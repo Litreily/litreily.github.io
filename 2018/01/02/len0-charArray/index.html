@@ -1,0 +1,85 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><title>结构体中长度为0的字符数组 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><body><div class="box" id="container"><div class="h-wrapper"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="https://litreily.gitbooks.io/notes/">笔记</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li class="m-sch"><form class="form" id="j-formsch" action="/search" method="get"><input class="txt" type="text" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"></form></li></ul></div></nav></div><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><h1 class="p-title">结构体中长度为0的字符数组</h1><div class="p-content"><p>在C语言的结构体中，有一种特殊用法，在结构体的末尾放置一个长度为0的字符数组，结构体倒数第二个位置放置一个整型变量<code>len</code>。其典型样例如下：</p>
+<pre><code class="c">typedef struct dynamic_value {
+  int flag;
+  int len;
+  char val[0];
+}s_flv;
+</code></pre>
+<p>本文针对其特征，用法及适用场合予以简单介绍。</p>
+<h2 id="特征"><a href="#特征" class="headerlink" title="特征"></a>特征</h2><ul>
+<li>最后的字符数组<code>val</code>长度为0，不占用额外的内存空间</li>
+<li>倒数第二个元素为一整型变量，用于存储字符数组的真实长度</li>
+<li><code>val</code>实际指向的是结构体<code>s_flv</code>之后的内存空间</li>
+<li>字符数组的大小可以在定义结构体变量时动态指定<code>s_flv.len</code></li>
+<li>结构体元素个数不限，样例为典型模式，其中的<code>flag</code>作为标签用以标识不同的数据</li>
+</ul>
+<h2 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h2><ul>
+<li>按<code>s_flv</code>格式写入数据到文件</li>
+</ul>
+<pre><code class="c">#include &lt;stdio.h&gt;
+
+static void write_flv(FILE *fp, int flag, char *val)
+{
+    int len = 0;
+    if(val == NULL)
+        val = &quot;&quot;;
+    else
+        len = strlen(val);
+
+    fwrite(&amp;flag, sizeof(flag), 1, fp); // 写入标识
+    fwrite(&amp;len, sizeof(len), 1, fp);   // 写入字符数组长度
+    fwrite(val, len, 1, fp);    // 写入长度为len的字符串
+}
+</code></pre>
+<ul>
+<li>读取文件</li>
+</ul>
+<pre><code class="c">#include &lt;stdio.h&gt;
+
+static int read_flv(char *file, char *val)
+{
+    char buf[32];   // 假定字符数组长度小等于32
+    char *p = buf;
+
+    FILE *fp = fopen(file, &quot;r&quot;);
+    if(!fp)
+        return -1;
+
+    if(fread(buf, 2*sizeof(int), 1, fp) &lt;= 0)   // 读取前两个整型数据，获取字符数组长度
+        return -1;
+
+    s_flv *flv = (s_flv *)p;        // 定义s_flv结构体，存储数据
+    fread(val, flv-&gt;len, 1, fp);    // 读取字符数组
+    flose(fp);
+    return 0;
+}
+</code></pre>
+<ul>
+<li><strong>说明</strong><ul>
+<li>每执行一次<code>fread</code>或<code>fwrite</code>函数，文件指针就往后偏移相应的读取长度或写入长度</li>
+<li><code>read_flv</code>定义<code>flv</code>时，从<code>buf</code>中可以获取到数组长度，然后使用<code>fread</code>读取相应长度的数据即可取出字符数组的内容。</li>
+<li>使用以上方法生成的文件内容是二进制文件，许多字符是不可打印字符，所以使用<code>cat</code>指令无法正常显示文件内容</li>
+</ul>
+</li>
+</ul>
+<p>上面描述的方法是将<code>s_flv</code>类型的数据存入文件，但如果不想存入文件，那么该如何为其分配内存呢，下面来看一下：</p>
+<pre><code class="c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+// 定义s_flv指针变量
+int size = 10;
+s_flv *flv = (s_flv *)malloc(sizeof(s_flv) + size);
+flv-&gt;len = size;
+flv-&gt;val = flv + sizeof(s_flv);
+
+// 释放指针
+free(flv);
+</code></pre>
+<h2 id="适用场合"><a href="#适用场合" class="headerlink" title="适用场合"></a>适用场合</h2><ul>
+<li><code>json</code>文件的读写</li>
+<li>不定长度字符串的读写</li>
+</ul>
+<h2 id="扩展阅读"><a href="#扩展阅读" class="headerlink" title="扩展阅读"></a>扩展阅读</h2><ul>
+<li><a href="http://www.cnblogs.com/felove2013/articles/4050226.html" target="_blank" rel="noopener">浅析长度为0的数组</a></li>
+</ul>
+</div></article></div><div class="l-pager l-pager-dtl box"><a class="prev" href="/2018/02/08/mysql-basic/">&lt; mySQL基本语法</a><a class="next" href="/2017/09/07/ss-config/">VPS+SS翻越GFW &gt;</a></div><footer><p>Copyright © 2018 <a href="/." rel="nofollow">LITREILY | </a>Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer><script type="text/javascript" src="/plugins/prettify/prettify.js"></script></div></div></div></body></html>

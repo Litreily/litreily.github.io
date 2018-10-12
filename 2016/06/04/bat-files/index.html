@@ -1,0 +1,19 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><title>.bat批处理文件的妙用 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><body><div class="box" id="container"><div class="h-wrapper"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="https://litreily.gitbooks.io/notes/">笔记</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li class="m-sch"><form class="form" id="j-formsch" action="/search" method="get"><input class="txt" type="text" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"></form></li></ul></div></nav></div><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><h1 class="p-title">.bat批处理文件的妙用</h1><div class="p-content"><h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1. 引言"></a>1. 引言</h2><p>近日学习web前端开发，又重新安装了Sublime Text 3，但用的不是很熟练，想要打开终端输个指令还是得用cmd。但每次都得切换路径甚是麻烦，于是想找个简单的方法。网上寻寻觅觅，觉得.bat批处理文件值得一试。</p>
+<h2 id="2-bat文件"><a href="#2-bat文件" class="headerlink" title="2. bat文件"></a>2. bat文件</h2><ul>
+<li>新建.bat文件</li>
+<li>编辑文件内容</li>
+</ul>
+<pre><code class="bash">cd D:\WorkSpace\Html CSS\LITR.coding.net
+jekyll serve watch
+</code></pre>
+<ul>
+<li>保存后运行</li>
+</ul>
+<p><img src="/assets/windows/startJekyll.bat.png" alt="run startJekyll.bat"></p>
+<p>双击运行.bat文件，这样一来，就不用每次设置文件路径了。当然，如果使用Brackets开发的话，可以通过git插件提供的终端接口直接跳转至当前工程目录，也就不需要.bat文件的参与了。</p>
+<p>当然，这么简单的两句话，还是存在一定的缺陷，就是当我使用<code>ctrl+C</code>退出jekyll serve的时候，指令窗口也会随之关闭。为了解决这个问题，可以先跳转至指定目录，然后执行<code>cmd</code>。</p>
+<pre><code class="bash">cd D:\WorkSpace\Html CSS\LITR.coding.net
+cmd.exe    
+</code></pre>
+<p>这样虽能保证窗口不关闭，但也无法在其后执行其它指令了。</p>
+</div></article></div><div class="l-pager l-pager-dtl box"><a class="prev" href="/2016/06/05/labview-base/">&lt; Labview - 基本概念</a><a class="next" href="/2016/05/15/brackets-git/">Brackets - Git插件的使用方法 &gt;</a></div><footer><p>Copyright © 2018 <a href="/." rel="nofollow">LITREILY | </a>Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer><script type="text/javascript" src="/plugins/prettify/prettify.js"></script></div></div></div></body></html>

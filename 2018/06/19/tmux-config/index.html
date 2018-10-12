@@ -1,0 +1,63 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><title>tmux常用配置说明 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><body><div class="box" id="container"><div class="h-wrapper"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="https://litreily.gitbooks.io/notes/">笔记</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li class="m-sch"><form class="form" id="j-formsch" action="/search" method="get"><input class="txt" type="text" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"></form></li></ul></div></nav></div><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><h1 class="p-title">tmux常用配置说明</h1><div class="p-content"><p><code>tmux</code>作为<code>Linux</code>三大神器之一，结合<code>zsh</code>和<code>vim</code>堪称无敌，<code>tmux</code>作为分屏利器自有其强大之处，本文就其常用配置予以说明。</p>
+<h2 id="安装tmux"><a href="#安装tmux" class="headerlink" title="安装tmux"></a>安装tmux</h2><pre><code class="zsh"># install in ubuntu
+$ sudo apt-get install tmux
+</code></pre>
+<ul>
+<li><code>Ctrl+B</code>: default keys of tmux <code>prefix</code></li>
+<li><code>.tmux.conf</code>: config file of <code>tmux</code></li>
+<li><code>tmux source-file .tmux.conf</code>: command to reload <code>.tmux.conf</code></li>
+</ul>
+<a id="more"></a>
+<h2 id="禁止自动更新窗口名称"><a href="#禁止自动更新窗口名称" class="headerlink" title="禁止自动更新窗口名称"></a>禁止自动更新窗口名称</h2><p>默认情况下，<code>tmux</code>会根据当前目录及相关操作自动更改窗口名称，但通常情况下，我们是不需要其修改的，为此可以在配置文件中添加：</p>
+<pre><code class="yml">setw -g allow_rename &#39;off&#39;
+</code></pre>
+<h2 id="设置zsh作为默认shell"><a href="#设置zsh作为默认shell" class="headerlink" title="设置zsh作为默认shell"></a>设置zsh作为默认shell</h2><p>如果先安装的<code>tmux</code>, 后安装和配置<code>zsh</code>，那tmux有可能默认打开使用的是<code>bash</code>，此时可以使用以下配置指令予以更改：</p>
+<pre><code class="yml">set-option -g default-shell /bin/zsh
+</code></pre>
+<h2 id="设置vim作为默认编辑器"><a href="#设置vim作为默认编辑器" class="headerlink" title="设置vim作为默认编辑器"></a>设置vim作为默认编辑器</h2><p>在<code>tmux</code>的搜索模式<code>prefix+[</code>下，默认使用↑↓←→箭头作为移动按键，对于习惯于<code>vim</code>操作的我来讲，这显然很不方便，还好<code>tmux</code>提供了使用<code>vim</code>作为编辑器的选项，启用配置如下：</p>
+<pre><code class="yml">setw -g mode-keys vi
+</code></pre>
+<h2 id="解决配色问题"><a href="#解决配色问题" class="headerlink" title="解决配色问题"></a>解决配色问题</h2><p>在<code>tmux</code>中，有可能部分应用的配色与纯<code>shell</code>下不一致，尤其是<code>vim</code>，后来发现<code>htop</code>也存在这个问题。要解决很简单，在<code>tmux</code>配置中加上一句：</p>
+<pre><code class="yml">set -g default-terminal &quot;screen-256color&quot;
+</code></pre>
+<h2 id="存储-恢复tmux工作环境"><a href="#存储-恢复tmux工作环境" class="headerlink" title="存储/恢复tmux工作环境"></a>存储/恢复tmux工作环境</h2><p>如果在服务器上使用<code>tmux</code>，由于服务器基本不关机，所以不用考虑<code>tmux</code>环境会丢失。但是在个人电脑上使用的话，重启电脑后<code>tmux</code>环境就丢失了，如果每次重启都要重新配置一遍环境的话，那未免太浪费时间了。所以这里推荐个插件<a href="https://github.com/tmux-plugins/tmux-resurrect" target="_blank" rel="noopener">tmux-resurrect</a> </p>
+<p><code>tmux-resurrect</code>可以对<code>tmux</code>环境进行保存和恢复，安装及配置如下：</p>
+<pre><code class="zsh">$ mkdir ~/.tmux
+$ git clone https://github.com/tmux-plugins/tmux-resurrect ~/.tmux/tmux-resurrect
+
+# edit .tmux.conf at the bottom
+$ vi ~/.tmux.conf
+run-shell ~/.tmux/tmux-resurrect/resurrect.tmux
+
+# re source .tmux.conf
+$ tmux source-file ~/.tmux.conf
+</code></pre>
+<p><code>tmux-resurrect</code>用法:</p>
+<ul>
+<li><code>prefix + Ctrl-s</code> - save</li>
+<li><code>prefix + Ctrl-r</code> - restore</li>
+</ul>
+<p>插件<code>tmux-resurrect</code>还可以结合插件<code>tmux-continum</code>一起使用，<code>tmux-continum</code>可以自动定时存储环境，在开机后打开<code>tmux</code>时自动恢复环境，这就避免了人为存储和恢复的麻烦以及因忘记存储导致的环境丢失。<code>tmux-continum</code>的安装及配置如下:</p>
+<pre><code class="zsh">$ git clone https://github.com/tmux-plugins/tmux-continuum ~/.tmux/tmux-continum
+
+# edit .tmux.conf
+$ vi ~/.tmux.conf
+set -g @continuum-restore &#39;on&#39;  # restore last saved env
+set -g @continuum-save-interval &#39;30&#39;  # default is 15 minutes
+run-shell ~/.tmux/tmux-continum/continuum.tmux
+
+$ tmux source ~/.tmux.conf
+</code></pre>
+<p><strong>说明</strong>：</p>
+<ol>
+<li>以上两个插件都是手动安装的，其实也可以使用<code>tmux</code>的插件管理器<a href="https://github.com/tmux-plugins/tpm" target="_blank" rel="noopener">tpm</a>进行安装，这里就不详述了。</li>
+<li>以上插件要求<code>tmux</code>版本大等于<code>1.9</code></li>
+</ol>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://linuxtoy.org/archives/tmux-resurrect-and-continuum.html" target="_blank" rel="noopener">https://linuxtoy.org/archives/tmux-resurrect-and-continuum.html</a></li>
+<li><a href="https://github.com/tmux/tmux" target="_blank" rel="noopener">https://github.com/tmux/tmux</a></li>
+<li><a href="https://github.com/tmux-plugins/tpm" target="_blank" rel="noopener">https://github.com/tmux-plugins/tpm</a></li>
+<li><a href="https://github.com/tmux-plugins/tmux-resurrect" target="_blank" rel="noopener">https://github.com/tmux-plugins/tmux-resurrect</a></li>
+<li><a href="https://github.com/tmux-plugins/tmux-continuum" target="_blank" rel="noopener">https://github.com/tmux-plugins/tmux-continuum</a></li>
+</ul>
+</div></article></div><div class="l-pager l-pager-dtl box"><a class="prev" href="/2018/07/07/quick-sort/">&lt; Python实现快排及其可视化</a><a class="next" href="/2018/05/30/openwrt-ko/">Openwrt中添加内核模块 &gt;</a></div><footer><p>Copyright © 2018 <a href="/." rel="nofollow">LITREILY | </a>Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer><script type="text/javascript" src="/plugins/prettify/prettify.js"></script></div></div></div></body></html>

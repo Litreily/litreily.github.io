@@ -1,0 +1,27 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><title>Labview - 存储txt文件 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><body><div class="box" id="container"><div class="h-wrapper"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="https://litreily.gitbooks.io/notes/">笔记</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li class="m-sch"><form class="form" id="j-formsch" action="/search" method="get"><input class="txt" type="text" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"></form></li></ul></div></nav></div><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><h1 class="p-title">Labview - 存储txt文件</h1><div class="p-content"><h2 id="1-存储文件"><a href="#1-存储文件" class="headerlink" title="1. 存储文件"></a>1. 存储文件</h2><h3 id="1-1-简单存储"><a href="#1-1-简单存储" class="headerlink" title="1.1 简单存储"></a>1.1 简单存储</h3><p>写个简单的小程序，用于存储四列随机数，每隔1s存储一次，数据之间以tab作为分隔符。</p>
+<p><img src="/assets/labview/rwTxt/readTxt.png" alt="readTxt"></p>
+<p>存储后的文件:</p>
+<p><img src="/assets/labview/rwTxt/testTxt.png" alt="testTxt"></p>
+<h3 id="1-2-加入表头"><a href="#1-2-加入表头" class="headerlink" title="1.2 加入表头"></a>1.2 加入表头</h3><p>看着上面这个文件，总感觉少点什么，对了，表头还没加。那就加个判断，首次创建文件时添个表头。为了简化点，定时结构就不截图了。</p>
+<p><img src="/assets/labview/rwTxt/addTitle.png" alt="addTitle"></p>
+<p>现在再来看看这个txt文件，表头已经被加上了，虽然看着没怎么对齐，但这是正常的，如果导入至Excel就可以看出来。</p>
+<p><img src="/assets/labview/rwTxt/testTitle.png" alt="testTitle"></p>
+<h3 id="1-3-存储时间"><a href="#1-3-存储时间" class="headerlink" title="1.3 存储时间"></a>1.3 存储时间</h3><p>大部分情况下，我们在存储数据的同时需要记录存储时间，那么就再稍稍修改一下程序。</p>
+<p><img src="/assets/labview/rwTxt/addTime.png" alt="addTime"></p>
+<p>添加的东西也不多，就是多了个表头，每组数据前多了个时间标识，需要说明一点的是，这里用到的&quot;格式化日期/时间字符串&quot;，它的格式化方法可以参考以下说明。</p>
+<p><img src="/assets/labview/rwTxt/timeStrHelp.png" alt="timeStrHelp"></p>
+<blockquote>
+<p> 下列代码为部分常用的时间格式代码：%c可显示依据地域语言设定的日期/时间。<br><br><strong>时间</strong>相关格式代码为：%X（指定地域的时间），%H（小时，24小时），%I（小时，12小时），%M（分钟），%S（秒），%<digit>u（分数秒，精度<digit>），%p（a.m./p.m.标识）。<br><strong>日期</strong>相关格式代码为：%x（指定地域日期），%y（两位年份），%Y（四位年份），%m（月份），%b（月名缩写），%d（一个月中的天值），%a（星期名缩写）。</digit></digit></p>
+</blockquote>
+<p>好了，改好了就测试一下，看看时间已经被加上了。</p>
+<p><img src="/assets/labview/rwTxt/testTime.png" alt="testTime"></p>
+<h3 id="1-4-有趣实例"><a href="#1-4-有趣实例" class="headerlink" title="1.4 有趣实例"></a>1.4 有趣实例</h3><p>好了，现在来写个有趣的小程序，定时存储一组数据至txt文件，包含人的姓名、性别、年龄、身高和名族。具体要求如下表所示。</p>
+<table class="normalTable"><th></th><td>姓名</td><td>性别</td><td>年龄</td><td>身高(m)</td><td>汉族</td><tr><td>数据类型</td><td>字符串</td><td>字符串</td><td>Byte</td><td>Double</td><td>布尔</td></tr><tr><td>要求</td><td>随机</td><td>男/女</td><td>12~40</td><td>1.40~1.80</td><td>T/F</td></tr></table>
+
+<p>程序框图如下：</p>
+<p><img src="/assets/labview/rwTxt/randomWrite.png" alt="randomWrite"></p>
+<p>好了，现在运行程序，看看会有哪些有趣的名字呢。</p>
+<p><img src="/assets/labview/rwTxt/randomTxt.png" alt="randomTxt"></p>
+<p>关于.txt文件存储就讲这些吧。以后若是有其它运用方式，遇到了再写不迟。</p>
+<h2 id="2-下载链接"><a href="#2-下载链接" class="headerlink" title="2. 下载链接"></a>2. 下载链接</h2><p>文中提到的两个vi文件已共享至百度网盘，以供<a href="http://pan.baidu.com/s/1kU7mveZ" target="_blank">下载！</a></p>
+</div></article></div><div class="l-pager l-pager-dtl box"><a class="prev" href="/2016/08/17/clearAD/">&lt; 消除utorrent中的广告</a><a class="next" href="/2016/06/06/labview-dialog/">Labview - 对话框程序模板 &gt;</a></div><footer><p>Copyright © 2018 <a href="/." rel="nofollow">LITREILY | </a>Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer><script type="text/javascript" src="/plugins/prettify/prettify.js"></script></div></div></div></body></html>

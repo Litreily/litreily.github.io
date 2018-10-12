@@ -1,0 +1,221 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><title>Matlab - 经VS将.m文件转换为.dll文件 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><body><div class="box" id="container"><div class="h-wrapper"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="https://litreily.gitbooks.io/notes/">笔记</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li class="m-sch"><form class="form" id="j-formsch" action="/search" method="get"><input class="txt" type="text" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"></form></li></ul></div></nav></div><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><h1 class="p-title">Matlab - 经VS将.m文件转换为.dll文件</h1><div class="p-content"><h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1. 引言"></a>1. 引言</h2><p>在使用 LabVIEW 进行软件开发的过程中，有时需要使用 Matlab 强大的数据处理功能，以提高开发效率，此时可以通过 Matlab Coder 将 Matlab 中的函数转换为 C/C++ 源文件，然后通过 Visual Studio 将这些源文件封装为 .dll 文件，最后通过 LabVIEW 调用库函数实现对 Matlab 函数的调用。</p>
+<p>本文将通过一个实例讲述以上功能的实现过程，大体步骤如下：</p>
+<pre class="descriptions">
+1. Matlab 编写代码
+    1.1 编写 .m 函数
+    1.2 使用 Coder 生成 C/C++ 文件
+2. Visual Studio 生成 .dll 文件
+3. LabVIEW 调用 .dll文件
+</pre>
+
+<p>软件版本说明：</p>
+<pre class="descriptions">
+1. Matlab 2016a       (64bit)
+2. LabVIEW 2015       (64bit)
+3. Visual Studio 2015 (64bit)
+</pre>
+
+<h2 id="2-通过-Matlab-生成-C-C-源文件"><a href="#2-通过-Matlab-生成-C-C-源文件" class="headerlink" title="2. 通过 Matlab 生成 C/C++ 源文件"></a>2. 通过 Matlab 生成 C/C++ 源文件</h2><h3 id="2-1-m-函数编码"><a href="#2-1-m-函数编码" class="headerlink" title="2.1 .m 函数编码"></a>2.1 .m 函数编码</h3><p>在 Matlab 文件目录中新建文件夹&quot;CreateDll&quot;，在该文件夹下新建两个函数文件，分别实现简单加法运算函数，以及一个用自相关求解周期信号频率的函数。</p>
+<div class="smallTitle">add( a,b )</div>
+
+<pre><code class="matlab">function [ answer ] = add( a,b )
+% 加法运算
+% a,b 均为 double 型数据
+
+answer = a + b;
+
+end
+</code></pre>
+<div class="smallTitle">getFreq( signal, fs )</div>
+
+<pre><code class="matlab">function [ frequency ] = getFreq( signal,fs )
+%GETFREQ 自相关法求周期信号频率
+% [input]
+% signal    : double 1*n
+% fs        : double 1*1
+% [output]
+% frequency : double  1*1
+
+y_xcorr = xcorr(signal,&#39;coeff&#39;);            % 信号自相关
+[~,locs] = findpeaks(y_xcorr);              % 获取峰值位置
+middlePosition = fix(length(locs)/2);       % 计算处于中部的峰值位置
+frequency = fs/(locs(middlePosition)-locs(middlePosition-1)); % 计算信号频率
+
+end
+</code></pre>
+<h3 id="2-2-使用-Coder-生成-C-C-文件"><a href="#2-2-使用-Coder-生成-C-C-文件" class="headerlink" title="2.2 使用 Coder 生成 C/C++ 文件"></a>2.2 使用 Coder 生成 C/C++ 文件</h3><ul>
+<li>1.在命令行中输入 coder 打开 Matlab Coder 工具。</li>
+</ul>
+<pre><code>&gt;&gt; coder
+</code></pre><p><img src="/assets/matlab/coder1.png" alt="Matlab Coder"></p>
+<ul>
+<li>2.添加 add 函数及 getFreq 函数</li>
+</ul>
+<p><img src="/assets/matlab/coder2.png" alt="Matlab Coder"></p>
+<ul>
+<li>3.定义函数输入参数的数据类型（两种定义方式）</li>
+</ul>
+<pre class="descriptions">
+1. 手动修改输入参数的数据类型
+2. 输入函数调用示例，通过 Coder 工具的自定义输入功能自动匹配输入参数类型
+</pre>
+
+<p>调用示例：</p>
+<pre><code>&gt;&gt; add(3,4);
+</code></pre><p><img src="/assets/matlab/coder3.png" alt="Matlab Coder"></p>
+<p>手动可选择的数据类型如下图所示：</p>
+<p><img src="/assets/matlab/coder3_1.png" alt="Input types"></p>
+<ul>
+<li>4.设定数据长度</li>
+</ul>
+<pre class="descriptions">
+1. 对于大部分变量，数据长度为 1×1
+2. 对于一维<strong>向量、数组</strong>
+  2.1 固定长度的变量：直接设定具体值（如：一个星期每天的工作时间，可设为 1×7）
+  2.2 不定长度但有上限的变量：设定 1×:100 （假定上限值为 100）
+  2.3 不定长度上限不定的变量：设定 1×:inf （inf代表无限）
+3. 二维数组设定规则与一维数组类似
+</pre>
+
+<p><img src="/assets/matlab/coder3_2.png" alt="Input length"></p>
+<ul>
+<li>5.Check for Run-Time Issues</li>
+</ul>
+<p>这一步可以跳过，这是用来生成试用代码以及用于 Matlab 的 MEX 文件。</p>
+<p><img src="/assets/matlab/coder4.png" alt="Check for Run-Time Issues"></p>
+<ul>
+<li>6.Generate Code</li>
+</ul>
+<p>选择 C++ 语言，通过 &quot; More Settings &quot; 修改代码生成相关的配置选项,最后点击 &quot; Generate &quot; 按钮生成源代码。</p>
+<div class="smallTitle">选择语言</div>
+
+<p><img src="/assets/matlab/coder5.png" alt="Generate Code"></p>
+<div class="smallTitle">配置选项</div>
+
+<p><img src="/assets/matlab/coder5_1.png" alt="More Settings"></p>
+<div class="smallTitle">生成代码</div>
+
+<p><img src="/assets/matlab/coder6.png" alt="C++ Code"></p>
+<p>在代码生成界面可以看到以下内容：</p>
+<pre class="descriptions">
+1. Source Code : Matlab 中创建的函数源代码
+2. Output Files : Coder 工具生成得到的 .h 头文件和 .cpp 源文件
+3. Build Log : 用于查看代码生成报告
+4. Variables : 选中 Matlab 文件时显示函数的输入输出数据类型和大小
+</pre>
+
+<ul>
+<li>7.Finsh Workflow</li>
+</ul>
+<div class="smallTitle">完成工作流程</div>
+
+<p><img src="/assets/matlab/coder7.png" alt="Finish WorkFlow"></p>
+<div class="smallTitle">查看代码</div>
+
+<p><img src="/assets/matlab/coder8.png" alt="Select Code"></p>
+<p>可以看出，最终生成的文件较多，代码量较大，这可以归结为以下几个原因：</p>
+<pre class="descriptions">
+1. 重新实现fft等复杂算法
+2. 考虑各种异常情况的处理
+3. 考虑不定长数组或向量的内存分配问题
+4. 考虑无限值 inf 和 无效值 NaN
+5. 不同编程语言间数据类型的转换
+</pre>
+
+<p>当然，我们可以在代码生成前根据需求进行相关设置，以避免不必要文件的产生，此处不予详述。</p>
+<p>最后将生成的所有 .h/.cpp 文件复制到剪切板中以备后用。至此，Matlab 部分的工作已经全部完成。</p>
+<h2 id="3-通过-Visual-Studio-生成-dll-文件"><a href="#3-通过-Visual-Studio-生成-dll-文件" class="headerlink" title="3. 通过 Visual Studio 生成 .dll 文件"></a>3. 通过 Visual Studio 生成 .dll 文件</h2><p>在 VS 中要做的就是将 Matlab Coder 生成的 C++ 文件封装为 dll 文件，以供 LabVIEW 程序调用。</p>
+<h3 id="3-1-创建-win32-项目"><a href="#3-1-创建-win32-项目" class="headerlink" title="3.1 创建 win32 项目"></a>3.1 创建 win32 项目</h3><p><img src="/assets/matlab/CreateDll.png" alt="Create VS Project"></p>
+<p>在win32应用程序向导中选择 <strong>DLL</strong>，并勾选 <strong>空项目</strong> ，然后点击完成。</p>
+<p><img src="/assets/matlab/CreateDll1.png" alt="Create VS Project"></p>
+<h3 id="3-2-添加文件"><a href="#3-2-添加文件" class="headerlink" title="3.2 添加文件"></a>3.2 添加文件</h3><p>将从 Matlab 中复制的 C++ 文件粘贴到 CreateDll 项目的本地文件中，然后在项目中添加这些文件。</p>
+<p><img src="/assets/matlab/CreateDll2_1.png" alt="Add Source Files to VS Project"></p>
+<p><img src="/assets/matlab/CreateDll2.png" alt="Add Source Files to VS Project"></p>
+<h3 id="3-3-新建模块定义文件"><a href="#3-3-新建模块定义文件" class="headerlink" title="3.3 新建模块定义文件"></a>3.3 新建模块定义文件</h3><p>在 VS 中新建 .def 模块定义文件，输入以下代码</p>
+<pre><code>LIBRARY CreateDll
+
+EXPORTS
+
+add
+getFreq
+</code></pre><p>LIBRARY 后面添加库名称，EXPORTS 后面添加需要导出的函数名称。</p>
+<p><img src="/assets/matlab/CreateDll3.png" alt=".def file"></p>
+<p>编辑完成后，可以在 &quot;项目属性&gt;&gt;链接器&gt;&gt;输入&gt;&gt;模块定义文件&quot; 中看到，项目已将该选项自动添加为了当前 .def 文件，对于低版本的 VS 可能需要手动添加。</p>
+<h3 id="3-4-生成-dll-文件"><a href="#3-4-生成-dll-文件" class="headerlink" title="3.4 生成 .dll 文件"></a>3.4 生成 .dll 文件</h3><p>最后一步，选中项目名称，点击右键选择 &quot;<strong>生成</strong>&quot; ，从本地项目目录的 Debug 文件夹中可以找到已生成的 .dll 文件。</p>
+<p>值得注意的是：</p>
+<pre class="descriptions">
+1. 选择 Debug 模式为 x64 时生成 64 位 dll 文件，文件存于 .\x64\Debug\Create.dll
+2. 选择 Debug 模式为 x86 时生成 32 位 dll 文件，文件存于 .\Debug\Create.dll
+</pre>
+
+<p>对于不同位数的 LabVIEW 程序，我们可以选择对应的 Debug 模式，这个功能真的是非常棒！</p>
+<p><img src="/assets/matlab/CreateDll4.png" alt="Bulid .dll file"></p>
+<h3 id="3-5-函数接口"><a href="#3-5-函数接口" class="headerlink" title="3.5 函数接口"></a>3.5 函数接口</h3><p>经 VS 生成的 API 函数接口说明如下：</p>
+<p><strong>add</strong></p>
+<pre><code class="C++">double add(double a, double b);
+</code></pre>
+<p><strong>getFreq</strong></p>
+<pre><code class="C++">double getFreq(const double b_signal[1000], double fs);
+</code></pre>
+<p>因为例程所用数据为定长数组（1×1000），所以输入参数的数据类型为基本的 double 型。倘若定义的 b_signal 为不定长数组 （1×:inf） ,其格式将变为：</p>
+<pre><code class="C++">double getFreq(const emxArray_real_T *b_signal, double fs);
+</code></pre>
+<p>这是因为程序需要为不确定长度的数组动态分配内存，所以有效数据与其描述信息将被封装到结构体中，该结构体为 &quot;<strong>emxArray_real_T</strong>&quot;</p>
+<pre><code class="C++">struct emxArray_real_T
+{
+  double *data;
+  int *size;
+  int allocatedSize;
+  int numDimensions;
+  boolean_T canFreeData;
+};
+</code></pre>
+<p>结构体中的 &quot;<strong>boolean_T</strong>&quot; 定义如下</p>
+<pre><code class="C++">typedef unsigned char boolean_T;
+</code></pre>
+<p>由于不定长数据会导致大量冗余代码，并且在 LabVIEW 中调用时非常麻烦，除非必须，否则不建议使用，本文后续所述也是定长数组。</p>
+<h2 id="4-通过-LabVIEW-调用-dll文件"><a href="#4-通过-LabVIEW-调用-dll文件" class="headerlink" title="4. 通过 LabVIEW 调用 .dll文件"></a>4. 通过 LabVIEW 调用 .dll文件</h2><p>通过 VS，我们已经得到了想要的 .dll 文件，那么在 LabVIEW 中该如何调用呢？这里提供两种方法。</p>
+<pre class="descriptions">
+1. 通过调用库函数节点（Call Library Function Node）
+2. 通过 LabVIEW 导入工具（Tools->Import->Shared Library(.dll)...）
+</pre>
+
+<p>两种方法的原理一致，以第一种方法为例进行讲解。</p>
+<h3 id="4-1-Call-Library-Function-Node"><a href="#4-1-Call-Library-Function-Node" class="headerlink" title="4.1 Call Library Function Node"></a>4.1 Call Library Function Node</h3><p>在 LabVIEW 函数面板搜索 &quot;Call Library&quot; ，中文版可直接搜索 <code>dll</code>。将调用库函数节点放入程序框图中。</p>
+<p><strong>调用 add 函数</strong></p>
+<ul>
+<li>选择 CreateDll.dll 文件</li>
+</ul>
+<p><img src="/assets/matlab/UseDll1.png" alt="select CreateDll.dll"></p>
+<ul>
+<li>配置 add 函数接口</li>
+</ul>
+<p><img src="/assets/matlab/UseDll1_1.png" alt="Config add function"></p>
+<ul>
+<li>函数调用示例</li>
+</ul>
+<p><img src="/assets/matlab/UseDll1_2.png" alt="Use add function"></p>
+<p><strong>调用 getFreq 函数</strong></p>
+<ul>
+<li>配置 getFreq 函数接口</li>
+</ul>
+<p><img src="/assets/matlab/UseDll2.png" alt="Config getFreq function"></p>
+<ul>
+<li>函数调用示例</li>
+</ul>
+<p><img src="/assets/matlab/UseDll2_2.png" alt="getFreq front panel"></p>
+<p>先产生一个数据长度为 1000 ，频率可调的正弦信号，采样频率 1kHz；然后调用 .dll文件中的 getFreq 函数，通过自相关方法求取信号频率，并输出到变量 getFreq 中。</p>
+<p><img src="/assets/matlab/UseDll2_3.png" alt="getFreq block diagram"></p>
+<h3 id="4-2-不定长数组问题"><a href="#4-2-不定长数组问题" class="headerlink" title="4.2 不定长数组问题"></a>4.2 不定长数组问题</h3><p>这里对不定长数组问题进行简单介绍：.dll 文件中的函数将不再是简单的 double 指针，而是一个结构体指针；在 LabVIEW 中调用时，可以创建自定义控件，用簇代替该结构体，簇的引用作为结构体指针；簇的内容包括以下几部分。</p>
+<pre class="descriptions">
+double *pData : 一维数组引用，用于传递信号数据
+int    *pSize : 一维数组引用，用于传递数据长度
+int allocatedSize : 分配内存大小，调用时可设为 0
+int numDimensions : 数组维数，设为 1 或 2
+unsigned char canFreeData : 布尔变量，确定能否释放数据内存
+</pre>
+
+<p><img src="/assets/matlab/UseDll2_1.png" alt="Create customsize control"></p>
+<h2 id="5-小结"><a href="#5-小结" class="headerlink" title="5. 小结"></a>5. 小结</h2><p>本文对 &quot;Matlab Coder 生成 C++ 代码&quot;，&quot;VS 生成 .dll 文件&quot;，&quot;LabVIEW 调用外部库函数&quot; 这三部分内容进行讲述。通过Matlab , VS , LabVIEW 的结合使用，我们便可实现 LabVIEW 程序调用 Matlab 函数的目的。</p>
+<p>此外，在 64 位的 VS 中可以通过修改 Debug 模式生成 32 位或 64 位的动态链接库，以适配不同版本的 LabVIEW。当然最后不要忘了，不同编译模式下生成的 .dll 文件存放在不同的目录下。</p>
+</div></article></div><div class="l-pager l-pager-dtl box"><a class="prev" href="/2016/12/05/stm32-dac/">&lt; stm32 - DAC基本输出方式</a><a class="next" href="/2016/11/14/signal-Process/">信号处理 - 滤波器截止频率 &gt;</a></div><footer><p>Copyright © 2018 <a href="/." rel="nofollow">LITREILY | </a>Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer><script type="text/javascript" src="/plugins/prettify/prettify.js"></script></div></div></div></body></html>

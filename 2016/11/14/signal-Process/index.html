@@ -1,0 +1,72 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><title>信号处理 - 滤波器截止频率 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><body><div class="box" id="container"><div class="h-wrapper"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="https://litreily.gitbooks.io/notes/">笔记</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li class="m-sch"><form class="form" id="j-formsch" action="/search" method="get"><input class="txt" type="text" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"></form></li></ul></div></nav></div><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><h1 class="p-title">信号处理 - 滤波器截止频率</h1><div class="p-content"><h2 id="1-截止频率"><a href="#1-截止频率" class="headerlink" title="1. 截止频率"></a>1. 截止频率</h2><p>通常，我们将信号幅值衰减3dB处的频率作为截止频率，这是为何？</p>
+<p>首先，明确以下两点：</p>
+<pre class="descriptions">
+1. 幅值的平方为功率
+2. 信号功率衰减一半时的频率被称为<strong>截止频率</strong>
+</pre>
+
+<p>当信号功率衰减一半 (1/2) 时，幅值衰减 sqrt(1/2) ，那么其对应的 dB 值为：</p>
+<pre class="textContainer">20*log10(sqrt(2)/2) ≈ -3dB</pre>
+
+<h2 id="2-举例说明"><a href="#2-举例说明" class="headerlink" title="2. 举例说明"></a>2. 举例说明</h2><h3 id="2-1-滤波器设计"><a href="#2-1-滤波器设计" class="headerlink" title="2.1 滤波器设计"></a>2.1 滤波器设计</h3><p>设计一个 butterworth 低通滤波器，采样频率 100Hz ，截止频率 20Hz ，阶次为 4 。</p>
+<pre><code class="matlab">clc
+fs = 100;           % 采样频率
+tLen = 2;           % 时间长度
+pointNum = fs*2;    % 采样点数
+fpass = 20;         % 通带频率
+
+wp = fpass/(fs/2);      % 计算归一化角频率
+[b,a] = butter(4,wp);   % 设计滤波器
+
+% 获取频率特性
+[H,F] = freqz(b,a,pointNum,fs);
+H = 20*log10(abs(H));
+
+hold off
+plot(F,H);grid on;hold on
+
+fcAmp = H(fpass*2*pointNum/fs+1);
+stem(fpass,fcAmp,&#39;linewidth&#39;,2);
+text(fpass+2,fcAmp-1,num2str(fcAmp));
+
+setPlot(&#39;滤波器幅频特性&#39;,&#39;frequency(Hz)&#39;,&#39;amptitude(dB)&#39;,[F(1) F(end)],[-50,10]);
+</code></pre>
+<h3 id="2-2-setPlot"><a href="#2-2-setPlot" class="headerlink" title="2.2 setPlot"></a>2.2 setPlot</h3><p>程序中用到的 setPlot 函数用于设置图形的 title , xlabel , ylabel , xlim , ylim.</p>
+<pre><code class="matlab">function [  ] = setPlot( varargin )
+% setPlot()
+% setPlot(title)
+% setPlot(title,xlabel)
+% setPlot(title,xlable,ylabel)
+% setPlot(title,xlabel,ylabel,xlim)
+% setPlot(title,xlable,ylabel,xlim,ylim)
+
+narginchk(0,5);     % 判断输入参数是否足够
+
+grid on;
+axis tight;
+
+if nargin&gt;=1
+    title(varargin{1});
+end
+
+if nargin&gt;=2
+    xlabel(varargin{2});
+end
+
+if nargin&gt;=3
+    ylabel(varargin{3});
+end
+
+if nargin&gt;=4
+    xlim(varargin{4});
+end
+
+if nargin&gt;=5
+    ylim(varargin{5});
+end
+
+end
+</code></pre>
+<h3 id="2-3-滤波器幅频特性"><a href="#2-3-滤波器幅频特性" class="headerlink" title="2.3 滤波器幅频特性"></a>2.3 滤波器幅频特性</h3><p><img src="/assets/matlab/fc20Hz.png" alt="截止频率"></p>
+<p>从图中可以看出，按照要求设计得到的滤波器，截止频率 20Hz 对应的幅值衰减为 -3.0103dB ,约为 -3dB ，与理论所述相吻合。</p>
+</div></article></div><div class="l-pager l-pager-dtl box"><a class="prev" href="/2016/11/25/matlab-coder/">&lt; Matlab - 经VS将.m文件转换为.dll文件</a><a class="next" href="/2016/11/02/FreeRTOS/">stm32 - FreeRTOS系统移植 &gt;</a></div><footer><p>Copyright © 2018 <a href="/." rel="nofollow">LITREILY | </a>Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer><script type="text/javascript" src="/plugins/prettify/prettify.js"></script></div></div></div></body></html>

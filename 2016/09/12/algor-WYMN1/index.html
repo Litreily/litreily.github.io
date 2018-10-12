@@ -1,0 +1,42 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><title>前端岗位模拟试题1 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><body><div class="box" id="container"><div class="h-wrapper"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="https://litreily.gitbooks.io/notes/">笔记</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li class="m-sch"><form class="form" id="j-formsch" action="/search" method="get"><input class="txt" type="text" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"></form></li></ul></div></nav></div><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><h1 class="p-title">前端岗位模拟试题1</h1><div class="p-content"><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>正整数A的&quot;DA(1位整数)部分&quot;定义为由A中所有组成的新整数PA。例如：给定A=3862767，DA=6，则A的&quot;6部分&quot;PA是66，因为A中有2个6。</p>
+<p>现给定A、DA、B、DB，请编写程序计算PA+PB。</p>
+<h3 id="输入描述"><a href="#输入描述" class="headerlink" title="输入描述"></a>输入描述</h3><blockquote>
+<p>输入在一行中依次给出A，DA，B,DB，中间以空格分隔，其中 0&lt; A,B &lt;1e10</p>
+</blockquote>
+<h3 id="输出描述"><a href="#输出描述" class="headerlink" title="输出描述"></a>输出描述</h3><blockquote>
+<p>在一行中输出PA+PB的值</p>
+</blockquote>
+<h3 id="输入例子"><a href="#输入例子" class="headerlink" title="输入例子"></a>输入例子</h3><blockquote>
+<p>3862767 6 13530293 3</p>
+</blockquote>
+<h3 id="输出例子"><a href="#输出例子" class="headerlink" title="输出例子"></a>输出例子</h3><blockquote>
+<p>399</p>
+</blockquote>
+<h2 id="解题程序"><a href="#解题程序" class="headerlink" title="解题程序"></a>解题程序</h2><pre><code class="C++">#include &lt;iostream&gt;
+using namespace std;
+
+void getPA(unsigned long num, int DA, unsigned long &amp; PA)
+{
+    PA = 0;
+    while(num)           // 循环查找num中DA的个数
+    {
+      if(num%10==DA)
+        PA = PA*10+DA;
+      num/=10;
+    }
+}
+
+int main()
+{
+    unsigned long A,B;
+    unsigned long PA=0,PB=0;
+    int DA,DB;
+
+    cin&gt;&gt;A&gt;&gt;DA&gt;&gt;B&gt;&gt;DB;
+    getPA(A,DA,PA);      // 计算PA
+    getPA(B,DB,PB);      // 计算PB
+    cout&lt;&lt;PA+PB&lt;&lt;endl;
+    return 0;
+}
+</code></pre>
+</div></article></div><div class="l-pager l-pager-dtl box"><a class="prev" href="/2016/09/12/algor-WYMN2/">&lt; 前端岗位模拟试题2</a><a class="next" href="/2016/08/21/atom-packages/">解决atom无法安装插件的问题 &gt;</a></div><footer><p>Copyright © 2018 <a href="/." rel="nofollow">LITREILY | </a>Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer><script type="text/javascript" src="/plugins/prettify/prettify.js"></script></div></div></div></body></html>

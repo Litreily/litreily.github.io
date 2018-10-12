@@ -1,0 +1,21 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><title>Matlab - 设置坐标尺度 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><body><div class="box" id="container"><div class="h-wrapper"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="https://litreily.gitbooks.io/notes/">笔记</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li class="m-sch"><form class="form" id="j-formsch" action="/search" method="get"><input class="txt" type="text" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"></form></li></ul></div></nav></div><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><h1 class="p-title">Matlab - 设置坐标尺度</h1><div class="p-content"><p>matlab中，在使用plot绘图时会自动生成带有标尺的坐标系，坐标间距会随屏幕大小自动更改。但有时候由于特殊需求需要修改该间距，此时，我们可以通过set函数进行实现。</p>
+<p>以 <code>y=sin(2*pi*10*t)</code> 为例，在使用matlab默认生成方式时，其仿真结果如下图所示：</p>
+<p><img src="/assets/matlab/setTickBefore.png" alt="setTickBefore"></p>
+<p>代码如下：</p>
+<pre><code class="matlab">clc
+f=10;               % 信号频率
+fs=400;             % 采样频率
+N=fs*0.5;           % 采样点数
+t=(0:N-1)/fs;       % 时间
+y=sin(2*pi*f.*t);   % 信号
+
+plot(t,y);grid on;  % 绘图
+xlabel(&#39;时间/t&#39;);     % x轴标题
+ylabel(&#39;幅值&#39;);       % y轴标题
+title(&#39;y=sin(2*pi*10*t)&#39;)   % 标题
+set(gca,&#39;xtick&#39;,0:0.025:t(end));    % 设置x轴标尺
+set(gca,&#39;ytick&#39;,min(y):0.4:max(y)); % 设置y轴标尺
+</code></pre>
+<p>修改标尺后得到的波形如下图所示：</p>
+<p><img src="/assets/matlab/setTickAfter.png" alt="setTickAfter"></p>
+</div></article></div><div class="l-pager l-pager-dtl box"><a class="prev" href="/2016/04/15/install-jekyll/">&lt; 在Windows中安装Jekyll</a><a class="next" href="/2016/04/10/algor-puzzles/">算法谜题 &gt;</a></div><footer><p>Copyright © 2018 <a href="/." rel="nofollow">LITREILY | </a>Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer><script type="text/javascript" src="/plugins/prettify/prettify.js"></script></div></div></div></body></html>

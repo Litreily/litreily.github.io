@@ -1,0 +1,383 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><title>Python网络爬虫1 - 爬取网易LOFTER图片 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><body><div class="box" id="container"><div class="h-wrapper"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="https://litreily.gitbooks.io/notes/">笔记</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li class="m-sch"><form class="form" id="j-formsch" action="/search" method="get"><input class="txt" type="text" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"></form></li></ul></div></nav></div><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><h1 class="p-title">Python网络爬虫1 - 爬取网易LOFTER图片</h1><div class="p-content"><p><code>LOFTER</code>是网易出品的优质轻博客，灵感源于国外的<code>tumblr</code>，但比之更加文艺，更加本地化。本人非常喜欢<code>LOFTER</code>的UI设计，以及其中的优质用户和内容，似乎网易并不擅长推广，所以受众并不广泛。这都是题外话，本文主要记录作者近期学习<code>python3</code>并用之爬取<code>LOFTER</code>用户图片的过程和成果，与大家交流分享。</p>
+<blockquote>
+<p>本文将以本人<a href="http://litreily.lofter.com" target="_blank" rel="noopener">litreily</a>博客为例说明整个爬取过程</p>
+</blockquote>
+<h2 id="分析LOFTER站点"><a href="#分析LOFTER站点" class="headerlink" title="分析LOFTER站点"></a>分析LOFTER站点</h2><p>在爬取站点之前，首先需要分析站点的关键信息有哪些，如果给自己提问，可能会有以下问题：</p>
+<ol>
+<li>用户的主页网址格式是？</li>
+<li>用户博客链接的格式是？</li>
+<li>每篇博客内的图片链接的格式是？</li>
+<li>不同用户的主页模板不同，是否可以按同样方法抓取博客信息？</li>
+<li>用户的博客数量巨大，主页以什么方式分页？</li>
+<li>有没有归档页面方便爬取（大多数网站都有归档页面）？</li>
+</ol>
+<p>当然，这些问题不是一下子就能想出来，可以在探索网页内容的过程逐步展开，并思考下一步该考虑的问题，下面针对各个问题对主页进行探索分析。</p>
+<h3 id="主页信息"><a href="#主页信息" class="headerlink" title="主页信息"></a>主页信息</h3><blockquote>
+<p>主页: http://[username].lofter.com</p>
+</blockquote>
+<p><img src="/assets/spider/lofter/litreily.png" alt="litreily"></p>
+<p>从主页可以看到<a href="http://litreily.lofter.com/view" target="_blank" rel="noopener">归档</a>的链接，暂时不管。不同的用户，其主页所用模板不尽一致，<code>LOFTER</code>为提供了大量精美的主页模板，以满足不同用户的需求：</p>
+<p><img src="/assets/spider/lofter/lofterTemplet.png" alt="lofter templet"></p>
+<p>然而，正是因为所用模板不同，其网页内容格式也不同，这个从不同模板中图片的位置，大小，图片信息等就可以看出来。相同的资源，不同的展示方式，就好像同样一件艺术品，既可以摆放在玻璃框中，也可以悬挂在高空。</p>
+<p>当然这不是本文重点，这里只是为了说明不同用户的主页信息展示不一样，会给爬虫爬取带来一定影响。</p>
+<h3 id="分页信息"><a href="#分页信息" class="headerlink" title="分页信息"></a>分页信息</h3><p>点击主页尾部的下一页，可以跳转至下一页，除首页和末页外，都会有上一页和下一页的链接，这里就给了我们一个提示，我们可以先抓取首页信息，然后从中抓取到<strong>下一页</strong>的链接，然后不断获取<strong>下一页</strong>的博客信息。</p>
+<p><img src="/assets/spider/lofter/pages.png" alt="pages"></p>
+<p>或者更简单点，看网址栏中的网址格式:</p>
+<blockquote>
+<p>分页： <code>http://[username].lofter.com/?page=[pageNumber]&amp;t=[timeStamp]</code></p>
+</blockquote>
+<p>直接使用<code>for</code>循环修改<code>page</code>值，逐页爬取博客信息。这貌似是个不错的想法，好，假设这样可行，那我们来分析每一页的信息。</p>
+<p><img src="/assets/spider/lofter/postLink.png" alt="post link"></p>
+<p>如上图所示，首先找到博文永久链接<code>http://litreily.lofter.com/post/44fbca_1265bb3e</code></p>
+<p>针对含有图片的某一篇博文，<strong>litreily</strong>所用模板中会出现两次博文链接（见图中红框标注的两处），倘若我们使用正则表达式:</p>
+<pre><code class="python">re.findall(r&#39;&quot;http://.*lofter.com/post/[\w_]*&quot;&#39;, html)
+</code></pre>
+<p>将对每篇博文匹配出两个一样的链接，这可不是我们想要的，那咋整，匹配完再把重复的删了？不至于这么麻烦，细看两处链接前后信息，可以看到两处链接的<code>class</code>属性不一致，好办了，咱改改正则：</p>
+<pre><code class="python">re.findall(r&#39;&lt;a class=&quot;img&quot; href=&quot;(http://.*lofter.com/post/[\w_]*)&quot;&gt;&#39;, html)
+</code></pre>
+<p>好像可以了，这不就可以按页抓取博客链接，然后接着分析每篇博文信息不就好了么。我原本就想这么干，可是当我查看了不同用户的排版以及相应的链接信息后，整个人都不好了，一千个用户就是一千个哈姆雷特啊。如果你发现有统一解析所有用户模板信息的方法，那肯定是你看的模板不够多。</p>
+<p>所以呢，这条路是走不通了，至少我没再往这条路上走。打道回府，只不过重头再来，路漫漫其修远兮，吾将上下而求索。</p>
+<p>靠，说了半天，原来走不通，那你说个毛线！！！淡定淡定，都是文明人，后面的风景很远，额不是，，，是很美，请耐心等待…</p>
+<h3 id="归档页信息"><a href="#归档页信息" class="headerlink" title="归档页信息"></a>归档页信息</h3><blockquote>
+<p>归档页：<code>http://[username].lofter.com/view</code></p>
+</blockquote>
+<p>好了，还记得前面说的<strong>归档</strong>吧，归档可是个好东西，它把所有博文都按日期归档，最主要的是，所有用户的归档页面都是同一个模板，不管大V小v还是普通老百姓，真的是一视同仁。剩下的问题就是<strong>如何从归档页抓取每篇博客的真实路径</strong>。</p>
+<p><img src="/assets/spider/lofter/archive.png" alt="archive"></p>
+<p>先来看看归档页面的结构吧，博客按月份归档，每篇博客仅显示首张图片缩略图或纯文本。然后<code>F12</code>打开调试工具，如下图所示，每个月份对应一个<code>&lt;div class=&quot;m-filecnt m-filecnt-1&quot;&gt;</code>这样的节点，每个月份节点包含了本月所有博客的入口信息，一篇博客对应一个<code>id</code>号，以及一个博客的<strong>相对路径</strong>。<code>id</code>神马的不用关心，重点就是这个<strong>相对路径</strong>，有了它不就有了博客的绝对路径了么。</p>
+<ul>
+<li>相对路径：”/post/44fbca_1265bb3e”</li>
+<li>绝对路径：”http://[username].lofter.com/post/44fbca_1265bb3e”</li>
+</ul>
+<p><img src="/assets/spider/lofter/archive_html.png" alt="archive structure"></p>
+<p>这样看来，那岂不是只要抓取这一个归档页面就可以抓到所有的博客路径了呢？呵呵，真的这么容易吗？显然不大可能，当我们下拉页面时，归档信息将动态加载刷新，没错，是动态的！！！意料之中的猝不及防</p>
+<p>接着我在Chrome浏览器中<code>Ctrl+U</code>看了看网页的源码（太长这就不放图了），果然不出所料，动态数据在源码中是木有的，只有一个脚本在那静静的躺着，躺着，躺着。。。难道就要放弃了吗，当然不！<strong>只要是网络通信，就必然有请求包和响应包</strong></p>
+<p>那现在的问题就是，动态网页的数据是如果获取到的？动态数据的<strong>真实请求</strong>是什么？抓包看看呗，打开浏览器调试工具中的<code>Network</code>，刷新归档页，看看页面加载过程，找到真实请求，这个很好找，这类请求的后缀一般不会是png,jpg,gif,js,css等，而且多半是<strong>POST</strong>包，并且会出现在一堆图片请求的前面。</p>
+<p><img src="/assets/spider/lofter/post.png" alt="post"></p>
+<p>好了，找到了，就是上面这货。现在归档数据请求的链接有了，确实是<strong>POST</strong>包，同样，请求包的头部信息<code>headers</code>和请求参数<code>request payload</code>也有了。</p>
+<p><img src="/assets/spider/lofter/post_values.png" alt="request values"></p>
+<p>现在的关键问题是，这些请求包中的参数都是干嘛的？经我多方尝试、猜测与观察，总结如下：</p>
+<pre><code class="C#">callCount=1       # 固定
+scriptSessionId=${scriptSessionId}187   # 固定
+httpSessionId=    # 固定
+c0-scriptName=ArchiveBean       # 固定
+c0-methodName=getArchivePostByTime      # 固定
+c0-id=0           # 固定
+c0-param0=number:4520906        # 用户ID，可从用户主页源码获取
+c0-param1=number:1521342313224  # 时间戳，最最最关键参数！
+c0-param2=number:50       # 单次请求博客篇数，可以按需求修改
+c0-param3=boolean:false   # 固定
+batchId=822456            # 6位随机数，爬取时可以固定
+</code></pre>
+<p>所以我们模拟请求包的时候就按这个来就可以了，至于时间戳怎么获取，请求包的<code>headers</code>如何确定，后面会有详述。</p>
+<p>下面我们来看看请求后得到的响应包长啥样，look，就下面这个，看到没，<strong><code>permalink</code></strong>, 千呼万唤始出来啊，这不就是我们想要的博客固定路径了么。响应包并不是<code>html</code>文件，而是一组数据，我觉着归档页包含的那个脚本就是根据这个数据文件进而请求首张图片信息或文本信息的，当然这是我的猜测了，有兴趣的可以去看看那个脚本。</p>
+<p><img src="/assets/spider/lofter/post_response.png" alt="post response"></p>
+<p>有了这组数据，咱就可以获取每次请求得到的博客路径列表，进而逐一爬取博客内的图片链接了。</p>
+<p>到此处为止，归档页的信息就分析完了，我们已经知道该发送怎样的请求包去获取归档数据，与此同时，我们也知道了从归档页如何获取每篇博客的真实路径。</p>
+<p>下面就来看看当我们知道博客路径并抓取后，该如何获取每篇博客正文内的图片链接。</p>
+<h3 id="博客页信息"><a href="#博客页信息" class="headerlink" title="博客页信息"></a>博客页信息</h3><blockquote>
+<p>博客： <code>http://[username].lofter.com/post/******_********</code></p>
+</blockquote>
+<p>以上面获取的博客 <a href="http://litreily.lofter.com/post/33a459_1230cb50" target="_blank" rel="noopener">http://litreily.lofter.com/post/33a459_1230cb50</a> 为例，大部分博客内的图片都不止一张，这也是必须访问博客页本身的主要原因，好了照旧查看页面元素。</p>
+<p><img src="/assets/spider/lofter/blog_pic.png" alt="blog pictures"></p>
+<p>可以发现每篇博客内所有图片的大图链接都是上图框选中这样的，都有着同样的属性<code>bigimgsrc</code>，并且是博客页面唯一的。由于每篇博客源码内包含了该篇博客所有的图片链接，所以当我们获取了某篇博客的<code>html</code>文件后，便可以使用正则表达式获取所有图片链接。</p>
+<p>至此，我们已经掌握了爬取<code>lofter</code>单用户博客图片所需的所有信息，是时候确定爬取方案了。</p>
+<h2 id="确定爬取方案"><a href="#确定爬取方案" class="headerlink" title="确定爬取方案"></a>确定爬取方案</h2><p>首先，根据给定的<code>username</code>获取<code>uid</code>作为<code>POST</code>请求包数据中的一分子；然后，循环执行以下步骤直至全部爬取完成</p>
+<ol>
+<li>生成或更新归档页请求数据</li>
+<li>模拟归档页面发送POST请求</li>
+<li>解析响应数据并获取博客链接</li>
+<li>逐一爬取博客内容</li>
+<li>解析博客内容并获取图片链接</li>
+<li>逐一下载图片至本地</li>
+</ol>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>方案确定好了，那就撸起袖子加油干吧！</p>
+<h3 id="依赖库"><a href="#依赖库" class="headerlink" title="依赖库"></a>依赖库</h3><ul>
+<li>requests</li>
+</ul>
+<p>Only one! 没错，依赖的第三方库就这一个，怎么装咱这就不说了</p>
+<h3 id="获取用户ID"><a href="#获取用户ID" class="headerlink" title="获取用户ID"></a>获取用户ID</h3><p>用户ID，确切的说是用户博客的唯一ID，是归档页请求报文中的参数之一，通过查看主页源码找到了相应的字符串，所以只要用<code>request.get</code>抓取首页然后匹配ID字符串就可以了，代码如下：</p>
+<pre><code class="python">def _get_blogid(username):
+    try:
+        html = requests.get(&#39;http://%s.lofter.com&#39; % username)
+        id_reg = r&#39;src=&quot;http://www.lofter.com/control\?blogId=(.*)&quot;&#39;
+        blogid = re.search(id_reg, html.text).group(1)
+        print(&#39;The blogid of %s is: %s&#39; % (username, blogid))
+        return blogid
+    except Exception as e:
+        print(&#39;get blogid from http://%s.lofter.com failed&#39; % username)
+        print(&#39;please check your username.&#39;)
+        exit(1)
+</code></pre>
+<h3 id="生成POST请求数据"><a href="#生成POST请求数据" class="headerlink" title="生成POST请求数据"></a>生成POST请求数据</h3><p>根据前面归档页的分析，我们知道POST请求中除了一些固定参数外，还有用户ID，时间戳<code>timestamp</code>以及单次请求的博客篇数<code>N</code>需要确定，而ID已经在前面已经获取到了；博客篇数可以自定义一个数，如40；最后就剩下时间戳了。</p>
+<p>经过多次尝试发现，这个时间戳<code>timestamp</code>是所有参数中唯一一个需要在每次请求中不断更新的参数。那么它更新的依据是什么呢？每篇博客都对应着一个<code>timestamp</code>，而且是博客的发布时间，每次请求后得到的最后一篇博客的<code>timestamp</code>就可以作为下一次请求的<code>timestamp</code>。为什么呢，因为我多次实验发现，在给定一个<code>timestamp</code>并发送POST请求后，服务器会<strong>以请求参数中的时间戳为起点按时间顺序往前检索出指定篇数(如：40)的博客信息</strong></p>
+<p>响应包的博客信息中包含了每篇博客的时间戳，所以每次获取响应包后，只要解析出响应包中最后一篇博客的时间戳，就可以作为下一次请求中的时间戳。</p>
+<p>根据以上分析，可以写出获取时间戳的函数如下：</p>
+<pre><code class="python"># time_pattern: re.compile(&#39;s%d\.time=(.*);s.*type&#39; % (query_number-1))
+def _get_timestamp(html, time_pattern):
+    if not html:
+        timestamp = round(time.time() * 1000)  # first timestamp(ms)
+    else:
+        timestamp = time_pattern.search(html).group(1)
+    return str(timestamp)
+</code></pre>
+<blockquote>
+<p>注意，首次请求的时间戳可以直接使用当前系统时间(ms)</p>
+</blockquote>
+<h3 id="发送POST请求包"><a href="#发送POST请求包" class="headerlink" title="发送POST请求包"></a>发送POST请求包</h3><p>POST请求包的<code>url</code>是固定的，<code>data</code>就是前面获取到的所有请求参数，<code>headers</code>如下：</p>
+<pre><code class="python">headers = {
+        &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.146 Safari/537.36&#39;,
+        &#39;Host&#39;: username + &#39;.lofter.com&#39;,
+        &#39;Referer&#39;: &#39;http://%s.lofter.com/view&#39; % username,
+        &#39;Accept-Encoding&#39;: &#39;gzip, deflate&#39;
+    }
+</code></pre>
+<p>其中，<code>User-Agent</code>用于模拟浏览器请求，后面三个参数最好都加上，否则可能无法请求成功。POST请求其实就是一条语句<code>requests.post</code>，具体实现如下：</p>
+<pre><code class="python">def _get_html(url, data, headers):
+    try:
+        html = requests.post(url, data, headers = headers)
+    except Exception as e:
+        print(&quot;get %s failed\n%s&quot; % (url, str(e)))
+        return None
+    finally:
+        pass
+    return html
+</code></pre>
+<h3 id="解析POST响应包"><a href="#解析POST响应包" class="headerlink" title="解析POST响应包"></a>解析POST响应包</h3><p>在获取响应包的文本<code>html</code>后，便可从中获取本次请求得到的所有博客的相对路径，然后生成绝对路径，进而逐一抓取博客原文，从原文中抓取所有图链。</p>
+<pre><code class="python"># get urls of blogs: s3.permalink=&quot;44fbca_19a6b1b&quot;
+new_blogs = blog_url_pattern.findall(html)
+num_new_blogs = len(new_blogs)
+num_blogs += num_new_blogs 
+
+if num_new_blogs != 0:
+    print(&#39;NewBlogs:%d\tTotalBolgs:%d&#39; % (num_new_blogs, num_blogs))
+    # get imgurls from new_blogs
+    imgurls = []
+    for blog in new_blogs:
+        imgurls.extend(_get_imgurls(username, blog, headers))
+    num_imgs += len(imgurls)
+</code></pre>
+<p>以上代码便是获取POST的响应包<code>html</code>后的解析操作，其中<code>_get_imurls</code>是用于抓取博客原文并解析出所有图链的函数。</p>
+<pre><code class="python">def _get_imgurls(username, blog, headers):
+    blog_url = &#39;http://%s.lofter.com/post/%s&#39; % (username, blog)
+    blog_html = requests.get(blog_url, headers = headers).text
+    imgurls = re.findall(r&#39;bigimgsrc=&quot;(.*?)&quot;&#39;, blog_html)
+    print(&#39;Blog\t%s\twith %d\tpictures&#39; % (blog_url, len(imgurls)))
+    return imgurls
+</code></pre>
+<h3 id="下载图片"><a href="#下载图片" class="headerlink" title="下载图片"></a>下载图片</h3><pre><code class="python">def _capture_images(imgurl, path):
+    headers = {&#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.146 Safari/537.36&#39;}
+    for i in range(1,3):
+        try:
+            image_request = requests.get(imgurl, headers = headers, timeout = 20)
+            if image_request.status_code == 200:
+                open(path, &#39;wb&#39;).write(image_request.content)
+                break
+        except requests.exceptions.ConnectionError as e:
+            print(&#39;\tGet %s failed\n\terror:%s&#39; % (imgurl, e))
+            if i == 1:
+                imgurl = re.sub(&#39;^http://img.*?\.&#39;,&#39;http://img.&#39;,imgurl)
+                print(&#39;\tRetry &#39; + imgurl)
+            else:
+                print(&#39;\tRetry fail&#39;)
+        except Exception as e:
+            print(e)
+        finally:
+            pass
+
+</code></pre>
+<p>有了图链，最后的工作当然是下载图片了，上面这段代码便是用来下载图片的，<code>headers</code>是为了模拟浏览器访问。那为什么要尝试下载两次呢？因为我在抓取过程中，有时候会出现抓取失败的情况，并显示以下错误信息：</p>
+<pre><code class="yaml">&#39;Connection aborted.&#39;, RemoteDisconnected(&#39;Remote end closed connection without response&#39;
+</code></pre>
+<p>所以在<code>Retry</code>前先将图链对应的<code>host</code>稍加修改,这样可以保证更高的成功率，但并不能完全避免。对于下载失败的情况，可能是：</p>
+<ol>
+<li>被反爬了（极大可能）</li>
+<li>网络通信不畅（可能性低）</li>
+<li>图链失效</li>
+<li>服务器出毛病了</li>
+</ol>
+<p>有时候，同样一个图链，过一段时间去抓就好了，或者换个网络就好了。我猜测是被反爬，但证据不足，所以只能降低爬取频率，比如每发送接收一次POST请求便<code>sleep</code>10s左右，但还是会有失败的情况，如果大家有更好的意见，欢迎交流。目前情况，正常情况100%爬取完全没问题，异常情况90%以上吧。</p>
+<h3 id="主循环"><a href="#主循环" class="headerlink" title="主循环"></a>主循环</h3><p>好了，其它零碎的代码就不多说了，爬虫主循环流程如下，其实就是以上步骤的整合：</p>
+<ol>
+<li>爬取归档页面指定篇数<code>query_number</code>的博文链接<code>new_blogs</code></li>
+<li>逐个爬取博文<code>blog</code>数据，获取每篇<code>blog</code>的所有大图链接<code>imgurls</code></li>
+<li>逐个爬取大图链接<code>imgurls</code>,下载图片至本地目录</li>
+<li>判断是否已爬取完所有博文<ul>
+<li>若已爬完，则显示爬取成果信息，并退出</li>
+<li>若未爬完，则更新请求包中的时间戳<code>timestamp</code>，返回第1步继续爬取新的博文</li>
+</ul>
+</li>
+</ol>
+<h3 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h3><pre><code class="python">#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+# date: 2018.03.07
+&quot;&quot;&quot;Capture pictures from lofter with username.&quot;&quot;&quot;
+
+import re
+import os
+import platform
+
+import requests
+
+import time
+import random
+
+
+def _get_path(username):
+    path = {
+        &#39;Windows&#39;: &#39;D:/litreily/Pictures/python/lofter/&#39; + username,
+        &#39;Linux&#39;: &#39;/mnt/d/litreily/Pictures/python/lofter/&#39; + username
+    }.get(platform.system())
+
+    if not os.path.isdir(path):
+        os.makedirs(path)
+    return path
+
+
+def _get_html(url, data, headers):
+    try:
+        html = requests.post(url, data, headers = headers)
+    except Exception as e:
+        print(&quot;get %s failed\n%s&quot; % (url, str(e)))
+        return None
+    finally:
+        pass
+    return html
+
+
+def _get_blogid(username):
+    try:
+        html = requests.get(&#39;http://%s.lofter.com&#39; % username)
+        id_reg = r&#39;src=&quot;http://www.lofter.com/control\?blogId=(.*)&quot;&#39;
+        blogid = re.search(id_reg, html.text).group(1)
+        print(&#39;The blogid of %s is: %s&#39; % (username, blogid))
+        return blogid
+    except Exception as e:
+        print(&#39;get blogid from http://%s.lofter.com failed&#39; % username)
+        print(&#39;please check your username.&#39;)
+        exit(1)
+
+
+def _get_timestamp(html, time_pattern):
+    if not html:
+        timestamp = round(time.time() * 1000)  # first timestamp(ms)
+    else:
+        timestamp = time_pattern.search(html).group(1)
+    return str(timestamp)
+
+
+def _get_imgurls(username, blog, headers):
+    blog_url = &#39;http://%s.lofter.com/post/%s&#39; % (username, blog)
+    blog_html = requests.get(blog_url, headers = headers).text
+    imgurls = re.findall(r&#39;bigimgsrc=&quot;(.*?)&quot;&#39;, blog_html)
+    print(&#39;Blog\t%s\twith %d\tpictures&#39; % (blog_url, len(imgurls)))
+    return imgurls
+
+
+def _capture_images(imgurl, path):
+    headers = {&#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.146 Safari/537.36&#39;}
+    for i in range(1,3):
+        try:
+            image_request = requests.get(imgurl, headers = headers, timeout = 20)
+            if image_request.status_code == 200:
+                open(path, &#39;wb&#39;).write(image_request.content)
+                break
+        except requests.exceptions.ConnectionError as e:
+            print(&#39;\tGet %s failed\n\terror:%s&#39; % (imgurl, e))
+            if i == 1:
+                imgurl = re.sub(&#39;^http://img.*?\.&#39;,&#39;http://img.&#39;,imgurl)
+                print(&#39;\tRetry &#39; + imgurl)
+            else:
+                print(&#39;\tRetry fail&#39;)
+        except Exception as e:
+            print(e)
+        finally:
+            pass
+
+
+def _create_query_data(blogid, timestamp, query_number):
+    data = {&#39;callCount&#39;:&#39;1&#39;,
+    &#39;scriptSessionId&#39;:&#39;${scriptSessionId}187&#39;,
+    &#39;httpSessionId&#39;:&#39;&#39;,
+    &#39;c0-scriptName&#39;:&#39;ArchiveBean&#39;,
+    &#39;c0-methodName&#39;:&#39;getArchivePostByTime&#39;,
+    &#39;c0-id&#39;:&#39;0&#39;,
+    &#39;c0-param0&#39;:&#39;number:&#39; + blogid,
+    &#39;c0-param1&#39;:&#39;number:&#39; + timestamp,
+    &#39;c0-param2&#39;:&#39;number:&#39; + query_number,
+    &#39;c0-param3&#39;:&#39;boolean:false&#39;,
+    &#39;batchId&#39;:&#39;123456&#39;}
+    return data
+
+
+def main():
+    # prepare paramters
+    username = &#39;litreily&#39;
+    blogid = _get_blogid(username)
+    query_number = 40
+    time_pattern = re.compile(&#39;s%d\.time=(.*);s.*type&#39; % (query_number-1))
+    blog_url_pattern = re.compile(r&#39;s[\d]*\.permalink=&quot;([\w_]*)&quot;&#39;) 
+
+    # creat path to save imgs
+    path = _get_path(username)
+
+    # parameters of post packet
+    url = &#39;http://%s.lofter.com/dwr/call/plaincall/ArchiveBean.getArchivePostByTime.dwr&#39; % username
+    data = _create_query_data(blogid, _get_timestamp(None, time_pattern), str(query_number))
+    headers = {
+        &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.146 Safari/537.36&#39;,
+        &#39;Host&#39;: username + &#39;.lofter.com&#39;,
+        &#39;Referer&#39;: &#39;http://%s.lofter.com/view&#39; % username,
+        &#39;Accept-Encoding&#39;: &#39;gzip, deflate&#39;
+    }
+
+    num_blogs = 0
+    num_imgs = 0
+    index_img = 0
+    print(&#39;------------------------------- start line ------------------------------&#39;)
+    while True:
+        html = _get_html(url, data, headers).text
+        # get urls of blogs: s3.permalink=&quot;44fbca_19a6b1b&quot;
+        new_blogs = blog_url_pattern.findall(html)
+        num_new_blogs = len(new_blogs)
+        num_blogs += num_new_blogs 
+
+        if num_new_blogs != 0:
+            print(&#39;NewBlogs:%d\tTotalBolgs:%d&#39; % (num_new_blogs, num_blogs))
+            # get imgurls from new_blogs
+            imgurls = []
+            for blog in new_blogs:
+                imgurls.extend(_get_imgurls(username, blog, headers))
+            num_imgs += len(imgurls)
+
+            # download imgs
+            for imgurl in imgurls:
+                index_img += 1
+                paths = &#39;%s/%d.%s&#39; % (path, index_img, re.search(r&#39;(jpg|png|gif)&#39;, imgurl).group(0))
+                print(&#39;{}\t{}&#39;.format(index_img, paths))
+                _capture_images(imgurl, paths)
+
+        if num_new_blogs != query_number:
+            print(&#39;------------------------------- stop line -------------------------------&#39;)
+            print(&#39;capture complete!&#39;)
+            print(&#39;captured blogs:%d images:%d&#39; % (num_blogs, num_imgs))
+            print(&#39;download path:&#39; + path)
+            print(&#39;-------------------------------------------------------------------------&#39;)
+            break
+
+        data[&#39;c0-param1&#39;] = &#39;number:&#39; + _get_timestamp(html, time_pattern)
+        print(&#39;The next TimeStamp is : %s\n&#39; % data[&#39;c0-param1&#39;].split(&#39;:&#39;)[1])
+        # wait a few second
+        time.sleep(random.randint(5,10))
+
+
+if __name__ == &#39;__main__&#39;:
+    main()
+</code></pre>
+<h2 id="爬取测试"><a href="#爬取测试" class="headerlink" title="爬取测试"></a>爬取测试</h2><p><img src="/assets/spider/lofter/lofter_spider.png" alt="lofter spider"></p>
+<p><img src="/assets/spider/lofter/pictures.png" alt="pictures"></p>
+<h2 id="说在最后"><a href="#说在最后" class="headerlink" title="说在最后"></a>说在最后</h2><ul>
+<li>Github 源码：<a href="https://github.com/Litreily/capturer" target="_blank" rel="noopener">https://github.com/Litreily/capturer</a></li>
+<li>欢迎交流探讨与STAR</li>
+<li>请节制使用！</li>
+</ul>
+</div></article></div><div class="l-pager l-pager-dtl box"><a class="prev" href="/2018/04/10/sina/">&lt; Python网络爬虫2 - 爬取新浪微博用户图片</a><a class="next" href="/2018/02/22/ddos-attack/">两款实用的DDos攻击工具 &gt;</a></div><footer><p>Copyright © 2018 <a href="/." rel="nofollow">LITREILY | </a>Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer><script type="text/javascript" src="/plugins/prettify/prettify.js"></script></div></div></div></body></html>

