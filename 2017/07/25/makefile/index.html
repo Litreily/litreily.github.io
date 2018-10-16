@@ -1,123 +1,54 @@
-<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><title>初探makefile | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><body><div class="box" id="container"><div class="h-wrapper"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="https://litreily.gitbooks.io/notes/">笔记</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li class="m-sch"><form class="form" id="j-formsch" action="/search" method="get"><input class="txt" type="text" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"></form></li></ul></div></nav></div><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><h1 class="p-title">初探makefile</h1><div class="p-content"><p>嵌入式软件开发少不了使用makefile进行软件编译，写好一个makefile，让其完成所有程序代码的自动化编译链接，可以提高软件开发效率。<code>make</code>是一个命令工具，用于解释并执行makefile中的指令。大多数IDE都有这个命令工具，如<code>Visual C++</code>的<code>nmake</code>，<code>Linux</code>中<code>GNU</code>的<code>make</code>。本文以一个简单例子说明<code>makefile</code>文件的书写规范和执行过程。</p>
-<h2 id="创建待编译的文件"><a href="#创建待编译的文件" class="headerlink" title="创建待编译的文件"></a>创建待编译的文件</h2><pre><code class="bash">mkdir mkfiles
-vim add.h add.c main.h main.c
-</code></pre>
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><title>初探makefile | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/8.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">初探makefile</h1><a id="logo" href="/.">LITREILY</a><p class="description">Stay Hungry, Stay Foolish</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> Home</i></a><a href="/archives/"><i class="fa fa-archive"> Archive</i></a><a href="https://litreily.gitbooks.io/notes/"><i class="fa fa-book"> Notes</i></a><a href="/about/"><i class="fa fa-user"> About</i></a><a href="/history/"><i class="fa fa-history"> History</i></a><a href="/atom.xml"><i class="fa fa-rss"> RSS</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">初探makefile</h1><div class="post-meta">Jul 25, 2017<span> | </span><span class="category"><a href="/categories/Linux/">Linux</a></span></div><a class="disqus-comment-count" href="/2017/07/25/makefile/#vcomment"><span class="valine-comment-count" data-xid="/2017/07/25/makefile/"></span><span> Comment</span></a><div class="post-content"><p>嵌入式软件开发少不了使用makefile进行软件编译，写好一个makefile，让其完成所有程序代码的自动化编译链接，可以提高软件开发效率。<code>make</code>是一个命令工具，用于解释并执行makefile中的指令。大多数IDE都有这个命令工具，如<code>Visual C++</code>的<code>nmake</code>，<code>Linux</code>中<code>GNU</code>的<code>make</code>。本文以一个简单例子说明<code>makefile</code>文件的书写规范和执行过程。</p>
+<h2 id="创建待编译的文件"><a href="#创建待编译的文件" class="headerlink" title="创建待编译的文件"></a>创建待编译的文件</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir mkfiles</span><br><span class="line">vim add.h add.c main.h main.c</span><br></pre></td></tr></table></figure>
 <p>然后逐个编辑头文件和源文件，实现一个简单的加法运算。</p>
 <h3 id="add-h"><a href="#add-h" class="headerlink" title="add.h"></a>add.h</h3><p>加法函数放于<code>add.c</code>中，对应头文件为<code>add.h</code>，用于存放函数声明。</p>
-<pre><code class="c">#ifndef __ADD_H_
-#define __ADD_H_
-
-// declaration functions
-int add(int a,int b);
-
-#endif // __ADD_H_
-</code></pre>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> __ADD_H_</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __ADD_H_</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// declaration functions</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">// __ADD_H_</span></span></span><br></pre></td></tr></table></figure>
 <h3 id="add-c"><a href="#add-c" class="headerlink" title="add.c"></a>add.c</h3><p>在<code>add.c</code>中实现加法函数。</p>
-<pre><code class="c">#include &quot;add.h&quot;
-
-int add(int a, int b)
-{
-  return a+b;
-}
-</code></pre>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"add.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">return</span> a+b;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="main-h"><a href="#main-h" class="headerlink" title="main.h"></a>main.h</h3><p>在主函数对应的头文件<code>main.h</code>中添加依赖的头文件。</p>
-<pre><code class="c">#ifndef __MAIN_H_
-#define __MAIN_H_
-
-#include &lt;math.h&gt;
-
-#endif // __MAIN_H_
-</code></pre>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> __MAIN_H_</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __MAIN_H_</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;math.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">// __MAIN_H_</span></span></span><br></pre></td></tr></table></figure>
 <h3 id="main-c"><a href="#main-c" class="headerlink" title="main.c"></a>main.c</h3><p>在<code>main.c</code>中实现主函数，打印出一个加法运算结果。</p>
-<pre><code class="c">#include &lt;stdio.h&gt;
-#include &quot;main.h&quot;
-#include &quot;add.h&quot;
-
-int main(void)
-{
-  int a = 10;
-  int b = 1;
-  int c = add(a,b);
-  printf(&quot;%d + %d = %d\n&quot;,a,b,c);
-  return 0;
-}
-</code></pre>
-<h2 id="创建-makefile"><a href="#创建-makefile" class="headerlink" title="创建 makefile"></a>创建 makefile</h2><h3 id="makefile-规则"><a href="#makefile-规则" class="headerlink" title="makefile 规则"></a>makefile 规则</h3><pre><code class="bash">target ... : prerequisites ...
-&lt;tab&gt;   command
-
-...
-...
-</code></pre>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"main.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"add.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line">  <span class="keyword">int</span> b = <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">int</span> c = add(a,b);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">"%d + %d = %d\n"</span>,a,b,c);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="创建-makefile"><a href="#创建-makefile" class="headerlink" title="创建 makefile"></a>创建 makefile</h2><h3 id="makefile-规则"><a href="#makefile-规则" class="headerlink" title="makefile 规则"></a>makefile 规则</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">target ... : prerequisites ...</span><br><span class="line">&lt;tab&gt;   <span class="built_in">command</span></span><br><span class="line"></span><br><span class="line">...</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 <p><code>target</code>: 目标文件，可以是.o（object file）文件，也可以是最终的可执行文件<br><code>prerequisites</code> : 生成目标文件所需的文件或是目标（<em>.h, </em>.c, *.o, …）<br><code>command</code>: <code>make</code>需要执行的编译、链接等指令（所有指令前都以<code>TAB</code>键开头）</p>
-<h3 id="makefile-基础写法"><a href="#makefile-基础写法" class="headerlink" title="makefile 基础写法"></a>makefile 基础写法</h3><pre><code class="makefile">test : main.o add.o
-    cc -o test main.o add.o
-
-main.o : main.c main.h add.h
-    cc -c main.c
-
-add.o : add.c add.h
-    cc -c add.c
-
-# make clean : use to clean all the object files
-
-.PHONY : clean
-clean :
-    rm test main.o add.o
-</code></pre>
+<h3 id="makefile-基础写法"><a href="#makefile-基础写法" class="headerlink" title="makefile 基础写法"></a>makefile 基础写法</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">test : main.o add.o</span><br><span class="line">	cc -o test main.o add.o</span><br><span class="line"></span><br><span class="line">main.o : main.c main.h add.h</span><br><span class="line">	cc -c main.c</span><br><span class="line"></span><br><span class="line">add.o : add.c add.h</span><br><span class="line">	cc -c add.c</span><br><span class="line"></span><br><span class="line"><span class="comment"># make clean : use to clean all the object files</span></span><br><span class="line"></span><br><span class="line">.PHONY : clean</span><br><span class="line">clean :</span><br><span class="line">	rm test main.o add.o</span><br></pre></td></tr></table></figure>
 <p>其中，test, main.o, add.o均是目标文件<code>target</code>；所有源文件及头文件均为<code>prerequisites</code>；</p>
 <p><code>cc</code> : 编译器，与<code>gcc</code>相似，<code>-c</code>代表编译，执行后产生对象文件，即”.o”文件；<code>-o</code>代表链接，用于链接”.o”文件并生成可执行文件；</p>
 <p><code>.PHONY</code> : 用于声明后面跟着的都是伪目标（类似于C语言中的标签(Label)）；</p>
 <p><code>clean</code> ： 一个伪目标，只有在外部执行<code>make clean</code>时方才执行相应的执行，此次用于删除生成的所有目标文件。</p>
 <h3 id="makefile-简化版1"><a href="#makefile-简化版1" class="headerlink" title="makefile 简化版1"></a>makefile 简化版1</h3><p>在<code>makefile</code>中可以通过<code>$</code>符号引用变量，简化文件。变量定义以等号连接，类似于宏定义，将需要多处使用的字符串存入变量中可以方便修改和管理，如本例，可定义以下变量：</p>
-<pre><code class="makefile">objs = main.o add.o  # 引用方法 $(objs)
-</code></pre>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">objs = main.o add.o  <span class="comment"># 引用方法 $(objs)</span></span><br></pre></td></tr></table></figure>
 <p>简化后的<code>makefile</code>如下：</p>
-<pre><code class="makefile">objs = main.o add.o
-test : $(objs)
-    cc -o test $(objs)
-
-main.o : main.c main.h add.h
-    cc -c main.c
-
-add.o : add.c add.h
-    cc -c add.c
-
-# make clean : use to clean all the object files
-
-.PHONY : clean
-clean :
-    rm test (objs)
-</code></pre>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">objs = main.o add.o</span><br><span class="line">test : <span class="variable">$(objs)</span></span><br><span class="line">	cc -o test <span class="variable">$(objs)</span></span><br><span class="line"></span><br><span class="line">main.o : main.c main.h add.h</span><br><span class="line">	cc -c main.c</span><br><span class="line"></span><br><span class="line">add.o : add.c add.h</span><br><span class="line">	cc -c add.c</span><br><span class="line"></span><br><span class="line"><span class="comment"># make clean : use to clean all the object files</span></span><br><span class="line"></span><br><span class="line">.PHONY : clean</span><br><span class="line">clean :</span><br><span class="line">	rm test (objs)</span><br></pre></td></tr></table></figure>
 <p>当项目文件很多时，合理使用变量可以大大简化<code>makefile</code>的编写和修改。</p>
 <h3 id="makefile-简化版2"><a href="#makefile-简化版2" class="headerlink" title="makefile 简化版2"></a>makefile 简化版2</h3><p>要知道，<code>make</code>非常强大，具有<strong>自动推导</strong>的功能，可以自动推导”.o”目标文件下面的指令。如果目标文件为”main.o”，那么指令必然为”cc -c main.c”，依赖于<code>make</code>指令的推导功能，<code>makefile</code>可以省略该指令的编写。</p>
 <p>此外，每个”.o”目标文件的依赖文件必然包含一个文件名相同的”.c”文件，该文件可以通过自动推导得出，所以在<code>makefile</code>中同样可以省略。</p>
 <p>根据以上规则可以对<code>makefile</code>进一步简化：</p>
-<pre><code class="makefile">objs = main.o add.o
-test : $(objs)
-    cc -o test $(objs)
-
-main.o : main.h add.h
-add.o : add.h
-
-# make clean : use to clean all the object files
-
-.PHONY : clean
-clean :
-    rm test (objs)
-</code></pre>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">objs = main.o add.o</span><br><span class="line">test : <span class="variable">$(objs)</span></span><br><span class="line">	cc -o test <span class="variable">$(objs)</span></span><br><span class="line"></span><br><span class="line">main.o : main.h add.h</span><br><span class="line">add.o : add.h</span><br><span class="line"></span><br><span class="line"><span class="comment"># make clean : use to clean all the object files</span></span><br><span class="line"></span><br><span class="line">.PHONY : clean</span><br><span class="line">clean :</span><br><span class="line">	rm test (objs)</span><br></pre></td></tr></table></figure>
 <h2 id="make"><a href="#make" class="headerlink" title="make"></a>make</h2><p>编写好<code>makefile</code>文件后，便可以使用<code>make</code>指令进行编译链接并生成可执行文件了。</p>
-<pre><code class="bash">$ make  # 生成可执行文件
-cc -c main.c
-cc -c add.c
-cc -o test main.o add.o
-$ ls
-add.c  add.h  add.o  main.c  main.h  main.o  makefile  test
-$ ./test  # 执行可执行文件
-10 + 1 = 11
-$ make clean  # 清除所有目标文件
-rm test main.o add.o
-$ ls
-add.c  add.h  main.c  main.h  makefile
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ make  <span class="comment"># 生成可执行文件</span></span><br><span class="line">cc -c main.c</span><br><span class="line">cc -c add.c</span><br><span class="line">cc -o <span class="built_in">test</span> main.o add.o</span><br><span class="line">$ ls</span><br><span class="line">add.c  add.h  add.o  main.c  main.h  main.o  makefile  <span class="built_in">test</span></span><br><span class="line">$ ./<span class="built_in">test</span>  <span class="comment"># 执行可执行文件</span></span><br><span class="line">10 + 1 = 11</span><br><span class="line">$ make clean  <span class="comment"># 清除所有目标文件</span></span><br><span class="line">rm <span class="built_in">test</span> main.o add.o</span><br><span class="line">$ ls</span><br><span class="line">add.c  add.h  main.c  main.h  makefile</span><br></pre></td></tr></table></figure>
 <p>至此，一个简单的<code>makefile</code>编写过程及执行过程便结束了。</p>
-</div></article></div><div class="l-pager l-pager-dtl box"><a class="prev" href="/2017/07/27/mixwith-shell/">&lt; C程序与Shell脚本混合编程</a><a class="next" href="/2017/06/11/initial-ubuntu/">安装Ubuntu后的系统精简与美化 &gt;</a></div><footer><p>Copyright © 2018 <a href="/." rel="nofollow">LITREILY | </a>Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer><script type="text/javascript" src="/plugins/prettify/prettify.js"></script></div></div></div></body></html>
+</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a class="article-share-link" data-url="http://www.litreily.top/2017/07/25/makefile/" data-id="cjnbnfzgu005a85wt6c14wcf5" data-qrcode="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACKUlEQVR42u3ay66DMAxF0f7/T3OnlSpgH5veKs7OqKItYTGw/Mjrhdfxts6uf67335Dfn+3y2JIhQ8ayjPRR+D2vdyHfBlQZMmRswLh+FPL5OjST4Evuf3pdhgwZMk62vwbUEkEZMmTI6DBqVzhVhgwZMq4ZpIhNW2kE8INaXIYMGQsy0vbZf37+ynxDhgwZSzGOcPGmf+fO8X9lyJAxmtE/MNFp0pHAyveSIUPGVAZvzXfKy05JjBJWGTJkjGbwZj0Ppvyl1Aaip/+SIUPGxoy0lOXpXSdxvJlvyJAhYxCDDwV5WAySOXwULJ7BypAhYxCDJHlx/A7LYHJP9JpkyJCxAePZ5I834Eg7r5UgypAhY3FGZ5s0peNsEvpvGm0yZMgYx0gDXH8AWQvuNwfCZMiQMZqRHqcg48xac63YzpMhQ8ZoRu2QFi87+Qvio00ZMmTISI9B1A5YBIe9+JIhQ8ZQRtpW6wwg04fj95chQ8ZsRhoEay3+2iCBhPKbKYcMGTI2YHBYJ1lMScE8VoYMGUMZPNR26koepoPrMmTIGM1AJWKp7CQPkb4m9C8ZMmQMYhzhqjX9OeaxpFCGDBmDGJ0xZ2c4Sppu/MCHDBkydmDUgmw6AKgFdA6WIUPGDoz0UdIkj9w5LZVlyJAhgwfc2i/THW/YMmTIkFE6KsHbZGmYDmYaMmTIGMToDANq29cK14fbbTJkyFiEUSsdOxukaSIfKsiQIWMc4w+aGTMIvQLz7wAAAABJRU5ErkJggg==">Share</a><div class="tags"><a href="/tags/C-C/">C/C++</a><a href="/tags/ubuntu/">ubuntu</a><a href="/tags/makefile/">makefile</a></div><div class="post-nav"><a class="pre" href="/2017/07/27/mixwith-shell/">C程序与Shell脚本混合编程</a><a class="next" href="/2017/06/11/initial-ubuntu/">安装Ubuntu后的系统精简与美化</a></div><div id="vcomment"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/LabVIEW/">LabVIEW</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Matlab/">Matlab</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Media/">Media</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Network/">Network</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Office/">Office</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web/">Web</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Web/Template/">Template</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/信号处理/">信号处理</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/嵌入式/">嵌入式</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/杂物柜/">杂物柜</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/tags/office/" style="font-size: 12px;">office</a> <a href="/tags/test/" style="font-size: 15.43px;">test</a> <a href="/tags/ruby/" style="font-size: 13.71px;">ruby</a> <a href="/tags/literature/" style="font-size: 12px;">literature</a> <a href="/tags/algorithm/" style="font-size: 20.57px;">algorithm</a> <a href="/tags/video/" style="font-size: 13.71px;">video</a> <a href="/tags/matlab/" style="font-size: 17.14px;">matlab</a> <a href="/tags/windows/" style="font-size: 13.71px;">windows</a> <a href="/tags/labview/" style="font-size: 22.29px;">labview</a> <a href="/tags/tdms/" style="font-size: 13.71px;">tdms</a> <a href="/tags/brackets/" style="font-size: 12px;">brackets</a> <a href="/tags/git/" style="font-size: 15.43px;">git</a> <a href="/tags/tools/" style="font-size: 17.14px;">tools</a> <a href="/tags/C-C/" style="font-size: 24px;">C/C++</a> <a href="/tags/utorrent/" style="font-size: 12px;">utorrent</a> <a href="/tags/atom/" style="font-size: 13.71px;">atom</a> <a href="/tags/ubuntu/" style="font-size: 22.29px;">ubuntu</a> <a href="/tags/linux/" style="font-size: 18.86px;">linux</a> <a href="/tags/signal/" style="font-size: 13.71px;">signal</a> <a href="/tags/music/" style="font-size: 13.71px;">music</a> <a href="/tags/hexo/" style="font-size: 13.71px;">hexo</a> <a href="/tags/RSS/" style="font-size: 12px;">RSS</a> <a href="/tags/Feed/" style="font-size: 12px;">Feed</a> <a href="/tags/VS/" style="font-size: 13.71px;">VS</a> <a href="/tags/jekyll/" style="font-size: 15.43px;">jekyll</a> <a href="/tags/word/" style="font-size: 12px;">word</a> <a href="/tags/stm32/" style="font-size: 13.71px;">stm32</a> <a href="/tags/LWD/" style="font-size: 12px;">LWD</a> <a href="/tags/log/" style="font-size: 12px;">log</a> <a href="/tags/FreeRTOS/" style="font-size: 12px;">FreeRTOS</a> <a href="/tags/makefile/" style="font-size: 13.71px;">makefile</a> <a href="/tags/wireshark/" style="font-size: 12px;">wireshark</a> <a href="/tags/tmux/" style="font-size: 13.71px;">tmux</a> <a href="/tags/shell/" style="font-size: 12px;">shell</a> <a href="/tags/telnet/" style="font-size: 12px;">telnet</a> <a href="/tags/smtp/" style="font-size: 12px;">smtp</a> <a href="/tags/mysql/" style="font-size: 12px;">mysql</a> <a href="/tags/centos/" style="font-size: 12px;">centos</a> <a href="/tags/ddos/" style="font-size: 12px;">ddos</a> <a href="/tags/hping3/" style="font-size: 12px;">hping3</a> <a href="/tags/pug/" style="font-size: 12px;">pug</a> <a href="/tags/spider/" style="font-size: 17.14px;">spider</a> <a href="/tags/scrapy/" style="font-size: 12px;">scrapy</a> <a href="/tags/sort/" style="font-size: 12px;">sort</a> <a href="/tags/visualization/" style="font-size: 12px;">visualization</a> <a href="/tags/sina/" style="font-size: 12px;">sina</a> <a href="/tags/queue/" style="font-size: 12px;">queue</a> <a href="/tags/xlwt/" style="font-size: 12px;">xlwt</a> <a href="/tags/lofter/" style="font-size: 12px;">lofter</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/09/27/tee/">Linux指令 - tee的实现</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/20/coredump/">OpenWrt中使用gdb分析coredump</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/31/pug-synax/">网页模板pug基本语法</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/07/quick-sort/">Python实现快排及其可视化</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/19/tmux-config/">tmux常用配置说明</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Links</i></div><ul></ul><a href="https://www.smslit.top" title="smslit-水木十里" target="_blank">smslit-水木十里</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2018 <a href="/." rel="nofollow">LITREILY.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> manupassant.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.css"><script type="text/javascript" src="/js/search.js?v=0.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+   search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>

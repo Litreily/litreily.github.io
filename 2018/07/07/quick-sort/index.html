@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><title>Python实现快排及其可视化 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><body><div class="box" id="container"><div class="h-wrapper"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="https://litreily.gitbooks.io/notes/">笔记</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li class="m-sch"><form class="form" id="j-formsch" action="/search" method="get"><input class="txt" type="text" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"></form></li></ul></div></nav></div><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><h1 class="p-title">Python实现快排及其可视化</h1><div class="p-content"><p>最近装了个<code>Anaconda</code>，准备学习一下数据可视化。本着三天打鱼两天装死的心态，重新抱起崭新的<strong>算法</strong>书，认真学起了快排算法。学完后用<code>Python</code>实现了一遍基本的快排，然后使用<code>matplotlib</code>进行动态绘图，最后使用<code>imageio</code>生成GIF图片。谨以此文以记之！</p>
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><title>Python实现快排及其可视化 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/8.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Python实现快排及其可视化</h1><a id="logo" href="/.">LITREILY</a><p class="description">Stay Hungry, Stay Foolish</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> Home</i></a><a href="/archives/"><i class="fa fa-archive"> Archive</i></a><a href="https://litreily.gitbooks.io/notes/"><i class="fa fa-book"> Notes</i></a><a href="/about/"><i class="fa fa-user"> About</i></a><a href="/history/"><i class="fa fa-history"> History</i></a><a href="/atom.xml"><i class="fa fa-rss"> RSS</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">Python实现快排及其可视化</h1><div class="post-meta">Jul 7, 2018<span> | </span><span class="category"><a href="/categories/算法/">算法</a></span></div><a class="disqus-comment-count" href="/2018/07/07/quick-sort/#vcomment"><span class="valine-comment-count" data-xid="/2018/07/07/quick-sort/"></span><span> Comment</span></a><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">Contents</div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#快排基本原理"><span class="toc-number">1.</span> <span class="toc-text">快排基本原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基本实现"><span class="toc-number">2.</span> <span class="toc-text">基本实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#快排优化"><span class="toc-number">3.</span> <span class="toc-text">快排优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#面向对象编程"><span class="toc-number">4.</span> <span class="toc-text">面向对象编程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#打印数据交换记录"><span class="toc-number">5.</span> <span class="toc-text">打印数据交换记录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据可视化"><span class="toc-number">6.</span> <span class="toc-text">数据可视化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#生成GIF动图"><span class="toc-number">7.</span> <span class="toc-text">生成GIF动图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#完整源码"><span class="toc-number">8.</span> <span class="toc-text">完整源码</span></a></li></ol></div></div><div class="post-content"><p>最近装了个<code>Anaconda</code>，准备学习一下数据可视化。本着三天打鱼两天装死的心态，重新抱起崭新的<strong>算法</strong>书，认真学起了快排算法。学完后用<code>Python</code>实现了一遍基本的快排，然后使用<code>matplotlib</code>进行动态绘图，最后使用<code>imageio</code>生成GIF图片。谨以此文以记之！</p>
 <h2 id="快排基本原理"><a href="#快排基本原理" class="headerlink" title="快排基本原理"></a>快排基本原理</h2><p><strong>快排</strong>采用和归并排序相同的分而治之的思想，将待排序数组分成左右两个子数组，对两部分子数组独立排序。当子数组均有序时，整个数组也就有序了。</p>
 <p>排序步骤如下：</p>
 <ol>
@@ -27,207 +27,26 @@
 <h2 id="基本实现"><a href="#基本实现" class="headerlink" title="基本实现"></a>基本实现</h2><blockquote>
 <p>Talk is cheap, show me the code</p>
 </blockquote>
-<pre><code class="python">def sort(data):
-    __sort(data, 0, len(data) - 1)
-
-def __sort(data, lo, hi):
-    if lo &gt;= hi:
-        return
-    key = __partition(data, lo, hi)
-    __sort(data, lo, key - 1)
-    __sort(data, key + 1, hi)
-
-def __swap(data, lo, hi):
-    data[lo], data[hi] = data[hi], data[lo]
-
-def __partition(data, lo, hi):
-    &#39;&#39;&#39;partition array&#39;&#39;&#39;
-    i = lo
-    j = hi
-    v = data[lo] # slicing element
-    while True:
-        # find one element that larger than v scan from left to right(→)
-        i += 1
-        while data[i] &lt; v:
-            if i == hi:
-                break
-            i += 1
-
-        # find one element that smaller than v scan from right to left(←)
-        while v &lt; data[j]:
-            if j == lo:
-                break
-            j -= 1
-
-        if i &gt;= j:
-            break
-        __swap(data, i, j)
-    __swap(data, lo, j)
-    return j
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sort</span><span class="params">(data)</span>:</span></span><br><span class="line">    __sort(data, <span class="number">0</span>, len(data) - <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__sort</span><span class="params">(data, lo, hi)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> lo &gt;= hi:</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    key = __partition(data, lo, hi)</span><br><span class="line">    __sort(data, lo, key - <span class="number">1</span>)</span><br><span class="line">    __sort(data, key + <span class="number">1</span>, hi)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__swap</span><span class="params">(data, lo, hi)</span>:</span></span><br><span class="line">    data[lo], data[hi] = data[hi], data[lo]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__partition</span><span class="params">(data, lo, hi)</span>:</span></span><br><span class="line">    <span class="string">'''partition array'''</span></span><br><span class="line">    i = lo</span><br><span class="line">    j = hi</span><br><span class="line">    v = data[lo] <span class="comment"># slicing element</span></span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">        <span class="comment"># find one element that larger than v scan from left to right(→)</span></span><br><span class="line">        i += <span class="number">1</span></span><br><span class="line">        <span class="keyword">while</span> data[i] &lt; v:</span><br><span class="line">            <span class="keyword">if</span> i == hi:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            i += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># find one element that smaller than v scan from right to left(←)</span></span><br><span class="line">        <span class="keyword">while</span> v &lt; data[j]:</span><br><span class="line">            <span class="keyword">if</span> j == lo:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            j -= <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> i &gt;= j:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        __swap(data, i, j)</span><br><span class="line">    __swap(data, lo, j)</span><br><span class="line">    <span class="keyword">return</span> j</span><br></pre></td></tr></table></figure>
 <p>以上便是参考<code>Algorithms</code>书上<code>java</code>代码的<code>Python</code>实现。下面是个使用示例：</p>
-<pre><code class="python">import random
-
-def main():
-    data = [_ for _ in range(20)]
-    random.shuffle(data)
-    print(data)
-    sort(data)
-    print(data)
-
-if __name__ == &#39;__main__&#39;:
-    main()
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    data = [_ <span class="keyword">for</span> _ <span class="keyword">in</span> range(<span class="number">20</span>)]</span><br><span class="line">    random.shuffle(data)</span><br><span class="line">    print(data)</span><br><span class="line">    sort(data)</span><br><span class="line">    print(data)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
 <p>执行结果如下：</p>
-<pre><code class="bash">$ python quick.py
-[4, 9, 1, 13, 18, 5, 6, 14, 2, 16, 7, 12, 15, 8, 11, 17, 0, 19, 10, 3]
-[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ python quick.py</span><br><span class="line">[4, 9, 1, 13, 18, 5, 6, 14, 2, 16, 7, 12, 15, 8, 11, 17, 0, 19, 10, 3]</span><br><span class="line">[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]</span><br></pre></td></tr></table></figure>
 <h2 id="快排优化"><a href="#快排优化" class="headerlink" title="快排优化"></a>快排优化</h2><p>快排有很多优化算法，目前我只习得一种最简单的，可以将切分函数两个内部<code>while</code>循环中的<code>if</code>语句去掉</p>
-<pre><code class="python"># first one
-if i == hi:
-    break
-
-# second one
-if j == lo:
-    break
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># first one</span></span><br><span class="line"><span class="keyword">if</span> i == hi:</span><br><span class="line">    <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># second one</span></span><br><span class="line"><span class="keyword">if</span> j == lo:</span><br><span class="line">    <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
 <p>这两个判断都是为了防止访问数组越界而设，其实第二个是完全没有必要加的，因为<code>lo</code>对应的就是切分元素本身，自己肯定不会小于自己，所以这个判断完全是多余的；对于第一个，想要去掉的话，只要保证数组最后一个元素最大即可，实现上只要在执行排序函数之前将最大值换至最后即可。</p>
-<pre><code class="py">__swap(data, data.index(max(data)), len(data) - 1)
-</code></pre>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">__swap(data, data.index(max(data)), len(data) - <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
 <p>本文后续的<code>code</code>会将第二个判断去掉，但第一个的还保留着，毕竟把最大值直接挪到最后总感觉怪怪的，在可视化的时候也会牺牲一点随机性。</p>
 <h2 id="面向对象编程"><a href="#面向对象编程" class="headerlink" title="面向对象编程"></a>面向对象编程</h2><p>为了方便代码的阅读和管理,我将快排代码封装成<code>QuickSort</code>类,同时加入变量<code>swap_times</code>用于记录总的数据交换次数。</p>
-<pre><code class="py">class QuickSort(object):
-    &#39;&#39;&#39;Quick sort algorithm&#39;&#39;&#39;
-    def sort(self, data):
-        self.swap_times = 0
-        # set the largest element to the end
-        # self.__swap(data, data.index(max(data)), len(data) - 1)
-        self.__sort(data, 0, len(data) - 1)
-        return self.swap_times
-
-    def __swap(self, data, lo, hi):
-        data[lo], data[hi] = data[hi], data[lo]
-        self.swap_times += 1
-
-    def __sort(self, data, lo, hi):
-        if lo &gt;= hi:
-            return
-        key = self.__partition(data, lo, hi)
-        self.__sort(data, lo, key - 1)
-        self.__sort(data, key + 1, hi)
-
-    def __partition(self, data, lo, hi):
-        &#39;&#39;&#39;partition array&#39;&#39;&#39;
-        i = lo
-        j = hi
-        v = data[lo] # slicing element
-        while True:
-            # find one element that larger than v scan from left to right(→)
-            i += 1
-            while data[i] &lt; v:
-                # below judge can dropped if the end element is the largest
-                if i == hi:
-                    break
-                i += 1
-
-            # find one element that smaller than v scan from right to left(←)
-            while v &lt; data[j]:
-                j -= 1
-
-            if i &gt;= j:
-                break
-            self.__swap(data, i, j)
-        self.__swap(data, lo, j)
-        return j
-</code></pre>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">QuickSort</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="string">'''Quick sort algorithm'''</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">sort</span><span class="params">(self, data)</span>:</span></span><br><span class="line">        self.swap_times = <span class="number">0</span></span><br><span class="line">        <span class="comment"># set the largest element to the end</span></span><br><span class="line">        <span class="comment"># self.__swap(data, data.index(max(data)), len(data) - 1)</span></span><br><span class="line">        self.__sort(data, <span class="number">0</span>, len(data) - <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> self.swap_times</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__swap</span><span class="params">(self, data, lo, hi)</span>:</span></span><br><span class="line">        data[lo], data[hi] = data[hi], data[lo]</span><br><span class="line">        self.swap_times += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__sort</span><span class="params">(self, data, lo, hi)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> lo &gt;= hi:</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        key = self.__partition(data, lo, hi)</span><br><span class="line">        self.__sort(data, lo, key - <span class="number">1</span>)</span><br><span class="line">        self.__sort(data, key + <span class="number">1</span>, hi)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__partition</span><span class="params">(self, data, lo, hi)</span>:</span></span><br><span class="line">        <span class="string">'''partition array'''</span></span><br><span class="line">        i = lo</span><br><span class="line">        j = hi</span><br><span class="line">        v = data[lo] <span class="comment"># slicing element</span></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">            <span class="comment"># find one element that larger than v scan from left to right(→)</span></span><br><span class="line">            i += <span class="number">1</span></span><br><span class="line">            <span class="keyword">while</span> data[i] &lt; v:</span><br><span class="line">                <span class="comment"># below judge can dropped if the end element is the largest</span></span><br><span class="line">                <span class="keyword">if</span> i == hi:</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                i += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">            <span class="comment"># find one element that smaller than v scan from right to left(←)</span></span><br><span class="line">            <span class="keyword">while</span> v &lt; data[j]:</span><br><span class="line">                j -= <span class="number">1</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> i &gt;= j:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            self.__swap(data, i, j)</span><br><span class="line">        self.__swap(data, lo, j)</span><br><span class="line">        <span class="keyword">return</span> j</span><br></pre></td></tr></table></figure>
 <h2 id="打印数据交换记录"><a href="#打印数据交换记录" class="headerlink" title="打印数据交换记录"></a>打印数据交换记录</h2><p>为了了解排序过程中数据交换,可以在<code>__swap</code>函数中打印每一次交换后的数组。</p>
-<pre><code class="py">def __init__(self, debug=False, save_fig=False):
-    self.debug = debug
-
-def __swap(self, data, lo, hi):
-    data[lo], data[hi] = data[hi], data[lo]
-    self.swap_times += 1
-
-    if self.debug:
-        print(&#39;{0} swap({1}, {2})&#39;.format(data, lo, hi))
-</code></pre>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, debug=False, save_fig=False)</span>:</span></span><br><span class="line">    self.debug = debug</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__swap</span><span class="params">(self, data, lo, hi)</span>:</span></span><br><span class="line">    data[lo], data[hi] = data[hi], data[lo]</span><br><span class="line">    self.swap_times += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> self.debug:</span><br><span class="line">        print(<span class="string">'&#123;0&#125; swap(&#123;1&#125;, &#123;2&#125;)'</span>.format(data, lo, hi))</span><br></pre></td></tr></table></figure>
 <p>示例：</p>
-<pre><code class="py">#main.py
-def main():
-    data = []
-    random.seed(time.time())
-    data = [_ for _ in range(20)]
-    random.shuffle(data)
-
-    qs = QuickSort(debug=True)
-    swap_times, = qs.sort(data)
-
-
-if __name__ == &#39;__main__&#39;:
-    main()
-</code></pre>
-<pre><code class="sh">➜  algorithm git:(master) ✗ ./main.py
-[14, 3, 11, 10, 4, 1, 2, 12, 18, 17, 7, 8, 13, 15, 0, 9, 16, 6, 5, 19] swap(4, 19)
-[14, 3, 11, 10, 4, 1, 2, 12, 5, 17, 7, 8, 13, 15, 0, 9, 16, 6, 18, 19] swap(8, 18)
-[14, 3, 11, 10, 4, 1, 2, 12, 5, 6, 7, 8, 13, 15, 0, 9, 16, 17, 18, 19] swap(9, 17)
-[14, 3, 11, 10, 4, 1, 2, 12, 5, 6, 7, 8, 13, 9, 0, 15, 16, 17, 18, 19] swap(13, 15)
-[0, 3, 11, 10, 4, 1, 2, 12, 5, 6, 7, 8, 13, 9, 14, 15, 16, 17, 18, 19] swap(0, 14)
-[0, 3, 11, 10, 4, 1, 2, 12, 5, 6, 7, 8, 13, 9, 14, 15, 16, 17, 18, 19] swap(0, 0)
-[0, 3, 2, 10, 4, 1, 11, 12, 5, 6, 7, 8, 13, 9, 14, 15, 16, 17, 18, 19] swap(2, 6)
-[0, 3, 2, 1, 4, 10, 11, 12, 5, 6, 7, 8, 13, 9, 14, 15, 16, 17, 18, 19] swap(3, 5)
-[0, 1, 2, 3, 4, 10, 11, 12, 5, 6, 7, 8, 13, 9, 14, 15, 16, 17, 18, 19] swap(1, 3)
-[0, 1, 2, 3, 4, 10, 11, 12, 5, 6, 7, 8, 13, 9, 14, 15, 16, 17, 18, 19] swap(1, 1)
-[0, 1, 2, 3, 4, 10, 11, 12, 5, 6, 7, 8, 13, 9, 14, 15, 16, 17, 18, 19] swap(4, 4)
-[0, 1, 2, 3, 4, 10, 9, 12, 5, 6, 7, 8, 13, 11, 14, 15, 16, 17, 18, 19] swap(6, 13)
-[0, 1, 2, 3, 4, 10, 9, 8, 5, 6, 7, 12, 13, 11, 14, 15, 16, 17, 18, 19] swap(7, 11)
-[0, 1, 2, 3, 4, 7, 9, 8, 5, 6, 10, 12, 13, 11, 14, 15, 16, 17, 18, 19] swap(5, 10)
-[0, 1, 2, 3, 4, 7, 6, 8, 5, 9, 10, 12, 13, 11, 14, 15, 16, 17, 18, 19] swap(6, 9)
-[0, 1, 2, 3, 4, 7, 6, 5, 8, 9, 10, 12, 13, 11, 14, 15, 16, 17, 18, 19] swap(7, 8)
-[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 11, 14, 15, 16, 17, 18, 19] swap(5, 7)
-[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 11, 14, 15, 16, 17, 18, 19] swap(5, 5)
-[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 11, 14, 15, 16, 17, 18, 19] swap(8, 8)
-[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 11, 13, 14, 15, 16, 17, 18, 19] swap(12, 13)
-[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19] swap(11, 12)
-[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19] swap(15, 15)
-[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19] swap(16, 16)
-[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19] swap(17, 17)
-[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19] swap(18, 18)
-</code></pre>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#main.py</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    data = []</span><br><span class="line">    random.seed(time.time())</span><br><span class="line">    data = [_ <span class="keyword">for</span> _ <span class="keyword">in</span> range(<span class="number">20</span>)]</span><br><span class="line">    random.shuffle(data)</span><br><span class="line"></span><br><span class="line">    qs = QuickSort(debug=<span class="keyword">True</span>)</span><br><span class="line">    swap_times, = qs.sort(data)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">➜  algorithm git:(master) ✗ ./main.py</span><br><span class="line">[14, 3, 11, 10, 4, 1, 2, 12, 18, 17, 7, 8, 13, 15, 0, 9, 16, 6, 5, 19] swap(4, 19)</span><br><span class="line">[14, 3, 11, 10, 4, 1, 2, 12, 5, 17, 7, 8, 13, 15, 0, 9, 16, 6, 18, 19] swap(8, 18)</span><br><span class="line">[14, 3, 11, 10, 4, 1, 2, 12, 5, 6, 7, 8, 13, 15, 0, 9, 16, 17, 18, 19] swap(9, 17)</span><br><span class="line">[14, 3, 11, 10, 4, 1, 2, 12, 5, 6, 7, 8, 13, 9, 0, 15, 16, 17, 18, 19] swap(13, 15)</span><br><span class="line">[0, 3, 11, 10, 4, 1, 2, 12, 5, 6, 7, 8, 13, 9, 14, 15, 16, 17, 18, 19] swap(0, 14)</span><br><span class="line">[0, 3, 11, 10, 4, 1, 2, 12, 5, 6, 7, 8, 13, 9, 14, 15, 16, 17, 18, 19] swap(0, 0)</span><br><span class="line">[0, 3, 2, 10, 4, 1, 11, 12, 5, 6, 7, 8, 13, 9, 14, 15, 16, 17, 18, 19] swap(2, 6)</span><br><span class="line">[0, 3, 2, 1, 4, 10, 11, 12, 5, 6, 7, 8, 13, 9, 14, 15, 16, 17, 18, 19] swap(3, 5)</span><br><span class="line">[0, 1, 2, 3, 4, 10, 11, 12, 5, 6, 7, 8, 13, 9, 14, 15, 16, 17, 18, 19] swap(1, 3)</span><br><span class="line">[0, 1, 2, 3, 4, 10, 11, 12, 5, 6, 7, 8, 13, 9, 14, 15, 16, 17, 18, 19] swap(1, 1)</span><br><span class="line">[0, 1, 2, 3, 4, 10, 11, 12, 5, 6, 7, 8, 13, 9, 14, 15, 16, 17, 18, 19] swap(4, 4)</span><br><span class="line">[0, 1, 2, 3, 4, 10, 9, 12, 5, 6, 7, 8, 13, 11, 14, 15, 16, 17, 18, 19] swap(6, 13)</span><br><span class="line">[0, 1, 2, 3, 4, 10, 9, 8, 5, 6, 7, 12, 13, 11, 14, 15, 16, 17, 18, 19] swap(7, 11)</span><br><span class="line">[0, 1, 2, 3, 4, 7, 9, 8, 5, 6, 10, 12, 13, 11, 14, 15, 16, 17, 18, 19] swap(5, 10)</span><br><span class="line">[0, 1, 2, 3, 4, 7, 6, 8, 5, 9, 10, 12, 13, 11, 14, 15, 16, 17, 18, 19] swap(6, 9)</span><br><span class="line">[0, 1, 2, 3, 4, 7, 6, 5, 8, 9, 10, 12, 13, 11, 14, 15, 16, 17, 18, 19] swap(7, 8)</span><br><span class="line">[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 11, 14, 15, 16, 17, 18, 19] swap(5, 7)</span><br><span class="line">[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 11, 14, 15, 16, 17, 18, 19] swap(5, 5)</span><br><span class="line">[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 11, 14, 15, 16, 17, 18, 19] swap(8, 8)</span><br><span class="line">[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 11, 13, 14, 15, 16, 17, 18, 19] swap(12, 13)</span><br><span class="line">[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19] swap(11, 12)</span><br><span class="line">[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19] swap(15, 15)</span><br><span class="line">[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19] swap(16, 16)</span><br><span class="line">[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19] swap(17, 17)</span><br><span class="line">[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19] swap(18, 18)</span><br></pre></td></tr></table></figure>
 <p>根据打印结果可以逐步分析快排算法的执行过程，明确知晓每一次交换的数据。</p>
 <h2 id="数据可视化"><a href="#数据可视化" class="headerlink" title="数据可视化"></a>数据可视化</h2><p>打印log固然可以分析算法的执行流程，但是不够直观，所以想着用可视化工具进一步处理，以动态图片形式显示快排过程。为此，只需在交换数据的函数<code>__swap</code>中使用<code>matplotlib</code>的柱状图绘制交换完成后的数组即可。</p>
-<pre><code class="python">import matplotlib.pyplot as plt
-...
-
-class QuickSort(object):
-    def __init__(self, debug=False, save_fig=False):
-        ...
-        self.save_fig = save_fig
-        self.fig, self.ax = plt.subplots()
-        # open interactive mode of matplot
-        plt.ion()
-
-        if self.save_fig:
-            self.path = &#39;./images/{0}&#39;.format(time.strftime(&#39;%Y%m%d_%H%M%S&#39;))
-            os.makedirs(self.path)
-
-    def __swap(self, data, lo, hi):
-        ...
-        self.__plot_figure(data, lo, hi, show_swap=True)
-
-    def __plot_figure(self, data, lo=0, hi=0, show_swap=False):
-        &#39;&#39;&#39;plot and save figure&#39;&#39;&#39;
-        self.ax.clear()
-        self.ax.set_title(&#39;data quicksort&#39;)
-        self.ax.bar(range(len(data)), data, label=&#39;data&#39;)
-        if show_swap:
-            self.ax.bar([lo, hi], [data[lo], data[hi]], color=&#39;red&#39;, label=&#39;swap&#39;)
-        plt.legend()
-        plt.pause(0.001)
-
-        if self.save_fig:
-            plt.savefig(&#39;{0}/{1}.png&#39;.format(self.path, self.swap_times))
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">QuickSort</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, debug=False, save_fig=False)</span>:</span></span><br><span class="line">        ...</span><br><span class="line">        self.save_fig = save_fig</span><br><span class="line">        self.fig, self.ax = plt.subplots()</span><br><span class="line">        <span class="comment"># open interactive mode of matplot</span></span><br><span class="line">        plt.ion()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> self.save_fig:</span><br><span class="line">            self.path = <span class="string">'./images/&#123;0&#125;'</span>.format(time.strftime(<span class="string">'%Y%m%d_%H%M%S'</span>))</span><br><span class="line">            os.makedirs(self.path)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__swap</span><span class="params">(self, data, lo, hi)</span>:</span></span><br><span class="line">        ...</span><br><span class="line">        self.__plot_figure(data, lo, hi, show_swap=<span class="keyword">True</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__plot_figure</span><span class="params">(self, data, lo=<span class="number">0</span>, hi=<span class="number">0</span>, show_swap=False)</span>:</span></span><br><span class="line">        <span class="string">'''plot and save figure'''</span></span><br><span class="line">        self.ax.clear()</span><br><span class="line">        self.ax.set_title(<span class="string">'data quicksort'</span>)</span><br><span class="line">        self.ax.bar(range(len(data)), data, label=<span class="string">'data'</span>)</span><br><span class="line">        <span class="keyword">if</span> show_swap:</span><br><span class="line">            self.ax.bar([lo, hi], [data[lo], data[hi]], color=<span class="string">'red'</span>, label=<span class="string">'swap'</span>)</span><br><span class="line">        plt.legend()</span><br><span class="line">        plt.pause(<span class="number">0.001</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> self.save_fig:</span><br><span class="line">            plt.savefig(<span class="string">'&#123;0&#125;/&#123;1&#125;.png'</span>.format(self.path, self.swap_times))</span><br></pre></td></tr></table></figure>
 <p>需要注意的几点是：</p>
 <ol>
 <li><code>matplotlib</code>具有两种绘图模式，阻塞(<code>block</code>)模式和交互(<code>interactive</code>)模式，阻塞模式必须等待当前绘图窗口关闭方才执行后续程序，而交互模式则无需等待。为了动态显示排序过程，自然选择交互模式，所以初始化时调用<code>ion()</code>函数打开交互模式</li>
@@ -239,158 +58,39 @@ class QuickSort(object):
 </ol>
 <p><img src="/assets/algorithm/dataBar.png" alt="data bar"></p>
 <h2 id="生成GIF动图"><a href="#生成GIF动图" class="headerlink" title="生成GIF动图"></a>生成GIF动图</h2><p>有了前面保存好的图片，使用<code>imageio</code>库的<code>append</code>函数及<code>mimsave</code>即可生成<code>gif</code>图片。图片间隔时间由<code>mimsave</code>函数的<code>duration</code>参数决定。</p>
-<pre><code class="python"># main.py
-import imageio
-from quick_sort import QuickSort
-
-import os
-from os.path import join
-
-
-def save_gif(path, gif_name):
-    if not os.path.exists(path) or len(os.listdir(path))==0:
-        return
-
-    images = []
-    for file_name in range(len(os.listdir(path))):
-        file_path = join(path, &#39;{}.png&#39;.format(file_name))
-        images.append(imageio.imread(file_path))
-    imageio.mimsave(join(path, gif_name), images, &#39;GIF&#39;, duration=0.2)
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># main.py</span></span><br><span class="line"><span class="keyword">import</span> imageio</span><br><span class="line"><span class="keyword">from</span> quick_sort <span class="keyword">import</span> QuickSort</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">from</span> os.path <span class="keyword">import</span> join</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">save_gif</span><span class="params">(path, gif_name)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(path) <span class="keyword">or</span> len(os.listdir(path))==<span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">    images = []</span><br><span class="line">    <span class="keyword">for</span> file_name <span class="keyword">in</span> range(len(os.listdir(path))):</span><br><span class="line">        file_path = join(path, <span class="string">'&#123;&#125;.png'</span>.format(file_name))</span><br><span class="line">        images.append(imageio.imread(file_path))</span><br><span class="line">    imageio.mimsave(join(path, gif_name), images, <span class="string">'GIF'</span>, duration=<span class="number">0.2</span>)</span><br></pre></td></tr></table></figure>
 <p><img src="/assets/algorithm/quickSort.gif" alt="quick sort"></p>
 <p>至此，便完成了快排的算法实现及其可视化。</p>
 <h2 id="完整源码"><a href="#完整源码" class="headerlink" title="完整源码"></a>完整源码</h2><p>代码已上传至<a href="https://github.com/Litreily/Python-demos.git" target="_blank" rel="noopener">github Python-demos</a> <code>algorithm</code>目录</p>
 <ul>
 <li>quick_sort.py</li>
 </ul>
-<pre><code class="python">#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-import matplotlib.pyplot as plt
-import time
-import os
-
-class QuickSort(object):
-    &#39;&#39;&#39;Quick sort algorithm&#39;&#39;&#39;
-    def __init__(self, debug=False, save_fig=False):
-        self.debug = debug
-        self.save_fig = save_fig
-        self.fig, self.ax = plt.subplots()
-        plt.ion()
-
-        if self.save_fig:
-            self.path = &#39;./images/{0}&#39;.format(time.strftime(&#39;%Y%m%d_%H%M%S&#39;))
-            os.makedirs(self.path)
-
-    def sort(self, data):
-        self.swap_times = 0
-        self.__plot_figure(data)
-        # set the largest element to the end
-        # self.__swap(data, data.index(max(data)), len(data) - 1)
-        self.__sort(data, 0, len(data) - 1)
-        return self.swap_times, self.path
-
-    def __swap(self, data, lo, hi):
-        data[lo], data[hi] = data[hi], data[lo]
-        self.swap_times += 1
-
-        if self.debug:
-            print(&#39;\t{0} swap({1}, {2})&#39;.format(data, lo, hi))
-
-        self.__plot_figure(data, lo, hi, show_swap=True)
-
-    def __plot_figure(self, data, lo=0, hi=0, show_swap=False):
-        &#39;&#39;&#39;plot and save figure&#39;&#39;&#39;
-        self.ax.clear()
-        self.ax.set_title(&#39;data quicksort&#39;)
-        self.ax.bar(range(len(data)), data, label=&#39;data&#39;)
-        if show_swap:
-            self.ax.bar([lo, hi], [data[lo], data[hi]], color=&#39;red&#39;, label=&#39;swap&#39;)
-        plt.legend()
-        plt.pause(0.001)
-
-        if self.save_fig:
-            plt.savefig(&#39;{0}/{1}.png&#39;.format(self.path, self.swap_times))
-
-    def __sort(self, data, lo, hi):
-        if lo &gt;= hi:
-            return
-        key = self.__partition(data, lo, hi)
-        self.__sort(data, lo, key - 1)
-        self.__sort(data, key + 1, hi)
-
-    def __partition(self, data, lo, hi):
-        &#39;&#39;&#39;partition array&#39;&#39;&#39;
-        i = lo
-        j = hi
-        v = data[lo] # slicing element
-        while True:
-            # find one element that larger than v scan from left to right(→)
-            i += 1
-            while data[i] &lt; v:
-                # below judge can dropped if the end element is the largest
-                if i == hi:
-                    break
-                i += 1
-
-            # find one element that smaller than v scan from right to left(←)
-            while v &lt; data[j]:
-                j -= 1
-
-            if i &gt;= j:
-                break
-            self.__swap(data, i, j)
-        self.__swap(data, lo, j)
-        return j
-
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">QuickSort</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="string">'''Quick sort algorithm'''</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, debug=False, save_fig=False)</span>:</span></span><br><span class="line">        self.debug = debug</span><br><span class="line">        self.save_fig = save_fig</span><br><span class="line">        self.fig, self.ax = plt.subplots()</span><br><span class="line">        plt.ion()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> self.save_fig:</span><br><span class="line">            self.path = <span class="string">'./images/&#123;0&#125;'</span>.format(time.strftime(<span class="string">'%Y%m%d_%H%M%S'</span>))</span><br><span class="line">            os.makedirs(self.path)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">sort</span><span class="params">(self, data)</span>:</span></span><br><span class="line">        self.swap_times = <span class="number">0</span></span><br><span class="line">        self.__plot_figure(data)</span><br><span class="line">        <span class="comment"># set the largest element to the end</span></span><br><span class="line">        <span class="comment"># self.__swap(data, data.index(max(data)), len(data) - 1)</span></span><br><span class="line">        self.__sort(data, <span class="number">0</span>, len(data) - <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> self.swap_times, self.path</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__swap</span><span class="params">(self, data, lo, hi)</span>:</span></span><br><span class="line">        data[lo], data[hi] = data[hi], data[lo]</span><br><span class="line">        self.swap_times += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> self.debug:</span><br><span class="line">            print(<span class="string">'\t&#123;0&#125; swap(&#123;1&#125;, &#123;2&#125;)'</span>.format(data, lo, hi))</span><br><span class="line">        </span><br><span class="line">        self.__plot_figure(data, lo, hi, show_swap=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__plot_figure</span><span class="params">(self, data, lo=<span class="number">0</span>, hi=<span class="number">0</span>, show_swap=False)</span>:</span></span><br><span class="line">        <span class="string">'''plot and save figure'''</span></span><br><span class="line">        self.ax.clear()</span><br><span class="line">        self.ax.set_title(<span class="string">'data quicksort'</span>)</span><br><span class="line">        self.ax.bar(range(len(data)), data, label=<span class="string">'data'</span>)</span><br><span class="line">        <span class="keyword">if</span> show_swap:</span><br><span class="line">            self.ax.bar([lo, hi], [data[lo], data[hi]], color=<span class="string">'red'</span>, label=<span class="string">'swap'</span>)</span><br><span class="line">        plt.legend()</span><br><span class="line">        plt.pause(<span class="number">0.001</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> self.save_fig:</span><br><span class="line">            plt.savefig(<span class="string">'&#123;0&#125;/&#123;1&#125;.png'</span>.format(self.path, self.swap_times))</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__sort</span><span class="params">(self, data, lo, hi)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> lo &gt;= hi:</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        key = self.__partition(data, lo, hi)</span><br><span class="line">        self.__sort(data, lo, key - <span class="number">1</span>)</span><br><span class="line">        self.__sort(data, key + <span class="number">1</span>, hi)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__partition</span><span class="params">(self, data, lo, hi)</span>:</span></span><br><span class="line">        <span class="string">'''partition array'''</span></span><br><span class="line">        i = lo</span><br><span class="line">        j = hi</span><br><span class="line">        v = data[lo] <span class="comment"># slicing element</span></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">            <span class="comment"># find one element that larger than v scan from left to right(→)</span></span><br><span class="line">            i += <span class="number">1</span></span><br><span class="line">            <span class="keyword">while</span> data[i] &lt; v:</span><br><span class="line">                <span class="comment"># below judge can dropped if the end element is the largest</span></span><br><span class="line">                <span class="keyword">if</span> i == hi:</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                i += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">            <span class="comment"># find one element that smaller than v scan from right to left(←)</span></span><br><span class="line">            <span class="keyword">while</span> v &lt; data[j]:</span><br><span class="line">                j -= <span class="number">1</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> i &gt;= j:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            self.__swap(data, i, j)</span><br><span class="line">        self.__swap(data, lo, j)</span><br><span class="line">        <span class="keyword">return</span> j</span><br></pre></td></tr></table></figure>
 <ul>
 <li>main.py</li>
 </ul>
-<pre><code class="python">#!/bin/env python
-# -*- encoding: utf-8 -*-
-
-import time
-import random
-import imageio
-from quick_sort import QuickSort
-
-import os
-from os.path import join
-
-
-def save_gif(path, gif_name):
-    if not os.path.exists(path) or len(os.listdir(path))==0:
-        return
-
-    images = []
-    for file_name in range(len(os.listdir(path))):
-        file_path = join(path, &#39;{}.png&#39;.format(file_name))
-        images.append(imageio.imread(file_path))
-    imageio.mimsave(join(path, gif_name), images, &#39;GIF&#39;, duration=0.2)
-
-
-def main():
-    data = []
-    random.seed(time.time())
-    random.shuffle(data)
-
-    print(&#39;source: {0}&#39;.format(data))
-    start = time.time()
-    qs = QuickSort(debug=False, save_fig=True)
-    swap_times, fig_path = qs.sort(data)
-    save_gif(fig_path, &#39;quick_sort.gif&#39;)
-    stop = time.time()
-    print(&#39;result: {0}\n&#39;.format(data))
-
-    print(&#39;----------------------------------&#39;)
-    print(&#39;swap times: {0}&#39;.format(swap_times))
-    print(&#39;spend time: {0}s&#39;.format(stop - start))
-    print(&#39;image path: {0}&#39;.format(fig_path))
-    print(&#39;----------------------------------&#39;)
-
-
-if __name__ == &#39;__main__&#39;:
-    main()
-</code></pre>
-</div></article></div><div class="l-pager l-pager-dtl box"><a class="prev" href="/2018/08/31/pug-synax/">&lt; 网页模板pug基本语法</a><a class="next" href="/2018/06/19/tmux-config/">tmux常用配置说明 &gt;</a></div><footer><p>Copyright © 2018 <a href="/." rel="nofollow">LITREILY | </a>Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer><script type="text/javascript" src="/plugins/prettify/prettify.js"></script></div></div></div></body></html>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/bin/env python</span></span><br><span class="line"><span class="comment"># -*- encoding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> imageio</span><br><span class="line"><span class="keyword">from</span> quick_sort <span class="keyword">import</span> QuickSort</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">from</span> os.path <span class="keyword">import</span> join</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">save_gif</span><span class="params">(path, gif_name)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(path) <span class="keyword">or</span> len(os.listdir(path))==<span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">    images = []</span><br><span class="line">    <span class="keyword">for</span> file_name <span class="keyword">in</span> range(len(os.listdir(path))):</span><br><span class="line">        file_path = join(path, <span class="string">'&#123;&#125;.png'</span>.format(file_name))</span><br><span class="line">        images.append(imageio.imread(file_path))</span><br><span class="line">    imageio.mimsave(join(path, gif_name), images, <span class="string">'GIF'</span>, duration=<span class="number">0.2</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    data = []</span><br><span class="line">    random.seed(time.time())</span><br><span class="line">    random.shuffle(data)</span><br><span class="line"></span><br><span class="line">    print(<span class="string">'source: &#123;0&#125;'</span>.format(data))</span><br><span class="line">    start = time.time()</span><br><span class="line">    qs = QuickSort(debug=<span class="keyword">False</span>, save_fig=<span class="keyword">True</span>)</span><br><span class="line">    swap_times, fig_path = qs.sort(data)</span><br><span class="line">    save_gif(fig_path, <span class="string">'quick_sort.gif'</span>)</span><br><span class="line">    stop = time.time()</span><br><span class="line">    print(<span class="string">'result: &#123;0&#125;\n'</span>.format(data))</span><br><span class="line"></span><br><span class="line">    print(<span class="string">'----------------------------------'</span>)</span><br><span class="line">    print(<span class="string">'swap times: &#123;0&#125;'</span>.format(swap_times))</span><br><span class="line">    print(<span class="string">'spend time: &#123;0&#125;s'</span>.format(stop - start))</span><br><span class="line">    print(<span class="string">'image path: &#123;0&#125;'</span>.format(fig_path))</span><br><span class="line">    print(<span class="string">'----------------------------------'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a class="article-share-link" data-url="http://www.litreily.top/2018/07/07/quick-sort/" data-id="cjnbnfzhh006u85wt5mc1pl1t" data-qrcode="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACKUlEQVR42u3aQY7EIAxE0b7/pTMHaIX8sumRYj6r1igKvCxqjOHzweP6Gvz52iyfXwwZMmS8lnEtx90EHdj382TehxllyJBxAONu4rvfZEHrd64/EF+bDBkyZNReTdj8LzJkyJCRLouXfbV4lSFDhozOJpaE6Xriflhv2IvLkCHjhQzedf//3z8535AhQ8arGFc4CC+NS3JI8PAeGTJkjGbwgFsfA6RFXj9wZciQcRqj38qvbW75X4JiUYYMGUMZPOBqkco/UO0ZGTJkzGbsjU6yHe2XnjJkyDiTkS60f9zY2crGXUMZMmSMYJBrW2n5yGM3LS7RxDJkyBjEQHtc3BpLl06ONnmDT4YMGVMZ/OpDZ8tKwLUnZciQcQJj1+WtXc01/vlur1nIkCFjHCOdjB8YrBeaRnO8F5chQ8ZhDB6U/Y9SvNghQ4aMAxgpptjVwzEdRG2n0pQhQ8arGMF+NywQ42PIWqzLkCFjNCNtn5HwrV3m4JctHj6KDBkyhjJqFynSAi79EK07IzJkyBjN4LHbKRz7ZeJD4MqQIWM0gwdr53iAvy14vwwZMoYyrnCQoq0W0BuKQhkyZAxl8JG2ydL2WRrKaYkpQ4aMtzN4yNao/a1vfHgpQ4aMoYx0w9lJ985/gOB8Q4YMGQczSFivn6m18x7WI0OGDBmg3c9jtFZ0PhxtypAh4wAGPwyoFYitU1ZyCUOGDBmjGf0J0tYYWcSusJYhQ8bLGX+5G3RyXT2uSgAAAABJRU5ErkJggg==">Share</a><div class="tags"><a href="/tags/algorithm/">algorithm</a><a href="/tags/sort/">sort</a><a href="/tags/visualization/">visualization</a></div><div class="post-nav"><a class="pre" href="/2018/08/31/pug-synax/">网页模板pug基本语法</a><a class="next" href="/2018/06/19/tmux-config/">tmux常用配置说明</a></div><div id="vcomment"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/LabVIEW/">LabVIEW</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Matlab/">Matlab</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Media/">Media</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Network/">Network</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Office/">Office</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web/">Web</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Web/Template/">Template</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/信号处理/">信号处理</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/嵌入式/">嵌入式</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/杂物柜/">杂物柜</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/tags/office/" style="font-size: 12px;">office</a> <a href="/tags/test/" style="font-size: 15.43px;">test</a> <a href="/tags/ruby/" style="font-size: 13.71px;">ruby</a> <a href="/tags/literature/" style="font-size: 12px;">literature</a> <a href="/tags/algorithm/" style="font-size: 20.57px;">algorithm</a> <a href="/tags/video/" style="font-size: 13.71px;">video</a> <a href="/tags/matlab/" style="font-size: 17.14px;">matlab</a> <a href="/tags/windows/" style="font-size: 13.71px;">windows</a> <a href="/tags/labview/" style="font-size: 22.29px;">labview</a> <a href="/tags/tdms/" style="font-size: 13.71px;">tdms</a> <a href="/tags/brackets/" style="font-size: 12px;">brackets</a> <a href="/tags/git/" style="font-size: 15.43px;">git</a> <a href="/tags/tools/" style="font-size: 17.14px;">tools</a> <a href="/tags/C-C/" style="font-size: 24px;">C/C++</a> <a href="/tags/utorrent/" style="font-size: 12px;">utorrent</a> <a href="/tags/atom/" style="font-size: 13.71px;">atom</a> <a href="/tags/ubuntu/" style="font-size: 22.29px;">ubuntu</a> <a href="/tags/linux/" style="font-size: 18.86px;">linux</a> <a href="/tags/signal/" style="font-size: 13.71px;">signal</a> <a href="/tags/music/" style="font-size: 13.71px;">music</a> <a href="/tags/hexo/" style="font-size: 13.71px;">hexo</a> <a href="/tags/RSS/" style="font-size: 12px;">RSS</a> <a href="/tags/Feed/" style="font-size: 12px;">Feed</a> <a href="/tags/VS/" style="font-size: 13.71px;">VS</a> <a href="/tags/jekyll/" style="font-size: 15.43px;">jekyll</a> <a href="/tags/word/" style="font-size: 12px;">word</a> <a href="/tags/stm32/" style="font-size: 13.71px;">stm32</a> <a href="/tags/LWD/" style="font-size: 12px;">LWD</a> <a href="/tags/log/" style="font-size: 12px;">log</a> <a href="/tags/FreeRTOS/" style="font-size: 12px;">FreeRTOS</a> <a href="/tags/makefile/" style="font-size: 13.71px;">makefile</a> <a href="/tags/wireshark/" style="font-size: 12px;">wireshark</a> <a href="/tags/tmux/" style="font-size: 13.71px;">tmux</a> <a href="/tags/shell/" style="font-size: 12px;">shell</a> <a href="/tags/telnet/" style="font-size: 12px;">telnet</a> <a href="/tags/smtp/" style="font-size: 12px;">smtp</a> <a href="/tags/mysql/" style="font-size: 12px;">mysql</a> <a href="/tags/centos/" style="font-size: 12px;">centos</a> <a href="/tags/ddos/" style="font-size: 12px;">ddos</a> <a href="/tags/hping3/" style="font-size: 12px;">hping3</a> <a href="/tags/pug/" style="font-size: 12px;">pug</a> <a href="/tags/spider/" style="font-size: 17.14px;">spider</a> <a href="/tags/scrapy/" style="font-size: 12px;">scrapy</a> <a href="/tags/sort/" style="font-size: 12px;">sort</a> <a href="/tags/visualization/" style="font-size: 12px;">visualization</a> <a href="/tags/sina/" style="font-size: 12px;">sina</a> <a href="/tags/queue/" style="font-size: 12px;">queue</a> <a href="/tags/xlwt/" style="font-size: 12px;">xlwt</a> <a href="/tags/lofter/" style="font-size: 12px;">lofter</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/09/27/tee/">Linux指令 - tee的实现</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/20/coredump/">OpenWrt中使用gdb分析coredump</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/31/pug-synax/">网页模板pug基本语法</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/07/quick-sort/">Python实现快排及其可视化</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/19/tmux-config/">tmux常用配置说明</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Links</i></div><ul></ul><a href="https://www.smslit.top" title="smslit-水木十里" target="_blank">smslit-水木十里</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2018 <a href="/." rel="nofollow">LITREILY.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> manupassant.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.css"><script type="text/javascript" src="/js/search.js?v=0.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+   search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
