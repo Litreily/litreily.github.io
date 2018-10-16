@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><title>Matlab - 经VS将.m文件转换为.dll文件 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/8.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Matlab - 经VS将.m文件转换为.dll文件</h1><a id="logo" href="/.">LITREILY</a><p class="description">Stay Hungry, Stay Foolish</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> Home</i></a><a href="/archives/"><i class="fa fa-archive"> Archive</i></a><a href="https://litreily.gitbooks.io/notes/"><i class="fa fa-book"> Notes</i></a><a href="/about/"><i class="fa fa-user"> About</i></a><a href="/history/"><i class="fa fa-history"> History</i></a><a href="/atom.xml"><i class="fa fa-rss"> RSS</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">Matlab - 经VS将.m文件转换为.dll文件</h1><div class="post-meta">Nov 25, 2016<span> | </span><span class="category"><a href="/categories/Matlab/">Matlab</a></span></div><a class="disqus-comment-count" href="/2016/11/25/matlab-coder/#vcomment"><span class="valine-comment-count" data-xid="/2016/11/25/matlab-coder/"></span><span> Comment</span></a><div class="post-content"><h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1. 引言"></a>1. 引言</h2><p>在使用 LabVIEW 进行软件开发的过程中，有时需要使用 Matlab 强大的数据处理功能，以提高开发效率，此时可以通过 Matlab Coder 将 Matlab 中的函数转换为 C/C++ 源文件，然后通过 Visual Studio 将这些源文件封装为 .dll 文件，最后通过 LabVIEW 调用库函数实现对 Matlab 函数的调用。</p>
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><title>Matlab - 经VS将.m文件转换为.dll文件 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><body><div class="box" id="container"><div class="h-wrapper"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="https://litreily.gitbooks.io/notes/">笔记</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li class="m-sch"><form class="form" id="j-formsch" action="/search" method="get"><input class="txt" type="text" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"></form></li></ul></div></nav></div><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><h1 class="p-title">Matlab - 经VS将.m文件转换为.dll文件</h1><div class="p-content"><h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1. 引言"></a>1. 引言</h2><p>在使用 LabVIEW 进行软件开发的过程中，有时需要使用 Matlab 强大的数据处理功能，以提高开发效率，此时可以通过 Matlab Coder 将 Matlab 中的函数转换为 C/C++ 源文件，然后通过 Visual Studio 将这些源文件封装为 .dll 文件，最后通过 LabVIEW 调用库函数实现对 Matlab 函数的调用。</p>
 <p>本文将通过一个实例讲述以上功能的实现过程，大体步骤如下：</p>
 <ol>
 <li>Matlab 编写代码<br> 1.1 编写 .m 函数<br> 1.2 使用 Coder 生成 C/C++ 文件</li>
@@ -14,15 +14,36 @@
 <h2 id="2-通过-Matlab-生成-C-C-源文件"><a href="#2-通过-Matlab-生成-C-C-源文件" class="headerlink" title="2. 通过 Matlab 生成 C/C++ 源文件"></a>2. 通过 Matlab 生成 C/C++ 源文件</h2><h3 id="2-1-m-函数编码"><a href="#2-1-m-函数编码" class="headerlink" title="2.1 .m 函数编码"></a>2.1 .m 函数编码</h3><p>在 Matlab 文件目录中新建文件夹&quot;CreateDll&quot;，在该文件夹下新建两个函数文件，分别实现简单加法运算函数，以及一个用自相关求解周期信号频率的函数。</p>
 <div class="smallTitle">add( a,b )</div>
 
-<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="params">[ answer ]</span> = <span class="title">add</span><span class="params">( a,b )</span></span></span><br><span class="line"><span class="comment">% 加法运算</span></span><br><span class="line"><span class="comment">% a,b 均为 double 型数据</span></span><br><span class="line"></span><br><span class="line">answer = a + b;</span><br><span class="line"></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<pre><code class="matlab">function [ answer ] = add( a,b )
+% 加法运算
+% a,b 均为 double 型数据
+
+answer = a + b;
+
+end
+</code></pre>
 <div class="smallTitle">getFreq( signal, fs )</div>
 
-<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="params">[ frequency ]</span> = <span class="title">getFreq</span><span class="params">( signal,fs )</span></span></span><br><span class="line"><span class="comment">%GETFREQ 自相关法求周期信号频率</span></span><br><span class="line"><span class="comment">% [input]</span></span><br><span class="line"><span class="comment">% signal    : double 1*n</span></span><br><span class="line"><span class="comment">% fs        : double 1*1</span></span><br><span class="line"><span class="comment">% [output]</span></span><br><span class="line"><span class="comment">% frequency : double  1*1</span></span><br><span class="line"></span><br><span class="line">y_xcorr = xcorr(signal,<span class="string">'coeff'</span>);            <span class="comment">% 信号自相关</span></span><br><span class="line">[~,locs] = findpeaks(y_xcorr);              <span class="comment">% 获取峰值位置</span></span><br><span class="line">middlePosition = <span class="built_in">fix</span>(<span class="built_in">length</span>(locs)/<span class="number">2</span>);       <span class="comment">% 计算处于中部的峰值位置</span></span><br><span class="line">frequency = fs/(locs(middlePosition)-locs(middlePosition<span class="number">-1</span>)); <span class="comment">% 计算信号频率</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<pre><code class="matlab">function [ frequency ] = getFreq( signal,fs )
+%GETFREQ 自相关法求周期信号频率
+% [input]
+% signal    : double 1*n
+% fs        : double 1*1
+% [output]
+% frequency : double  1*1
+
+y_xcorr = xcorr(signal,&#39;coeff&#39;);            % 信号自相关
+[~,locs] = findpeaks(y_xcorr);              % 获取峰值位置
+middlePosition = fix(length(locs)/2);       % 计算处于中部的峰值位置
+frequency = fs/(locs(middlePosition)-locs(middlePosition-1)); % 计算信号频率
+
+end
+</code></pre>
 <h3 id="2-2-使用-Coder-生成-C-C-文件"><a href="#2-2-使用-Coder-生成-C-C-文件" class="headerlink" title="2.2 使用 Coder 生成 C/C++ 文件"></a>2.2 使用 Coder 生成 C/C++ 文件</h3><ul>
 <li>1.在命令行中输入 coder 打开 Matlab Coder 工具。</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt; coder</span><br></pre></td></tr></table></figure>
-<p><img src="/assets/matlab/coder1.png" alt="Matlab Coder"></p>
+<pre><code>&gt;&gt; coder
+</code></pre><p><img src="/assets/matlab/coder1.png" alt="Matlab Coder"></p>
 <ul>
 <li>2.添加 add 函数及 getFreq 函数</li>
 </ul>
@@ -35,8 +56,8 @@
 <li>输入函数调用示例，通过 Coder 工具的自定义输入功能自动匹配输入参数类型</li>
 </ol>
 <p>调用示例：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt; add(3,4);</span><br></pre></td></tr></table></figure>
-<p><img src="/assets/matlab/coder3.png" alt="Matlab Coder"></p>
+<pre><code>&gt;&gt; add(3,4);
+</code></pre><p><img src="/assets/matlab/coder3.png" alt="Matlab Coder"></p>
 <p>手动可选择的数据类型如下图所示：</p>
 <p><img src="/assets/matlab/coder3_1.png" alt="Input types"></p>
 <ul>
@@ -100,8 +121,13 @@
 <p><img src="/assets/matlab/CreateDll2_1.png" alt="Add Source Files to VS Project"></p>
 <p><img src="/assets/matlab/CreateDll2.png" alt="Add Source Files to VS Project"></p>
 <h3 id="3-3-新建模块定义文件"><a href="#3-3-新建模块定义文件" class="headerlink" title="3.3 新建模块定义文件"></a>3.3 新建模块定义文件</h3><p>在 VS 中新建 .def 模块定义文件，输入以下代码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">LIBRARY CreateDll</span><br><span class="line"></span><br><span class="line">EXPORTS</span><br><span class="line"></span><br><span class="line">add</span><br><span class="line">getFreq</span><br></pre></td></tr></table></figure>
-<p>LIBRARY 后面添加库名称，EXPORTS 后面添加需要导出的函数名称。</p>
+<pre><code>LIBRARY CreateDll
+
+EXPORTS
+
+add
+getFreq
+</code></pre><p>LIBRARY 后面添加库名称，EXPORTS 后面添加需要导出的函数名称。</p>
 <p><img src="/assets/matlab/CreateDll3.png" alt=".def file"></p>
 <p>编辑完成后，可以在 &quot;项目属性&gt;&gt;链接器&gt;&gt;输入&gt;&gt;模块定义文件&quot; 中看到，项目已将该选项自动添加为了当前 .def 文件，对于低版本的 VS 可能需要手动添加。</p>
 <h3 id="3-4-生成-dll-文件"><a href="#3-4-生成-dll-文件" class="headerlink" title="3.4 生成 .dll 文件"></a>3.4 生成 .dll 文件</h3><p>最后一步，选中项目名称，点击右键选择 &quot;<strong>生成</strong>&quot; ，从本地项目目录的 Debug 文件夹中可以找到已生成的 .dll 文件。</p>
@@ -113,14 +139,28 @@
 <p>对于不同位数的 LabVIEW 程序，我们可以选择对应的 Debug 模式，这个功能真的是非常棒！</p>
 <p><img src="/assets/matlab/CreateDll4.png" alt="Bulid .dll file"></p>
 <h3 id="3-5-函数接口"><a href="#3-5-函数接口" class="headerlink" title="3.5 函数接口"></a>3.5 函数接口</h3><p>经 VS 生成的 API 函数接口说明如下：</p>
-<p><strong>add</strong><br>  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">add</span><span class="params">(<span class="keyword">double</span> a, <span class="keyword">double</span> b)</span></span>;</span><br></pre></td></tr></table></figure></p>
-<p><strong>getFreq</strong><br>  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">getFreq</span><span class="params">(<span class="keyword">const</span> <span class="keyword">double</span> b_signal[<span class="number">1000</span>], <span class="keyword">double</span> fs)</span></span>;</span><br></pre></td></tr></table></figure></p>
+<p><strong>add</strong></p>
+<pre><code class="C++">double add(double a, double b);
+</code></pre>
+<p><strong>getFreq</strong></p>
+<pre><code class="C++">double getFreq(const double b_signal[1000], double fs);
+</code></pre>
 <p>因为例程所用数据为定长数组（1×1000），所以输入参数的数据类型为基本的 double 型。倘若定义的 b_signal 为不定长数组 （1×:inf） ,其格式将变为：</p>
-  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">getFreq</span><span class="params">(<span class="keyword">const</span> emxArray_real_T *b_signal, <span class="keyword">double</span> fs)</span></span>;</span><br></pre></td></tr></table></figure>
+<pre><code class="C++">double getFreq(const emxArray_real_T *b_signal, double fs);
+</code></pre>
 <p>这是因为程序需要为不确定长度的数组动态分配内存，所以有效数据与其描述信息将被封装到结构体中，该结构体为 &quot;<strong>emxArray_real_T</strong>&quot;</p>
-  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">emxArray_real_T</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">  <span class="keyword">double</span> *data;</span><br><span class="line">  <span class="keyword">int</span> *size;</span><br><span class="line">  <span class="keyword">int</span> allocatedSize;</span><br><span class="line">  <span class="keyword">int</span> numDimensions;</span><br><span class="line">  boolean_T canFreeData;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<pre><code class="C++">struct emxArray_real_T
+{
+  double *data;
+  int *size;
+  int allocatedSize;
+  int numDimensions;
+  boolean_T canFreeData;
+};
+</code></pre>
 <p>结构体中的 &quot;<strong>boolean_T</strong>&quot; 定义如下</p>
-  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">unsigned</span> <span class="keyword">char</span> boolean_T;</span><br></pre></td></tr></table></figure>
+<pre><code class="C++">typedef unsigned char boolean_T;
+</code></pre>
 <p>由于不定长数据会导致大量冗余代码，并且在 LabVIEW 中调用时非常麻烦，除非必须，否则不建议使用，本文后续所述也是定长数组。</p>
 <h2 id="4-通过-LabVIEW-调用-dll文件"><a href="#4-通过-LabVIEW-调用-dll文件" class="headerlink" title="4. 通过 LabVIEW 调用 .dll文件"></a>4. 通过 LabVIEW 调用 .dll文件</h2><p>通过 VS，我们已经得到了想要的 .dll 文件，那么在 LabVIEW 中该如何调用呢？这里提供两种方法。</p>
 <ol>
@@ -154,31 +194,13 @@
 <p>先产生一个数据长度为 1000 ，频率可调的正弦信号，采样频率 1kHz；然后调用 .dll文件中的 getFreq 函数，通过自相关方法求取信号频率，并输出到变量 getFreq 中。</p>
 <p><img src="/assets/matlab/UseDll2_3.png" alt="getFreq block diagram"></p>
 <h3 id="4-2-不定长数组问题"><a href="#4-2-不定长数组问题" class="headerlink" title="4.2 不定长数组问题"></a>4.2 不定长数组问题</h3><p>这里对不定长数组问题进行简单介绍：.dll 文件中的函数将不再是简单的 double 指针，而是一个结构体指针；在 LabVIEW 中调用时，可以创建自定义控件，用簇代替该结构体，簇的引用作为结构体指针；簇的内容包括以下几部分。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">double</span> *pData : 一维数组引用，用于传递信号数据</span><br><span class="line"><span class="keyword">int</span>    *pSize : 一维数组引用，用于传递数据长度</span><br><span class="line"><span class="keyword">int</span> allocatedSize : 分配内存大小，调用时可设为 <span class="number">0</span></span><br><span class="line"><span class="keyword">int</span> numDimensions : 数组维数，设为 <span class="number">1</span> 或 <span class="number">2</span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">char</span> canFreeData : 布尔变量，确定能否释放数据内存</span><br></pre></td></tr></table></figure>
+<pre><code class="c">double *pData : 一维数组引用，用于传递信号数据
+int    *pSize : 一维数组引用，用于传递数据长度
+int allocatedSize : 分配内存大小，调用时可设为 0
+int numDimensions : 数组维数，设为 1 或 2
+unsigned char canFreeData : 布尔变量，确定能否释放数据内存
+</code></pre>
 <p><img src="/assets/matlab/UseDll2_1.png" alt="Create customsize control"></p>
 <h2 id="5-小结"><a href="#5-小结" class="headerlink" title="5. 小结"></a>5. 小结</h2><p>本文对 &quot;Matlab Coder 生成 C++ 代码&quot;，&quot;VS 生成 .dll 文件&quot;，&quot;LabVIEW 调用外部库函数&quot; 这三部分内容进行讲述。通过Matlab , VS , LabVIEW 的结合使用，我们便可实现 LabVIEW 程序调用 Matlab 函数的目的。</p>
 <p>此外，在 64 位的 VS 中可以通过修改 Debug 模式生成 32 位或 64 位的动态链接库，以适配不同版本的 LabVIEW。当然最后不要忘了，不同编译模式下生成的 .dll 文件存放在不同的目录下。</p>
-</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a class="article-share-link" data-url="http://www.litreily.top/2016/11/25/matlab-coder/" data-id="cjnbnh5og0023e2wtiusp5ixm" data-qrcode="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACJUlEQVR42u3aQY7CMAwF0Ln/pZktEmr7bRekJq8rBB3Sx+JPHPvvL75eb9fnO+/vH93fW+XmCwMD47GM1+l1zvh8na+SfJo8GwYGxj6Mo4WPXuefnq/V+4EwMDAwcsZ5UCZhmq+LgYGBUWVUg7gX1hgYGBiTAM0L1HzL+KNaHAMD44GM/NT996+/0t/AwMB4FONVvKoF57zcjZ4KAwNjacZdDch5OyEpqi82mhgYGBsw8sGv/BCtWnaOxsswMDC2YfQGIKrDZEffMIlvDAyMVRnVA/2clw+K9RoA0aYQAwNjIUbeYjyPwmq85sXwRbhjYGAszagulm/pJkd11bDGwMDYjVFtWObNyHlrs7zPxcDAWIJR3fBVC9EklCffiYGBsQNj0lC863At33RWG6IYGBhrMPIhiV6TsteYrIYyBgbG2ozCTcUytfeTjWIdAwNjUUavgJyUr9VxjRuiFgMD4+GMfAAiP+KftEjzv8LAwNiTkbcYq/FaDdzqOxgYGDswkpuqzc55oJeHMDAwMLZkVCO1N/6VIy/ux8DA2IZxV+zmrYXeSRoGBsY+jF6x2tssVofMyptCDAyMRRmTzmB+lPaNobHbGpwYGBgPYVQP/fPHSmI3/86L0MfAwNiAMQm+6gDH5D9AoRbHwMDAGI+O9crUQzAGBgZGvNikTE3aCYUWJgYGxnKMpIjNmwe9B01+AgwMjD0ZeemYh2b1IXpbTwwMjA0Y/9Nd+ggkJkUtAAAAAElFTkSuQmCC">Share</a><div class="tags"><a href="/tags/matlab/">matlab</a><a href="/tags/labview/">labview</a><a href="/tags/VS/">VS</a></div><div class="post-nav"><a class="pre" href="/2016/12/05/stm32-dac/">stm32 - DAC基本输出方式</a><a class="next" href="/2016/11/14/signal-Process/">信号处理 - 滤波器截止频率</a></div><div id="vcomment"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
-var verify = 'false' == true ? true : false;
-var GUEST_INFO = ['nick','mail','link'];
-var guest_info = 'nick,mail,link'.split(',').filter(function(item){
-  return GUEST_INFO.indexOf(item) > -1
-});
-guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
-window.valine = new Valine({
-  el:'#vcomment',
-  notify:notify,
-  verify:verify,
-  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
-  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
-  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
-  avatar:'identicon',
-  guest_info:guest_info,
-  pageSize:'10'
-})</script></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/LabVIEW/">LabVIEW</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Matlab/">Matlab</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Media/">Media</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Network/">Network</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Office/">Office</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web/">Web</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Web/Template/">Template</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/信号处理/">信号处理</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/嵌入式/">嵌入式</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/杂物柜/">杂物柜</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/tags/word/" style="font-size: 12px;">word</a> <a href="/tags/jekyll/" style="font-size: 15.43px;">jekyll</a> <a href="/tags/literature/" style="font-size: 12px;">literature</a> <a href="/tags/test/" style="font-size: 15.43px;">test</a> <a href="/tags/video/" style="font-size: 13.71px;">video</a> <a href="/tags/algorithm/" style="font-size: 20.57px;">algorithm</a> <a href="/tags/matlab/" style="font-size: 17.14px;">matlab</a> <a href="/tags/windows/" style="font-size: 13.71px;">windows</a> <a href="/tags/brackets/" style="font-size: 12px;">brackets</a> <a href="/tags/git/" style="font-size: 15.43px;">git</a> <a href="/tags/tools/" style="font-size: 17.14px;">tools</a> <a href="/tags/labview/" style="font-size: 22.29px;">labview</a> <a href="/tags/tdms/" style="font-size: 13.71px;">tdms</a> <a href="/tags/atom/" style="font-size: 13.71px;">atom</a> <a href="/tags/utorrent/" style="font-size: 12px;">utorrent</a> <a href="/tags/C-C/" style="font-size: 24px;">C/C++</a> <a href="/tags/ubuntu/" style="font-size: 22.29px;">ubuntu</a> <a href="/tags/linux/" style="font-size: 18.86px;">linux</a> <a href="/tags/signal/" style="font-size: 13.71px;">signal</a> <a href="/tags/music/" style="font-size: 13.71px;">music</a> <a href="/tags/hexo/" style="font-size: 13.71px;">hexo</a> <a href="/tags/VS/" style="font-size: 13.71px;">VS</a> <a href="/tags/stm32/" style="font-size: 13.71px;">stm32</a> <a href="/tags/office/" style="font-size: 12px;">office</a> <a href="/tags/ruby/" style="font-size: 13.71px;">ruby</a> <a href="/tags/LWD/" style="font-size: 12px;">LWD</a> <a href="/tags/RSS/" style="font-size: 12px;">RSS</a> <a href="/tags/Feed/" style="font-size: 12px;">Feed</a> <a href="/tags/log/" style="font-size: 12px;">log</a> <a href="/tags/wireshark/" style="font-size: 12px;">wireshark</a> <a href="/tags/shell/" style="font-size: 12px;">shell</a> <a href="/tags/makefile/" style="font-size: 13.71px;">makefile</a> <a href="/tags/tmux/" style="font-size: 13.71px;">tmux</a> <a href="/tags/telnet/" style="font-size: 12px;">telnet</a> <a href="/tags/smtp/" style="font-size: 12px;">smtp</a> <a href="/tags/mysql/" style="font-size: 12px;">mysql</a> <a href="/tags/centos/" style="font-size: 12px;">centos</a> <a href="/tags/FreeRTOS/" style="font-size: 12px;">FreeRTOS</a> <a href="/tags/ddos/" style="font-size: 12px;">ddos</a> <a href="/tags/hping3/" style="font-size: 12px;">hping3</a> <a href="/tags/spider/" style="font-size: 17.14px;">spider</a> <a href="/tags/sina/" style="font-size: 12px;">sina</a> <a href="/tags/scrapy/" style="font-size: 12px;">scrapy</a> <a href="/tags/pug/" style="font-size: 12px;">pug</a> <a href="/tags/sort/" style="font-size: 12px;">sort</a> <a href="/tags/visualization/" style="font-size: 12px;">visualization</a> <a href="/tags/queue/" style="font-size: 12px;">queue</a> <a href="/tags/xlwt/" style="font-size: 12px;">xlwt</a> <a href="/tags/lofter/" style="font-size: 12px;">lofter</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/09/27/tee/">Linux指令 - tee的实现</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/20/coredump/">OpenWrt中使用gdb分析coredump</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/31/pug-synax/">网页模板pug基本语法</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/07/quick-sort/">Python实现快排及其可视化</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/19/tmux-config/">tmux常用配置说明</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Links</i></div><ul></ul><a href="https://www.smslit.top" title="smslit-水木十里" target="_blank">smslit-水木十里</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2018 <a href="/." rel="nofollow">LITREILY.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> manupassant.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.css"><script type="text/javascript" src="/js/search.js?v=0.0.0"></script><script>var search_path = 'search.xml';
-if (search_path.length == 0) {
-   search_path = 'search.xml';
-}
-var path = '/' + search_path;
-searchFunc(path, 'local-search-input', 'local-search-result');
-</script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
+</div></article></div><div class="l-pager l-pager-dtl box"><a class="prev" href="/2016/12/05/stm32-dac/">&lt; stm32 - DAC基本输出方式</a><a class="next" href="/2016/11/14/signal-Process/">信号处理 - 滤波器截止频率 &gt;</a></div><footer><p>Copyright © 2018 <a href="/." rel="nofollow">LITREILY | </a>Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer><script type="text/javascript" src="/plugins/prettify/prettify.js"></script></div></div></div></body></html>

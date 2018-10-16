@@ -1,11 +1,41 @@
-<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><title>Openwrt中添加内核模块 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/8.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Openwrt中添加内核模块</h1><a id="logo" href="/.">LITREILY</a><p class="description">Stay Hungry, Stay Foolish</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> Home</i></a><a href="/archives/"><i class="fa fa-archive"> Archive</i></a><a href="https://litreily.gitbooks.io/notes/"><i class="fa fa-book"> Notes</i></a><a href="/about/"><i class="fa fa-user"> About</i></a><a href="/history/"><i class="fa fa-history"> History</i></a><a href="/atom.xml"><i class="fa fa-rss"> RSS</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">Openwrt中添加内核模块</h1><div class="post-meta">May 30, 2018<span> | </span><span class="category"><a href="/categories/嵌入式/">嵌入式</a></span></div><a class="disqus-comment-count" href="/2018/05/30/openwrt-ko/#vcomment"><span class="valine-comment-count" data-xid="/2018/05/30/openwrt-ko/"></span><span> Comment</span></a><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">Contents</div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#sourcecode"><span class="toc-number">1.</span> <span class="toc-text">sourcecode</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#demo-c"><span class="toc-number">1.1.</span> <span class="toc-text">demo.c</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Kconfig"><span class="toc-number">1.2.</span> <span class="toc-text">Kconfig</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Root-Makefile"><span class="toc-number">1.3.</span> <span class="toc-text">Root - Makefile</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#src-Makefile"><span class="toc-number">1.4.</span> <span class="toc-text">src - Makefile</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#更新-config"><span class="toc-number">2.</span> <span class="toc-text">更新 .config</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#make"><span class="toc-number">3.</span> <span class="toc-text">make</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#insmod-rmmod"><span class="toc-number">4.</span> <span class="toc-text">insmod/rmmod</span></a></li></ol></div></div><div class="post-content"><p>如果想要在<code>Openwrt</code>系统中添加一个内核模块，其实并不难，对着某个已有的内核模块，依葫芦画瓢嘛，不难。本文将介绍一个最最简单的</p>
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><title>Openwrt中添加内核模块 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><body><div class="box" id="container"><div class="h-wrapper"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="https://litreily.gitbooks.io/notes/">笔记</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li class="m-sch"><form class="form" id="j-formsch" action="/search" method="get"><input class="txt" type="text" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"></form></li></ul></div></nav></div><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><h1 class="p-title">Openwrt中添加内核模块</h1><div class="p-content"><p>如果想要在<code>Openwrt</code>系统中添加一个内核模块，其实并不难，对着某个已有的内核模块，依葫芦画瓢嘛，不难。本文将介绍一个最最简单的</p>
 <h2 id="sourcecode"><a href="#sourcecode" class="headerlink" title="sourcecode"></a>sourcecode</h2><p>path: <code>git_repo/package/kmod-demo/</code></p>
 <p>下面是源码包含的所有文件，根级<code>Makefile</code>提供给内核编译器使用，<code>src</code>级<code>Makefile</code>用于编译<code>.ko</code>文件。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ tree</span><br><span class="line">.</span><br><span class="line">├── Makefile</span><br><span class="line">└── src</span><br><span class="line">    ├── demo.c</span><br><span class="line">    ├── Kconfig</span><br><span class="line">    └── Makefile</span><br></pre></td></tr></table></figure>
-<h3 id="demo-c"><a href="#demo-c" class="headerlink" title="demo.c"></a>demo.c</h3><p>源码非常简单，在装载时打印<code>Hello World</code>，卸载时打印<code>Exit</code>。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/module.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/kernel.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">int</span> __<span class="function">init <span class="title">hello_init</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    printk(<span class="string">"Hello World\n"</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">void</span> __<span class="function"><span class="built_in">exit</span> <span class="title">hello_exit</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    printk(<span class="string">"Exit\n"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">module_init(hello_init);</span><br><span class="line">module_exit(hello_exit);</span><br><span class="line">MODULE_LICENSE(<span class="string">"GPL"</span>);</span><br><span class="line">MODULE_AUTHOR(<span class="string">"Guangtao.wu"</span>);</span><br></pre></td></tr></table></figure>
+<pre><code>$ tree
+.
+├── Makefile
+└── src
+    ├── demo.c
+    ├── Kconfig
+    └── Makefile
+</code></pre><h3 id="demo-c"><a href="#demo-c" class="headerlink" title="demo.c"></a>demo.c</h3><p>源码非常简单，在装载时打印<code>Hello World</code>，卸载时打印<code>Exit</code>。</p>
+<pre><code class="c">#include &lt;linux/module.h&gt;
+#include &lt;linux/kernel.h&gt;
+
+static int __init hello_init(void)
+{
+    printk(&quot;Hello World\n&quot;);
+    return 0;
+}
+
+static void __exit hello_exit(void)
+{
+    printk(&quot;Exit\n&quot;);
+}
+
+module_init(hello_init);
+module_exit(hello_exit);
+MODULE_LICENSE(&quot;GPL&quot;);
+MODULE_AUTHOR(&quot;Guangtao.wu&quot;); 
+</code></pre>
 <h3 id="Kconfig"><a href="#Kconfig" class="headerlink" title="Kconfig"></a>Kconfig</h3><p>在<code>Kconfig</code>文件中添加一些编译相关的选项</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">config DEMO</span><br><span class="line">    tristate "This is a Module_DEMO"</span><br><span class="line">    default n</span><br><span class="line">    help</span><br><span class="line">      This is a DEMO, for debugging kernel model.</span><br><span class="line">      If unsure, say N.</span><br></pre></td></tr></table></figure>
+<pre><code class="json">config DEMO
+    tristate &quot;This is a Module_DEMO&quot;
+    default n
+    help
+      This is a DEMO, for debugging kernel model.
+      If unsure, say N.
+</code></pre>
 <ul>
 <li><code>default</code> : 该选项的默认值<ul>
 <li><code>n</code> 不编译</li>
@@ -15,40 +45,75 @@
 </li>
 </ul>
 <h3 id="Root-Makefile"><a href="#Root-Makefile" class="headerlink" title="Root - Makefile"></a>Root - Makefile</h3><p>根级<code>Makefile</code>仿其它内核模块编写，注意替换名称<code>demo</code>，<code>SUBMENU</code>以及<code>TITLE</code>将显示在<code>make menuconfig</code>的交互界面中。</p>
-<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># Copyright (C) 2006 OpenWrt.org</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># This is free software, licensed under the GNU General Public License v2.</span></span><br><span class="line"><span class="comment"># See /LICENSE for more information.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># $Id: Makefile 6565 2007-03-14 13:42:21Z nbd $</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">include</span> <span class="variable">$(TOPDIR)</span>/rules.mk</span><br><span class="line"><span class="keyword">include</span> <span class="variable">$(INCLUDE_DIR)</span>/kernel.mk</span><br><span class="line"></span><br><span class="line">PKG_NAME:=demo</span><br><span class="line">PKG_RELEASE:=1</span><br><span class="line"></span><br><span class="line">PKG_BUILD_DIR:=<span class="variable">$(KERNEL_BUILD_DIR)</span>/<span class="variable">$(PKG_NAME)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">include</span> <span class="variable">$(INCLUDE_DIR)</span>/package.mk</span><br><span class="line"></span><br><span class="line"><span class="keyword">define</span> KernelPackage/demo</span><br><span class="line">  SUBMENU:=Other modules</span><br><span class="line">  TITLE:=kernel demo </span><br><span class="line">  VERSION:=<span class="variable">$(LINUX_VERSION)</span>-<span class="variable">$(BOARD)</span>-<span class="variable">$(PKG_RELEASE)</span></span><br><span class="line">  FILES:= <span class="variable">$(PKG_BUILD_DIR)</span>/demo.<span class="variable">$(LINUX_KMOD_SUFFIX)</span></span><br><span class="line">  AUTOLOAD:=<span class="variable">$(<span class="built_in">call</span> AutoLoad,46,demo)</span></span><br><span class="line"><span class="keyword">endef</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">define</span> Build/Prepare</span><br><span class="line">	mkdir -p <span class="variable">$(PKG_BUILD_DIR)</span></span><br><span class="line">	<span class="variable">$(CP)</span> ./src/* <span class="variable">$(PKG_BUILD_DIR)</span></span><br><span class="line"><span class="keyword">endef</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">define</span> Build/Compile</span><br><span class="line">	<span class="variable">$(MAKE)</span> -C <span class="string">"<span class="variable">$(LINUX_DIR)</span>"</span> \</span><br><span class="line">		CROSS_COMPILE=<span class="string">"<span class="variable">$(TARGET_CROSS)</span>"</span> \</span><br><span class="line">		ARCH=<span class="string">"<span class="variable">$(LINUX_KARCH)</span>"</span> \</span><br><span class="line">		SUBDIRS=<span class="string">"<span class="variable">$(PKG_BUILD_DIR)</span>"</span> \</span><br><span class="line">		EXTRA_CFLAGS=<span class="string">"<span class="variable">$(BUILDFLAGS)</span>"</span> \</span><br><span class="line">		modules</span><br><span class="line"><span class="keyword">endef</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">define</span> KernelPackage/demo/install</span><br><span class="line">	<span class="variable">$(INSTALL_DIR)</span> $(1)/lib/network/</span><br><span class="line"><span class="keyword">endef</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$(<span class="built_in">eval</span> $(<span class="built_in">call</span> KernelPackage,demo)</span>)</span><br></pre></td></tr></table></figure>
+<pre><code class="makefile"># 
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+# $Id: Makefile 6565 2007-03-14 13:42:21Z nbd $
+
+include $(TOPDIR)/rules.mk
+include $(INCLUDE_DIR)/kernel.mk
+
+PKG_NAME:=demo
+PKG_RELEASE:=1
+
+PKG_BUILD_DIR:=$(KERNEL_BUILD_DIR)/$(PKG_NAME)
+
+include $(INCLUDE_DIR)/package.mk
+
+define KernelPackage/demo
+  SUBMENU:=Other modules
+  TITLE:=kernel demo 
+  VERSION:=$(LINUX_VERSION)-$(BOARD)-$(PKG_RELEASE)
+  FILES:= $(PKG_BUILD_DIR)/demo.$(LINUX_KMOD_SUFFIX)
+  AUTOLOAD:=$(call AutoLoad,46,demo)
+endef
+
+define Build/Prepare
+    mkdir -p $(PKG_BUILD_DIR)
+    $(CP) ./src/* $(PKG_BUILD_DIR)
+endef
+
+define Build/Compile
+    $(MAKE) -C &quot;$(LINUX_DIR)&quot; \
+        CROSS_COMPILE=&quot;$(TARGET_CROSS)&quot; \
+        ARCH=&quot;$(LINUX_KARCH)&quot; \
+        SUBDIRS=&quot;$(PKG_BUILD_DIR)&quot; \
+        EXTRA_CFLAGS=&quot;$(BUILDFLAGS)&quot; \
+        modules
+endef
+
+define KernelPackage/demo/install
+    $(INSTALL_DIR) $(1)/lib/network/
+endef
+
+$(eval $(call KernelPackage,demo))
+</code></pre>
 <h3 id="src-Makefile"><a href="#src-Makefile" class="headerlink" title="src - Makefile"></a>src - Makefile</h3><p>源码的<code>Makefile</code>很简单，其实只要一行就够了，其中<code>CONFIG_&lt;module_name&gt;</code>需要在后续<code>.config</code>文件中配置，或者直接将<code>$(CONFIG_DEMO)</code>改为<code>y</code>或<code>m</code>即可。</p>
-<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">obj ?= .</span><br><span class="line"></span><br><span class="line">obj-<span class="variable">$(CONFIG_DEMO)</span> += demo.o</span><br></pre></td></tr></table></figure>
+<pre><code class="Makefile">obj ?= .
+
+obj-$(CONFIG_DEMO) += demo.o
+</code></pre>
 <h2 id="更新-config"><a href="#更新-config" class="headerlink" title="更新 .config"></a>更新 .config</h2><p>使用<code>make menuconfig</code>或者直接修改配置文件<code>.config</code>可以启用新添加的内核模块。</p>
 <ol>
 <li><code>make menuconfig</code>: 搜索<code>demo</code>将其选中然后保存退出</li>
 <li>手动启用，修改<code>.config</code>，在<code>Others module</code>配置参数附近添加如下内容</li>
 </ol>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CONFIG_KERNEL_kmod_demo=y</span><br></pre></td></tr></table></figure>
+<pre><code class="c">CONFIG_KERNEL_kmod_demo=y
+</code></pre>
 <h2 id="make"><a href="#make" class="headerlink" title="make"></a>make</h2><p>当源码和配置选项都准备好后，便可以编译安装了，单独安装需要整个<code>kernel</code>已经编译过一次，以保证交叉编译工具链能够正常使用。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ make package/kmod-demo/compile V=s</span><br><span class="line">$ make package/kmod-demo/install V=s</span><br></pre></td></tr></table></figure>
-<h2 id="insmod-rmmod"><a href="#insmod-rmmod" class="headerlink" title="insmod/rmmod"></a>insmod/rmmod</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># insmod</span></span><br><span class="line">$ insmod demo.ko</span><br><span class="line">Hello World</span><br><span class="line"></span><br><span class="line"><span class="comment"># rmmod</span></span><br><span class="line">$ rmmod demo.ko</span><br><span class="line">Exit</span><br></pre></td></tr></table></figure>
+<pre><code class="sh">$ make package/kmod-demo/compile V=s
+$ make package/kmod-demo/install V=s
+</code></pre>
+<h2 id="insmod-rmmod"><a href="#insmod-rmmod" class="headerlink" title="insmod/rmmod"></a>insmod/rmmod</h2><pre><code class="sh"># insmod
+$ insmod demo.ko
+Hello World
+
+# rmmod
+$ rmmod demo.ko
+Exit
+</code></pre>
 <p>look, <code>printk</code>的信息已经成功打印出来了！</p>
-</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a class="article-share-link" data-url="http://www.litreily.top/2018/05/30/openwrt-ko/" data-id="cjnbnh5p20043e2wt7sxa4b1u" data-qrcode="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACLklEQVR42u3aS27DMAxF0ex/0+4Cisr3kUoBUdejAnUUHQ0YfvT54Of59fD31++kn2o9MmTIOJbxLJ81owarrf9ylDJkyLiAsQ6I5CsJrPZdaB0ZMmTIAEE2ZafryJAhQwZnrN9Zf2r9DllBhgwZNzNIkUmW7v/367W4DBkyDmTwrvv///2V+YYMGTKOYjzhU0sNeSgv7kqGDBmjGTzAkdZY2qRLhwcv+5EhQ8ZQRr+Vz1dIjyC4zCFDhozRDMLrDwb4AfXHqDJkyJjN4MUnD4u8lZ/ygt8QGTJkjGOkqV6tVdcpZYN5rAwZMkYw+LUt3r5Pzy8dEgSZrAwZMkYweHHIeXzrZLQZNOxkyJAxlMGvPnSuQdTK12BEIUOGjNGMdHjJ00q+9XQ4URwJyJAh43DG3h57J3FMW28yZMi4mZFefdh1KLVDlCFDxg2MWhIWd/VwmC6GWhkyZAxlkDDHV+BDhV15nQwZMm5g8OY7vyrRSfh4Qvlyr02GDBlDGTzY1RI4kmiSgvnPI5AhQ8YFDN7Y4o0zchWjj5QhQ8Y9jLRArQVfPhhIQ7YMGTKmMmoXUgmMrMDXCZJCGTJkjGN0rkqkDbu0JceTThkyZNzAICEyvUjBRwuk9EV7kCFDxgWMTsGZRvfOL0Aw35AhQ8bFjHRDtQCajlFlyJAhgzfu05FkZ+VtAVeGDBmHMEgRm17ISJv4pNzd0G6TIUPGgYy0dORjyM6YIS5iZciQMZPxAxtAvCr8Lik3AAAAAElFTkSuQmCC">Share</a><div class="tags"><a href="/tags/C-C/">C/C++</a><a href="/tags/linux/">linux</a></div><div class="post-nav"><a class="pre" href="/2018/06/19/tmux-config/">tmux常用配置说明</a><a class="next" href="/2018/05/27/scrapy-start/">Python网络爬虫4 - scrapy入门</a></div><div id="vcomment"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
-var verify = 'false' == true ? true : false;
-var GUEST_INFO = ['nick','mail','link'];
-var guest_info = 'nick,mail,link'.split(',').filter(function(item){
-  return GUEST_INFO.indexOf(item) > -1
-});
-guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
-window.valine = new Valine({
-  el:'#vcomment',
-  notify:notify,
-  verify:verify,
-  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
-  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
-  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
-  avatar:'identicon',
-  guest_info:guest_info,
-  pageSize:'10'
-})</script></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/LabVIEW/">LabVIEW</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Matlab/">Matlab</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Media/">Media</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Network/">Network</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Office/">Office</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web/">Web</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Web/Template/">Template</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/信号处理/">信号处理</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/嵌入式/">嵌入式</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/杂物柜/">杂物柜</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/tags/word/" style="font-size: 12px;">word</a> <a href="/tags/jekyll/" style="font-size: 15.43px;">jekyll</a> <a href="/tags/literature/" style="font-size: 12px;">literature</a> <a href="/tags/test/" style="font-size: 15.43px;">test</a> <a href="/tags/video/" style="font-size: 13.71px;">video</a> <a href="/tags/algorithm/" style="font-size: 20.57px;">algorithm</a> <a href="/tags/matlab/" style="font-size: 17.14px;">matlab</a> <a href="/tags/windows/" style="font-size: 13.71px;">windows</a> <a href="/tags/brackets/" style="font-size: 12px;">brackets</a> <a href="/tags/git/" style="font-size: 15.43px;">git</a> <a href="/tags/tools/" style="font-size: 17.14px;">tools</a> <a href="/tags/labview/" style="font-size: 22.29px;">labview</a> <a href="/tags/tdms/" style="font-size: 13.71px;">tdms</a> <a href="/tags/atom/" style="font-size: 13.71px;">atom</a> <a href="/tags/utorrent/" style="font-size: 12px;">utorrent</a> <a href="/tags/C-C/" style="font-size: 24px;">C/C++</a> <a href="/tags/ubuntu/" style="font-size: 22.29px;">ubuntu</a> <a href="/tags/linux/" style="font-size: 18.86px;">linux</a> <a href="/tags/signal/" style="font-size: 13.71px;">signal</a> <a href="/tags/music/" style="font-size: 13.71px;">music</a> <a href="/tags/hexo/" style="font-size: 13.71px;">hexo</a> <a href="/tags/VS/" style="font-size: 13.71px;">VS</a> <a href="/tags/stm32/" style="font-size: 13.71px;">stm32</a> <a href="/tags/office/" style="font-size: 12px;">office</a> <a href="/tags/ruby/" style="font-size: 13.71px;">ruby</a> <a href="/tags/LWD/" style="font-size: 12px;">LWD</a> <a href="/tags/RSS/" style="font-size: 12px;">RSS</a> <a href="/tags/Feed/" style="font-size: 12px;">Feed</a> <a href="/tags/log/" style="font-size: 12px;">log</a> <a href="/tags/wireshark/" style="font-size: 12px;">wireshark</a> <a href="/tags/shell/" style="font-size: 12px;">shell</a> <a href="/tags/makefile/" style="font-size: 13.71px;">makefile</a> <a href="/tags/tmux/" style="font-size: 13.71px;">tmux</a> <a href="/tags/telnet/" style="font-size: 12px;">telnet</a> <a href="/tags/smtp/" style="font-size: 12px;">smtp</a> <a href="/tags/mysql/" style="font-size: 12px;">mysql</a> <a href="/tags/centos/" style="font-size: 12px;">centos</a> <a href="/tags/FreeRTOS/" style="font-size: 12px;">FreeRTOS</a> <a href="/tags/ddos/" style="font-size: 12px;">ddos</a> <a href="/tags/hping3/" style="font-size: 12px;">hping3</a> <a href="/tags/spider/" style="font-size: 17.14px;">spider</a> <a href="/tags/sina/" style="font-size: 12px;">sina</a> <a href="/tags/scrapy/" style="font-size: 12px;">scrapy</a> <a href="/tags/pug/" style="font-size: 12px;">pug</a> <a href="/tags/sort/" style="font-size: 12px;">sort</a> <a href="/tags/visualization/" style="font-size: 12px;">visualization</a> <a href="/tags/queue/" style="font-size: 12px;">queue</a> <a href="/tags/xlwt/" style="font-size: 12px;">xlwt</a> <a href="/tags/lofter/" style="font-size: 12px;">lofter</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/09/27/tee/">Linux指令 - tee的实现</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/20/coredump/">OpenWrt中使用gdb分析coredump</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/31/pug-synax/">网页模板pug基本语法</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/07/quick-sort/">Python实现快排及其可视化</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/19/tmux-config/">tmux常用配置说明</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Links</i></div><ul></ul><a href="https://www.smslit.top" title="smslit-水木十里" target="_blank">smslit-水木十里</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2018 <a href="/." rel="nofollow">LITREILY.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> manupassant.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.css"><script type="text/javascript" src="/js/search.js?v=0.0.0"></script><script>var search_path = 'search.xml';
-if (search_path.length == 0) {
-   search_path = 'search.xml';
-}
-var path = '/' + search_path;
-searchFunc(path, 'local-search-input', 'local-search-result');
-</script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
+</div></article></div><div class="l-pager l-pager-dtl box"><a class="prev" href="/2018/06/19/tmux-config/">&lt; tmux常用配置说明</a><a class="next" href="/2018/05/27/scrapy-start/">Python网络爬虫4 - scrapy入门 &gt;</a></div><footer><p>Copyright © 2018 <a href="/." rel="nofollow">LITREILY | </a>Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer><script type="text/javascript" src="/plugins/prettify/prettify.js"></script></div></div></div></body></html>
