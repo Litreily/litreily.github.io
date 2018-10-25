@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><title>Python网络爬虫4 - scrapy入门 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/8.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Python网络爬虫4 - scrapy入门</h1><a id="logo" href="/.">LITREILY</a><p class="description">Stay Hungry, Stay Foolish</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> Home</i></a><a href="/archives/"><i class="fa fa-archive"> Archive</i></a><a href="https://litreily.gitbooks.io/notes/"><i class="fa fa-book"> Notes</i></a><a href="/about/"><i class="fa fa-user"> About</i></a><a href="/history/"><i class="fa fa-history"> History</i></a><a href="/atom.xml"><i class="fa fa-rss"> RSS</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">Python网络爬虫4 - scrapy入门</h1><div class="post-meta">May 27, 2018<span> | </span><span class="category"><a href="/categories/Python/">Python</a></span></div><a class="disqus-comment-count" href="/2018/05/27/scrapy-start/#vcomment"><span class="valine-comment-count" data-xid="/2018/05/27/scrapy-start/"></span><span> Comment</span></a><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">Contents</div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#scrapy-framework"><span class="toc-number">1.</span> <span class="toc-text">scrapy framework</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#spider-process"><span class="toc-number">1.1.</span> <span class="toc-text">spider process</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Items"><span class="toc-number">1.2.</span> <span class="toc-text">Items</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Install"><span class="toc-number">2.</span> <span class="toc-text">Install</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#scrapy-startproject"><span class="toc-number">3.</span> <span class="toc-text">scrapy startproject</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#scrapy-genspider"><span class="toc-number">4.</span> <span class="toc-text">scrapy genspider</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#scrapy-crawl"><span class="toc-number">5.</span> <span class="toc-text">scrapy crawl</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#scrapy-shell"><span class="toc-number">6.</span> <span class="toc-text">scrapy shell</span></a></li></ol></div></div><div class="post-content"><p><code>scrapy</code>作为一款强大的爬虫框架，当然要好好学习一番，本文便是本人学习和使用<code>scrapy</code>过后的一个总结，内容比较基础，算是入门笔记吧，主要讲述<code>scrapy</code>的基本概念和使用方法。</p>
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><title>Python网络爬虫4 - scrapy入门 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><body><div class="box" id="container"><div class="h-wrapper"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="https://litreily.gitbooks.io/notes/">笔记</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li class="m-sch"><form class="form" id="j-formsch" action="/search" method="get"><input class="txt" type="text" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"></form></li></ul></div></nav></div><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><h1 class="p-title">Python网络爬虫4 - scrapy入门</h1><div class="p-content"><p><code>scrapy</code>作为一款强大的爬虫框架，当然要好好学习一番，本文便是本人学习和使用<code>scrapy</code>过后的一个总结，内容比较基础，算是入门笔记吧，主要讲述<code>scrapy</code>的基本概念和使用方法。</p>
 <h2 id="scrapy-framework"><a href="#scrapy-framework" class="headerlink" title="scrapy framework"></a>scrapy framework</h2><p>首先附上<code>scrapy</code>经典图如下：</p>
 <p><img src="/assets/spider/scrapy/scrapy.jpg" alt="scrapy framework"></p>
 <p><code>scrapy</code>框架包含以下几个部分</p>
@@ -24,19 +24,73 @@
 </ol>
 <p>需要说明的是，项目管道(<code>Item Pipeline</code>)主要完成数据清洗，验证，持久化存储等工作；下载器中间件(<code>Downloader Middlewares</code>)作为下载器和引擎之间的的钩子(<code>hook</code>)，用于监听或修改下载请求或已下载的网页，比如修改请求包的头部信息等；爬虫中间件(<code>Spider Middlewares</code>)作为爬虫和引擎之间的钩子(<code>hook</code>)，用于处理爬虫的输入输出，即网页<code>response</code>和爬虫解析网页后得到的<code>Items</code>和<code>requests</code>。</p>
 <h3 id="Items"><a href="#Items" class="headerlink" title="Items"></a>Items</h3><p>至于什么是<code>Items</code>，个人认为就是经爬虫解析后得到的一个数据单元，包含一组数据，比如爬取的是某网站的商品信息，那么每爬取一个网页可能会得到多组商品信息，每组信息包含商品名称，价格，生产日期，商品样式等，那我们便可以定义一组<code>Item</code></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> scrapy.item <span class="keyword">import</span> Item</span><br><span class="line"><span class="keyword">from</span> scrapy.item <span class="keyword">import</span> Field</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GoodsItem</span><span class="params">(Item)</span>:</span></span><br><span class="line">    name = Field()</span><br><span class="line">    price = Field()</span><br><span class="line">    date = Field()</span><br><span class="line">    types = Field()</span><br></pre></td></tr></table></figure>
+<pre><code class="python">from scrapy.item import Item
+from scrapy.item import Field
+
+class GoodsItem(Item):
+    name = Field()
+    price = Field()
+    date = Field()
+    types = Field()
+</code></pre>
 <p><code>Field()</code>实质就是一个字典<code>Dict()</code>类型的扩展，如上代码所示，一组<code>Item</code>对应一个商品信息，单个网页可能包含一个或多个商品，所有<code>Item</code>信息都需要在<code>Spider</code>中赋值，然后经引擎交给<code>Item Pipeline</code>。具体实现在后续博文的实例中会有体现，本文旨在简单记述<code>scrapy</code>的基本概念和使用方法。</p>
 <h2 id="Install"><a href="#Install" class="headerlink" title="Install"></a>Install</h2><p>with <code>pip</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install scrapy</span><br></pre></td></tr></table></figure>
+<pre><code class="node">pip install scrapy
+</code></pre>
 <p>or <code>conda</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda install -c conda-forge scrapy</span><br></pre></td></tr></table></figure>
+<pre><code class="node">conda install -c conda-forge scrapy
+</code></pre>
 <p>基本指令如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">D:\WorkSpace&gt;scrapy --help</span><br><span class="line">Scrapy <span class="number">1.5</span><span class="number">.0</span> - no active project</span><br><span class="line"></span><br><span class="line">Usage:</span><br><span class="line">  scrapy &lt;command&gt; [options] [args]</span><br><span class="line"></span><br><span class="line">Available commands:</span><br><span class="line">  bench         Run quick benchmark test</span><br><span class="line">  fetch         Fetch a URL using the Scrapy downloader</span><br><span class="line">  genspider     Generate <span class="keyword">new</span> spider using pre-defined templates</span><br><span class="line">  runspider     Run a self-contained spider (without creating a project)</span><br><span class="line">  settings      Get settings values</span><br><span class="line">  shell         Interactive scraping <span class="built_in">console</span></span><br><span class="line">  startproject  Create <span class="keyword">new</span> project</span><br><span class="line">  version       Print Scrapy version</span><br><span class="line">  view          Open URL <span class="keyword">in</span> browser, <span class="keyword">as</span> seen by Scrapy</span><br><span class="line"></span><br><span class="line">  [ more ]      More commands available when run <span class="keyword">from</span> project directory</span><br><span class="line"></span><br><span class="line">Use <span class="string">"scrapy &lt;command&gt; -h"</span> to see more info about a command</span><br></pre></td></tr></table></figure>
+<pre><code class="js">D:\WorkSpace&gt;scrapy --help
+Scrapy 1.5.0 - no active project
+
+Usage:
+  scrapy &lt;command&gt; [options] [args]
+
+Available commands:
+  bench         Run quick benchmark test
+  fetch         Fetch a URL using the Scrapy downloader
+  genspider     Generate new spider using pre-defined templates
+  runspider     Run a self-contained spider (without creating a project)
+  settings      Get settings values
+  shell         Interactive scraping console
+  startproject  Create new project
+  version       Print Scrapy version
+  view          Open URL in browser, as seen by Scrapy
+
+  [ more ]      More commands available when run from project directory
+
+Use &quot;scrapy &lt;command&gt; -h&quot; to see more info about a command
+</code></pre>
 <p>如果需要使用虚拟环境，需要安装<code>virtualenv</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install virtualenv</span><br></pre></td></tr></table></figure>
-<h2 id="scrapy-startproject"><a href="#scrapy-startproject" class="headerlink" title="scrapy startproject"></a>scrapy startproject</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scrapy startproject &lt;project-name&gt; [project-dir]</span><br></pre></td></tr></table></figure>
+<pre><code class="node">pip install virtualenv
+</code></pre>
+<h2 id="scrapy-startproject"><a href="#scrapy-startproject" class="headerlink" title="scrapy startproject"></a>scrapy startproject</h2><pre><code class="sh">scrapy startproject &lt;project-name&gt; [project-dir]
+</code></pre>
 <p>使用该指令可以生成一个新的<code>scrapy</code>项目，以<code>demo</code>为例</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">$ scrapy startproject demo</span><br><span class="line">...</span><br><span class="line">You can start your first spider with:</span><br><span class="line">    <span class="built_in">cd</span> demo</span><br><span class="line">    scrapy genspider example example.com</span><br><span class="line"></span><br><span class="line">$ <span class="built_in">cd</span> demo</span><br><span class="line">$ tree</span><br><span class="line">.</span><br><span class="line">├── demo</span><br><span class="line">│   ├── __init__.py</span><br><span class="line">│   ├── items.py</span><br><span class="line">│   ├── middlewares.py</span><br><span class="line">│   ├── pipelines.py</span><br><span class="line">│   ├── __pycache__</span><br><span class="line">│   ├── settings.py</span><br><span class="line">│   └── spiders</span><br><span class="line">│       ├── __init__.py</span><br><span class="line">│       └── __pycache__</span><br><span class="line">└── scrapy.cfg</span><br><span class="line"></span><br><span class="line">4 directories, 7 files</span><br></pre></td></tr></table></figure>
+<pre><code class="sh">$ scrapy startproject demo
+...
+You can start your first spider with:
+    cd demo
+    scrapy genspider example example.com
+
+$ cd demo
+$ tree
+.
+├── demo
+│   ├── __init__.py
+│   ├── items.py
+│   ├── middlewares.py
+│   ├── pipelines.py
+│   ├── __pycache__
+│   ├── settings.py
+│   └── spiders
+│       ├── __init__.py
+│       └── __pycache__
+└── scrapy.cfg
+
+4 directories, 7 files
+</code></pre>
 <p>可以看到<code>startproject</code>自动生成了一些文件夹和文件，其中：</p>
 <ol>
 <li><code>scrapy.cfg</code>: 项目配置文件，一般不用修改</li>
@@ -49,9 +103,22 @@
 <li><code>__pycache__</code>: 存储解释器生成的<code>.pyc</code>文件（一种跨平台的字节码<code>byte code</code>），在<code>python2</code>中该类文件与<code>.py</code>保存在相同文件夹</li>
 </ol>
 <h2 id="scrapy-genspider"><a href="#scrapy-genspider" class="headerlink" title="scrapy genspider"></a>scrapy genspider</h2><p>项目生成以后，可以使用<code>scrapy genspider</code>指令自动生成一个爬虫文件，比如，如果要爬取<a href="www.huaban.com">花瓣网首页</a>，执行以下指令：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> demo</span><br><span class="line">$ scrapy genspider huaban www.huaban.com</span><br></pre></td></tr></table></figure>
+<pre><code class="sh">$ cd demo
+$ scrapy genspider huaban www.huaban.com
+</code></pre>
 <p>默认生成的爬虫文件<code>huaban.py</code>如下：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> scrapy</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HuabanSpider</span><span class="params">(scrapy.Spider)</span>:</span></span><br><span class="line">    name = <span class="string">'huaban'</span></span><br><span class="line">    allowed_domains = [<span class="string">'www.huaban.com'</span>]</span><br><span class="line">    start_urls = [<span class="string">'http://www.huaban.com/'</span>]</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">parse</span><span class="params">(self, response)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+<pre><code class="python"># -*- coding: utf-8 -*-
+import scrapy
+
+
+class HuabanSpider(scrapy.Spider):
+    name = &#39;huaban&#39;
+    allowed_domains = [&#39;www.huaban.com&#39;]
+    start_urls = [&#39;http://www.huaban.com/&#39;]
+
+    def parse(self, response):
+        pass
+</code></pre>
 <ul>
 <li>爬虫类继承于<code>scrapy.Spider</code></li>
 <li><code>name</code>是必须存在的参数，用以标识该爬虫</li>
@@ -60,37 +127,161 @@
 </ul>
 <p>如果要自定义起始链接，也可以重写<code>scrapy.Spider</code>类的<code>start_requests</code>函数，此处不予细讲。</p>
 <p><code>parse</code>函数是一个默认的回调函数，当下载器下载网页后，会调用该函数进行解析，<code>response</code>就是请求包的响应数据。至于网页内容的解析方法，<code>scrapy</code>内置了几种选择器(<code>Selector</code>)，包括<code>xpath</code>选择器、<code>CSS</code>选择器和正则匹配。下面是一些选择器的使用示例，方便大家更加直观的了解选择器的用法。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># xpath selector</span></span><br><span class="line">response.xpath(<span class="string">'//a'</span>)</span><br><span class="line">response.xpath(<span class="string">'./img'</span>).extract()</span><br><span class="line">response.xpath(<span class="string">'//*[@id="huaban"]'</span>).extract_first()</span><br><span class="line">repsonse.xpath(<span class="string">'//*[@id="Profile"]/div[1]/a[2]/text()'</span>).extract_first()</span><br><span class="line"></span><br><span class="line"><span class="comment"># css selector</span></span><br><span class="line">response.css(<span class="string">'a'</span>).extract()</span><br><span class="line">response.css(<span class="string">'#Profile &gt; div.profile-basic'</span>).extract_first()</span><br><span class="line">response.css(<span class="string">'a[href="test.html"]::text'</span>).extract_first()</span><br><span class="line"></span><br><span class="line"><span class="comment"># re selector</span></span><br><span class="line">response.xpath(<span class="string">'.'</span>).re(<span class="string">'id:\s*(\d+)'</span>)</span><br><span class="line">response.xpath(<span class="string">'//a/text()'</span>).re_first(<span class="string">'username: \s(.*)'</span>)</span><br></pre></td></tr></table></figure>
+<pre><code class="python"># xpath selector
+response.xpath(&#39;//a&#39;)
+response.xpath(&#39;./img&#39;).extract()
+response.xpath(&#39;//*[@id=&quot;huaban&quot;]&#39;).extract_first()
+repsonse.xpath(&#39;//*[@id=&quot;Profile&quot;]/div[1]/a[2]/text()&#39;).extract_first()
+
+# css selector
+response.css(&#39;a&#39;).extract()
+response.css(&#39;#Profile &gt; div.profile-basic&#39;).extract_first()
+response.css(&#39;a[href=&quot;test.html&quot;]::text&#39;).extract_first()
+
+# re selector
+response.xpath(&#39;.&#39;).re(&#39;id:\s*(\d+)&#39;)
+response.xpath(&#39;//a/text()&#39;).re_first(&#39;username: \s(.*)&#39;)
+</code></pre>
 <p>需要说明的是，<code>response</code>不能直接调用<code>re</code>,<code>re_first</code>.</p>
 <h2 id="scrapy-crawl"><a href="#scrapy-crawl" class="headerlink" title="scrapy crawl"></a>scrapy crawl</h2><p>假设爬虫编写完了，那就可以使用<code>scrapy crawl</code>指令开始执行爬取任务了。</p>
 <p>当进入一个创建好的<code>scrapy</code>项目目录时，使用<code>scrapy -h</code>可以获得相比未创建之前更多的帮助信息，其中就包括用于启动爬虫任务的<code>scrapy crawl</code></p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">$ scrapy -h</span><br><span class="line">Scrapy 1.5.0 - project: huaban</span><br><span class="line"></span><br><span class="line">Usage:</span><br><span class="line">  scrapy &lt;<span class="built_in">command</span>&gt; [options] [args]</span><br><span class="line"></span><br><span class="line">Available commands:</span><br><span class="line">  bench         Run quick benchmark <span class="built_in">test</span></span><br><span class="line">  check         Check spider contracts</span><br><span class="line">  crawl         Run a spider</span><br><span class="line">  edit          Edit spider</span><br><span class="line">  fetch         Fetch a URL using the Scrapy downloader</span><br><span class="line">  genspider     Generate new spider using pre-defined templates</span><br><span class="line">  list          List available spiders</span><br><span class="line">  parse         Parse URL (using its spider) and <span class="built_in">print</span> the results</span><br><span class="line">  runspider     Run a self-contained spider (without creating a project)</span><br><span class="line">  settings      Get settings values</span><br><span class="line">  shell         Interactive scraping console</span><br><span class="line">  startproject  Create new project</span><br><span class="line">  version       Print Scrapy version</span><br><span class="line">  view          Open URL <span class="keyword">in</span> browser, as seen by Scrapy</span><br><span class="line"></span><br><span class="line">Use <span class="string">"scrapy &lt;command&gt; -h"</span> to see more info about a <span class="built_in">command</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">$ scrapy crawl -h</span><br><span class="line">Usage</span><br><span class="line">=====</span><br><span class="line">  scrapy crawl [options] &lt;spider&gt;</span><br><span class="line"></span><br><span class="line">Run a spider</span><br><span class="line"></span><br><span class="line">Options</span><br><span class="line">=======</span><br><span class="line">--<span class="built_in">help</span>, -h              show this <span class="built_in">help</span> message and <span class="built_in">exit</span></span><br><span class="line">-a NAME=VALUE           <span class="built_in">set</span> spider argument (may be repeated)</span><br><span class="line">--output=FILE, -o FILE  dump scraped items into FILE (use - <span class="keyword">for</span> stdout)</span><br><span class="line">--output-format=FORMAT, -t FORMAT</span><br><span class="line">                        format to use <span class="keyword">for</span> dumping items with -o</span><br><span class="line"></span><br><span class="line">Global Options</span><br><span class="line">--------------</span><br><span class="line">--logfile=FILE          <span class="built_in">log</span> file. <span class="keyword">if</span> omitted stderr will be used</span><br><span class="line">--loglevel=LEVEL, -L LEVEL</span><br><span class="line">                        <span class="built_in">log</span> level (default: DEBUG)</span><br><span class="line">--nolog                 <span class="built_in">disable</span> logging completely</span><br><span class="line">--profile=FILE          write python cProfile stats to FILE</span><br><span class="line">--pidfile=FILE          write process ID to FILE</span><br><span class="line">--<span class="built_in">set</span>=NAME=VALUE, -s NAME=VALUE</span><br><span class="line">                        <span class="built_in">set</span>/override setting (may be repeated)</span><br><span class="line">--pdb                   <span class="built_in">enable</span> pdb on failure</span><br></pre></td></tr></table></figure>
+<pre><code class="sh">$ scrapy -h
+Scrapy 1.5.0 - project: huaban
+
+Usage:
+  scrapy &lt;command&gt; [options] [args]
+
+Available commands:
+  bench         Run quick benchmark test
+  check         Check spider contracts
+  crawl         Run a spider
+  edit          Edit spider
+  fetch         Fetch a URL using the Scrapy downloader
+  genspider     Generate new spider using pre-defined templates
+  list          List available spiders
+  parse         Parse URL (using its spider) and print the results
+  runspider     Run a self-contained spider (without creating a project)
+  settings      Get settings values
+  shell         Interactive scraping console
+  startproject  Create new project
+  version       Print Scrapy version
+  view          Open URL in browser, as seen by Scrapy
+
+Use &quot;scrapy &lt;command&gt; -h&quot; to see more info about a command
+</code></pre>
+<pre><code class="sh">$ scrapy crawl -h
+Usage
+=====
+  scrapy crawl [options] &lt;spider&gt;
+
+Run a spider
+
+Options
+=======
+--help, -h              show this help message and exit
+-a NAME=VALUE           set spider argument (may be repeated)
+--output=FILE, -o FILE  dump scraped items into FILE (use - for stdout)
+--output-format=FORMAT, -t FORMAT
+                        format to use for dumping items with -o
+
+Global Options
+--------------
+--logfile=FILE          log file. if omitted stderr will be used
+--loglevel=LEVEL, -L LEVEL
+                        log level (default: DEBUG)
+--nolog                 disable logging completely
+--profile=FILE          write python cProfile stats to FILE
+--pidfile=FILE          write process ID to FILE
+--set=NAME=VALUE, -s NAME=VALUE
+                        set/override setting (may be repeated)
+--pdb                   enable pdb on failure
+</code></pre>
 <p>从<code>scrapy crawl</code>的帮助信息可以看出，该指令包含很多可选参数，但必选参数只有一个，就是<code>spider</code>，即要执行的爬虫名称，对应每个爬虫的名称(<code>name</code>)。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scrapy crawl huaban</span><br></pre></td></tr></table></figure>
+<pre><code class="sh">scrapy crawl huaban
+</code></pre>
 <p>至此，一个<code>scrapy</code>爬虫任务的创建和执行过程就介绍完了，至于实例，后续博客会陆续介绍。</p>
 <h2 id="scrapy-shell"><a href="#scrapy-shell" class="headerlink" title="scrapy shell"></a>scrapy shell</h2><p>最后简要说明一下指令<code>scrapy shell</code>，这是一个交互式的<code>shell</code>,类似于命令行形式的<code>python</code>，当我们刚开始学习<code>scrapy</code>或者刚开始爬取某个陌生的站点时，可以使用它熟悉各种函数操作或者选择器的使用，用它来不断试错纠错，熟练掌握<code>scrapy</code>各种用法。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line">$ scrapy shell www.huaban.com</span><br><span class="line">2018-05-29 23:58:49 [scrapy.utils.log] INFO: Scrapy 1.5.0 started (bot: scrapybot)</span><br><span class="line">2018-05-29 23:58:49 [scrapy.utils.log] INFO: Versions: lxml 4.2.1.0, libxml2 2.9.5, cssselect 1.0.3, parsel 1.4.0, w3lib 1.19.0, Twisted 17.9.0, Python 3.6.3 (v3.6.3:2c5fed8, Oct  3</span><br><span class="line">2017, 17:26:49) [MSC v.1900 32 bit (Intel)], pyOpenSSL 17.5.0 (OpenSSL 1.1.0h  27 Mar 2018), cryptography 2.2.2, Platform Windows-10-10.0.17134-SP0</span><br><span class="line">2018-05-29 23:58:49 [scrapy.crawler] INFO: Overridden settings: &#123;<span class="string">'DUPEFILTER_CLASS'</span>: <span class="string">'scrapy.dupefilters.BaseDupeFilter'</span>, <span class="string">'LOGSTATS_INTERVAL'</span>: 0&#125;</span><br><span class="line">2018-05-29 23:58:49 [scrapy.middleware] INFO: Enabled extensions:</span><br><span class="line">[<span class="string">'scrapy.extensions.corestats.CoreStats'</span>,</span><br><span class="line"> <span class="string">'scrapy.extensions.telnet.TelnetConsole'</span>]</span><br><span class="line">2018-05-29 23:58:50 [scrapy.middleware] INFO: Enabled downloader middlewares:</span><br><span class="line">[<span class="string">'scrapy.downloadermiddlewares.httpauth.HttpAuthMiddleware'</span>,</span><br><span class="line"> <span class="string">'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware'</span>,</span><br><span class="line"> <span class="string">'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware'</span>,</span><br><span class="line"> <span class="string">'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware'</span>,</span><br><span class="line"> <span class="string">'scrapy.downloadermiddlewares.retry.RetryMiddleware'</span>,</span><br><span class="line"> <span class="string">'scrapy.downloadermiddlewares.redirect.MetaRefreshMiddleware'</span>,</span><br><span class="line"> <span class="string">'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware'</span>,</span><br><span class="line"> <span class="string">'scrapy.downloadermiddlewares.redirect.RedirectMiddleware'</span>,</span><br><span class="line"> <span class="string">'scrapy.downloadermiddlewares.cookies.CookiesMiddleware'</span>,</span><br><span class="line"> <span class="string">'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware'</span>,</span><br><span class="line"> <span class="string">'scrapy.downloadermiddlewares.stats.DownloaderStats'</span>]</span><br><span class="line">2018-05-29 23:58:50 [scrapy.middleware] INFO: Enabled spider middlewares:</span><br><span class="line">[<span class="string">'scrapy.spidermiddlewares.httperror.HttpErrorMiddleware'</span>,</span><br><span class="line"> <span class="string">'scrapy.spidermiddlewares.offsite.OffsiteMiddleware'</span>,</span><br><span class="line"> <span class="string">'scrapy.spidermiddlewares.referer.RefererMiddleware'</span>,</span><br><span class="line"> <span class="string">'scrapy.spidermiddlewares.urllength.UrlLengthMiddleware'</span>,</span><br><span class="line"> <span class="string">'scrapy.spidermiddlewares.depth.DepthMiddleware'</span>]</span><br><span class="line">2018-05-29 23:58:50 [scrapy.middleware] INFO: Enabled item pipelines:</span><br><span class="line">[]</span><br><span class="line">2018-05-29 23:58:50 [scrapy.extensions.telnet] DEBUG: Telnet console listening on 127.0.0.1:6023</span><br><span class="line">2018-05-29 23:58:50 [scrapy.core.engine] INFO: Spider opened</span><br><span class="line">2018-05-29 23:58:50 [scrapy.downloadermiddlewares.redirect] DEBUG: Redirecting (301) to &lt;GET http://huaban.com/&gt; from &lt;GET http://www.huaban.com&gt;</span><br><span class="line">2018-05-29 23:58:50 [scrapy.core.engine] DEBUG: Crawled (200) &lt;GET http://huaban.com/&gt; (referer: None)</span><br><span class="line">[s] Available Scrapy objects:</span><br><span class="line">[s]   scrapy     scrapy module (contains scrapy.Request, scrapy.Selector, etc)</span><br><span class="line">[s]   crawler    &lt;scrapy.crawler.Crawler object at 0x03385CB0&gt;</span><br><span class="line">[s]   item       &#123;&#125;</span><br><span class="line">[s]   request    &lt;GET http://www.huaban.com&gt;</span><br><span class="line">[s]   response   &lt;200 http://huaban.com/&gt;</span><br><span class="line">[s]   settings   &lt;scrapy.settings.Settings object at 0x04CC4D10&gt;</span><br><span class="line">[s]   spider     &lt;DefaultSpider <span class="string">'default'</span> at 0x4fa6bf0&gt;</span><br><span class="line">[s] Useful shortcuts:</span><br><span class="line">[s]   fetch(url[, redirect=True]) Fetch URL and update <span class="built_in">local</span> objects (by default, redirects are followed)</span><br><span class="line">[s]   fetch(req)                  Fetch a scrapy.Request and update <span class="built_in">local</span> objects</span><br><span class="line">[s]   shelp()           Shell <span class="built_in">help</span> (<span class="built_in">print</span> this <span class="built_in">help</span>)</span><br><span class="line">[s]   view(response)    View response <span class="keyword">in</span> a browser</span><br><span class="line">In [1]: view(response)</span><br><span class="line">Out[1]: True</span><br><span class="line"></span><br><span class="line">In [2]: response.xpath(<span class="string">'//a'</span>)</span><br><span class="line">Out[2]:</span><br><span class="line">[&lt;Selector xpath=<span class="string">'//a'</span> data=<span class="string">'&lt;a id="elevator" class="off" onclick="re'</span>&gt;,</span><br><span class="line"> &lt;Selector xpath=<span class="string">'//a'</span> data=<span class="string">'&lt;a class="plus"&gt;&lt;/a&gt;'</span>&gt;,</span><br><span class="line"> &lt;Selector xpath=<span class="string">'//a'</span> data=<span class="string">'&lt;a onclick="app.showUploadDialog();"&gt;添加采'</span>&gt;,</span><br><span class="line"> &lt;Selector xpath=<span class="string">'//a'</span> data=<span class="string">'&lt;a class="add-board-item"&gt;添加画板&lt;i class="'</span>&gt;,</span><br><span class="line"> &lt;Selector xpath=<span class="string">'//a'</span> data=<span class="string">'&lt;a href="/about/goodies/"&gt;安装采集工具&lt;i class'</span>&gt;,</span><br><span class="line"> &lt;Selector xpath=<span class="string">'//a'</span> data=<span class="string">'&lt;a class="huaban_security_oauth" logo_si'</span>&gt;]</span><br><span class="line"></span><br><span class="line">In [3]: response.xpath(<span class="string">'//a'</span>).extract()</span><br><span class="line">Out[3]:</span><br><span class="line">[<span class="string">'&lt;a id="elevator" class="off" onclick="return false;" title="回到顶部"&gt;&lt;/a&gt;'</span>,</span><br><span class="line"> <span class="string">'&lt;a class="plus"&gt;&lt;/a&gt;'</span>,</span><br><span class="line"> <span class="string">'&lt;a onclick="app.showUploadDialog();"&gt;添加采集&lt;i class="upload"&gt;&lt;/i&gt;&lt;/a&gt;'</span>,</span><br><span class="line"> <span class="string">'&lt;a class="add-board-item"&gt;添加画板&lt;i class="add-board"&gt;&lt;/i&gt;&lt;/a&gt;'</span>,</span><br><span class="line"> <span class="string">'&lt;a href="/about/goodies/"&gt;安装采集工具&lt;i class="goodies"&gt;&lt;/i&gt;&lt;/a&gt;'</span>,</span><br><span class="line"> <span class="string">'&lt;a class="huaban_security_oauth" logo_size="124x47" logo_type="realname" href="//www.anquan.org" rel="nofollow"&gt; &lt;script src="//static.anquan.org/static/outer/js/aq_auth.js"&gt;&lt;/script&gt; &lt;/a&gt;'</span>]</span><br><span class="line"></span><br><span class="line">In [4]: response.xpath(<span class="string">'//img'</span>)</span><br><span class="line">Out[4]: [&lt;Selector xpath=<span class="string">'//img'</span> data=<span class="string">'&lt;img src="https://d5nxst8fruw4z.cloudfro'</span>&gt;]</span><br><span class="line"></span><br><span class="line">In [5]: response.xpath(<span class="string">'//a/text()'</span>)</span><br><span class="line">Out[5]:</span><br><span class="line">[&lt;Selector xpath=<span class="string">'//a/text()'</span> data=<span class="string">'添加采集'</span>&gt;,</span><br><span class="line"> &lt;Selector xpath=<span class="string">'//a/text()'</span> data=<span class="string">'添加画板'</span>&gt;,</span><br><span class="line"> &lt;Selector xpath=<span class="string">'//a/text()'</span> data=<span class="string">'安装采集工具'</span>&gt;,</span><br><span class="line"> &lt;Selector xpath=<span class="string">'//a/text()'</span> data=<span class="string">' '</span>&gt;,</span><br><span class="line"> &lt;Selector xpath=<span class="string">'//a/text()'</span> data=<span class="string">' '</span>&gt;]</span><br><span class="line"></span><br><span class="line">In [6]: response.xpath(<span class="string">'//a/text()'</span>).extract()</span><br><span class="line">Out[6]: [<span class="string">'添加采集'</span>, <span class="string">'添加画板'</span>, <span class="string">'安装采集工具'</span>, <span class="string">' '</span>, <span class="string">' '</span>]</span><br><span class="line"></span><br><span class="line">In [7]: response.xpath(<span class="string">'//a/text()'</span>).extract_first()</span><br><span class="line">Out[7]: <span class="string">'添加采集'</span></span><br></pre></td></tr></table></figure></div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a class="article-share-link" data-url="http://www.litreily.top/2018/05/27/scrapy-start/" data-id="cjnogm8rn004p5fwt1pfoawo5" data-qrcode="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACIklEQVR42u3aS46DMBAFwNz/0hlpthHMe24yEqa8ihICLhZW/16veL1/19H3n+voX0dXfv76+sbCwMC4LeN9uo4ecPTr+RYnzz2/PwYGxhMY54fsVZs7v0NyZB9+j4GBgVHeut10HlxiYGBg5Iw8Wc0TYwwMDIxzxqRwlm8xT4m/mItjYGDckNE2Bv7z8xf7GxgYGDdhvMuV3ye58rJdYWBgbM0438SkDJcHf+0hW0S4GBgYWzCS8ayrMHk7s06hMTAwtma0R15bREsCvrXCHwYGxnMYa0db0VYcF/jq9BUDA2NrRpJY5sdr+wra11pU+zAwMG7OmI8+5IW25BWMklgMDIxNGWs3ShLLqw7rhI2BgfEERlv2yhPaSVBYDHZgYGBszbjqwe0mvjHAgYGBsTej7nZeVCzLQ8xRLo6BgbERI28VtIHjGqyeGcHAwHgAIwnO2iBvXowrAlAMDIytGWvFr/m25gMcf5AwMDA2YuStxDbga5sBOfWw3IaBgbEdow628nezlMQuBpQYGBiPYeTlrTaYmzRKIxgGBsbWjKvCwbVBjdfSqsttGBgYN2e8y9UCJm3OIqzEwMDYmjE55towcfKaFvsbGBgYGzHmx2LbDGiHM5JiHwYGxhMYaw2AvEiX/7ct2GFgYGDkj5wkuvMrMTAwMJJALf/vZIwMAwPjyYx25CJvA+TgPK3FwMB4GqNtDOTlsHzMYpIwY2BgbM34AbYcFBnW7/pkAAAAAElFTkSuQmCC">Share</a><div class="tags"><a href="/tags/spider/">spider</a><a href="/tags/scrapy/">scrapy</a></div><div class="post-nav"><a class="pre" href="/2018/05/30/openwrt-ko/">Openwrt中添加内核模块</a><a class="next" href="/2018/04/30/cfachina/">Python网络爬虫3 - 生产者消费者模型爬取某金融网站数据</a></div><div id="vcomment"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
-var verify = 'false' == true ? true : false;
-var GUEST_INFO = ['nick','mail','link'];
-var guest_info = 'nick,mail,link'.split(',').filter(function(item){
-  return GUEST_INFO.indexOf(item) > -1
-});
-guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
-window.valine = new Valine({
-  el:'#vcomment',
-  notify:notify,
-  verify:verify,
-  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
-  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
-  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
-  avatar:'identicon',
-  guest_info:guest_info,
-  pageSize:'10'
-})</script></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/LabVIEW/">LabVIEW</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Matlab/">Matlab</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Media/">Media</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Network/">Network</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Office/">Office</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web/">Web</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Web/Template/">Template</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/信号处理/">信号处理</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/嵌入式/">嵌入式</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/杂物柜/">杂物柜</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/tags/word/" style="font-size: 12px;">word</a> <a href="/tags/test/" style="font-size: 15.43px;">test</a> <a href="/tags/ruby/" style="font-size: 13.71px;">ruby</a> <a href="/tags/video/" style="font-size: 13.71px;">video</a> <a href="/tags/literature/" style="font-size: 12px;">literature</a> <a href="/tags/algorithm/" style="font-size: 20.57px;">algorithm</a> <a href="/tags/windows/" style="font-size: 13.71px;">windows</a> <a href="/tags/matlab/" style="font-size: 17.14px;">matlab</a> <a href="/tags/labview/" style="font-size: 22.29px;">labview</a> <a href="/tags/tdms/" style="font-size: 13.71px;">tdms</a> <a href="/tags/brackets/" style="font-size: 12px;">brackets</a> <a href="/tags/git/" style="font-size: 15.43px;">git</a> <a href="/tags/tools/" style="font-size: 17.14px;">tools</a> <a href="/tags/utorrent/" style="font-size: 12px;">utorrent</a> <a href="/tags/atom/" style="font-size: 13.71px;">atom</a> <a href="/tags/C-C/" style="font-size: 24px;">C/C++</a> <a href="/tags/ubuntu/" style="font-size: 22.29px;">ubuntu</a> <a href="/tags/linux/" style="font-size: 18.86px;">linux</a> <a href="/tags/signal/" style="font-size: 13.71px;">signal</a> <a href="/tags/music/" style="font-size: 13.71px;">music</a> <a href="/tags/stm32/" style="font-size: 13.71px;">stm32</a> <a href="/tags/VS/" style="font-size: 13.71px;">VS</a> <a href="/tags/hexo/" style="font-size: 13.71px;">hexo</a> <a href="/tags/RSS/" style="font-size: 12px;">RSS</a> <a href="/tags/Feed/" style="font-size: 12px;">Feed</a> <a href="/tags/office/" style="font-size: 12px;">office</a> <a href="/tags/jekyll/" style="font-size: 15.43px;">jekyll</a> <a href="/tags/log/" style="font-size: 12px;">log</a> <a href="/tags/LWD/" style="font-size: 12px;">LWD</a> <a href="/tags/FreeRTOS/" style="font-size: 12px;">FreeRTOS</a> <a href="/tags/makefile/" style="font-size: 13.71px;">makefile</a> <a href="/tags/wireshark/" style="font-size: 12px;">wireshark</a> <a href="/tags/shell/" style="font-size: 12px;">shell</a> <a href="/tags/tmux/" style="font-size: 13.71px;">tmux</a> <a href="/tags/telnet/" style="font-size: 12px;">telnet</a> <a href="/tags/smtp/" style="font-size: 12px;">smtp</a> <a href="/tags/ddos/" style="font-size: 12px;">ddos</a> <a href="/tags/hping3/" style="font-size: 12px;">hping3</a> <a href="/tags/mysql/" style="font-size: 12px;">mysql</a> <a href="/tags/centos/" style="font-size: 12px;">centos</a> <a href="/tags/pug/" style="font-size: 12px;">pug</a> <a href="/tags/spider/" style="font-size: 17.14px;">spider</a> <a href="/tags/lofter/" style="font-size: 12px;">lofter</a> <a href="/tags/sort/" style="font-size: 12px;">sort</a> <a href="/tags/visualization/" style="font-size: 12px;">visualization</a> <a href="/tags/stdio/" style="font-size: 12px;">stdio</a> <a href="/tags/cache/" style="font-size: 12px;">cache</a> <a href="/tags/buffer/" style="font-size: 12px;">buffer</a> <a href="/tags/scrapy/" style="font-size: 12px;">scrapy</a> <a href="/tags/sina/" style="font-size: 12px;">sina</a> <a href="/tags/queue/" style="font-size: 12px;">queue</a> <a href="/tags/xlwt/" style="font-size: 12px;">xlwt</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/10/25/io-cache/">Linux中的文件I/O缓冲</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/27/tee/">Linux指令 - tee的实现</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/20/coredump/">OpenWrt中使用gdb分析coredump</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/31/pug-synax/">网页模板pug基本语法</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/07/quick-sort/">Python实现快排及其可视化</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Links</i></div><ul></ul><a href="https://www.smslit.top" title="smslit-水木十里" target="_blank">smslit-水木十里</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2018 <a href="/." rel="nofollow">LITREILY.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> manupassant.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.css"><script type="text/javascript" src="/js/search.js?v=0.0.0"></script><script>var search_path = 'search.xml';
-if (search_path.length == 0) {
-   search_path = 'search.xml';
-}
-var path = '/' + search_path;
-searchFunc(path, 'local-search-input', 'local-search-result');
-</script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
+<pre><code class="sh">$ scrapy shell www.huaban.com
+2018-05-29 23:58:49 [scrapy.utils.log] INFO: Scrapy 1.5.0 started (bot: scrapybot)
+2018-05-29 23:58:49 [scrapy.utils.log] INFO: Versions: lxml 4.2.1.0, libxml2 2.9.5, cssselect 1.0.3, parsel 1.4.0, w3lib 1.19.0, Twisted 17.9.0, Python 3.6.3 (v3.6.3:2c5fed8, Oct  3
+2017, 17:26:49) [MSC v.1900 32 bit (Intel)], pyOpenSSL 17.5.0 (OpenSSL 1.1.0h  27 Mar 2018), cryptography 2.2.2, Platform Windows-10-10.0.17134-SP0
+2018-05-29 23:58:49 [scrapy.crawler] INFO: Overridden settings: {&#39;DUPEFILTER_CLASS&#39;: &#39;scrapy.dupefilters.BaseDupeFilter&#39;, &#39;LOGSTATS_INTERVAL&#39;: 0}
+2018-05-29 23:58:49 [scrapy.middleware] INFO: Enabled extensions:
+[&#39;scrapy.extensions.corestats.CoreStats&#39;,
+ &#39;scrapy.extensions.telnet.TelnetConsole&#39;]
+2018-05-29 23:58:50 [scrapy.middleware] INFO: Enabled downloader middlewares:
+[&#39;scrapy.downloadermiddlewares.httpauth.HttpAuthMiddleware&#39;,
+ &#39;scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware&#39;,
+ &#39;scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware&#39;,
+ &#39;scrapy.downloadermiddlewares.useragent.UserAgentMiddleware&#39;,
+ &#39;scrapy.downloadermiddlewares.retry.RetryMiddleware&#39;,
+ &#39;scrapy.downloadermiddlewares.redirect.MetaRefreshMiddleware&#39;,
+ &#39;scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware&#39;,
+ &#39;scrapy.downloadermiddlewares.redirect.RedirectMiddleware&#39;,
+ &#39;scrapy.downloadermiddlewares.cookies.CookiesMiddleware&#39;,
+ &#39;scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware&#39;,
+ &#39;scrapy.downloadermiddlewares.stats.DownloaderStats&#39;]
+2018-05-29 23:58:50 [scrapy.middleware] INFO: Enabled spider middlewares:
+[&#39;scrapy.spidermiddlewares.httperror.HttpErrorMiddleware&#39;,
+ &#39;scrapy.spidermiddlewares.offsite.OffsiteMiddleware&#39;,
+ &#39;scrapy.spidermiddlewares.referer.RefererMiddleware&#39;,
+ &#39;scrapy.spidermiddlewares.urllength.UrlLengthMiddleware&#39;,
+ &#39;scrapy.spidermiddlewares.depth.DepthMiddleware&#39;]
+2018-05-29 23:58:50 [scrapy.middleware] INFO: Enabled item pipelines:
+[]
+2018-05-29 23:58:50 [scrapy.extensions.telnet] DEBUG: Telnet console listening on 127.0.0.1:6023
+2018-05-29 23:58:50 [scrapy.core.engine] INFO: Spider opened
+2018-05-29 23:58:50 [scrapy.downloadermiddlewares.redirect] DEBUG: Redirecting (301) to &lt;GET http://huaban.com/&gt; from &lt;GET http://www.huaban.com&gt;
+2018-05-29 23:58:50 [scrapy.core.engine] DEBUG: Crawled (200) &lt;GET http://huaban.com/&gt; (referer: None)
+[s] Available Scrapy objects:
+[s]   scrapy     scrapy module (contains scrapy.Request, scrapy.Selector, etc)
+[s]   crawler    &lt;scrapy.crawler.Crawler object at 0x03385CB0&gt;
+[s]   item       {}
+[s]   request    &lt;GET http://www.huaban.com&gt;
+[s]   response   &lt;200 http://huaban.com/&gt;
+[s]   settings   &lt;scrapy.settings.Settings object at 0x04CC4D10&gt;
+[s]   spider     &lt;DefaultSpider &#39;default&#39; at 0x4fa6bf0&gt;
+[s] Useful shortcuts:
+[s]   fetch(url[, redirect=True]) Fetch URL and update local objects (by default, redirects are followed)
+[s]   fetch(req)                  Fetch a scrapy.Request and update local objects
+[s]   shelp()           Shell help (print this help)
+[s]   view(response)    View response in a browser
+In [1]: view(response)
+Out[1]: True
+
+In [2]: response.xpath(&#39;//a&#39;)
+Out[2]:
+[&lt;Selector xpath=&#39;//a&#39; data=&#39;&lt;a id=&quot;elevator&quot; class=&quot;off&quot; onclick=&quot;re&#39;&gt;,
+ &lt;Selector xpath=&#39;//a&#39; data=&#39;&lt;a class=&quot;plus&quot;&gt;&lt;/a&gt;&#39;&gt;,
+ &lt;Selector xpath=&#39;//a&#39; data=&#39;&lt;a onclick=&quot;app.showUploadDialog();&quot;&gt;添加采&#39;&gt;,
+ &lt;Selector xpath=&#39;//a&#39; data=&#39;&lt;a class=&quot;add-board-item&quot;&gt;添加画板&lt;i class=&quot;&#39;&gt;,
+ &lt;Selector xpath=&#39;//a&#39; data=&#39;&lt;a href=&quot;/about/goodies/&quot;&gt;安装采集工具&lt;i class&#39;&gt;,
+ &lt;Selector xpath=&#39;//a&#39; data=&#39;&lt;a class=&quot;huaban_security_oauth&quot; logo_si&#39;&gt;]
+
+In [3]: response.xpath(&#39;//a&#39;).extract()
+Out[3]:
+[&#39;&lt;a id=&quot;elevator&quot; class=&quot;off&quot; onclick=&quot;return false;&quot; title=&quot;回到顶部&quot;&gt;&lt;/a&gt;&#39;,
+ &#39;&lt;a class=&quot;plus&quot;&gt;&lt;/a&gt;&#39;,
+ &#39;&lt;a onclick=&quot;app.showUploadDialog();&quot;&gt;添加采集&lt;i class=&quot;upload&quot;&gt;&lt;/i&gt;&lt;/a&gt;&#39;,
+ &#39;&lt;a class=&quot;add-board-item&quot;&gt;添加画板&lt;i class=&quot;add-board&quot;&gt;&lt;/i&gt;&lt;/a&gt;&#39;,
+ &#39;&lt;a href=&quot;/about/goodies/&quot;&gt;安装采集工具&lt;i class=&quot;goodies&quot;&gt;&lt;/i&gt;&lt;/a&gt;&#39;,
+ &#39;&lt;a class=&quot;huaban_security_oauth&quot; logo_size=&quot;124x47&quot; logo_type=&quot;realname&quot; href=&quot;//www.anquan.org&quot; rel=&quot;nofollow&quot;&gt; &lt;script src=&quot;//static.anquan.org/static/outer/js/aq_auth.js&quot;&gt;&lt;/script&gt; &lt;/a&gt;&#39;]
+
+In [4]: response.xpath(&#39;//img&#39;)
+Out[4]: [&lt;Selector xpath=&#39;//img&#39; data=&#39;&lt;img src=&quot;https://d5nxst8fruw4z.cloudfro&#39;&gt;]
+
+In [5]: response.xpath(&#39;//a/text()&#39;)
+Out[5]:
+[&lt;Selector xpath=&#39;//a/text()&#39; data=&#39;添加采集&#39;&gt;,
+ &lt;Selector xpath=&#39;//a/text()&#39; data=&#39;添加画板&#39;&gt;,
+ &lt;Selector xpath=&#39;//a/text()&#39; data=&#39;安装采集工具&#39;&gt;,
+ &lt;Selector xpath=&#39;//a/text()&#39; data=&#39; &#39;&gt;,
+ &lt;Selector xpath=&#39;//a/text()&#39; data=&#39; &#39;&gt;]
+
+In [6]: response.xpath(&#39;//a/text()&#39;).extract()
+Out[6]: [&#39;添加采集&#39;, &#39;添加画板&#39;, &#39;安装采集工具&#39;, &#39; &#39;, &#39; &#39;]
+
+In [7]: response.xpath(&#39;//a/text()&#39;).extract_first()
+Out[7]: &#39;添加采集&#39;
+</code></pre>
+</div></article></div><div class="l-pager l-pager-dtl box"><a class="prev" href="/2018/05/30/openwrt-ko/">&lt; Openwrt中添加内核模块</a><a class="next" href="/2018/04/30/cfachina/">Python网络爬虫3 - 生产者消费者模型爬取某金融网站数据 &gt;</a></div><footer><p>Copyright © 2018 <a href="/." rel="nofollow">LITREILY | </a>Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer><script type="text/javascript" src="/plugins/prettify/prettify.js"></script></div></div></div></body></html>
