@@ -52,4 +52,21 @@
 <p>通过属性对比可以看出，自动存储文件比手动存储文件多了一些属性值，包括<strong>换算数量</strong><code>NI_Number_Of_Scales</code>、<strong>换算阶数和配置</strong><code>NI_Scale[n]_config</code>以及<strong>换算的启用状态</strong><code>NI_Scaling_Status</code>。为了验证数据存储文件大小不一致是否与这些多出属性有关，我进行了进一步测试，在手动存储过程中设置了tdms文件属性，使其与自动存储文件的属性一致。</p>
 <p><img src="/assets/labview/saveTdms/setTdmsProperties.png" alt="SetTdmsProperties"></p>
 <p>但结果依旧令人失望，文件大小并未因此而减小。理论上肯定有方法减小Tdms文件大小，但我现在还不知晓，路漫漫其修远兮，吾将上下而求索。</p>
-</div></article></div><div class="l-pager l-pager-dtl box"><a class="prev" href="/2016/05/15/brackets-git/">&lt; Brackets - Git插件的使用方法</a><a class="next" href="/2016/04/15/install-jekyll/">在Windows中安装Jekyll &gt;</a></div><footer><p>Copyright © 2018 <a href="/." rel="nofollow">LITREILY | </a>Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer><script type="text/javascript" src="/plugins/prettify/prettify.js"></script></div></div></div></body></html>
+</div></article></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2016/05/15/brackets-git/">&lt; Brackets - Git插件的使用方法</a><a class="next" href="/2016/04/15/install-jekyll/">在Windows中安装Jekyll &gt;</a></div><div id="vcomment"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></section><footer><p>Copyright © 2018 <a href="/." rel="nofollow">LITREILY | </a>Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer><script type="text/javascript" src="/plugins/prettify/prettify.js"></script></div></div></div></body></html>

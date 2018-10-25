@@ -14,7 +14,7 @@ body {
 body, .l-content, blockquote {
   background-color: #2d4356; }
 
-body, textarea, input, select, .m-hdimg .ttl a, .m-nav a, .l-pager a, .p-content, h1.p-title a, .p-readmore a {
+body, textarea, input, select, .m-hdimg .ttl a, .m-nav a, .l-pager a, .p-content, .l-post .p-desc a {
   color: #CECECE; }
 
 textarea, input, select {
@@ -182,7 +182,7 @@ a, .m-nav a:hover, .l-post .p-desc a:hover, .ttl a:hover, .m-nav .dot, .l-pager 
 .l-post .p-desc, article.p-art {
   position: relative;
   top: 0;
-  max-width: 800px;
+  max-width: 840px;
   text-align: left;
   padding: 40px;
   margin-bottom: 20px;
@@ -202,10 +202,8 @@ a, .m-nav a:hover, .l-post .p-desc a:hover, .ttl a:hover, .m-nav .dot, .l-pager 
 /*----------------------*/
 /*page list of home page*/
 /*----------------------*/
-.l-pager {
-  padding: 20px 40px; }
-
 .l-pager-id {
+  padding: 20px 40px;
   margin-bottom: 40px;
   background: #0d171f;
   background: rgba(0, 0, 0, 0.5); }
@@ -218,8 +216,7 @@ a, .m-nav a:hover, .l-post .p-desc a:hover, .ttl a:hover, .m-nav .dot, .l-pager 
     font-size: 14px; }
 
 .l-pager-dtl {
-  padding-top: 0;
-  max-width: 760px; }
+  padding-bottom: 20px; }
   .l-pager-dtl a {
     float: left;
     padding: 2px;
@@ -228,6 +225,10 @@ a, .m-nav a:hover, .l-post .p-desc a:hover, .ttl a:hover, .m-nav .dot, .l-pager 
     font-size: 16px; }
   .l-pager-dtl .next {
     float: right; }
+
+.p-ext {
+  padding: 20px 40px;
+  max-width: 800px; }
 
 /*----------------------*/
 /*style of post content */
@@ -311,7 +312,7 @@ footer {
 /*----------------------*/
 /*Screen adaptation     */
 /*----------------------*/
-@media print, screen and (min-width: 776px) {
+@media print, screen and (min-width: 901px) {
   body {
     background-image: url(/img/backgroud.png);
     background-repeat: repeat-y;
@@ -324,10 +325,10 @@ footer {
     left: -80px;
     width: 100%; } }
 
-@media print, screen and (max-width: 775px) {
+@media print, screen and (max-width: 900px) {
   .h-wrapper {
     display: none; }
-  .l-post {
+  .l-post, .p-ext {
     padding-left: 5%;
     padding-right: 5%; }
   .l-post .p-info {
@@ -337,7 +338,7 @@ footer {
   blockquote {
     margin-left: -20px;
     margin-right: -20px; }
-  .l-pager, footer {
+  footer {
     padding: 20px; }
   footer {
     text-align: center; } }
