@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><title>两款实用的DDos攻击工具 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><body><div class="box" id="container"><div class="h-wrapper"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="https://litreily.gitbooks.io/notes/">笔记</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li class="m-sch"><form class="form" id="j-formsch" action="/search" method="get"><input class="txt" type="text" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"></form></li></ul></div></nav></div><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><h1 class="p-title">两款实用的DDos攻击工具</h1><div class="p-content"><p>之前为了重现某个bug，需要对网络设备进行ddos攻击测试，同时也是对设备的网络攻击防护功能进行抗压测试。临阵磨枪，google了两款攻击工具，windows平台的<code>hyenae</code>，以及Linux平台的<code>hping3</code>，在此记录一下两者的用法。</p>
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><title>两款实用的DDos攻击工具 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/8.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">两款实用的DDos攻击工具</h1><a id="logo" href="/.">LITREILY</a><p class="description">Stay Hungry, Stay Foolish</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> Home</i></a><a href="/archives/"><i class="fa fa-archive"> Archive</i></a><a href="https://litreily.gitbooks.io/notes/"><i class="fa fa-book"> Notes</i></a><a href="/about/"><i class="fa fa-user"> About</i></a><a href="/history/"><i class="fa fa-history"> History</i></a><a href="/atom.xml"><i class="fa fa-rss"> RSS</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">两款实用的DDos攻击工具</h1><div class="post-meta">Feb 22, 2018<span> | </span><span class="category"><a href="/categories/Network/">Network</a></span></div><a class="disqus-comment-count" href="/2018/02/22/ddos-attack/#vcomment"><span class="valine-comment-count" data-xid="/2018/02/22/ddos-attack/"></span><span> Comment</span></a><div class="post-content"><p>之前为了重现某个bug，需要对网络设备进行ddos攻击测试，同时也是对设备的网络攻击防护功能进行抗压测试。临阵磨枪，google了两款攻击工具，windows平台的<code>hyenae</code>，以及Linux平台的<code>hping3</code>，在此记录一下两者的用法。</p>
 <h2 id="Hyenae"><a href="#Hyenae" class="headerlink" title="Hyenae"></a>Hyenae</h2><p><code>hyenae</code>是在<code>Windows</code>平台上非常好用的一款<code>ddos</code>攻击工具，可以完成绝大多数的攻击操作。</p>
 <h3 id="download"><a href="#download" class="headerlink" title="download"></a>download</h3><ul>
 <li><a href="https://sourceforge.net/projects/hyenae/" target="_blank" rel="noopener">https://sourceforge.net/projects/hyenae/</a></li>
@@ -71,11 +71,7 @@
 </ul>
 </li>
 </ul>
-<pre><code class="bash">DoS *** 3118 *** {Land Attack} are suppressed!
-[DoS Attack: Land Attack] from source: 172.17.14.94, port 53,
-[DoS Attack: Land Attack] from source: 172.17.14.94, port 53,
-[DoS Attack: Land Attack] from source: 172.17.14.94, port 53,
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">DoS *** 3118 *** &#123;Land Attack&#125; are suppressed!</span><br><span class="line">[DoS Attack: Land Attack] from <span class="built_in">source</span>: 172.17.14.94, port 53,</span><br><span class="line">[DoS Attack: Land Attack] from <span class="built_in">source</span>: 172.17.14.94, port 53,</span><br><span class="line">[DoS Attack: Land Attack] from <span class="built_in">source</span>: 172.17.14.94, port 53,</span><br></pre></td></tr></table></figure>
 <ul>
 <li>SYN/ACK scan (TCP SYN ACK)<ul>
 <li>src: %-172.17.14.8@80</li>
@@ -83,11 +79,7 @@
 </ul>
 </li>
 </ul>
-<pre><code class="bash">DoS *** 3896 *** {SYN/ACK Scan} are suppressed!
-[DoS Attack: SYN/ACK Scan] from source: 172.17.14.8, port 80,
-[DoS Attack: SYN/ACK Scan] from source: 172.17.14.8, port 80,
-[DoS Attack: SYN/ACK Scan] from source: 172.17.14.8, port 80,
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">DoS *** 3896 *** &#123;SYN/ACK Scan&#125; are suppressed!</span><br><span class="line">[DoS Attack: SYN/ACK Scan] from <span class="built_in">source</span>: 172.17.14.8, port 80,</span><br><span class="line">[DoS Attack: SYN/ACK Scan] from <span class="built_in">source</span>: 172.17.14.8, port 80,</span><br><span class="line">[DoS Attack: SYN/ACK Scan] from <span class="built_in">source</span>: 172.17.14.8, port 80,</span><br></pre></td></tr></table></figure>
 <ul>
 <li>ping flood (icmp echo)<ul>
 <li>src:  %-172.17.14.8</li>
@@ -95,11 +87,7 @@
 </ul>
 </li>
 </ul>
-<pre><code class="bash">DoS *** 1881 *** {Ping Flood} are suppressed!
-[DoS Attack: Ping Flood] from source: 172.17.14.8,
-[DoS Attack: Ping Flood] from source: 172.17.14.8,
-[DoS Attack: Ping Flood] from source: 172.17.14.8,
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">DoS *** 1881 *** &#123;Ping Flood&#125; are suppressed!</span><br><span class="line">[DoS Attack: Ping Flood] from <span class="built_in">source</span>: 172.17.14.8,</span><br><span class="line">[DoS Attack: Ping Flood] from <span class="built_in">source</span>: 172.17.14.8,</span><br><span class="line">[DoS Attack: Ping Flood] from <span class="built_in">source</span>: 172.17.14.8,</span><br></pre></td></tr></table></figure>
 <ul>
 <li>ping sweep (icmp echo)<ul>
 <li>src:  %-%</li>
@@ -107,11 +95,7 @@
 </ul>
 </li>
 </ul>
-<pre><code class="bash">DoS *** 1719 *** {Ping Sweep} are suppressed!
-[DoS Attack: Ping Sweep] from source: 188.167.1.1,
-[DoS Attack: Ping Sweep] from source: 113.172.1.5,
-[DoS Attack: Ping Sweep] from source: 175.181.2.6,
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">DoS *** 1719 *** &#123;Ping Sweep&#125; are suppressed!</span><br><span class="line">[DoS Attack: Ping Sweep] from <span class="built_in">source</span>: 188.167.1.1,</span><br><span class="line">[DoS Attack: Ping Sweep] from <span class="built_in">source</span>: 113.172.1.5,</span><br><span class="line">[DoS Attack: Ping Sweep] from <span class="built_in">source</span>: 175.181.2.6,</span><br></pre></td></tr></table></figure>
 <ul>
 <li>RST Scan(TCP RST)<ul>
 <li>src: %-172.17.14.8@80</li>
@@ -119,11 +103,7 @@
 </ul>
 </li>
 </ul>
-<pre><code class="bash">DoS *** 4023 *** {RST Scan} are suppressed!
-[DoS Attack: RST Scan] from source: 172.17.14.8, port 80,
-[DoS Attack: RST Scan] from source: 172.17.14.8, port 80,
-[DoS Attack: RST Scan] from source: 172.17.14.8, port 80,
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">DoS *** 4023 *** &#123;RST Scan&#125; are suppressed!</span><br><span class="line">[DoS Attack: RST Scan] from <span class="built_in">source</span>: 172.17.14.8, port 80,</span><br><span class="line">[DoS Attack: RST Scan] from <span class="built_in">source</span>: 172.17.14.8, port 80,</span><br><span class="line">[DoS Attack: RST Scan] from <span class="built_in">source</span>: 172.17.14.8, port 80,</span><br></pre></td></tr></table></figure>
 <ul>
 <li>ACK scan (TCP ACK)<ul>
 <li>src: %-172.17.14.8@80</li>
@@ -131,11 +111,7 @@
 </ul>
 </li>
 </ul>
-<pre><code class="bash">DoS *** 3989 *** {ACK Scan} are suppressed!
-[DoS Attack: ACK Scan] from source: 172.17.14.8, port 80,
-[DoS Attack: ACK Scan] from source: 172.17.14.8, port 80,
-[DoS Attack: ACK Scan] from source: 172.17.14.8, port 80
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">DoS *** 3989 *** &#123;ACK Scan&#125; are suppressed!</span><br><span class="line">[DoS Attack: ACK Scan] from <span class="built_in">source</span>: 172.17.14.8, port 80,</span><br><span class="line">[DoS Attack: ACK Scan] from <span class="built_in">source</span>: 172.17.14.8, port 80,</span><br><span class="line">[DoS Attack: ACK Scan] from <span class="built_in">source</span>: 172.17.14.8, port 80</span><br></pre></td></tr></table></figure>
 <ul>
 <li>FIN scan(TCP FIN)<ul>
 <li>src: %-172.17.14.8@80</li>
@@ -143,33 +119,14 @@
 </ul>
 </li>
 </ul>
-<pre><code class="bash">DoS *** 3009 *** {FIN Scan} are suppressed!
-[DoS Attack: FIN Scan] from source: 172.17.14.8, port 80,
-[DoS Attack: FIN Scan] from source: 172.17.14.8, port 80,
-[DoS Attack: FIN Scan] from source: 172.17.14.8, port 80,
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">DoS *** 3009 *** &#123;FIN Scan&#125; are suppressed!</span><br><span class="line">[DoS Attack: FIN Scan] from <span class="built_in">source</span>: 172.17.14.8, port 80,</span><br><span class="line">[DoS Attack: FIN Scan] from <span class="built_in">source</span>: 172.17.14.8, port 80,</span><br><span class="line">[DoS Attack: FIN Scan] from <span class="built_in">source</span>: 172.17.14.8, port 80,</span><br></pre></td></tr></table></figure>
 <h2 id="hping3"><a href="#hping3" class="headerlink" title="hping3"></a>hping3</h2><blockquote>
 <p>hping3是用于生成和解析TCPIP协议数据包的开源工具</p>
 </blockquote>
 <p><code>hping3</code>同样可用于产生<code>ddos</code>攻击包，但与<code>hyenae</code>不同的是，<code>hping3</code>无法手动设置<code>MAC</code>地址，而是根据<code>IP</code>地址自动获取</p>
 <p>需要注意的是，如果使用搬瓦工购买的<code>vps</code>向公网IP执行<code>hping3</code>攻击的话，最好不要尝试，如果要用也一定记得限速，否则就会被警告并关停,当然你有3次机会重置</p>
 <p><img src="/assets/network/vps-warning.png" alt="vps warning"></p>
-<h3 id="examples"><a href="#examples" class="headerlink" title="examples"></a>examples</h3><pre><code class="bash"># land attack
-$ sudo hping3 -V -c 10000 -d 120 -S -w 64 --keep -p 80 -s 20000 --flood -a 172.17.14.52 172.17.14.52
-# syn/ack attack
-$ sudo hping3 -V -c 10000 -d 120 -S -A -w 64 --keep -p 80 -s 80 --flood -a 172.17.14.192 172.17.14.52
-
-# -V verbose
-# -c packet count
-# -d data size
-# -p destPort
-# -s srcPort
-# -a srcIP
-# -S SYN tag
-# -A ACK tag
-# -w winsize
-# -I interface
-</code></pre>
+<h3 id="examples"><a href="#examples" class="headerlink" title="examples"></a>examples</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># land attack</span></span><br><span class="line">$ sudo hping3 -V -c 10000 -d 120 -S -w 64 --keep -p 80 -s 20000 --flood -a 172.17.14.52 172.17.14.52</span><br><span class="line"><span class="comment"># syn/ack attack</span></span><br><span class="line">$ sudo hping3 -V -c 10000 -d 120 -S -A -w 64 --keep -p 80 -s 80 --flood -a 172.17.14.192 172.17.14.52</span><br><span class="line"></span><br><span class="line"><span class="comment"># -V verbose</span></span><br><span class="line"><span class="comment"># -c packet count</span></span><br><span class="line"><span class="comment"># -d data size</span></span><br><span class="line"><span class="comment"># -p destPort</span></span><br><span class="line"><span class="comment"># -s srcPort</span></span><br><span class="line"><span class="comment"># -a srcIP</span></span><br><span class="line"><span class="comment"># -S SYN tag</span></span><br><span class="line"><span class="comment"># -A ACK tag</span></span><br><span class="line"><span class="comment"># -w winsize</span></span><br><span class="line"><span class="comment"># -I interface</span></span><br></pre></td></tr></table></figure>
 <h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><ul>
 <li>网络攻击工具<ul>
 <li>hping3<ul>
@@ -193,4 +150,27 @@ $ sudo hping3 -V -c 10000 -d 120 -S -A -w 64 --keep -p 80 -s 80 --flood -a 172.1
 </ul>
 </li>
 </ul>
-</div></article></div><div class="l-pager l-pager-dtl box"><a class="prev" href="/2018/03/17/lofter/">&lt; Python网络爬虫1 - 爬取网易LOFTER图片</a><a class="next" href="/2018/02/08/mysql-basic/">mySQL基本语法 &gt;</a></div><footer><p>Copyright © 2018 <a href="/." rel="nofollow">LITREILY | </a>Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer><script type="text/javascript" src="/plugins/prettify/prettify.js"></script></div></div></div></body></html>
+</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a class="article-share-link" data-url="http://www.litreily.top/2018/02/22/ddos-attack/" data-id="cjnogm8rc003s5fwtklea9fbo" data-qrcode="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACKElEQVR42u3awVLjMBAE0Pz/T8N1qyChe+Sk1tLziTLG0vOhkTTzeMTX18vr32eePd+O8njHhYGBcVtGPsXk/s9JJM+37/+FioGBcQDjWYLNnmnDN3nPH3PGwMDAeLlcWwnQ9c+HgYGB0S7v2g3qszdjYGBgrBylvb6TH8a9/ts37sUxMDBuyMhP3T//81vqGxgYGLdifJVX+56kMNmG7C+jYGBgbM3IAy7nzRaXbeBiYGCcxmiP5mfD5NvgixvFMDAwtmDki7n227QLvjyyn/7fwMDAOICRkNZbJWYFzmEJEwMD4+aMJBCTDW3enJFPvfgtBgbGAYx8mLy1K39D/vzT+MbAwDiYsdLn0CJnHzEKXAwMjJszZqXK9YFbTL7cxMDA2I/xmaOx9VaMP8AYGBjHMNpAnJUnW0z0gTAwMLZm5KdV7fF9vrzLAXWzBQYGxkaMPGrXi5Fto0Z9CIiBgbEdo222aDeus0O0YV8bBgbGpoyVRVheMGhJ7R0MDIwTGLMi5axVoi0DFKGMgYFxACM/VsuvfDvabo+L/xgYGBgbMZKp5GGaN17MGjUwMDDOYawEaNI20UZ5296BgYFxAuOqAmd7bNcWMj9Up8XAwPiPGW3IXnXn4sDFwMA4gDHbZM6KBHULRbCgxMDAwJitNJMwnW1TLwhcDAyMAxgrpco2aqOxMDAwDmDkDROzeG0Dum7OwMDA2JqRbx3X2ybaiSafCQMDY2vGN36ZqHbcDrY8AAAAAElFTkSuQmCC">Share</a><div class="tags"><a href="/tags/ddos/">ddos</a><a href="/tags/hping3/">hping3</a></div><div class="post-nav"><a class="pre" href="/2018/03/17/lofter/">Python网络爬虫1 - 爬取网易LOFTER图片</a><a class="next" href="/2018/02/08/mysql-basic/">mySQL基本语法</a></div><div id="vcomment"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/LabVIEW/">LabVIEW</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Matlab/">Matlab</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Media/">Media</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Network/">Network</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Office/">Office</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web/">Web</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Web/Template/">Template</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/信号处理/">信号处理</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/嵌入式/">嵌入式</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/杂物柜/">杂物柜</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/tags/word/" style="font-size: 12px;">word</a> <a href="/tags/test/" style="font-size: 15.43px;">test</a> <a href="/tags/ruby/" style="font-size: 13.71px;">ruby</a> <a href="/tags/video/" style="font-size: 13.71px;">video</a> <a href="/tags/literature/" style="font-size: 12px;">literature</a> <a href="/tags/algorithm/" style="font-size: 20.57px;">algorithm</a> <a href="/tags/windows/" style="font-size: 13.71px;">windows</a> <a href="/tags/matlab/" style="font-size: 17.14px;">matlab</a> <a href="/tags/labview/" style="font-size: 22.29px;">labview</a> <a href="/tags/tdms/" style="font-size: 13.71px;">tdms</a> <a href="/tags/brackets/" style="font-size: 12px;">brackets</a> <a href="/tags/git/" style="font-size: 15.43px;">git</a> <a href="/tags/tools/" style="font-size: 17.14px;">tools</a> <a href="/tags/utorrent/" style="font-size: 12px;">utorrent</a> <a href="/tags/atom/" style="font-size: 13.71px;">atom</a> <a href="/tags/C-C/" style="font-size: 24px;">C/C++</a> <a href="/tags/ubuntu/" style="font-size: 22.29px;">ubuntu</a> <a href="/tags/linux/" style="font-size: 18.86px;">linux</a> <a href="/tags/signal/" style="font-size: 13.71px;">signal</a> <a href="/tags/music/" style="font-size: 13.71px;">music</a> <a href="/tags/stm32/" style="font-size: 13.71px;">stm32</a> <a href="/tags/VS/" style="font-size: 13.71px;">VS</a> <a href="/tags/hexo/" style="font-size: 13.71px;">hexo</a> <a href="/tags/RSS/" style="font-size: 12px;">RSS</a> <a href="/tags/Feed/" style="font-size: 12px;">Feed</a> <a href="/tags/office/" style="font-size: 12px;">office</a> <a href="/tags/jekyll/" style="font-size: 15.43px;">jekyll</a> <a href="/tags/log/" style="font-size: 12px;">log</a> <a href="/tags/LWD/" style="font-size: 12px;">LWD</a> <a href="/tags/FreeRTOS/" style="font-size: 12px;">FreeRTOS</a> <a href="/tags/makefile/" style="font-size: 13.71px;">makefile</a> <a href="/tags/wireshark/" style="font-size: 12px;">wireshark</a> <a href="/tags/shell/" style="font-size: 12px;">shell</a> <a href="/tags/tmux/" style="font-size: 13.71px;">tmux</a> <a href="/tags/telnet/" style="font-size: 12px;">telnet</a> <a href="/tags/smtp/" style="font-size: 12px;">smtp</a> <a href="/tags/ddos/" style="font-size: 12px;">ddos</a> <a href="/tags/hping3/" style="font-size: 12px;">hping3</a> <a href="/tags/mysql/" style="font-size: 12px;">mysql</a> <a href="/tags/centos/" style="font-size: 12px;">centos</a> <a href="/tags/pug/" style="font-size: 12px;">pug</a> <a href="/tags/spider/" style="font-size: 17.14px;">spider</a> <a href="/tags/lofter/" style="font-size: 12px;">lofter</a> <a href="/tags/sort/" style="font-size: 12px;">sort</a> <a href="/tags/visualization/" style="font-size: 12px;">visualization</a> <a href="/tags/stdio/" style="font-size: 12px;">stdio</a> <a href="/tags/cache/" style="font-size: 12px;">cache</a> <a href="/tags/buffer/" style="font-size: 12px;">buffer</a> <a href="/tags/scrapy/" style="font-size: 12px;">scrapy</a> <a href="/tags/sina/" style="font-size: 12px;">sina</a> <a href="/tags/queue/" style="font-size: 12px;">queue</a> <a href="/tags/xlwt/" style="font-size: 12px;">xlwt</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/10/25/io-cache/">Linux中的文件I/O缓冲</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/27/tee/">Linux指令 - tee的实现</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/20/coredump/">OpenWrt中使用gdb分析coredump</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/31/pug-synax/">网页模板pug基本语法</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/07/quick-sort/">Python实现快排及其可视化</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Links</i></div><ul></ul><a href="https://www.smslit.top" title="smslit-水木十里" target="_blank">smslit-水木十里</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2018 <a href="/." rel="nofollow">LITREILY.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> manupassant.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.css"><script type="text/javascript" src="/js/search.js?v=0.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+   search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>

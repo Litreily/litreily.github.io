@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><title>Python网络爬虫3 - 生产者消费者模型爬取某金融网站数据 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><body><div class="box" id="container"><div class="h-wrapper"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="https://litreily.gitbooks.io/notes/">笔记</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li class="m-sch"><form class="form" id="j-formsch" action="/search" method="get"><input class="txt" type="text" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"></form></li></ul></div></nav></div><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><h1 class="p-title">Python网络爬虫3 - 生产者消费者模型爬取某金融网站数据</h1><div class="p-content"><p>应一位金融圈的朋友所托，帮忙写个爬虫，帮他爬取<a href="http://www.cfachina.org/cfainfo/organbaseinfoServlet?all=personinfo#" target="_blank" rel="noopener">中国期货行业协议</a>网站中所有金融机构的从业人员信息。网站数据的获取本身比较简单，但是为了学习一些新的爬虫方法和技巧，即本文要讲述的<strong>生产者消费者模型</strong>，我又学习了一下Python中队列库<code>queue</code>及线程库<code>Thread</code>的使用方法。</p>
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><title>Python网络爬虫3 - 生产者消费者模型爬取某金融网站数据 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/8.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Python网络爬虫3 - 生产者消费者模型爬取某金融网站数据</h1><a id="logo" href="/.">LITREILY</a><p class="description">Stay Hungry, Stay Foolish</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> Home</i></a><a href="/archives/"><i class="fa fa-archive"> Archive</i></a><a href="https://litreily.gitbooks.io/notes/"><i class="fa fa-book"> Notes</i></a><a href="/about/"><i class="fa fa-user"> About</i></a><a href="/history/"><i class="fa fa-history"> History</i></a><a href="/atom.xml"><i class="fa fa-rss"> RSS</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">Python网络爬虫3 - 生产者消费者模型爬取某金融网站数据</h1><div class="post-meta">Apr 30, 2018<span> | </span><span class="category"><a href="/categories/Python/">Python</a></span></div><a class="disqus-comment-count" href="/2018/04/30/cfachina/#vcomment"><span class="valine-comment-count" data-xid="/2018/04/30/cfachina/"></span><span> Comment</span></a><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">Contents</div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#生产者消费者模型"><span class="toc-number">1.</span> <span class="toc-text">生产者消费者模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分析站点"><span class="toc-number">2.</span> <span class="toc-text">分析站点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#获取机构名称"><span class="toc-number">2.1.</span> <span class="toc-text">获取机构名称</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#获取机构信息对应的网页数量"><span class="toc-number">2.2.</span> <span class="toc-text">获取机构信息对应的网页数量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#获取当前页面从业人员信息"><span class="toc-number">2.3.</span> <span class="toc-text">获取当前页面从业人员信息</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#确定爬取方案"><span class="toc-number">3.</span> <span class="toc-text">确定爬取方案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码实现"><span class="toc-number">4.</span> <span class="toc-text">代码实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#生成者SpiderThread"><span class="toc-number">4.1.</span> <span class="toc-text">生成者SpiderThread</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#消费者DatamineThread"><span class="toc-number">4.2.</span> <span class="toc-text">消费者DatamineThread</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数据存储Storage"><span class="toc-number">4.3.</span> <span class="toc-text">数据存储Storage</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#存入txt文件"><span class="toc-number">4.3.1.</span> <span class="toc-text">存入txt文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#存入Excel文件"><span class="toc-number">4.3.2.</span> <span class="toc-text">存入Excel文件</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#main"><span class="toc-number">4.4.</span> <span class="toc-text">main</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#源码"><span class="toc-number">5.</span> <span class="toc-text">源码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#爬取测试"><span class="toc-number">6.</span> <span class="toc-text">爬取测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#写在最后"><span class="toc-number">7.</span> <span class="toc-text">写在最后</span></a></li></ol></div></div><div class="post-content"><p>应一位金融圈的朋友所托，帮忙写个爬虫，帮他爬取<a href="http://www.cfachina.org/cfainfo/organbaseinfoServlet?all=personinfo#" target="_blank" rel="noopener">中国期货行业协议</a>网站中所有金融机构的从业人员信息。网站数据的获取本身比较简单，但是为了学习一些新的爬虫方法和技巧，即本文要讲述的<strong>生产者消费者模型</strong>，我又学习了一下Python中队列库<code>queue</code>及线程库<code>Thread</code>的使用方法。</p>
 <h2 id="生产者消费者模型"><a href="#生产者消费者模型" class="headerlink" title="生产者消费者模型"></a>生产者消费者模型</h2><p>生产者消费者模型非常简单，相信大部分程序员都知道，就是一方作为生产者不断提供资源，另一方作为消费者不断消费资源。简单点说，就好比餐馆的厨师和顾客，厨师作为生产者不断制作美味的食物，而顾客作为消费者不断食用厨师提供的食物。此外，生产者与消费者之间可以是一对一、一对多、多对一和多对多的关系。</p>
 <p>那么这个模型和爬虫有什么关系呢？其实，爬虫可以认为是一个生产者，它不断从网站爬取数据，爬取到的数据就是食物；而所得数据需要消费者进行数据清洗，把有用的数据吸收掉，把无用的数据丢弃。</p>
 <p>在实践过程中，爬虫爬取和数据清洗分别对应一个<code>Thread</code>，两个线程之间通过顺序队列<code>queue</code>传递数据，数据传递过程就好比餐馆服务员从厨房把食物送到顾客餐桌上的过程。爬取线程负责爬取网站数据，并将原始数据存入队列，清洗线程从队列中按入队顺序读取原始数据并提取出有效数据。</p>
@@ -28,19 +28,15 @@
 <p>我们最终爬取的数据可以按机构名称存储到对应的txt文件或excel文件中。</p>
 <h3 id="获取机构名称"><a href="#获取机构名称" class="headerlink" title="获取机构名称"></a>获取机构名称</h3><p><img src="/assets/spider/cfachina/gst_title.png" alt="get mechanism name"></p>
 <p>获取到某机构的任意从业信息页面后，使用<code>BeautifulSoup</code>可快速提取机构名称。</p>
-<pre><code class="python">mechanism_name = soup.find(&#39;&#39;, {&#39;class&#39;:&#39;gst_title&#39;}).find_all(&#39;a&#39;)[2].get_text()
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mechanism_name = soup.find(<span class="string">''</span>, &#123;<span class="string">'class'</span>:<span class="string">'gst_title'</span>&#125;).find_all(<span class="string">'a'</span>)[<span class="number">2</span>].get_text()</span><br></pre></td></tr></table></figure>
 <p>那么有人可能会问，既然主页表格都已经包含了所有机构的编号和名称，为何还要多此一举的再获取一次呢？这是因为，我压根就不想爬主页的那些表格，直接根据机构编号的递增规律生成对应的网址即可，所以获取机构名称的任务就放在了爬取每个机构首个信息页面之后。</p>
 <h3 id="获取机构信息对应的网页数量"><a href="#获取机构信息对应的网页数量" class="headerlink" title="获取机构信息对应的网页数量"></a>获取机构信息对应的网页数量</h3><p><img src="/assets/spider/cfachina/page_cnt.png" alt="get count of page"></p>
 <p>每个机构的数据量是不等的，幸好每个页面都包含了当前页面数及总页面数。使用以下代码即可获取页码数。</p>
-<pre><code class="python">url_re = re.compile(&#39;#currentPage.*\+.*\+\&#39;(\d+)\&#39;&#39;)
-page_cnt = url_re.search(html).group(1)
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">url_re = re.compile(<span class="string">'#currentPage.*\+.*\+\'(\d+)\''</span>)</span><br><span class="line">page_cnt = url_re.search(html).group(<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
 <p>从每个机构首页获取页码数后，便可<code>for</code>循环修改网址参数中的<code>currentPage</code>，逐页获取机构信息。</p>
 <h3 id="获取当前页面从业人员信息"><a href="#获取当前页面从业人员信息" class="headerlink" title="获取当前页面从业人员信息"></a>获取当前页面从业人员信息</h3><p><img src="/assets/spider/cfachina/personinfo_table.png" alt="get personinfo"></p>
 <p>针对如上图所示的一个特定信息页时，人员信息被存放于一个表中，除了固定的表头信息外，人员信息均被包含在一个带有<code>id</code>的<code>tr</code>标签中，所以使用<code>BeautifulSoup</code>可以很容易提取出页面内所有人员信息。</p>
-<pre><code class="python">soup.find_all(&#39;tr&#39;, id=True)
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">soup.find_all(<span class="string">'tr'</span>, id=<span class="keyword">True</span>)</span><br></pre></td></tr></table></figure>
 <h2 id="确定爬取方案"><a href="#确定爬取方案" class="headerlink" title="确定爬取方案"></a>确定爬取方案</h2><p>一般的想法当然是逐页爬取主页信息，然后获取每页所有机构对应的网页链接，进而继续爬取每个机构信息。</p>
 <p>但是由于该网站的机构信息网址具有明显的规律，我们根据每个机构的编号便可直接得到每个机构每个信息页面的网址。所以具体爬取方案如下：</p>
 <ol>
@@ -60,87 +56,15 @@ page_cnt = url_re.search(html).group(1)
 </li>
 </ol>
 <h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><h3 id="生成者SpiderThread"><a href="#生成者SpiderThread" class="headerlink" title="生成者SpiderThread"></a>生成者<code>SpiderThread</code></h3><p>爬虫线程先从队列获取一个机构编号，生成机构首页网址并进行爬取，接着判断机构页面数量是否为0，如若不为0则继续获取机构名称，并根据页面数循环爬取剩余页面，将原始html数据以如下<code>dict</code>格式存入队列<code>html_queue</code>:</p>
-<pre><code class="json">{
-    &#39;name&#39;: mechanismId_mechanismName,
-    &#39;num&#39;: currentPage,
-    &#39;content&#39;: html
-}
-</code></pre>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    'name': mechanismId_mechanismName,</span><br><span class="line">    'num': currentPage,</span><br><span class="line">    'content': html</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>爬虫产生的数据队列<code>html_queue</code>将由数据清洗线程进行处理，下面是爬虫线程的主程序，整个线程代码请看后面的<a href="#源码">源码</a>。</p>
-<pre><code class="python">def run(self):
-    while True:
-        mechanism_id = &#39;G0&#39; + self.url_queue.get()
-
-        # the first page&#39;s url
-        url = self.__get_url(mechanism_id, 1)
-        html = self.grab(url)
-
-        page_cnt = self.url_re.search(html.text).group(1)
-        if page_cnt == &#39;0&#39;:
-            self.url_queue.task_done()
-            continue
-
-        soup = BeautifulSoup(html.text, &#39;html.parser&#39;)
-        mechanism_name = soup.find(&#39;&#39;, {&#39;class&#39;:&#39;gst_title&#39;}).find_all(&#39;a&#39;)[2].get_text()
-        print(&#39;\nGrab Thread: get %s - %s with %s pages\n&#39; % (mechanism_id, mechanism_name, page_cnt))
-
-        # put data into html_queue
-        self.html_queue.put({&#39;name&#39;:&#39;%s_%s&#39; % (mechanism_id, mechanism_name), &#39;num&#39;:1, &#39;content&#39;:html})
-        for i in range(2, int(page_cnt) + 1):
-            url = self.__get_url(mechanism_id, i)
-            html = self.grab(url)
-            self.html_queue.put({&#39;name&#39;:&#39;%s_%s&#39; % (mechanism_id, mechanism_name), &#39;num&#39;:i, &#39;content&#39;:html})
-
-        self.url_queue.task_done()
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span></span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">        mechanism_id = <span class="string">'G0'</span> + self.url_queue.get()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># the first page's url</span></span><br><span class="line">        url = self.__get_url(mechanism_id, <span class="number">1</span>)</span><br><span class="line">        html = self.grab(url)</span><br><span class="line"></span><br><span class="line">        page_cnt = self.url_re.search(html.text).group(<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">if</span> page_cnt == <span class="string">'0'</span>:</span><br><span class="line">            self.url_queue.task_done()</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        </span><br><span class="line">        soup = BeautifulSoup(html.text, <span class="string">'html.parser'</span>)</span><br><span class="line">        mechanism_name = soup.find(<span class="string">''</span>, &#123;<span class="string">'class'</span>:<span class="string">'gst_title'</span>&#125;).find_all(<span class="string">'a'</span>)[<span class="number">2</span>].get_text()</span><br><span class="line">        print(<span class="string">'\nGrab Thread: get %s - %s with %s pages\n'</span> % (mechanism_id, mechanism_name, page_cnt))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># put data into html_queue</span></span><br><span class="line">        self.html_queue.put(&#123;<span class="string">'name'</span>:<span class="string">'%s_%s'</span> % (mechanism_id, mechanism_name), <span class="string">'num'</span>:<span class="number">1</span>, <span class="string">'content'</span>:html&#125;)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">2</span>, int(page_cnt) + <span class="number">1</span>):</span><br><span class="line">            url = self.__get_url(mechanism_id, i)</span><br><span class="line">            html = self.grab(url)</span><br><span class="line">            self.html_queue.put(&#123;<span class="string">'name'</span>:<span class="string">'%s_%s'</span> % (mechanism_id, mechanism_name), <span class="string">'num'</span>:i, <span class="string">'content'</span>:html&#125;)</span><br><span class="line">        </span><br><span class="line">        self.url_queue.task_done()</span><br></pre></td></tr></table></figure>
 <h3 id="消费者DatamineThread"><a href="#消费者DatamineThread" class="headerlink" title="消费者DatamineThread"></a>消费者<code>DatamineThread</code></h3><p>数据清洗线程比较简单，就是从生产者提供的数据队列<code>html_queue</code>逐一提取<code>html</code>数据，然后从<code>html</code>数据中提取从业人员信息，以二维数组形式存储，最后交由存储模块<code>Storage</code>完成数据存储工作。</p>
-<pre><code class="python">class DatamineThread(Thread):
-    &quot;&quot;&quot;Parse data from html&quot;&quot;&quot;
-    def __init__(self, html_queue, filetype):
-        Thread.__init__(self)
-        self.html_queue = html_queue
-        self.filetype = filetype
-
-    def __datamine(self, data):
-        &#39;&#39;&#39;Get data from html content&#39;&#39;&#39;
-        soup = BeautifulSoup(data[&#39;content&#39;].text, &#39;html.parser&#39;)
-        infos = []
-        for info in soup.find_all(&#39;tr&#39;, id=True):
-            items = []
-            for item in info.find_all(&#39;td&#39;):
-                items.append(item.get_text())
-            infos.append(items)
-        return infos
-
-    def run(self):
-        while True:
-            data = self.html_queue.get()
-            print(&#39;Datamine Thread: get %s_%d&#39; % (data[&#39;name&#39;], data[&#39;num&#39;]))
-
-            store = Storage(data[&#39;name&#39;], self.filetype)
-            store.save(self.__datamine(data))
-            self.html_queue.task_done()
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DatamineThread</span><span class="params">(Thread)</span>:</span></span><br><span class="line">    <span class="string">"""Parse data from html"""</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, html_queue, filetype)</span>:</span></span><br><span class="line">        Thread.__init__(self)</span><br><span class="line">        self.html_queue = html_queue</span><br><span class="line">        self.filetype = filetype</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__datamine</span><span class="params">(self, data)</span>:</span></span><br><span class="line">        <span class="string">'''Get data from html content'''</span></span><br><span class="line">        soup = BeautifulSoup(data[<span class="string">'content'</span>].text, <span class="string">'html.parser'</span>)</span><br><span class="line">        infos = []</span><br><span class="line">        <span class="keyword">for</span> info <span class="keyword">in</span> soup.find_all(<span class="string">'tr'</span>, id=<span class="keyword">True</span>):</span><br><span class="line">            items = []</span><br><span class="line">            <span class="keyword">for</span> item <span class="keyword">in</span> info.find_all(<span class="string">'td'</span>):</span><br><span class="line">                items.append(item.get_text())</span><br><span class="line">            infos.append(items)</span><br><span class="line">        <span class="keyword">return</span> infos</span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">            data = self.html_queue.get()</span><br><span class="line">            print(<span class="string">'Datamine Thread: get %s_%d'</span> % (data[<span class="string">'name'</span>], data[<span class="string">'num'</span>]))</span><br><span class="line"></span><br><span class="line">            store = Storage(data[<span class="string">'name'</span>], self.filetype)</span><br><span class="line">            store.save(self.__datamine(data))</span><br><span class="line">            self.html_queue.task_done()</span><br></pre></td></tr></table></figure>
 <h3 id="数据存储Storage"><a href="#数据存储Storage" class="headerlink" title="数据存储Storage"></a>数据存储<code>Storage</code></h3><p>我写了两类文件格式的存储函数，<code>write_txt</code>, <code>write_excel</code>，分别对应<code>txt</code>,<code>excel</code>文件。实际存储时由调用方确定文件格式。</p>
-<pre><code class="python">def save(self, data):
-    {
-        &#39;.txt&#39;: self.write_txt,
-        &#39;.xls&#39;: self.write_excel
-    }.get(self.filetype)(data)
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">save</span><span class="params">(self, data)</span>:</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">'.txt'</span>: self.write_txt,</span><br><span class="line">        <span class="string">'.xls'</span>: self.write_excel</span><br><span class="line">    &#125;.get(self.filetype)(data)</span><br></pre></td></tr></table></figure>
 <h4 id="存入txt文件"><a href="#存入txt文件" class="headerlink" title="存入txt文件"></a>存入txt文件</h4><p>存入<code>txt</code>文件是比较简单的，就是以附加(<code>a</code>)形式打开文件，写入数据，关闭文件。其中，文件名称由调用方提供。写入数据时，每个人员信息占用一行，以制表符<code>\t</code>分隔。</p>
-<pre><code class="python">def write_txt(self, data):
-    &#39;&#39;&#39;Write data to txt file&#39;&#39;&#39;
-    fid = open(self.path, &#39;a&#39;, encoding=&#39;utf-8&#39;)
-
-    # insert the header of table
-    if not os.path.getsize(self.path):
-        fid.write(&#39;\t&#39;.join(self.table_header) + &#39;\n&#39;)
-
-    for info in data:
-        fid.write(&#39;\t&#39;.join(info) + &#39;\n&#39;)
-    fid.close()
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">write_txt</span><span class="params">(self, data)</span>:</span></span><br><span class="line">    <span class="string">'''Write data to txt file'''</span></span><br><span class="line">    fid = open(self.path, <span class="string">'a'</span>, encoding=<span class="string">'utf-8'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># insert the header of table</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.getsize(self.path):</span><br><span class="line">        fid.write(<span class="string">'\t'</span>.join(self.table_header) + <span class="string">'\n'</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> info <span class="keyword">in</span> data:</span><br><span class="line">        fid.write(<span class="string">'\t'</span>.join(info) + <span class="string">'\n'</span>)</span><br><span class="line">    fid.close()</span><br></pre></td></tr></table></figure>
 <h4 id="存入Excel文件"><a href="#存入Excel文件" class="headerlink" title="存入Excel文件"></a>存入Excel文件</h4><p>存入<code>Excel</code>文件还是比较繁琐的，由于经验不多，选用的是<code>xlwt</code>, <code>xlrd</code>和<code>xlutils</code>库。说实话，这3个库真心不大好用，勉强完成任务而已。为什么这么说，且看：</p>
 <ol>
 <li>修改文件麻烦：<code>xlwt</code>只能写,<code>xlrd</code>只能读，需要<code>xlutils</code>的<code>copy</code>函数将<code>xlrd</code>读取的数据复制到内存，再用<code>xlwt</code>修改</li>
@@ -148,307 +72,17 @@ page_cnt = url_re.search(html).group(1)
 <li>表格样式易变：只要重新写入文件，表格样式必然重置</li>
 </ol>
 <p>所以后续我肯定会再学学其它的<code>excel</code>库，当然，当前解决方案暂时还用这三个。代码如下：</p>
-<pre><code class="python">def write_excel(self, data):
-    &#39;&#39;&#39;write data to excel file&#39;&#39;&#39;
-    if not os.path.exists(self.path):
-        header_style = xlwt.easyxf(&#39;font:name 楷体, color-index black, bold on&#39;)
-        wb = xlwt.Workbook(encoding=&#39;utf-8&#39;)
-        ws = wb.add_sheet(&#39;Data&#39;)
-
-        # insert the header of table
-        for i in range(len(self.table_header)):
-            ws.write(0, i, self.table_header[i], header_style)
-    else:
-        rb = open_workbook(self.path)
-        wb = copy(rb)
-        ws = wb.get_sheet(0)
-
-    # write data
-    offset = len(ws.rows)
-    for i in range(0, len(data)):
-        for j in range(0, len(data[0])):
-            ws.write(offset + i, j, data[i][j])
-
-    # When use xlutils.copy.copy function to copy data from exist .xls file,
-    # it will loss the origin style, so we need overwrite the width of column,
-    # maybe there some other good solution, but I have not found yet.
-    for i in range(len(self.table_header)):
-        ws.col(i).width = 256 * (10, 10, 15, 20, 50, 20, 15)[i]
-
-    # save to file
-    while True:
-        try:
-            wb.save(self.path)
-            break
-        except PermissionError as e:
-            print(&#39;{0} error: {1}&#39;.format(self.path, e.strerror))
-            time.sleep(5)
-        finally:
-            pass
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">write_excel</span><span class="params">(self, data)</span>:</span></span><br><span class="line">    <span class="string">'''write data to excel file'''</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(self.path):</span><br><span class="line">        header_style = xlwt.easyxf(<span class="string">'font:name 楷体, color-index black, bold on'</span>)</span><br><span class="line">        wb = xlwt.Workbook(encoding=<span class="string">'utf-8'</span>)</span><br><span class="line">        ws = wb.add_sheet(<span class="string">'Data'</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># insert the header of table</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(len(self.table_header)):</span><br><span class="line">            ws.write(<span class="number">0</span>, i, self.table_header[i], header_style)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        rb = open_workbook(self.path)</span><br><span class="line">        wb = copy(rb)</span><br><span class="line">        ws = wb.get_sheet(<span class="number">0</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># write data</span></span><br><span class="line">    offset = len(ws.rows)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, len(data)):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">0</span>, len(data[<span class="number">0</span>])):</span><br><span class="line">            ws.write(offset + i, j, data[i][j])</span><br><span class="line"></span><br><span class="line">    <span class="comment"># When use xlutils.copy.copy function to copy data from exist .xls file,</span></span><br><span class="line">    <span class="comment"># it will loss the origin style, so we need overwrite the width of column,</span></span><br><span class="line">    <span class="comment"># maybe there some other good solution, but I have not found yet.</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(self.table_header)):</span><br><span class="line">        ws.col(i).width = <span class="number">256</span> * (<span class="number">10</span>, <span class="number">10</span>, <span class="number">15</span>, <span class="number">20</span>, <span class="number">50</span>, <span class="number">20</span>, <span class="number">15</span>)[i]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># save to file</span></span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            wb.save(self.path)</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">except</span> PermissionError <span class="keyword">as</span> e:</span><br><span class="line">            print(<span class="string">'&#123;0&#125; error: &#123;1&#125;'</span>.format(self.path, e.strerror))</span><br><span class="line">            time.sleep(<span class="number">5</span>)</span><br><span class="line">        <span class="keyword">finally</span>:</span><br><span class="line">            <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
 <p><strong>说明：</strong></p>
 <ol>
 <li>一个文件对应一个机构的数据，需要多次读取和写入，所以需要计算文件写入时的行数偏移量<code>offset</code>，即当前文件已包含数据的行数</li>
 <li>当被写入文件被人为打开时，会出现<code>PermissionError</code>异常，可以在捕获该异常然后提示错误信息，并定时等待直到文件被关闭。</li>
 </ol>
 <h3 id="main"><a href="#main" class="headerlink" title="main"></a>main</h3><p>主函数用于创建和启动生产者线程和消费者线程，同时为生产者线程提供机构编号队列。</p>
-<pre><code class="python">url_queue = queue.Queue()
-html_queue = queue.Queue()
-
-def main():
-    for i in range(1001, 1199):
-        url_queue.put(str(i))
-
-    # create and start a spider thread
-    st = SpiderThread(url_queue, html_queue)
-    st.setDaemon(True)
-    st.start()
-
-    # create and start a datamine thread
-    dt = DatamineThread(html_queue, &#39;.xls&#39;)
-    dt.setDaemon(True)
-    dt.start()
-
-    # wait on the queue until everything has been processed
-    url_queue.join()
-    html_queue.join()
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">url_queue = queue.Queue()</span><br><span class="line">html_queue = queue.Queue()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1001</span>, <span class="number">1199</span>):</span><br><span class="line">        url_queue.put(str(i))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># create and start a spider thread</span></span><br><span class="line">    st = SpiderThread(url_queue, html_queue)</span><br><span class="line">    st.setDaemon(<span class="keyword">True</span>)</span><br><span class="line">    st.start()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># create and start a datamine thread</span></span><br><span class="line">    dt = DatamineThread(html_queue, <span class="string">'.xls'</span>)</span><br><span class="line">    dt.setDaemon(<span class="keyword">True</span>)</span><br><span class="line">    dt.start()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># wait on the queue until everything has been processed</span></span><br><span class="line">    url_queue.join()</span><br><span class="line">    html_queue.join()</span><br></pre></td></tr></table></figure>
 <p>从主函数可以看到，两个队列都调用了<code>join</code>函数，用于阻塞，直到对应队列为空为止。要注意的是，队列操作中，<strong>每个出队操作<code>queue.get()</code>需要对应一个<code>queue.task_done()</code>操作</strong>，否则会出现队列数据已全部处理完，但主线程仍在执行的情况。</p>
 <p>至此，爬虫的主要代码便讲解完了，下面是完整源码。</p>
-<h2 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h2><pre><code class="python">#!/usr/bin/python3
-# -*-coding:utf-8-*-
-
-import queue
-from threading import Thread
-
-import requests
-
-import re
-from bs4 import BeautifulSoup
-
-import os
-import platform
-
-import xlwt
-from xlrd import open_workbook
-from xlutils.copy import copy
-
-import time
-
-# url format ↓
-# http://www.cfachina.org/cfainfo/organbaseinfoOneServlet?organid=+G01001+&amp;currentPage=1&amp;pageSize=20&amp;selectType=personinfo&amp;all=undefined
-# organid: +G01001+, +G01002+, +G01003+, ...
-# currentPage: 1, 2, 3, ...
-# pageSize: 20(default)
-# 
-# Algorithm design:
-# 2 threads with 2 queues
-# Thread-1, get first page url, then get page_num and mechanism_name from first page
-# Thread-2, parse html file and get data from it, then output data to local file
-# url_queue data -&gt; &#39;url&#39;  # first url of each mechanism
-# html_queue data -&gt; {&#39;name&#39;:&#39;mechanism_name&#39;, &#39;html&#39;:data}
-
-url_queue = queue.Queue()
-html_queue = queue.Queue()
-
-
-class SpiderThread(Thread):
-    &quot;&quot;&quot;Threaded Url Grab&quot;&quot;&quot;
-    def __init__(self, url_queue, html_queue):
-        Thread.__init__(self)
-        self.url_queue = url_queue
-        self.html_queue = html_queue
-        self.page_size = 20
-        self.url_re = re.compile(&#39;#currentPage.*\+.*\+\&#39;(\d+)\&#39;&#39;)
-        self.headers = {&#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36&#39;}
-
-    def __get_url(self, mechanism_id, current_page):
-        return &#39;http://www.cfachina.org/cfainfo/organbaseinfoOneServlet?organid=+%s+&amp;currentPage=%d&amp;pageSize=%d&amp;selectType=personinfo&amp;all=undefined&#39; \
-        % (mechanism_id, current_page, self.page_size)
-
-    def grab(self, url):
-        &#39;&#39;&#39;Grab html of url from web&#39;&#39;&#39;
-        while True:
-            try:
-                html = requests.get(url, headers=self.headers, timeout=20)
-                if html.status_code == 200:
-                    break
-            except requests.exceptions.ConnectionError as e:
-                print(url + &#39; Connection error, try again...&#39;)
-            except requests.exceptions.ReadTimeout as e:
-                print(url + &#39; Read timeout, try again...&#39;)
-            except Exception as e:
-                print(str(e))
-            finally:
-                pass
-        return html
-
-    def run(self):
-        &#39;&#39;&#39;Grab all htmls of mechanism one by one
-        Steps:
-            1. grab first page of each mechanism from url_queue
-            2. get number of pages and mechanism name from first page
-            3. grab all html file of each mechanism
-            4. push all html to html_queue
-        &#39;&#39;&#39;
-        while True:
-            mechanism_id = &#39;G0&#39; + self.url_queue.get()
-
-            # the first page&#39;s url
-            url = self.__get_url(mechanism_id, 1)
-            html = self.grab(url)
-
-            page_cnt = self.url_re.search(html.text).group(1)
-            if page_cnt == &#39;0&#39;:
-                self.url_queue.task_done()
-                continue
-
-            soup = BeautifulSoup(html.text, &#39;html.parser&#39;)
-            mechanism_name = soup.find(&#39;&#39;, {&#39;class&#39;:&#39;gst_title&#39;}).find_all(&#39;a&#39;)[2].get_text()
-            print(&#39;\nGrab Thread: get %s - %s with %s pages\n&#39; % (mechanism_id, mechanism_name, page_cnt))
-
-            # put data into html_queue
-            self.html_queue.put({&#39;name&#39;:&#39;%s_%s&#39; % (mechanism_id, mechanism_name), &#39;num&#39;:1, &#39;content&#39;:html})
-            for i in range(2, int(page_cnt) + 1):
-                url = self.__get_url(mechanism_id, i)
-                html = self.grab(url)
-                self.html_queue.put({&#39;name&#39;:&#39;%s_%s&#39; % (mechanism_id, mechanism_name), &#39;num&#39;:i, &#39;content&#39;:html})
-
-            self.url_queue.task_done()
-
-
-class DatamineThread(Thread):
-    &quot;&quot;&quot;Parse data from html&quot;&quot;&quot;
-    def __init__(self, html_queue, filetype):
-        Thread.__init__(self)
-        self.html_queue = html_queue
-        self.filetype = filetype
-
-    def __datamine(self, data):
-        &#39;&#39;&#39;Get data from html content&#39;&#39;&#39;
-        soup = BeautifulSoup(data[&#39;content&#39;].text, &#39;html.parser&#39;)
-        infos = []
-        for info in soup.find_all(&#39;tr&#39;, id=True):
-            items = []
-            for item in info.find_all(&#39;td&#39;):
-                items.append(item.get_text())
-            infos.append(items)
-        return infos
-
-    def run(self):
-        while True:
-            data = self.html_queue.get()
-            print(&#39;Datamine Thread: get %s_%d&#39; % (data[&#39;name&#39;], data[&#39;num&#39;]))
-
-            store = Storage(data[&#39;name&#39;], self.filetype)
-            store.save(self.__datamine(data))
-            self.html_queue.task_done()
-
-
-class Storage():
-    def __init__(self, filename, filetype):
-        self.filetype = filetype
-        self.filename = filename + filetype
-        self.table_header = (&#39;姓名&#39;, &#39;性别&#39;, &#39;从业资格号&#39;, &#39;投资咨询从业证书号&#39;, &#39;任职部门&#39;, &#39;职务&#39;, &#39;任现职时间&#39;)
-        self.path = self.__get_path()
-
-    def __get_path(self):
-        path = {
-            &#39;Windows&#39;: &#39;D:/litreily/Documents/python/cfachina&#39;,
-            &#39;Linux&#39;: &#39;/mnt/d/litreily/Documents/python/cfachina&#39;
-        }.get(platform.system())
-
-        if not os.path.isdir(path):
-            os.makedirs(path)
-        return &#39;%s/%s&#39; % (path, self.filename)
-
-    def write_txt(self, data):
-        &#39;&#39;&#39;Write data to txt file&#39;&#39;&#39;
-        fid = open(self.path, &#39;a&#39;, encoding=&#39;utf-8&#39;)
-
-        # insert the header of table
-        if not os.path.getsize(self.path):
-            fid.write(&#39;\t&#39;.join(self.table_header) + &#39;\n&#39;)
-
-        for info in data:
-            fid.write(&#39;\t&#39;.join(info) + &#39;\n&#39;)
-        fid.close()
-
-    def write_excel(self, data):
-        &#39;&#39;&#39;write data to excel file&#39;&#39;&#39;
-        if not os.path.exists(self.path):
-            header_style = xlwt.easyxf(&#39;font:name 楷体, color-index black, bold on&#39;)
-            wb = xlwt.Workbook(encoding=&#39;utf-8&#39;)
-            ws = wb.add_sheet(&#39;Data&#39;)
-
-            # insert the header of table
-            for i in range(len(self.table_header)):
-                ws.write(0, i, self.table_header[i], header_style)
-        else:
-            rb = open_workbook(self.path)
-            wb = copy(rb)
-            ws = wb.get_sheet(0)
-
-        # write data
-        offset = len(ws.rows)
-        for i in range(0, len(data)):
-            for j in range(0, len(data[0])):
-                ws.write(offset + i, j, data[i][j])
-
-        # When use xlutils.copy.copy function to copy data from exist .xls file,
-        # it will loss the origin style, so we need overwrite the width of column,
-        # maybe there some other good solution, but I have not found yet.
-        for i in range(len(self.table_header)):
-            ws.col(i).width = 256 * (10, 10, 15, 20, 50, 20, 15)[i]
-
-        # save to file
-        while True:
-            try:
-                wb.save(self.path)
-                break
-            except PermissionError as e:
-                print(&#39;{0} error: {1}&#39;.format(self.path, e.strerror))
-                time.sleep(5)
-            finally:
-                pass
-
-    def save(self, data):
-        &#39;&#39;&#39;Write data to local file.
-
-        According filetype to choose function to save data, filetype can be &#39;.txt&#39; 
-        or &#39;.xls&#39;, but &#39;.txt&#39; type is saved more faster then &#39;.xls&#39; type
-
-        Args:
-            data: a 2d-list array that need be save
-        &#39;&#39;&#39;
-        {
-            &#39;.txt&#39;: self.write_txt,
-            &#39;.xls&#39;: self.write_excel
-        }.get(self.filetype)(data)
-
-
-def main():
-    for i in range(1001, 1199):
-        url_queue.put(str(i))
-
-    # create and start a spider thread
-    st = SpiderThread(url_queue, html_queue)
-    st.setDaemon(True)
-    st.start()
-
-    # create and start a datamine thread
-    dt = DatamineThread(html_queue, &#39;.xls&#39;)
-    dt.setDaemon(True)
-    dt.start()
-
-    # wait on the queue until everything has been processed
-    url_queue.join()
-    html_queue.join()
-
-
-if __name__ == &#39;__main__&#39;:
-    main()
-</code></pre>
+<h2 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python3</span></span><br><span class="line"><span class="comment"># -*-coding:utf-8-*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> queue</span><br><span class="line"><span class="keyword">from</span> threading <span class="keyword">import</span> Thread</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> platform</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> xlwt</span><br><span class="line"><span class="keyword">from</span> xlrd <span class="keyword">import</span> open_workbook</span><br><span class="line"><span class="keyword">from</span> xlutils.copy <span class="keyword">import</span> copy</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="comment"># url format ↓</span></span><br><span class="line"><span class="comment"># http://www.cfachina.org/cfainfo/organbaseinfoOneServlet?organid=+G01001+&amp;currentPage=1&amp;pageSize=20&amp;selectType=personinfo&amp;all=undefined</span></span><br><span class="line"><span class="comment"># organid: +G01001+, +G01002+, +G01003+, ...</span></span><br><span class="line"><span class="comment"># currentPage: 1, 2, 3, ...</span></span><br><span class="line"><span class="comment"># pageSize: 20(default)</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># Algorithm design:</span></span><br><span class="line"><span class="comment"># 2 threads with 2 queues</span></span><br><span class="line"><span class="comment"># Thread-1, get first page url, then get page_num and mechanism_name from first page</span></span><br><span class="line"><span class="comment"># Thread-2, parse html file and get data from it, then output data to local file</span></span><br><span class="line"><span class="comment"># url_queue data -&gt; 'url'  # first url of each mechanism</span></span><br><span class="line"><span class="comment"># html_queue data -&gt; &#123;'name':'mechanism_name', 'html':data&#125;</span></span><br><span class="line"></span><br><span class="line">url_queue = queue.Queue()</span><br><span class="line">html_queue = queue.Queue()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SpiderThread</span><span class="params">(Thread)</span>:</span></span><br><span class="line">    <span class="string">"""Threaded Url Grab"""</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, url_queue, html_queue)</span>:</span></span><br><span class="line">        Thread.__init__(self)</span><br><span class="line">        self.url_queue = url_queue</span><br><span class="line">        self.html_queue = html_queue</span><br><span class="line">        self.page_size = <span class="number">20</span></span><br><span class="line">        self.url_re = re.compile(<span class="string">'#currentPage.*\+.*\+\'(\d+)\''</span>)</span><br><span class="line">        self.headers = &#123;<span class="string">'User-Agent'</span>: <span class="string">'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'</span>&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__get_url</span><span class="params">(self, mechanism_id, current_page)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">'http://www.cfachina.org/cfainfo/organbaseinfoOneServlet?organid=+%s+&amp;currentPage=%d&amp;pageSize=%d&amp;selectType=personinfo&amp;all=undefined'</span> \</span><br><span class="line">        % (mechanism_id, current_page, self.page_size)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">grab</span><span class="params">(self, url)</span>:</span></span><br><span class="line">        <span class="string">'''Grab html of url from web'''</span></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                html = requests.get(url, headers=self.headers, timeout=<span class="number">20</span>)</span><br><span class="line">                <span class="keyword">if</span> html.status_code == <span class="number">200</span>:</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">except</span> requests.exceptions.ConnectionError <span class="keyword">as</span> e:</span><br><span class="line">                print(url + <span class="string">' Connection error, try again...'</span>)</span><br><span class="line">            <span class="keyword">except</span> requests.exceptions.ReadTimeout <span class="keyword">as</span> e:</span><br><span class="line">                print(url + <span class="string">' Read timeout, try again...'</span>)</span><br><span class="line">            <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">                print(str(e))</span><br><span class="line">            <span class="keyword">finally</span>:</span><br><span class="line">                <span class="keyword">pass</span></span><br><span class="line">        <span class="keyword">return</span> html</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">'''Grab all htmls of mechanism one by one</span></span><br><span class="line"><span class="string">        Steps:</span></span><br><span class="line"><span class="string">            1. grab first page of each mechanism from url_queue</span></span><br><span class="line"><span class="string">            2. get number of pages and mechanism name from first page</span></span><br><span class="line"><span class="string">            3. grab all html file of each mechanism</span></span><br><span class="line"><span class="string">            4. push all html to html_queue</span></span><br><span class="line"><span class="string">        '''</span></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">            mechanism_id = <span class="string">'G0'</span> + self.url_queue.get()</span><br><span class="line"></span><br><span class="line">            <span class="comment"># the first page's url</span></span><br><span class="line">            url = self.__get_url(mechanism_id, <span class="number">1</span>)</span><br><span class="line">            html = self.grab(url)</span><br><span class="line"></span><br><span class="line">            page_cnt = self.url_re.search(html.text).group(<span class="number">1</span>)</span><br><span class="line">            <span class="keyword">if</span> page_cnt == <span class="string">'0'</span>:</span><br><span class="line">                self.url_queue.task_done()</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            </span><br><span class="line">            soup = BeautifulSoup(html.text, <span class="string">'html.parser'</span>)</span><br><span class="line">            mechanism_name = soup.find(<span class="string">''</span>, &#123;<span class="string">'class'</span>:<span class="string">'gst_title'</span>&#125;).find_all(<span class="string">'a'</span>)[<span class="number">2</span>].get_text()</span><br><span class="line">            print(<span class="string">'\nGrab Thread: get %s - %s with %s pages\n'</span> % (mechanism_id, mechanism_name, page_cnt))</span><br><span class="line"></span><br><span class="line">            <span class="comment"># put data into html_queue</span></span><br><span class="line">            self.html_queue.put(&#123;<span class="string">'name'</span>:<span class="string">'%s_%s'</span> % (mechanism_id, mechanism_name), <span class="string">'num'</span>:<span class="number">1</span>, <span class="string">'content'</span>:html&#125;)</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">2</span>, int(page_cnt) + <span class="number">1</span>):</span><br><span class="line">                url = self.__get_url(mechanism_id, i)</span><br><span class="line">                html = self.grab(url)</span><br><span class="line">                self.html_queue.put(&#123;<span class="string">'name'</span>:<span class="string">'%s_%s'</span> % (mechanism_id, mechanism_name), <span class="string">'num'</span>:i, <span class="string">'content'</span>:html&#125;)</span><br><span class="line">            </span><br><span class="line">            self.url_queue.task_done()</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DatamineThread</span><span class="params">(Thread)</span>:</span></span><br><span class="line">    <span class="string">"""Parse data from html"""</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, html_queue, filetype)</span>:</span></span><br><span class="line">        Thread.__init__(self)</span><br><span class="line">        self.html_queue = html_queue</span><br><span class="line">        self.filetype = filetype</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__datamine</span><span class="params">(self, data)</span>:</span></span><br><span class="line">        <span class="string">'''Get data from html content'''</span></span><br><span class="line">        soup = BeautifulSoup(data[<span class="string">'content'</span>].text, <span class="string">'html.parser'</span>)</span><br><span class="line">        infos = []</span><br><span class="line">        <span class="keyword">for</span> info <span class="keyword">in</span> soup.find_all(<span class="string">'tr'</span>, id=<span class="keyword">True</span>):</span><br><span class="line">            items = []</span><br><span class="line">            <span class="keyword">for</span> item <span class="keyword">in</span> info.find_all(<span class="string">'td'</span>):</span><br><span class="line">                items.append(item.get_text())</span><br><span class="line">            infos.append(items)</span><br><span class="line">        <span class="keyword">return</span> infos</span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">            data = self.html_queue.get()</span><br><span class="line">            print(<span class="string">'Datamine Thread: get %s_%d'</span> % (data[<span class="string">'name'</span>], data[<span class="string">'num'</span>]))</span><br><span class="line"></span><br><span class="line">            store = Storage(data[<span class="string">'name'</span>], self.filetype)</span><br><span class="line">            store.save(self.__datamine(data))</span><br><span class="line">            self.html_queue.task_done()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Storage</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, filename, filetype)</span>:</span></span><br><span class="line">        self.filetype = filetype</span><br><span class="line">        self.filename = filename + filetype</span><br><span class="line">        self.table_header = (<span class="string">'姓名'</span>, <span class="string">'性别'</span>, <span class="string">'从业资格号'</span>, <span class="string">'投资咨询从业证书号'</span>, <span class="string">'任职部门'</span>, <span class="string">'职务'</span>, <span class="string">'任现职时间'</span>)</span><br><span class="line">        self.path = self.__get_path()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__get_path</span><span class="params">(self)</span>:</span></span><br><span class="line">        path = &#123;</span><br><span class="line">            <span class="string">'Windows'</span>: <span class="string">'D:/litreily/Documents/python/cfachina'</span>,</span><br><span class="line">            <span class="string">'Linux'</span>: <span class="string">'/mnt/d/litreily/Documents/python/cfachina'</span></span><br><span class="line">        &#125;.get(platform.system())</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> os.path.isdir(path):</span><br><span class="line">            os.makedirs(path)</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'%s/%s'</span> % (path, self.filename)</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">write_txt</span><span class="params">(self, data)</span>:</span></span><br><span class="line">        <span class="string">'''Write data to txt file'''</span></span><br><span class="line">        fid = open(self.path, <span class="string">'a'</span>, encoding=<span class="string">'utf-8'</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># insert the header of table</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> os.path.getsize(self.path):</span><br><span class="line">            fid.write(<span class="string">'\t'</span>.join(self.table_header) + <span class="string">'\n'</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> info <span class="keyword">in</span> data:</span><br><span class="line">            fid.write(<span class="string">'\t'</span>.join(info) + <span class="string">'\n'</span>)</span><br><span class="line">        fid.close()</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">write_excel</span><span class="params">(self, data)</span>:</span></span><br><span class="line">        <span class="string">'''write data to excel file'''</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(self.path):</span><br><span class="line">            header_style = xlwt.easyxf(<span class="string">'font:name 楷体, color-index black, bold on'</span>)</span><br><span class="line">            wb = xlwt.Workbook(encoding=<span class="string">'utf-8'</span>)</span><br><span class="line">            ws = wb.add_sheet(<span class="string">'Data'</span>)</span><br><span class="line"></span><br><span class="line">            <span class="comment"># insert the header of table</span></span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(len(self.table_header)):</span><br><span class="line">                ws.write(<span class="number">0</span>, i, self.table_header[i], header_style)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            rb = open_workbook(self.path)</span><br><span class="line">            wb = copy(rb)</span><br><span class="line">            ws = wb.get_sheet(<span class="number">0</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># write data</span></span><br><span class="line">        offset = len(ws.rows)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, len(data)):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">0</span>, len(data[<span class="number">0</span>])):</span><br><span class="line">                ws.write(offset + i, j, data[i][j])</span><br><span class="line"></span><br><span class="line">        <span class="comment"># When use xlutils.copy.copy function to copy data from exist .xls file,</span></span><br><span class="line">        <span class="comment"># it will loss the origin style, so we need overwrite the width of column,</span></span><br><span class="line">        <span class="comment"># maybe there some other good solution, but I have not found yet.</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(len(self.table_header)):</span><br><span class="line">            ws.col(i).width = <span class="number">256</span> * (<span class="number">10</span>, <span class="number">10</span>, <span class="number">15</span>, <span class="number">20</span>, <span class="number">50</span>, <span class="number">20</span>, <span class="number">15</span>)[i]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># save to file</span></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                wb.save(self.path)</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">except</span> PermissionError <span class="keyword">as</span> e:</span><br><span class="line">                print(<span class="string">'&#123;0&#125; error: &#123;1&#125;'</span>.format(self.path, e.strerror))</span><br><span class="line">                time.sleep(<span class="number">5</span>)</span><br><span class="line">            <span class="keyword">finally</span>:</span><br><span class="line">                <span class="keyword">pass</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">save</span><span class="params">(self, data)</span>:</span></span><br><span class="line">        <span class="string">'''Write data to local file.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        According filetype to choose function to save data, filetype can be '.txt' </span></span><br><span class="line"><span class="string">        or '.xls', but '.txt' type is saved more faster then '.xls' type</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        Args:</span></span><br><span class="line"><span class="string">            data: a 2d-list array that need be save</span></span><br><span class="line"><span class="string">        '''</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="string">'.txt'</span>: self.write_txt,</span><br><span class="line">            <span class="string">'.xls'</span>: self.write_excel</span><br><span class="line">        &#125;.get(self.filetype)(data)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1001</span>, <span class="number">1199</span>):</span><br><span class="line">        url_queue.put(str(i))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># create and start a spider thread</span></span><br><span class="line">    st = SpiderThread(url_queue, html_queue)</span><br><span class="line">    st.setDaemon(<span class="keyword">True</span>)</span><br><span class="line">    st.start()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># create and start a datamine thread</span></span><br><span class="line">    dt = DatamineThread(html_queue, <span class="string">'.xls'</span>)</span><br><span class="line">    dt.setDaemon(<span class="keyword">True</span>)</span><br><span class="line">    dt.start()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># wait on the queue until everything has been processed</span></span><br><span class="line">    url_queue.join()</span><br><span class="line">    html_queue.join()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
 <h2 id="爬取测试"><a href="#爬取测试" class="headerlink" title="爬取测试"></a>爬取测试</h2><p><img src="/assets/spider/cfachina/spider.png" alt="spider"></p>
 <p><img src="/assets/spider/cfachina/save_txt.png" alt="save to txt"></p>
 <p><img src="/assets/spider/cfachina/save_xls.png" alt="save to excel"></p>
@@ -457,4 +91,27 @@ if __name__ == &#39;__main__&#39;:
 <li>如果将页面网址中的<code>pageSize</code>修改为<code>1000</code>或更大，则可以一次性获取某机构的所有从业人员信息，而不用逐页爬取，效率可以大大提高。</li>
 <li>该爬虫已托管至<a href="https://github.com/Litreily/Python-demos" target="_blank" rel="noopener">github Python-demos</a></li>
 </ul>
-</div></article></div><div class="l-pager l-pager-dtl box"><a class="prev" href="/2018/05/27/scrapy-start/">&lt; Python网络爬虫4 - scrapy入门</a><a class="next" href="/2018/04/10/sina/">Python网络爬虫2 - 爬取新浪微博用户图片 &gt;</a></div><footer><p>Copyright © 2018 <a href="/." rel="nofollow">LITREILY | </a>Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer><script type="text/javascript" src="/plugins/prettify/prettify.js"></script></div></div></div></body></html>
+</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a class="article-share-link" data-url="http://www.litreily.top/2018/04/30/cfachina/" data-id="cjnogm8rp004v5fwt8tirukl4" data-qrcode="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACLUlEQVR42u3a0W7CMAwFUP7/p5m0p01au2ubTsM9eaoKNDkgmcT24xGP5+f4en105+jV83ceffbFAwMD420ZyeN6yzr6IpI1VJ+PgYFxB0YSZHtT5kH8/PqXNWNgYGDEy5pvBDEwMDCuDrgJ7Hx2DAwMjMkhNpkyD6/VOy87i2NgYLwho1cY+Jvry+sbGBgY/57xHI9kU3gerHsh+9tnMTAwVjPyVFo1uZYcO5P3FwIxBgbGakZeErgusPY2iNHvg4GBsYKRpLF6r87vjAoDGBgYKxjVFHzeBJYvN1/0YQjGwMBYzcg3eZPS5qSxI/9LwMDA2MrIWygmk1UTc+fB/Yc7GBgYt2HkibM8ZOfJu8nGFAMDYzejF2SrTRi942uzbICBgXEbxqS1oppEexRHdKDFwMC4DaPa5jUvW/bKmRgYGLsZuTVvC6sm4JKyZbmLDQMDYxGjx8uDYzJ9+Z8hfz4GBsYKRt7UVS0uJg0ck0Tbt09hYGCsZlSPstXN3ySUj7aMGBgY6xjVZotkKecTz0sCUcUAAwNjKWOyZexhcl5hn4uBgbGO0Wu5qG7jXhWCmztcDAyMt2U8iyMJ0L0g2wv3GBgYd2Bc3bfQm/68JICBgXFPRh4Ee6QrAu4PXwQGBsYNGL3Alzde5Im5UWEAAwMDo5WYqx508yYPDAwMjOpDm1u6uDz5soCLgYHxtoxJMaDXJNErNhRqmxgYGIsYk8LAFW0W1YQdBgbGasYHkxyoduGWGH0AAAAASUVORK5CYII=">Share</a><div class="tags"><a href="/tags/spider/">spider</a><a href="/tags/queue/">queue</a><a href="/tags/xlwt/">xlwt</a></div><div class="post-nav"><a class="pre" href="/2018/05/27/scrapy-start/">Python网络爬虫4 - scrapy入门</a><a class="next" href="/2018/04/10/sina/">Python网络爬虫2 - 爬取新浪微博用户图片</a></div><div id="vcomment"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/LabVIEW/">LabVIEW</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Matlab/">Matlab</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Media/">Media</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Network/">Network</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Office/">Office</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web/">Web</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Web/Template/">Template</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/信号处理/">信号处理</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/嵌入式/">嵌入式</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/杂物柜/">杂物柜</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/tags/word/" style="font-size: 12px;">word</a> <a href="/tags/test/" style="font-size: 15.43px;">test</a> <a href="/tags/ruby/" style="font-size: 13.71px;">ruby</a> <a href="/tags/video/" style="font-size: 13.71px;">video</a> <a href="/tags/literature/" style="font-size: 12px;">literature</a> <a href="/tags/algorithm/" style="font-size: 20.57px;">algorithm</a> <a href="/tags/windows/" style="font-size: 13.71px;">windows</a> <a href="/tags/matlab/" style="font-size: 17.14px;">matlab</a> <a href="/tags/labview/" style="font-size: 22.29px;">labview</a> <a href="/tags/tdms/" style="font-size: 13.71px;">tdms</a> <a href="/tags/brackets/" style="font-size: 12px;">brackets</a> <a href="/tags/git/" style="font-size: 15.43px;">git</a> <a href="/tags/tools/" style="font-size: 17.14px;">tools</a> <a href="/tags/utorrent/" style="font-size: 12px;">utorrent</a> <a href="/tags/atom/" style="font-size: 13.71px;">atom</a> <a href="/tags/C-C/" style="font-size: 24px;">C/C++</a> <a href="/tags/ubuntu/" style="font-size: 22.29px;">ubuntu</a> <a href="/tags/linux/" style="font-size: 18.86px;">linux</a> <a href="/tags/signal/" style="font-size: 13.71px;">signal</a> <a href="/tags/music/" style="font-size: 13.71px;">music</a> <a href="/tags/stm32/" style="font-size: 13.71px;">stm32</a> <a href="/tags/VS/" style="font-size: 13.71px;">VS</a> <a href="/tags/hexo/" style="font-size: 13.71px;">hexo</a> <a href="/tags/RSS/" style="font-size: 12px;">RSS</a> <a href="/tags/Feed/" style="font-size: 12px;">Feed</a> <a href="/tags/office/" style="font-size: 12px;">office</a> <a href="/tags/jekyll/" style="font-size: 15.43px;">jekyll</a> <a href="/tags/log/" style="font-size: 12px;">log</a> <a href="/tags/LWD/" style="font-size: 12px;">LWD</a> <a href="/tags/FreeRTOS/" style="font-size: 12px;">FreeRTOS</a> <a href="/tags/makefile/" style="font-size: 13.71px;">makefile</a> <a href="/tags/wireshark/" style="font-size: 12px;">wireshark</a> <a href="/tags/shell/" style="font-size: 12px;">shell</a> <a href="/tags/tmux/" style="font-size: 13.71px;">tmux</a> <a href="/tags/telnet/" style="font-size: 12px;">telnet</a> <a href="/tags/smtp/" style="font-size: 12px;">smtp</a> <a href="/tags/ddos/" style="font-size: 12px;">ddos</a> <a href="/tags/hping3/" style="font-size: 12px;">hping3</a> <a href="/tags/mysql/" style="font-size: 12px;">mysql</a> <a href="/tags/centos/" style="font-size: 12px;">centos</a> <a href="/tags/pug/" style="font-size: 12px;">pug</a> <a href="/tags/spider/" style="font-size: 17.14px;">spider</a> <a href="/tags/lofter/" style="font-size: 12px;">lofter</a> <a href="/tags/sort/" style="font-size: 12px;">sort</a> <a href="/tags/visualization/" style="font-size: 12px;">visualization</a> <a href="/tags/stdio/" style="font-size: 12px;">stdio</a> <a href="/tags/cache/" style="font-size: 12px;">cache</a> <a href="/tags/buffer/" style="font-size: 12px;">buffer</a> <a href="/tags/scrapy/" style="font-size: 12px;">scrapy</a> <a href="/tags/sina/" style="font-size: 12px;">sina</a> <a href="/tags/queue/" style="font-size: 12px;">queue</a> <a href="/tags/xlwt/" style="font-size: 12px;">xlwt</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/10/25/io-cache/">Linux中的文件I/O缓冲</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/27/tee/">Linux指令 - tee的实现</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/20/coredump/">OpenWrt中使用gdb分析coredump</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/31/pug-synax/">网页模板pug基本语法</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/07/quick-sort/">Python实现快排及其可视化</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Links</i></div><ul></ul><a href="https://www.smslit.top" title="smslit-水木十里" target="_blank">smslit-水木十里</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2018 <a href="/." rel="nofollow">LITREILY.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> manupassant.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.css"><script type="text/javascript" src="/js/search.js?v=0.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+   search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
