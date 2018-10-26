@@ -7810,11 +7810,11 @@ Categories=Development;IDE;Java;
         
         <tags>
             
+            <tag> atom </tag>
+            
             <tag> ubuntu </tag>
             
             <tag> linux </tag>
-            
-            <tag> atom </tag>
             
         </tags>
         
@@ -7918,63 +7918,6 @@ int main()
     </entry>
     
     <entry>
-      <title><![CDATA[前端岗位模拟试题2]]></title>
-      <url>http://www.litreily.top/2016/09/12/algor-WYMN2/</url>
-      <content type="html"><![CDATA[<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>二货小易有一个W*H的网格盒子，网格的行编号为0~H-1，网格的列编号为0~W-1。每个格子至多可以放一块蛋糕，任意两块蛋糕的欧几里得距离不能等于2。</p>
-<p>对于两个格子坐标(x1,y1),(x2,y2)的欧几里得距离为：((x1-x2)<em>(x1-x2)+(y1-y2)</em>(y1-y2))的算术平方根。</p>
-<p>小易想知道最多可以放多少块蛋糕在网格盒子里。</p>
-<h3 id="输入描述"><a href="#输入描述" class="headerlink" title="输入描述"></a>输入描述</h3><blockquote>
-<p>每组数组包含网格长宽W,H，用空格分隔。(1&lt;=W、H&lt;=1000)</p>
-</blockquote>
-<h3 id="输出描述"><a href="#输出描述" class="headerlink" title="输出描述"></a>输出描述</h3><blockquote>
-<p>输出一个最多可以放的蛋糕数</p>
-</blockquote>
-<h3 id="输入例子"><a href="#输入例子" class="headerlink" title="输入例子"></a>输入例子</h3><blockquote>
-<p>3 2</p>
-</blockquote>
-<h3 id="输出例子"><a href="#输出例子" class="headerlink" title="输出例子"></a>输出例子</h3><blockquote>
-<p>4</p>
-</blockquote>
-<h2 id="题目解析"><a href="#题目解析" class="headerlink" title="题目解析"></a>题目解析</h2><p>根据题意，可以推测出蛋糕数最多的放置方案：将网格进行分区，每四个构成一个正方形的网格作为一个分区，类似于坐标变换。假设原坐标为(x,y),那么变换后的分区坐标为(x/2,y/2)。当变换后的分区坐标满足横纵坐标之和为偶数时，该分区内的4个网格均可放置蛋糕。</p>
-<p><img src="/assets/algorithm/putCake.png" alt="putCake"></p>
-<h2 id="解题程序"><a href="#解题程序" class="headerlink" title="解题程序"></a>解题程序</h2><pre><code class="C++">#include &lt;iostream&gt;
-using namespace std;
-
-int main()
-{
-
-  int W,H;
-  int cnt=0;                   // 定义可放的蛋糕数
-  cin&gt;&gt;W&gt;&gt;H;                // 输入盒子网格的行列数
-
-  for(int i=0;i&lt;H;i++)
-      for(int j=0;j&lt;W;j++)
-          if((i/2+j/2)%2==0)
-          cnt++;
-  cout&lt;&lt;cnt&lt;&lt;endl;
-  return 0;    
-}
-</code></pre>
-]]></content>
-      
-        <categories>
-            
-            <category> 算法 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> algorithm </tag>
-            
-            <tag> C/C++ </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
       <title><![CDATA[前端岗位模拟试题1]]></title>
       <url>http://www.litreily.top/2016/09/12/algor-WYMN1/</url>
       <content type="html"><![CDATA[<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>正整数A的&quot;DA(1位整数)部分&quot;定义为由A中所有组成的新整数PA。例如：给定A=3862767，DA=6，则A的&quot;6部分&quot;PA是66，因为A中有2个6。</p>
@@ -8016,6 +7959,63 @@ int main()
     getPA(B,DB,PB);      // 计算PB
     cout&lt;&lt;PA+PB&lt;&lt;endl;
     return 0;
+}
+</code></pre>
+]]></content>
+      
+        <categories>
+            
+            <category> 算法 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> algorithm </tag>
+            
+            <tag> C/C++ </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[前端岗位模拟试题2]]></title>
+      <url>http://www.litreily.top/2016/09/12/algor-WYMN2/</url>
+      <content type="html"><![CDATA[<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>二货小易有一个W*H的网格盒子，网格的行编号为0~H-1，网格的列编号为0~W-1。每个格子至多可以放一块蛋糕，任意两块蛋糕的欧几里得距离不能等于2。</p>
+<p>对于两个格子坐标(x1,y1),(x2,y2)的欧几里得距离为：((x1-x2)<em>(x1-x2)+(y1-y2)</em>(y1-y2))的算术平方根。</p>
+<p>小易想知道最多可以放多少块蛋糕在网格盒子里。</p>
+<h3 id="输入描述"><a href="#输入描述" class="headerlink" title="输入描述"></a>输入描述</h3><blockquote>
+<p>每组数组包含网格长宽W,H，用空格分隔。(1&lt;=W、H&lt;=1000)</p>
+</blockquote>
+<h3 id="输出描述"><a href="#输出描述" class="headerlink" title="输出描述"></a>输出描述</h3><blockquote>
+<p>输出一个最多可以放的蛋糕数</p>
+</blockquote>
+<h3 id="输入例子"><a href="#输入例子" class="headerlink" title="输入例子"></a>输入例子</h3><blockquote>
+<p>3 2</p>
+</blockquote>
+<h3 id="输出例子"><a href="#输出例子" class="headerlink" title="输出例子"></a>输出例子</h3><blockquote>
+<p>4</p>
+</blockquote>
+<h2 id="题目解析"><a href="#题目解析" class="headerlink" title="题目解析"></a>题目解析</h2><p>根据题意，可以推测出蛋糕数最多的放置方案：将网格进行分区，每四个构成一个正方形的网格作为一个分区，类似于坐标变换。假设原坐标为(x,y),那么变换后的分区坐标为(x/2,y/2)。当变换后的分区坐标满足横纵坐标之和为偶数时，该分区内的4个网格均可放置蛋糕。</p>
+<p><img src="/assets/algorithm/putCake.png" alt="putCake"></p>
+<h2 id="解题程序"><a href="#解题程序" class="headerlink" title="解题程序"></a>解题程序</h2><pre><code class="C++">#include &lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+
+  int W,H;
+  int cnt=0;                   // 定义可放的蛋糕数
+  cin&gt;&gt;W&gt;&gt;H;                // 输入盒子网格的行列数
+
+  for(int i=0;i&lt;H;i++)
+      for(int j=0;j&lt;W;j++)
+          if((i/2+j/2)%2==0)
+          cnt++;
+  cout&lt;&lt;cnt&lt;&lt;endl;
+  return 0;    
 }
 </code></pre>
 ]]></content>

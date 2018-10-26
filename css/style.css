@@ -14,10 +14,10 @@ body {
 body, .l-content, blockquote {
   background-color: #2d4356; }
 
-body, textarea, input, select, .m-hdimg .ttl a, .m-nav a, .l-pager a, .p-content, .l-post .p-desc a {
+body, button, textarea, input, select, .m-hdimg .ttl a, .m-nav a, .l-pager a, .p-content, .l-post .p-desc a {
   color: #CECECE; }
 
-textarea, input, select {
+button, textarea, input, select {
   font-family: "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", tahoma, arial, simsun, "宋体";
   font-size: 12px;
   outline: 0; }
@@ -339,8 +339,7 @@ footer {
     margin-left: -20px;
     margin-right: -20px; }
   footer {
-    padding: 20px; }
-  footer {
+    padding: 20px;
     text-align: center; } }
 
 @media print, screen and (max-width: 500px) {
