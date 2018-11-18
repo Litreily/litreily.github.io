@@ -529,9 +529,9 @@ $ sudo yum install mysql-devel # install sdk of mysql
     
       <category term="ubuntu" scheme="http://www.litreily.top/tags/ubuntu/"/>
     
-      <category term="makefile" scheme="http://www.litreily.top/tags/makefile/"/>
-    
       <category term="shell" scheme="http://www.litreily.top/tags/shell/"/>
+    
+      <category term="makefile" scheme="http://www.litreily.top/tags/makefile/"/>
     
   </entry>
   
