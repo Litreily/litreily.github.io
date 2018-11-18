@@ -12,7 +12,8 @@ body {
   background-repeat: repeat-y;
   background-position-x: -80px;
   word-wrap: break-word;
-  font: 12px/200% "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", tahoma, arial, simsun, "宋体"; }
+  font: 12px/200% "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", tahoma, arial, simsun, "宋体";
+  overflow-x: hidden; }
 
 body, .l-content, blockquote {
   background-color: #2d4356; }
@@ -85,6 +86,12 @@ h4 {
   height: 0;
   overflow: hidden;
   content: '.'; }
+
+#container, #menu {
+  transition: all ease-out 1s; }
+
+.translate {
+  transform: translateX(250px); }
 
 /*----------------------*/
 /*mobile head nav style */
@@ -191,6 +198,15 @@ h4 {
       animation-duration: 0.5s;
       animation-fill-mode: both;
       animation-name: outlast; }
+
+.mobile-menu {
+  position: fixed;
+  top: 48px;
+  background: #2d4356;
+  box-shadow: 1px 0px 10px 1px #152029;
+  height: 100%;
+  width: 250px;
+  z-index: 99; }
 
 /*----------------------*/
 /*head info of home page*/
