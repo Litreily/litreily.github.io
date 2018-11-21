@@ -206,7 +206,8 @@ h4 {
   box-shadow: 1px 0px 10px 1px #152029;
   height: 100%;
   width: 250px;
-  z-index: 99; }
+  z-index: 99;
+  overflow-y: auto; }
 
 /*----------------------*/
 /*head info of home page*/
