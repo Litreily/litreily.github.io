@@ -88,7 +88,7 @@ h4 {
   content: '.'; }
 
 #container, #menu {
-  transition: all ease-out 1s; }
+  transition: all ease-out 0.5s; }
 
 .translate {
   transform: translateX(250px); }
@@ -198,6 +198,21 @@ h4 {
       animation-duration: 0.5s;
       animation-fill-mode: both;
       animation-name: outlast; }
+
+@keyframes showmenu {
+  0% {
+    opacity: 0; }
+  100% {
+    opacity: 1; } }
+
+@keyframes hiddenmenu {
+  0% {
+    opacity: 1; }
+  100% {
+    opacity: 0; } }
+
+#menu.mobile-menu {
+  animation: 0.5s ease-out showmenu; }
 
 .mobile-menu {
   position: fixed;
