@@ -8122,9 +8122,9 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
         
         <tags>
             
-            <tag> tools </tag>
-            
             <tag> utorrent </tag>
+            
+            <tag> tools </tag>
             
         </tags>
         
@@ -8468,11 +8468,11 @@ cmd.exe
         
         <tags>
             
+            <tag> tools </tag>
+            
             <tag> brackets </tag>
             
             <tag> git </tag>
-            
-            <tag> tools </tag>
             
         </tags>
         
