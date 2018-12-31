@@ -91,9 +91,9 @@
       <category term="嵌入式" scheme="http://www.litreily.top/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/"/>
     
     
-      <category term="C/C++" scheme="http://www.litreily.top/tags/C-C/"/>
-    
       <category term="linux" scheme="http://www.litreily.top/tags/linux/"/>
+    
+      <category term="C/C++" scheme="http://www.litreily.top/tags/C-C/"/>
     
   </entry>
   
@@ -118,9 +118,9 @@
       <category term="嵌入式" scheme="http://www.litreily.top/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/"/>
     
     
-      <category term="C/C++" scheme="http://www.litreily.top/tags/C-C/"/>
-    
       <category term="linux" scheme="http://www.litreily.top/tags/linux/"/>
+    
+      <category term="C/C++" scheme="http://www.litreily.top/tags/C-C/"/>
     
   </entry>
   
@@ -232,9 +232,9 @@
       <category term="嵌入式" scheme="http://www.litreily.top/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/"/>
     
     
-      <category term="C/C++" scheme="http://www.litreily.top/tags/C-C/"/>
-    
       <category term="linux" scheme="http://www.litreily.top/tags/linux/"/>
+    
+      <category term="C/C++" scheme="http://www.litreily.top/tags/C-C/"/>
     
   </entry>
   
@@ -545,13 +545,13 @@
       <category term="Linux" scheme="http://www.litreily.top/categories/Linux/"/>
     
     
-      <category term="C/C++" scheme="http://www.litreily.top/tags/C-C/"/>
-    
       <category term="ubuntu" scheme="http://www.litreily.top/tags/ubuntu/"/>
     
-      <category term="makefile" scheme="http://www.litreily.top/tags/makefile/"/>
+      <category term="C/C++" scheme="http://www.litreily.top/tags/C-C/"/>
     
       <category term="shell" scheme="http://www.litreily.top/tags/shell/"/>
+    
+      <category term="makefile" scheme="http://www.litreily.top/tags/makefile/"/>
     
   </entry>
   
