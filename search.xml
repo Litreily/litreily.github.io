@@ -1623,9 +1623,9 @@
             
             <tag> ubuntu </tag>
             
-            <tag> shell </tag>
-            
             <tag> makefile </tag>
+            
+            <tag> shell </tag>
             
         </tags>
         
@@ -3405,6 +3405,42 @@ Categories=Development;IDE;Java;
     </entry>
     
     <entry>
+      <title><![CDATA[前端岗位模拟试题1]]></title>
+      <url>http://www.litreily.top/2016/09/12/algor-WYMN1/</url>
+      <content type="html"><![CDATA[<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>正整数A的&quot;DA(1位整数)部分&quot;定义为由A中所有组成的新整数PA。例如：给定A=3862767，DA=6，则A的&quot;6部分&quot;PA是66，因为A中有2个6。</p>
+<p>现给定A、DA、B、DB，请编写程序计算PA+PB。</p>
+<h3 id="输入描述"><a href="#输入描述" class="headerlink" title="输入描述"></a>输入描述</h3><blockquote>
+<p>输入在一行中依次给出A，DA，B,DB，中间以空格分隔，其中 0&lt; A,B &lt;1e10</p>
+</blockquote>
+<h3 id="输出描述"><a href="#输出描述" class="headerlink" title="输出描述"></a>输出描述</h3><blockquote>
+<p>在一行中输出PA+PB的值</p>
+</blockquote>
+<h3 id="输入例子"><a href="#输入例子" class="headerlink" title="输入例子"></a>输入例子</h3><blockquote>
+<p>3862767 6 13530293 3</p>
+</blockquote>
+<h3 id="输出例子"><a href="#输出例子" class="headerlink" title="输出例子"></a>输出例子</h3><blockquote>
+<p>399</p>
+</blockquote>
+<h2 id="解题程序"><a href="#解题程序" class="headerlink" title="解题程序"></a>解题程序</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">getPA</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">long</span> num, <span class="keyword">int</span> DA, <span class="keyword">unsigned</span> <span class="keyword">long</span> &amp; PA)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    PA = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(num)           <span class="comment">// 循环查找num中DA的个数</span></span><br><span class="line">    &#123;</span><br><span class="line">      <span class="keyword">if</span>(num%<span class="number">10</span>==DA)</span><br><span class="line">        PA = PA*<span class="number">10</span>+DA;</span><br><span class="line">      num/=<span class="number">10</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> A,B;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> PA=<span class="number">0</span>,PB=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> DA,DB;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">cin</span>&gt;&gt;A&gt;&gt;DA&gt;&gt;B&gt;&gt;DB;</span><br><span class="line">    getPA(A,DA,PA);      <span class="comment">// 计算PA</span></span><br><span class="line">    getPA(B,DB,PB);      <span class="comment">// 计算PB</span></span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;PA+PB&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      
+        <categories>
+            
+            <category> 算法 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> algorithm </tag>
+            
+            <tag> C/C++ </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[前端岗位模拟试题2]]></title>
       <url>http://www.litreily.top/2016/09/12/algor-WYMN2/</url>
       <content type="html"><![CDATA[<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>二货小易有一个W*H的网格盒子，网格的行编号为0~H-1，网格的列编号为0~W-1。每个格子至多可以放一块蛋糕，任意两块蛋糕的欧几里得距离不能等于2。</p>
@@ -3425,42 +3461,6 @@ Categories=Development;IDE;Java;
 <h2 id="题目解析"><a href="#题目解析" class="headerlink" title="题目解析"></a>题目解析</h2><p>根据题意，可以推测出蛋糕数最多的放置方案：将网格进行分区，每四个构成一个正方形的网格作为一个分区，类似于坐标变换。假设原坐标为(x,y),那么变换后的分区坐标为(x/2,y/2)。当变换后的分区坐标满足横纵坐标之和为偶数时，该分区内的4个网格均可放置蛋糕。</p>
 <p><img src="/assets/algorithm/putCake.png" alt="putCake"></p>
 <h2 id="解题程序"><a href="#解题程序" class="headerlink" title="解题程序"></a>解题程序</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">int</span> W,H;</span><br><span class="line">  <span class="keyword">int</span> cnt=<span class="number">0</span>;                   <span class="comment">// 定义可放的蛋糕数</span></span><br><span class="line">  <span class="built_in">cin</span>&gt;&gt;W&gt;&gt;H;                <span class="comment">// 输入盒子网格的行列数</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;H;i++)</span><br><span class="line">      <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;W;j++)</span><br><span class="line">      	<span class="keyword">if</span>((i/<span class="number">2</span>+j/<span class="number">2</span>)%<span class="number">2</span>==<span class="number">0</span>)</span><br><span class="line">          cnt++;</span><br><span class="line">  <span class="built_in">cout</span>&lt;&lt;cnt&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-      
-        <categories>
-            
-            <category> 算法 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> algorithm </tag>
-            
-            <tag> C/C++ </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[前端岗位模拟试题1]]></title>
-      <url>http://www.litreily.top/2016/09/12/algor-WYMN1/</url>
-      <content type="html"><![CDATA[<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>正整数A的&quot;DA(1位整数)部分&quot;定义为由A中所有组成的新整数PA。例如：给定A=3862767，DA=6，则A的&quot;6部分&quot;PA是66，因为A中有2个6。</p>
-<p>现给定A、DA、B、DB，请编写程序计算PA+PB。</p>
-<h3 id="输入描述"><a href="#输入描述" class="headerlink" title="输入描述"></a>输入描述</h3><blockquote>
-<p>输入在一行中依次给出A，DA，B,DB，中间以空格分隔，其中 0&lt; A,B &lt;1e10</p>
-</blockquote>
-<h3 id="输出描述"><a href="#输出描述" class="headerlink" title="输出描述"></a>输出描述</h3><blockquote>
-<p>在一行中输出PA+PB的值</p>
-</blockquote>
-<h3 id="输入例子"><a href="#输入例子" class="headerlink" title="输入例子"></a>输入例子</h3><blockquote>
-<p>3862767 6 13530293 3</p>
-</blockquote>
-<h3 id="输出例子"><a href="#输出例子" class="headerlink" title="输出例子"></a>输出例子</h3><blockquote>
-<p>399</p>
-</blockquote>
-<h2 id="解题程序"><a href="#解题程序" class="headerlink" title="解题程序"></a>解题程序</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">getPA</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">long</span> num, <span class="keyword">int</span> DA, <span class="keyword">unsigned</span> <span class="keyword">long</span> &amp; PA)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    PA = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(num)           <span class="comment">// 循环查找num中DA的个数</span></span><br><span class="line">    &#123;</span><br><span class="line">      <span class="keyword">if</span>(num%<span class="number">10</span>==DA)</span><br><span class="line">        PA = PA*<span class="number">10</span>+DA;</span><br><span class="line">      num/=<span class="number">10</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> A,B;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> PA=<span class="number">0</span>,PB=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> DA,DB;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">cin</span>&gt;&gt;A&gt;&gt;DA&gt;&gt;B&gt;&gt;DB;</span><br><span class="line">    getPA(A,DA,PA);      <span class="comment">// 计算PA</span></span><br><span class="line">    getPA(B,DB,PB);      <span class="comment">// 计算PB</span></span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;PA+PB&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
       
         <categories>
             
