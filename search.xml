@@ -275,9 +275,9 @@
         
         <tags>
             
-            <tag> linux </tag>
-            
             <tag> C/C++ </tag>
+            
+            <tag> linux </tag>
             
         </tags>
         
@@ -340,9 +340,9 @@
         
         <tags>
             
-            <tag> linux </tag>
-            
             <tag> C/C++ </tag>
+            
+            <tag> linux </tag>
             
         </tags>
         
@@ -640,9 +640,9 @@
         
         <tags>
             
-            <tag> linux </tag>
-            
             <tag> C/C++ </tag>
+            
+            <tag> linux </tag>
             
         </tags>
         
@@ -1619,13 +1619,13 @@
         
         <tags>
             
-            <tag> ubuntu </tag>
-            
             <tag> C/C++ </tag>
             
-            <tag> shell </tag>
+            <tag> ubuntu </tag>
             
             <tag> makefile </tag>
+            
+            <tag> shell </tag>
             
         </tags>
         
@@ -1675,9 +1675,9 @@
         
         <tags>
             
-            <tag> ubuntu </tag>
-            
             <tag> C/C++ </tag>
+            
+            <tag> ubuntu </tag>
             
             <tag> makefile </tag>
             
@@ -2326,7 +2326,7 @@ VariantData : 键值数据（一维的变体数组）
 <li>添加百度统计服务</li>
 </ul>
 <p>在<a href="http://tongji.baidu.com/" target="_blank" rel="noopener">百度统计</a>中添加好站点，根据提示获取统计代码</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="undefined">    var _hmt = _hmt || [];</span></span><br><span class="line"><span class="undefined">    (function() &#123;</span></span><br><span class="line"><span class="undefined">    var hm = document.createElement("script");</span></span><br><span class="line"><span class="undefined">    hm.src = "https://hm.baidu.com/hm.js?d34587ee0aac7488b7dd789f9f17f366";</span></span><br><span class="line"><span class="undefined">    var s = document.getElementsByTagName("script")[0];</span></span><br><span class="line"><span class="undefined">    s.parentNode.insertBefore(hm, s);</span></span><br><span class="line"><span class="undefined">    &#125;)();</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> _hmt = _hmt || [];</span></span><br><span class="line"><span class="javascript">    (<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> hm = <span class="built_in">document</span>.createElement(<span class="string">"script"</span>);</span></span><br><span class="line"><span class="javascript">    hm.src = <span class="string">"https://hm.baidu.com/hm.js?d34587ee0aac7488b7dd789f9f17f366"</span>;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> s = <span class="built_in">document</span>.getElementsByTagName(<span class="string">"script"</span>)[<span class="number">0</span>];</span></span><br><span class="line"><span class="undefined">    s.parentNode.insertBefore(hm, s);</span></span><br><span class="line"><span class="undefined">    &#125;)();</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>在 <code>head.ejs</code> 中的 <code>&lt;/head&gt;</code> 前添加以上代码，往后便可在百度统计中查看站点的详细信息啦。</p>
 <h2 id="2016-12-24"><a href="#2016-12-24" class="headerlink" title="2016-12-24"></a>2016-12-24</h2><ul>
 <li>修复RSS无法被正常获取资源的问题</li>
@@ -2434,9 +2434,9 @@ VariantData : 键值数据（一维的变体数组）
         
         <tags>
             
-            <tag> algorithm </tag>
-            
             <tag> matlab </tag>
+            
+            <tag> algorithm </tag>
             
             <tag> signal </tag>
             
@@ -3361,11 +3361,11 @@ Categories=Development;IDE;Java;
         
         <tags>
             
+            <tag> atom </tag>
+            
             <tag> ubuntu </tag>
             
             <tag> linux </tag>
-            
-            <tag> atom </tag>
             
         </tags>
         
