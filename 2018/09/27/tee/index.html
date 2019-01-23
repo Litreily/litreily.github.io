@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><title>Linux指令 - tee的实现 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/8.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Linux指令 - tee的实现</h1><a id="logo" href="/.">LITREILY</a><p class="description">Stay Hungry, Stay Foolish</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> Home</i></a><a href="/archives/"><i class="fa fa-archive"> Archive</i></a><a href="https://litreily.gitbooks.io/notes/"><i class="fa fa-book"> Notes</i></a><a href="/about/"><i class="fa fa-user"> About</i></a><a href="/history/"><i class="fa fa-history"> History</i></a><a href="/atom.xml"><i class="fa fa-rss"> RSS</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">Linux指令 - tee的实现</h1><div class="post-meta">Sep 27, 2018<span> | </span><span class="category"><a href="/categories/嵌入式/">嵌入式</a></span></div><a class="disqus-comment-count" href="/2018/09/27/tee/#vcomment"><span class="valine-comment-count" data-xid="/2018/09/27/tee/"></span><span> Comment</span></a><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">Contents</div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#tee功能简述"><span class="toc-number">1.</span> <span class="toc-text">tee功能简述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参数解析"><span class="toc-number">2.</span> <span class="toc-text">参数解析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#getopt"><span class="toc-number">2.1.</span> <span class="toc-text">getopt</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#getopt-long"><span class="toc-number">2.2.</span> <span class="toc-text">getopt_long</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#usage"><span class="toc-number">2.3.</span> <span class="toc-text">usage</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#小结"><span class="toc-number">2.4.</span> <span class="toc-text">小结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据读写"><span class="toc-number">3.</span> <span class="toc-text">数据读写</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#完整代码"><span class="toc-number">4.</span> <span class="toc-text">完整代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#指令测试"><span class="toc-number">5.</span> <span class="toc-text">指令测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文档"><span class="toc-number">6.</span> <span class="toc-text">参考文档</span></a></li></ol></div></div><div class="post-content"><p>近日学习<a href="https://book.douban.com/subject/25809330/" target="_blank" rel="noopener">《Linux/UNIX 系统编程手册》</a>一书，巩固了C语言中一些常用库函数的使用，主要涉及基本IO操作相关的库函数。为了加深理解，手动实现了Linux系统中的<code>tee</code>指令的功能。借此文记述实现过程。</p>
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><title>Linux指令 - tee的实现 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><body><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="https://litreily.gitbooks.io/notes/">笔记</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li class="m-sch"><form class="form" id="j-formsch" action="/search" method="get"><input class="txt" type="text" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"></form></li></ul></div></nav></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><h1 class="p-title">Linux指令 - tee的实现</h1><div class="p-content"><p>近日学习<a href="https://book.douban.com/subject/25809330/" target="_blank" rel="noopener">《Linux/UNIX 系统编程手册》</a>一书，巩固了C语言中一些常用库函数的使用，主要涉及基本IO操作相关的库函数。为了加深理解，手动实现了Linux系统中的<code>tee</code>指令的功能。借此文记述实现过程。</p>
 <h2 id="tee功能简述"><a href="#tee功能简述" class="headerlink" title="tee功能简述"></a>tee功能简述</h2><p><code>tee</code>类似于一个单输入双输出的三通管道，将标准输入的数据输出到指定文件和标准输出中。为实现这个指令，主要考虑以下几点：</p>
 <ol>
 <li>解析<code>tee</code>包含的命令行参数</li>
@@ -7,10 +7,26 @@
 </ol>
 <p>下面逐步分析每个要点的实现方法。</p>
 <h2 id="参数解析"><a href="#参数解析" class="headerlink" title="参数解析"></a>参数解析</h2><p><code>tee</code>包含以下可选项，本文实现仅考虑<code>-a</code>,<code>--version</code>,<code>--help</code></p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Usage: tee [OPTION]... [FILE]...</span><br><span class="line">Copy standard input to each FILE, and also to standard output.</span><br><span class="line"></span><br><span class="line">  -a, --append              append to the given FILEs, <span class="keyword">do</span> not overwrite</span><br><span class="line">  -i, --ignore-interrupts   ignore interrupt signals</span><br><span class="line">  -p                        diagnose errors writing to non pipes</span><br><span class="line">      --output-error[=MODE]   <span class="built_in">set</span> behavior on write error.  See MODE below</span><br><span class="line">      --<span class="built_in">help</span>     display this <span class="built_in">help</span> and <span class="built_in">exit</span></span><br><span class="line">      --version  output version information and <span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
+<pre><code class="sh">Usage: tee [OPTION]... [FILE]...
+Copy standard input to each FILE, and also to standard output.
+
+  -a, --append              append to the given FILEs, do not overwrite
+  -i, --ignore-interrupts   ignore interrupt signals
+  -p                        diagnose errors writing to non pipes
+      --output-error[=MODE]   set behavior on write error.  See MODE below
+      --help     display this help and exit
+      --version  output version information and exit
+</code></pre>
 <p>为解析命令行的<strong>可选项</strong>，需要用到库函数<code>getopt</code>或<code>getopt_long</code>，前者仅支持短格式，后者支持长短格式。下面对使用这两个函数解析参数的方法进行对比。</p>
 <h3 id="getopt"><a href="#getopt" class="headerlink" title="getopt"></a>getopt</h3><p><code>getopt</code>函数声明及相关参数如下：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getopt</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> * <span class="keyword">const</span> argv[],</span></span></span><br><span class="line"><span class="function"><span class="params">            <span class="keyword">const</span> <span class="keyword">char</span> *optstring)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">char</span> *optarg;</span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">int</span> optind, opterr, optopt;</span><br></pre></td></tr></table></figure>
+<pre><code class="c">#include &lt;unistd.h&gt;
+
+int getopt(int argc, char * const argv[],
+            const char *optstring);
+
+extern char *optarg;
+extern int optind, opterr, optopt;
+</code></pre>
 <ul>
 <li><code>argc</code>: 与main函数的argc一致，代表参数个数</li>
 <li><code>argv</code>: 与main函数的argv一致，代表参数值</li>
@@ -21,9 +37,48 @@
 <li><code>optopt</code>: 是对可选参数字符的一个备份，当输入的参数无效时可用</li>
 </ul>
 <p>下面使用<code>getopt</code>实现对选项<code>-a</code>的解析：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> opt, fd = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">int</span> flag_append = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> flags = O_WRONLY | O_CREAT;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>((opt = getopt(argc, argv, <span class="string">"a"</span>))!=<span class="number">-1</span>) &#123;</span><br><span class="line">        <span class="keyword">switch</span>(opt)&#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'a'</span>:</span><br><span class="line">                flag_append = <span class="number">1</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'?'</span>:</span><br><span class="line">            <span class="keyword">default</span>:</span><br><span class="line">                <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(optind &lt; argc)&#123;</span><br><span class="line">        flags += flag_append ? O_APPEND:O_TRUNC;</span><br><span class="line">        fd = open(argv[optind], flags, S_IRUSR | S_IWUSR</span><br><span class="line">                    | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);</span><br><span class="line">        <span class="keyword">if</span>(fd == <span class="number">-1</span>)&#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">"invaild file -- \"%s\"\n"</span>, argv[optind]);</span><br><span class="line">            <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    output(fd);</span><br><span class="line">    <span class="keyword">if</span>(fd &gt; <span class="number">0</span>)</span><br><span class="line">        close(fd);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="c">int main(int argc, char *argv[])
+{
+    int opt, fd = -1;
+    int flag_append = 0;
+    int flags = O_WRONLY | O_CREAT;
+
+    while((opt = getopt(argc, argv, &quot;a&quot;))!=-1) {
+        switch(opt){
+            case &#39;a&#39;:
+                flag_append = 1;
+                break;
+            case &#39;?&#39;:
+            default:
+                exit(EXIT_FAILURE);
+                break;
+        }
+    }
+
+    if(optind &lt; argc){
+        flags += flag_append ? O_APPEND:O_TRUNC;
+        fd = open(argv[optind], flags, S_IRUSR | S_IWUSR
+                    | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+        if(fd == -1){
+            printf(&quot;invaild file -- \&quot;%s\&quot;\n&quot;, argv[optind]);
+            exit(EXIT_FAILURE);
+        }
+    }
+
+    output(fd);
+    if(fd &gt; 0)
+        close(fd);
+
+    return 0;
+}
+</code></pre>
 <p>以上代码结合<code>while</code>、 <code>switch</code>，使用<code>getopt</code>循环获取和分析可选项。当前只对一个可选项<code>a</code>进行了解析，当包含<code>-a</code>可选项时，flag_append设为1，之后根据该标志为文件的打开方式添加<code>O_APPEND</code>标志，后面读写数据时就会以附加的方式在文件尾部开始写入。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(optind &lt; argc)&#123;</span><br><span class="line">    flags += flag_append ? O_APPEND:O_TRUNC;</span><br><span class="line">    fd = open(argv[optind], flags, S_IRUSR | S_IWUSR</span><br><span class="line">            | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);</span><br><span class="line">    <span class="comment">//...</span></span><br></pre></td></tr></table></figure>
+<pre><code class="c">    if(optind &lt; argc){
+        flags += flag_append ? O_APPEND:O_TRUNC;
+        fd = open(argv[optind], flags, S_IRUSR | S_IWUSR
+                | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+        //...
+</code></pre>
 <blockquote>
 <p>说明：  </p>
 <ol>
@@ -32,20 +87,85 @@
 </ol>
 </blockquote>
 <h3 id="getopt-long"><a href="#getopt-long" class="headerlink" title="getopt_long"></a>getopt_long</h3><p><code>getopt_long</code>定义如下：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;getopt.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getopt_long</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> * <span class="keyword">const</span> argv[],</span></span></span><br><span class="line"><span class="function"><span class="params">            <span class="keyword">const</span> <span class="keyword">char</span> *optstring,</span></span></span><br><span class="line"><span class="function"><span class="params">            <span class="keyword">const</span> struct option *longopts, <span class="keyword">int</span> *longindex)</span></span>;</span><br></pre></td></tr></table></figure>
+<pre><code class="c">#include &lt;getopt.h&gt;
+
+int getopt_long(int argc, char * const argv[],
+            const char *optstring,
+            const struct option *longopts, int *longindex);
+</code></pre>
 <p>与<code>getopt</code>相比，多了两个参数<code>longopts</code>, <code>longindex</code></p>
 <ul>
 <li><code>longopts</code>: 长格式可选项，<code>option</code>结构体指针</li>
 </ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">option</span> &#123;</span></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *name;       <span class="comment">// 名称，如"help"</span></span><br><span class="line">    <span class="keyword">int</span>         has_arg;    <span class="comment">// 带参标志，0 或 1</span></span><br><span class="line">    <span class="keyword">int</span>        *flag;       <span class="comment">// 常设为NULL，若非NULL,将会把val值存入flag</span></span><br><span class="line">    <span class="keyword">int</span>         val;        <span class="comment">// getopt_long的返回值或将存入flag的值</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<pre><code class="c">struct option {
+    const char *name;       // 名称，如&quot;help&quot;
+    int         has_arg;    // 带参标志，0 或 1
+    int        *flag;       // 常设为NULL，若非NULL,将会把val值存入flag
+    int         val;        // getopt_long的返回值或将存入flag的值
+};
+</code></pre>
 <p>当<code>flag</code>为NULL时，<code>getopt_long</code>返回<code>val</code>，否则返回0,并将<code>val</code>值存入<code>flag</code></p>
 <ul>
 <li><code>longindex</code>: 用于存储当前解析的长选项在<code>longopts</code>中的索引值(0,1,…)，通常设为<code>NULL</code></li>
 </ul>
 <p>下面使用<code>getopt_long</code>实现对选项<code>--help</code>，<code>--version</code>, <code>-a</code>的解析：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> opt, fd = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">int</span> flag_append = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> flags = O_WRONLY | O_CREAT;</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">option</span> <span class="title">opts</span>[] = &#123;</span></span><br><span class="line">        &#123;<span class="string">"append"</span>, <span class="number">0</span>, <span class="literal">NULL</span>, <span class="string">'a'</span>&#125;,</span><br><span class="line">        &#123;<span class="string">"help"</span>, <span class="number">0</span>, <span class="literal">NULL</span>, <span class="string">'h'</span>&#125;,</span><br><span class="line">        &#123;<span class="string">"version"</span>, <span class="number">0</span>, <span class="literal">NULL</span>, <span class="string">'v'</span>&#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>((opt = getopt_long(argc, argv, <span class="string">":av"</span>,opts, <span class="literal">NULL</span>))!=<span class="number">-1</span>) &#123;</span><br><span class="line">        <span class="keyword">switch</span>(opt)&#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'a'</span>:</span><br><span class="line">                flag_append = <span class="number">1</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'h'</span>:</span><br><span class="line">                usage();</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'v'</span>:</span><br><span class="line">                <span class="built_in">printf</span>(VERSION<span class="string">"\n"</span>);</span><br><span class="line">                <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'?'</span>:</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">"tee: invaild option -- '%c'\n"</span></span><br><span class="line">                    <span class="string">"Try 'tee --help' for more infomation.\n"</span>, optopt);</span><br><span class="line">            <span class="keyword">default</span>:</span><br><span class="line">                <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(optind &lt; argc)&#123;</span><br><span class="line">        flags += flag_append ? O_APPEND:O_TRUNC;</span><br><span class="line">        fd = open(argv[optind], flags, S_IRUSR | S_IWUSR</span><br><span class="line">            | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);</span><br><span class="line">        <span class="keyword">if</span>(fd == <span class="number">-1</span>)&#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">"invaild file -- \"%s\"\n"</span>, argv[optind]);</span><br><span class="line">            <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    output(fd);</span><br><span class="line">    <span class="keyword">if</span>(fd &gt; <span class="number">0</span>)</span><br><span class="line">        close(fd);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="c">int main(int argc, char *argv[])
+{
+    int opt, fd = -1;
+    int flag_append = 0;
+    int flags = O_WRONLY | O_CREAT;
+
+    struct option opts[] = {
+        {&quot;append&quot;, 0, NULL, &#39;a&#39;},
+        {&quot;help&quot;, 0, NULL, &#39;h&#39;},
+        {&quot;version&quot;, 0, NULL, &#39;v&#39;}
+    };
+
+    while((opt = getopt_long(argc, argv, &quot;:av&quot;,opts, NULL))!=-1) {
+        switch(opt){
+            case &#39;a&#39;:
+                flag_append = 1;
+                break;
+            case &#39;h&#39;:
+                usage();
+                break;
+            case &#39;v&#39;:
+                printf(VERSION&quot;\n&quot;);
+                exit(EXIT_FAILURE);
+                break;
+            case &#39;?&#39;:
+                printf(&quot;tee: invaild option -- &#39;%c&#39;\n&quot;
+                    &quot;Try &#39;tee --help&#39; for more infomation.\n&quot;, optopt);
+            default:
+                exit(EXIT_FAILURE);
+                break;
+        }
+    }
+
+    if(optind &lt; argc){
+        flags += flag_append ? O_APPEND:O_TRUNC;
+        fd = open(argv[optind], flags, S_IRUSR | S_IWUSR
+            | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+        if(fd == -1){
+            printf(&quot;invaild file -- \&quot;%s\&quot;\n&quot;, argv[optind]);
+            exit(EXIT_FAILURE);
+        }
+    }
+
+    output(fd);
+    if(fd &gt; 0)
+        close(fd);
+
+    return 0;
+}
+</code></pre>
 <p>以上代码中，长格式选项数组如下：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">option</span> <span class="title">opts</span>[] = &#123;</span></span><br><span class="line">    &#123;<span class="string">"append"</span>, <span class="number">0</span>, <span class="literal">NULL</span>, <span class="string">'a'</span>&#125;,</span><br><span class="line">    &#123;<span class="string">"help"</span>, <span class="number">0</span>, <span class="literal">NULL</span>, <span class="string">'h'</span>&#125;,</span><br><span class="line">    &#123;<span class="string">"version"</span>, <span class="number">0</span>, <span class="literal">NULL</span>, <span class="string">'v'</span>&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<pre><code class="c">    struct option opts[] = {
+        {&quot;append&quot;, 0, NULL, &#39;a&#39;},
+        {&quot;help&quot;, 0, NULL, &#39;h&#39;},
+        {&quot;version&quot;, 0, NULL, &#39;v&#39;}
+    };
+</code></pre>
 <p>可以看到，当用户分别输入<code>--append</code>,<code>--help</code>,<code>--version</code>时，<code>getopt_long</code>分别返回<code>a</code>，<code>h</code>，<code>v</code>三个字符。</p>
 <p>但注意<code>while((opt = getopt_long(argc, argv, &quot;:av&quot;,opts, NULL))!=-1)</code>只包含了<code>av</code>两个参数，所以当用户输入<code>-h</code>时，程序会认为是无效参数，也就是说<code>--help</code>在这里只支持长格式，而其它两个支持长短两种方式。</p>
 <p>这也是指令的某些选项仅支持长格式的实现方法之一了，其它方法可参考函数<code>getopt_long_only</code></p>
@@ -53,23 +173,200 @@
 <p>说明：<br><code>:av</code>最前面的冒号可以起到<code>opterr=0</code>的效果，就是在参数无效时不给出默认提示</p>
 </blockquote>
 <h3 id="usage"><a href="#usage" class="headerlink" title="usage"></a>usage</h3><p><a href="#getopt_long">getopt_long</a>提到的<code>--help</code>选项是绝大多数指令都会实现的，用于提供帮助信息，下面是<code>tee</code>的<code>--help</code>输出。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">usage</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"Usage: tee [OPTION]... [FILE]\n"</span></span><br><span class="line">        <span class="string">"Copy standard input to each FILE, and also to standard output.\n\n"</span></span><br><span class="line">        <span class="string">"  -a, --append   append to the given FILEs, do not overwrite\n"</span></span><br><span class="line">        <span class="string">"  -v, --version  output version information and exit\n"</span></span><br><span class="line">        <span class="string">"      --help     display this help and exit\n"</span></span><br><span class="line">    );</span><br><span class="line">    <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="c">void usage(){
+    printf(&quot;Usage: tee [OPTION]... [FILE]\n&quot;
+        &quot;Copy standard input to each FILE, and also to standard output.\n\n&quot;
+        &quot;  -a, --append   append to the given FILEs, do not overwrite\n&quot;
+        &quot;  -v, --version  output version information and exit\n&quot;
+        &quot;      --help     display this help and exit\n&quot;
+    );
+    exit(EXIT_FAILURE);
+}
+</code></pre>
 <h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>关于参数解析，说到底就是<code>getopt</code>或<code>getopt_long</code>的应用。以上提到的可选参数中，其实也就<code>-a</code>会影响后续写入文件的方式，其它两个长格式选项均用于打印信息，之后便直接退出了。</p>
 <p>而非可选项也只考虑了一个待写入文件的文件名，暂不考虑同时多文件写入。</p>
 <h2 id="数据读写"><a href="#数据读写" class="headerlink" title="数据读写"></a>数据读写</h2><p><code>tee</code>数据读写很简单，仅需不断读取标准输入(stdin)数据，然后写入标准输出(stdout)和文件中，直到无数据可读或遇到中断信号为止。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BUF_SIZE 512</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">output</span><span class="params">(<span class="keyword">int</span> fd)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">char</span> buffer[BUF_SIZE] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="keyword">char</span> ch;</span><br><span class="line"></span><br><span class="line">    fflush(<span class="built_in">stdin</span>);</span><br><span class="line">    fflush(<span class="built_in">stdout</span>);</span><br><span class="line">    <span class="keyword">while</span>(read(STDIN_FILENO, &amp;ch, <span class="number">1</span>) &gt; <span class="number">0</span>)&#123; <span class="comment">// read from stdin</span></span><br><span class="line">        buffer[i++] = ch;</span><br><span class="line">        <span class="keyword">if</span>(ch = <span class="string">'\n'</span> || i == BUF_SIZE)&#123;</span><br><span class="line">            write(STDOUT_FILENO, buffer, i); <span class="comment">// output to stdout</span></span><br><span class="line">            <span class="keyword">if</span>(fd &gt; <span class="number">0</span>) write(fd, buffer, i);</span><br><span class="line">            <span class="built_in">memset</span>(buffer, <span class="number">0</span>, <span class="keyword">sizeof</span>(buffer));</span><br><span class="line">            i = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="c">#define BUF_SIZE 512
+void output(int fd)
+{
+    int i = 0;
+    char buffer[BUF_SIZE] = {0};
+    char ch;
+
+    fflush(stdin);
+    fflush(stdout);
+    while(read(STDIN_FILENO, &amp;ch, 1) &gt; 0){ // read from stdin
+        buffer[i++] = ch;
+        if(ch = &#39;\n&#39; || i == BUF_SIZE){
+            write(STDOUT_FILENO, buffer, i); // output to stdout
+            if(fd &gt; 0) write(fd, buffer, i);
+            memset(buffer, 0, sizeof(buffer));
+            i = 0;
+        }
+    }
+}
+</code></pre>
 <p><code>STDIN_FILENO</code>, <code>STDOUT_FILENO</code>分别对应标准输入和标准输出的文件描述符<code>0</code>, <code>1</code>。这两个加上标准错误输出<code>STDERR_FILENO</code>是所有应用程序默认打开的，所以无需手动<code>open</code>。</p>
 <p>此外，输出函数<code>output</code>会判断传入的文件描述符是否有效，如果无效则不会写入文件，仅将数据输出至标准输出。</p>
-<h2 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;getopt.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BUF_SIZE 512</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> VERSION <span class="meta-string">"litreily 1.0.0"</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">output</span><span class="params">(<span class="keyword">int</span> fd)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">char</span> buffer[BUF_SIZE] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="keyword">char</span> ch;</span><br><span class="line"></span><br><span class="line">    fflush(<span class="built_in">stdin</span>);</span><br><span class="line">    fflush(<span class="built_in">stdout</span>);</span><br><span class="line">    <span class="keyword">while</span>(read(STDIN_FILENO, &amp;ch, <span class="number">1</span>) &gt; <span class="number">0</span>)&#123;</span><br><span class="line">        buffer[i++] = ch;</span><br><span class="line">        <span class="keyword">if</span>(ch = <span class="string">'\n'</span> || i == BUF_SIZE)&#123;</span><br><span class="line">            write(STDOUT_FILENO, buffer, i); <span class="comment">// output to stdout</span></span><br><span class="line">            <span class="keyword">if</span>(fd &gt; <span class="number">0</span>) write(fd, buffer, i);</span><br><span class="line">            <span class="built_in">memset</span>(buffer, <span class="number">0</span>, <span class="keyword">sizeof</span>(buffer));</span><br><span class="line">            i = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">usage</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"Usage: tee [OPTION]... [FILE]\n"</span></span><br><span class="line">        <span class="string">"Copy standard input to each FILE, and also to standard output.\n\n"</span></span><br><span class="line">        <span class="string">"  -a, --append   append to the given FILEs, do not overwrite\n"</span></span><br><span class="line">        <span class="string">"  -v, --version  output version information and exit\n"</span></span><br><span class="line">        <span class="string">"      --help     display this help and exit\n"</span></span><br><span class="line">    );</span><br><span class="line">    <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> opt, fd = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">int</span> flag_append = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> flags = O_WRONLY | O_CREAT;</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">option</span> <span class="title">opts</span>[] = &#123;</span></span><br><span class="line">        &#123;<span class="string">"append"</span>, <span class="number">0</span>, <span class="literal">NULL</span>, <span class="string">'a'</span>&#125;,</span><br><span class="line">        &#123;<span class="string">"help"</span>, <span class="number">0</span>, <span class="literal">NULL</span>, <span class="string">'h'</span>&#125;,</span><br><span class="line">        &#123;<span class="string">"version"</span>, <span class="number">0</span>, <span class="literal">NULL</span>, <span class="string">'v'</span>&#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>((opt = getopt_long(argc, argv, <span class="string">":av"</span>,opts, <span class="literal">NULL</span>))!=<span class="number">-1</span>) &#123;</span><br><span class="line">        <span class="keyword">switch</span>(opt)&#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'a'</span>:</span><br><span class="line">                flag_append = <span class="number">1</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'h'</span>:</span><br><span class="line">                usage();</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'v'</span>:</span><br><span class="line">                <span class="built_in">printf</span>(VERSION<span class="string">"\n"</span>);</span><br><span class="line">                <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'?'</span>:</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">"tee: invaild option -- '%c'\n"</span></span><br><span class="line">                    <span class="string">"Try 'tee --help' for more infomation.\n"</span>, optopt);</span><br><span class="line">            <span class="keyword">default</span>:</span><br><span class="line">                <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(optind &lt; argc)&#123;</span><br><span class="line">        flags += flag_append ? O_APPEND:O_TRUNC;</span><br><span class="line">        fd = open(argv[optind], flags, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);</span><br><span class="line">        <span class="keyword">if</span>(fd == <span class="number">-1</span>)&#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">"invaild file -- \"%s\"\n"</span>, argv[optind]);</span><br><span class="line">            <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    output(fd);</span><br><span class="line">    <span class="keyword">if</span>(fd &gt; <span class="number">0</span>)</span><br><span class="line">        close(fd);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h2><pre><code class="c">#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;fcntl.h&gt;
+#include &lt;string.h&gt;
+#include &lt;getopt.h&gt;
+
+#define BUF_SIZE 512
+#define VERSION &quot;litreily 1.0.0&quot;
+
+void output(int fd)
+{
+    int i = 0;
+    char buffer[BUF_SIZE] = {0};
+    char ch;
+
+    fflush(stdin);
+    fflush(stdout);
+    while(read(STDIN_FILENO, &amp;ch, 1) &gt; 0){
+        buffer[i++] = ch;
+        if(ch = &#39;\n&#39; || i == BUF_SIZE){
+            write(STDOUT_FILENO, buffer, i); // output to stdout
+            if(fd &gt; 0) write(fd, buffer, i);
+            memset(buffer, 0, sizeof(buffer));
+            i = 0;
+        }
+    }
+}
+
+void usage(){
+    printf(&quot;Usage: tee [OPTION]... [FILE]\n&quot;
+        &quot;Copy standard input to each FILE, and also to standard output.\n\n&quot;
+        &quot;  -a, --append   append to the given FILEs, do not overwrite\n&quot;
+        &quot;  -v, --version  output version information and exit\n&quot;
+        &quot;      --help     display this help and exit\n&quot;
+    );
+    exit(EXIT_FAILURE);
+}
+
+int main(int argc, char *argv[])
+{
+    int opt, fd = -1;
+    int flag_append = 0;
+    int flags = O_WRONLY | O_CREAT;
+
+    struct option opts[] = {
+        {&quot;append&quot;, 0, NULL, &#39;a&#39;},
+        {&quot;help&quot;, 0, NULL, &#39;h&#39;},
+        {&quot;version&quot;, 0, NULL, &#39;v&#39;}
+    };
+
+    while((opt = getopt_long(argc, argv, &quot;:av&quot;,opts, NULL))!=-1) {
+        switch(opt){
+            case &#39;a&#39;:
+                flag_append = 1;
+                break;
+            case &#39;h&#39;:
+                usage();
+                break;
+            case &#39;v&#39;:
+                printf(VERSION&quot;\n&quot;);
+                exit(EXIT_FAILURE);
+                break;
+            case &#39;?&#39;:
+                printf(&quot;tee: invaild option -- &#39;%c&#39;\n&quot;
+                    &quot;Try &#39;tee --help&#39; for more infomation.\n&quot;, optopt);
+            default:
+                exit(EXIT_FAILURE);
+                break;
+        }
+    }
+
+    if(optind &lt; argc){
+        flags += flag_append ? O_APPEND:O_TRUNC;
+        fd = open(argv[optind], flags, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+        if(fd == -1){
+            printf(&quot;invaild file -- \&quot;%s\&quot;\n&quot;, argv[optind]);
+            exit(EXIT_FAILURE);
+        }
+    }
+
+    output(fd);
+    if(fd &gt; 0)
+        close(fd);
+
+    return 0;
+}
+</code></pre>
 <h2 id="指令测试"><a href="#指令测试" class="headerlink" title="指令测试"></a>指令测试</h2><p>使用<code>gcc</code>完成编译，得到<code>tee</code>可执行文件</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc tee.c -o tee</span><br></pre></td></tr></table></figure>
+<pre><code class="sh">gcc tee.c -o tee
+</code></pre>
 <p>下面对指令进行测试：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">$ ./tee --<span class="built_in">help</span></span><br><span class="line">Usage: tee [OPTION]... [FILE]</span><br><span class="line">Copy standard input to each FILE, and also to standard output.</span><br><span class="line"></span><br><span class="line">  -a, --append   append to the given FILEs, <span class="keyword">do</span> not overwrite</span><br><span class="line">  -v, --version  output version information and <span class="built_in">exit</span></span><br><span class="line">      --<span class="built_in">help</span>     display this <span class="built_in">help</span> and <span class="built_in">exit</span></span><br><span class="line">$ ./tee --version</span><br><span class="line">litreily 1.0.0</span><br><span class="line">$ ./tee -h</span><br><span class="line">tee: invaild option -- <span class="string">'h'</span></span><br><span class="line">Try <span class="string">'tee --help'</span> <span class="keyword">for</span> more infomation.</span><br><span class="line">$ ./tee -v</span><br><span class="line">litreily 1.0.0</span><br><span class="line">$ ./tee -a -d</span><br><span class="line">tee: invaild option -- <span class="string">'d'</span></span><br><span class="line">Try <span class="string">'tee --help'</span> <span class="keyword">for</span> more infomation.</span><br><span class="line">$ ./tee test.txt</span><br><span class="line">1</span><br><span class="line">1</span><br><span class="line">22</span><br><span class="line">22</span><br><span class="line">$ cat test.txt</span><br><span class="line">1</span><br><span class="line">22</span><br><span class="line">$ ./tee -a test.txt</span><br><span class="line">4444</span><br><span class="line">4444</span><br><span class="line">55555</span><br><span class="line">55555</span><br><span class="line">$ cat test.txt</span><br><span class="line">1</span><br><span class="line">22</span><br><span class="line">4444</span><br><span class="line">55555</span><br><span class="line">$ ls | ./tee test.txt</span><br><span class="line">main.c</span><br><span class="line">Makefile</span><br><span class="line">README.md</span><br><span class="line">tee</span><br><span class="line">tee.c</span><br><span class="line">test.txt</span><br><span class="line">$ cat test.txt</span><br><span class="line">main.c</span><br><span class="line">Makefile</span><br><span class="line">README.md</span><br><span class="line">tee</span><br><span class="line">tee.c</span><br><span class="line">test.txt</span><br></pre></td></tr></table></figure>
+<pre><code class="sh">$ ./tee --help
+Usage: tee [OPTION]... [FILE]
+Copy standard input to each FILE, and also to standard output.
+
+  -a, --append   append to the given FILEs, do not overwrite
+  -v, --version  output version information and exit
+      --help     display this help and exit
+$ ./tee --version
+litreily 1.0.0
+$ ./tee -h
+tee: invaild option -- &#39;h&#39;
+Try &#39;tee --help&#39; for more infomation.
+$ ./tee -v
+litreily 1.0.0
+$ ./tee -a -d
+tee: invaild option -- &#39;d&#39;
+Try &#39;tee --help&#39; for more infomation.
+$ ./tee test.txt
+1
+1
+22
+22
+$ cat test.txt
+1
+22
+$ ./tee -a test.txt
+4444
+4444
+55555
+55555
+$ cat test.txt
+1
+22
+4444
+55555
+$ ls | ./tee test.txt
+main.c
+Makefile
+README.md
+tee
+tee.c
+test.txt
+$ cat test.txt
+main.c
+Makefile
+README.md
+tee
+tee.c
+test.txt
+</code></pre>
 <h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ol>
 <li><a href="http://man.linuxde.net/tee" target="_blank" rel="noopener">tee命令</a></li>
 <li><a href="http://blog.zhangjikai.com/2016/03/05/%E3%80%90C%E3%80%91%E8%A7%A3%E6%9E%90%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%8F%82%E6%95%B0--getopt%E5%92%8Cgetopt_long/" target="_blank" rel="noopener">解析命令行参数–getopt和getopt_long</a></li>
 </ol>
-</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a class="article-share-link" data-url="http://www.litreily.top/2018/09/27/tee/" data-id="cjr7rt7l0004h6owt2iq0vgp5" data-qrcode="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAK4AAACuCAAAAACKZ2kyAAAByklEQVR42u3aQW7DMAwEwPz/0+41QBp5KUqqC4xPQWAr4xwWFKnXK76uj+v9++Se928+n1184eLitrnX8Brfk4DGr5cbcHFxz3O/Jcb485g7t/7Ns7i4uI/k9uupccDh4uL+X25SJCVoXFzcJ3OT7c04hjqvtGWvhouL2+DmRcm+z1v6u7i4uFPcq3h1XqMaXr88hYuLe4SbB0p1WJIMVid/FxcX9wg3iae8HOlvY8pP4eLibuCuDbLOOlH7FRcXdzM3H2YkQ9Zq+yMvj3Bxcc9zV40xquPV5BfLXRxcXNw2tzM46VDmmrC4uLhnuHmjc1yU5NFWPXJxs/nBxcXdwK1uY+Y2MMmhrmjzg4uLe4Q7t+WolizLiiFcXNwj3DyqqqGWtzySpmphyIqLi3uEm1OqA9QEvWAmjIuL2+AmSySblrneZqH5gouL+6fc6vCjP6aNghUXF3czd65wmTs2kR/DWlxn4eLidjNkMuzyxspcW6T8Mri4uG1uHl6dAxZJjEb/Ky4u7kFuHjT9YOoEKC4u7vO51bHKOMKigS4uLu7jueN1+oe3vo5ScHFxj3B3N0nzFurNH4SLi3uEOzf47CxXbbbi4uIe5P4AwJfsC3vkwKcAAAAASUVORK5CYII=">Share</a><div class="tags"><a href="/tags/C-C/">C/C++</a><a href="/tags/linux/">linux</a></div><div class="post-nav"><a class="pre" href="/2018/10/25/io-cache/">Linux中的文件I/O缓冲</a><a class="next" href="/2018/09/20/coredump/">OpenWrt中使用gdb分析coredump</a></div><div id="vcomment"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+</div></article></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2018/10/25/io-cache/">&lt; Linux中的文件I/O缓冲</a><a class="next" href="/2018/09/20/coredump/">OpenWrt中使用gdb分析coredump &gt;</a></div><div id="valine-comment"><style type="text/css">.v * { color: #CECECE; }
+.v a { color: #0F9FB4; }
+.v a:hover { color: #216C73; }
+.v li { list-style: inherit; }
+.v .vwrap { border: 1px solid #223441; border-radius: 0; }
+.v .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.v .vbtn { border-radius: 0; color: #cecece; background: none; }
+.v .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.v .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.v .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.v code, .v pre,.v .vlist .vcard .vhead .vsys { background: #203240; }
+.v .vlist .vcard .vcontent.expand:before { background: linear-gradient(180deg,hsla(206,33%,19%,0),hsla(206,33%,19%,.9)); }
+.v .vlist .vcard .vcontent.expand:after { background: hsla(206,33%,19%,.9); }</style><div id="vcomment"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
 var verify = 'false' == true ? true : false;
 var GUEST_INFO = ['nick','mail','link'];
 var guest_info = 'nick,mail,link'.split(',').filter(function(item){
@@ -86,10 +383,4 @@ window.valine = new Valine({
   avatar:'identicon',
   guest_info:guest_info,
   pageSize:'10'
-})</script></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/LabVIEW/">LabVIEW</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Matlab/">Matlab</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Media/">Media</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Network/">Network</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web/">Web</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/嵌入式/">嵌入式</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/杂物柜/">杂物柜</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/tags/office/" style="font-size: 12px;">office</a> <a href="/tags/test/" style="font-size: 15.43px;">test</a> <a href="/tags/ruby/" style="font-size: 13.71px;">ruby</a> <a href="/tags/literature/" style="font-size: 12px;">literature</a> <a href="/tags/video/" style="font-size: 13.71px;">video</a> <a href="/tags/algorithm/" style="font-size: 20.57px;">algorithm</a> <a href="/tags/matlab/" style="font-size: 17.14px;">matlab</a> <a href="/tags/windows/" style="font-size: 13.71px;">windows</a> <a href="/tags/labview/" style="font-size: 22.29px;">labview</a> <a href="/tags/tdms/" style="font-size: 13.71px;">tdms</a> <a href="/tags/brackets/" style="font-size: 12px;">brackets</a> <a href="/tags/git/" style="font-size: 15.43px;">git</a> <a href="/tags/tools/" style="font-size: 17.14px;">tools</a> <a href="/tags/utorrent/" style="font-size: 12px;">utorrent</a> <a href="/tags/atom/" style="font-size: 13.71px;">atom</a> <a href="/tags/C-C/" style="font-size: 24px;">C/C++</a> <a href="/tags/ubuntu/" style="font-size: 22.29px;">ubuntu</a> <a href="/tags/linux/" style="font-size: 18.86px;">linux</a> <a href="/tags/music/" style="font-size: 13.71px;">music</a> <a href="/tags/signal/" style="font-size: 13.71px;">signal</a> <a href="/tags/VS/" style="font-size: 13.71px;">VS</a> <a href="/tags/stm32/" style="font-size: 13.71px;">stm32</a> <a href="/tags/hexo/" style="font-size: 13.71px;">hexo</a> <a href="/tags/log/" style="font-size: 12px;">log</a> <a href="/tags/RSS/" style="font-size: 12px;">RSS</a> <a href="/tags/Feed/" style="font-size: 12px;">Feed</a> <a href="/tags/FreeRTOS/" style="font-size: 12px;">FreeRTOS</a> <a href="/tags/jekyll/" style="font-size: 15.43px;">jekyll</a> <a href="/tags/word/" style="font-size: 12px;">word</a> <a href="/tags/LWD/" style="font-size: 12px;">LWD</a> <a href="/tags/telnet/" style="font-size: 12px;">telnet</a> <a href="/tags/smtp/" style="font-size: 12px;">smtp</a> <a href="/tags/wireshark/" style="font-size: 12px;">wireshark</a> <a href="/tags/tmux/" style="font-size: 13.71px;">tmux</a> <a href="/tags/mysql/" style="font-size: 12px;">mysql</a> <a href="/tags/centos/" style="font-size: 12px;">centos</a> <a href="/tags/ddos/" style="font-size: 12px;">ddos</a> <a href="/tags/hping3/" style="font-size: 12px;">hping3</a> <a href="/tags/spider/" style="font-size: 17.14px;">spider</a> <a href="/tags/scrapy/" style="font-size: 12px;">scrapy</a> <a href="/tags/shell/" style="font-size: 12px;">shell</a> <a href="/tags/makefile/" style="font-size: 13.71px;">makefile</a> <a href="/tags/sort/" style="font-size: 12px;">sort</a> <a href="/tags/visualization/" style="font-size: 12px;">visualization</a> <a href="/tags/pug/" style="font-size: 12px;">pug</a> <a href="/tags/stdio/" style="font-size: 12px;">stdio</a> <a href="/tags/cache/" style="font-size: 12px;">cache</a> <a href="/tags/buffer/" style="font-size: 12px;">buffer</a> <a href="/tags/pypcap/" style="font-size: 12px;">pypcap</a> <a href="/tags/dpkt/" style="font-size: 12px;">dpkt</a> <a href="/tags/queue/" style="font-size: 12px;">queue</a> <a href="/tags/xlwt/" style="font-size: 12px;">xlwt</a> <a href="/tags/sina/" style="font-size: 12px;">sina</a> <a href="/tags/lofter/" style="font-size: 12px;">lofter</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/12/31/pypcap-install/">Python之pypcap库的安装及简单抓包工具的实现</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/25/io-cache/">Linux中的文件I/O缓冲</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/27/tee/">Linux指令 - tee的实现</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/20/coredump/">OpenWrt中使用gdb分析coredump</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/31/pug-synax/">网页模板pug基本语法</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Links</i></div><ul></ul><a href="https://www.smslit.top" title="smslit-水木十里" target="_blank">smslit-水木十里</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2019 <a href="/." rel="nofollow">LITREILY.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> manupassant.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.css"><script type="text/javascript" src="/js/search.js?v=0.0.0"></script><script>var search_path = 'search.xml';
-if (search_path.length == 0) {
-   search_path = 'search.xml';
-}
-var path = '/' + search_path;
-searchFunc(path, 'local-search-input', 'local-search-result');
-</script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
+})</script></div></section><footer><p>Copyright © 2019 <a href="/." rel="nofollow">LITREILY | </a>Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer><script type="text/javascript" src="/plugins/prettify/prettify.js"></script></div></div></div></body></html>

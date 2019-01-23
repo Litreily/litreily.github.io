@@ -1,5 +1,7 @@
-<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><title>Python之pypcap库的安装及简单抓包工具的实现 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/8.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Python之pypcap库的安装及简单抓包工具的实现</h1><a id="logo" href="/.">LITREILY</a><p class="description">Stay Hungry, Stay Foolish</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> Home</i></a><a href="/archives/"><i class="fa fa-archive"> Archive</i></a><a href="https://litreily.gitbooks.io/notes/"><i class="fa fa-book"> Notes</i></a><a href="/about/"><i class="fa fa-user"> About</i></a><a href="/history/"><i class="fa fa-history"> History</i></a><a href="/atom.xml"><i class="fa fa-rss"> RSS</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">Python之pypcap库的安装及简单抓包工具的实现</h1><div class="post-meta">Dec 31, 2018<span> | </span><span class="category"><a href="/categories/Python/">Python</a></span></div><a class="disqus-comment-count" href="/2018/12/31/pypcap-install/#vcomment"><span class="valine-comment-count" data-xid="/2018/12/31/pypcap-install/"></span><span> Comment</span></a><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">Contents</div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux-端安装-pypcap"><span class="toc-number">1.</span> <span class="toc-text">Linux 端安装 pypcap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Windows-端安装-pypcap"><span class="toc-number">2.</span> <span class="toc-text">Windows 端安装 pypcap</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#下载文件"><span class="toc-number">2.1.</span> <span class="toc-text">下载文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装"><span class="toc-number">2.2.</span> <span class="toc-text">安装</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#简单使用"><span class="toc-number">3.</span> <span class="toc-text">简单使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#findalldevs"><span class="toc-number">3.1.</span> <span class="toc-text">findalldevs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pcap-pcap"><span class="toc-number">3.2.</span> <span class="toc-text">pcap.pcap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setfilter"><span class="toc-number">3.3.</span> <span class="toc-text">setfilter</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#抓包"><span class="toc-number">3.4.</span> <span class="toc-text">抓包</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#简易抓包工具"><span class="toc-number">4.</span> <span class="toc-text">简易抓包工具</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#简要说明"><span class="toc-number">4.1.</span> <span class="toc-text">简要说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#抓包测试"><span class="toc-number">4.2.</span> <span class="toc-text">抓包测试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol></div></div><div class="post-content"><p><a href="https://github.com/pynetwork/pypcap" target="_blank" rel="noopener">pypcap</a>是一个对<code>libpcap</code>C库进行封装和简化的面向对象的抓包工具库，可以非常方便的用于抓包和过滤，结合<code>dpkt</code>解析库可以完成许多网络数据包的抓取和分析。本文讲述的就是如何使用<code>pypcap</code>及<code>dpkt</code>库实现简单抓包工具，也称为嗅探器(sniffer).</p>
-<h2 id="Linux-端安装-pypcap"><a href="#Linux-端安装-pypcap" class="headerlink" title="Linux 端安装 pypcap"></a>Linux 端安装 pypcap</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install libpcap-dev</span><br><span class="line">sudo pip install pypcap</span><br></pre></td></tr></table></figure>
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><title>Python之pypcap库的安装及简单抓包工具的实现 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><body><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="https://litreily.gitbooks.io/notes/">笔记</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li class="m-sch"><form class="form" id="j-formsch" action="/search" method="get"><input class="txt" type="text" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"></form></li></ul></div></nav></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><h1 class="p-title">Python之pypcap库的安装及简单抓包工具的实现</h1><div class="p-content"><p><a href="https://github.com/pynetwork/pypcap" target="_blank" rel="noopener">pypcap</a>是一个对<code>libpcap</code>C库进行封装和简化的面向对象的抓包工具库，可以非常方便的用于抓包和过滤，结合<code>dpkt</code>解析库可以完成许多网络数据包的抓取和分析。本文讲述的就是如何使用<code>pypcap</code>及<code>dpkt</code>库实现简单抓包工具，也称为嗅探器(sniffer).</p>
+<h2 id="Linux-端安装-pypcap"><a href="#Linux-端安装-pypcap" class="headerlink" title="Linux 端安装 pypcap"></a>Linux 端安装 pypcap</h2><pre><code class="bash">sudo apt-get install libpcap-dev
+sudo pip install pypcap
+</code></pre>
 <p>这里有个问题,如果使用<code>Anaconda</code>目录的<code>pip</code>安装则可能失败,目前原因未明,但官方的<code>python3</code>对应的<code>pip3</code>及<code>python2</code>对应的<code>pip</code>均无此问题.</p>
 <a id="more"></a>
 <h2 id="Windows-端安装-pypcap"><a href="#Windows-端安装-pypcap" class="headerlink" title="Windows 端安装 pypcap"></a>Windows 端安装 pypcap</h2><p>根据<code>pypcap</code>官方说明：</p>
@@ -26,21 +28,163 @@
 </ol>
 <p>在第三步需要注意的是，如果Python版本为3.7.2（其它大于3.7的版本没试过）有可能编译失败，因为有个头文件<code>pystate.h</code>在高版本会有更新，导致结构体<code>_ts PyThreadState</code>中的某些参数不识别，从而提示错误<code>pcap.c(22849): error C2039: &#39;exc_value&#39;: is not a member of &#39;_ts&#39;</code>等。之后我将版本换至3.6.6后便正常编译了。</p>
 <p>安装完成后，可以进入<code>python</code>执行<code>import pcap</code>查看是否已经可以正常导入。</p>
-<h2 id="简单使用"><a href="#简单使用" class="headerlink" title="简单使用"></a>简单使用</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pcap</span><br><span class="line"></span><br><span class="line"><span class="comment"># list all of the Internet devices</span></span><br><span class="line">devs = pcap.findalldevs()</span><br><span class="line">print(*devs, sep=<span class="string">'\n'</span>)</span><br><span class="line"></span><br><span class="line">pc = pcap.pcap(devs[<span class="number">3</span>], promisc=<span class="keyword">True</span>, immediate=<span class="keyword">True</span>, timeout_ms=<span class="number">50</span>)</span><br><span class="line"><span class="comment"># fiter http pcakets</span></span><br><span class="line">pc.setfilter(<span class="string">'tcp port 80'</span>)</span><br><span class="line"><span class="keyword">for</span> ptime, pdata <span class="keyword">in</span> pc:</span><br><span class="line">    print(ptime, pdata)</span><br></pre></td></tr></table></figure>
+<h2 id="简单使用"><a href="#简单使用" class="headerlink" title="简单使用"></a>简单使用</h2><pre><code class="python">import pcap
+
+# list all of the Internet devices
+devs = pcap.findalldevs()
+print(*devs, sep=&#39;\n&#39;)
+
+pc = pcap.pcap(devs[3], promisc=True, immediate=True, timeout_ms=50)
+# fiter http pcakets
+pc.setfilter(&#39;tcp port 80&#39;)
+for ptime, pdata in pc:
+    print(ptime, pdata)
+</code></pre>
 <p>接下来简单解释下几个主要函数</p>
 <h3 id="findalldevs"><a href="#findalldevs" class="headerlink" title="findalldevs"></a>findalldevs</h3><p><code>findalldevs</code>可以列出当前操作系统的所有网络接口,但是<code>windows</code>和<code>Linux</code>的输出风格不大一样,下面来看看.</p>
 <p>Linux版输出简单明了,若我猜的不错,输出的首个接口便是电脑的有线接口(本人台式机,Ubuntu系统),至少在我这是适用的.</p>
-<figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">➜ python</span><br><span class="line">Python 3.6.7 (default, Oct 22 2018, 11:32:17)</span><br><span class="line">[GCC 8.2.0] on linux</span><br><span class="line">Type <span class="string">"help"</span>, <span class="string">"copyright"</span>, <span class="string">"credits"</span> or <span class="string">"license"</span> <span class="keyword">for</span> more information.</span><br><span class="line">&gt;&gt;&gt; import pcap</span><br><span class="line">&gt;&gt;&gt; pcap.findalldevs()</span><br><span class="line">[<span class="string">'enp2s0'</span>, <span class="string">'any'</span>, <span class="string">'lo'</span>, <span class="string">'nflog'</span>, <span class="string">'nfqueue'</span>, <span class="string">'usbmon1'</span>, <span class="string">'usbmon2'</span>]</span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+<pre><code class="zsh">➜ python
+Python 3.6.7 (default, Oct 22 2018, 11:32:17)
+[GCC 8.2.0] on linux
+Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
+&gt;&gt;&gt; import pcap
+&gt;&gt;&gt; pcap.findalldevs()
+[&#39;enp2s0&#39;, &#39;any&#39;, &#39;lo&#39;, &#39;nflog&#39;, &#39;nfqueue&#39;, &#39;usbmon1&#39;, &#39;usbmon2&#39;]
+&gt;&gt;&gt;
+</code></pre>
 <p>在<code>ubuntu</code>及大部分Linux系统中,均可使用<code>ip route</code>或是<code>ifconfig</code>来获取接口名，据此甚至可以自动获取接口名．</p>
 <p>Windows版则比较复杂，下面是某台电脑<code>win10</code>操作系统输出的结果，这个直接看是看不出什么的, 因为使用<code>cmd</code>指令<code>ipconfig /all</code>输出的接口信息并不包含以下内容，而是接口名称及描述信息等，如果想知道下面接口如何与接口名对应起来，可以参考后面抓包工具使用注册表来获取接口信息,或是打开<code>wireshark</code>抓包，每个报文的帧头都会显示当前接口的接口信息．</p>
-<figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; import pcap</span><br><span class="line">&gt;&gt;&gt; pcap.findalldevs()</span><br><span class="line">[<span class="string">'\Device\NPF_&#123;839768E4-726A-48BB-9CEC-BD6FD670CB8F&#125;'</span>, <span class="string">'\Device\NPF_&#123;C4D1AF17-C5C9-40C5-90F8-17781657FC9E&#125;'</span>, <span class="string">'\Device\NPF_&#123;26024876-9711-428F-89D3-B91D2C488AC5&#125;'</span>, <span class="string">'\Device\NPF_&#123;E26BFFEF-0644-4C13-8016-EB408AE1D471&#125;'</span>, <span class="string">'\Device\NPF_&#123;9ED3674C-211E-4A57-923A-F8DBE6E6B704&#125;'</span>, <span class="string">'\Device\NPF_&#123;A0B8B562-F309-44F3-95A1-BF34F5465925&#125;'</span>, <span class="string">'\Device\NPF_&#123;9D76B006-6946-4C88-AED2-7F7A9194303C&#125;'</span>]</span><br></pre></td></tr></table></figure>
-<h3 id="pcap-pcap"><a href="#pcap-pcap" class="headerlink" title="pcap.pcap"></a>pcap.pcap</h3><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pc = pcap.pcap(devs[<span class="number">3</span>], promisc=<span class="keyword">True</span>, immediate=<span class="keyword">True</span>, timeout_ms=<span class="number">50</span>)</span><br></pre></td></tr></table></figure>
+<pre><code class="zsh">&gt;&gt;&gt; import pcap
+&gt;&gt;&gt; pcap.findalldevs()
+[&#39;\Device\NPF_{839768E4-726A-48BB-9CEC-BD6FD670CB8F}&#39;, &#39;\Device\NPF_{C4D1AF17-C5C9-40C5-90F8-17781657FC9E}&#39;, &#39;\Device\NPF_{26024876-9711-428F-89D3-B91D2C488AC5}&#39;, &#39;\Device\NPF_{E26BFFEF-0644-4C13-8016-EB408AE1D471}&#39;, &#39;\Device\NPF_{9ED3674C-211E-4A57-923A-F8DBE6E6B704}&#39;, &#39;\Device\NPF_{A0B8B562-F309-44F3-95A1-BF34F5465925}&#39;, &#39;\Device\NPF_{9D76B006-6946-4C88-AED2-7F7A9194303C}&#39;]
+</code></pre>
+<h3 id="pcap-pcap"><a href="#pcap-pcap" class="headerlink" title="pcap.pcap"></a>pcap.pcap</h3><pre><code class="py">pc = pcap.pcap(devs[3], promisc=True, immediate=True, timeout_ms=50)
+</code></pre>
 <p>以上代码定义了一个pcap对象，首个参数<code>devs[3]</code>对应接口名，<code>promisc</code>为真代表打开混杂模式，<code>immediate</code>代表立即模式，启用将不缓存数据包,<code>timeout_ms</code>代表接收数据包的超时时间</p>
 <h3 id="setfilter"><a href="#setfilter" class="headerlink" title="setfilter"></a>setfilter</h3><p><code>setfilter</code>用来设置数据包过滤器，比如只想抓<code>http</code>的包，那就通过<code>setfilter(tcp port 80)</code>实现，更加详细的过滤规则请自行谷歌．</p>
-<h3 id="抓包"><a href="#抓包" class="headerlink" title="抓包"></a>抓包</h3><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> ptime, pdata <span class="keyword">in</span> pc:</span><br><span class="line">    print(ptime, pdata)</span><br></pre></td></tr></table></figure>
+<h3 id="抓包"><a href="#抓包" class="headerlink" title="抓包"></a>抓包</h3><pre><code class="py">for ptime, pdata in pc:
+    print(ptime, pdata)
+</code></pre>
 <p><code>pcap.pcap</code>对象pc是个动态数据，通常结合for循环或是while循环不断读取数据包，数据包会返回时间戳及报文数据．</p>
 <p>上面这个小例子就是简单的说明<code>pcap</code>常用库函数的使用方法．具体的数据包的存储及解析需要由解析库<code>dpkt</code>来完成．下面是一个更加详细的抓包工具实例，可以完成数据包的抓取、解析及存储.</p>
-<h2 id="简易抓包工具"><a href="#简易抓包工具" class="headerlink" title="简易抓包工具"></a>简易抓包工具</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="comment"># -*- encoding:utf-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> pcap</span><br><span class="line"><span class="keyword">import</span> dpkt</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> getopt</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> platform</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> <span class="string">'Windows'</span> <span class="keyword">in</span> platform.platform():</span><br><span class="line">    <span class="keyword">import</span> winreg <span class="keyword">as</span> wr</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">IF_REG = <span class="string">r'SYSTEM\CurrentControlSet\Control\Network\&#123;4d36e972-e325-11ce-bfc1-08002be10318&#125;'</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getInterfaceByName</span><span class="params">(name)</span>:</span></span><br><span class="line">    <span class="string">'''Get guid of interface from regedit of windows system</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        name: interface name</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">        An valid guid value or None.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Example:</span></span><br><span class="line"><span class="string">        getInterfaceByName('eth0')</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line">    reg = wr.ConnectRegistry(<span class="keyword">None</span>, wr.HKEY_LOCAL_MACHINE)</span><br><span class="line">    reg_key = wr.OpenKey(reg, IF_REG)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(wr.QueryInfoKey(reg_key)[<span class="number">0</span>]):</span><br><span class="line">        subkey_name = wr.EnumKey(reg_key, i)</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            reg_subkey = wr.OpenKey(reg_key, subkey_name + <span class="string">r'\Connection'</span>)</span><br><span class="line">            Name = wr.QueryValueEx(reg_subkey, <span class="string">'Name'</span>)[<span class="number">0</span>]</span><br><span class="line">            wr.CloseKey(reg_subkey)</span><br><span class="line">            <span class="keyword">if</span> Name == name:</span><br><span class="line">                <span class="keyword">return</span> <span class="string">r'\Device\NPF_'</span> + subkey_name</span><br><span class="line">        <span class="keyword">except</span> FileNotFoundError <span class="keyword">as</span> e:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">None</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">mac_addr</span><span class="params">(mac)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">'%02x:%02x:%02x:%02x:%02x:%02x'</span>%tuple(mac)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">ip_addr</span><span class="params">(ip)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">'%d.%d.%d.%d'</span>%tuple(ip)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">captureData</span><span class="params">(iface)</span>:</span></span><br><span class="line">    pkt = pcap.pcap(iface, promisc=<span class="keyword">True</span>, immediate=<span class="keyword">True</span>, timeout_ms=<span class="number">50</span>)</span><br><span class="line">    <span class="comment"># filter method</span></span><br><span class="line">    filters = &#123;</span><br><span class="line">        <span class="string">'DNS'</span>: <span class="string">'udp port 53'</span>,</span><br><span class="line">        <span class="string">'HTTP'</span>: <span class="string">'tcp port 80'</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment"># pkt.setfilter(filters['HTTP'])</span></span><br><span class="line"></span><br><span class="line">    pcap_filepath = <span class="string">'pkts/pkts_&#123;&#125;.pcap'</span>.format(time.strftime(<span class="string">"%Y%m%d-%H%M%S"</span>,</span><br><span class="line">        time.localtime()))</span><br><span class="line">    pcap_file = open(pcap_filepath, <span class="string">'wb'</span>)</span><br><span class="line">    writer = dpkt.pcap.Writer(pcap_file)</span><br><span class="line">    print(<span class="string">'Start capture...'</span>)</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        pkts_count = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> ptime, pdata <span class="keyword">in</span> pkt:</span><br><span class="line">            writer.writepkt(pdata, ptime)</span><br><span class="line">            <span class="comment"># anlysisData(pdata)</span></span><br><span class="line">            printRawPkt(ptime, pdata)</span><br><span class="line">            pkts_count += <span class="number">1</span></span><br><span class="line">    <span class="keyword">except</span> KeyboardInterrupt <span class="keyword">as</span> e:</span><br><span class="line">        writer.close()</span><br><span class="line">        pcap_file.close()</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> pkts_count:</span><br><span class="line">            os.remove(pcap_filepath)</span><br><span class="line">        print(<span class="string">'%d packets received'</span>%(pkts_count))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">printRawPkt</span><span class="params">(time, data)</span>:</span></span><br><span class="line">    eth = dpkt.ethernet.Ethernet(data)</span><br><span class="line">    print(<span class="string">'Timestamp: '</span>, str(datetime.datetime.utcfromtimestamp(time)))</span><br><span class="line">    print(<span class="string">'Ethernet Frame: '</span>, mac_addr(eth.src), mac_addr(eth.dst))</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> isinstance(eth.data, dpkt.ip.IP):</span><br><span class="line">        print(<span class="string">''</span>)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">    ip = eth.data</span><br><span class="line"></span><br><span class="line">    <span class="comment"># get fragments info</span></span><br><span class="line">    do_not_fragment = bool(ip.off &amp; dpkt.ip.IP_DF)</span><br><span class="line">    more_fragments = bool(ip.off &amp; dpkt.ip.IP_MF)</span><br><span class="line">    fragment_offset = ip.off &amp; dpkt.ip.IP_OFFMASK</span><br><span class="line"></span><br><span class="line">    print(<span class="string">'IP: %s -&gt; %s (len=%d ttl=%d DF=%d MF=%d offset=%d)\n'</span> % (</span><br><span class="line">        ip_addr(ip.src), ip_addr(ip.dst), ip.len, ip.ttl,</span><br><span class="line">        do_not_fragment, more_fragments, fragment_offset))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">anlysisData</span><span class="params">(data)</span>:</span></span><br><span class="line">    packet = dpkt.ethernet.Ethernet(data)</span><br><span class="line">    <span class="keyword">if</span> isinstance(packet.data, dpkt.ip.IP):</span><br><span class="line">        ip = ip_addr(packet.data.dst)</span><br><span class="line">        <span class="keyword">if</span> packet.data.data.dport == <span class="number">80</span> <span class="keyword">or</span> packet.data.data.sport == <span class="number">80</span>:</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                print(packet.data.data.data.decode(<span class="string">'utf-8'</span>, errors=<span class="string">'ignore'</span>))</span><br><span class="line">            <span class="keyword">except</span> UnicodeDecodeError <span class="keyword">as</span> uderr:</span><br><span class="line">                print(uderr.__str__())</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">if</span> <span class="string">'Windows'</span> <span class="keyword">in</span> platform.platform():</span><br><span class="line">        iface = getInterfaceByName(<span class="string">'Router'</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        iface = <span class="string">'enp2s0'</span></span><br><span class="line">    captureData(iface)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+<h2 id="简易抓包工具"><a href="#简易抓包工具" class="headerlink" title="简易抓包工具"></a>简易抓包工具</h2><pre><code class="python">#!/usr/bin/env python3
+# -*- encoding:utf-8 -*-
+import pcap
+import dpkt
+
+import getopt
+import sys
+import datetime
+import time
+import os
+import platform
+
+if &#39;Windows&#39; in platform.platform():
+    import winreg as wr
+
+
+IF_REG = r&#39;SYSTEM\CurrentControlSet\Control\Network\{4d36e972-e325-11ce-bfc1-08002be10318}&#39;
+def getInterfaceByName(name):
+    &#39;&#39;&#39;Get guid of interface from regedit of windows system
+
+    Args:
+        name: interface name
+
+    Returns:
+        An valid guid value or None.
+
+    Example:
+        getInterfaceByName(&#39;eth0&#39;)
+    &#39;&#39;&#39;
+    reg = wr.ConnectRegistry(None, wr.HKEY_LOCAL_MACHINE)
+    reg_key = wr.OpenKey(reg, IF_REG)
+    for i in range(wr.QueryInfoKey(reg_key)[0]):
+        subkey_name = wr.EnumKey(reg_key, i)
+        try:
+            reg_subkey = wr.OpenKey(reg_key, subkey_name + r&#39;\Connection&#39;)
+            Name = wr.QueryValueEx(reg_subkey, &#39;Name&#39;)[0]
+            wr.CloseKey(reg_subkey)
+            if Name == name:
+                return r&#39;\Device\NPF_&#39; + subkey_name
+        except FileNotFoundError as e:
+            pass
+
+    return None
+
+def mac_addr(mac):
+    return &#39;%02x:%02x:%02x:%02x:%02x:%02x&#39;%tuple(mac)
+
+def ip_addr(ip):
+    return &#39;%d.%d.%d.%d&#39;%tuple(ip)
+
+def captureData(iface):
+    pkt = pcap.pcap(iface, promisc=True, immediate=True, timeout_ms=50)
+    # filter method
+    filters = {
+        &#39;DNS&#39;: &#39;udp port 53&#39;,
+        &#39;HTTP&#39;: &#39;tcp port 80&#39;
+    }
+    # pkt.setfilter(filters[&#39;HTTP&#39;])
+
+    pcap_filepath = &#39;pkts/pkts_{}.pcap&#39;.format(time.strftime(&quot;%Y%m%d-%H%M%S&quot;,
+        time.localtime()))
+    pcap_file = open(pcap_filepath, &#39;wb&#39;)
+    writer = dpkt.pcap.Writer(pcap_file)
+    print(&#39;Start capture...&#39;)
+    try:
+        pkts_count = 0
+        for ptime, pdata in pkt:
+            writer.writepkt(pdata, ptime)
+            # anlysisData(pdata)
+            printRawPkt(ptime, pdata)
+            pkts_count += 1
+    except KeyboardInterrupt as e:
+        writer.close()
+        pcap_file.close()
+        if not pkts_count:
+            os.remove(pcap_filepath)
+        print(&#39;%d packets received&#39;%(pkts_count))
+
+def printRawPkt(time, data):
+    eth = dpkt.ethernet.Ethernet(data)
+    print(&#39;Timestamp: &#39;, str(datetime.datetime.utcfromtimestamp(time)))
+    print(&#39;Ethernet Frame: &#39;, mac_addr(eth.src), mac_addr(eth.dst))
+    if not isinstance(eth.data, dpkt.ip.IP):
+        print(&#39;&#39;)
+        return
+
+    ip = eth.data
+
+    # get fragments info
+    do_not_fragment = bool(ip.off &amp; dpkt.ip.IP_DF)
+    more_fragments = bool(ip.off &amp; dpkt.ip.IP_MF)
+    fragment_offset = ip.off &amp; dpkt.ip.IP_OFFMASK
+
+    print(&#39;IP: %s -&gt; %s (len=%d ttl=%d DF=%d MF=%d offset=%d)\n&#39; % (
+        ip_addr(ip.src), ip_addr(ip.dst), ip.len, ip.ttl,
+        do_not_fragment, more_fragments, fragment_offset))
+
+def anlysisData(data):
+    packet = dpkt.ethernet.Ethernet(data)
+    if isinstance(packet.data, dpkt.ip.IP):
+        ip = ip_addr(packet.data.dst)
+        if packet.data.data.dport == 80 or packet.data.data.sport == 80:
+            try:
+                print(packet.data.data.data.decode(&#39;utf-8&#39;, errors=&#39;ignore&#39;))
+            except UnicodeDecodeError as uderr:
+                print(uderr.__str__())
+
+
+def main():
+    if &#39;Windows&#39; in platform.platform():
+        iface = getInterfaceByName(&#39;Router&#39;)
+    else:
+        iface = &#39;enp2s0&#39;
+    captureData(iface)
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre>
 <h3 id="简要说明"><a href="#简要说明" class="headerlink" title="简要说明"></a>简要说明</h3><ul>
 <li>获取接口</li>
 </ul>
@@ -49,26 +193,85 @@
 <li>数据包存储</li>
 </ul>
 <p>为了将数据包存储到<code>.pcap</code>文件(此类文件可以使用wireshark打开)中,可以通过<code>dpkt.pcap.Writer</code>对象使用<code>writepkt</code>函数不断写入文件.</p>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pcap_file = open(pcap_filepath, <span class="string">'wb'</span>)</span><br><span class="line">writer = dpkt.pcap.Writer(pcap_file)</span><br><span class="line"><span class="keyword">for</span> ptime, pdata <span class="keyword">in</span> pkt:</span><br><span class="line">    writer.writepkt(pdata, ptime)</span><br></pre></td></tr></table></figure>
+<pre><code class="py">pcap_file = open(pcap_filepath, &#39;wb&#39;)
+writer = dpkt.pcap.Writer(pcap_file)
+for ptime, pdata in pkt:
+    writer.writepkt(pdata, ptime)
+</code></pre>
 <ul>
 <li>打印数据包基本信息</li>
 </ul>
 <p><code>printRawPkt</code>是个非常简单的打印数据包基本信息的函数,最多仅打印至<code>ip</code>信息,打印格式如下:</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">Timestamp:</span>  <span class="number">2018</span><span class="bullet">-12</span><span class="bullet">-31</span> <span class="number">13</span><span class="string">:58:39.850904</span></span><br><span class="line"><span class="string">Ethernet</span> <span class="attr">Frame:</span>  <span class="number">00</span><span class="string">:e0:4c:5a:0a:78</span> <span class="number">00</span><span class="string">:0f:e9:61:30:00</span></span><br><span class="line"><span class="attr">IP:</span> <span class="number">192.168</span><span class="number">.1</span><span class="number">.76</span> <span class="bullet">-&gt;</span> <span class="number">59.111</span><span class="number">.160</span><span class="number">.197</span> <span class="string">(len=52</span> <span class="string">ttl=64</span> <span class="string">DF=1</span> <span class="string">MF=0</span> <span class="string">offset=0)</span></span><br></pre></td></tr></table></figure>
+<pre><code class="yml">Timestamp:  2018-12-31 13:58:39.850904
+Ethernet Frame:  00:e0:4c:5a:0a:78 00:0f:e9:61:30:00
+IP: 192.168.1.76 -&gt; 59.111.160.197 (len=52 ttl=64 DF=1 MF=0 offset=0)
+</code></pre>
 <p>信息包含时间戳,以太网帧的<code>MAC</code>地址,<code>IP</code>地址及分片信息等.</p>
 <ul>
 <li>解析http数据包</li>
 </ul>
 <p><code>anlysisData</code>函数目前只是简单的检测及打印解码后的<code>http</code>包,使用<code>dpkt.ethernet.Ethernet</code>可以将原始数据包封装成一个结构化的以太网帧,之后按照网络协议栈的顺序便可逐层解析出链路层、网络层、传输层直至应用层.以上代码先是判断是否为<code>IP</code>报文,之后根据端口号判断是否为http报文,然后将数据解码后输出.</p>
 <p>这个例子也很简单,很多异常情况也没考虑,本文主要目的是描述<code>pypcap</code>和<code>dpkt</code>的常用方法以及抓包工具的实现过程,至于针对具体协议的解析则需继续学习.</p>
-<h3 id="抓包测试"><a href="#抓包测试" class="headerlink" title="抓包测试"></a>抓包测试</h3><figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">➜ mkdir pkts</span><br><span class="line">➜ sudo ./pktcap.py</span><br><span class="line">Start capture...</span><br><span class="line">Timestamp:  2018-12-31 13:58:37.148964</span><br><span class="line">Ethernet Frame:  00:36:76:6c:28:fe 33:33:00:00:00:16</span><br><span class="line"></span><br><span class="line">Timestamp:  2018-12-31 13:58:37.148978</span><br><span class="line">Ethernet Frame:  00:36:76:6c:28:fe 33:33:00:00:00:16</span><br><span class="line"></span><br><span class="line">Timestamp:  2018-12-31 13:58:37.529024</span><br><span class="line">Ethernet Frame:  00:36:76:6c:28:fe 33:33:00:00:00:16</span><br><span class="line"></span><br><span class="line">Timestamp:  2018-12-31 13:58:37.809011</span><br><span class="line">Ethernet Frame:  98:e0:d9:a4:50:1d 33:33:00:00:00:16</span><br><span class="line"></span><br><span class="line">Timestamp:  2018-12-31 13:58:39.850904</span><br><span class="line">Ethernet Frame:  00:e0:4c:5a:0a:78 00:0f:e9:61:30:00</span><br><span class="line">IP: 192.168.1.76 -&gt; 59.111.160.197 (len=52 ttl=64 DF=1 MF=0 offset=0)</span><br><span class="line"></span><br><span class="line">Timestamp:  2018-12-31 13:58:39.862890</span><br><span class="line">Ethernet Frame:  00:0f:e9:61:30:00 00:e0:4c:5a:0a:78</span><br><span class="line">IP: 59.111.160.197 -&gt; 192.168.1.76 (len=40 ttl=55 DF=1 MF=0 offset=0)</span><br><span class="line"></span><br><span class="line">Timestamp:  2018-12-31 13:58:40.289465</span><br><span class="line">Ethernet Frame:  b0:19:c6:17:0a:57 33:33:00:00:00:16</span><br><span class="line"></span><br><span class="line">Timestamp:  2018-12-31 13:58:40.369068</span><br><span class="line">Ethernet Frame:  a4:d1:8c:0b:54:12 33:33:00:00:00:16</span><br><span class="line"></span><br><span class="line">Timestamp:  2018-12-31 13:58:41.859034</span><br><span class="line">Ethernet Frame:  a0:4e:a7:e0:65:3d 33:33:00:00:00:16</span><br><span class="line"></span><br><span class="line">Timestamp:  2018-12-31 13:58:42.079218</span><br><span class="line">Ethernet Frame:  8c:6d:50:7d:f9:<span class="built_in">fc</span> ff:ff:ff:ff:ff:ff</span><br><span class="line">IP: 0.0.0.0 -&gt; 255.255.255.255 (len=352 ttl=64 DF=0 MF=0 offset=0)</span><br><span class="line"></span><br><span class="line">^C10 packets received</span><br><span class="line">➜ <span class="built_in">cd</span> pkts</span><br><span class="line">➜ ls</span><br><span class="line">pkts_20181230-185017.pcap  pkts_20181231-203416.pcap  pkts_20181231-215837.pcap</span><br></pre></td></tr></table></figure>
+<h3 id="抓包测试"><a href="#抓包测试" class="headerlink" title="抓包测试"></a>抓包测试</h3><pre><code class="zsh">➜ mkdir pkts
+➜ sudo ./pktcap.py
+Start capture...
+Timestamp:  2018-12-31 13:58:37.148964
+Ethernet Frame:  00:36:76:6c:28:fe 33:33:00:00:00:16
+
+Timestamp:  2018-12-31 13:58:37.148978
+Ethernet Frame:  00:36:76:6c:28:fe 33:33:00:00:00:16
+
+Timestamp:  2018-12-31 13:58:37.529024
+Ethernet Frame:  00:36:76:6c:28:fe 33:33:00:00:00:16
+
+Timestamp:  2018-12-31 13:58:37.809011
+Ethernet Frame:  98:e0:d9:a4:50:1d 33:33:00:00:00:16
+
+Timestamp:  2018-12-31 13:58:39.850904
+Ethernet Frame:  00:e0:4c:5a:0a:78 00:0f:e9:61:30:00
+IP: 192.168.1.76 -&gt; 59.111.160.197 (len=52 ttl=64 DF=1 MF=0 offset=0)
+
+Timestamp:  2018-12-31 13:58:39.862890
+Ethernet Frame:  00:0f:e9:61:30:00 00:e0:4c:5a:0a:78
+IP: 59.111.160.197 -&gt; 192.168.1.76 (len=40 ttl=55 DF=1 MF=0 offset=0)
+
+Timestamp:  2018-12-31 13:58:40.289465
+Ethernet Frame:  b0:19:c6:17:0a:57 33:33:00:00:00:16
+
+Timestamp:  2018-12-31 13:58:40.369068
+Ethernet Frame:  a4:d1:8c:0b:54:12 33:33:00:00:00:16
+
+Timestamp:  2018-12-31 13:58:41.859034
+Ethernet Frame:  a0:4e:a7:e0:65:3d 33:33:00:00:00:16
+
+Timestamp:  2018-12-31 13:58:42.079218
+Ethernet Frame:  8c:6d:50:7d:f9:fc ff:ff:ff:ff:ff:ff
+IP: 0.0.0.0 -&gt; 255.255.255.255 (len=352 ttl=64 DF=0 MF=0 offset=0)
+
+^C10 packets received
+➜ cd pkts
+➜ ls
+pkts_20181230-185017.pcap  pkts_20181231-203416.pcap  pkts_20181231-215837.pcap
+</code></pre>
 <p>代码已上传至<a href="https://github.com/Litreily/Python-demos.git" target="_blank" rel="noopener">github Python-demos</a> <code>sniffer.py</code></p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
 <li><a href="https://www.cnblogs.com/jackadam/p/8279080.html" target="_blank" rel="noopener">windows 环境下python 安装 pypcap…</a></li>
 <li><a href="https://www.cnblogs.com/xuanhun/p/5625186.html" target="_blank" rel="noopener">Python黑客编程3网络数据监听和过滤</a></li>
 <li><a href="https://blog.csdn.net/weixin_39138707/article/details/74612637" target="_blank" rel="noopener">Mac下用python+pypcap+dpkt抓取IP数据包并分析</a></li>
 </ol>
-</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a class="article-share-link" data-url="http://www.litreily.top/2018/12/31/pypcap-install/" data-id="cjr7rt7l2004n6owtb1xny8m5" data-qrcode="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACIklEQVR42u3aYW7DMAgG0Nz/0tkBqqQfkE6K/fxr0trYL5MYYI4jXufH+vzt1ed7uxy/WBgYGK9lnLfrfoN847O48rNhYGDsw7jaOP9MAqvuVXgOBgYGRvHR90EzfwUYGBgY84A7PygGBgZGzkiKyXlSOA/WD9TiGBgYL2TkXff///kn9xsYGBivYvSa9b0QnITys7UwMDDWZuQBrnpVeX/EcoGanAcDA2NRRjUI5s21XtnZHObAwMBYmtEbrchHxKrjZZOXi4GBsQNjksAlsMmraXYHMTAwlmBMLimrbbJqwldgY2BgbMNIMJMDVZPCPGRjYGDsxnj2uHnKmJSsl+fEwMDYgNELiNVvTS5Hv7TtMDAwlmY8e904OVY16F/ebGBgYGzD6F0VVC8DyilgfqeBgYGxECMvVpOmWC8Qz8fOMDAwdmD0xiCqvCQpLAx+VR+KgYGxKCNfDzTLigEaAwNjH8azAxa9gNv7/OXfBAMDY2lGjuk1xfI0tFrKYmBg7MNI0r5kkKs8ftpKUqP/GxgYGEszJoOto6PE37ocC8PAwFiOcRZXNZnLn/BYbouBgbEc44FoXRywqI6uRsMWGBgYGzCSEDm/BvjFWNiRbIaBgbEQIw9888uAeekb1eIYGBjbM+Ytud7gRbl7h4GBsT0jL18noTYqhjEwMDZgPDVI0WvoJ+Xul9eEgYGxNKM6GFFtn+UBNA/lzYtMDAyM9zH+AOGXDcvlDL4tAAAAAElFTkSuQmCC">Share</a><div class="tags"><a href="/tags/pypcap/">pypcap</a><a href="/tags/dpkt/">dpkt</a></div><div class="post-nav"><a class="next" href="/2018/10/25/io-cache/">Linux中的文件I/O缓冲</a></div><div id="vcomment"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+</div></article></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2019/01/22/highcharts/">&lt; Python之MongoDB数据分析及其Highcharts可视化</a><a class="next" href="/2018/10/25/io-cache/">Linux中的文件I/O缓冲 &gt;</a></div><div id="valine-comment"><style type="text/css">.v * { color: #CECECE; }
+.v a { color: #0F9FB4; }
+.v a:hover { color: #216C73; }
+.v li { list-style: inherit; }
+.v .vwrap { border: 1px solid #223441; border-radius: 0; }
+.v .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.v .vbtn { border-radius: 0; color: #cecece; background: none; }
+.v .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.v .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.v .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.v code, .v pre,.v .vlist .vcard .vhead .vsys { background: #203240; }
+.v .vlist .vcard .vcontent.expand:before { background: linear-gradient(180deg,hsla(206,33%,19%,0),hsla(206,33%,19%,.9)); }
+.v .vlist .vcard .vcontent.expand:after { background: hsla(206,33%,19%,.9); }</style><div id="vcomment"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
 var verify = 'false' == true ? true : false;
 var GUEST_INFO = ['nick','mail','link'];
 var guest_info = 'nick,mail,link'.split(',').filter(function(item){
@@ -85,10 +288,4 @@ window.valine = new Valine({
   avatar:'identicon',
   guest_info:guest_info,
   pageSize:'10'
-})</script></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/LabVIEW/">LabVIEW</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Matlab/">Matlab</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Media/">Media</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Network/">Network</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web/">Web</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/嵌入式/">嵌入式</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/杂物柜/">杂物柜</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/tags/office/" style="font-size: 12px;">office</a> <a href="/tags/test/" style="font-size: 15.43px;">test</a> <a href="/tags/ruby/" style="font-size: 13.71px;">ruby</a> <a href="/tags/literature/" style="font-size: 12px;">literature</a> <a href="/tags/video/" style="font-size: 13.71px;">video</a> <a href="/tags/algorithm/" style="font-size: 20.57px;">algorithm</a> <a href="/tags/matlab/" style="font-size: 17.14px;">matlab</a> <a href="/tags/windows/" style="font-size: 13.71px;">windows</a> <a href="/tags/labview/" style="font-size: 22.29px;">labview</a> <a href="/tags/tdms/" style="font-size: 13.71px;">tdms</a> <a href="/tags/brackets/" style="font-size: 12px;">brackets</a> <a href="/tags/git/" style="font-size: 15.43px;">git</a> <a href="/tags/tools/" style="font-size: 17.14px;">tools</a> <a href="/tags/utorrent/" style="font-size: 12px;">utorrent</a> <a href="/tags/atom/" style="font-size: 13.71px;">atom</a> <a href="/tags/C-C/" style="font-size: 24px;">C/C++</a> <a href="/tags/ubuntu/" style="font-size: 22.29px;">ubuntu</a> <a href="/tags/linux/" style="font-size: 18.86px;">linux</a> <a href="/tags/music/" style="font-size: 13.71px;">music</a> <a href="/tags/signal/" style="font-size: 13.71px;">signal</a> <a href="/tags/VS/" style="font-size: 13.71px;">VS</a> <a href="/tags/stm32/" style="font-size: 13.71px;">stm32</a> <a href="/tags/hexo/" style="font-size: 13.71px;">hexo</a> <a href="/tags/log/" style="font-size: 12px;">log</a> <a href="/tags/RSS/" style="font-size: 12px;">RSS</a> <a href="/tags/Feed/" style="font-size: 12px;">Feed</a> <a href="/tags/FreeRTOS/" style="font-size: 12px;">FreeRTOS</a> <a href="/tags/jekyll/" style="font-size: 15.43px;">jekyll</a> <a href="/tags/word/" style="font-size: 12px;">word</a> <a href="/tags/LWD/" style="font-size: 12px;">LWD</a> <a href="/tags/telnet/" style="font-size: 12px;">telnet</a> <a href="/tags/smtp/" style="font-size: 12px;">smtp</a> <a href="/tags/wireshark/" style="font-size: 12px;">wireshark</a> <a href="/tags/tmux/" style="font-size: 13.71px;">tmux</a> <a href="/tags/mysql/" style="font-size: 12px;">mysql</a> <a href="/tags/centos/" style="font-size: 12px;">centos</a> <a href="/tags/ddos/" style="font-size: 12px;">ddos</a> <a href="/tags/hping3/" style="font-size: 12px;">hping3</a> <a href="/tags/spider/" style="font-size: 17.14px;">spider</a> <a href="/tags/scrapy/" style="font-size: 12px;">scrapy</a> <a href="/tags/shell/" style="font-size: 12px;">shell</a> <a href="/tags/makefile/" style="font-size: 13.71px;">makefile</a> <a href="/tags/sort/" style="font-size: 12px;">sort</a> <a href="/tags/visualization/" style="font-size: 12px;">visualization</a> <a href="/tags/pug/" style="font-size: 12px;">pug</a> <a href="/tags/stdio/" style="font-size: 12px;">stdio</a> <a href="/tags/cache/" style="font-size: 12px;">cache</a> <a href="/tags/buffer/" style="font-size: 12px;">buffer</a> <a href="/tags/pypcap/" style="font-size: 12px;">pypcap</a> <a href="/tags/dpkt/" style="font-size: 12px;">dpkt</a> <a href="/tags/queue/" style="font-size: 12px;">queue</a> <a href="/tags/xlwt/" style="font-size: 12px;">xlwt</a> <a href="/tags/sina/" style="font-size: 12px;">sina</a> <a href="/tags/lofter/" style="font-size: 12px;">lofter</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/12/31/pypcap-install/">Python之pypcap库的安装及简单抓包工具的实现</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/25/io-cache/">Linux中的文件I/O缓冲</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/27/tee/">Linux指令 - tee的实现</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/20/coredump/">OpenWrt中使用gdb分析coredump</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/31/pug-synax/">网页模板pug基本语法</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Links</i></div><ul></ul><a href="https://www.smslit.top" title="smslit-水木十里" target="_blank">smslit-水木十里</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2019 <a href="/." rel="nofollow">LITREILY.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> manupassant.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.css"><script type="text/javascript" src="/js/search.js?v=0.0.0"></script><script>var search_path = 'search.xml';
-if (search_path.length == 0) {
-   search_path = 'search.xml';
-}
-var path = '/' + search_path;
-searchFunc(path, 'local-search-input', 'local-search-result');
-</script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
+})</script></div></section><footer><p>Copyright © 2019 <a href="/." rel="nofollow">LITREILY | </a>Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer><script type="text/javascript" src="/plugins/prettify/prettify.js"></script></div></div></div></body></html>
