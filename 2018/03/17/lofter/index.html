@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><title>Python网络爬虫1 - 爬取网易LOFTER图片 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><body><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="https://litreily.gitbooks.io/notes/">笔记</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li class="m-sch"><form class="form" id="j-formsch" action="/search" method="get"><input class="txt" type="text" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"></form></li></ul></div></nav></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><h1 class="p-title">Python网络爬虫1 - 爬取网易LOFTER图片</h1><div class="p-content"><p><code>LOFTER</code>是网易出品的优质轻博客，灵感源于国外的<code>tumblr</code>，但比之更加文艺，更加本地化。本人非常喜欢<code>LOFTER</code>的UI设计，以及其中的优质用户和内容，似乎网易并不擅长推广，所以受众并不广泛。这都是题外话，本文主要记录作者近期学习<code>python3</code>并用之爬取<code>LOFTER</code>用户图片的过程和成果，与大家交流分享。</p>
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><title>Python网络爬虫1 - 爬取网易LOFTER图片 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/8.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Python网络爬虫1 - 爬取网易LOFTER图片</h1><a id="logo" href="/.">LITREILY</a><p class="description">Stay Hungry, Stay Foolish</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> Home</i></a><a href="/archives/"><i class="fa fa-archive"> Archive</i></a><a href="https://litreily.gitbooks.io/notes/"><i class="fa fa-book"> Notes</i></a><a href="/about/"><i class="fa fa-user"> About</i></a><a href="/history/"><i class="fa fa-history"> History</i></a><a href="/atom.xml"><i class="fa fa-rss"> RSS</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">Python网络爬虫1 - 爬取网易LOFTER图片</h1><div class="post-meta">Mar 17, 2018<span> | </span><span class="category"><a href="/categories/Python/">Python</a></span></div><a class="disqus-comment-count" href="/2018/03/17/lofter/#vcomment"><span class="valine-comment-count" data-xid="/2018/03/17/lofter/"></span><span> Comment</span></a><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">Contents</div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#分析LOFTER站点"><span class="toc-number">1.</span> <span class="toc-text">分析LOFTER站点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#主页信息"><span class="toc-number">1.1.</span> <span class="toc-text">主页信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分页信息"><span class="toc-number">1.2.</span> <span class="toc-text">分页信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#归档页信息"><span class="toc-number">1.3.</span> <span class="toc-text">归档页信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#博客页信息"><span class="toc-number">1.4.</span> <span class="toc-text">博客页信息</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#确定爬取方案"><span class="toc-number">2.</span> <span class="toc-text">确定爬取方案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码实现"><span class="toc-number">3.</span> <span class="toc-text">代码实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#依赖库"><span class="toc-number">3.1.</span> <span class="toc-text">依赖库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#获取用户ID"><span class="toc-number">3.2.</span> <span class="toc-text">获取用户ID</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#生成POST请求数据"><span class="toc-number">3.3.</span> <span class="toc-text">生成POST请求数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#发送POST请求包"><span class="toc-number">3.4.</span> <span class="toc-text">发送POST请求包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解析POST响应包"><span class="toc-number">3.5.</span> <span class="toc-text">解析POST响应包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#下载图片"><span class="toc-number">3.6.</span> <span class="toc-text">下载图片</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#主循环"><span class="toc-number">3.7.</span> <span class="toc-text">主循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#完整代码"><span class="toc-number">3.8.</span> <span class="toc-text">完整代码</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#爬取测试"><span class="toc-number">4.</span> <span class="toc-text">爬取测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#说在最后"><span class="toc-number">5.</span> <span class="toc-text">说在最后</span></a></li></ol></div></div><div class="post-content"><p><code>LOFTER</code>是网易出品的优质轻博客，灵感源于国外的<code>tumblr</code>，但比之更加文艺，更加本地化。本人非常喜欢<code>LOFTER</code>的UI设计，以及其中的优质用户和内容，似乎网易并不擅长推广，所以受众并不广泛。这都是题外话，本文主要记录作者近期学习<code>python3</code>并用之爬取<code>LOFTER</code>用户图片的过程和成果，与大家交流分享。</p>
 <blockquote>
 <p>本文将以本人<a href="http://litreily.lofter.com" target="_blank" rel="noopener">litreily</a>博客为例说明整个爬取过程</p>
 </blockquote>
@@ -30,11 +30,9 @@
 <p><img src="/assets/spider/lofter/postLink.png" alt="post link"></p>
 <p>如上图所示，首先找到博文永久链接<code>http://litreily.lofter.com/post/44fbca_1265bb3e</code></p>
 <p>针对含有图片的某一篇博文，<strong>litreily</strong>所用模板中会出现两次博文链接（见图中红框标注的两处），倘若我们使用正则表达式:</p>
-<pre><code class="python">re.findall(r&#39;&quot;http://.*lofter.com/post/[\w_]*&quot;&#39;, html)
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">re.findall(<span class="string">r'"http://.*lofter.com/post/[\w_]*"'</span>, html)</span><br></pre></td></tr></table></figure>
 <p>将对每篇博文匹配出两个一样的链接，这可不是我们想要的，那咋整，匹配完再把重复的删了？不至于这么麻烦，细看两处链接前后信息，可以看到两处链接的<code>class</code>属性不一致，好办了，咱改改正则：</p>
-<pre><code class="python">re.findall(r&#39;&lt;a class=&quot;img&quot; href=&quot;(http://.*lofter.com/post/[\w_]*)&quot;&gt;&#39;, html)
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">re.findall(<span class="string">r'&lt;a class="img" href="(http://.*lofter.com/post/[\w_]*)"&gt;'</span>, html)</span><br></pre></td></tr></table></figure>
 <p>好像可以了，这不就可以按页抓取博客链接，然后接着分析每篇博文信息不就好了么。我原本就想这么干，可是当我查看了不同用户的排版以及相应的链接信息后，整个人都不好了，一千个用户就是一千个哈姆雷特啊。如果你发现有统一解析所有用户模板信息的方法，那肯定是你看的模板不够多。</p>
 <p>所以呢，这条路是走不通了，至少我没再往这条路上走。打道回府，只不过重头再来，路漫漫其修远兮，吾将上下而求索。</p>
 <p>靠，说了半天，原来走不通，那你说个毛线！！！淡定淡定，都是文明人，后面的风景很远，额不是，，，是很美，请耐心等待…</p>
@@ -56,18 +54,7 @@
 <p>好了，找到了，就是上面这货。现在归档数据请求的链接有了，确实是<strong>POST</strong>包，同样，请求包的头部信息<code>headers</code>和请求参数<code>request payload</code>也有了。</p>
 <p><img src="/assets/spider/lofter/post_values.png" alt="request values"></p>
 <p>现在的关键问题是，这些请求包中的参数都是干嘛的？经我多方尝试、猜测与观察，总结如下：</p>
-<pre><code class="C#">callCount=1       # 固定
-scriptSessionId=${scriptSessionId}187   # 固定
-httpSessionId=    # 固定
-c0-scriptName=ArchiveBean       # 固定
-c0-methodName=getArchivePostByTime      # 固定
-c0-id=0           # 固定
-c0-param0=number:4520906        # 用户ID，可从用户主页源码获取
-c0-param1=number:1521342313224  # 时间戳，最最最关键参数！
-c0-param2=number:50       # 单次请求博客篇数，可以按需求修改
-c0-param3=boolean:false   # 固定
-batchId=822456            # 6位随机数，爬取时可以固定
-</code></pre>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">callCount=1       # 固定</span><br><span class="line">scriptSessionId=$&#123;scriptSessionId&#125;187   # 固定</span><br><span class="line">httpSessionId=    # 固定</span><br><span class="line">c0-scriptName=ArchiveBean       # 固定</span><br><span class="line">c0-methodName=getArchivePostByTime      # 固定</span><br><span class="line">c0-id=0           # 固定</span><br><span class="line">c0-param0=number:4520906        # 用户ID，可从用户主页源码获取</span><br><span class="line">c0-param1=number:1521342313224  # 时间戳，最最最关键参数！</span><br><span class="line">c0-param2=number:50       # 单次请求博客篇数，可以按需求修改</span><br><span class="line">c0-param3=boolean:false   # 固定</span><br><span class="line">batchId=822456            # 6位随机数，爬取时可以固定</span><br></pre></td></tr></table></figure>
 <p>所以我们模拟请求包的时候就按这个来就可以了，至于时间戳怎么获取，请求包的<code>headers</code>如何确定，后面会有详述。</p>
 <p>下面我们来看看请求后得到的响应包长啥样，look，就下面这个，看到没，<strong><code>permalink</code></strong>, 千呼万唤始出来啊，这不就是我们想要的博客固定路径了么。响应包并不是<code>html</code>文件，而是一组数据，我觉着归档页包含的那个脚本就是根据这个数据文件进而请求首张图片信息或文本信息的，当然这是我的猜测了，有兴趣的可以去看看那个脚本。</p>
 <p><img src="/assets/spider/lofter/post_response.png" alt="post response"></p>
@@ -96,98 +83,24 @@ batchId=822456            # 6位随机数，爬取时可以固定
 </ul>
 <p>Only one! 没错，依赖的第三方库就这一个，怎么装咱这就不说了</p>
 <h3 id="获取用户ID"><a href="#获取用户ID" class="headerlink" title="获取用户ID"></a>获取用户ID</h3><p>用户ID，确切的说是用户博客的唯一ID，是归档页请求报文中的参数之一，通过查看主页源码找到了相应的字符串，所以只要用<code>request.get</code>抓取首页然后匹配ID字符串就可以了，代码如下：</p>
-<pre><code class="python">def _get_blogid(username):
-    try:
-        html = requests.get(&#39;http://%s.lofter.com&#39; % username)
-        id_reg = r&#39;src=&quot;http://www.lofter.com/control\?blogId=(.*)&quot;&#39;
-        blogid = re.search(id_reg, html.text).group(1)
-        print(&#39;The blogid of %s is: %s&#39; % (username, blogid))
-        return blogid
-    except Exception as e:
-        print(&#39;get blogid from http://%s.lofter.com failed&#39; % username)
-        print(&#39;please check your username.&#39;)
-        exit(1)
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_get_blogid</span><span class="params">(username)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        html = requests.get(<span class="string">'http://%s.lofter.com'</span> % username)</span><br><span class="line">        id_reg = <span class="string">r'src="http://www.lofter.com/control\?blogId=(.*)"'</span></span><br><span class="line">        blogid = re.search(id_reg, html.text).group(<span class="number">1</span>)</span><br><span class="line">        print(<span class="string">'The blogid of %s is: %s'</span> % (username, blogid))</span><br><span class="line">        <span class="keyword">return</span> blogid</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        print(<span class="string">'get blogid from http://%s.lofter.com failed'</span> % username)</span><br><span class="line">        print(<span class="string">'please check your username.'</span>)</span><br><span class="line">        exit(<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
 <h3 id="生成POST请求数据"><a href="#生成POST请求数据" class="headerlink" title="生成POST请求数据"></a>生成POST请求数据</h3><p>根据前面归档页的分析，我们知道POST请求中除了一些固定参数外，还有用户ID，时间戳<code>timestamp</code>以及单次请求的博客篇数<code>N</code>需要确定，而ID已经在前面已经获取到了；博客篇数可以自定义一个数，如40；最后就剩下时间戳了。</p>
 <p>经过多次尝试发现，这个时间戳<code>timestamp</code>是所有参数中唯一一个需要在每次请求中不断更新的参数。那么它更新的依据是什么呢？每篇博客都对应着一个<code>timestamp</code>，而且是博客的发布时间，每次请求后得到的最后一篇博客的<code>timestamp</code>就可以作为下一次请求的<code>timestamp</code>。为什么呢，因为我多次实验发现，在给定一个<code>timestamp</code>并发送POST请求后，服务器会<strong>以请求参数中的时间戳为起点按时间顺序往前检索出指定篇数(如：40)的博客信息</strong></p>
 <p>响应包的博客信息中包含了每篇博客的时间戳，所以每次获取响应包后，只要解析出响应包中最后一篇博客的时间戳，就可以作为下一次请求中的时间戳。</p>
 <p>根据以上分析，可以写出获取时间戳的函数如下：</p>
-<pre><code class="python"># time_pattern: re.compile(&#39;s%d\.time=(.*);s.*type&#39; % (query_number-1))
-def _get_timestamp(html, time_pattern):
-    if not html:
-        timestamp = round(time.time() * 1000)  # first timestamp(ms)
-    else:
-        timestamp = time_pattern.search(html).group(1)
-    return str(timestamp)
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># time_pattern: re.compile('s%d\.time=(.*);s.*type' % (query_number-1))</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_get_timestamp</span><span class="params">(html, time_pattern)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> html:</span><br><span class="line">        timestamp = round(time.time() * <span class="number">1000</span>)  <span class="comment"># first timestamp(ms)</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        timestamp = time_pattern.search(html).group(<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> str(timestamp)</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>注意，首次请求的时间戳可以直接使用当前系统时间(ms)</p>
 </blockquote>
 <h3 id="发送POST请求包"><a href="#发送POST请求包" class="headerlink" title="发送POST请求包"></a>发送POST请求包</h3><p>POST请求包的<code>url</code>是固定的，<code>data</code>就是前面获取到的所有请求参数，<code>headers</code>如下：</p>
-<pre><code class="python">headers = {
-        &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.146 Safari/537.36&#39;,
-        &#39;Host&#39;: username + &#39;.lofter.com&#39;,
-        &#39;Referer&#39;: &#39;http://%s.lofter.com/view&#39; % username,
-        &#39;Accept-Encoding&#39;: &#39;gzip, deflate&#39;
-    }
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">headers = &#123;</span><br><span class="line">        <span class="string">'User-Agent'</span>: <span class="string">'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.146 Safari/537.36'</span>,</span><br><span class="line">        <span class="string">'Host'</span>: username + <span class="string">'.lofter.com'</span>,</span><br><span class="line">        <span class="string">'Referer'</span>: <span class="string">'http://%s.lofter.com/view'</span> % username,</span><br><span class="line">        <span class="string">'Accept-Encoding'</span>: <span class="string">'gzip, deflate'</span></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 <p>其中，<code>User-Agent</code>用于模拟浏览器请求，后面三个参数最好都加上，否则可能无法请求成功。POST请求其实就是一条语句<code>requests.post</code>，具体实现如下：</p>
-<pre><code class="python">def _get_html(url, data, headers):
-    try:
-        html = requests.post(url, data, headers = headers)
-    except Exception as e:
-        print(&quot;get %s failed\n%s&quot; % (url, str(e)))
-        return None
-    finally:
-        pass
-    return html
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_get_html</span><span class="params">(url, data, headers)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        html = requests.post(url, data, headers = headers)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        print(<span class="string">"get %s failed\n%s"</span> % (url, str(e)))</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">None</span></span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    <span class="keyword">return</span> html</span><br></pre></td></tr></table></figure>
 <h3 id="解析POST响应包"><a href="#解析POST响应包" class="headerlink" title="解析POST响应包"></a>解析POST响应包</h3><p>在获取响应包的文本<code>html</code>后，便可从中获取本次请求得到的所有博客的相对路径，然后生成绝对路径，进而逐一抓取博客原文，从原文中抓取所有图链。</p>
-<pre><code class="python"># get urls of blogs: s3.permalink=&quot;44fbca_19a6b1b&quot;
-new_blogs = blog_url_pattern.findall(html)
-num_new_blogs = len(new_blogs)
-num_blogs += num_new_blogs 
-
-if num_new_blogs != 0:
-    print(&#39;NewBlogs:%d\tTotalBolgs:%d&#39; % (num_new_blogs, num_blogs))
-    # get imgurls from new_blogs
-    imgurls = []
-    for blog in new_blogs:
-        imgurls.extend(_get_imgurls(username, blog, headers))
-    num_imgs += len(imgurls)
-</code></pre>
-<p>以上代码便是获取POST的响应包<code>html</code>后的解析操作，其中<code>_get_imurls</code>是用于抓取博客原文并解析出所有图链的函数。</p>
-<pre><code class="python">def _get_imgurls(username, blog, headers):
-    blog_url = &#39;http://%s.lofter.com/post/%s&#39; % (username, blog)
-    blog_html = requests.get(blog_url, headers = headers).text
-    imgurls = re.findall(r&#39;bigimgsrc=&quot;(.*?)&quot;&#39;, blog_html)
-    print(&#39;Blog\t%s\twith %d\tpictures&#39; % (blog_url, len(imgurls)))
-    return imgurls
-</code></pre>
-<h3 id="下载图片"><a href="#下载图片" class="headerlink" title="下载图片"></a>下载图片</h3><pre><code class="python">def _capture_images(imgurl, path):
-    headers = {&#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.146 Safari/537.36&#39;}
-    for i in range(1,3):
-        try:
-            image_request = requests.get(imgurl, headers = headers, timeout = 20)
-            if image_request.status_code == 200:
-                open(path, &#39;wb&#39;).write(image_request.content)
-                break
-        except requests.exceptions.ConnectionError as e:
-            print(&#39;\tGet %s failed\n\terror:%s&#39; % (imgurl, e))
-            if i == 1:
-                imgurl = re.sub(&#39;^http://img.*?\.&#39;,&#39;http://img.&#39;,imgurl)
-                print(&#39;\tRetry &#39; + imgurl)
-            else:
-                print(&#39;\tRetry fail&#39;)
-        except Exception as e:
-            print(e)
-        finally:
-            pass
-
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># get urls of blogs: s3.permalink="44fbca_19a6b1b"</span></span><br><span class="line">new_blogs = blog_url_pattern.findall(html)</span><br><span class="line">num_new_blogs = len(new_blogs)</span><br><span class="line">num_blogs += num_new_blogs </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> num_new_blogs != <span class="number">0</span>:</span><br><span class="line">    print(<span class="string">'NewBlogs:%d\tTotalBolgs:%d'</span> % (num_new_blogs, num_blogs))</span><br><span class="line">    <span class="comment"># get imgurls from new_blogs</span></span><br><span class="line">    imgurls = []</span><br><span class="line">    <span class="keyword">for</span> blog <span class="keyword">in</span> new_blogs:</span><br><span class="line">        imgurls.extend(_get_imgurls(username, blog, headers))</span><br><span class="line">    num_imgs += len(imgurls)</span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line">以上代码便是获取POST的响应包`html`后的解析操作，其中`_get_imurls`是用于抓取博客原文并解析出所有图链的函数。</span><br><span class="line"></span><br><span class="line">``` python</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_get_imgurls</span><span class="params">(username, blog, headers)</span>:</span></span><br><span class="line">    blog_url = <span class="string">'http://%s.lofter.com/post/%s'</span> % (username, blog)</span><br><span class="line">    blog_html = requests.get(blog_url, headers = headers).text</span><br><span class="line">    imgurls = re.findall(<span class="string">r'bigimgsrc="(.*?)"'</span>, blog_html)</span><br><span class="line">    print(<span class="string">'Blog\t%s\twith %d\tpictures'</span> % (blog_url, len(imgurls)))</span><br><span class="line">    <span class="keyword">return</span> imgurls</span><br></pre></td></tr></table></figure>
+<h3 id="下载图片"><a href="#下载图片" class="headerlink" title="下载图片"></a>下载图片</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_capture_images</span><span class="params">(imgurl, path)</span>:</span></span><br><span class="line">    headers = &#123;<span class="string">'User-Agent'</span>: <span class="string">'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.146 Safari/537.36'</span>&#125;</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">3</span>):</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            image_request = requests.get(imgurl, headers = headers, timeout = <span class="number">20</span>)</span><br><span class="line">            <span class="keyword">if</span> image_request.status_code == <span class="number">200</span>:</span><br><span class="line">                open(path, <span class="string">'wb'</span>).write(image_request.content)</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">except</span> requests.exceptions.ConnectionError <span class="keyword">as</span> e:</span><br><span class="line">            print(<span class="string">'\tGet %s failed\n\terror:%s'</span> % (imgurl, e))</span><br><span class="line">            <span class="keyword">if</span> i == <span class="number">1</span>:</span><br><span class="line">                imgurl = re.sub(<span class="string">'^http://img.*?\.'</span>,<span class="string">'http://img.'</span>,imgurl)</span><br><span class="line">                print(<span class="string">'\tRetry '</span> + imgurl)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                print(<span class="string">'\tRetry fail'</span>)</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            print(e)</span><br><span class="line">        <span class="keyword">finally</span>:</span><br><span class="line">            <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
 <p>有了图链，最后的工作当然是下载图片了，上面这段代码便是用来下载图片的，<code>headers</code>是为了模拟浏览器访问。那为什么要尝试下载两次呢？因为我在抓取过程中，有时候会出现抓取失败的情况，并显示以下错误信息：</p>
-<pre><code class="yaml">&#39;Connection aborted.&#39;, RemoteDisconnected(&#39;Remote end closed connection without response&#39;
-</code></pre>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'Connection aborted.'</span><span class="string">,</span> <span class="string">RemoteDisconnected('Remote</span> <span class="string">end</span> <span class="string">closed</span> <span class="string">connection</span> <span class="string">without</span> <span class="string">response'</span></span><br></pre></td></tr></table></figure>
 <p>所以在<code>Retry</code>前先将图链对应的<code>host</code>稍加修改,这样可以保证更高的成功率，但并不能完全避免。对于下载失败的情况，可能是：</p>
 <ol>
 <li>被反爬了（极大可能）</li>
@@ -207,172 +120,7 @@ if num_new_blogs != 0:
 </ul>
 </li>
 </ol>
-<h3 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h3><pre><code class="python">#!/usr/bin/env python
-# -*- coding:utf-8 -*-
-# date: 2018.03.07
-&quot;&quot;&quot;Capture pictures from lofter with username.&quot;&quot;&quot;
-
-import re
-import os
-import platform
-
-import requests
-
-import time
-import random
-
-
-def _get_path(username):
-    path = {
-        &#39;Windows&#39;: &#39;D:/litreily/Pictures/python/lofter/&#39; + username,
-        &#39;Linux&#39;: &#39;/mnt/d/litreily/Pictures/python/lofter/&#39; + username
-    }.get(platform.system())
-
-    if not os.path.isdir(path):
-        os.makedirs(path)
-    return path
-
-
-def _get_html(url, data, headers):
-    try:
-        html = requests.post(url, data, headers = headers)
-    except Exception as e:
-        print(&quot;get %s failed\n%s&quot; % (url, str(e)))
-        return None
-    finally:
-        pass
-    return html
-
-
-def _get_blogid(username):
-    try:
-        html = requests.get(&#39;http://%s.lofter.com&#39; % username)
-        id_reg = r&#39;src=&quot;http://www.lofter.com/control\?blogId=(.*)&quot;&#39;
-        blogid = re.search(id_reg, html.text).group(1)
-        print(&#39;The blogid of %s is: %s&#39; % (username, blogid))
-        return blogid
-    except Exception as e:
-        print(&#39;get blogid from http://%s.lofter.com failed&#39; % username)
-        print(&#39;please check your username.&#39;)
-        exit(1)
-
-
-def _get_timestamp(html, time_pattern):
-    if not html:
-        timestamp = round(time.time() * 1000)  # first timestamp(ms)
-    else:
-        timestamp = time_pattern.search(html).group(1)
-    return str(timestamp)
-
-
-def _get_imgurls(username, blog, headers):
-    blog_url = &#39;http://%s.lofter.com/post/%s&#39; % (username, blog)
-    blog_html = requests.get(blog_url, headers = headers).text
-    imgurls = re.findall(r&#39;bigimgsrc=&quot;(.*?)&quot;&#39;, blog_html)
-    print(&#39;Blog\t%s\twith %d\tpictures&#39; % (blog_url, len(imgurls)))
-    return imgurls
-
-
-def _capture_images(imgurl, path):
-    headers = {&#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.146 Safari/537.36&#39;}
-    for i in range(1,3):
-        try:
-            image_request = requests.get(imgurl, headers = headers, timeout = 20)
-            if image_request.status_code == 200:
-                open(path, &#39;wb&#39;).write(image_request.content)
-                break
-        except requests.exceptions.ConnectionError as e:
-            print(&#39;\tGet %s failed\n\terror:%s&#39; % (imgurl, e))
-            if i == 1:
-                imgurl = re.sub(&#39;^http://img.*?\.&#39;,&#39;http://img.&#39;,imgurl)
-                print(&#39;\tRetry &#39; + imgurl)
-            else:
-                print(&#39;\tRetry fail&#39;)
-        except Exception as e:
-            print(e)
-        finally:
-            pass
-
-
-def _create_query_data(blogid, timestamp, query_number):
-    data = {&#39;callCount&#39;:&#39;1&#39;,
-    &#39;scriptSessionId&#39;:&#39;${scriptSessionId}187&#39;,
-    &#39;httpSessionId&#39;:&#39;&#39;,
-    &#39;c0-scriptName&#39;:&#39;ArchiveBean&#39;,
-    &#39;c0-methodName&#39;:&#39;getArchivePostByTime&#39;,
-    &#39;c0-id&#39;:&#39;0&#39;,
-    &#39;c0-param0&#39;:&#39;number:&#39; + blogid,
-    &#39;c0-param1&#39;:&#39;number:&#39; + timestamp,
-    &#39;c0-param2&#39;:&#39;number:&#39; + query_number,
-    &#39;c0-param3&#39;:&#39;boolean:false&#39;,
-    &#39;batchId&#39;:&#39;123456&#39;}
-    return data
-
-
-def main():
-    # prepare paramters
-    username = &#39;litreily&#39;
-    blogid = _get_blogid(username)
-    query_number = 40
-    time_pattern = re.compile(&#39;s%d\.time=(.*);s.*type&#39; % (query_number-1))
-    blog_url_pattern = re.compile(r&#39;s[\d]*\.permalink=&quot;([\w_]*)&quot;&#39;) 
-
-    # creat path to save imgs
-    path = _get_path(username)
-
-    # parameters of post packet
-    url = &#39;http://%s.lofter.com/dwr/call/plaincall/ArchiveBean.getArchivePostByTime.dwr&#39; % username
-    data = _create_query_data(blogid, _get_timestamp(None, time_pattern), str(query_number))
-    headers = {
-        &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.146 Safari/537.36&#39;,
-        &#39;Host&#39;: username + &#39;.lofter.com&#39;,
-        &#39;Referer&#39;: &#39;http://%s.lofter.com/view&#39; % username,
-        &#39;Accept-Encoding&#39;: &#39;gzip, deflate&#39;
-    }
-
-    num_blogs = 0
-    num_imgs = 0
-    index_img = 0
-    print(&#39;------------------------------- start line ------------------------------&#39;)
-    while True:
-        html = _get_html(url, data, headers).text
-        # get urls of blogs: s3.permalink=&quot;44fbca_19a6b1b&quot;
-        new_blogs = blog_url_pattern.findall(html)
-        num_new_blogs = len(new_blogs)
-        num_blogs += num_new_blogs 
-
-        if num_new_blogs != 0:
-            print(&#39;NewBlogs:%d\tTotalBolgs:%d&#39; % (num_new_blogs, num_blogs))
-            # get imgurls from new_blogs
-            imgurls = []
-            for blog in new_blogs:
-                imgurls.extend(_get_imgurls(username, blog, headers))
-            num_imgs += len(imgurls)
-
-            # download imgs
-            for imgurl in imgurls:
-                index_img += 1
-                paths = &#39;%s/%d.%s&#39; % (path, index_img, re.search(r&#39;(jpg|png|gif)&#39;, imgurl).group(0))
-                print(&#39;{}\t{}&#39;.format(index_img, paths))
-                _capture_images(imgurl, paths)
-
-        if num_new_blogs != query_number:
-            print(&#39;------------------------------- stop line -------------------------------&#39;)
-            print(&#39;capture complete!&#39;)
-            print(&#39;captured blogs:%d images:%d&#39; % (num_blogs, num_imgs))
-            print(&#39;download path:&#39; + path)
-            print(&#39;-------------------------------------------------------------------------&#39;)
-            break
-
-        data[&#39;c0-param1&#39;] = &#39;number:&#39; + _get_timestamp(html, time_pattern)
-        print(&#39;The next TimeStamp is : %s\n&#39; % data[&#39;c0-param1&#39;].split(&#39;:&#39;)[1])
-        # wait a few second
-        time.sleep(random.randint(5,10))
-
-
-if __name__ == &#39;__main__&#39;:
-    main()
-</code></pre>
+<h3 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"><span class="comment"># date: 2018.03.07</span></span><br><span class="line"><span class="string">"""Capture pictures from lofter with username."""</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> platform</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_get_path</span><span class="params">(username)</span>:</span></span><br><span class="line">    path = &#123;</span><br><span class="line">        <span class="string">'Windows'</span>: <span class="string">'D:/litreily/Pictures/python/lofter/'</span> + username,</span><br><span class="line">        <span class="string">'Linux'</span>: <span class="string">'/mnt/d/litreily/Pictures/python/lofter/'</span> + username</span><br><span class="line">    &#125;.get(platform.system())</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.isdir(path):</span><br><span class="line">        os.makedirs(path)</span><br><span class="line">    <span class="keyword">return</span> path</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_get_html</span><span class="params">(url, data, headers)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        html = requests.post(url, data, headers = headers)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        print(<span class="string">"get %s failed\n%s"</span> % (url, str(e)))</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">None</span></span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    <span class="keyword">return</span> html</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_get_blogid</span><span class="params">(username)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        html = requests.get(<span class="string">'http://%s.lofter.com'</span> % username)</span><br><span class="line">        id_reg = <span class="string">r'src="http://www.lofter.com/control\?blogId=(.*)"'</span></span><br><span class="line">        blogid = re.search(id_reg, html.text).group(<span class="number">1</span>)</span><br><span class="line">        print(<span class="string">'The blogid of %s is: %s'</span> % (username, blogid))</span><br><span class="line">        <span class="keyword">return</span> blogid</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        print(<span class="string">'get blogid from http://%s.lofter.com failed'</span> % username)</span><br><span class="line">        print(<span class="string">'please check your username.'</span>)</span><br><span class="line">        exit(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_get_timestamp</span><span class="params">(html, time_pattern)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> html:</span><br><span class="line">        timestamp = round(time.time() * <span class="number">1000</span>)  <span class="comment"># first timestamp(ms)</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        timestamp = time_pattern.search(html).group(<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> str(timestamp)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_get_imgurls</span><span class="params">(username, blog, headers)</span>:</span></span><br><span class="line">    blog_url = <span class="string">'http://%s.lofter.com/post/%s'</span> % (username, blog)</span><br><span class="line">    blog_html = requests.get(blog_url, headers = headers).text</span><br><span class="line">    imgurls = re.findall(<span class="string">r'bigimgsrc="(.*?)"'</span>, blog_html)</span><br><span class="line">    print(<span class="string">'Blog\t%s\twith %d\tpictures'</span> % (blog_url, len(imgurls)))</span><br><span class="line">    <span class="keyword">return</span> imgurls</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_capture_images</span><span class="params">(imgurl, path)</span>:</span></span><br><span class="line">    headers = &#123;<span class="string">'User-Agent'</span>: <span class="string">'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.146 Safari/537.36'</span>&#125;</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">3</span>):</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            image_request = requests.get(imgurl, headers = headers, timeout = <span class="number">20</span>)</span><br><span class="line">            <span class="keyword">if</span> image_request.status_code == <span class="number">200</span>:</span><br><span class="line">                open(path, <span class="string">'wb'</span>).write(image_request.content)</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">except</span> requests.exceptions.ConnectionError <span class="keyword">as</span> e:</span><br><span class="line">            print(<span class="string">'\tGet %s failed\n\terror:%s'</span> % (imgurl, e))</span><br><span class="line">            <span class="keyword">if</span> i == <span class="number">1</span>:</span><br><span class="line">                imgurl = re.sub(<span class="string">'^http://img.*?\.'</span>,<span class="string">'http://img.'</span>,imgurl)</span><br><span class="line">                print(<span class="string">'\tRetry '</span> + imgurl)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                print(<span class="string">'\tRetry fail'</span>)</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            print(e)</span><br><span class="line">        <span class="keyword">finally</span>:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_create_query_data</span><span class="params">(blogid, timestamp, query_number)</span>:</span></span><br><span class="line">    data = &#123;<span class="string">'callCount'</span>:<span class="string">'1'</span>,</span><br><span class="line">    <span class="string">'scriptSessionId'</span>:<span class="string">'$&#123;scriptSessionId&#125;187'</span>,</span><br><span class="line">    <span class="string">'httpSessionId'</span>:<span class="string">''</span>,</span><br><span class="line">    <span class="string">'c0-scriptName'</span>:<span class="string">'ArchiveBean'</span>,</span><br><span class="line">    <span class="string">'c0-methodName'</span>:<span class="string">'getArchivePostByTime'</span>,</span><br><span class="line">    <span class="string">'c0-id'</span>:<span class="string">'0'</span>,</span><br><span class="line">    <span class="string">'c0-param0'</span>:<span class="string">'number:'</span> + blogid,</span><br><span class="line">    <span class="string">'c0-param1'</span>:<span class="string">'number:'</span> + timestamp,</span><br><span class="line">    <span class="string">'c0-param2'</span>:<span class="string">'number:'</span> + query_number,</span><br><span class="line">    <span class="string">'c0-param3'</span>:<span class="string">'boolean:false'</span>,</span><br><span class="line">    <span class="string">'batchId'</span>:<span class="string">'123456'</span>&#125;</span><br><span class="line">    <span class="keyword">return</span> data</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment"># prepare paramters</span></span><br><span class="line">    username = <span class="string">'litreily'</span></span><br><span class="line">    blogid = _get_blogid(username)</span><br><span class="line">    query_number = <span class="number">40</span></span><br><span class="line">    time_pattern = re.compile(<span class="string">'s%d\.time=(.*);s.*type'</span> % (query_number<span class="number">-1</span>))</span><br><span class="line">    blog_url_pattern = re.compile(<span class="string">r's[\d]*\.permalink="([\w_]*)"'</span>) </span><br><span class="line">    </span><br><span class="line">    <span class="comment"># creat path to save imgs</span></span><br><span class="line">    path = _get_path(username)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># parameters of post packet</span></span><br><span class="line">    url = <span class="string">'http://%s.lofter.com/dwr/call/plaincall/ArchiveBean.getArchivePostByTime.dwr'</span> % username</span><br><span class="line">    data = _create_query_data(blogid, _get_timestamp(<span class="keyword">None</span>, time_pattern), str(query_number))</span><br><span class="line">    headers = &#123;</span><br><span class="line">        <span class="string">'User-Agent'</span>: <span class="string">'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.146 Safari/537.36'</span>,</span><br><span class="line">        <span class="string">'Host'</span>: username + <span class="string">'.lofter.com'</span>,</span><br><span class="line">        <span class="string">'Referer'</span>: <span class="string">'http://%s.lofter.com/view'</span> % username,</span><br><span class="line">        <span class="string">'Accept-Encoding'</span>: <span class="string">'gzip, deflate'</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    num_blogs = <span class="number">0</span></span><br><span class="line">    num_imgs = <span class="number">0</span></span><br><span class="line">    index_img = <span class="number">0</span></span><br><span class="line">    print(<span class="string">'------------------------------- start line ------------------------------'</span>)</span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">        html = _get_html(url, data, headers).text</span><br><span class="line">        <span class="comment"># get urls of blogs: s3.permalink="44fbca_19a6b1b"</span></span><br><span class="line">        new_blogs = blog_url_pattern.findall(html)</span><br><span class="line">        num_new_blogs = len(new_blogs)</span><br><span class="line">        num_blogs += num_new_blogs </span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> num_new_blogs != <span class="number">0</span>:</span><br><span class="line">            print(<span class="string">'NewBlogs:%d\tTotalBolgs:%d'</span> % (num_new_blogs, num_blogs))</span><br><span class="line">            <span class="comment"># get imgurls from new_blogs</span></span><br><span class="line">            imgurls = []</span><br><span class="line">            <span class="keyword">for</span> blog <span class="keyword">in</span> new_blogs:</span><br><span class="line">                imgurls.extend(_get_imgurls(username, blog, headers))</span><br><span class="line">            num_imgs += len(imgurls)</span><br><span class="line"></span><br><span class="line">            <span class="comment"># download imgs</span></span><br><span class="line">            <span class="keyword">for</span> imgurl <span class="keyword">in</span> imgurls:</span><br><span class="line">                index_img += <span class="number">1</span></span><br><span class="line">                paths = <span class="string">'%s/%d.%s'</span> % (path, index_img, re.search(<span class="string">r'(jpg|png|gif)'</span>, imgurl).group(<span class="number">0</span>))</span><br><span class="line">                print(<span class="string">'&#123;&#125;\t&#123;&#125;'</span>.format(index_img, paths))</span><br><span class="line">                _capture_images(imgurl, paths)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> num_new_blogs != query_number:</span><br><span class="line">            print(<span class="string">'------------------------------- stop line -------------------------------'</span>)</span><br><span class="line">            print(<span class="string">'capture complete!'</span>)</span><br><span class="line">            print(<span class="string">'captured blogs:%d images:%d'</span> % (num_blogs, num_imgs))</span><br><span class="line">            print(<span class="string">'download path:'</span> + path)</span><br><span class="line">            print(<span class="string">'-------------------------------------------------------------------------'</span>)</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">        data[<span class="string">'c0-param1'</span>] = <span class="string">'number:'</span> + _get_timestamp(html, time_pattern)</span><br><span class="line">        print(<span class="string">'The next TimeStamp is : %s\n'</span> % data[<span class="string">'c0-param1'</span>].split(<span class="string">':'</span>)[<span class="number">1</span>])</span><br><span class="line">        <span class="comment"># wait a few second</span></span><br><span class="line">        time.sleep(random.randint(<span class="number">5</span>,<span class="number">10</span>))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
 <h2 id="爬取测试"><a href="#爬取测试" class="headerlink" title="爬取测试"></a>爬取测试</h2><p><img src="/assets/spider/lofter/lofter_spider.png" alt="lofter spider"></p>
 <p><img src="/assets/spider/lofter/pictures.png" alt="pictures"></p>
 <h2 id="说在最后"><a href="#说在最后" class="headerlink" title="说在最后"></a>说在最后</h2><ul>
@@ -380,19 +128,7 @@ if __name__ == &#39;__main__&#39;:
 <li>欢迎交流探讨与STAR</li>
 <li>请节制使用！</li>
 </ul>
-</div></article></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2018/04/10/sina/">&lt; Python网络爬虫2 - 爬取新浪微博用户图片</a><a class="next" href="/2018/02/22/ddos-attack/">两款实用的DDos攻击工具 &gt;</a></div><div id="valine-comment"><style type="text/css">.v * { color: #CECECE; }
-.v a { color: #0F9FB4; }
-.v a:hover { color: #216C73; }
-.v li { list-style: inherit; }
-.v .vwrap { border: 1px solid #223441; border-radius: 0; }
-.v .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
-.v .vbtn { border-radius: 0; color: #cecece; background: none; }
-.v .vlist .vcard .vh { border-bottom-color: #293D4E; }
-.v .vwrap .vheader .vinput { border-bottom-color: #223441; }
-.v .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
-.v code, .v pre,.v .vlist .vcard .vhead .vsys { background: #203240; }
-.v .vlist .vcard .vcontent.expand:before { background: linear-gradient(180deg,hsla(206,33%,19%,0),hsla(206,33%,19%,.9)); }
-.v .vlist .vcard .vcontent.expand:after { background: hsla(206,33%,19%,.9); }</style><div id="vcomment"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a class="article-share-link" data-url="http://www.litreily.top/2018/03/17/lofter/" data-id="cjr8rb4o1004ar6wtlz4xlbwm" data-qrcode="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAK4AAACuCAAAAACKZ2kyAAABz0lEQVR42u3aQW4CMQwFUO5/aSqxQmozfMdJmEovK1RgeOnCir/zeMTr+Vqj1+/r999Hn3x/d/HCxcVtc5+Xa/Tzq56Zfx4XF/c8t1q8rgvW6MkJ/YMNFxf3Ztz8ZzqbxMXF/Y/c6w3kTREuLu79uf1GJf8X5KEJLi7ut7j9wLT/+mi+i4uL24g18wg1L2r5E/54Ji4u7hFuHn/0G57qQSfq1XBxcTdwk7iz2g6NnpBEHpPjVVxc3A3caqiRfzeJNgrv4uLiHuFeV4k8ssyPPnPlLCpquLi4i7jV0Wk+Jll1betD3cXFxd3AXXUNK485qhsuzHZwcXG3cfO2pzqCreYbUSHDxcU9wl01XJkcoFZ7NVxc3A3cueaneiSqbn5YyHBxcb/EzQ8i1WsWnV4GFxf3JLczDunEH/lVj6hXw8XFXcqd65Y66LlRyrD5wcXF3cBde6Eq31Je2obfwsXF3cadizX7pWryqgcuLu4Rbr7mRqedYlcOSnBxcZdy8+KVN0KdAe2HYxYuLu5B7twYdfGAJCmIuLi4t+T249G5AxMuLu49uXPz2+qANpoG4+LiHuHmzc+quxB5ISukvLi4uIu4c4Fplf7lfBcXFzfl/gDllUP6J+IrwQAAAABJRU5ErkJggg==">Share</a><div class="tags"><a href="/tags/tools/">tools</a><a href="/tags/spider/">spider</a><a href="/tags/lofter/">lofter</a></div><div class="post-nav"><a class="pre" href="/2018/04/10/sina/">Python网络爬虫2 - 爬取新浪微博用户图片</a><a class="next" href="/2018/02/22/ddos-attack/">两款实用的DDos攻击工具</a></div><div id="vcomment"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
 var verify = 'false' == true ? true : false;
 var GUEST_INFO = ['nick','mail','link'];
 var guest_info = 'nick,mail,link'.split(',').filter(function(item){
@@ -409,4 +145,10 @@ window.valine = new Valine({
   avatar:'identicon',
   guest_info:guest_info,
   pageSize:'10'
-})</script></div></section><footer><p>Copyright © 2019 <a href="/." rel="nofollow">LITREILY | </a>Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer><script type="text/javascript" src="/plugins/prettify/prettify.js"></script></div></div></div></body></html>
+})</script></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/LabVIEW/">LabVIEW</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Matlab/">Matlab</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Media/">Media</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Network/">Network</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web/">Web</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/嵌入式/">嵌入式</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/杂物柜/">杂物柜</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/tags/FreeRTOS/" style="font-size: 12px;">FreeRTOS</a> <a href="/tags/jekyll/" style="font-size: 15.43px;">jekyll</a> <a href="/tags/test/" style="font-size: 15.43px;">test</a> <a href="/tags/literature/" style="font-size: 12px;">literature</a> <a href="/tags/video/" style="font-size: 13.71px;">video</a> <a href="/tags/algorithm/" style="font-size: 20.57px;">algorithm</a> <a href="/tags/matlab/" style="font-size: 17.14px;">matlab</a> <a href="/tags/windows/" style="font-size: 13.71px;">windows</a> <a href="/tags/labview/" style="font-size: 22.29px;">labview</a> <a href="/tags/tdms/" style="font-size: 13.71px;">tdms</a> <a href="/tags/brackets/" style="font-size: 12px;">brackets</a> <a href="/tags/git/" style="font-size: 15.43px;">git</a> <a href="/tags/tools/" style="font-size: 17.14px;">tools</a> <a href="/tags/utorrent/" style="font-size: 12px;">utorrent</a> <a href="/tags/atom/" style="font-size: 13.71px;">atom</a> <a href="/tags/C-C/" style="font-size: 24px;">C/C++</a> <a href="/tags/ubuntu/" style="font-size: 22.29px;">ubuntu</a> <a href="/tags/linux/" style="font-size: 18.86px;">linux</a> <a href="/tags/signal/" style="font-size: 13.71px;">signal</a> <a href="/tags/music/" style="font-size: 13.71px;">music</a> <a href="/tags/stm32/" style="font-size: 13.71px;">stm32</a> <a href="/tags/VS/" style="font-size: 13.71px;">VS</a> <a href="/tags/hexo/" style="font-size: 13.71px;">hexo</a> <a href="/tags/RSS/" style="font-size: 12px;">RSS</a> <a href="/tags/Feed/" style="font-size: 12px;">Feed</a> <a href="/tags/office/" style="font-size: 12px;">office</a> <a href="/tags/word/" style="font-size: 12px;">word</a> <a href="/tags/LWD/" style="font-size: 12px;">LWD</a> <a href="/tags/log/" style="font-size: 12px;">log</a> <a href="/tags/ruby/" style="font-size: 13.71px;">ruby</a> <a href="/tags/wireshark/" style="font-size: 12px;">wireshark</a> <a href="/tags/shell/" style="font-size: 12px;">shell</a> <a href="/tags/makefile/" style="font-size: 13.71px;">makefile</a> <a href="/tags/tmux/" style="font-size: 13.71px;">tmux</a> <a href="/tags/telnet/" style="font-size: 12px;">telnet</a> <a href="/tags/smtp/" style="font-size: 12px;">smtp</a> <a href="/tags/ddos/" style="font-size: 12px;">ddos</a> <a href="/tags/hping3/" style="font-size: 12px;">hping3</a> <a href="/tags/mysql/" style="font-size: 12px;">mysql</a> <a href="/tags/centos/" style="font-size: 12px;">centos</a> <a href="/tags/spider/" style="font-size: 17.14px;">spider</a> <a href="/tags/scrapy/" style="font-size: 12px;">scrapy</a> <a href="/tags/pug/" style="font-size: 12px;">pug</a> <a href="/tags/lofter/" style="font-size: 12px;">lofter</a> <a href="/tags/sort/" style="font-size: 12px;">sort</a> <a href="/tags/visualization/" style="font-size: 13.71px;">visualization</a> <a href="/tags/ssh/" style="font-size: 12px;">ssh</a> <a href="/tags/proxy/" style="font-size: 12px;">proxy</a> <a href="/tags/vps/" style="font-size: 12px;">vps</a> <a href="/tags/stdio/" style="font-size: 12px;">stdio</a> <a href="/tags/cache/" style="font-size: 12px;">cache</a> <a href="/tags/buffer/" style="font-size: 12px;">buffer</a> <a href="/tags/MongoDB/" style="font-size: 12px;">MongoDB</a> <a href="/tags/queue/" style="font-size: 12px;">queue</a> <a href="/tags/xlwt/" style="font-size: 12px;">xlwt</a> <a href="/tags/pypcap/" style="font-size: 12px;">pypcap</a> <a href="/tags/dpkt/" style="font-size: 12px;">dpkt</a> <a href="/tags/sina/" style="font-size: 12px;">sina</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2019/01/22/highcharts/">Python之MongoDB数据分析及其Highcharts可视化</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/31/pypcap-install/">Python之pypcap库的安装及简单抓包工具的实现</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/25/autossh/">autossh反向代理实现内网穿透</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/25/io-cache/">Linux中的文件I/O缓冲</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/27/tee/">Linux指令 - tee的实现</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Links</i></div><ul></ul><a href="https://www.smslit.top" title="smslit-水木十里" target="_blank">smslit-水木十里</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2019 <a href="/." rel="nofollow">LITREILY.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> manupassant.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.css"><script type="text/javascript" src="/js/search.js?v=0.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+   search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
