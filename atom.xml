@@ -34,9 +34,9 @@
       <category term="Python" scheme="http://www.litreily.top/categories/Python/"/>
     
     
-      <category term="visualization" scheme="http://www.litreily.top/tags/visualization/"/>
-    
       <category term="MongoDB" scheme="http://www.litreily.top/tags/MongoDB/"/>
+    
+      <category term="visualization" scheme="http://www.litreily.top/tags/visualization/"/>
     
   </entry>
   
@@ -231,9 +231,9 @@ sudo pip install pypcap
     
       <category term="algorithm" scheme="http://www.litreily.top/tags/algorithm/"/>
     
-      <category term="sort" scheme="http://www.litreily.top/tags/sort/"/>
-    
       <category term="visualization" scheme="http://www.litreily.top/tags/visualization/"/>
+    
+      <category term="sort" scheme="http://www.litreily.top/tags/sort/"/>
     
   </entry>
   

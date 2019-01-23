@@ -400,7 +400,7 @@ a, .m-nav a:hover, .l-post .p-desc a:hover, .ttl a:hover, .m-nav .dot, .l-pager 
   .p-content pre ol {
     overflow: auto; }
   .p-content pre ol li {
-    line-height: 1.5em;
+    line-height: 1.8em;
     list-style: none;
     margin-left: 0;
     white-space: pre; }
