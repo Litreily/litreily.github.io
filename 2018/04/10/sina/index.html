@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><title>Python网络爬虫2 - 爬取新浪微博用户图片 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><body><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="https://litreily.gitbooks.io/notes/">笔记</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li class="m-sch"><form class="form" id="j-formsch" action="/search" method="get"><input class="txt" type="text" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"></form></li></ul></div></nav></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><h1 class="p-title">Python网络爬虫2 - 爬取新浪微博用户图片</h1><div class="p-content"><p>其实，新浪微博用户图片爬虫是我学习<code>python</code>以来写的第一个爬虫，只不过当时懒，后来爬完<code>Lofter</code>后觉得有必要总结一下，所以就有了第一篇爬虫博客。现在暂时闲下来了，准备把新浪的这个也补上。</p>
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><title>Python网络爬虫2 - 爬取新浪微博用户图片 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/8.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Python网络爬虫2 - 爬取新浪微博用户图片</h1><a id="logo" href="/.">LITREILY</a><p class="description">Stay Hungry, Stay Foolish</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> Home</i></a><a href="/archives/"><i class="fa fa-archive"> Archive</i></a><a href="https://litreily.gitbooks.io/notes/"><i class="fa fa-book"> Notes</i></a><a href="/about/"><i class="fa fa-user"> About</i></a><a href="/history/"><i class="fa fa-history"> History</i></a><a href="/atom.xml"><i class="fa fa-rss"> RSS</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">Python网络爬虫2 - 爬取新浪微博用户图片</h1><div class="post-meta">Apr 10, 2018<span> | </span><span class="category"><a href="/categories/Python/">Python</a></span></div><a class="disqus-comment-count" href="/2018/04/10/sina/#vcomment"><span class="valine-comment-count" data-xid="/2018/04/10/sina/"></span><span> Comment</span></a><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">Contents</div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#分析sina站点"><span class="toc-number">1.</span> <span class="toc-text">分析sina站点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#获取用户ID"><span class="toc-number">1.1.</span> <span class="toc-text">获取用户ID</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#图片存储参数解析"><span class="toc-number">1.2.</span> <span class="toc-text">图片存储参数解析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#图链解析"><span class="toc-number">1.3.</span> <span class="toc-text">图链解析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#确定爬取方案"><span class="toc-number">2.</span> <span class="toc-text">确定爬取方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#获取cookies"><span class="toc-number">2.1.</span> <span class="toc-text">获取cookies</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#下载网页"><span class="toc-number">2.2.</span> <span class="toc-text">下载网页</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#获取存储路径"><span class="toc-number">2.3.</span> <span class="toc-text">获取存储路径</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#下载图片"><span class="toc-number">2.4.</span> <span class="toc-text">下载图片</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#源码"><span class="toc-number">3.</span> <span class="toc-text">源码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#爬取测试"><span class="toc-number">4.</span> <span class="toc-text">爬取测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#写在最后"><span class="toc-number">5.</span> <span class="toc-text">写在最后</span></a></li></ol></div></div><div class="post-content"><p>其实，新浪微博用户图片爬虫是我学习<code>python</code>以来写的第一个爬虫，只不过当时懒，后来爬完<code>Lofter</code>后觉得有必要总结一下，所以就有了第一篇爬虫博客。现在暂时闲下来了，准备把新浪的这个也补上。</p>
 <p>言归正传，既然选择爬新浪微博，那当然是有需求的，这也是学习的主要动力之一，没错，就是美图。<code>sina</code>用户多数微博都是包含图片的，而且是组图居多，单个图片的较少。</p>
 <p>为了避免侵权，本文以本人微博<a href="https://weibo.com/litreily" target="_blank" rel="noopener">litreily</a>为例说明整个爬取过程，虽然图片较少，质量较低，但爬取方案是绝对ok的，使用时只要换个用户ID就可以了。</p>
 <h2 id="分析sina站点"><a href="#分析sina站点" class="headerlink" title="分析sina站点"></a>分析sina站点</h2><h3 id="获取用户ID"><a href="#获取用户ID" class="headerlink" title="获取用户ID"></a>获取用户ID</h3><p>在爬取前，我们需要知道的是每个用户都有一个用户名，而一个用户名又对应一个唯一的整型数字ID，类似于学生的学号，本人的是<code>2657006573</code>。至于怎么根据用户名去获取ID，有以下两种方法：</p>
@@ -8,14 +8,7 @@
 </ol>
 <p>其实是可以在已知用户名的情况下通过爬虫自动获取到<code>uid</code>的，但是我当时初学<code>python</code>，并没有考虑充分，所以后面的源码是以用户ID作为输入参数的。</p>
 <h3 id="图片存储参数解析"><a href="#图片存储参数解析" class="headerlink" title="图片存储参数解析"></a>图片存储参数解析</h3><p>用户所有的图片都被存放至这样的路径下，真的是<strong>所有图片</strong>哦！！！</p>
-<pre><code class="yml">https://weibo.cn/{uid}/profile?filter={filter_type}&amp;page={page_num}
-
-# example
-https://weibo.cn/2657006573/profile?filter=0&amp;page=1
-uid: 2657006573
-filter_type: 0
-page_num: 1
-</code></pre>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">https:</span><span class="string">//weibo.cn/&#123;uid&#125;/profile?filter=&#123;filter_type&#125;&amp;page=&#123;page_num&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># example</span></span><br><span class="line"><span class="attr">https:</span><span class="string">//weibo.cn/2657006573/profile?filter=0&amp;page=1</span></span><br><span class="line"><span class="attr">uid:</span> <span class="number">2657006573</span></span><br><span class="line"><span class="attr">filter_type:</span> <span class="number">0</span></span><br><span class="line"><span class="attr">page_num:</span> <span class="number">1</span></span><br></pre></td></tr></table></figure>
 <p>注意，是<code>weibo.cn</code>而不是<code>weibo.com</code>，至于我是怎么找到这个页面的，说实话，我也忘了。。。</p>
 <p>链接中包含3个参数，<code>uid</code>, <code>filter_mode</code> 以及 <code>page_num</code>。其中，<code>uid</code>就是前面提及的用户ID，<code>page_num</code>也很好理解，就是分页的当前页数，从1开始增加，那么，这个<code>filter_mode</code>是什么呢？</p>
 <p>不着急，我们先来看看页面↓</p>
@@ -51,12 +44,7 @@ page_num: 1
 </ol>
 <p>可以看出，只是一个<code>thumb180</code>和<code>large</code>的区别。既然发现了规律，那就好办多了，我们只要知道缩略图的网址，就可以将域名后的第一级子域名替换成<code>large</code>就可以了，而不用获取<strong>原图</strong>链接再跳转一次。</p>
 <p>而且，多次尝试可以发现组图链接及缩略图链接满足正则表达式：</p>
-<pre><code class="python"># 1. 组图链接：
-imglist_reg = r&#39;href=&quot;(https://weibo.cn/mblog/picAll/.{9}\?rl=2)&quot;&#39;
-
-# 2. 缩略图
-img_reg = r&#39;src=&quot;(http://w.{2}\.sinaimg.cn/(.{6,8})/.{32,33}.(jpg|gif))&quot;&#39;
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 组图链接：</span></span><br><span class="line">imglist_reg = <span class="string">r'href="(https://weibo.cn/mblog/picAll/.&#123;9&#125;\?rl=2)"'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 缩略图</span></span><br><span class="line">img_reg = <span class="string">r'src="(http://w.&#123;2&#125;\.sinaimg.cn/(.&#123;6,8&#125;)/.&#123;32,33&#125;.(jpg|gif))"'</span></span><br></pre></td></tr></table></figure>
 <p>到此，新浪微博的解析过程就结束了，图链的格式以及获取方式也都清楚了。下面就可以设计方案进行爬取了。</p>
 <h2 id="确定爬取方案"><a href="#确定爬取方案" class="headerlink" title="确定爬取方案"></a>确定爬取方案</h2><p>根据解析结果，很容易制定出以下爬取方案：</p>
 <ol>
@@ -75,157 +63,14 @@ img_reg = r&#39;src=&quot;(http://w.{2}\.sinaimg.cn/(.{6,8})/.{32,33}.(jpg|gif))
 <h3 id="获取cookies"><a href="#获取cookies" class="headerlink" title="获取cookies"></a>获取cookies</h3><p>针对以上方案，其中有几个重点内容，其一就是<code>cookies</code>的获取，我暂时还没学怎么自动获取<code>cookies</code>，所以目前是登录微博后手动获取的。</p>
 <p><img src="/assets/spider/sina/cookies.png" alt="get cookies"></p>
 <h3 id="下载网页"><a href="#下载网页" class="headerlink" title="下载网页"></a>下载网页</h3><p>下载网页用的是<code>python3</code>自带的<code>urllib</code>库，当时没学<code>requests</code>，以后可能也很少用<code>urllib</code>了。</p>
-<pre><code class="python">def _get_html(url, headers):
-    try:
-        req = urllib.request.Request(url, headers = headers)
-        page = urllib.request.urlopen(req)
-        html = page.read().decode(&#39;UTF-8&#39;)
-    except Exception as e:
-        print(&quot;get %s failed&quot; % url)
-        return None
-    return html
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_get_html</span><span class="params">(url, headers)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        req = urllib.request.Request(url, headers = headers)</span><br><span class="line">        page = urllib.request.urlopen(req)</span><br><span class="line">        html = page.read().decode(<span class="string">'UTF-8'</span>)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        print(<span class="string">"get %s failed"</span> % url)</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">None</span></span><br><span class="line">    <span class="keyword">return</span> html</span><br></pre></td></tr></table></figure>
 <h3 id="获取存储路径"><a href="#获取存储路径" class="headerlink" title="获取存储路径"></a>获取存储路径</h3><p>由于我是在<code>win10</code>下编写的代码，但是个人比较喜欢用<code>bash</code>，所以图片的存储路径有以下两种格式，<code>_get_path</code>函数会自动判断当前操作系统的类型，然后选择相应的路径。</p>
-<pre><code class="python">def _get_path(uid):
-    path = {
-        &#39;Windows&#39;: &#39;D:/litreily/Pictures/python/sina/&#39; + uid,
-        &#39;Linux&#39;: &#39;/mnt/d/litreily/Pictures/python/sina/&#39; + uid
-    }.get(platform.system())
-
-    if not os.path.isdir(path):
-        os.makedirs(path)
-    return path
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_get_path</span><span class="params">(uid)</span>:</span></span><br><span class="line">    path = &#123;</span><br><span class="line">        <span class="string">'Windows'</span>: <span class="string">'D:/litreily/Pictures/python/sina/'</span> + uid,</span><br><span class="line">        <span class="string">'Linux'</span>: <span class="string">'/mnt/d/litreily/Pictures/python/sina/'</span> + uid</span><br><span class="line">    &#125;.get(platform.system())</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.isdir(path):</span><br><span class="line">        os.makedirs(path)</span><br><span class="line">    <span class="keyword">return</span> path</span><br></pre></td></tr></table></figure>
 <p>幸好<code>windows</code>是兼容<code>linux</code>系统的斜杠符号的，不然程序中的相对路径替换还挺麻烦。</p>
 <h3 id="下载图片"><a href="#下载图片" class="headerlink" title="下载图片"></a>下载图片</h3><p>由于选用的<code>urllib</code>库，所以下载图片就使用<code>urllib.request.urlretrieve</code>了</p>
-<pre><code class="python"># image url of one page is saved in imgurls
-for img in imgurls:
-    imgurl = img[0].replace(img[1], &#39;large&#39;)
-    num_imgs += 1
-    try:
-        urllib.request.urlretrieve(imgurl, &#39;{}/{}.{}&#39;.format(path, num_imgs, img[2]))
-        # display the raw url of images
-        print(&#39;\t%d\t%s&#39; % (num_imgs, imgurl))
-    except Exception as e:
-        print(str(e))
-        print(&#39;\t%d\t%s failed&#39; % (num_imgs, imgurl))
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># image url of one page is saved in imgurls</span></span><br><span class="line"><span class="keyword">for</span> img <span class="keyword">in</span> imgurls:</span><br><span class="line">    imgurl = img[<span class="number">0</span>].replace(img[<span class="number">1</span>], <span class="string">'large'</span>)</span><br><span class="line">    num_imgs += <span class="number">1</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        urllib.request.urlretrieve(imgurl, <span class="string">'&#123;&#125;/&#123;&#125;.&#123;&#125;'</span>.format(path, num_imgs, img[<span class="number">2</span>]))</span><br><span class="line">        <span class="comment"># display the raw url of images</span></span><br><span class="line">        print(<span class="string">'\t%d\t%s'</span> % (num_imgs, imgurl))</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        print(str(e))</span><br><span class="line">        print(<span class="string">'\t%d\t%s failed'</span> % (num_imgs, imgurl))</span><br></pre></td></tr></table></figure>
 <h2 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h2><p>其它细节详见源码</p>
-<pre><code class="python">#!/usr/bin/python3
-# -*- coding:utf-8 -*-
-# author: litreily
-# date: 2018.02.05
-&quot;&quot;&quot;Capture pictures from sina-weibo with user_id.&quot;&quot;&quot;
-
-import re
-import os
-import platform
-
-import urllib
-import urllib.request
-
-from bs4 import BeautifulSoup
-
-
-def _get_path(uid):
-    path = {
-        &#39;Windows&#39;: &#39;D:/litreily/Pictures/python/sina/&#39; + uid,
-        &#39;Linux&#39;: &#39;/mnt/d/litreily/Pictures/python/sina/&#39; + uid
-    }.get(platform.system())
-
-    if not os.path.isdir(path):
-        os.makedirs(path)
-    return path
-
-
-def _get_html(url, headers):
-    try:
-        req = urllib.request.Request(url, headers = headers)
-        page = urllib.request.urlopen(req)
-        html = page.read().decode(&#39;UTF-8&#39;)
-    except Exception as e:
-        print(&quot;get %s failed&quot; % url)
-        return None
-    return html
-
-
-def _capture_images(uid, headers, path):
-    filter_mode = 1      # 0-all 1-original 2-pictures
-    num_pages = 1
-    num_blogs = 0
-    num_imgs = 0
-
-    # regular expression of imgList and img
-    imglist_reg = r&#39;href=&quot;(https://weibo.cn/mblog/picAll/.{9}\?rl=2)&quot;&#39;
-    imglist_pattern = re.compile(imglist_reg)
-    img_reg = r&#39;src=&quot;(http://w.{2}\.sinaimg.cn/(.{6,8})/.{32,33}.(jpg|gif))&quot;&#39;
-    img_pattern = re.compile(img_reg)
-
-    print(&#39;start capture picture of uid:&#39; + uid)
-    while True:
-        url = &#39;https://weibo.cn/%s/profile?filter=%s&amp;page=%d&#39; % (uid, filter_mode, num_pages)
-
-        # 1. get html of each page url
-        html = _get_html(url, headers)
-
-        # 2. parse the html and find all the imgList Url of each page
-        soup = BeautifulSoup(html, &quot;html.parser&quot;)
-        # &lt;div class=&quot;c&quot; id=&quot;M_G4gb5pY8t&quot;&gt;&lt;div&gt;
-        blogs = soup.body.find_all(attrs={&#39;id&#39;:re.compile(r&#39;^M_&#39;)}, recursive=False)
-        num_blogs += len(blogs)
-
-        imgurls = []        
-        for blog in blogs:
-            blog = str(blog)
-            imglist_url = imglist_pattern.findall(blog)
-            if not imglist_url:
-                # 2.1 get img-url from blog that have only one pic
-                imgurls += img_pattern.findall(blog)
-            else:
-                # 2.2 get img-urls from blog that have group pics
-                html = _get_html(imglist_url[0], headers)
-                imgurls += img_pattern.findall(html)
-
-        if not imgurls:
-            print(&#39;capture complete!&#39;)
-            print(&#39;captured pages:%d, blogs:%d, imgs:%d&#39; % (num_pages, num_blogs, num_imgs))
-            print(&#39;directory:&#39; + path)
-            break
-
-        # 3. download all the imgs from each imgList
-        print(&#39;PAGE %d with %d images&#39; % (num_pages, len(imgurls)))
-        for img in imgurls:
-            imgurl = img[0].replace(img[1], &#39;large&#39;)
-            num_imgs += 1
-            try:
-                urllib.request.urlretrieve(imgurl, &#39;{}/{}.{}&#39;.format(path, num_imgs, img[2]))
-                # display the raw url of images
-                print(&#39;\t%d\t%s&#39; % (num_imgs, imgurl))
-            except Exception as e:
-                print(str(e))
-                print(&#39;\t%d\t%s failed&#39; % (num_imgs, imgurl))
-        num_pages += 1
-        print(&#39;&#39;)
-
-
-def main():
-    # uids = [&#39;2657006573&#39;,&#39;2173752092&#39;,&#39;3261134763&#39;,&#39;2174219060&#39;]
-    uid = &#39;2657006573&#39;
-    path = _get_path(uid)
-
-    # cookie is form the above url-&gt;network-&gt;request headers
-    cookies = &#39;&#39;
-    headers = {&#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36&#39;,
-            &#39;Cookie&#39;: cookies}
-
-    # capture imgs from sina
-    _capture_images(uid, headers, path)
-
-
-if __name__ == &#39;__main__&#39;:
-    main()
-
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python3</span></span><br><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"><span class="comment"># author: litreily</span></span><br><span class="line"><span class="comment"># date: 2018.02.05</span></span><br><span class="line"><span class="string">"""Capture pictures from sina-weibo with user_id."""</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> platform</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> urllib</span><br><span class="line"><span class="keyword">import</span> urllib.request</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_get_path</span><span class="params">(uid)</span>:</span></span><br><span class="line">    path = &#123;</span><br><span class="line">        <span class="string">'Windows'</span>: <span class="string">'D:/litreily/Pictures/python/sina/'</span> + uid,</span><br><span class="line">        <span class="string">'Linux'</span>: <span class="string">'/mnt/d/litreily/Pictures/python/sina/'</span> + uid</span><br><span class="line">    &#125;.get(platform.system())</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.isdir(path):</span><br><span class="line">        os.makedirs(path)</span><br><span class="line">    <span class="keyword">return</span> path</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_get_html</span><span class="params">(url, headers)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        req = urllib.request.Request(url, headers = headers)</span><br><span class="line">        page = urllib.request.urlopen(req)</span><br><span class="line">        html = page.read().decode(<span class="string">'UTF-8'</span>)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        print(<span class="string">"get %s failed"</span> % url)</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">None</span></span><br><span class="line">    <span class="keyword">return</span> html</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_capture_images</span><span class="params">(uid, headers, path)</span>:</span></span><br><span class="line">    filter_mode = <span class="number">1</span>      <span class="comment"># 0-all 1-original 2-pictures</span></span><br><span class="line">    num_pages = <span class="number">1</span></span><br><span class="line">    num_blogs = <span class="number">0</span></span><br><span class="line">    num_imgs = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># regular expression of imgList and img</span></span><br><span class="line">    imglist_reg = <span class="string">r'href="(https://weibo.cn/mblog/picAll/.&#123;9&#125;\?rl=2)"'</span></span><br><span class="line">    imglist_pattern = re.compile(imglist_reg)</span><br><span class="line">    img_reg = <span class="string">r'src="(http://w.&#123;2&#125;\.sinaimg.cn/(.&#123;6,8&#125;)/.&#123;32,33&#125;.(jpg|gif))"'</span></span><br><span class="line">    img_pattern = re.compile(img_reg)</span><br><span class="line">    </span><br><span class="line">    print(<span class="string">'start capture picture of uid:'</span> + uid)</span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">        url = <span class="string">'https://weibo.cn/%s/profile?filter=%s&amp;page=%d'</span> % (uid, filter_mode, num_pages)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 1. get html of each page url</span></span><br><span class="line">        html = _get_html(url, headers)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 2. parse the html and find all the imgList Url of each page</span></span><br><span class="line">        soup = BeautifulSoup(html, <span class="string">"html.parser"</span>)</span><br><span class="line">        <span class="comment"># &lt;div class="c" id="M_G4gb5pY8t"&gt;&lt;div&gt;</span></span><br><span class="line">        blogs = soup.body.find_all(attrs=&#123;<span class="string">'id'</span>:re.compile(<span class="string">r'^M_'</span>)&#125;, recursive=<span class="keyword">False</span>)</span><br><span class="line">        num_blogs += len(blogs)</span><br><span class="line"></span><br><span class="line">        imgurls = []        </span><br><span class="line">        <span class="keyword">for</span> blog <span class="keyword">in</span> blogs:</span><br><span class="line">            blog = str(blog)</span><br><span class="line">            imglist_url = imglist_pattern.findall(blog)</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> imglist_url:</span><br><span class="line">                <span class="comment"># 2.1 get img-url from blog that have only one pic</span></span><br><span class="line">                imgurls += img_pattern.findall(blog)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="comment"># 2.2 get img-urls from blog that have group pics</span></span><br><span class="line">                html = _get_html(imglist_url[<span class="number">0</span>], headers)</span><br><span class="line">                imgurls += img_pattern.findall(html)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> imgurls:</span><br><span class="line">            print(<span class="string">'capture complete!'</span>)</span><br><span class="line">            print(<span class="string">'captured pages:%d, blogs:%d, imgs:%d'</span> % (num_pages, num_blogs, num_imgs))</span><br><span class="line">            print(<span class="string">'directory:'</span> + path)</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 3. download all the imgs from each imgList</span></span><br><span class="line">        print(<span class="string">'PAGE %d with %d images'</span> % (num_pages, len(imgurls)))</span><br><span class="line">        <span class="keyword">for</span> img <span class="keyword">in</span> imgurls:</span><br><span class="line">            imgurl = img[<span class="number">0</span>].replace(img[<span class="number">1</span>], <span class="string">'large'</span>)</span><br><span class="line">            num_imgs += <span class="number">1</span></span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                urllib.request.urlretrieve(imgurl, <span class="string">'&#123;&#125;/&#123;&#125;.&#123;&#125;'</span>.format(path, num_imgs, img[<span class="number">2</span>]))</span><br><span class="line">                <span class="comment"># display the raw url of images</span></span><br><span class="line">                print(<span class="string">'\t%d\t%s'</span> % (num_imgs, imgurl))</span><br><span class="line">            <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">                print(str(e))</span><br><span class="line">                print(<span class="string">'\t%d\t%s failed'</span> % (num_imgs, imgurl))</span><br><span class="line">        num_pages += <span class="number">1</span></span><br><span class="line">        print(<span class="string">''</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment"># uids = ['2657006573','2173752092','3261134763','2174219060']</span></span><br><span class="line">    uid = <span class="string">'2657006573'</span></span><br><span class="line">    path = _get_path(uid)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># cookie is form the above url-&gt;network-&gt;request headers</span></span><br><span class="line">    cookies = <span class="string">''</span></span><br><span class="line">    headers = &#123;<span class="string">'User-Agent'</span>: <span class="string">'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36'</span>,</span><br><span class="line">            <span class="string">'Cookie'</span>: cookies&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># capture imgs from sina</span></span><br><span class="line">    _capture_images(uid, headers, path)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
 <p>使用时记得修改<code>main</code>函数中的<code>cookies</code>和<code>uid</code>！</p>
 <h2 id="爬取测试"><a href="#爬取测试" class="headerlink" title="爬取测试"></a>爬取测试</h2><p><img src="/assets/spider/sina/capturer_litreily.png" alt="capture litreily"></p>
 <p><img src="/assets/spider/sina/capturer_litreily_end.png" alt="capture litreily end"></p>
@@ -235,19 +80,7 @@ if __name__ == &#39;__main__&#39;:
 <li>由于是首个爬虫，所以许多地方有待改进，相对的<a href="http://www.litreily.top/2018/03/17/lofter/">LOFTER爬虫</a>就更娴熟写了</li>
 <li>目前没有发现新浪微博有明显的反爬措施，但还是按需索取为好</li>
 </ul>
-</div></article></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2018/04/30/cfachina/">&lt; Python网络爬虫3 - 生产者消费者模型爬取某金融网站数据</a><a class="next" href="/2018/03/17/lofter/">Python网络爬虫1 - 爬取网易LOFTER图片 &gt;</a></div><div id="valine-comment"><style type="text/css">.v * { color: #CECECE; }
-.v a { color: #0F9FB4; }
-.v a:hover { color: #216C73; }
-.v li { list-style: inherit; }
-.v .vwrap { border: 1px solid #223441; border-radius: 0; }
-.v .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
-.v .vbtn { border-radius: 0; color: #cecece; background: none; }
-.v .vlist .vcard .vh { border-bottom-color: #293D4E; }
-.v .vwrap .vheader .vinput { border-bottom-color: #223441; }
-.v .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
-.v code, .v pre,.v .vlist .vcard .vhead .vsys { background: #203240; }
-.v .vlist .vcard .vcontent.expand:before { background: linear-gradient(180deg,hsla(206,33%,19%,0),hsla(206,33%,19%,.9)); }
-.v .vlist .vcard .vcontent.expand:after { background: hsla(206,33%,19%,.9); }</style><div id="vcomment"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a class="article-share-link" data-url="http://www.litreily.top/2018/04/10/sina/" data-id="cjreqvswg003umvwthduc27tl" data-qrcode="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAK4AAACuCAAAAACKZ2kyAAABw0lEQVR42u3aS44CMQwFQO5/6Z4t0ojwHHcMSJVVKwJSzcLyJ49HvK6n9X/n1f6rnef9x4mFi4vb5l7LtT5yTf/PWj+vDbi4uPPcV4jkM3mY2/t9XFzc3+LemzDh4uL+Lnd92Dp4fSCQ4eLiNrhJ8dPH5SnRDbUaLi5ug5snJeeej/R3cXFxt7hXcSWjkb2hS3Q6Li7uCDcPKNVBaXWsUjgXFxd3hJuPPJPUp1/GRN/CxcU9xu0PQasDkjzAvcnIcHFxB7nJyCRpquaRJy+TcHFxZ7h74WaduHTGKpEEFxd3hNsJK3vj0htSK1xc3MPcPGXpFEXVNsqbuIuLi3uM2x9/5ilR0jop1Gq4uLjHuNV2Z97i7N+z2ix+cHFxb+LmlyTyoFNtoCTpFC4u7jy3M0SpFj/J3xHVari4uIPcvbFKtfG6eY0DFxf3Q9x+OlINdoUxLS4u7mHuVVxJInIuwOHi4s5wq8Fl/lbI5svg4uK2udXglbdEc0ohqcLFxR3kVi9U5QcX6rBObYSLi/sF3IRVDWHR5Q9cXNyv5FZZN7dQcXFxB7l7DY69RmoywrmhVsPFxW1wq6FkbwTbKZZwcXEHuX881+IxMBUiKAAAAABJRU5ErkJggg==">Share</a><div class="tags"><a href="/tags/tools/">tools</a><a href="/tags/spider/">spider</a><a href="/tags/sina/">sina</a></div><div class="post-nav"><a class="pre" href="/2018/04/30/cfachina/">Python网络爬虫3 - 生产者消费者模型爬取某金融网站数据</a><a class="next" href="/2018/03/17/lofter/">Python网络爬虫1 - 爬取网易LOFTER图片</a></div><div id="vcomment"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
 var verify = 'false' == true ? true : false;
 var GUEST_INFO = ['nick','mail','link'];
 var guest_info = 'nick,mail,link'.split(',').filter(function(item){
@@ -264,4 +97,10 @@ window.valine = new Valine({
   avatar:'identicon',
   guest_info:guest_info,
   pageSize:'10'
-})</script></div></section><footer><p>Copyright © 2019 <a href="/." rel="nofollow">LITREILY | </a>Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer><script type="text/javascript" src="/plugins/prettify/prettify.js"></script></div></div></div></body></html>
+})</script></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/LabVIEW/">LabVIEW</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Matlab/">Matlab</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Media/">Media</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Network/">Network</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web/">Web</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/嵌入式/">嵌入式</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/杂物柜/">杂物柜</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/tags/word/" style="font-size: 12px;">word</a> <a href="/tags/test/" style="font-size: 15.43px;">test</a> <a href="/tags/jekyll/" style="font-size: 15.43px;">jekyll</a> <a href="/tags/ruby/" style="font-size: 13.71px;">ruby</a> <a href="/tags/algorithm/" style="font-size: 20.57px;">algorithm</a> <a href="/tags/literature/" style="font-size: 12px;">literature</a> <a href="/tags/windows/" style="font-size: 13.71px;">windows</a> <a href="/tags/matlab/" style="font-size: 17.14px;">matlab</a> <a href="/tags/labview/" style="font-size: 22.29px;">labview</a> <a href="/tags/tdms/" style="font-size: 13.71px;">tdms</a> <a href="/tags/brackets/" style="font-size: 12px;">brackets</a> <a href="/tags/git/" style="font-size: 15.43px;">git</a> <a href="/tags/tools/" style="font-size: 17.14px;">tools</a> <a href="/tags/utorrent/" style="font-size: 12px;">utorrent</a> <a href="/tags/C-C/" style="font-size: 24px;">C/C++</a> <a href="/tags/ubuntu/" style="font-size: 22.29px;">ubuntu</a> <a href="/tags/linux/" style="font-size: 18.86px;">linux</a> <a href="/tags/atom/" style="font-size: 13.71px;">atom</a> <a href="/tags/music/" style="font-size: 13.71px;">music</a> <a href="/tags/signal/" style="font-size: 13.71px;">signal</a> <a href="/tags/VS/" style="font-size: 13.71px;">VS</a> <a href="/tags/stm32/" style="font-size: 13.71px;">stm32</a> <a href="/tags/hexo/" style="font-size: 13.71px;">hexo</a> <a href="/tags/RSS/" style="font-size: 12px;">RSS</a> <a href="/tags/Feed/" style="font-size: 12px;">Feed</a> <a href="/tags/FreeRTOS/" style="font-size: 12px;">FreeRTOS</a> <a href="/tags/log/" style="font-size: 12px;">log</a> <a href="/tags/office/" style="font-size: 12px;">office</a> <a href="/tags/video/" style="font-size: 12px;">video</a> <a href="/tags/makefile/" style="font-size: 13.71px;">makefile</a> <a href="/tags/wireshark/" style="font-size: 12px;">wireshark</a> <a href="/tags/telnet/" style="font-size: 12px;">telnet</a> <a href="/tags/smtp/" style="font-size: 12px;">smtp</a> <a href="/tags/tmux/" style="font-size: 13.71px;">tmux</a> <a href="/tags/shell/" style="font-size: 12px;">shell</a> <a href="/tags/mysql/" style="font-size: 12px;">mysql</a> <a href="/tags/centos/" style="font-size: 12px;">centos</a> <a href="/tags/ddos/" style="font-size: 12px;">ddos</a> <a href="/tags/hping3/" style="font-size: 12px;">hping3</a> <a href="/tags/spider/" style="font-size: 17.14px;">spider</a> <a href="/tags/sina/" style="font-size: 12px;">sina</a> <a href="/tags/lofter/" style="font-size: 12px;">lofter</a> <a href="/tags/scrapy/" style="font-size: 12px;">scrapy</a> <a href="/tags/pug/" style="font-size: 12px;">pug</a> <a href="/tags/queue/" style="font-size: 12px;">queue</a> <a href="/tags/xlwt/" style="font-size: 12px;">xlwt</a> <a href="/tags/sort/" style="font-size: 12px;">sort</a> <a href="/tags/visualization/" style="font-size: 13.71px;">visualization</a> <a href="/tags/ssh/" style="font-size: 12px;">ssh</a> <a href="/tags/proxy/" style="font-size: 12px;">proxy</a> <a href="/tags/vps/" style="font-size: 12px;">vps</a> <a href="/tags/stdio/" style="font-size: 12px;">stdio</a> <a href="/tags/cache/" style="font-size: 12px;">cache</a> <a href="/tags/buffer/" style="font-size: 12px;">buffer</a> <a href="/tags/pypcap/" style="font-size: 12px;">pypcap</a> <a href="/tags/dpkt/" style="font-size: 12px;">dpkt</a> <a href="/tags/MongoDB/" style="font-size: 12px;">MongoDB</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2019/01/22/highcharts/">Python之MongoDB数据分析及其Highcharts可视化</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/31/pypcap-install/">Python之pypcap库的安装及简单抓包工具的实现</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/25/autossh/">autossh反向代理实现内网穿透</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/25/io-cache/">Linux中的文件I/O缓冲</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/27/tee/">Linux指令 - tee的实现</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Links</i></div><ul></ul><a href="https://www.smslit.top" title="smslit-水木十里" target="_blank">smslit-水木十里</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2019 <a href="/." rel="nofollow">LITREILY.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> manupassant.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.css"><script type="text/javascript" src="/js/search.js?v=0.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+   search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
