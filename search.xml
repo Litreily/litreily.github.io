@@ -236,9 +236,9 @@ with open(&#39;products_new.json&#39;,&#39;w&#39;,encoding=&#39;utf-8&#39;) as f
         
         <tags>
             
-            <tag> MongoDB </tag>
-            
             <tag> visualization </tag>
+            
+            <tag> MongoDB </tag>
             
         </tags>
         
@@ -1963,9 +1963,9 @@ if __name__ == &#39;__main__&#39;:
             
             <tag> algorithm </tag>
             
-            <tag> visualization </tag>
-            
             <tag> sort </tag>
+            
+            <tag> visualization </tag>
             
         </tags>
         
@@ -5050,57 +5050,6 @@ VariantData : 键值数据（一维的变体数组）
             <tag> git </tag>
             
             <tag> VS </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[Schlumberger Digiscope]]></title>
-      <url>http://www.litreily.top/2016/12/29/mwd-digiscope/</url>
-      <content type="html"><![CDATA[<h2 id="Digiscope"><a href="#Digiscope" class="headerlink" title="Digiscope"></a>Digiscope</h2><iframe src="http://www.tudou.com/programs/view/html5embed.action?type=0&code=__B-y_oAnh4&lcode=&resourceId=98721707_06_05_99" allowtransparency="true" allowfullscreen="true" allowfullscreeninteractive="true" scrolling="no" border="0" frameborder="0" style="width:100%;height:400px;"></iframe>
-
-<h3 id="Slimhole-measurements-while-drilling"><a href="#Slimhole-measurements-while-drilling" class="headerlink" title="Slimhole measurements while drilling"></a>Slimhole measurements while drilling</h3><ul>
-<li>High-quality data for reservoir description</li>
-<li>High-speed telemetry for faster data</li>
-<li>Strong signal for deeper wells</li>
-</ul>
-<h3 id="DigiScope-Two-Stage-Turbine"><a href="#DigiScope-Two-Stage-Turbine" class="headerlink" title="DigiScope Two-Stage Turbine"></a>DigiScope Two-Stage Turbine</h3><p>High power for a full slimhole suite of LWD services, enabling complete reservoir description</p>
-<h3 id="DigiScope-Advanced-Modulation"><a href="#DigiScope-Advanced-Modulation" class="headerlink" title="DigiScope Advanced Modulation"></a>DigiScope Advanced Modulation</h3><p>High-speed and high-quality data with smooth phase shift keying (SPSK) for a strong signal in the deepest wells</p>
-<ul>
-<li>Physical bit rate up to 36 bps</li>
-<li>Orion II data compression effective bit rate &gt; 140 bps</li>
-<li>Wide frequency range of 0.25-24Hz</li>
-</ul>
-<h3 id="MWD-data-for-drilling"><a href="#MWD-data-for-drilling" class="headerlink" title="MWD data for drilling"></a>MWD data for drilling</h3><ul>
-<li>Direction &amp; inclination</li>
-<li>Toolface</li>
-<li>Shock &amp; vibration</li>
-<li>Azimuthal gamma ray</li>
-<li>Annular pressure while drilling</li>
-<li>Internal pressure while drilling</li>
-</ul>
-<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><blockquote>
-<p>Source Link: <a href="http://www.slb.com/services/drilling/mwd_lwd/mwd/slimhole_measurement_while_drilling.aspx" target="_blank" rel="noopener">http://www.slb.com/services/drilling/mwd_lwd/mwd/slimhole_measurement_while_drilling.aspx</a></p>
-</blockquote>
-<ul>
-<li><a href="http://www.360doc.com/content/16/1031/22/37063808_602893994.shtml" target="_blank" rel="noopener">http://www.360doc.com/content/16/1031/22/37063808_602893994.shtml</a></li>
-<li><a href="http://d.wanfangdata.com.cn/Periodical/syjx201607005" target="_blank" rel="noopener">http://d.wanfangdata.com.cn/Periodical/syjx201607005</a></li>
-</ul>
-]]></content>
-      
-        <categories>
-            
-            <category> Media </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> video </tag>
-            
-            <tag> LWD </tag>
             
         </tags>
         
