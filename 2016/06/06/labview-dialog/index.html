@@ -1,0 +1,74 @@
+<!DOCTYPE html><html lang="en"><head><meta name="generator" content="Hexo 3.9.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><title>Labview - 对话框程序模板 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><body><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">Labview - 对话框程序模板</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2016/06/06/labview-dialog/">2016-06-06</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/LabVIEW/">LabVIEW</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>软件开发过程中，经常要使用对话框界面，例如各种参数设置界面等。为了减少重复性工作，我们可以创建一个对话框模板，往后就可以通过该模板直接新建对话框界面。</p>
+<h2 id="1-创建模板"><a href="#1-创建模板" class="headerlink" title="1. 创建模板"></a>1. 创建模板</h2><h3 id="1-1-新建vi"><a href="#1-1-新建vi" class="headerlink" title="1.1 新建vi"></a>1.1 新建vi</h3><p>打开LabVIEW软件，新建vi，保存为&quot;对话框模板.vi&quot;。</p>
+<p><img src="/assets/labview/dialog/template.png" alt="Labview template.vi"></p>
+<h3 id="1-2-添加while循环"><a href="#1-2-添加while循环" class="headerlink" title="1.2 添加while循环"></a>1.2 添加while循环</h3><p>对话框界面也属于用户界面，所以需要给它单独开辟一个线程，即一个while循环。</p>
+<p><img src="/assets/labview/dialog/while.png" alt="Labview while"></p>
+<h3 id="1-3-添加移位寄存器"><a href="#1-3-添加移位寄存器" class="headerlink" title="1.3 添加移位寄存器"></a>1.3 添加移位寄存器</h3><p>在while循环左上角添加一个移位寄存器，然后创建一个<strong>枚举常量</strong>，给其添加以下内容：</p>
+<ul>
+<li>init：初始化</li>
+<li>run：运行</li>
+<li>exit：退出</li>
+</ul>
+<p>编辑完成后点击确定，然后将其连接至移位寄存器的输入端，默认设为&quot;init&quot;。</p>
+<p><img src="/assets/labview/dialog/enum.png" alt="Labview enum"></p>
+<h3 id="1-4-添加条件结构"><a href="#1-4-添加条件结构" class="headerlink" title="1.4 添加条件结构"></a>1.4 添加条件结构</h3><p>在while循环中添加一个条件结构，将将移位寄存器的值作为判断条件。为条件结构的每个值添加分支。</p>
+<p><img src="/assets/labview/dialog/switch.png" alt="Labview switch"></p>
+<h3 id="1-5-添加事件结构"><a href="#1-5-添加事件结构" class="headerlink" title="1.5 添加事件结构"></a>1.5 添加事件结构</h3><p>在条件结构的&quot;run&quot;分支中添加事件结构，用于响应用户操作。至此，所需的三个主要控制结构就都有了。</p>
+<p><img src="/assets/labview/dialog/event.png" alt="Labview event"></p>
+<h3 id="1-6-修改init分支"><a href="#1-6-修改init分支" class="headerlink" title="1.6 修改init分支"></a>1.6 修改init分支</h3><p>在条件结构的&quot;init&quot;（初始化）分支中，用户可以添加对话框的<strong>初始化</strong>程序。该分支只执行一次，接着进入&quot;run&quot;（主程序运行）分支，所以需要将移位寄存器的值设为&quot;run&quot;。</p>
+<p><img src="/assets/labview/dialog/init.png" alt="Labview init"></p>
+<h3 id="1-7-添加前面板关闭事件"><a href="#1-7-添加前面板关闭事件" class="headerlink" title="1.7 添加前面板关闭事件"></a>1.7 添加前面板关闭事件</h3><p>给事件结构添加&quot;前面板关闭？&quot;事件分支，然后将&quot;放弃？&quot;设为真，不让前面板在此刻关闭。同时将移位寄存器的值设为&quot;exit&quot;。</p>
+<p><img src="/assets/labview/dialog/closeFront.png" alt="Labview closeFront"></p>
+<p><img src="/assets/labview/dialog/exit.png" alt="Labview exit"></p>
+<h3 id="1-8-添加循环停止条件"><a href="#1-8-添加循环停止条件" class="headerlink" title="1.8 添加循环停止条件"></a>1.8 添加循环停止条件</h3><p>所有的while循环都需要一个停止条件，这里的while循环同样也需要，其停止条件便是移位寄存器的值变为&quot;exit&quot;。</p>
+<p><img src="/assets/labview/dialog/exitRule.png" alt="Labview exitRule"></p>
+<h3 id="1-9-完善移位寄存器"><a href="#1-9-完善移位寄存器" class="headerlink" title="1.9 完善移位寄存器"></a>1.9 完善移位寄存器</h3><p>现在看看程序，是不是还无法执行，因为移位寄存器的部分连线没有赋值，现在简要演示一下完善过程。</p>
+<p><img src="/assets/labview/dialog/register.gif" alt="Labview register"></p>
+<h3 id="1-10-添加界面关闭程序"><a href="#1-10-添加界面关闭程序" class="headerlink" title="1.10 添加界面关闭程序"></a>1.10 添加界面关闭程序</h3><p>从上面可以看出，在关闭前面板时，我们选择了放弃，然后进入&quot;exit&quot;分支，就是为了在这个分支中处理界面关闭前的任务，例如存储数据，保存界面参数等操作。不过这样一来，我们就需要在while循环结束时关闭界面，此处可以使用属性节点。</p>
+<p><img src="/assets/labview/dialog/exitPanel.png" alt="Labview exitPanel"></p>
+<h2 id="2-设置vi属性"><a href="#2-设置vi属性" class="headerlink" title="2. 设置vi属性"></a>2. 设置vi属性</h2><p>以上操作完成了对话框界面的程序框图设计，但此时运行该对话框，它还包含了系统自带的菜单栏和工具栏，而这些都是对话框不需要的。</p>
+<p><img src="/assets/labview/dialog/dialog_1.png" alt="Labview dialog"></p>
+<p>此时，我们可以通过快捷键<code>Ctrl+I</code>打开<strong>VI属性</strong>界面，在类别中选择<strong>窗口外观</strong>，最后选择<strong>对话框</strong>，点击确定。</p>
+<p><img src="/assets/labview/dialog/dialog_view.png" alt="Labview VI Properties"></p>
+<p>到此为止，一个简单的对话框界面模板就完成了，往后使用时，就可以通过&quot;复制该模板&rarr;重命名vi文件&rarr;添砖加瓦&quot;得到新的对话框。</p>
+<p><img src="/assets/labview/dialog/dialog_2.png" alt="Labview dialog"></p>
+<p>该模板比较简单，但是非常实用，大多数设置界面都可以使用该模板进行设计。当然也可以进一步完善。例如，很多设置界面都有<strong>应用</strong>按钮和<strong>退出</strong>按钮，那么，我们可以在模板中添加一个应用按钮和一个退出按钮，并添加对应的按钮点击事件，修改移位寄存器的值。</p>
+<h2 id="3-下载模板"><a href="#3-下载模板" class="headerlink" title="3. 下载模板"></a>3. 下载模板</h2><p>我将模板存至网盘便于下载：<a href="http://pan.baidu.com/s/1pKUe7Ib" target="_blank">下载链接！</a></p>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2016/06/06/labview-dialog/">https://www.litreily.top/2016/06/06/labview-dialog/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tag"></i><a href="/tags/labview/">labview</a></span></div></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2016/06/06/shrotcuts/">&lt; Labview - 常用快捷键</a><a class="next" href="/2016/06/05/labview-base/">Labview - 基本概念 &gt;</a></div><div id="valine-comment"><style type="text/css">.v * { color: #CECECE; }
+.v a { color: #0F9FB4; }
+.v a:hover { color: #216C73; }
+.v li { list-style: inherit; }
+.v .vwrap { border: 1px solid #223441; border-radius: 0; }
+.v .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.v .vbtn { border-radius: 0; color: #cecece; background: none; }
+.v .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.v .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.v .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.v code, .v pre,.v .vlist .vcard .vhead .vsys { background: #203240; }
+.v code, .v pre { color: #F0F0F0; font-size: 95%; }
+.v .vlist .vcard .vcontent.expand:before { background: linear-gradient(180deg,hsla(206,33%,19%,0),hsla(206,33%,19%,.9)); }
+.v .vlist .vcard .vcontent.expand:after { background: hsla(206,33%,19%,.9); }</style><div id="vcomment"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
+  lang: 'zh-cn',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></section><footer><p>Copyright © 2016 - 2020 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/plugins/prettify/prettify.js"></script><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.css"></body></html>

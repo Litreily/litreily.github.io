@@ -1,0 +1,921 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>LITREILY</title>
+  <icon>https://www.gravatar.com/avatar/6ae20d989e9d976faf00ecc6d9bcfe82</icon>
+  <subtitle>Stay Hungry, Stay Foolish</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="https://www.litreily.top/"/>
+  <updated>2020-03-08T14:26:37.003Z</updated>
+  <id>https://www.litreily.top/</id>
+  
+  <author>
+    <name>litreily</name>
+    <email>707922098@qq.com</email>
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>网络协议1 - NBNS</title>
+    <link href="https://www.litreily.top/2020/02/28/nbns/"/>
+    <id>https://www.litreily.top/2020/02/28/nbns/</id>
+    <published>2020-02-28T01:48:26.000Z</published>
+    <updated>2020-03-08T14:26:37.003Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;NetBIOS-简介&quot;&gt;&lt;a href=&quot;#NetBIOS-简介&quot; class=&quot;headerlink&quot; title=&quot;NetBIOS 简介&quot;&gt;&lt;/a&gt;NetBIOS 简介&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;NetBIOS&lt;/strong&gt;，Network Basic Input/Output System的缩写，一般指用于&lt;strong&gt;局域网&lt;/strong&gt;通信的一套API，相关RFC文档包括 &lt;a href=&quot;https://tools.ietf.org/html/rfc1001&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;RFC 1001&lt;/a&gt;, &lt;a href=&quot;https://tools.ietf.org/html/rfc1002&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;RFC 1002&lt;/a&gt;. RFC 1001主要对NetBIOS及相关协议和服务进行解释说明，RFC 1002给出了相关协议和服务的数据组包格式。&lt;/p&gt;
+&lt;p&gt;NetBIOS提供三种软件服务：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Service Name&lt;/th&gt;
+&lt;th&gt;Port&lt;/th&gt;
+&lt;th&gt;Protocol&lt;/th&gt;
+&lt;th&gt;Short Name&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;NetBIOS Name service&lt;/td&gt;
+&lt;td&gt;137&lt;/td&gt;
+&lt;td&gt;UDP/TCP&lt;/td&gt;
+&lt;td&gt;NBNS&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;NetBIOS Datagram&lt;/td&gt;
+&lt;td&gt;138&lt;/td&gt;
+&lt;td&gt;UDP&lt;/td&gt;
+&lt;td&gt;NBND&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;NetBIOS Session service&lt;/td&gt;
+&lt;td&gt;139&lt;/td&gt;
+&lt;td&gt;TCP&lt;/td&gt;
+&lt;td&gt;NBSS&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;本文主要描述最常见的&lt;code&gt;NBNS&lt;/code&gt;.&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Network" scheme="https://www.litreily.top/categories/Network/"/>
+    
+      <category term="Protocol" scheme="https://www.litreily.top/categories/Network/Protocol/"/>
+    
+    
+      <category term="wireshark" scheme="https://www.litreily.top/tags/wireshark/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Setup dhcpd/dhcpdv6 server</title>
+    <link href="https://www.litreily.top/2020/01/17/dhcpd_server/"/>
+    <id>https://www.litreily.top/2020/01/17/dhcpd_server/</id>
+    <published>2020-01-17T13:36:16.000Z</published>
+    <updated>2020-02-26T13:11:56.224Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;搭建DHCP server在许多网络应用中是非常必要的，尤其是测试IPv6相关的功能时，本文就来介绍下针对IPv4和IPv6该如何搭建DHCP server.&lt;/p&gt;
+&lt;h2 id=&quot;Install-dhcpd-server&quot;&gt;&lt;a href=&quot;#Install-dhcpd-server&quot; class=&quot;headerlink&quot; title=&quot;Install dhcpd server&quot;&gt;&lt;/a&gt;Install dhcpd server&lt;/h2&gt;&lt;p&gt;首先通过&lt;code&gt;apt&lt;/code&gt;安装&lt;code&gt;isc-dhcp-server&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;sudo apt install isc-dhcp-server
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;Setup-dhcpd&quot;&gt;&lt;a href=&quot;#Setup-dhcpd&quot; class=&quot;headerlink&quot; title=&quot;Setup dhcpd&quot;&gt;&lt;/a&gt;Setup dhcpd&lt;/h2&gt;&lt;h3 id=&quot;Config-interfaces&quot;&gt;&lt;a href=&quot;#Config-interfaces&quot; class=&quot;headerlink&quot; title=&quot;Config interfaces&quot;&gt;&lt;/a&gt;Config interfaces&lt;/h3&gt;&lt;p&gt;通过&lt;code&gt;ifco
+      
+    
+    </summary>
+    
+      <category term="Network" scheme="https://www.litreily.top/categories/Network/"/>
+    
+    
+      <category term="ubuntu" scheme="https://www.litreily.top/tags/ubuntu/"/>
+    
+      <category term="dhcp" scheme="https://www.litreily.top/tags/dhcp/"/>
+    
+      <category term="ipv6" scheme="https://www.litreily.top/tags/ipv6/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>根据socket端口号查看进程信息</title>
+    <link href="https://www.litreily.top/2020/01/15/socket_fd/"/>
+    <id>https://www.litreily.top/2020/01/15/socket_fd/</id>
+    <published>2020-01-15T11:28:56.000Z</published>
+    <updated>2020-02-26T13:11:56.224Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;根据已知的一个端口号，以telnet默认端口号23为例，去查找系统中监听该端口号的进程，主要可以通过下面3种方式。&lt;/p&gt;
+&lt;h2 id=&quot;netstat&quot;&gt;&lt;a href=&quot;#netstat&quot; class=&quot;headerlink&quot; title=&quot;netstat&quot;&gt;&lt;/a&gt;netstat&lt;/h2&gt;&lt;p&gt;使用&lt;code&gt;netstat&lt;/code&gt;可以查看系统网络状态，&lt;code&gt;-p&lt;/code&gt;参数可以显示对应的进程信息&lt;code&gt;pid/process&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;$ netstat -anp |grep &amp;quot;:23&amp;quot;
+tcp        0      0 192.168.1.1:23          0.0.0.0:*               LISTEN      3698/utelnetd
+tcp        0      0 192.168.1.1:23          192.168.1.10:10381      ESTABLISHED 3698/utelnetd
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;从上面的信息中可以看到两条信息：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;监听23端口的进程是pid为&lt;code&gt;3698&lt;/code&gt;的&lt;code&gt;utelnetd&lt;/code&gt;&lt;/li&gt;
+
+      
+    
+    </summary>
+    
+      <category term="Linux" scheme="https://www.litreily.top/categories/Linux/"/>
+    
+    
+      <category term="socket" scheme="https://www.litreily.top/tags/socket/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>awk &#39;!a[$0]++&#39;去重小技巧</title>
+    <link href="https://www.litreily.top/2020/01/09/awk_dedup/"/>
+    <id>https://www.litreily.top/2020/01/09/awk_dedup/</id>
+    <published>2020-01-09T13:04:16.000Z</published>
+    <updated>2020-02-26T13:11:56.223Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;今天碰到一个关于awk的去重用法，觉得挺有意思的，记录一下&lt;/p&gt;
+&lt;h2 id=&quot;awk-按行去重&quot;&gt;&lt;a href=&quot;#awk-按行去重&quot; class=&quot;headerlink&quot; title=&quot;awk 按行去重&quot;&gt;&lt;/a&gt;awk 按行去重&lt;/h2&gt;&lt;p&gt;&lt;code&gt;awk &amp;#39;!a[$0]++&amp;#39; file&lt;/code&gt; 是个神奇的用法，通过它可以实现文件内容去重&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;$0&lt;/code&gt;: 代表整行&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;a[]&lt;/code&gt;: 代表数组a,名称随意,首次调用时为空&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;++&lt;/code&gt;:　与&lt;code&gt;C/C++&lt;/code&gt;中的&lt;code&gt;++&lt;/code&gt;一个含义，&lt;code&gt;i++&lt;/code&gt;先使用i后i自增1，&lt;code&gt;++i&lt;/code&gt;代表i先自增1然后被使用&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;!&lt;/code&gt;: 代表取反&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;所以&lt;code&gt;a[$0]&lt;/code&gt;代表对当前行构建一个名为a的数组，首次构建后其值为0&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;a[$0]++&lt;/code&gt;代表先使用&lt;code&gt;a[$0]&lt;/code&gt;的值，然后&lt;code&gt;a[$0]&lt;/code&gt;的值自增1。首次调用自然就是0,下次遇到重复的行就变为1，所以不加&lt;code&gt;
+      
+    
+    </summary>
+    
+      <category term="Linux" scheme="https://www.litreily.top/categories/Linux/"/>
+    
+    
+      <category term="shell" scheme="https://www.litreily.top/tags/shell/"/>
+    
+      <category term="awk" scheme="https://www.litreily.top/tags/awk/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>insmod内核模块提示Unknown Symbol问题处理</title>
+    <link href="https://www.litreily.top/2019/11/07/unknown_symbol/"/>
+    <id>https://www.litreily.top/2019/11/07/unknown_symbol/</id>
+    <published>2019-11-07T02:19:26.000Z</published>
+    <updated>2020-02-26T13:11:56.223Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;问题描述&quot;&gt;&lt;a href=&quot;#问题描述&quot; class=&quot;headerlink&quot; title=&quot;问题描述&quot;&gt;&lt;/a&gt;问题描述&lt;/h2&gt;&lt;p&gt;在调试内核crash问题时打开了&lt;code&gt;lockup&lt;/code&gt;相关的kernel CONFIG，重新编译FW后发现有个内核模块insmod失败&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;log&quot;&gt;[Wed Nov 06 15:51:57.384 2019] ip6t_CONE: Unknown symbol rcu_bh_lock_map (err 0)
+[Wed Nov 06 15:51:57.384 2019] ip6t_CONE: Unknown symbol lock_acquire (err 0)
+[Wed Nov 06 15:51:57.384 2019] ip6t_CONE: Unknown symbol lock_release (err 0)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;手动使用&lt;code&gt;insmod&lt;/code&gt;重新加载也是提示相同的错误。&lt;/p&gt;
+&lt;h2 id=&quot;问题分析&quot;&gt;&lt;a href=&quot;#问题分析&quot; class=&quot;headerlink&quot; title=&quot;问题分析&quot;&gt;&lt;/a&gt;问题分析&lt;/h2&gt;&lt;p&gt;原本这个问题是不存在的，出现的原因必然和启用的CONFIG相关，对比前后两个FW的&lt;cod
+      
+    
+    </summary>
+    
+      <category term="嵌入式" scheme="https://www.litreily.top/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/"/>
+    
+    
+      <category term="IPv6" scheme="https://www.litreily.top/tags/IPv6/"/>
+    
+      <category term="kernel" scheme="https://www.litreily.top/tags/kernel/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>openwrt swconfig stack trace分析</title>
+    <link href="https://www.litreily.top/2019/11/06/swconfig_crash/"/>
+    <id>https://www.litreily.top/2019/11/06/swconfig_crash/</id>
+    <published>2019-11-06T11:04:20.000Z</published>
+    <updated>2020-02-26T13:11:56.221Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;接上一篇博客 &lt;a href=&quot;/2019/11/03/kernel_debug/&quot; title=&quot;watchdog bite导致系统重启问题的调试&quot;&gt;watchdog bite导致系统重启问题的调试&lt;/a&gt; ，打开调试功能后开始压力测试，在测试过程中发现DUT每隔2s打印一次以下异常信息&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;log&quot;&gt;BUG: sleeping function called from invalid context at kernel/locking/mutex.c:616
+in_atomic(): 1, irqs_disabled(): 0, pid: 9465, name: swconfig
+INFO: lockdep is turned off.
+CPU: 2 PID: 9465 Comm: swconfig Tainted: P        W    3.14.77 #1
+[&amp;lt;c021561c&amp;gt;] (unwind_backtrace) from [&amp;lt;c0211d44&amp;gt;] (show_stack+0x18/0x1c)
+[&amp;lt;c0211d44&amp;gt;] (show_stack) from [&amp;lt;c062ea98&amp;gt;] (dump_stack+0x9c/0xd4)
+[&amp;lt;c062ea98&amp;gt;] (du
+      
+    
+    </summary>
+    
+      <category term="嵌入式" scheme="https://www.litreily.top/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/"/>
+    
+    
+      <category term="openwrt" scheme="https://www.litreily.top/tags/openwrt/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>watchdog bite导致系统重启问题的调试</title>
+    <link href="https://www.litreily.top/2019/11/03/kernel_debug/"/>
+    <id>https://www.litreily.top/2019/11/03/kernel_debug/</id>
+    <published>2019-11-03T07:04:20.000Z</published>
+    <updated>2020-01-14T13:33:20.000Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;背景说明&quot;&gt;&lt;a href=&quot;#背景说明&quot; class=&quot;headerlink&quot; title=&quot;背景说明&quot;&gt;&lt;/a&gt;背景说明&lt;/h2&gt;&lt;p&gt;ST在做stress test过程中发现一个bug，DUT会在工作一段时间后重启，重启原因是&lt;code&gt;watchdog bite&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;txt&quot;&gt;[Thu Sep 26 09:21:59.734 2019] Watchdog bark! Now = 831425.568038
+[Thu Sep 26 09:21:59.734 2019] Causing a watchdog bite!
+[Thu Sep 26 09:21:59.734 2019] Configuring Watchdog Timer
+[Thu Sep 26 09:21:59.734 2019] Wa
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;但是无法确定根本原因是什么，是什么导致的死锁，让watchdog没办法在规定时间内bark。为此，我们需要启用相关的内核调试手段去获取相关信息，然后深入分析crashdump和console log。&lt;/p&gt;
+&lt;h2 id=&quot;内核裁剪&quot;&gt;&lt;a href=&quot;#内核裁剪&quot; class=&quot;headerlink&quot; title=&quot;内核裁剪&quot;&gt;&lt;/a&gt;内核裁剪&lt;/h2&gt;&lt;h3 id=&quot;启用f
+      
+    
+    </summary>
+    
+      <category term="嵌入式" scheme="https://www.litreily.top/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/"/>
+    
+    
+      <category term="ftrace" scheme="https://www.litreily.top/tags/ftrace/"/>
+    
+      <category term="openwrt" scheme="https://www.litreily.top/tags/openwrt/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Python网络爬虫7 - 爬取表情包</title>
+    <link href="https://www.litreily.top/2019/10/09/fabiaoqing/"/>
+    <id>https://www.litreily.top/2019/10/09/fabiaoqing/</id>
+    <published>2019-10-09T12:22:30.000Z</published>
+    <updated>2020-02-26T13:11:56.220Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;为了逗女朋友开心，想找一堆表情包，那么作为一名程序员，自然是会想到用程序来完成这个事情，而Python爬虫就是一个非常好的方法。&lt;/p&gt;
+&lt;p&gt;我先找到了一个专门发布表情包的网站，就叫做&lt;a href=&quot;https://www.fabiaoqing.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;发表情&lt;/a&gt;网，可以通过搜索关键词得到大量相关的表情包，下面对这个网站的爬取进行详细介绍。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/emotion/fabiaoqing.png&quot; alt=&quot;fabiaoqing&quot;&gt;&lt;/p&gt;
+&lt;h2 id=&quot;分析站点&quot;&gt;&lt;a href=&quot;#分析站点&quot; class=&quot;headerlink&quot; title=&quot;分析站点&quot;&gt;&lt;/a&gt;分析站点&lt;/h2&gt;&lt;p&gt;为了不引起不适，我选择搜索“你好”，出来的结果是这样的&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/emotion/hello.png&quot; alt=&quot;hello&quot;&gt;&lt;/p&gt;
+&lt;p&gt;可以看到共有&lt;code&gt;688&lt;/code&gt;个相关的&lt;strong&gt;表情&lt;/strong&gt;，右侧的&lt;strong&gt;表情包&lt;/strong&gt;是分组形式的，不是我的爬取对象。我们只关注表情，在网页底部可以看到分页信息：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/emotion/page.p
+      
+    
+    </summary>
+    
+      <category term="Python" scheme="https://www.litreily.top/categories/Python/"/>
+    
+    
+      <category term="spider" scheme="https://www.litreily.top/tags/spider/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>嵌入式设备在无法使用网络和USB的情况下如何进行文件传输</title>
+    <link href="https://www.litreily.top/2019/09/12/minicom/"/>
+    <id>https://www.litreily.top/2019/09/12/minicom/</id>
+    <published>2019-09-12T06:22:30.000Z</published>
+    <updated>2020-02-26T13:11:56.220Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;问题背景&quot;&gt;&lt;a href=&quot;#问题背景&quot; class=&quot;headerlink&quot; title=&quot;问题背景&quot;&gt;&lt;/a&gt;问题背景&lt;/h2&gt;&lt;p&gt;ST 测试时出现一个问题，路由器（采用&lt;a href=&quot;https://openwrt.org&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Openwrt&lt;/a&gt;系统）的console无法正常显示shell提示符，正常情况下是&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;root@DeviceName:/#
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这样的，出问题时是下面这样的，用户名不见了，设备名变成了none.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;@(none):/#
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+      <category term="Linux" scheme="https://www.litreily.top/categories/Linux/"/>
+    
+    
+      <category term="shell" scheme="https://www.litreily.top/tags/shell/"/>
+    
+      <category term="tftp" scheme="https://www.litreily.top/tags/tftp/"/>
+    
+      <category term="nand" scheme="https://www.litreily.top/tags/nand/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用正则模糊匹配的ftp文件传输</title>
+    <link href="https://www.litreily.top/2019/09/02/lftp/"/>
+    <id>https://www.litreily.top/2019/09/02/lftp/</id>
+    <published>2019-09-02T02:51:20.000Z</published>
+    <updated>2020-02-26T13:11:56.219Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;通常而言，FTP传输过程中，客户端在完成账户认证后，需要指定具体的文件路径方能下载或删除服务器端的文件。但是在使用命令行指令去操作ftp数据时，如果每次都要输入完整的路径就太麻烦了，而且如果想要同时下载多个文件还需逐个执行下载指令，那有什么方法可以通过&lt;strong&gt;正则表达式&lt;/strong&gt;去完成模糊匹配和批量下载呢？本文就来介绍一下FTP数据传输的常用操作及正则匹配的实现方法。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/ftp/ftp.png&quot; alt=&quot;ftp diagram&quot;&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Linux" scheme="https://www.litreily.top/categories/Linux/"/>
+    
+    
+      <category term="shell" scheme="https://www.litreily.top/tags/shell/"/>
+    
+      <category term="ftp" scheme="https://www.litreily.top/tags/ftp/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Python网络爬虫6 - Scrapy爬取vmgirls</title>
+    <link href="https://www.litreily.top/2019/08/09/vmgirls/"/>
+    <id>https://www.litreily.top/2019/08/09/vmgirls/</id>
+    <published>2019-08-09T12:09:10.000Z</published>
+    <updated>2020-02-26T13:11:56.218Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;今天介绍一个妹子站点图片的爬取过程，站点&lt;a href=&quot;https://www.vmgirls.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;唯美女生&lt;/a&gt;。站点结构非常简单，单独用&lt;code&gt;requests&lt;/code&gt;库或者&lt;code&gt;scrapy&lt;/code&gt;框架都可以。本文介绍的是使用&lt;code&gt;scrapy&lt;/code&gt;框架爬取。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/vmgirls/vmgirls.png&quot; alt=&quot;vmgirls&quot;&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Python" scheme="https://www.litreily.top/categories/Python/"/>
+    
+    
+      <category term="spider" scheme="https://www.litreily.top/tags/spider/"/>
+    
+      <category term="girls" scheme="https://www.litreily.top/tags/girls/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>高效思维导图应用训练</title>
+    <link href="https://www.litreily.top/2019/06/11/mind-map/"/>
+    <id>https://www.litreily.top/2019/06/11/mind-map/</id>
+    <published>2019-06-11T12:23:34.000Z</published>
+    <updated>2020-02-26T13:11:56.218Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;上周在公司进行了一天的思维导图培训，感觉收获颇丰，有必要总结一下。&lt;/p&gt;
+&lt;h2 id=&quot;思维导图概述&quot;&gt;&lt;a href=&quot;#思维导图概述&quot; class=&quot;headerlink&quot; title=&quot;思维导图概述&quot;&gt;&lt;/a&gt;思维导图概述&lt;/h2&gt;&lt;h3 id=&quot;定义&quot;&gt;&lt;a href=&quot;#定义&quot; class=&quot;headerlink&quot; title=&quot;定义&quot;&gt;&lt;/a&gt;定义&lt;/h3&gt;&lt;p&gt;思维导图主要用于解决以下三个问题：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;记不住&lt;/li&gt;
+&lt;li&gt;理不清&lt;/li&gt;
+&lt;li&gt;想不出&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;这三个也是工作效能低下的主要原因。那究竟什么是思维导图呢？&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;思维导图&lt;/strong&gt;是表达&lt;strong&gt;放射性思维&lt;/strong&gt;的图形思维工具。用&lt;strong&gt;图文&lt;/strong&gt;技巧，把各级主题关系用层级图表现，将关键词与图像、颜色等建立思维链接。用&lt;strong&gt;全脑机能&lt;/strong&gt;，使在科学与艺术、逻辑与想象间平衡，开启大脑潜能。&lt;/p&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+      <category term="杂物柜" scheme="https://www.litreily.top/categories/%E6%9D%82%E7%89%A9%E6%9F%9C/"/>
+    
+    
+      <category term="5W2H" scheme="https://www.litreily.top/tags/5W2H/"/>
+    
+      <category term="MECE" scheme="https://www.litreily.top/tags/MECE/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>哈希表的实现与常见操作</title>
+    <link href="https://www.litreily.top/2019/05/24/hash-table/"/>
+    <id>https://www.litreily.top/2019/05/24/hash-table/</id>
+    <published>2019-05-24T12:00:00.000Z</published>
+    <updated>2020-02-26T13:11:56.217Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;前段时间基于数组和单链表以拉链法写了个哈希表，实现了基本的增删改查（&lt;code&gt;CRUD&lt;/code&gt;），以键值对的形式存储一些配置参数，便以此文记录一下。&lt;/p&gt;
+&lt;h2 id=&quot;数据结构&quot;&gt;&lt;a href=&quot;#数据结构&quot; class=&quot;headerlink&quot; title=&quot;数据结构&quot;&gt;&lt;/a&gt;数据结构&lt;/h2&gt;&lt;pre&gt;&lt;code class=&quot;c&quot;&gt;#define TABLE_SIZE 101
+#define KEY_SIZE 32
+#define VALUE_SIZE 128
+#define BUF_SIZE 256
+
+#define DATA_PATH &amp;quot;data.txt&amp;quot;
+
+struct linklist {
+    char key[KEY_SIZE];
+    char val[VALUE_SIZE];
+    struct linklist *next;
+};
+struct linklist *hashtbl[TABLE_SIZE];
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+      <category term="嵌入式" scheme="https://www.litreily.top/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/"/>
+    
+    
+      <category term="C/C++" scheme="https://www.litreily.top/tags/C-C/"/>
+    
+      <category term="linux" scheme="https://www.litreily.top/tags/linux/"/>
+    
+      <category term="hash" scheme="https://www.litreily.top/tags/hash/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>git commit 工具 - commitizen</title>
+    <link href="https://www.litreily.top/2019/03/12/commitizen/"/>
+    <id>https://www.litreily.top/2019/03/12/commitizen/</id>
+    <published>2019-03-12T13:39:10.000Z</published>
+    <updated>2020-02-26T13:11:56.217Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;为了规范代码提交，最近学习了一下如何使用&lt;code&gt;commitizen&lt;/code&gt;进行commit提交，其实也很简单，这里简单做个介绍。&lt;/p&gt;
+&lt;h2 id=&quot;commitizen-安装&quot;&gt;&lt;a href=&quot;#commitizen-安装&quot; class=&quot;headerlink&quot; title=&quot;commitizen 安装&quot;&gt;&lt;/a&gt;commitizen 安装&lt;/h2&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;npm install -g commitizen
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+      <category term="杂物柜" scheme="https://www.litreily.top/categories/%E6%9D%82%E7%89%A9%E6%9F%9C/"/>
+    
+    
+      <category term="git" scheme="https://www.litreily.top/tags/git/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Python网络爬虫5 - 爬取QQ空间相册</title>
+    <link href="https://www.litreily.top/2019/03/03/qqzone/"/>
+    <id>https://www.litreily.top/2019/03/03/qqzone/</id>
+    <published>2019-03-03T10:34:20.000Z</published>
+    <updated>2020-02-26T13:11:56.216Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;自毕业后，就再也没有用过QQ，QQ空间里记录的是些并不精彩的青葱岁月，但好歹也是份回忆，近日想着学以致用，用&lt;code&gt;Python&lt;/code&gt;把QQ空间相册的所有照片爬取下来，以作备份。&lt;/p&gt;
+&lt;h2 id=&quot;分析QQ空间&quot;&gt;&lt;a href=&quot;#分析QQ空间&quot; class=&quot;headerlink&quot; title=&quot;分析QQ空间&quot;&gt;&lt;/a&gt;分析QQ空间&lt;/h2&gt;&lt;h3 id=&quot;登录QQ空间&quot;&gt;&lt;a href=&quot;#登录QQ空间&quot; class=&quot;headerlink&quot; title=&quot;登录QQ空间&quot;&gt;&lt;/a&gt;登录QQ空间&lt;/h3&gt;&lt;p&gt;爬取第一步，分析站点，首先需要知道如何登录QQ空间。最初想法是用&lt;code&gt;requests&lt;/code&gt;库配置登录请求，模拟登录，但是不久便放弃了这一思路，请看下图↓&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/qqzone/login.png&quot; alt=&quot;login&quot;&gt;&lt;/p&gt;
+&lt;p&gt;根据登录按钮绑定的监听事件可以追踪到该按钮的点击事件如下：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/qqzone/login_func.png&quot; alt=&quot;login function&quot;&gt;&lt;/p&gt;
+&lt;p&gt;账号加密是必然的，但这一堆堆的代码真心不好解析，有耐心的勇士尽情一试！&lt;/p&gt;
+&lt;p&gt;在排除这种登录方法后，选择&lt;code&gt;selenium&lt;/c
+      
+    
+    </summary>
+    
+      <category term="Python" scheme="https://www.litreily.top/categories/Python/"/>
+    
+    
+      <category term="spider" scheme="https://www.litreily.top/tags/spider/"/>
+    
+      <category term="qqzone" scheme="https://www.litreily.top/tags/qqzone/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>记一次Client无法获取IPv6地址问题的分析过程</title>
+    <link href="https://www.litreily.top/2019/02/27/ipv6/"/>
+    <id>https://www.litreily.top/2019/02/27/ipv6/</id>
+    <published>2019-02-27T05:47:30.000Z</published>
+    <updated>2020-02-26T13:11:56.216Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;近日SQA报了一个bug，对路由器经过6天左右的压力测试后，无论是有线设备还是无线设备都拿不到&lt;code&gt;IPv6&lt;/code&gt;地址了。经过层层分析发现可能是&lt;code&gt;kernel&lt;/code&gt;内存泄漏。本文便记录这一问题的分析过程。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="嵌入式" scheme="https://www.litreily.top/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/"/>
+    
+    
+      <category term="IPv6" scheme="https://www.litreily.top/tags/IPv6/"/>
+    
+      <category term="router" scheme="https://www.litreily.top/tags/router/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Ubuntu开机自动挂载Windows系统中的磁盘分区</title>
+    <link href="https://www.litreily.top/2019/02/17/mount/"/>
+    <id>https://www.litreily.top/2019/02/17/mount/</id>
+    <published>2019-02-17T12:39:57.000Z</published>
+    <updated>2020-02-26T13:11:56.214Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;本人电脑装有&lt;code&gt;ubuntu&lt;/code&gt;和&lt;code&gt;windows&lt;/code&gt;双系统，有时候需要在&lt;code&gt;ubuntu&lt;/code&gt;下使用&lt;code&gt;windows&lt;/code&gt;系统下的文件，每次手动挂载的话很麻烦，所以想让它开机自动挂载常用的&lt;code&gt;windows&lt;/code&gt;磁盘分区。&lt;/p&gt;
+&lt;h2 id=&quot;查看分区&quot;&gt;&lt;a href=&quot;#查看分区&quot; class=&quot;headerlink&quot; title=&quot;查看分区&quot;&gt;&lt;/a&gt;查看分区&lt;/h2&gt;&lt;p&gt;在挂载windows磁盘前，需要知道每个磁盘的路径或&lt;code&gt;UUID&lt;/code&gt;，此时主要依靠&lt;code&gt;fdisk&lt;/code&gt;和&lt;code&gt;blkid&lt;/code&gt;两个指令，前一个指令获取分区信息，后一个指令获取&lt;code&gt;Block device&lt;/code&gt;块设备的属性。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;sh&quot;&gt;$ sudo blkid
+/dev/sda1: LABEL=&amp;quot;Win10&amp;quot; UUID=&amp;quot;C4A0E65EA0E65708&amp;quot; TYPE=&amp;quot;ntfs&amp;quot; PARTUUID=&amp;quot;6190c592-01&amp;quot;
+/dev/sda2: UUID=&amp;quot;AE3C137D3C133FAF&amp;quot; TYPE=&amp;
+      
+    
+    </summary>
+    
+      <category term="Linux" scheme="https://www.litreily.top/categories/Linux/"/>
+    
+    
+      <category term="ubuntu" scheme="https://www.litreily.top/tags/ubuntu/"/>
+    
+      <category term="mount" scheme="https://www.litreily.top/tags/mount/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>XSS跨站脚本攻击</title>
+    <link href="https://www.litreily.top/2019/02/14/XSS/"/>
+    <id>https://www.litreily.top/2019/02/14/XSS/</id>
+    <published>2019-02-14T03:14:20.000Z</published>
+    <updated>2020-02-26T13:11:56.214Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;近期遇到一堆 Stored XSS vulnerability 问题，即存储型跨站脚本漏洞，所以有必要学习一下XSS相关的知识。&lt;/p&gt;
+&lt;h2 id=&quot;XSS简介&quot;&gt;&lt;a href=&quot;#XSS简介&quot; class=&quot;headerlink&quot; title=&quot;XSS简介&quot;&gt;&lt;/a&gt;XSS简介&lt;/h2&gt;&lt;p&gt;&lt;code&gt;XSS&lt;/code&gt;是跨站脚本&lt;code&gt;Cross-Site Scripting&lt;/code&gt;的简写，至于为什么不是&lt;code&gt;CSS&lt;/code&gt;，相信大家很容易猜到，是为了避免与前端的层叠样式表&lt;code&gt;Cascading Style Sheets&lt;/code&gt;重名。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;XSS&lt;/code&gt;涉及三个要素：一个站点，攻击者和受害者。攻击者通过某站点的漏洞注入脚本到该站点，受害者在使用浏览器访问该站点时就可能遭受&lt;code&gt;XSS&lt;/code&gt;攻击。&lt;/p&gt;
+&lt;p&gt;脚本类型不限于&lt;code&gt;javascript&lt;/code&gt;, 也可以是其它脚本，如&lt;code&gt;VBScript&lt;/code&gt;, &lt;code&gt;ActiveX&lt;/code&gt; 和 &lt;code&gt;flash&lt;/code&gt;等，但主要还是以&lt;code&gt;javascript&lt;/code&gt;为主。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Network" scheme="https://www.litreily.top/categories/Network/"/>
+    
+      <category term="Security" scheme="https://www.litreily.top/categories/Network/Security/"/>
+    
+    
+      <category term="xss" scheme="https://www.litreily.top/tags/xss/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Python之MongoDB数据分析及其Highcharts可视化</title>
+    <link href="https://www.litreily.top/2019/01/22/highcharts/"/>
+    <id>https://www.litreily.top/2019/01/22/highcharts/</id>
+    <published>2019-01-22T01:35:40.000Z</published>
+    <updated>2020-02-26T13:11:56.213Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;近期使用&lt;code&gt;requests&lt;/code&gt;把内部&lt;code&gt;bugziila&lt;/code&gt;上的&lt;code&gt;bug&lt;/code&gt;数据爬取了一遍，并存入了本地的&lt;code&gt;MongoDB&lt;/code&gt;数据库，想着对数据做些简单的可视化处理，将所有产品的bug数做一个统计和可视化，于是便有了这篇简短的文章。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Python" scheme="https://www.litreily.top/categories/Python/"/>
+    
+    
+      <category term="visualization" scheme="https://www.litreily.top/tags/visualization/"/>
+    
+      <category term="MongoDB" scheme="https://www.litreily.top/tags/MongoDB/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Python之pypcap库的安装及简单抓包工具的实现</title>
+    <link href="https://www.litreily.top/2018/12/31/pypcap-install/"/>
+    <id>https://www.litreily.top/2018/12/31/pypcap-install/</id>
+    <published>2018-12-31T11:22:30.000Z</published>
+    <updated>2020-02-26T13:11:56.212Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;a href=&quot;https://github.com/pynetwork/pypcap&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;pypcap&lt;/a&gt;是一个对&lt;code&gt;libpcap&lt;/code&gt;C库进行封装和简化的面向对象的抓包工具库，可以非常方便的用于抓包和过滤，结合&lt;code&gt;dpkt&lt;/code&gt;解析库可以完成许多网络数据包的抓取和分析。本文讲述的就是如何使用&lt;code&gt;pypcap&lt;/code&gt;及&lt;code&gt;dpkt&lt;/code&gt;库实现简单抓包工具，也称为嗅探器(sniffer).&lt;/p&gt;
+&lt;h2 id=&quot;Linux-端安装-pypcap&quot;&gt;&lt;a href=&quot;#Linux-端安装-pypcap&quot; class=&quot;headerlink&quot; title=&quot;Linux 端安装 pypcap&quot;&gt;&lt;/a&gt;Linux 端安装 pypcap&lt;/h2&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;sudo apt-get install libpcap-dev
+sudo pip install pypcap
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这里有个问题,如果使用&lt;code&gt;Anaconda&lt;/code&gt;目录的&lt;code&gt;pip&lt;/code&gt;安装则可能失败,目前原因未明,但官方的&lt;code&gt;python3&lt;/code&gt;对应的&lt;code&gt;pip3&lt;/code&gt;及&lt;code&gt;python2&lt;/code&gt;对应的&lt;code&gt;pip&lt;/code&gt;均无此问题.&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Python" scheme="https://www.litreily.top/categories/Python/"/>
+    
+    
+      <category term="pypcap" scheme="https://www.litreily.top/tags/pypcap/"/>
+    
+      <category term="dpkt" scheme="https://www.litreily.top/tags/dpkt/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>autossh反向代理实现内网穿透</title>
+    <link href="https://www.litreily.top/2018/11/25/autossh/"/>
+    <id>https://www.litreily.top/2018/11/25/autossh/</id>
+    <published>2018-11-25T03:25:20.000Z</published>
+    <updated>2020-02-26T13:11:56.211Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;有时候需要在公司使用家里个人PC的一些资源，此时可以选择&lt;code&gt;Teamvieawer&lt;/code&gt;进行远程，但是略微麻烦而且访问速率较慢，此时通过&lt;code&gt;vps&lt;/code&gt;实现内网穿透就是个不错的想法。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/proxy/autossh_proxy.svg&quot; alt=&quot;vps proxy&quot;&gt;&lt;/p&gt;
+&lt;p&gt;本文讲述的内网穿透方法是通过&lt;code&gt;autossh&lt;/code&gt;实现vps对内网的反向代理，在vps与内网之间建立一条长连接，使得外网PC通过vps的反向代理访问内网PC。整个实现所需的条件如下：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;带有公网IP(&lt;code&gt;222.222.222.222&lt;/code&gt;)的vps&lt;/li&gt;
+&lt;li&gt;保持开机且联网的内网PC&lt;/li&gt;
+&lt;li&gt;任一联网的外网PC&lt;/li&gt;
+&lt;/ol&gt;
+    
+    </summary>
+    
+      <category term="Network" scheme="https://www.litreily.top/categories/Network/"/>
+    
+    
+      <category term="ssh" scheme="https://www.litreily.top/tags/ssh/"/>
+    
+      <category term="proxy" scheme="https://www.litreily.top/tags/proxy/"/>
+    
+      <category term="vps" scheme="https://www.litreily.top/tags/vps/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Linux中的文件I/O缓冲</title>
+    <link href="https://www.litreily.top/2018/10/25/io-cache/"/>
+    <id>https://www.litreily.top/2018/10/25/io-cache/</id>
+    <published>2018-10-25T01:42:40.000Z</published>
+    <updated>2020-02-26T13:11:56.211Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;近日阅读《Linux/UNIX系统编程手册》第13章 - 文件I/O缓冲，有些收获，是以此文以记之。以往只知道Linux的I/O操作有缓冲机制，但始终不知道具体的缓冲流程及使用方法。读完本章节后方才有种恍然大悟的感觉，久违的因读书而觉得舒爽的感觉。&lt;/p&gt;
+&lt;p&gt;好了，进入正题，下图摘自原文(13.4-I/O缓冲小结)，此图概括了&lt;code&gt;stdio&lt;/code&gt;库及内核针对输出文件所用的缓冲以及各类缓冲的控制机制。本文依据此图逐步揭开文件I/O缓冲的面纱。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/linux/io_buffer.jpg&quot; alt=&quot;I/O缓冲&quot;&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Linux" scheme="https://www.litreily.top/categories/Linux/"/>
+    
+    
+      <category term="stdio" scheme="https://www.litreily.top/tags/stdio/"/>
+    
+      <category term="cache" scheme="https://www.litreily.top/tags/cache/"/>
+    
+      <category term="buffer" scheme="https://www.litreily.top/tags/buffer/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Linux指令 - tee的实现</title>
+    <link href="https://www.litreily.top/2018/09/27/tee/"/>
+    <id>https://www.litreily.top/2018/09/27/tee/</id>
+    <published>2018-09-27T06:34:30.000Z</published>
+    <updated>2020-02-26T13:11:56.210Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;近日学习&lt;a href=&quot;https://book.douban.com/subject/25809330/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;《Linux/UNIX 系统编程手册》&lt;/a&gt;一书，巩固了C语言中一些常用库函数的使用，主要涉及基本IO操作相关的库函数。为了加深理解，手动实现了Linux系统中的&lt;code&gt;tee&lt;/code&gt;指令的功能。借此文记述实现过程。&lt;/p&gt;
+&lt;h2 id=&quot;tee功能简述&quot;&gt;&lt;a href=&quot;#tee功能简述&quot; class=&quot;headerlink&quot; title=&quot;tee功能简述&quot;&gt;&lt;/a&gt;tee功能简述&lt;/h2&gt;&lt;p&gt;&lt;code&gt;tee&lt;/code&gt;类似于一个单输入双输出的三通管道，将标准输入的数据输出到指定文件和标准输出中。为实现这个指令，主要考虑以下几点：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;解析&lt;code&gt;tee&lt;/code&gt;包含的命令行参数&lt;/li&gt;
+&lt;li&gt;读取标准输入数据，并将数据写入标准输出和指定文件&lt;/li&gt;
+&lt;li&gt;若未指定文件，则仅将数据输出到标准输出&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;下面逐步分析每个要点的实现方法。&lt;/p&gt;
+&lt;h2 id=&quot;参数解析&quot;&gt;&lt;a href=&quot;#参数解析&quot; class=&quot;headerlink&quot; title=&quot;参数解析&quot;&gt;&lt;/a&gt;参数解析&lt;/h2&gt;&lt;p&gt;&lt;code&gt;tee&lt;/c
+      
+    
+    </summary>
+    
+      <category term="嵌入式" scheme="https://www.litreily.top/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/"/>
+    
+    
+      <category term="C/C++" scheme="https://www.litreily.top/tags/C-C/"/>
+    
+      <category term="linux" scheme="https://www.litreily.top/tags/linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>OpenWrt中使用gdb分析coredump</title>
+    <link href="https://www.litreily.top/2018/09/20/coredump/"/>
+    <id>https://www.litreily.top/2018/09/20/coredump/</id>
+    <published>2018-09-20T10:32:00.000Z</published>
+    <updated>2020-02-26T13:11:56.209Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;近日调试一个&lt;code&gt;bug&lt;/code&gt;，一个守护进程在特定情况下执行一段程序后便会挂掉。为了分析&lt;code&gt;bug&lt;/code&gt;产生原因，本人使用了printf, strace追踪，gdb调试等诸多调试工具和测试方法。本文对于在&lt;code&gt;OpenWrt&lt;/code&gt;嵌入式系统中启用&lt;code&gt;gdb&lt;/code&gt;功能及其使用方法进行详细说明。&lt;/p&gt;
+&lt;h2 id=&quot;调试背景&quot;&gt;&lt;a href=&quot;#调试背景&quot; class=&quot;headerlink&quot; title=&quot;调试背景&quot;&gt;&lt;/a&gt;调试背景&lt;/h2&gt;&lt;p&gt;我最先通过&lt;code&gt;strace&lt;/code&gt;工具追踪发现进程是在收到&lt;code&gt;SIGABRT&lt;/code&gt;信号后被&lt;code&gt;kill&lt;/code&gt;的。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;c&quot;&gt;pipe([8, 9])                            = 0
+fcntl64(8, F_GETFL)                     = 0 (flags O_RDONLY)
+ioctl(8, SNDCTL_TMR_TIMEBASE or TCGETS, 0xbe90a454) = -1 EINVAL (Invalid argument)
+rt_sigprocmask(SIG_UNBLOCK, [ABRT], NULL, 8) 
+      
+    
+    </summary>
+    
+      <category term="嵌入式" scheme="https://www.litreily.top/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/"/>
+    
+    
+      <category term="C/C++" scheme="https://www.litreily.top/tags/C-C/"/>
+    
+      <category term="linux" scheme="https://www.litreily.top/tags/linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>网页模板pug基本语法</title>
+    <link href="https://www.litreily.top/2018/08/31/pug-synax/"/>
+    <id>https://www.litreily.top/2018/08/31/pug-synax/</id>
+    <published>2018-08-31T12:24:10.000Z</published>
+    <updated>2020-02-26T13:11:56.209Z</updated>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;Pug – robust, elegant, feature rich template engine for Node.js&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;code&gt;pug&lt;/code&gt;原名&lt;code&gt;jade&lt;/code&gt;,因版权问题更名为&lt;code&gt;pug&lt;/code&gt;,即哈巴狗。与&lt;code&gt;hexo&lt;/code&gt;默认模块&lt;code&gt;ejs&lt;/code&gt;一样，&lt;code&gt;pug&lt;/code&gt;也是一个模板引擎，可用于快速的网站开发，当然也可以用于静态博客网站的设计。本站点现时所用主题&lt;code&gt;manupassant&lt;/code&gt;也使用了&lt;code&gt;pug&lt;/code&gt;。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Web" scheme="https://www.litreily.top/categories/Web/"/>
+    
+    
+      <category term="pug" scheme="https://www.litreily.top/tags/pug/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Python实现快排及其可视化</title>
+    <link href="https://www.litreily.top/2018/07/07/quick-sort/"/>
+    <id>https://www.litreily.top/2018/07/07/quick-sort/</id>
+    <published>2018-07-07T11:00:00.000Z</published>
+    <updated>2020-02-26T13:11:56.208Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;最近装了个&lt;code&gt;Anaconda&lt;/code&gt;，准备学习一下数据可视化。本着三天打鱼两天装死的心态，重新抱起崭新的&lt;strong&gt;算法&lt;/strong&gt;书，认真学起了快排算法。学完后用&lt;code&gt;Python&lt;/code&gt;实现了一遍基本的快排，然后使用&lt;code&gt;matplotlib&lt;/code&gt;进行动态绘图，最后使用&lt;code&gt;imageio&lt;/code&gt;生成GIF图片。谨以此文以记之！&lt;/p&gt;
+&lt;h2 id=&quot;快排基本原理&quot;&gt;&lt;a href=&quot;#快排基本原理&quot; class=&quot;headerlink&quot; title=&quot;快排基本原理&quot;&gt;&lt;/a&gt;快排基本原理&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;快排&lt;/strong&gt;采用和归并排序相同的分而治之的思想，将待排序数组分成左右两个子数组，对两部分子数组独立排序。当子数组均有序时，整个数组也就有序了。&lt;/p&gt;
+&lt;p&gt;排序步骤如下：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;将原始数组&lt;code&gt;data&lt;/code&gt;随机打乱，以消除对输入的依赖（本步可选）&lt;/li&gt;
+&lt;li&gt;选择数组的首个元素&lt;code&gt;data[0]&lt;/code&gt;作为切分元素&lt;code&gt;v&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;切分数组&lt;ul&gt;
+&lt;li&gt;从左往右找到第一个大于切分元素&lt;code&gt;v&lt;/code&gt;的元素&lt;code&gt;data[i]&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;从右到左找到第一
+      
+    
+    </summary>
+    
+      <category term="算法" scheme="https://www.litreily.top/categories/%E7%AE%97%E6%B3%95/"/>
+    
+    
+      <category term="algorithm" scheme="https://www.litreily.top/tags/algorithm/"/>
+    
+      <category term="sort" scheme="https://www.litreily.top/tags/sort/"/>
+    
+      <category term="visualization" scheme="https://www.litreily.top/tags/visualization/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>tmux常用配置说明</title>
+    <link href="https://www.litreily.top/2018/06/19/tmux-config/"/>
+    <id>https://www.litreily.top/2018/06/19/tmux-config/</id>
+    <published>2018-06-19T01:26:00.000Z</published>
+    <updated>2020-02-26T13:11:56.207Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;code&gt;tmux&lt;/code&gt;作为&lt;code&gt;Linux&lt;/code&gt;三大神器之一，结合&lt;code&gt;zsh&lt;/code&gt;和&lt;code&gt;vim&lt;/code&gt;堪称无敌，&lt;code&gt;tmux&lt;/code&gt;作为分屏利器自有其强大之处，本文就其常用配置予以说明。&lt;/p&gt;
+&lt;h2 id=&quot;安装tmux&quot;&gt;&lt;a href=&quot;#安装tmux&quot; class=&quot;headerlink&quot; title=&quot;安装tmux&quot;&gt;&lt;/a&gt;安装tmux&lt;/h2&gt;&lt;pre&gt;&lt;code class=&quot;zsh&quot;&gt;# install in ubuntu
+$ sudo apt-get install tmux
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Ctrl+B&lt;/code&gt;: default keys of tmux &lt;code&gt;prefix&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;.tmux.conf&lt;/code&gt;: config file of &lt;code&gt;tmux&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;tmux source-file .tmux.conf&lt;/code&gt;: command to reload &lt;code&gt;.tmux.conf&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+      <category term="Linux" scheme="https://www.litreily.top/categories/Linux/"/>
+    
+    
+      <category term="ubuntu" scheme="https://www.litreily.top/tags/ubuntu/"/>
+    
+      <category term="tmux" scheme="https://www.litreily.top/tags/tmux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Openwrt中添加内核模块</title>
+    <link href="https://www.litreily.top/2018/05/30/openwrt-ko/"/>
+    <id>https://www.litreily.top/2018/05/30/openwrt-ko/</id>
+    <published>2018-05-30T15:23:56.000Z</published>
+    <updated>2020-02-26T13:11:56.206Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;如果想要在&lt;code&gt;Openwrt&lt;/code&gt;系统中添加一个内核模块，其实并不难，对着某个已有的内核模块，依葫芦画瓢嘛，不难。本文将介绍一个最最简单的&lt;/p&gt;
+&lt;h2 id=&quot;sourcecode&quot;&gt;&lt;a href=&quot;#sourcecode&quot; class=&quot;headerlink&quot; title=&quot;sourcecode&quot;&gt;&lt;/a&gt;sourcecode&lt;/h2&gt;&lt;p&gt;path: &lt;code&gt;git_repo/package/kmod-demo/&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;下面是源码包含的所有文件，根级&lt;code&gt;Makefile&lt;/code&gt;提供给内核编译器使用，&lt;code&gt;src&lt;/code&gt;级&lt;code&gt;Makefile&lt;/code&gt;用于编译&lt;code&gt;.ko&lt;/code&gt;文件。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ tree
+.
+├── Makefile
+└── src
+    ├── demo.c
+    ├── Kconfig
+    └── Makefile
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&quot;demo-c&quot;&gt;&lt;a href=&quot;#demo-c&quot; class=&quot;headerlink&quot; title=&quot;demo.c&quot;&gt;&lt;/a&gt;demo.c&lt;/h3&gt;&lt;p&gt;源码非常简单，在装载时打印&lt;code&gt;Hello World&lt;/code&gt;，卸载时打印&lt;code&gt;Exit&lt;/cod
+      
+    
+    </summary>
+    
+      <category term="嵌入式" scheme="https://www.litreily.top/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/"/>
+    
+    
+      <category term="C/C++" scheme="https://www.litreily.top/tags/C-C/"/>
+    
+      <category term="linux" scheme="https://www.litreily.top/tags/linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Python网络爬虫4 - scrapy入门</title>
+    <link href="https://www.litreily.top/2018/05/27/scrapy-start/"/>
+    <id>https://www.litreily.top/2018/05/27/scrapy-start/</id>
+    <published>2018-05-27T15:38:28.000Z</published>
+    <updated>2020-02-26T13:11:56.206Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;&lt;code&gt;scrapy&lt;/code&gt;作为一款强大的爬虫框架，当然要好好学习一番，本文便是本人学习和使用&lt;code&gt;scrapy&lt;/code&gt;过后的一个总结，内容比较基础，算是入门笔记吧，主要讲述&lt;code&gt;scrapy&lt;/code&gt;的基本概念和使用方法。&lt;/p&gt;
+&lt;h2 id=&quot;scrapy-framework&quot;&gt;&lt;a href=&quot;#scrapy-framework&quot; class=&quot;headerlink&quot; title=&quot;scrapy framework&quot;&gt;&lt;/a&gt;scrapy framework&lt;/h2&gt;&lt;p&gt;首先附上&lt;code&gt;scrapy&lt;/code&gt;经典图如下：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/spider/scrapy/scrapy.jpg&quot; alt=&quot;scrapy framework&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;scrapy&lt;/code&gt;框架包含以下几个部分&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;Scrapy Engine&lt;/code&gt; 引擎&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Spiders&lt;/code&gt; 爬虫&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Scheduler&lt;/code&gt; 调度器&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Downloader&lt;/code&gt; 下载器&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Item Pipeline&lt;/code&gt; 项目管道&lt;/li&gt;
+&lt;
+      
+    
+    </summary>
+    
+      <category term="Python" scheme="https://www.litreily.top/categories/Python/"/>
+    
+    
+      <category term="spider" scheme="https://www.litreily.top/tags/spider/"/>
+    
+      <category term="scrapy" scheme="https://www.litreily.top/tags/scrapy/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Python网络爬虫3 - 生产者消费者模型爬取某金融网站数据</title>
+    <link href="https://www.litreily.top/2018/04/30/cfachina/"/>
+    <id>https://www.litreily.top/2018/04/30/cfachina/</id>
+    <published>2018-04-30T09:03:35.000Z</published>
+    <updated>2020-02-26T13:11:56.205Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;应一位金融圈的朋友所托，帮忙写个爬虫，帮他爬取&lt;a href=&quot;http://www.cfachina.org/cfainfo/organbaseinfoServlet?all=personinfo#&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;中国期货行业协议&lt;/a&gt;网站中所有金融机构的从业人员信息。网站数据的获取本身比较简单，但是为了学习一些新的爬虫方法和技巧，即本文要讲述的&lt;strong&gt;生产者消费者模型&lt;/strong&gt;，我又学习了一下Python中队列库&lt;code&gt;queue&lt;/code&gt;及线程库&lt;code&gt;Thread&lt;/code&gt;的使用方法。&lt;/p&gt;
+&lt;h2 id=&quot;生产者消费者模型&quot;&gt;&lt;a href=&quot;#生产者消费者模型&quot; class=&quot;headerlink&quot; title=&quot;生产者消费者模型&quot;&gt;&lt;/a&gt;生产者消费者模型&lt;/h2&gt;&lt;p&gt;生产者消费者模型非常简单，相信大部分程序员都知道，就是一方作为生产者不断提供资源，另一方作为消费者不断消费资源。简单点说，就好比餐馆的厨师和顾客，厨师作为生产者不断制作美味的食物，而顾客作为消费者不断食用厨师提供的食物。此外，生产者与消费者之间可以是一对一、一对多、多对一和多对多的关系。&lt;/p&gt;
+&lt;p&gt;那么这个模型和爬虫有什么关系呢？其实，爬虫可以认为是一个生产者，它不断从网站爬取数据，爬取到的数据就是食物；而
+      
+    
+    </summary>
+    
+      <category term="Python" scheme="https://www.litreily.top/categories/Python/"/>
+    
+    
+      <category term="spider" scheme="https://www.litreily.top/tags/spider/"/>
+    
+      <category term="queue" scheme="https://www.litreily.top/tags/queue/"/>
+    
+      <category term="xlwt" scheme="https://www.litreily.top/tags/xlwt/"/>
+    
+  </entry>
+  
+</feed>

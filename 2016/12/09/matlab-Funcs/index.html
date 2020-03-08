@@ -1,0 +1,366 @@
+<!DOCTYPE html><html lang="en"><head><meta name="generator" content="Hexo 3.9.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><title>Matlab - 常用函数集锦 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><body><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">Matlab - 常用函数集锦</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2016/12/09/matlab-Funcs/">2016-12-09</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Matlab/">Matlab</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>在使用matlab进行信号处理和图形绘制过程中，某些函数被频繁调用，所以有必要将这些常用函数进行总结归类。</p>
+<h2 id="滤波函数"><a href="#滤波函数" class="headerlink" title="滤波函数"></a>滤波函数</h2><h3 id="低通滤波"><a href="#低通滤波" class="headerlink" title="低通滤波"></a>低通滤波</h3><pre><code class="matlab">function [filtered_signal,filtb,filta]=lopass_butterworth(inputsignal,cutoff_freq,Fs,order)
+% Low-pass Butterworth filter
+% [filtered_signal,filtb,filta] = lopass_butterworth(inputsignal,cutoff_freq,Fs,order)
+%
+% This is simply a set of built-in Matlab functions, repackaged for ease of
+% use by Chad Greene, October 2012.
+%
+% INPUTS:
+% inputsignal = input time series
+% cutoff_freq = filter corner frequency
+% Fs = data sampling frequency
+% order = order of Butterworth filter
+%  
+% OUTPUTS:
+% filtered_signal = the filtered time series
+% filtb, filta = filter numerator and denominator (optional)
+%
+% EXAMPLE 1:
+% load train
+% t = (1:length(y))/Fs;
+% y_filt = lopass_butterworth(y,900,Fs,4); % cut off at 900 Hz
+% figure
+% plot(t,y,&#39;b&#39;,t,y_filt,&#39;r&#39;)
+% xlabel(&#39;time in seconds&#39;)
+% box off
+% legend(&#39;unfiltered&#39;,&#39;filtered&#39;)
+% sound(y,Fs)      % play original time series
+% pause(2)         % pause two seconds
+% sound(y_filt,Fs) % play filtered time series
+
+nyquist_freq = Fs/2;  % Nyquist frequency
+Wn=cutoff_freq/nyquist_freq;    % non-dimensional frequency
+[filtb,filta]=butter(order,Wn,&#39;low&#39;); % construct the filter
+filtered_signal=filtfilt(filtb,filta,inputsignal); % filter the data with zero phase
+</code></pre>
+<h3 id="高通滤波"><a href="#高通滤波" class="headerlink" title="高通滤波"></a>高通滤波</h3><pre><code class="matlab">function [filtered_signal,filtb,filta]=hipass_butterworth(inputsignal,cutoff_freq,Fs,order)
+% High-pass Butterworth filter
+% [filtered_signal,filtb,filta] = hipass_butterworth(inputsignal,cutoff_freq,Fs,order)
+%
+% This is simply a set of built-in Matlab functions, repackaged for ease of
+% use by Chad Greene, October 2012.
+%
+% INPUTS:
+% inputsignal = input time series
+% cutoff_freq = filter corner frequency
+% Fs = data sampling frequency
+% order = order of Butterworth filter
+%
+% OUTPUTS:
+% filtered_signal = the filtered time series
+% filtb, filta = filter numerator and denominator (optional)
+%
+% EXAMPLE 1:
+% load train
+% t = (1:length(y))/Fs;
+% y_filt = hipass_butterworth(y,900,Fs,4); % cut off at 900 Hz
+% figure
+% plot(t,y,&#39;b&#39;,t,y_filt,&#39;r&#39;)
+% xlabel(&#39;time in seconds&#39;)
+% box off
+% legend(&#39;unfiltered&#39;,&#39;filtered&#39;)
+% sound(y,Fs)      % play original time series
+% pause(2)         % pause two seconds
+% sound(y_filt,Fs) % play filtered time series
+
+nyquist_freq = Fs/2;  % Nyquist frequency
+Wn=cutoff_freq/nyquist_freq;    % non-dimensional frequency
+[filtb,filta]=butter(order,Wn,&#39;high&#39;); % construct the filter
+filtered_signal=filtfilt(filtb,filta,inputsignal); % filter the data with zero phase
+</code></pre>
+<h3 id="带通滤波"><a href="#带通滤波" class="headerlink" title="带通滤波"></a>带通滤波</h3><pre><code class="matlab">function [filtered_signal,filtb,filta]=bandpass_butterworth(inputsignal,cutoff_freqs,Fs,order)
+% Bandpass Butterworth filter
+% [filtered_signal,filtb,filta] = bandpass_butterworth(inputsignal,cutoff_freq,Fs,order)
+%
+% This is simply a set of built-in Matlab functions, repackaged for ease of
+% use by Chad Greene, October 2012.
+%
+% INPUTS:
+% inputsignal = input time series
+% cutoff_freqs = filter corner frequencies in the form [f1 f2]
+% Fs = data sampling frequency
+% order = order of Butterworth filter
+%
+% OUTPUTS:
+% filtered_signal = the filtered time series
+% filtb, filta = filter numerator and denominator (optional)
+%
+% EXAMPLE 1:
+% load train
+% t = (1:length(y))/Fs;
+% y_filt = bandpass_butterworth(y,[800 1000],Fs,4); % cut off below 800 Hz and above 1000 Hz
+%
+% figure
+% plot(t,y,&#39;b&#39;,t,y_filt,&#39;r&#39;)
+% xlabel(&#39;time in seconds&#39;)
+% box off
+% legend(&#39;unfiltered&#39;,&#39;filtered&#39;)
+% sound(y,Fs)      % play original time series
+% pause(2)         % pause two seconds
+% sound(y_filt,Fs) % play filtered time series
+
+nyquist_freq = Fs/2;  % Nyquist frequency
+Wn=cutoff_freqs/nyquist_freq;    % non-dimensional frequency
+[filtb,filta]=butter(order,Wn,&#39;bandpass&#39;); % construct the filter
+filtered_signal=filtfilt(filtb,filta,inputsignal); % filter the data with zero phase
+</code></pre>
+<h3 id="带阻滤波"><a href="#带阻滤波" class="headerlink" title="带阻滤波"></a>带阻滤波</h3><pre><code class="matlab">function [filtered_signal,filtb,filta]=bandstop_butterworth(inputsignal,cutoff_freqs,Fs,order)
+% Band-stop Butterworth filter
+% [filtered_signal,filtb,filta] = bandstop_butterworth(inputsignal,cutoff_freqs,Fs,order)
+%
+% This is simply a set of built-in Matlab functions, repackaged for ease of
+% use by Chad Greene, October 2012.
+%
+% INPUTS:
+% inputsignal = input time series
+% cutoff_freqs = filter corner frequencies in the form [f1 f2]
+% Fs = data sampling frequency
+% order = order of Butterworth filter
+%
+% OUTPUTS:
+% filtered_signal = the filtered time series
+% filtb, filta = filter numerator and denominator (optional)
+%
+% EXAMPLE 1:
+% load train
+% t = (1:length(y))/Fs;
+% y_filt = bandstop_butterworth(y,[800 1000],Fs,4); % cut off below 800 Hz and above 1000 Hz
+%
+% figure
+% plot(t,y,&#39;b&#39;,t,y_filt,&#39;r&#39;)
+% xlabel(&#39;time in seconds&#39;)
+% box off
+% legend(&#39;unfiltered&#39;,&#39;filtered&#39;)
+% sound(y,Fs)      % play original time series
+% pause(2)         % pause two seconds
+% sound(y_filt,Fs) % play filtered time series
+
+nyquist_freq = Fs/2;  % Nyquist frequency
+Wn=cutoff_freqs/nyquist_freq;    % non-dimensional frequency
+[filtb,filta]=butter(order,Wn,&#39;stop&#39;); % construct the filter
+filtered_signal=filtfilt(filtb,filta,inputsignal); % filter the data with zero phase
+</code></pre>
+<h2 id="绘图函数"><a href="#绘图函数" class="headerlink" title="绘图函数"></a>绘图函数</h2><pre><code class="matlab">function [  ] = setPlot( varargin )
+% setPlot()
+% setPlot(title)
+% setPlot(title,xlabel)
+% setPlot(title,xlable,ylabel)
+% setPlot(title,xlabel,ylabel,xlim)
+% setPlot(title,xlable,ylabel,xlim,ylim)
+
+narginchk(0,5);     % 判断输入参数是否足够
+
+grid on;
+axis tight;
+
+if nargin&gt;=1
+    title(varargin{1});
+end
+
+if nargin&gt;=2
+    xlabel(varargin{2});
+end
+
+if nargin&gt;=3
+    ylabel(varargin{3});
+end
+
+if nargin&gt;=4
+    xlim(varargin{4});
+end
+
+if nargin&gt;=5
+    ylim(varargin{5});
+end
+
+end
+</code></pre>
+<h2 id="信号处理函数"><a href="#信号处理函数" class="headerlink" title="信号处理函数"></a>信号处理函数</h2><h3 id="频谱分析"><a href="#频谱分析" class="headerlink" title="频谱分析"></a>频谱分析</h3><pre><code class="matlab">function [freq,amp]=fft_signal(signal,fs,N)
+% Spectrum analysis
+% INPUTS:
+% signal = input time series
+% fs = data sampling frequency
+% N = data length of signal
+%
+% OUTPUTS:
+% freq = frequency of Spectrum
+% amp = amplitude of Spectrum
+%
+% EXAMPLE 1:
+% fs = 100;
+% N = fs*10;
+% t = (0:N-1)/fs;
+% y = sin(2*pi*10*t);
+% [freq,amp] = fft_signal(y,fs,N);
+% plot(freq,amp);
+
+amp = 2*abs(fft(signal))/N;        % 求取信号的幅度谱
+amp = amp(1:fix(length(amp)/2));       % 截取有效部分
+freq=(0:length(amp)-1)*fs/N;       % 横坐标代表频率
+end
+</code></pre>
+<h3 id="幅值分布"><a href="#幅值分布" class="headerlink" title="幅值分布"></a>幅值分布</h3><pre><code class="matlab">function [ amp,dist ] = ampDist( signal,sectionNum )
+% Calculate the amplitude distribution of the signal
+% INPUTS:
+% signal : The signal to be analyzed
+% sectionNum : Number of segments
+%
+% OUTPUTS:
+% amp : Amplitude after segmentation
+% dist :Amplitude distribution
+%
+% EXAMPLE 1:
+% fs = 1000;
+% N = fs*100;
+% y = wgn(1,N,10);     % 高斯白噪声
+% [amp,dist] = ampDist(y,500);
+% bar(amp,dist);
+
+yMin = min(signal);
+yMax = max(signal);
+
+amp = linspace(yMin,yMax,sectionNum);
+dist = hist(signal,amp);
+dist = dist./length(signal);
+end
+</code></pre>
+<h3 id="LMS最小均方算法"><a href="#LMS最小均方算法" class="headerlink" title="LMS最小均方算法"></a>LMS最小均方算法</h3><pre><code class="matlab">function [ y_error, y_filter ] = LMS( x_input,x_dest,M,u )
+% LMS 最小均方算法
+% INPUTS：
+% x_input    原始信号
+% x_dest     期望信号
+% M          阶次
+% u          步长因子
+%
+% OUTPUTS：
+% y_error    误差信号
+% y_filter   滤波器信号输出
+%
+% EXAMPLE 1:
+% load train
+% t = (1:length(y))/Fs;
+% M = 2; u = 0.5;
+% y_dest = (max(y)-min(y))/2*cos(2*pi*18*t);      % 参考信号
+% [y_error,y_filter] = LMS(y,y_dest,M,u);
+% plot(t,y_error,t,y_filter);
+
+N = length(x_input);
+y_filter = zeros(1,N);
+y_error  = zeros(1,N);
+h = zeros(1,M);
+
+for k=M:N
+    h_old = h;
+    y_filter(k) = x_dest(k:-1:k-M+1)*h_old&#39;;
+    y_error(k)  = x_input(k) - y_filter(k);
+    h = h_old + 2*u*y_error(k)*x_dest(k:-1:k-M+1);
+end
+
+end
+</code></pre>
+<h3 id="EMD经验模态分解"><a href="#EMD经验模态分解" class="headerlink" title="EMD经验模态分解"></a>EMD经验模态分解</h3><pre><code class="matlab">function imf = emd(x)
+% Empiricial Mode Decomposition (Hilbert-Huang Transform)
+% imf = emd(x)
+% Funcs : ismonotonic, isimf, getspline, findpeaks
+
+x   = transpose(x(:));      % 将x变为一维向量
+imf = [];
+while ~ismonotonic(x)
+   x1 = x;
+   sd = Inf;
+   cnt=0;
+   while (sd &gt; 0.1) || ~isimf(x1)
+      s1 = getspline(x1);
+      s2 = -getspline(-x1);
+      x2 = x1-(s1+s2)/2;
+
+      sd = sum((x1-x2).^2)/sum(x1.^2);
+      x1 = x2;
+      cnt=cnt+1;
+   end
+%    cnt
+
+   imf{end+1} = x1;
+   x          = x-x1;
+end
+imf{end+1} = x;
+
+% FUNCTIONS
+% 判断信号的单调性
+function u = ismonotonic(x)
+
+u1 = length(findpeaks(x))*length(findpeaks(-x));
+if u1 &gt; 0
+    u = 0;
+else
+    u = 1;
+end
+
+% 判断信号是否满足IMF条件
+% 条件：极大值点数和极小值点数之和与过零点数相等或相差1？
+function u = isimf(x)
+
+N  = length(x);
+u1 = sum(x(1:N-1).*x(2:N) &lt; 0);
+u2 = length(findpeaks(x))+length(findpeaks(-x));
+if abs(u1-u2) &gt; 1
+    u = 0;
+else
+    u = 1;
+end
+
+% 使用三次样条函数，得到包络线
+function s = getspline(x)
+
+N = length(x);
+p = findpeaks(x);
+s = spline([0 p N+1],[0 x(p) 0],1:N);
+
+% 寻找极大值点
+function n = findpeaks(x)
+% Find peaks.
+% n = findpeaks(x)
+
+n    = find(diff(diff(x) &gt; 0) &lt; 0);
+u    = find(x(n+1) &gt; x(n));
+n(u) = n(u)+1;
+</code></pre>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2016/12/09/matlab-Funcs/">https://www.litreily.top/2016/12/09/matlab-Funcs/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tags"></i><a href="/tags/matlab/">matlab</a><a href="/tags/algorithm/">algorithm</a><a href="/tags/signal/">signal</a></span></div></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2016/12/10/hello-hexo/">&lt; Welcome to hexo</a><a class="next" href="/2016/12/05/stm32-dac/">stm32 - DAC基本输出方式 &gt;</a></div><div id="valine-comment"><style type="text/css">.v * { color: #CECECE; }
+.v a { color: #0F9FB4; }
+.v a:hover { color: #216C73; }
+.v li { list-style: inherit; }
+.v .vwrap { border: 1px solid #223441; border-radius: 0; }
+.v .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.v .vbtn { border-radius: 0; color: #cecece; background: none; }
+.v .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.v .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.v .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.v code, .v pre,.v .vlist .vcard .vhead .vsys { background: #203240; }
+.v code, .v pre { color: #F0F0F0; font-size: 95%; }
+.v .vlist .vcard .vcontent.expand:before { background: linear-gradient(180deg,hsla(206,33%,19%,0),hsla(206,33%,19%,.9)); }
+.v .vlist .vcard .vcontent.expand:after { background: hsla(206,33%,19%,.9); }</style><div id="vcomment"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
+  lang: 'zh-cn',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></section><footer><p>Copyright © 2016 - 2020 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/plugins/prettify/prettify.js"></script><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.css"></body></html>

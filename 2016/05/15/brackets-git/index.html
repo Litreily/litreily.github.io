@@ -1,0 +1,114 @@
+<!DOCTYPE html><html lang="en"><head><meta name="generator" content="Hexo 3.9.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><title>Brackets - Git插件的使用方法 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><body><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">Brackets - Git插件的使用方法</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2016/05/15/brackets-git/">2016-05-15</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Web/">Web</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>Brackets，一款专职做网页设计的开发工具，其插件也是极为丰富，Git自然是少不了的，那么如何安装和使用它呢，我以Windows 10环境为例进行说明。</p>
+<h2 id="1-安装插件"><a href="#1-安装插件" class="headerlink" title="1. 安装插件"></a>1. 安装插件</h2><h3 id="1-1-打开插件管理器"><a href="#1-1-打开插件管理器" class="headerlink" title="1.1 打开插件管理器"></a>1.1 打开插件管理器</h3><p>在Brackets中，基本上所有的插件都可以从插件管理器(Extension Manager)中安装，该管理器可以从Brackets软件菜单栏File中找到。</p>
+<p><img src="/assets/brackets/git/extension manager.png" alt="Extension Manager"></p>
+<h3 id="1-2-搜素并安装git插件"><a href="#1-2-搜素并安装git插件" class="headerlink" title="1.2 搜素并安装git插件"></a>1.2 搜素并安装git插件</h3><ul>
+<li>打开插件管理器后，选择“Available”选项卡，在搜索框中输入“git”。</li>
+</ul>
+<p><img src="/assets/brackets/git/input git.png" alt="input git"></p>
+<ul>
+<li>在弹出的列表中找到“Brackets Git”，点击“install”开始安装。</li>
+</ul>
+<p><img src="/assets/brackets/git/install git.png" alt="install git"></p>
+<ul>
+<li>安装完成后，将提示“Installation successful!”。</li>
+</ul>
+<p><img src="/assets/brackets/git/install success.png" alt="install success"></p>
+<h3 id="1-3-查看Git插件"><a href="#1-3-查看Git插件" class="headerlink" title="1.3 查看Git插件"></a>1.3 查看Git插件</h3><p>安装完成后，可以在插件管理器的“Installed”选项卡中查看已安装的插件。</p>
+<p><img src="/assets/brackets/git/installed extensions.png" alt="installed extensions"></p>
+<p>此外，如果我们想知道它保存在哪个地方，可以打开文件资源管理器,在路径：</p>
+<pre>C:\\Users\USER_NAME\AppData\Roaming\Brackets\extensions\user</pre>
+
+<p>下进行查看。这里保存了用户安装的所有插件。</p>
+<p><img src="/assets/brackets/git/extensions.png" alt="extensions"></p>
+<h2 id="2-界面布局"><a href="#2-界面布局" class="headerlink" title="2. 界面布局"></a>2. 界面布局</h2><h3 id="2-1-整体布局"><a href="#2-1-整体布局" class="headerlink" title="2.1 整体布局"></a>2.1 整体布局</h3><p>在Brackets右侧插件栏中可以找到git图标，点击该图标或使用快捷键<code>Ctrl+ALG+G</code>可以打开或关闭界面下方的git工具。在界面左侧，当有文件被修改并且尚未<code>commit</code>时，文件名前面会出现红色竖杠标记，文件中被修改的地方也会出现相应的标记。此外，在界面左侧，项目文件夹下方有一个下拉选项，显示当前所在的git分支。</p>
+<p><img src="/assets/brackets/git/git layout.png" alt="git layout"></p>
+<h3 id="2-2-工具面板"><a href="#2-2-工具面板" class="headerlink" title="2.2 工具面板"></a>2.2 工具面板</h3><p>git工具面板按区域可分为两大块，上面是控件栏，下面是内容指示。</p>
+<p><img src="/assets/brackets/git/git tools.png" alt="git tools"></p>
+<p>下面是对各个控件的简要说明：</p>
+<ul>
+<li><img class="inline-img" src="/assets/brackets/git/git%20clone.png">： 初始化/克隆项目</li>
+<li><img class="inline-img" src="/assets/brackets/git/git%20commit.png">： 提交当前更改内容</li>
+<li><img class="inline-img" src="/assets/brackets/git/git%20updown.png">： 跳至上一个/下一个文件修改位置</li>
+<li><img class="inline-img" src="/assets/brackets/git/git%20history.png">： 显示仓库历史提交记录/当前文件历史修改记录</li>
+<li><img class="inline-img" src="/assets/brackets/git/git%20refresh.png">： 刷新仓库内容/更多指令选项</li>
+<li><img class="inline-img" src="/assets/brackets/git/git%20tag.png">： 添加标签</li>
+<li><img class="inline-img" src="/assets/brackets/git/git%20push.png">： 切换远程仓库源/fetch/pull/push</li>
+<li><img class="inline-img" src="/assets/brackets/git/git%20settings.png">： 打开指令窗口/Git Settings界面</li>
+</ul>
+<h2 id="3-使用方法"><a href="#3-使用方法" class="headerlink" title="3. 使用方法"></a>3. 使用方法</h2><h3 id="3-1-关联Git-GUI"><a href="#3-1-关联Git-GUI" class="headerlink" title="3.1 关联Git GUI"></a>3.1 关联Git GUI</h3><p>Brackets的git插件仅仅是个插件，要使用git进行代码管理，前提是电脑已装有git软件，如Windows的git for Windows，安装方法这里不多说。当我们安装好git软件并配置好环境变量后，默认情况下，Brackets能够自动识别git的安装路径；如果没有识别，可以手动设置，打开Git Settings界面，选择Git configuration选项卡，在“Path to Git executable”输入git的安装路径。</p>
+<p><img src="/assets/brackets/git/git setPath.png" alt="git settings"></p>
+<h3 id="3-2-git-init"><a href="#3-2-git-init" class="headerlink" title="3.2 git init"></a>3.2 git init</h3><p>当我们新建一个仓库，需要使用git进行管理时，首先应该在工程目录下执行<code>git init</code>指令，如果使用git插件，则只需在git工具面板中点击“Init”按钮即可。</p>
+<p><img src="/assets/brackets/git/git init.png" alt="git init"></p>
+<h3 id="3-3-git-remote"><a href="#3-3-git-remote" class="headerlink" title="3.3 git remote"></a>3.3 git remote</h3><p>为了推送代码至远程仓库，可以选择Github、Coding等带有Git管理器的网站，新建项目并复制仓库网址。为了实现:</p>
+<pre><code class="bash">$ git remote add origin https://git.coding.net/litreily/svg-social.git
+</code></pre>
+<p>可以在Brackets中打开git工具，点击右侧第一个按钮，选择“Create new remote…”，然后依次输入仓库名称以及网址，确认即可。</p>
+<p><img src="/assets/brackets/git/git remote.png" alt="git remote"></p>
+<p><img src="/assets/brackets/git/git remote add.png" alt="git remote"></p>
+<h3 id="3-4-git-commit"><a href="#3-4-git-commit" class="headerlink" title="3.4 git commit"></a>3.4 git commit</h3><p>当我们需要提交已修改文件时，可以执行<code>git add File_name</code>/<code>git add .</code>以及<code>git commit</code>。如果使用git插件，可以在git工具中勾选需要提交的文件，然后点击提交按钮，在弹出的界面中输入提交信息，点击确认即可。</p>
+<p><img src="/assets/brackets/git/git commit files.png" alt="git commit"></p>
+<h3 id="3-5-git-push"><a href="#3-5-git-push" class="headerlink" title="3.5 git push"></a>3.5 git push</h3><p>在联网情况下，如果需要将代码推送至远程仓库，需要使用指令<code>git push</code>,如：</p>
+<pre><code class="bash">$ git push origin master
+</code></pre>
+<p>如果使用git插件，可以点击推送按钮，首次推送需要填写用户名和密码，即远程仓库对应的用户名和密码。</p>
+<p><img src="/assets/brackets/git/git push files.png" alt="git push"></p>
+<p><img src="/assets/brackets/git/git push success.png" alt="git push"></p>
+<h3 id="3-6-git-pull-git-fetch"><a href="#3-6-git-pull-git-fetch" class="headerlink" title="3.6 git pull / git fetch"></a>3.6 git pull / git fetch</h3><p>如果用户在远程仓库修改了代码或添加了新的文件，此时可以在本地使用指令<code>git pull</code>获取更新文件，如：</p>
+<pre><code class="bash">$ git pull origin master
+</code></pre>
+<p>如果使用git插件，可以点击拉取按钮。</p>
+<p><img src="/assets/brackets/git/git pull.png" alt="git pull"></p>
+<p><img src="/assets/brackets/git/git pull success.png" alt="git pull"></p>
+<p>指令<code>git fetch</code>的操作方法类似，辞不赘述。</p>
+<h3 id="3-7-git-branch-git-checkout-git-merge"><a href="#3-7-git-branch-git-checkout-git-merge" class="headerlink" title="3.7 git branch / git checkout / git merge"></a>3.7 git branch / git checkout / git merge</h3><p>如果需要创建新的分支、切换分支或是合并分支，我们通常需要使用指令<code>git branch</code>/<code>git checkout</code>/<code>git merge</code>,在Brackets中，可以通过界面右侧的分支选项完成这些操作。</p>
+<p><img src="/assets/brackets/git/git checkout.png" alt="git checkout"></p>
+<p><img src="/assets/brackets/git/git branch.png" alt="git branch"></p>
+<h3 id="3-8-git-tag"><a href="#3-8-git-tag" class="headerlink" title="3.8 git tag"></a>3.8 git tag</h3><p>如果需要给当前版本添加标签，可以点击标签按钮，输入标签名，点击确定即可，下次推送的时候记得在推送窗口勾选“Send tags”。</p>
+<p><img src="/assets/brackets/git/git new tag.png" alt="git new tag"></p>
+<h3 id="3-9-打开指令窗口"><a href="#3-9-打开指令窗口" class="headerlink" title="3.9 打开指令窗口"></a>3.9 打开指令窗口</h3><p>如果习惯使用敲指令，或是有些指令不得不通过指令窗口才能实现，可以通过git插件打开git bash。</p>
+<p><img src="/assets/brackets/git/git bash.png" alt="git bash"></p>
+<h3 id="3-10-查看历史记录"><a href="#3-10-查看历史记录" class="headerlink" title="3.10 查看历史记录"></a>3.10 查看历史记录</h3><p>查看推送记录：</p>
+<p><img src="/assets/brackets/git/git history push.png" alt="git push history"></p>
+<p>查看某文件的提交记录：</p>
+<p><img src="/assets/brackets/git/git history file.png" alt="git file history"></p>
+<h3 id="3-11-放弃更改"><a href="#3-11-放弃更改" class="headerlink" title="3.11 放弃更改"></a>3.11 放弃更改</h3><p>如果我们需要放弃某些文件的修改时，可以在git工具的内容显示区域找到该文件，点击“discard changes”。如果想要删除某些刚刚添加但还未提交的文件，同样可以在该区域找到文件，通过点击“Delete file”删除文件。</p>
+<p><img src="/assets/brackets/git/git discard.png" alt="git discard"></p>
+<h2 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h2><p>git指令丰富，上述并非全部，但是尚且够用，往后更新同步。</p>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2016/05/15/brackets-git/">https://www.litreily.top/2016/05/15/brackets-git/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tags"></i><a href="/tags/git/">git</a><a href="/tags/tools/">tools</a><a href="/tags/brackets/">brackets</a></span></div></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2016/06/05/labview-base/">&lt; Labview - 基本概念</a><a class="next" href="/2016/05/11/DAQ-TDMS/">Labview - 手自动存储TDMS文件的区别 &gt;</a></div><div id="valine-comment"><style type="text/css">.v * { color: #CECECE; }
+.v a { color: #0F9FB4; }
+.v a:hover { color: #216C73; }
+.v li { list-style: inherit; }
+.v .vwrap { border: 1px solid #223441; border-radius: 0; }
+.v .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.v .vbtn { border-radius: 0; color: #cecece; background: none; }
+.v .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.v .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.v .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.v code, .v pre,.v .vlist .vcard .vhead .vsys { background: #203240; }
+.v code, .v pre { color: #F0F0F0; font-size: 95%; }
+.v .vlist .vcard .vcontent.expand:before { background: linear-gradient(180deg,hsla(206,33%,19%,0),hsla(206,33%,19%,.9)); }
+.v .vlist .vcard .vcontent.expand:after { background: hsla(206,33%,19%,.9); }</style><div id="vcomment"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
+  lang: 'zh-cn',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></section><footer><p>Copyright © 2016 - 2020 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/plugins/prettify/prettify.js"></script><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.css"></body></html>
