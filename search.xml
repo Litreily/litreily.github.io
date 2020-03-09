@@ -4,7 +4,7 @@
   
     
     <entry>
-      <title><![CDATA[网络协议1 - NBNS]]></title>
+      <title><![CDATA[网络协议详解1 - NBNS]]></title>
       <url>https://www.litreily.top/2020/02/28/nbns/</url>
       <content type="html"><![CDATA[<h2 id="NetBIOS-简介"><a href="#NetBIOS-简介" class="headerlink" title="NetBIOS 简介"></a>NetBIOS 简介</h2><p><strong>NetBIOS</strong>，Network Basic Input/Output System的缩写，一般指用于<strong>局域网</strong>通信的一套API，相关RFC文档包括 <a href="https://tools.ietf.org/html/rfc1001" target="_blank" rel="noopener">RFC 1001</a>, <a href="https://tools.ietf.org/html/rfc1002" target="_blank" rel="noopener">RFC 1002</a>. RFC 1001主要对NetBIOS及相关协议和服务进行解释说明，RFC 1002给出了相关协议和服务的数据组包格式。</p>
 <p>NetBIOS提供三种软件服务：</p>
@@ -180,7 +180,7 @@
 </ul>
 </li>
 </ul>
-<h4 id="RESOURCE-RECORD"><a href="#RESOURCE-RECORD" class="headerlink" title="RESOURCE RECORD"></a>RESOURCE RECORD</h4><p>NBNS的响应数据段格式如下：</p>
+<h4 id="RESOURCE-RECORD"><a href="#RESOURCE-RECORD" class="headerlink" title="RESOURCE RECORD"></a>RESOURCE RECORD</h4><p>NBNS的资源数据段可以存在于请求报文和应答报文中，数据格式如下：</p>
 <pre><code class="yml">                     1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 3 3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
