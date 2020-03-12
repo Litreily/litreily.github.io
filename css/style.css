@@ -8,9 +8,6 @@ html, body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form
   margin: 0;
   padding: 0; }
 
-html {
-  scroll-behavior: smooth; }
-
 body {
   background-image: url(/img/backgroud.png);
   background-repeat: repeat-y;
@@ -490,18 +487,20 @@ a, .m-nav a:hover, .l-post .p-desc a:hover, .ttl a:hover, .m-nav .dot, .l-pager 
 /*----------------------*/
 #toc {
   position: fixed;
-  min-width: 120px;
+  min-width: 150px;
   top: 45px;
-  left: 1240px;
+  left: 1220px;
   display: block;
   padding: 1.5em;
   background: #152029;
   border-radius: 4px;
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
-  margin-right: 20px; }
+  box-sizing: border-box;
+  margin-right: 20px;
+  max-height: calc(100% - 90px);
+  overflow: auto; }
   #toc li a {
-    display: block;
-    overflow: auto; }
+    display: block; }
     #toc li a:hover {
       color: white; }
   #toc li li {
@@ -618,8 +617,8 @@ footer {
   display: none;
   cursor: pointer;
   position: fixed;
-  bottom: 64px;
-  left: 1240px;
+  bottom: 45px;
+  left: 1220px;
   background-color: rgba(255, 255, 255, 0.1);
   text-align: center;
   font-size: 16px;
@@ -636,11 +635,11 @@ footer {
 /*----------------------*/
 /*Screen adaptation     */
 /*----------------------*/
-@media print, screen and (max-width: 1400px) {
+@media print, screen and (max-width: 1380px) {
   #toc {
     display: none; } }
 
-@media print, screen and (max-width: 1300px) {
+@media print, screen and (max-width: 1280px) {
   #back2Top {
     right: 20px;
     left: unset; } }
