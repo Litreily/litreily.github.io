@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2020-03-13T13:04:31.123Z</updated>
+  <updated>2020-03-19T13:39:28.984Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -15,6 +15,37 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>NBNS客户端的C语言实现</title>
+    <link href="https://www.litreily.top/2020/03/15/nbns_code/"/>
+    <id>https://www.litreily.top/2020/03/15/nbns_code/</id>
+    <published>2020-03-15T09:01:33.000Z</published>
+    <updated>2020-03-19T13:39:28.984Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;接上一篇&lt;a href=&quot;/2020/02/28/nbns/&quot;&gt;【网络协议详解1 - NBNS】&lt;/a&gt;对NBNS的介绍，这一篇将要讲述使用C语言如何实现一个NBNS客户端，用于向局域网内其它设备发送NBNS NODE STATUS QUERY，并将接收到的RESPONSE信息打印出来。其实也就是一个UDP socket的实例。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/network/udp-socket.png&quot; alt=&quot;UDP socket flowchart&quot;&gt;&lt;/p&gt;
+&lt;p&gt;编写一个客户端，首先要清楚它要完成什么任务，进而确定完成任务的方法和步骤。其任务很简单，就是NBNS数据包的发送和接收，也就是一个简单的socket收发进程。实现主要分以下几步：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;组包&lt;/strong&gt;得到NBNS NODE STATUS QUERY&lt;/li&gt;
+&lt;li&gt;发送NBNS NODE STATUS QUERY&lt;/li&gt;
+&lt;li&gt;接收RESPONSE并解析&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;include-amp-define&quot;&gt;&lt;a href=&quot;#include-amp-define&quot; class=&quot;headerlink&quot; title=&quot;include &amp;amp; define&quot;&gt;&lt;/a&gt;include &amp;amp; define&lt;/
+      
+    
+    </summary>
+    
+      <category term="嵌入式" scheme="https://www.litreily.top/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/"/>
+    
+    
+      <category term="C/C++" scheme="https://www.litreily.top/tags/C-C/"/>
+    
+  </entry>
   
   <entry>
     <title>网络协议详解1 - NBNS</title>
@@ -886,35 +917,6 @@ $ sudo apt-get install tmux
       <category term="spider" scheme="https://www.litreily.top/tags/spider/"/>
     
       <category term="scrapy" scheme="https://www.litreily.top/tags/scrapy/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Python网络爬虫3 - 生产者消费者模型爬取某金融网站数据</title>
-    <link href="https://www.litreily.top/2018/04/30/cfachina/"/>
-    <id>https://www.litreily.top/2018/04/30/cfachina/</id>
-    <published>2018-04-30T09:03:35.000Z</published>
-    <updated>2020-02-26T13:11:56.205Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;应一位金融圈的朋友所托，帮忙写个爬虫，帮他爬取&lt;a href=&quot;http://www.cfachina.org/cfainfo/organbaseinfoServlet?all=personinfo#&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;中国期货行业协议&lt;/a&gt;网站中所有金融机构的从业人员信息。网站数据的获取本身比较简单，但是为了学习一些新的爬虫方法和技巧，即本文要讲述的&lt;strong&gt;生产者消费者模型&lt;/strong&gt;，我又学习了一下Python中队列库&lt;code&gt;queue&lt;/code&gt;及线程库&lt;code&gt;Thread&lt;/code&gt;的使用方法。&lt;/p&gt;
-&lt;h2 id=&quot;生产者消费者模型&quot;&gt;&lt;a href=&quot;#生产者消费者模型&quot; class=&quot;headerlink&quot; title=&quot;生产者消费者模型&quot;&gt;&lt;/a&gt;生产者消费者模型&lt;/h2&gt;&lt;p&gt;生产者消费者模型非常简单，相信大部分程序员都知道，就是一方作为生产者不断提供资源，另一方作为消费者不断消费资源。简单点说，就好比餐馆的厨师和顾客，厨师作为生产者不断制作美味的食物，而顾客作为消费者不断食用厨师提供的食物。此外，生产者与消费者之间可以是一对一、一对多、多对一和多对多的关系。&lt;/p&gt;
-&lt;p&gt;那么这个模型和爬虫有什么关系呢？其实，爬虫可以认为是一个生产者，它不断从网站爬取数据，爬取到的数据就是食物；而
-      
-    
-    </summary>
-    
-      <category term="Python" scheme="https://www.litreily.top/categories/Python/"/>
-    
-    
-      <category term="spider" scheme="https://www.litreily.top/tags/spider/"/>
-    
-      <category term="queue" scheme="https://www.litreily.top/tags/queue/"/>
-    
-      <category term="xlwt" scheme="https://www.litreily.top/tags/xlwt/"/>
     
   </entry>
   

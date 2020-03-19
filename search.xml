@@ -4,6 +4,371 @@
   
     
     <entry>
+      <title><![CDATA[NBNS客户端的C语言实现]]></title>
+      <url>https://www.litreily.top/2020/03/15/nbns_code/</url>
+      <content type="html"><![CDATA[<p>接上一篇<a href="/2020/02/28/nbns/">【网络协议详解1 - NBNS】</a>对NBNS的介绍，这一篇将要讲述使用C语言如何实现一个NBNS客户端，用于向局域网内其它设备发送NBNS NODE STATUS QUERY，并将接收到的RESPONSE信息打印出来。其实也就是一个UDP socket的实例。</p>
+<p><img src="/assets/network/udp-socket.png" alt="UDP socket flowchart"></p>
+<p>编写一个客户端，首先要清楚它要完成什么任务，进而确定完成任务的方法和步骤。其任务很简单，就是NBNS数据包的发送和接收，也就是一个简单的socket收发进程。实现主要分以下几步：</p>
+<ol>
+<li><strong>组包</strong>得到NBNS NODE STATUS QUERY</li>
+<li>发送NBNS NODE STATUS QUERY</li>
+<li>接收RESPONSE并解析</li>
+</ol>
+<h2 id="include-amp-define"><a href="#include-amp-define" class="headerlink" title="include &amp; define"></a>include &amp; define</h2><p>首先来看看编写该客户端会用到的头文件及相关宏定义</p>
+<pre><code class="c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt; /* for exit */
+#include &lt;string.h&gt; /* for memset */
+#include &lt;unistd.h&gt; /* for close */
+#include &lt;sys/socket.h&gt; /* for socket, bind */
+#include &lt;sys/time.h&gt; /* for timeval */
+#include &lt;netinet/in.h&gt; /* for socksaddr_in */
+#include &lt;arpa/inet.h&gt; /* for htons */
+
+#define NBNS_PORT 137
+#define NBNS_TYPE_NB 0x0020
+#define NBNS_TYPE_NBSTAT 0x0021
+#define NBNS_CLASS_IN 0x0001
+#define BUFFER_SIZE 1024 /* buffer size for recv packet */
+#define IP_SIZE 16 /* length of IP address like 192.168.1.1 */
+</code></pre>
+<p>关于NBNS，其公知的端口号是137，在发送请求时会在目的地址中用到。</p>
+<h2 id="组包结构体"><a href="#组包结构体" class="headerlink" title="组包结构体"></a>组包结构体</h2><p>根据上一篇的内容，我们可以知道NBNS NODE STATUS的请求包和响应包的数据格式，据此可以编写相应的结构体。</p>
+<pre><code class="c">typedef unsigned int uint32;
+typedef unsigned short uint16;
+typedef unsigned char uint8;
+
+struct nbns_header {
+    uint16 tid; /* Transaction ID */
+    uint16 flags;
+    uint16 question;
+    uint16 answer;
+    uint16 authority;
+    uint16 additional;
+} __attribute__ ((packed));
+
+// NBNS NODE STATUS QUERY FORMAT
+struct nbns_request {
+    struct nbns_header header;
+
+    char qname[34];
+    uint16 qtype;
+    uint16 qclass;
+} __attribute__ ((packed));
+
+struct nbns_name {
+    char name[16];
+    uint16 flags;
+} __attribute__ ((packed));
+
+// NBNS NODE STATUS RESPONSE FORMAT
+struct nbns_response_header {
+    struct nbns_header header;
+
+    char rname[34];
+    uint16 rtype;
+    uint16 rclass;
+
+    uint32 ttl;
+    uint16 length;
+    uint8 num_of_names;
+} __attribute__ ((packed));
+</code></pre>
+<p>注意每个结构体后的<code>__attribute__ ((packed))</code>，这是为了告诉编译器不要对其进行对齐优化，保持数据的紧凑性，以防数据解析出错。</p>
+<h2 id="名称编解码"><a href="#名称编解码" class="headerlink" title="名称编解码"></a>名称编解码</h2><p>在进入正题之前，我们先来看下NetBIOS名称的编解码，这在后续发送请求和解析响应中都会用到。从RFC1001可知，NBNS请求包中的Name是被编码的，在<a href="/2020/02/28/nbns/#NetBIOS-命名编码">上一篇</a>中已经讲述过了。</p>
+<h3 id="编码"><a href="#编码" class="headerlink" title="编码"></a>编码</h3><p>对于NODE STATUS QUERY, 通常将NBNS name设为<code>*</code>, 就是一个通配符，使用下面的函数可以对其编码。</p>
+<pre><code class="c">// encode &quot;*&quot; to &quot;CKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&quot;
+void encode_name(char *name)
+{
+    int i;
+
+    name[0] = 0x20; /* length of name */
+    name[1] = ((&#39;*&#39; &gt;&gt; 4) &amp; 0x0F) + &#39;A&#39;;
+    name[2] = (&#39;*&#39; &amp; 0x0F) + &#39;A&#39;;
+
+    for (i = 3; i &lt; 33; i++)
+        name[i] = &#39;A&#39;;
+
+    name[i] = &#39;\0&#39;; /* end of name */
+}
+</code></pre>
+<h3 id="解码"><a href="#解码" class="headerlink" title="解码"></a>解码</h3><p>解码也很简单，就是编码的逆过程。上面的编码函数只针对<code>*</code>，但这里的解码函数却是针对所有满足格式要求的字符串。</p>
+<pre><code class="c">void decode_name(char *name, char *dst)
+{
+    int i;
+
+    if (name[0] != 0x20)
+        return;
+    for (i = 1; i &lt; 0x20; i+=2)
+        dst[i/2] = (((name[i]-&#39;A&#39;) &lt;&lt; 4) &amp; 0xF0) + ((name[i+1]-&#39;A&#39;) &amp; 0x0F);  
+    dst[i/2] = &#39;\0&#39;;
+}
+</code></pre>
+<h2 id="create-socket"><a href="#create-socket" class="headerlink" title="create socket"></a>create socket</h2><h3 id="socket"><a href="#socket" class="headerlink" title="socket"></a>socket</h3><p>好了，进入正题。在执行数据收发之前需要创建UDP socket, 这里会用到socket函数。</p>
+<pre><code class="c">#include &lt;sys/socket.h&gt;
+
+int socket(int domain, int type, int protocol);
+
+RETURN VALUE
+       On success, a file descriptor for the new socket is returned.  
+       On error, -1 is returned, and errno is set appropriately.
+</code></pre>
+<p>下面简要介绍下相关参数。</p>
+<ul>
+<li><p>domain<br>常见的网络通信域domain主要有<code>AF_UNIX</code>, <code>AF_INET</code>, <code>AF_INET6</code>, <code>AF_NETLINK</code>，对于常见的TCP/UDP传输，基于IPv4协议，我们选择<code>AF_INET</code>即可。</p>
+</li>
+<li><p>type<br>type代表socket类型，常用的包含针对TCP的<code>SOCK_STREAM</code>、针对UDP的<code>SOCK_DGRAM</code>，以及针对需要访问源网络数据（应用层以下数据）的<code>SOCK_RAW</code>。显然本文使用的是<code>SOCK_DGRAM</code>.</p>
+</li>
+<li><p>protocol<br>protocol通常设为0，当然也可以针对协议进行配置，比如UDP对应的<code>IPPROTO_UDP</code>，其中IPPROTO是IP Protocol的缩写。</p>
+</li>
+</ul>
+<h3 id="创建socket"><a href="#创建socket" class="headerlink" title="创建socket"></a>创建socket</h3><p>下面来实现一个open_socket函数，用于打开一个socket，可以把它当做一个信封，等待后面写好信件放进去。</p>
+<pre><code class="c">int open_socket(void)
+{
+    int sock;
+    struct sockaddr_in saddr;
+
+    sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+    if (sock &lt; 0)
+        handle_error(&quot;socket&quot;);
+
+    memset(&amp;saddr, 0, sizeof(saddr));
+    saddr.sin_family = AF_INET;
+    saddr.sin_port = 0;
+    saddr.sin_addr.s_addr = htonl(INADDR_ANY);
+
+    if (bind(sock, (struct sockaddr *)&amp;saddr, sizeof(saddr)) == -1)
+        handle_error(&quot;bind&quot;);
+
+    return sock;
+}
+</code></pre>
+<p>这里要注意几点：</p>
+<ol>
+<li>网络字节序和主机字节序不一定一样，需要使用<code>htonl</code>, <code>htons</code>函数进行转换<ul>
+<li>h - host</li>
+<li>n - network</li>
+<li>s - short 2个字节</li>
+<li>l - long 4个字节</li>
+</ul>
+</li>
+<li>源地址的端口port设为0，代表由网络协议栈分配</li>
+<li>bind函数用于绑定发送地址，类似于往信封上写好寄信人的地址信息</li>
+<li>handle_error是一个异常处理函数，检测到错误后调用其打印错误信息并退出程序。</li>
+</ol>
+<h2 id="发送请求"><a href="#发送请求" class="headerlink" title="发送请求"></a>发送请求</h2><h3 id="sendto"><a href="#sendto" class="headerlink" title="sendto"></a>sendto</h3><p>发送函数包括组包和发送两部分，将请求信息按照组包格式逐一赋值，然后通过<code>sendto</code>发送数据包。</p>
+<pre><code class="c">#include &lt;sys/socket.h&gt;
+
+ssize_t sendto(int sockfd, const void *buf, size_t len, int flags,
+               const struct sockaddr *dest_addr, socklen_t addrlen);
+
+RETURN VALUE
+       On success, these calls return the number of bytes sent.
+       On error, -1 is returned, and errno is set appropriately.
+</code></pre>
+<p>发送成功则返回真实的发送字节数，否则返回-1并更新errno.</p>
+<h3 id="发送数据"><a href="#发送数据" class="headerlink" title="发送数据"></a>发送数据</h3><pre><code class="c">int send_nbns_query(int sock, struct in_addr dest_ip)
+{
+    struct sockaddr_in dest;
+    struct nbns_request req;
+
+    memset(&amp;dest, 0, sizeof(dest));
+    dest.sin_family = AF_INET;
+    dest.sin_port = htons(NBNS_PORT);
+    dest.sin_addr = dest_ip;
+
+    req.header.tid = htons(1);
+    req.header.flags = htons(0x0000);
+    req.header.question = htons(1);
+    req.header.answer = 0;
+    req.header.authority = 0;
+    req.header.additional = 0;
+    encode_name(req.qname);
+    req.qtype = htons(NBNS_TYPE_NBSTAT);
+    req.qclass = htons(NBNS_CLASS_IN);
+
+    return sendto(sock, (char *)&amp;req, sizeof(req), 0,
+           (struct sockaddr *)&amp;dest, sizeof(dest));
+}
+</code></pre>
+<p>注意，除了0、单字节数据、单字节数组外，其余数据都需要使用<code>htons</code>或<code>htonl</code>进行转换，将主机字节序转换为网络字节序。</p>
+<h2 id="接收响应"><a href="#接收响应" class="headerlink" title="接收响应"></a>接收响应</h2><h3 id="recvfrom"><a href="#recvfrom" class="headerlink" title="recvfrom"></a>recvfrom</h3><p>发送请求后，便可以使用<code>recvfrom</code>函数接收响应数据了。</p>
+<pre><code class="c">#include &lt;sys/socket.h&gt;
+
+ssize_t recvfrom(int sockfd, void *buf, size_t len, int flags,
+                 struct sockaddr *src_addr, socklen_t *addrlen);
+
+RETURN VALUE
+    These calls return the number of bytes received, or -1 if an error occurred.
+    In the event of an error, errno is set to indicate the error.
+    Datagram sockets in various domains permit zero-length datagrams.
+    When such a datagram is received, the return value is 0.
+</code></pre>
+<p>接收成功返回接收到的字节数，否则返回-1。当然如何接收字节为0则返回0.</p>
+<h3 id="接收数据"><a href="#接收数据" class="headerlink" title="接收数据"></a>接收数据</h3><pre><code class="c">void recv_nbns_response(int sock)
+{
+    struct timeval tv;
+    struct sockaddr_in src_addr;
+    socklen_t src_len = sizeof(src_addr);
+    ssize_t recv_len = 0;
+    char res_buf[BUFFER_SIZE];
+    char src_ip[IP_SIZE] = {0};
+
+    tv.tv_sec = 5;
+    tv.tv_usec = 0;
+    /* set timeout 5s for some not exist PC */
+    if (setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, &amp;tv, sizeof(tv)) &lt; 0)
+        handle_error(&quot;setsockopt&quot;);
+    recv_len = recvfrom(sock, (char *)res_buf, BUFFER_SIZE, 0,
+        (struct sockaddr *)&amp;src_addr, &amp;src_len);
+    if (recv_len &lt; 0)
+        handle_error(&quot;recvfrom&quot;);
+    else if (recv_len &lt; sizeof(struct nbns_response_header))
+        return;
+
+    inet_ntop(AF_INET, (struct in_addr *)&amp;src_addr.sin_addr,
+        (char *)&amp;src_ip, IP_SIZE);
+    printf(&quot;recv response from %s : %ld Bytes\n&quot;, src_ip, recv_len);
+    show_nbns_response(res_buf);
+}
+</code></pre>
+<p>该函数通过<code>recvfrom</code>接收数据并存入字符数组<code>res_buf</code>中，同时可以保存发送方的地址信息并通过<code>inet_ntop</code>转换为点分十进制IP地址。最后通过调用函数<code>show_nbns_response</code>打印解析数据。</p>
+<p>接收过程中，要考虑到数据来源的一方不存在的情况，也就是永远收不到数据的情况，比如请求IP地址为<code>192.168.1.10</code>的设备，但此刻该设备关机了。为此，我们需要设置超时时间，通过<code>setsockopt</code>函数可以配置socket相关的可选项，当发生超时时，进行错误处理并退出。</p>
+<h3 id="打印输出"><a href="#打印输出" class="headerlink" title="打印输出"></a>打印输出</h3><p>接收数据后会调用<code>show_nbns_response</code>函数进行打印输出。</p>
+<pre><code class="c">void show_nbns_response(char *buf)
+{
+    struct nbns_response_header *res;
+    struct nbns_name *pname, *pend;
+    char rname[18] = {0};
+    char echar = &#39;\0&#39;;
+
+    res = (struct nbns_response_header *)buf;
+    decode_name(res-&gt;rname, rname);
+
+    printf(
+        &quot;Transaction: %d\n&quot; \
+        &quot;Flags: 0x%04x\n&quot; \
+        &quot;Questions: %d\n&quot; \
+        &quot;Answers: %d\n&quot; \
+        &quot;Authority: %d\n&quot; \
+        &quot;Additional: %d\n&quot; \
+        &quot;RR_Name: %s (%s)\n&quot; \
+        &quot;RR_Type: %s\n&quot; \
+        &quot;RR_Class: %s\n&quot; \
+        &quot;TTL: %d\n&quot; \
+        &quot;Data length: %d\n&quot; \
+        &quot;\nNumber of names: %d\n&quot;,
+        ntohs(res-&gt;header.tid),
+        ntohs(res-&gt;header.flags),
+        ntohs(res-&gt;header.question),
+        ntohs(res-&gt;header.answer),
+        ntohs(res-&gt;header.authority),
+        ntohs(res-&gt;header.additional),
+        res-&gt;rname + 1, rname,
+        ntohs(res-&gt;rtype) == NBNS_TYPE_NBSTAT ? &quot;NBSTAT (33)&quot; : &quot;NB (32)&quot;,
+        ntohs(res-&gt;rclass) == NBNS_CLASS_IN ? &quot;IN (1)&quot; : &quot;UNKNOWN&quot;,
+        ntohl(res-&gt;ttl),
+        ntohs(res-&gt;length),
+        res-&gt;num_of_names);
+
+    pname = (struct nbns_name *)&amp;buf[sizeof(struct nbns_response_header)];
+    pend = pname + res-&gt;num_of_names;
+    printf(&quot;---------------------------\n&quot;);
+    for (; pname &lt; pend; pname++ ) {
+        /* ignore the last byte of name*/
+        echar = pname-&gt;name[15];
+        pname-&gt;name[15] = &#39;\0&#39;;
+        printf(&quot;Name: %s&lt;%02x&gt;\n&quot;, pname-&gt;name, echar);
+        printf(&quot;Name flags: 0x%04x\n&quot;, ntohs(pname-&gt;flags));
+        printf(&quot;---------------------------\n&quot;);
+    }
+}
+</code></pre>
+<p>由于不清楚发送方究竟会发送多少组名称，所以先从缓存数组中读取头部信息，然后根据头部信息提供的num_of_names确定名称格式，再逐一打印出来。读取数据的过程就像是收件方接收到信件然后进行阅读一样。</p>
+<p>注意，这里有用到<code>ntohs</code>, <code>ntohl</code>进行字节序的转换，同时有用到decode_name进行名称的解码。</p>
+<h2 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h2><p>最后简单描述下异常处理函数<code>handle_error</code>, 其实很简单，就是在发生错误的情况下关闭资源，打印错误信息，最后退出程序。</p>
+<pre><code class="c">int nbns_sock; /* global value */
+static inline void handle_error(char *msg)
+{
+    if (nbns_sock &gt;= 0)
+        close(nbns_sock);
+    perror(msg);
+    exit(EXIT_FAILURE);
+}
+</code></pre>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>程序编写完成，使用<code>gcc</code>编译即可，下面给出测试用例↓</p>
+<pre><code class="bash">➜ nbnstat 192.168.1.1
+Send nbns query to 192.168.1.1
+recv response from 192.168.1.1 : 247 Bytes
+Transaction: 1
+Flags: 0x8580
+Questions: 0
+Answers: 1
+Authority: 0
+Additional: 0
+RR_Name: CKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA (*)
+RR_Type: NBSTAT (33)
+RR_Class: IN (1)
+TTL: 0
+Data length: 191
+
+Number of names: 8
+---------------------------
+Name: SMBSHARE       &lt;00&gt;
+Name flags: 0x4400
+---------------------------
+Name: SMBSHARE       &lt;03&gt;
+Name flags: 0x4400
+---------------------------
+Name: SMBSHARE       &lt;1f&gt;
+Name flags: 0x4400
+---------------------------
+Name: SMBSHARE       &lt;20&gt;
+Name flags: 0x4400
+---------------------------
+Name: __MSBROWSE__&lt;01&gt;
+Name flags: 0xc400
+---------------------------
+Name: WORKGROUP      &lt;00&gt;
+Name flags: 0xc400
+---------------------------
+Name: WORKGROUP      &lt;1d&gt;
+Name flags: 0x4400
+---------------------------
+Name: WORKGROUP      &lt;1e&gt;
+Name flags: 0xc400
+---------------------------
+</code></pre>
+<p>除了flags信息使用原有的16进制表示外，其余数据均以整型或字符串形式显示。</p>
+<p>上面是正常情况，下面给出两个异常情况的例子。</p>
+<pre><code class="bash">➜  nbnstat 192.168.1.10
+Send nbns query to 192.168.1.10
+recvfrom: Resource temporarily unavailable
+➜  nbnstat 192.16
+Not in presentation format
+</code></pre>
+<ol>
+<li>第1个是指定IP设备不存在，然后产生超时错误；</li>
+<li>第2个是指定IP格式不正确，提示格式错误。</li>
+</ol>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>本文介绍了一个简单<strong>NBNS客户端</strong>的具体实现，该客户端用于向指定IP设备发送NBNS NODE STATUS QUERY，并对请求结果予以分析和打印。涉及到的Socket API函数有socket, bind, sendto, recvfrom, htons, htonl, ntohs, ntohl, inet_pton, setsockopt等。</p>
+]]></content>
+      
+        <categories>
+            
+            <category> 嵌入式 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> C/C++ </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[网络协议详解1 - NBNS]]></title>
       <url>https://www.litreily.top/2020/02/28/nbns/</url>
       <content type="html"><![CDATA[<h2 id="NetBIOS-简介"><a href="#NetBIOS-简介" class="headerlink" title="NetBIOS 简介"></a>NetBIOS 简介</h2><p><strong>NetBIOS</strong>，Network Basic Input/Output System的缩写，一般指用于<strong>局域网</strong>通信的一套API，相关RFC文档包括 <a href="https://tools.ietf.org/html/rfc1001" target="_blank" rel="noopener">RFC 1001</a>, <a href="https://tools.ietf.org/html/rfc1002" target="_blank" rel="noopener">RFC 1002</a>. RFC 1001主要对NetBIOS及相关协议和服务进行解释说明，RFC 1002给出了相关协议和服务的数据组包格式。</p>
@@ -9577,9 +9942,9 @@ root: /
         
         <tags>
             
-            <tag> jekyll </tag>
-            
             <tag> hexo </tag>
+            
+            <tag> jekyll </tag>
             
             <tag> log </tag>
             
@@ -9964,11 +10329,11 @@ n(u) = n(u)+1;
         
         <tags>
             
-            <tag> matlab </tag>
-            
             <tag> algorithm </tag>
             
             <tag> signal </tag>
+            
+            <tag> matlab </tag>
             
         </tags>
         
@@ -10378,9 +10743,9 @@ unsigned char canFreeData : 布尔变量，确定能否释放数据内存
         
         <tags>
             
-            <tag> matlab </tag>
-            
             <tag> labview </tag>
+            
+            <tag> matlab </tag>
             
             <tag> VS </tag>
             
@@ -10473,9 +10838,9 @@ end
         
         <tags>
             
-            <tag> matlab </tag>
-            
             <tag> signal </tag>
+            
+            <tag> matlab </tag>
             
         </tags>
         
@@ -11989,9 +12354,9 @@ static void vUasrtSendTask(void *pvParameters)
             
             <tag> C/C++ </tag>
             
-            <tag> FreeRTOS </tag>
-            
             <tag> stm32 </tag>
+            
+            <tag> FreeRTOS </tag>
             
         </tags>
         
@@ -12607,63 +12972,6 @@ int main()
     </entry>
     
     <entry>
-      <title><![CDATA[前端岗位模拟试题2]]></title>
-      <url>https://www.litreily.top/2016/09/12/algor-WYMN2/</url>
-      <content type="html"><![CDATA[<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>二货小易有一个W*H的网格盒子，网格的行编号为0~H-1，网格的列编号为0~W-1。每个格子至多可以放一块蛋糕，任意两块蛋糕的欧几里得距离不能等于2。</p>
-<p>对于两个格子坐标(x1,y1),(x2,y2)的欧几里得距离为：((x1-x2)<em>(x1-x2)+(y1-y2)</em>(y1-y2))的算术平方根。</p>
-<p>小易想知道最多可以放多少块蛋糕在网格盒子里。</p>
-<h3 id="输入描述"><a href="#输入描述" class="headerlink" title="输入描述"></a>输入描述</h3><blockquote>
-<p>每组数组包含网格长宽W,H，用空格分隔。(1&lt;=W、H&lt;=1000)</p>
-</blockquote>
-<h3 id="输出描述"><a href="#输出描述" class="headerlink" title="输出描述"></a>输出描述</h3><blockquote>
-<p>输出一个最多可以放的蛋糕数</p>
-</blockquote>
-<h3 id="输入例子"><a href="#输入例子" class="headerlink" title="输入例子"></a>输入例子</h3><blockquote>
-<p>3 2</p>
-</blockquote>
-<h3 id="输出例子"><a href="#输出例子" class="headerlink" title="输出例子"></a>输出例子</h3><blockquote>
-<p>4</p>
-</blockquote>
-<h2 id="题目解析"><a href="#题目解析" class="headerlink" title="题目解析"></a>题目解析</h2><p>根据题意，可以推测出蛋糕数最多的放置方案：将网格进行分区，每四个构成一个正方形的网格作为一个分区，类似于坐标变换。假设原坐标为(x,y),那么变换后的分区坐标为(x/2,y/2)。当变换后的分区坐标满足横纵坐标之和为偶数时，该分区内的4个网格均可放置蛋糕。</p>
-<p><img src="/assets/algorithm/putCake.png" alt="putCake"></p>
-<h2 id="解题程序"><a href="#解题程序" class="headerlink" title="解题程序"></a>解题程序</h2><pre><code class="C++">#include &lt;iostream&gt;
-using namespace std;
-
-int main()
-{
-
-  int W,H;
-  int cnt=0;                   // 定义可放的蛋糕数
-  cin&gt;&gt;W&gt;&gt;H;                // 输入盒子网格的行列数
-
-  for(int i=0;i&lt;H;i++)
-      for(int j=0;j&lt;W;j++)
-          if((i/2+j/2)%2==0)
-          cnt++;
-  cout&lt;&lt;cnt&lt;&lt;endl;
-  return 0;    
-}
-</code></pre>
-]]></content>
-      
-        <categories>
-            
-            <category> 算法 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> algorithm </tag>
-            
-            <tag> C/C++ </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
       <title><![CDATA[前端岗位模拟试题1]]></title>
       <url>https://www.litreily.top/2016/09/12/algor-WYMN1/</url>
       <content type="html"><![CDATA[<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>正整数A的&quot;DA(1位整数)部分&quot;定义为由A中所有组成的新整数PA。例如：给定A=3862767，DA=6，则A的&quot;6部分&quot;PA是66，因为A中有2个6。</p>
@@ -12705,6 +13013,63 @@ int main()
     getPA(B,DB,PB);      // 计算PB
     cout&lt;&lt;PA+PB&lt;&lt;endl;
     return 0;
+}
+</code></pre>
+]]></content>
+      
+        <categories>
+            
+            <category> 算法 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> algorithm </tag>
+            
+            <tag> C/C++ </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[前端岗位模拟试题2]]></title>
+      <url>https://www.litreily.top/2016/09/12/algor-WYMN2/</url>
+      <content type="html"><![CDATA[<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>二货小易有一个W*H的网格盒子，网格的行编号为0~H-1，网格的列编号为0~W-1。每个格子至多可以放一块蛋糕，任意两块蛋糕的欧几里得距离不能等于2。</p>
+<p>对于两个格子坐标(x1,y1),(x2,y2)的欧几里得距离为：((x1-x2)<em>(x1-x2)+(y1-y2)</em>(y1-y2))的算术平方根。</p>
+<p>小易想知道最多可以放多少块蛋糕在网格盒子里。</p>
+<h3 id="输入描述"><a href="#输入描述" class="headerlink" title="输入描述"></a>输入描述</h3><blockquote>
+<p>每组数组包含网格长宽W,H，用空格分隔。(1&lt;=W、H&lt;=1000)</p>
+</blockquote>
+<h3 id="输出描述"><a href="#输出描述" class="headerlink" title="输出描述"></a>输出描述</h3><blockquote>
+<p>输出一个最多可以放的蛋糕数</p>
+</blockquote>
+<h3 id="输入例子"><a href="#输入例子" class="headerlink" title="输入例子"></a>输入例子</h3><blockquote>
+<p>3 2</p>
+</blockquote>
+<h3 id="输出例子"><a href="#输出例子" class="headerlink" title="输出例子"></a>输出例子</h3><blockquote>
+<p>4</p>
+</blockquote>
+<h2 id="题目解析"><a href="#题目解析" class="headerlink" title="题目解析"></a>题目解析</h2><p>根据题意，可以推测出蛋糕数最多的放置方案：将网格进行分区，每四个构成一个正方形的网格作为一个分区，类似于坐标变换。假设原坐标为(x,y),那么变换后的分区坐标为(x/2,y/2)。当变换后的分区坐标满足横纵坐标之和为偶数时，该分区内的4个网格均可放置蛋糕。</p>
+<p><img src="/assets/algorithm/putCake.png" alt="putCake"></p>
+<h2 id="解题程序"><a href="#解题程序" class="headerlink" title="解题程序"></a>解题程序</h2><pre><code class="C++">#include &lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+
+  int W,H;
+  int cnt=0;                   // 定义可放的蛋糕数
+  cin&gt;&gt;W&gt;&gt;H;                // 输入盒子网格的行列数
+
+  for(int i=0;i&lt;H;i++)
+      for(int j=0;j&lt;W;j++)
+          if((i/2+j/2)%2==0)
+          cnt++;
+  cout&lt;&lt;cnt&lt;&lt;endl;
+  return 0;    
 }
 </code></pre>
 ]]></content>
@@ -12774,9 +13139,9 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
         
         <tags>
             
-            <tag> git </tag>
-            
             <tag> atom </tag>
+            
+            <tag> git </tag>
             
         </tags>
         
@@ -12811,9 +13176,9 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
         
         <tags>
             
-            <tag> tools </tag>
-            
             <tag> utorrent </tag>
+            
+            <tag> tools </tag>
             
         </tags>
         
@@ -13119,11 +13484,11 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
         
         <tags>
             
-            <tag> brackets </tag>
+            <tag> tools </tag>
             
             <tag> git </tag>
             
-            <tag> tools </tag>
+            <tag> brackets </tag>
             
         </tags>
         
@@ -13271,9 +13636,9 @@ $ easy_install Pygments
         
         <tags>
             
-            <tag> windows </tag>
-            
             <tag> jekyll </tag>
+            
+            <tag> windows </tag>
             
             <tag> ruby </tag>
             
