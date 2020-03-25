@@ -16,8 +16,11 @@ body {
   font: 12px/200% "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", tahoma, arial, simsun, "宋体";
   overflow-x: hidden; }
 
-body, .l-content, blockquote {
+body, .l-content {
   background-color: #2d4356; }
+
+blockquote {
+  background-color: #213240; }
 
 body, button, textarea, input, select, .m-hdimg .ttl a, .m-nav a, .l-pager a, .p-content, .l-post .p-desc a {
   color: #CECECE; }
@@ -129,7 +132,7 @@ ul.search-result-list em {
   width: 100%;
   height: 48px;
   background: #2d4356;
-  box-shadow: 0 0 10px 1px #152029;
+  box-shadow: 0 0 10px 1px #2d4356;
   text-align: center;
   z-index: 999; }
   .mobile-head .navbar-title {
@@ -245,7 +248,7 @@ ul.search-result-list em {
   position: fixed;
   top: 48px;
   background: #2d4356;
-  box-shadow: 1px 0px 10px 1px #152029;
+  box-shadow: 1px 0px 10px 1px #2d4356;
   height: 100%;
   width: 250px;
   z-index: 99;
@@ -360,7 +363,7 @@ a, .m-nav a:hover, .l-post .p-desc a:hover, .ttl a:hover, .m-nav .dot, .l-pager 
   text-align: left;
   padding: 40px;
   margin-bottom: 20px;
-  background: #152029;
+  background: #2d4356;
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.5); }
 
 .l-post .p-desc:hover {
@@ -372,6 +375,9 @@ a, .m-nav a:hover, .l-post .p-desc a:hover, .ttl a:hover, .m-nav .dot, .l-pager 
 
 .p-readmore {
   text-align: right; }
+  .p-readmore a {
+    padding: 0.6em 1.2em;
+    background: #213240; }
 
 /*----------------------*/
 /*page list of home page*/
@@ -444,7 +450,7 @@ a, .m-nav a:hover, .l-post .p-desc a:hover, .ttl a:hover, .m-nav .dot, .l-pager 
   max-width: 95%; }
   .p-content pre.prettyprint:before {
     content: "code";
-    background: #2d4356;
+    background: #1B1D1E;
     display: block;
     margin: -1em -1em 1em;
     padding: 0 1em; }
@@ -456,13 +462,18 @@ a, .m-nav a:hover, .l-post .p-desc a:hover, .ttl a:hover, .m-nav .dot, .l-pager 
 .p-content table {
   display: inline-block;
   max-width: 100%;
-  border: 1px solid #333;
+  border: 1px solid #213240;
   border-collapse: separate;
   border-spacing: 0;
   vertical-align: middle;
   overflow-x: auto; }
-  .p-content table tbody tr:nth-child(2n-1) {
-    background: #333; }
+  .p-content table thead {
+    background: #213240; }
+  .p-content table tbody tr {
+    color: #bbaacc; }
+  .p-content table tbody tr:nth-child(2n) {
+    background: #1f3140;
+    background: rgba(0, 0, 0, 0.15); }
 
 .p-content th, .p-content td {
   padding: 0.2em 1em;
@@ -470,9 +481,12 @@ a, .m-nav a:hover, .l-post .p-desc a:hover, .ttl a:hover, .m-nav .dot, .l-pager 
   vertical-align: middle;
   word-break: keep-all; }
 
-.p-content ul > li, .p-content ol > li {
-  list-style: inherit;
-  margin-left: 16px; }
+.p-content > ul, .p-content > ol {
+  margin-left: 1.2em;
+  font-size: 0.9rem; }
+  .p-content > ul li, .p-content > ol li {
+    list-style: inherit;
+    margin-left: 1em; }
 
 .p-content a:hover, .p-archive a:hover, .p-copyright a:hover {
   opacity: 0.6; }
@@ -492,7 +506,7 @@ a, .m-nav a:hover, .l-post .p-desc a:hover, .ttl a:hover, .m-nav .dot, .l-pager 
   left: 1220px;
   display: block;
   padding: 1.5em;
-  background: #152029;
+  background: #2d4356;
   border-radius: 4px;
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
   box-sizing: border-box;
@@ -597,7 +611,7 @@ footer {
   font-size: 1.2em; }
   .tagcloud a:hover, .category-list-item a:hover {
     color: white;
-    box-shadow: 0 0 10px 2px #152029;
+    box-shadow: 0 0 10px 2px #2d4356;
     transform: scale(1.1);
     -webkit-transform: scale(1.1); }
 
@@ -630,7 +644,7 @@ footer {
   #back2Top:hover {
     background-color: #DDF; }
     #back2Top:hover a.fa::before {
-      color: #152029; }
+      color: #2d4356; }
 
 /*----------------------*/
 /*Screen adaptation     */
