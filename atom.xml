@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2020-03-19T13:39:28.984Z</updated>
+  <updated>2020-04-12T13:02:33.224Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>使用油猴脚本批量下载canvas图片</title>
+    <link href="https://www.litreily.top/2020/03/15/canvas-dl/"/>
+    <id>https://www.litreily.top/2020/03/15/canvas-dl/</id>
+    <published>2020-03-15T09:01:33.000Z</published>
+    <updated>2020-04-12T13:02:33.224Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;女友最近在网上下载一些北大网盘的pdf&lt;a href=&quot;https://disk.pku.edu.cn/#/link/3A7748E0466521E3E68A0CBA4C24DE20?gns=AE26ACF837E24D51B1EC40E0A80A5D23%2F7F0E54D7D92343B1B62031B1C41F2280&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;文档&lt;/a&gt;，结果发现没有下载接口，另存为也只能存储单张图片。找我帮忙，这时候发现程序员男票的好处了哈。&lt;/p&gt;
+&lt;h2 id=&quot;分析页面&quot;&gt;&lt;a href=&quot;#分析页面&quot; class=&quot;headerlink&quot; title=&quot;分析页面&quot;&gt;&lt;/a&gt;分析页面&lt;/h2&gt;&lt;p&gt;一开始想着使用Chrome调试工具看下pdf链接，发现这个网盘居然不是直接获取的pdf文件，而是使用js脚本动态渲染生成的，涨知识了。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/canvas/pdf-js.png&quot; alt=&quot;pdf-combine js&quot;&gt;&lt;/p&gt;
+&lt;p&gt;那看看是否可以以图片形式批量下载呢，结果查看pdf单页的html结构发现，这居然是个canvas!!!还不是普通图片，而是画布。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/canvas/canvas.png&quot; alt=&quot;cancvs&quot;&gt;&lt;/p
+      
+    
+    </summary>
+    
+      <category term="杂物柜" scheme="https://www.litreily.top/categories/%E6%9D%82%E7%89%A9%E6%9F%9C/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>NBNS客户端的C语言实现</title>
@@ -882,41 +907,6 @@ $ sudo apt-get install tmux
       <category term="C/C++" scheme="https://www.litreily.top/tags/C-C/"/>
     
       <category term="linux" scheme="https://www.litreily.top/tags/linux/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Python网络爬虫4 - scrapy入门</title>
-    <link href="https://www.litreily.top/2018/05/27/scrapy-start/"/>
-    <id>https://www.litreily.top/2018/05/27/scrapy-start/</id>
-    <published>2018-05-27T15:38:28.000Z</published>
-    <updated>2020-02-26T13:11:56.206Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;&lt;code&gt;scrapy&lt;/code&gt;作为一款强大的爬虫框架，当然要好好学习一番，本文便是本人学习和使用&lt;code&gt;scrapy&lt;/code&gt;过后的一个总结，内容比较基础，算是入门笔记吧，主要讲述&lt;code&gt;scrapy&lt;/code&gt;的基本概念和使用方法。&lt;/p&gt;
-&lt;h2 id=&quot;scrapy-framework&quot;&gt;&lt;a href=&quot;#scrapy-framework&quot; class=&quot;headerlink&quot; title=&quot;scrapy framework&quot;&gt;&lt;/a&gt;scrapy framework&lt;/h2&gt;&lt;p&gt;首先附上&lt;code&gt;scrapy&lt;/code&gt;经典图如下：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/assets/spider/scrapy/scrapy.jpg&quot; alt=&quot;scrapy framework&quot;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;scrapy&lt;/code&gt;框架包含以下几个部分&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;code&gt;Scrapy Engine&lt;/code&gt; 引擎&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;Spiders&lt;/code&gt; 爬虫&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;Scheduler&lt;/code&gt; 调度器&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;Downloader&lt;/code&gt; 下载器&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;Item Pipeline&lt;/code&gt; 项目管道&lt;/li&gt;
-&lt;
-      
-    
-    </summary>
-    
-      <category term="Python" scheme="https://www.litreily.top/categories/Python/"/>
-    
-    
-      <category term="spider" scheme="https://www.litreily.top/tags/spider/"/>
-    
-      <category term="scrapy" scheme="https://www.litreily.top/tags/scrapy/"/>
     
   </entry>
   

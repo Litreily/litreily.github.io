@@ -30,6 +30,9 @@ button, textarea, input, select {
   font-size: 12px;
   outline: 0; }
 
+strong {
+  color: white; }
+
 a, button {
   cursor: pointer; }
 
