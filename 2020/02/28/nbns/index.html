@@ -401,7 +401,7 @@
 <p>Each 4-bit, half-octet of the NetBIOS name is treated as an 8-bit, right-adjusted, zero-filled binary number.  This number is added to value of the ASCII character ‘A’ (hexidecimal 41).  The resulting 8- bit number is stored in the appropriate byte.</p>
 </blockquote>
 <p>简单讲，就是将每个字符按ASCII拆成两部分，每部分再加上<code>A</code>，从而由1个字符变成两个字符。比如字符<code>L</code>，对应ASCII <code>0x4C</code>，拆成两部分为<code>0x4</code>和<code>0xC</code>，然后每部分都加上字符<code>A</code>对应的ASCII <code>0x41</code>，得到<code>0x45</code>和<code>0x4D</code>，对应字符<code>E</code>和<code>M</code>，这样原始字符<code>L</code>就变成了双字符<code>EM</code>。下面是这个示例的详细说明图解。</p>
-<p><img src="https://www.litreily.top/assets/network/nbns/nbns_name.png" alt="NetBIOS命名编码示例"></p>
+<p><img src="/assets/network/nbns/nbns_name.png" alt="NetBIOS命名编码示例"></p>
 <p>注意原始名称不足16字节可以补空格<code>0x20</code>或NULL<code>0x00</code>，这里补的是空格；如果长度超过16则需要截取前16字节。</p>
 <p>使用<code>Python</code>可以快速完成编码↓</p>
 <pre><code class="python">&gt;&gt;&gt; orig_name = &#39;LITREILY&#39;.ljust(16)
@@ -479,7 +479,7 @@ Company:
 </code></pre>
 <p>需要注意的是，名称表中每个名称都是16字节，中间空白处是空格符，最后一个字节用<code>&lt;&gt;</code>显示，里面使用16进制数表示。如<code>CHSH2DNIPC074__&lt;00&gt;</code>，<code>_</code>代表空格，最后一个字节<code>&lt;00&gt;</code>是<code>\0</code>. NetBIOS name可以唯一，也可以是多个设备共用一个组，唯一名称用于指定唯一一台设备，而组名如此处的<code>DELTA</code>是域名称，局域网加入域对应的域名就是这种组名称，也称之为<strong>工作组</strong>。</p>
 <h3 id="使用示例二"><a href="#使用示例二" class="headerlink" title="使用示例二"></a>使用示例二</h3><p>第二个例子，我使用家用台式PC在局域网内进行了反复测试。下面是简要的抓包信息。</p>
-<p><img src="https://www.litreily.top/assets/network/nbns/nbns.png" alt="nbns packets"></p>
+<p><img src="/assets/network/nbns/nbns.png" alt="nbns packets"></p>
 <p><code>nbtstat -a RemoteName</code>用于请求指定名称所在设备的名称表。</p>
 <pre><code class="yml">C:\WINDOWS\system32&gt;nbtstat -a DZ-DN-700
 
@@ -611,12 +611,12 @@ eth0:
     已经刷新经过此计算机注册的 NetBIOS 名称。
 </code></pre>
 <h2 id="Windows-配置NetBIOS"><a href="#Windows-配置NetBIOS" class="headerlink" title="Windows 配置NetBIOS"></a>Windows 配置NetBIOS</h2><p>在Windows操作系统中，可以打开某网卡的属性配置，然后选择IPv4配置的高级选项，<code>WINS</code>选项卡即可配置<code>NetBIOS</code>。默认情况是启用的，与下图所示一致。</p>
-<p><img src="https://www.litreily.top/assets/network/nbns/netbios_config.png" alt="Windows上的NetBIOS配置"></p>
+<p><img src="/assets/network/nbns/netbios_config.png" alt="Windows上的NetBIOS配置"></p>
 <h2 id="wireshark-实例分析"><a href="#wireshark-实例分析" class="headerlink" title="wireshark 实例分析"></a>wireshark 实例分析</h2><p>最后来分析两个使用wireshark抓的NBNS数据包，以便更直观的理解和记忆。</p>
 <h3 id="Node-Status"><a href="#Node-Status" class="headerlink" title="Node Status"></a>Node Status</h3><p>使用指令<code>nbtstat -A 192.168.1.12</code>向指定设备发送Node status query，使用wireshark抓包。</p>
-<p><img src="https://www.litreily.top/assets/network/nbns/nodestatus_ws.png" alt="nbns node status"></p>
+<p><img src="/assets/network/nbns/nodestatus_ws.png" alt="nbns node status"></p>
 <p>请求数据包如下：</p>
-<p><img src="https://www.litreily.top/assets/network/nbns/nodestatus_ws_query.png" alt="nbns node status query"></p>
+<p><img src="/assets/network/nbns/nodestatus_ws_query.png" alt="nbns node status query"></p>
 <p>从wireshark得到的解析数据如下：</p>
 <pre><code class="yml">0000   e4 42 a6 18 ab 00 00 e0 4c 5a 0a 78 08 00 45 00   äB¦.«..àLZ.x..E.
 0010   00 4e 1e 82 00 00 80 11 98 b2 c0 a8 01 0e c0 a8   .N.......²À¨..À¨
@@ -645,7 +645,7 @@ NetBIOS Name Service
 </code></pre>
 <p>该数据报包含一个请求，所以<code>Questions</code>为1，其余为0；请求包中的编码名称为<code>*</code>的编码后数据CKAAAAAAAAAAAAAAA…; 由于使用的是指定IP，所以是单播包；因为是NODE STATUS REQUEST, 所以QUESTION_TYPE是NBSTAT(0x0021).</p>
 <p>从指定设备获取到的响应数据如下：</p>
-<p><img src="https://www.litreily.top/assets/network/nbns/nodestatus_ws_response.png" alt="nbns node status response"></p>
+<p><img src="/assets/network/nbns/nodestatus_ws_response.png" alt="nbns node status response"></p>
 <p>从截图中已经可以清晰的看到数据格式及具体内容了，被折叠的名称信息中，<code>DZ-DN-700&lt;20&gt;</code>与<code>DIAS&lt;1e&gt;</code>如下：</p>
 <pre><code class="yml">0000   00 e0 4c 5a 0a 78 e4 42 a6 18 ab 00 08 00 45 00   ..LZ.x........E.
 0010   00 cb 53 50 00 00 80 11 63 67 c0 a8 01 0c c0 a8   ..SP....cg......
@@ -706,9 +706,9 @@ Name flags: 0x8400, Name type, ONT: B-node, Name is active
 00c0   00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   ................
 00d0   00 00 00 00 00 00 00 00 00                        .........
 </code></pre>
-<h3 id="Name-Registration"><a href="#Name-Registration" class="headerlink" title="Name Registration"></a>Name Registration</h3><p><img src="https://www.litreily.top/assets/network/nbns/registration_ws.png" alt="nbns registration"></p>
+<h3 id="Name-Registration"><a href="#Name-Registration" class="headerlink" title="Name Registration"></a>Name Registration</h3><p><img src="/assets/network/nbns/registration_ws.png" alt="nbns registration"></p>
 <p>NBNS名称注册请求包如下图所示：</p>
-<p><img src="https://www.litreily.top/assets/network/nbns/registration_ws_pkt.png" alt="nbns registration query"></p>
+<p><img src="/assets/network/nbns/registration_ws_pkt.png" alt="nbns registration query"></p>
 <p>请求包格式与<a href="#NAME-REGISTRATION-REQUEST">NAME REGISTRATION REQUEST</a>中的一致。使用广播包方式，<code>OPCODE</code>为5，包含一条Questions记录和Additional记录，注册地址为发送方的IP地址192.168.1.12.</p>
 <p>在局域网内的其它设备或路由器接收到该广播包后，即可将其名称和IP地址记录到本地缓存当中。</p>
 <h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ol>
