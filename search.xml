@@ -24,6 +24,9 @@
 <p>这样就下载完成啦。</p>
 <p><img src="/assets/canvas/downloaded.png" alt="downloaded"></p>
 <p>至于如何将批量转换为pdf，那方法就多啦，福昕pdf编辑器、ABBYY等等，这个留待下回再讲，哈哈。</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>经评论区大佬@Axun提醒，本文所爬网站的PDF文件是可以直接提取的，刷新页面过滤<code>Access</code>即可得到下面的链接，右键在新页面打开即可保存，然后添加扩展名即可。</p>
+<p><img src="/assets/canvas/pdf-source-file.png" alt="PDF source file"></p>
+<p>当然啦，本文提及的canvas图片下载方法也适用于其它网站，欢迎食用。</p>
 ]]></content>
       
         <categories>
