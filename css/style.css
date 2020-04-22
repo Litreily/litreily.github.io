@@ -551,21 +551,6 @@ footer {
   display: inline-flex; }
 
 /*----------------------*/
-/*style of comment      */
-/*----------------------*/
-#valine-comment .v .vsys {
-  background: #263949; }
-
-#valine-comment .v .vcards .vcard .vh {
-  border-color: #263949; }
-
-#valine-comment .v .vcards .vcard .vcontent.expand:before {
-  background: linear-gradient(180deg, rgba(38, 58, 74, 0.6), rgba(66, 85, 103, 0.9)); }
-
-#valine-comment .v .vcards .vcard .vcontent.expand:after {
-  background: #263949; }
-
-/*----------------------*/
 /*style of archive, tag */
 /* ,categories, aoout   */
 /*----------------------*/

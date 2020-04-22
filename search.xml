@@ -2153,9 +2153,9 @@ Configuring Watchdog Timer
         
         <tags>
             
-            <tag> openwrt </tag>
-            
             <tag> ftrace </tag>
+            
+            <tag> openwrt </tag>
             
         </tags>
         
@@ -8451,11 +8451,11 @@ mysql&gt; DROP tableName;
         
         <tags>
             
+            <tag> linux </tag>
+            
             <tag> mysql </tag>
             
             <tag> centos </tag>
-            
-            <tag> linux </tag>
             
         </tags>
         
@@ -8993,9 +8993,9 @@ Infos:File-main.c, Func-main, Line-14
             
             <tag> ubuntu </tag>
             
-            <tag> shell </tag>
-            
             <tag> makefile </tag>
+            
+            <tag> shell </tag>
             
         </tags>
         
@@ -13180,9 +13180,9 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
         
         <tags>
             
-            <tag> git </tag>
-            
             <tag> atom </tag>
+            
+            <tag> git </tag>
             
         </tags>
         
@@ -13525,11 +13525,11 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
         
         <tags>
             
-            <tag> brackets </tag>
-            
             <tag> git </tag>
             
             <tag> tools </tag>
+            
+            <tag> brackets </tag>
             
         </tags>
         
