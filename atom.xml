@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2020-04-13T13:12:50.031Z</updated>
+  <updated>2020-04-27T12:33:44.650Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -17,29 +17,40 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>使用油猴脚本批量下载canvas图片</title>
-    <link href="https://www.litreily.top/2020/03/15/canvas-dl/"/>
-    <id>https://www.litreily.top/2020/03/15/canvas-dl/</id>
-    <published>2020-03-15T09:01:33.000Z</published>
-    <updated>2020-04-13T13:12:50.031Z</updated>
+    <title>简单实用的tftp烧录image脚本</title>
+    <link href="https://www.litreily.top/2020/04/27/tftp/"/>
+    <id>https://www.litreily.top/2020/04/27/tftp/</id>
+    <published>2020-04-27T11:21:03.000Z</published>
+    <updated>2020-04-27T12:33:44.650Z</updated>
     
     <summary type="html">
     
       
       
-        &lt;p&gt;女友最近在网上下载一些北大网盘的pdf&lt;a href=&quot;https://disk.pku.edu.cn/#/link/3A7748E0466521E3E68A0CBA4C24DE20?gns=AE26ACF837E24D51B1EC40E0A80A5D23%2F7F0E54D7D92343B1B62031B1C41F2280&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;文档&lt;/a&gt;，结果发现没有下载接口，另存为也只能存储单张图片。找我帮忙，这时候发现程序员男票的好处了哈。&lt;/p&gt;
-&lt;h2 id=&quot;分析页面&quot;&gt;&lt;a href=&quot;#分析页面&quot; class=&quot;headerlink&quot; title=&quot;分析页面&quot;&gt;&lt;/a&gt;分析页面&lt;/h2&gt;&lt;p&gt;一开始想着使用Chrome调试工具看下pdf链接，发现这个网盘居然不是直接获取的pdf文件，而是使用js脚本动态渲染生成的，涨知识了。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/assets/canvas/pdf-js.png&quot; alt=&quot;pdf-combine js&quot;&gt;&lt;/p&gt;
-&lt;p&gt;那看看是否可以以图片形式批量下载呢，结果查看pdf单页的html结构发现，这居然是个canvas!!!还不是普通图片，而是画布。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/assets/canvas/canvas.png&quot; alt=&quot;cancvs&quot;&gt;&lt;/p
+        &lt;p&gt;烧录FW image时，经常需要打开带有UI界面的tftp客户端，然后输入IP，选择FW image，然后点击写入，很是繁琐。&lt;/p&gt;
+&lt;p&gt;为了简化这个过程，我决定使用shell script，在win10中自带WSL(windows subsystem for linux)，配合zsh食用。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;zsh&quot;&gt;#!/bin/zsh
+# install to ~/bin/burnImage
+
+[ &amp;quot;x$1&amp;quot; = &amp;quot;x&amp;quot;  ] &amp;amp;&amp;amp; echo &amp;quot;usage: ${0##*/} &amp;lt;imagefile&amp;gt;&amp;quot; &amp;amp;&amp;amp; exit 1
+
+tftp 192.168.1.1 &amp;lt;&amp;lt;-EOF &amp;gt; /dev/null
+    binary
+    put $1
+EOF
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;脚本使用&lt;code&gt;tftp&lt;/code&gt;连接tftp server 192.168.1.1, 然后进入&lt;code&gt;binary&lt;/code&gt;模式，最后将image文件&lt;code&gt;$1&lt;/code&gt;传输至server端。&lt;/p&gt;
+&lt;p&gt;使用方法很简单，保证该文件&lt;code&gt;burnImage&lt;/code&gt;所在目录在环境变量&lt;code&gt;$PATH&lt;
       
     
     </summary>
     
-      <category term="杂物柜" scheme="https://www.litreily.top/categories/%E6%9D%82%E7%89%A9%E6%9F%9C/"/>
+      <category term="Linux" scheme="https://www.litreily.top/categories/Linux/"/>
     
     
-      <category term="tampermonkey" scheme="https://www.litreily.top/tags/tampermonkey/"/>
+      <category term="shell" scheme="https://www.litreily.top/tags/shell/"/>
+    
+      <category term="tftp" scheme="https://www.litreily.top/tags/tftp/"/>
     
   </entry>
   
@@ -71,6 +82,33 @@
     
     
       <category term="C/C++" scheme="https://www.litreily.top/tags/C-C/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用油猴脚本批量下载canvas图片</title>
+    <link href="https://www.litreily.top/2020/03/15/canvas-dl/"/>
+    <id>https://www.litreily.top/2020/03/15/canvas-dl/</id>
+    <published>2020-03-15T09:01:33.000Z</published>
+    <updated>2020-04-13T13:12:50.031Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;女友最近在网上下载一些北大网盘的pdf&lt;a href=&quot;https://disk.pku.edu.cn/#/link/3A7748E0466521E3E68A0CBA4C24DE20?gns=AE26ACF837E24D51B1EC40E0A80A5D23%2F7F0E54D7D92343B1B62031B1C41F2280&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;文档&lt;/a&gt;，结果发现没有下载接口，另存为也只能存储单张图片。找我帮忙，这时候发现程序员男票的好处了哈。&lt;/p&gt;
+&lt;h2 id=&quot;分析页面&quot;&gt;&lt;a href=&quot;#分析页面&quot; class=&quot;headerlink&quot; title=&quot;分析页面&quot;&gt;&lt;/a&gt;分析页面&lt;/h2&gt;&lt;p&gt;一开始想着使用Chrome调试工具看下pdf链接，发现这个网盘居然不是直接获取的pdf文件，而是使用js脚本动态渲染生成的，涨知识了。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/canvas/pdf-js.png&quot; alt=&quot;pdf-combine js&quot;&gt;&lt;/p&gt;
+&lt;p&gt;那看看是否可以以图片形式批量下载呢，结果查看pdf单页的html结构发现，这居然是个canvas!!!还不是普通图片，而是画布。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/canvas/canvas.png&quot; alt=&quot;cancvs&quot;&gt;&lt;/p
+      
+    
+    </summary>
+    
+      <category term="杂物柜" scheme="https://www.litreily.top/categories/%E6%9D%82%E7%89%A9%E6%9F%9C/"/>
+    
+    
+      <category term="tampermonkey" scheme="https://www.litreily.top/tags/tampermonkey/"/>
     
   </entry>
   
@@ -312,9 +350,9 @@ CPU: 2 PID: 9465 Comm: swconfig Tainted: P        W    3.14.77 #1
       <category term="嵌入式" scheme="https://www.litreily.top/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/"/>
     
     
-      <category term="ftrace" scheme="https://www.litreily.top/tags/ftrace/"/>
-    
       <category term="openwrt" scheme="https://www.litreily.top/tags/openwrt/"/>
+    
+      <category term="ftrace" scheme="https://www.litreily.top/tags/ftrace/"/>
     
   </entry>
   
@@ -874,41 +912,6 @@ $ sudo apt-get install tmux
       <category term="ubuntu" scheme="https://www.litreily.top/tags/ubuntu/"/>
     
       <category term="tmux" scheme="https://www.litreily.top/tags/tmux/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Openwrt中添加内核模块</title>
-    <link href="https://www.litreily.top/2018/05/30/openwrt-ko/"/>
-    <id>https://www.litreily.top/2018/05/30/openwrt-ko/</id>
-    <published>2018-05-30T15:23:56.000Z</published>
-    <updated>2020-02-26T13:11:56.206Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;如果想要在&lt;code&gt;Openwrt&lt;/code&gt;系统中添加一个内核模块，其实并不难，对着某个已有的内核模块，依葫芦画瓢嘛，不难。本文将介绍一个最最简单的&lt;/p&gt;
-&lt;h2 id=&quot;sourcecode&quot;&gt;&lt;a href=&quot;#sourcecode&quot; class=&quot;headerlink&quot; title=&quot;sourcecode&quot;&gt;&lt;/a&gt;sourcecode&lt;/h2&gt;&lt;p&gt;path: &lt;code&gt;git_repo/package/kmod-demo/&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;下面是源码包含的所有文件，根级&lt;code&gt;Makefile&lt;/code&gt;提供给内核编译器使用，&lt;code&gt;src&lt;/code&gt;级&lt;code&gt;Makefile&lt;/code&gt;用于编译&lt;code&gt;.ko&lt;/code&gt;文件。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ tree
-.
-├── Makefile
-└── src
-    ├── demo.c
-    ├── Kconfig
-    └── Makefile
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&quot;demo-c&quot;&gt;&lt;a href=&quot;#demo-c&quot; class=&quot;headerlink&quot; title=&quot;demo.c&quot;&gt;&lt;/a&gt;demo.c&lt;/h3&gt;&lt;p&gt;源码非常简单，在装载时打印&lt;code&gt;Hello World&lt;/code&gt;，卸载时打印&lt;code&gt;Exit&lt;/cod
-      
-    
-    </summary>
-    
-      <category term="嵌入式" scheme="https://www.litreily.top/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/"/>
-    
-    
-      <category term="C/C++" scheme="https://www.litreily.top/tags/C-C/"/>
-    
-      <category term="linux" scheme="https://www.litreily.top/tags/linux/"/>
     
   </entry>
   
