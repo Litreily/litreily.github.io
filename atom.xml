@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2020-04-27T12:33:44.650Z</updated>
+  <updated>2020-04-30T11:47:40.692Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -15,6 +15,37 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>lftp获取FTP Server端最新文件</title>
+    <link href="https://www.litreily.top/2020/04/30/lftp_get/"/>
+    <id>https://www.litreily.top/2020/04/30/lftp_get/</id>
+    <published>2020-04-30T09:33:02.000Z</published>
+    <updated>2020-04-30T11:47:40.692Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;最近解一个bug，要频繁编译和烧录FW，每次都要将image从远程的FTP server手动copy到本地，然后使用tftp进行烧录，实在不胜其烦。虽然上一篇&lt;a href=&quot;https://www.litreily.top/2020/04/27/tftp/&quot;&gt;简单实用的tftp烧录image脚本&lt;/a&gt;提高了烧录效率，但是每次将image拷贝到本地也是麻烦。&lt;/p&gt;
+&lt;p&gt;这次，我依旧想到了WSL, 使用shell脚本还是更加方便快捷，思路很简单，检查server端的最新文件，得到文件名后使用lftp下载到本地。&lt;/p&gt;
+&lt;h2 id=&quot;获取最新文件&quot;&gt;&lt;a href=&quot;#获取最新文件&quot; class=&quot;headerlink&quot; title=&quot;获取最新文件&quot;&gt;&lt;/a&gt;获取最新文件&lt;/h2&gt;&lt;p&gt;FTP Server文件存储方式是将每天的新数据归档到以当日日期命名的文件夹中，如今天&lt;code&gt;20200430&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;zsh&quot;&gt;➜  lftp -u &amp;quot;username,password&amp;quot; ftp://1.2.3.4
+lftp username@1.2.3.4:~&amp;gt; ls
+04-27-20  02:03PM       &amp;lt;DIR&amp;gt;          20200427
+04-29-20  05:3
+      
+    
+    </summary>
+    
+      <category term="Linux" scheme="https://www.litreily.top/categories/Linux/"/>
+    
+    
+      <category term="shell" scheme="https://www.litreily.top/tags/shell/"/>
+    
+      <category term="ftp" scheme="https://www.litreily.top/tags/ftp/"/>
+    
+  </entry>
   
   <entry>
     <title>简单实用的tftp烧录image脚本</title>
@@ -55,6 +86,33 @@ EOF
   </entry>
   
   <entry>
+    <title>使用油猴脚本批量下载canvas图片</title>
+    <link href="https://www.litreily.top/2020/03/15/canvas-dl/"/>
+    <id>https://www.litreily.top/2020/03/15/canvas-dl/</id>
+    <published>2020-03-15T09:01:33.000Z</published>
+    <updated>2020-04-13T13:12:50.031Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;女友最近在网上下载一些北大网盘的pdf&lt;a href=&quot;https://disk.pku.edu.cn/#/link/3A7748E0466521E3E68A0CBA4C24DE20?gns=AE26ACF837E24D51B1EC40E0A80A5D23%2F7F0E54D7D92343B1B62031B1C41F2280&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;文档&lt;/a&gt;，结果发现没有下载接口，另存为也只能存储单张图片。找我帮忙，这时候发现程序员男票的好处了哈。&lt;/p&gt;
+&lt;h2 id=&quot;分析页面&quot;&gt;&lt;a href=&quot;#分析页面&quot; class=&quot;headerlink&quot; title=&quot;分析页面&quot;&gt;&lt;/a&gt;分析页面&lt;/h2&gt;&lt;p&gt;一开始想着使用Chrome调试工具看下pdf链接，发现这个网盘居然不是直接获取的pdf文件，而是使用js脚本动态渲染生成的，涨知识了。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/canvas/pdf-js.png&quot; alt=&quot;pdf-combine js&quot;&gt;&lt;/p&gt;
+&lt;p&gt;那看看是否可以以图片形式批量下载呢，结果查看pdf单页的html结构发现，这居然是个canvas!!!还不是普通图片，而是画布。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/canvas/canvas.png&quot; alt=&quot;cancvs&quot;&gt;&lt;/p
+      
+    
+    </summary>
+    
+      <category term="杂物柜" scheme="https://www.litreily.top/categories/%E6%9D%82%E7%89%A9%E6%9F%9C/"/>
+    
+    
+      <category term="tampermonkey" scheme="https://www.litreily.top/tags/tampermonkey/"/>
+    
+  </entry>
+  
+  <entry>
     <title>NBNS客户端的C语言实现</title>
     <link href="https://www.litreily.top/2020/03/15/nbns_code/"/>
     <id>https://www.litreily.top/2020/03/15/nbns_code/</id>
@@ -82,33 +140,6 @@ EOF
     
     
       <category term="C/C++" scheme="https://www.litreily.top/tags/C-C/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>使用油猴脚本批量下载canvas图片</title>
-    <link href="https://www.litreily.top/2020/03/15/canvas-dl/"/>
-    <id>https://www.litreily.top/2020/03/15/canvas-dl/</id>
-    <published>2020-03-15T09:01:33.000Z</published>
-    <updated>2020-04-13T13:12:50.031Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;女友最近在网上下载一些北大网盘的pdf&lt;a href=&quot;https://disk.pku.edu.cn/#/link/3A7748E0466521E3E68A0CBA4C24DE20?gns=AE26ACF837E24D51B1EC40E0A80A5D23%2F7F0E54D7D92343B1B62031B1C41F2280&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;文档&lt;/a&gt;，结果发现没有下载接口，另存为也只能存储单张图片。找我帮忙，这时候发现程序员男票的好处了哈。&lt;/p&gt;
-&lt;h2 id=&quot;分析页面&quot;&gt;&lt;a href=&quot;#分析页面&quot; class=&quot;headerlink&quot; title=&quot;分析页面&quot;&gt;&lt;/a&gt;分析页面&lt;/h2&gt;&lt;p&gt;一开始想着使用Chrome调试工具看下pdf链接，发现这个网盘居然不是直接获取的pdf文件，而是使用js脚本动态渲染生成的，涨知识了。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/assets/canvas/pdf-js.png&quot; alt=&quot;pdf-combine js&quot;&gt;&lt;/p&gt;
-&lt;p&gt;那看看是否可以以图片形式批量下载呢，结果查看pdf单页的html结构发现，这居然是个canvas!!!还不是普通图片，而是画布。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/assets/canvas/canvas.png&quot; alt=&quot;cancvs&quot;&gt;&lt;/p
-      
-    
-    </summary>
-    
-      <category term="杂物柜" scheme="https://www.litreily.top/categories/%E6%9D%82%E7%89%A9%E6%9F%9C/"/>
-    
-    
-      <category term="tampermonkey" scheme="https://www.litreily.top/tags/tampermonkey/"/>
     
   </entry>
   
@@ -882,36 +913,6 @@ rt_sigprocmask(SIG_UNBLOCK, [ABRT], NULL, 8)
       <category term="sort" scheme="https://www.litreily.top/tags/sort/"/>
     
       <category term="visualization" scheme="https://www.litreily.top/tags/visualization/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>tmux常用配置说明</title>
-    <link href="https://www.litreily.top/2018/06/19/tmux-config/"/>
-    <id>https://www.litreily.top/2018/06/19/tmux-config/</id>
-    <published>2018-06-19T01:26:00.000Z</published>
-    <updated>2020-02-26T13:11:56.207Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;code&gt;tmux&lt;/code&gt;作为&lt;code&gt;Linux&lt;/code&gt;三大神器之一，结合&lt;code&gt;zsh&lt;/code&gt;和&lt;code&gt;vim&lt;/code&gt;堪称无敌，&lt;code&gt;tmux&lt;/code&gt;作为分屏利器自有其强大之处，本文就其常用配置予以说明。&lt;/p&gt;
-&lt;h2 id=&quot;安装tmux&quot;&gt;&lt;a href=&quot;#安装tmux&quot; class=&quot;headerlink&quot; title=&quot;安装tmux&quot;&gt;&lt;/a&gt;安装tmux&lt;/h2&gt;&lt;pre&gt;&lt;code class=&quot;zsh&quot;&gt;# install in ubuntu
-$ sudo apt-get install tmux
-&lt;/code&gt;&lt;/pre&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;Ctrl+B&lt;/code&gt;: default keys of tmux &lt;code&gt;prefix&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;.tmux.conf&lt;/code&gt;: config file of &lt;code&gt;tmux&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;tmux source-file .tmux.conf&lt;/code&gt;: command to reload &lt;code&gt;.tmux.conf&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-      <category term="Linux" scheme="https://www.litreily.top/categories/Linux/"/>
-    
-    
-      <category term="ubuntu" scheme="https://www.litreily.top/tags/ubuntu/"/>
-    
-      <category term="tmux" scheme="https://www.litreily.top/tags/tmux/"/>
     
   </entry>
   

@@ -4,6 +4,131 @@
   
     
     <entry>
+      <title><![CDATA[lftp获取FTP Server端最新文件]]></title>
+      <url>https://www.litreily.top/2020/04/30/lftp_get/</url>
+      <content type="html"><![CDATA[<p>最近解一个bug，要频繁编译和烧录FW，每次都要将image从远程的FTP server手动copy到本地，然后使用tftp进行烧录，实在不胜其烦。虽然上一篇<a href="https://www.litreily.top/2020/04/27/tftp/">简单实用的tftp烧录image脚本</a>提高了烧录效率，但是每次将image拷贝到本地也是麻烦。</p>
+<p>这次，我依旧想到了WSL, 使用shell脚本还是更加方便快捷，思路很简单，检查server端的最新文件，得到文件名后使用lftp下载到本地。</p>
+<h2 id="获取最新文件"><a href="#获取最新文件" class="headerlink" title="获取最新文件"></a>获取最新文件</h2><p>FTP Server文件存储方式是将每天的新数据归档到以当日日期命名的文件夹中，如今天<code>20200430</code></p>
+<pre><code class="zsh">➜  lftp -u &quot;username,password&quot; ftp://1.2.3.4
+lftp username@1.2.3.4:~&gt; ls
+04-27-20  02:03PM       &lt;DIR&gt;          20200427
+04-29-20  05:36PM       &lt;DIR&gt;          20200429
+04-30-20  01:11PM       &lt;DIR&gt;          20200430
+lftp username@1.2.3.4:/&gt; cd 20200430
+lftp username@1.2.3.4:/20200430&gt; ls
+04-30-20  08:45AM             25165953 20200430084545-FW-V1.2.1.4.img
+04-30-20  09:09AM             25165953 20200430090947-FW-V1.2.1.4.img
+04-30-20  10:04AM             25165953 20200430100405-FW-V1.2.1.4.img
+04-30-20  11:02AM             25165953 20200430110247-FW-V1.2.1.4.img
+04-30-20  01:11PM             25165953 20200430131110-FW-V1.2.1.4.img
+lftp username@1.2.3.4:/20200430&gt; exit
+➜  
+</code></pre>
+<p>所以获取当日文件列表时需要先进入目录，然后ls并将结果存到本地tmp文件</p>
+<pre><code class="zsh">dir=$(date &#39;+%Y%m%d&#39;)
+lftp -u &quot;$ftp_user,$ftp_pass&quot; $ftp_host &lt;&lt;-EOF &gt; $tmpfile
+    cd $dir
+    ls
+EOF
+</code></pre>
+<p>由于ls结果默认以时间顺序排序，最新文件在最后一行，这就好办了，结合<code>tail</code>和<code>awk</code>就可以得到最新文件名。</p>
+<pre><code class="zsh">image=$(tail -1 $tmpfile |awk &#39;{print $4}&#39;)
+</code></pre>
+<p>知道了文件名，先看下本地有没有下载过，如果有则无需重复下载，如果没有就使用<code>lftp</code>的<code>get</code>指令下载到本地。</p>
+<pre><code class="zsh"># return if $image already exist in local
+[ -f $image ] &amp;&amp; return
+[ &quot;x$image&quot; = &quot;x&quot; ] &amp;&amp; echo &quot;no image today&quot; &amp;&amp; exit 1
+
+lftp -u &quot;$ftp_user,$ftp_pass&quot; $ftp_host &lt;&lt;-EOF
+    cd $dir
+    get $image
+EOF
+</code></pre>
+<p>以上就完成了最新image的获取，结合之前使用<code>tftp</code>烧录image的脚本，更新shell脚本得到下面的完整代码。</p>
+<h2 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h2><pre><code class="zsh">#!/bin/zsh
+# download image from FTP server and burn it into router with tftp
+
+burn()
+{
+    tftp 192.168.1.1 &lt;&lt;-EOF &gt; /dev/null
+        binary
+        put $1
+    EOF
+}
+
+dl_newest_image()
+{
+    ftp_user=&quot;username&quot;
+    ftp_pass=&quot;password&quot;
+    ftp_host=&quot;ftp://1.2.3.4&quot;
+    tmpfile=~/tmp/ftp_list
+
+    # get ftp file list of today
+    dir=$(date &#39;+%Y%m%d&#39;)
+    lftp -u &quot;$ftp_user,$ftp_pass&quot; $ftp_host &lt;&lt;-EOF &gt; $tmpfile
+        cd $dir
+        ls
+    EOF
+
+    image=$(tail -1 $tmpfile |awk &#39;{print $4}&#39;)
+
+    # return if $image already exist in local
+    [ -f $image ] &amp;&amp; return
+    [ &quot;x$image&quot; = &quot;x&quot; ] &amp;&amp; echo &quot;no image today&quot; &amp;&amp; exit 1
+
+    lftp -u &quot;$ftp_user,$ftp_pass&quot; $ftp_host &lt;&lt;-EOF
+        cd $dir
+        get $image
+    EOF
+}
+
+
+cd $DT/tmp/imgs/ # $DT代表Win10的Desktop, 是我.zshrc的一个环境变量
+image=$1
+
+if [ &quot;x$1&quot; = &quot;x&quot;  ]; then
+    dl_newest_image
+fi
+
+echo &quot;start burning $image&quot;
+burn $image
+</code></pre>
+<h2 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h2><p>为了方便，脚本文件名更新为<code>bi</code>, burn image的意思，使用方法含带参和不带参两种。</p>
+<ol>
+<li>带参 - 烧录指定文件</li>
+<li>不带参 - 从FTP server获取最新文件并烧录</li>
+</ol>
+<pre><code class="zsh">➜  bi 20200430110247-FW-V1.2.1.4.img
+start burning 20200430110247-FW-V1.2.1.4.img
+➜  bi
+`20200430131128-RBR20-V2.7.1.8RC1-ubi4.img` at 15953920 (45%) 7.41M/s eta:2s [Receiving data]
+start burning 20200430131128-RBR20-V2.7.1.8RC1-ubi4.img
+</code></pre>
+<h2 id="Notice"><a href="#Notice" class="headerlink" title="Notice"></a>Notice</h2><ol>
+<li>其实使用<code>curl</code>也可以获取FTP Server的列表信息，使用<code>wget</code>也可以下载FTP Server文件，但是鉴于公司网络代理环境复杂，容易莫名失败，所以还是使用<code>lftp</code>；</li>
+<li>用户名密码不该直接放脚本内部，可以单独存到配置文件并设置好权限，然后脚本去读文件，当然啦，私人电脑忽略；</li>
+<li>脚本中<code>&lt;&lt;-EOF</code>的<code>-</code>表示忽略下面输入行每行开始的tab键，所以被<code>EOF</code>包含的部分不能使用空格键替代tab键，否则会出错。</li>
+</ol>
+]]></content>
+      
+        <categories>
+            
+            <category> Linux </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> shell </tag>
+            
+            <tag> ftp </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[简单实用的tftp烧录image脚本]]></title>
       <url>https://www.litreily.top/2020/04/27/tftp/</url>
       <content type="html"><![CDATA[<p>烧录FW image时，经常需要打开带有UI界面的tftp客户端，然后输入IP，选择FW image，然后点击写入，很是繁琐。</p>
@@ -36,6 +161,47 @@ EOF
             <tag> shell </tag>
             
             <tag> tftp </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[使用油猴脚本批量下载canvas图片]]></title>
+      <url>https://www.litreily.top/2020/03/15/canvas-dl/</url>
+      <content type="html"><![CDATA[<p>女友最近在网上下载一些北大网盘的pdf<a href="https://disk.pku.edu.cn/#/link/3A7748E0466521E3E68A0CBA4C24DE20?gns=AE26ACF837E24D51B1EC40E0A80A5D23%2F7F0E54D7D92343B1B62031B1C41F2280" target="_blank" rel="noopener">文档</a>，结果发现没有下载接口，另存为也只能存储单张图片。找我帮忙，这时候发现程序员男票的好处了哈。</p>
+<h2 id="分析页面"><a href="#分析页面" class="headerlink" title="分析页面"></a>分析页面</h2><p>一开始想着使用Chrome调试工具看下pdf链接，发现这个网盘居然不是直接获取的pdf文件，而是使用js脚本动态渲染生成的，涨知识了。</p>
+<p><img src="/assets/canvas/pdf-js.png" alt="pdf-combine js"></p>
+<p>那看看是否可以以图片形式批量下载呢，结果查看pdf单页的html结构发现，这居然是个canvas!!!还不是普通图片，而是画布。</p>
+<p><img src="/assets/canvas/canvas.png" alt="cancvs"></p>
+<h2 id="下载插件"><a href="#下载插件" class="headerlink" title="下载插件"></a>下载插件</h2><p>没关系，canvas什么的也不是难事，万能的油猴插件总会有解决方案的，果不其然让我找到个专门用于下载svg, canvas的油猴插件↓</p>
+<ul>
+<li><a href="https://greasyfork.org/zh-CN/scripts/383101-%E7%BD%91%E7%AB%99%E5%9B%BE%E7%89%87-%E8%83%8C%E6%99%AF%E5%9B%BE-svg-canvas-%E6%8A%93%E5%8F%96%E9%A2%84%E8%A7%88%E4%B8%8B%E8%BD%BD" target="_blank" rel="noopener">网站图片（背景图，svg，canvas）抓取预览下载</a></li>
+</ul>
+<h2 id="下载图片"><a href="#下载图片" class="headerlink" title="下载图片"></a>下载图片</h2><p>这正是我想要的，安装好后，使用起来非常简单，刷新要下载canvas图片的页面，在右下角有一个按钮<strong>自动获取图片</strong>。</p>
+<p><img src="/assets/canvas/check-tampermonkey.png" alt="js extension"></p>
+<p>点击之后开始扫描，注意下图中的数字并不代表实际的图片数量，不用理会。</p>
+<p><img src="/assets/canvas/scanning.png" alt="scanning"></p>
+<p>扫描完成后，可以限定图片大小，以滤除不符合要求的小图片，然后通过<strong>批量下载</strong>完成下载，对于数量较多的页面可能需要稍微等一小会，绝大部分情况是很快的。</p>
+<p><img src="/assets/canvas/download.png" alt="download"></p>
+<p>这样就下载完成啦。</p>
+<p><img src="/assets/canvas/downloaded.png" alt="downloaded"></p>
+<p>至于如何将批量转换为pdf，那方法就多啦，福昕pdf编辑器、ABBYY等等，这个留待下回再讲，哈哈。</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>经评论区大佬@Axun提醒，本文所爬网站的PDF文件是可以直接提取的，刷新页面过滤<code>Access</code>即可得到下面的链接，右键在新页面打开即可保存，然后添加扩展名即可。</p>
+<p><img src="/assets/canvas/pdf-source-file.png" alt="PDF source file"></p>
+<p>当然啦，本文提及的canvas图片下载方法也适用于其它网站，欢迎食用。</p>
+]]></content>
+      
+        <categories>
+            
+            <category> 杂物柜 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> tampermonkey </tag>
             
         </tags>
         
@@ -401,47 +567,6 @@ Not in presentation format
         <tags>
             
             <tag> C/C++ </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[使用油猴脚本批量下载canvas图片]]></title>
-      <url>https://www.litreily.top/2020/03/15/canvas-dl/</url>
-      <content type="html"><![CDATA[<p>女友最近在网上下载一些北大网盘的pdf<a href="https://disk.pku.edu.cn/#/link/3A7748E0466521E3E68A0CBA4C24DE20?gns=AE26ACF837E24D51B1EC40E0A80A5D23%2F7F0E54D7D92343B1B62031B1C41F2280" target="_blank" rel="noopener">文档</a>，结果发现没有下载接口，另存为也只能存储单张图片。找我帮忙，这时候发现程序员男票的好处了哈。</p>
-<h2 id="分析页面"><a href="#分析页面" class="headerlink" title="分析页面"></a>分析页面</h2><p>一开始想着使用Chrome调试工具看下pdf链接，发现这个网盘居然不是直接获取的pdf文件，而是使用js脚本动态渲染生成的，涨知识了。</p>
-<p><img src="/assets/canvas/pdf-js.png" alt="pdf-combine js"></p>
-<p>那看看是否可以以图片形式批量下载呢，结果查看pdf单页的html结构发现，这居然是个canvas!!!还不是普通图片，而是画布。</p>
-<p><img src="/assets/canvas/canvas.png" alt="cancvs"></p>
-<h2 id="下载插件"><a href="#下载插件" class="headerlink" title="下载插件"></a>下载插件</h2><p>没关系，canvas什么的也不是难事，万能的油猴插件总会有解决方案的，果不其然让我找到个专门用于下载svg, canvas的油猴插件↓</p>
-<ul>
-<li><a href="https://greasyfork.org/zh-CN/scripts/383101-%E7%BD%91%E7%AB%99%E5%9B%BE%E7%89%87-%E8%83%8C%E6%99%AF%E5%9B%BE-svg-canvas-%E6%8A%93%E5%8F%96%E9%A2%84%E8%A7%88%E4%B8%8B%E8%BD%BD" target="_blank" rel="noopener">网站图片（背景图，svg，canvas）抓取预览下载</a></li>
-</ul>
-<h2 id="下载图片"><a href="#下载图片" class="headerlink" title="下载图片"></a>下载图片</h2><p>这正是我想要的，安装好后，使用起来非常简单，刷新要下载canvas图片的页面，在右下角有一个按钮<strong>自动获取图片</strong>。</p>
-<p><img src="/assets/canvas/check-tampermonkey.png" alt="js extension"></p>
-<p>点击之后开始扫描，注意下图中的数字并不代表实际的图片数量，不用理会。</p>
-<p><img src="/assets/canvas/scanning.png" alt="scanning"></p>
-<p>扫描完成后，可以限定图片大小，以滤除不符合要求的小图片，然后通过<strong>批量下载</strong>完成下载，对于数量较多的页面可能需要稍微等一小会，绝大部分情况是很快的。</p>
-<p><img src="/assets/canvas/download.png" alt="download"></p>
-<p>这样就下载完成啦。</p>
-<p><img src="/assets/canvas/downloaded.png" alt="downloaded"></p>
-<p>至于如何将批量转换为pdf，那方法就多啦，福昕pdf编辑器、ABBYY等等，这个留待下回再讲，哈哈。</p>
-<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>经评论区大佬@Axun提醒，本文所爬网站的PDF文件是可以直接提取的，刷新页面过滤<code>Access</code>即可得到下面的链接，右键在新页面打开即可保存，然后添加扩展名即可。</p>
-<p><img src="/assets/canvas/pdf-source-file.png" alt="PDF source file"></p>
-<p>当然啦，本文提及的canvas图片下载方法也适用于其它网站，欢迎食用。</p>
-]]></content>
-      
-        <categories>
-            
-            <category> 杂物柜 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> tampermonkey </tag>
             
         </tags>
         

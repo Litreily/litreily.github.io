@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://www.litreily.top/2020/04/30/lftp_get/</loc>
+    
+    <lastmod>2020-04-30T11:47:40.692Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://www.litreily.top/2020/04/27/tftp/</loc>
     
     <lastmod>2020-04-27T12:33:44.650Z</lastmod>
@@ -93,14 +100,14 @@
   </url>
   
   <url>
-    <loc>https://www.litreily.top/2019/11/07/unknown_symbol/</loc>
+    <loc>https://www.litreily.top/2020/01/09/awk_dedup/</loc>
     
     <lastmod>2020-02-26T13:11:56.223Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://www.litreily.top/2020/01/09/awk_dedup/</loc>
+    <loc>https://www.litreily.top/2019/11/07/unknown_symbol/</loc>
     
     <lastmod>2020-02-26T13:11:56.223Z</lastmod>
     
@@ -114,14 +121,14 @@
   </url>
   
   <url>
-    <loc>https://www.litreily.top/2019/10/09/fabiaoqing/</loc>
+    <loc>https://www.litreily.top/2019/09/12/minicom/</loc>
     
     <lastmod>2020-02-26T13:11:56.220Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://www.litreily.top/2019/09/12/minicom/</loc>
+    <loc>https://www.litreily.top/2019/10/09/fabiaoqing/</loc>
     
     <lastmod>2020-02-26T13:11:56.220Z</lastmod>
     
@@ -163,14 +170,14 @@
   </url>
   
   <url>
-    <loc>https://www.litreily.top/2019/03/03/qqzone/</loc>
+    <loc>https://www.litreily.top/2019/02/27/ipv6/</loc>
     
     <lastmod>2020-02-26T13:11:56.216Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://www.litreily.top/2019/02/27/ipv6/</loc>
+    <loc>https://www.litreily.top/2019/03/03/qqzone/</loc>
     
     <lastmod>2020-02-26T13:11:56.216Z</lastmod>
     
@@ -268,14 +275,14 @@
   </url>
   
   <url>
-    <loc>https://www.litreily.top/2018/04/30/cfachina/</loc>
+    <loc>https://www.litreily.top/2018/04/10/sina/</loc>
     
     <lastmod>2020-02-26T13:11:56.205Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://www.litreily.top/2018/04/10/sina/</loc>
+    <loc>https://www.litreily.top/2018/04/30/cfachina/</loc>
     
     <lastmod>2020-02-26T13:11:56.205Z</lastmod>
     
@@ -324,13 +331,6 @@
   </url>
   
   <url>
-    <loc>https://www.litreily.top/2017/08/17/telnet-smtp/</loc>
-    
-    <lastmod>2020-02-26T13:11:56.200Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://www.litreily.top/2017/07/28/chmod-wireshark/</loc>
     
     <lastmod>2020-02-26T13:11:56.200Z</lastmod>
@@ -338,9 +338,9 @@
   </url>
   
   <url>
-    <loc>https://www.litreily.top/2017/07/25/makefile/</loc>
+    <loc>https://www.litreily.top/2017/08/17/telnet-smtp/</loc>
     
-    <lastmod>2020-02-26T13:11:56.199Z</lastmod>
+    <lastmod>2020-02-26T13:11:56.200Z</lastmod>
     
   </url>
   
@@ -352,14 +352,21 @@
   </url>
   
   <url>
-    <loc>https://www.litreily.top/2017/06/11/initial-ubuntu/</loc>
+    <loc>https://www.litreily.top/2017/07/25/makefile/</loc>
+    
+    <lastmod>2020-02-26T13:11:56.199Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.litreily.top/2017/04/24/labview-DAQ/</loc>
     
     <lastmod>2020-02-26T13:11:56.198Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://www.litreily.top/2017/04/24/labview-DAQ/</loc>
+    <loc>https://www.litreily.top/2017/06/11/initial-ubuntu/</loc>
     
     <lastmod>2020-02-26T13:11:56.198Z</lastmod>
     
@@ -373,14 +380,14 @@
   </url>
   
   <url>
-    <loc>https://www.litreily.top/2016/12/28/word-numbering/</loc>
+    <loc>https://www.litreily.top/2017/03/23/code-Platform/</loc>
     
     <lastmod>2020-02-26T13:11:56.196Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://www.litreily.top/2017/03/23/code-Platform/</loc>
+    <loc>https://www.litreily.top/2016/12/28/word-numbering/</loc>
     
     <lastmod>2020-02-26T13:11:56.196Z</lastmod>
     
@@ -436,13 +443,6 @@
   </url>
   
   <url>
-    <loc>https://www.litreily.top/2016/10/28/add-Music/</loc>
-    
-    <lastmod>2020-02-26T13:11:56.190Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://www.litreily.top/2016/11/02/FreeRTOS/</loc>
     
     <lastmod>2020-02-26T13:11:56.190Z</lastmod>
@@ -450,14 +450,21 @@
   </url>
   
   <url>
-    <loc>https://www.litreily.top/2016/10/12/installSW/</loc>
+    <loc>https://www.litreily.top/2016/10/28/add-Music/</loc>
+    
+    <lastmod>2020-02-26T13:11:56.190Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.litreily.top/2016/10/27/antiquity-music/</loc>
     
     <lastmod>2020-02-26T13:11:56.189Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://www.litreily.top/2016/10/27/antiquity-music/</loc>
+    <loc>https://www.litreily.top/2016/10/12/installSW/</loc>
     
     <lastmod>2020-02-26T13:11:56.189Z</lastmod>
     
