@@ -2397,9 +2397,9 @@ Configuring Watchdog Timer
         
         <tags>
             
-            <tag> ftrace </tag>
-            
             <tag> openwrt </tag>
+            
+            <tag> ftrace </tag>
             
         </tags>
         
@@ -8695,11 +8695,11 @@ mysql&gt; DROP tableName;
         
         <tags>
             
+            <tag> linux </tag>
+            
             <tag> mysql </tag>
             
             <tag> centos </tag>
-            
-            <tag> linux </tag>
             
         </tags>
         
@@ -11028,9 +11028,9 @@ unsigned char canFreeData : 布尔变量，确定能否释放数据内存
         
         <tags>
             
-            <tag> matlab </tag>
-            
             <tag> labview </tag>
+            
+            <tag> matlab </tag>
             
             <tag> VS </tag>
             
@@ -12639,9 +12639,9 @@ static void vUasrtSendTask(void *pvParameters)
             
             <tag> C/C++ </tag>
             
-            <tag> stm32 </tag>
-            
             <tag> FreeRTOS </tag>
+            
+            <tag> stm32 </tag>
             
         </tags>
         
@@ -13065,11 +13065,11 @@ Categories=Development;IDE;Java;
         
         <tags>
             
-            <tag> atom </tag>
-            
             <tag> ubuntu </tag>
             
             <tag> linux </tag>
+            
+            <tag> atom </tag>
             
         </tags>
         
