@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2020-04-30T11:47:40.692Z</updated>
+  <updated>2020-05-03T02:17:08.972Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -15,6 +15,39 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>解锁网易云音乐灰色无版权歌曲</title>
+    <link href="https://www.litreily.top/2020/05/03/netease/"/>
+    <id>https://www.litreily.top/2020/05/03/netease/</id>
+    <published>2020-05-03T01:11:39.000Z</published>
+    <updated>2020-05-03T02:17:08.972Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;由于版权之争，网易云的很多歌曲都灰掉并且无法播放了，想要使其可以播放还是有办法的，万能的Google和Github让我找到了&lt;a href=&quot;https://github.com/nondanee/UnblockNeteaseMusic&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;答案&lt;/a&gt;，直接上享用方法吧。&lt;/p&gt;
+&lt;h2 id=&quot;前提条件&quot;&gt;&lt;a href=&quot;#前提条件&quot; class=&quot;headerlink&quot; title=&quot;前提条件&quot;&gt;&lt;/a&gt;前提条件&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;一个可以远程访问的服务器，比如vps，阿里云、腾讯云、…&lt;/li&gt;
+&lt;li&gt;如果没有服务器，只能寻找别人搭建好的服务&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;搭建服务&quot;&gt;&lt;a href=&quot;#搭建服务&quot; class=&quot;headerlink&quot; title=&quot;搭建服务&quot;&gt;&lt;/a&gt;搭建服务&lt;/h2&gt;&lt;p&gt;在服务器端，首先安装依赖的工具&lt;code&gt;npx&lt;/code&gt;，如果有则忽略&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;zsh&quot;&gt;sudo apt install npm
+sudo npm i -g npx
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;然后clone项目UnblockNeteaseMusic.git到本地&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;zsh&quot;&gt;git clon
+      
+    
+    </summary>
+    
+      <category term="Media" scheme="https://www.litreily.top/categories/Media/"/>
+    
+    
+      <category term="music" scheme="https://www.litreily.top/tags/music/"/>
+    
+  </entry>
   
   <entry>
     <title>lftp获取FTP Server端最新文件</title>
@@ -381,9 +414,9 @@ CPU: 2 PID: 9465 Comm: swconfig Tainted: P        W    3.14.77 #1
       <category term="嵌入式" scheme="https://www.litreily.top/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/"/>
     
     
-      <category term="ftrace" scheme="https://www.litreily.top/tags/ftrace/"/>
-    
       <category term="openwrt" scheme="https://www.litreily.top/tags/openwrt/"/>
+    
+      <category term="ftrace" scheme="https://www.litreily.top/tags/ftrace/"/>
     
   </entry>
   
@@ -878,41 +911,6 @@ rt_sigprocmask(SIG_UNBLOCK, [ABRT], NULL, 8)
     
     
       <category term="pug" scheme="https://www.litreily.top/tags/pug/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Python实现快排及其可视化</title>
-    <link href="https://www.litreily.top/2018/07/07/quick-sort/"/>
-    <id>https://www.litreily.top/2018/07/07/quick-sort/</id>
-    <published>2018-07-07T11:00:00.000Z</published>
-    <updated>2020-02-26T13:11:56.208Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;最近装了个&lt;code&gt;Anaconda&lt;/code&gt;，准备学习一下数据可视化。本着三天打鱼两天装死的心态，重新抱起崭新的&lt;strong&gt;算法&lt;/strong&gt;书，认真学起了快排算法。学完后用&lt;code&gt;Python&lt;/code&gt;实现了一遍基本的快排，然后使用&lt;code&gt;matplotlib&lt;/code&gt;进行动态绘图，最后使用&lt;code&gt;imageio&lt;/code&gt;生成GIF图片。谨以此文以记之！&lt;/p&gt;
-&lt;h2 id=&quot;快排基本原理&quot;&gt;&lt;a href=&quot;#快排基本原理&quot; class=&quot;headerlink&quot; title=&quot;快排基本原理&quot;&gt;&lt;/a&gt;快排基本原理&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;快排&lt;/strong&gt;采用和归并排序相同的分而治之的思想，将待排序数组分成左右两个子数组，对两部分子数组独立排序。当子数组均有序时，整个数组也就有序了。&lt;/p&gt;
-&lt;p&gt;排序步骤如下：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;将原始数组&lt;code&gt;data&lt;/code&gt;随机打乱，以消除对输入的依赖（本步可选）&lt;/li&gt;
-&lt;li&gt;选择数组的首个元素&lt;code&gt;data[0]&lt;/code&gt;作为切分元素&lt;code&gt;v&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;切分数组&lt;ul&gt;
-&lt;li&gt;从左往右找到第一个大于切分元素&lt;code&gt;v&lt;/code&gt;的元素&lt;code&gt;data[i]&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;从右到左找到第一
-      
-    
-    </summary>
-    
-      <category term="算法" scheme="https://www.litreily.top/categories/%E7%AE%97%E6%B3%95/"/>
-    
-    
-      <category term="algorithm" scheme="https://www.litreily.top/tags/algorithm/"/>
-    
-      <category term="sort" scheme="https://www.litreily.top/tags/sort/"/>
-    
-      <category term="visualization" scheme="https://www.litreily.top/tags/visualization/"/>
     
   </entry>
   
