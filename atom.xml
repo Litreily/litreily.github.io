@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2020-05-03T02:17:08.972Z</updated>
+  <updated>2020-05-03T10:42:22.813Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -15,6 +15,40 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Python之markdown转Chrome收藏夹</title>
+    <link href="https://www.litreily.top/2020/05/03/md2bm/"/>
+    <id>https://www.litreily.top/2020/05/03/md2bm/</id>
+    <published>2020-05-03T08:49:25.000Z</published>
+    <updated>2020-05-03T10:42:22.813Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;网上可以搜到很多chrome收藏夹转markdown文档的方法，却鲜有markdown文档转为Chrome收藏夹的方法，不过这种需求也确实不多。我之所以用到，是因为平常会用markdown文档收集一些网站，现在想要转换为Chrome收藏夹，方便访问。&lt;/p&gt;
+&lt;h2 id=&quot;思路&quot;&gt;&lt;a href=&quot;#思路&quot; class=&quot;headerlink&quot; title=&quot;思路&quot;&gt;&lt;/a&gt;思路&lt;/h2&gt;&lt;p&gt;要实现这个功能倒也不难，因为Chrome的收藏夹本质上也是一个html文件，只不过有其固定的DOM结构而已，所以我们的实现思路很简单。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;导出Chrome已有的收藏夹&lt;/li&gt;
+&lt;li&gt;分析导出得到的html文件格式&lt;/li&gt;
+&lt;li&gt;将自己需要转成Chrome收藏夹的markdown按相同格式转换为html文件&lt;/li&gt;
+&lt;li&gt;在chrome中导入生成后的收藏夹&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;收藏夹的DOM结构&quot;&gt;&lt;a href=&quot;#收藏夹的DOM结构&quot; class=&quot;headerlink&quot; title=&quot;收藏夹的DOM结构&quot;&gt;&lt;/a&gt;收藏夹的DOM结构&lt;/h2&gt;&lt;p&gt;我导出了自己的收藏夹，取出其中一小部分为例进行分析，比较局部是可以反映整体的。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;html&quot;&gt;&amp;lt;!DOCTYPE NETSCAPE-B
+      
+    
+    </summary>
+    
+      <category term="Python" scheme="https://www.litreily.top/categories/Python/"/>
+    
+    
+      <category term="markdown" scheme="https://www.litreily.top/tags/markdown/"/>
+    
+      <category term="chrome" scheme="https://www.litreily.top/tags/chrome/"/>
+    
+  </entry>
   
   <entry>
     <title>解锁网易云音乐灰色无版权歌曲</title>
@@ -119,6 +153,33 @@ EOF
   </entry>
   
   <entry>
+    <title>使用油猴脚本批量下载canvas图片</title>
+    <link href="https://www.litreily.top/2020/03/15/canvas-dl/"/>
+    <id>https://www.litreily.top/2020/03/15/canvas-dl/</id>
+    <published>2020-03-15T09:01:33.000Z</published>
+    <updated>2020-04-13T13:12:50.031Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;女友最近在网上下载一些北大网盘的pdf&lt;a href=&quot;https://disk.pku.edu.cn/#/link/3A7748E0466521E3E68A0CBA4C24DE20?gns=AE26ACF837E24D51B1EC40E0A80A5D23%2F7F0E54D7D92343B1B62031B1C41F2280&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;文档&lt;/a&gt;，结果发现没有下载接口，另存为也只能存储单张图片。找我帮忙，这时候发现程序员男票的好处了哈。&lt;/p&gt;
+&lt;h2 id=&quot;分析页面&quot;&gt;&lt;a href=&quot;#分析页面&quot; class=&quot;headerlink&quot; title=&quot;分析页面&quot;&gt;&lt;/a&gt;分析页面&lt;/h2&gt;&lt;p&gt;一开始想着使用Chrome调试工具看下pdf链接，发现这个网盘居然不是直接获取的pdf文件，而是使用js脚本动态渲染生成的，涨知识了。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/canvas/pdf-js.png&quot; alt=&quot;pdf-combine js&quot;&gt;&lt;/p&gt;
+&lt;p&gt;那看看是否可以以图片形式批量下载呢，结果查看pdf单页的html结构发现，这居然是个canvas!!!还不是普通图片，而是画布。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/canvas/canvas.png&quot; alt=&quot;cancvs&quot;&gt;&lt;/p
+      
+    
+    </summary>
+    
+      <category term="杂物柜" scheme="https://www.litreily.top/categories/%E6%9D%82%E7%89%A9%E6%9F%9C/"/>
+    
+    
+      <category term="tampermonkey" scheme="https://www.litreily.top/tags/tampermonkey/"/>
+    
+  </entry>
+  
+  <entry>
     <title>NBNS客户端的C语言实现</title>
     <link href="https://www.litreily.top/2020/03/15/nbns_code/"/>
     <id>https://www.litreily.top/2020/03/15/nbns_code/</id>
@@ -146,33 +207,6 @@ EOF
     
     
       <category term="C/C++" scheme="https://www.litreily.top/tags/C-C/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>使用油猴脚本批量下载canvas图片</title>
-    <link href="https://www.litreily.top/2020/03/15/canvas-dl/"/>
-    <id>https://www.litreily.top/2020/03/15/canvas-dl/</id>
-    <published>2020-03-15T09:01:33.000Z</published>
-    <updated>2020-04-13T13:12:50.031Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;女友最近在网上下载一些北大网盘的pdf&lt;a href=&quot;https://disk.pku.edu.cn/#/link/3A7748E0466521E3E68A0CBA4C24DE20?gns=AE26ACF837E24D51B1EC40E0A80A5D23%2F7F0E54D7D92343B1B62031B1C41F2280&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;文档&lt;/a&gt;，结果发现没有下载接口，另存为也只能存储单张图片。找我帮忙，这时候发现程序员男票的好处了哈。&lt;/p&gt;
-&lt;h2 id=&quot;分析页面&quot;&gt;&lt;a href=&quot;#分析页面&quot; class=&quot;headerlink&quot; title=&quot;分析页面&quot;&gt;&lt;/a&gt;分析页面&lt;/h2&gt;&lt;p&gt;一开始想着使用Chrome调试工具看下pdf链接，发现这个网盘居然不是直接获取的pdf文件，而是使用js脚本动态渲染生成的，涨知识了。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/assets/canvas/pdf-js.png&quot; alt=&quot;pdf-combine js&quot;&gt;&lt;/p&gt;
-&lt;p&gt;那看看是否可以以图片形式批量下载呢，结果查看pdf单页的html结构发现，这居然是个canvas!!!还不是普通图片，而是画布。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/assets/canvas/canvas.png&quot; alt=&quot;cancvs&quot;&gt;&lt;/p
-      
-    
-    </summary>
-    
-      <category term="杂物柜" scheme="https://www.litreily.top/categories/%E6%9D%82%E7%89%A9%E6%9F%9C/"/>
-    
-    
-      <category term="tampermonkey" scheme="https://www.litreily.top/tags/tampermonkey/"/>
     
   </entry>
   
@@ -888,29 +922,6 @@ rt_sigprocmask(SIG_UNBLOCK, [ABRT], NULL, 8)
       <category term="C/C++" scheme="https://www.litreily.top/tags/C-C/"/>
     
       <category term="linux" scheme="https://www.litreily.top/tags/linux/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>网页模板pug基本语法</title>
-    <link href="https://www.litreily.top/2018/08/31/pug-synax/"/>
-    <id>https://www.litreily.top/2018/08/31/pug-synax/</id>
-    <published>2018-08-31T12:24:10.000Z</published>
-    <updated>2020-02-26T13:11:56.209Z</updated>
-    
-    <summary type="html">
-    
-      &lt;blockquote&gt;
-&lt;p&gt;Pug – robust, elegant, feature rich template engine for Node.js&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;&lt;code&gt;pug&lt;/code&gt;原名&lt;code&gt;jade&lt;/code&gt;,因版权问题更名为&lt;code&gt;pug&lt;/code&gt;,即哈巴狗。与&lt;code&gt;hexo&lt;/code&gt;默认模块&lt;code&gt;ejs&lt;/code&gt;一样，&lt;code&gt;pug&lt;/code&gt;也是一个模板引擎，可用于快速的网站开发，当然也可以用于静态博客网站的设计。本站点现时所用主题&lt;code&gt;manupassant&lt;/code&gt;也使用了&lt;code&gt;pug&lt;/code&gt;。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="Web" scheme="https://www.litreily.top/categories/Web/"/>
-    
-    
-      <category term="pug" scheme="https://www.litreily.top/tags/pug/"/>
     
   </entry>
   

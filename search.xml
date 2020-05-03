@@ -4,6 +4,262 @@
   
     
     <entry>
+      <title><![CDATA[Python之markdown转Chrome收藏夹]]></title>
+      <url>https://www.litreily.top/2020/05/03/md2bm/</url>
+      <content type="html"><![CDATA[<p>网上可以搜到很多chrome收藏夹转markdown文档的方法，却鲜有markdown文档转为Chrome收藏夹的方法，不过这种需求也确实不多。我之所以用到，是因为平常会用markdown文档收集一些网站，现在想要转换为Chrome收藏夹，方便访问。</p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>要实现这个功能倒也不难，因为Chrome的收藏夹本质上也是一个html文件，只不过有其固定的DOM结构而已，所以我们的实现思路很简单。</p>
+<ol>
+<li>导出Chrome已有的收藏夹</li>
+<li>分析导出得到的html文件格式</li>
+<li>将自己需要转成Chrome收藏夹的markdown按相同格式转换为html文件</li>
+<li>在chrome中导入生成后的收藏夹</li>
+</ol>
+<h2 id="收藏夹的DOM结构"><a href="#收藏夹的DOM结构" class="headerlink" title="收藏夹的DOM结构"></a>收藏夹的DOM结构</h2><p>我导出了自己的收藏夹，取出其中一小部分为例进行分析，比较局部是可以反映整体的。</p>
+<pre><code class="html">&lt;!DOCTYPE NETSCAPE-Bookmark-file-1&gt;
+&lt;!-- This is an automatically generated file.
+     It will be read and overwritten.
+     DO NOT EDIT! --&gt;
+&lt;META HTTP-EQUIV=&quot;Content-Type&quot; CONTENT=&quot;text/html; charset=UTF-8&quot;&gt;
+&lt;TITLE&gt;Bookmarks&lt;/TITLE&gt;
+&lt;H1&gt;Bookmarks&lt;/H1&gt;
+&lt;DL&gt;&lt;p&gt;
+    &lt;DT&gt;&lt;H3 ADD_DATE=&quot;1499940499&quot; LAST_MODIFIED=&quot;1573567059&quot; PERSONAL_TOOLBAR_FOLDER=&quot;true&quot;&gt;Bookmarks bar&lt;/H3&gt;
+    &lt;DL&gt;&lt;p&gt;
+        &lt;DT&gt;&lt;H3 ADD_DATE=&quot;1481956366&quot; LAST_MODIFIED=&quot;1565750292&quot;&gt;不常用&lt;/H3&gt;
+        &lt;DL&gt;&lt;p&gt;
+            &lt;DT&gt;&lt;H3 ADD_DATE=&quot;1460906121&quot; LAST_MODIFIED=&quot;1582357904&quot;&gt;设计&lt;/H3&gt;
+            &lt;DL&gt;&lt;p&gt;
+                &lt;DT&gt;&lt;A HREF=&quot;https://w3layouts.com/&quot; ADD_DATE=&quot;1460906098&quot; ICON=&quot;data:image/png;base64,&quot;&gt;Free Responsive Mobile Website Templates Designs - w3layouts.com&lt;/A&gt;
+                &lt;DT&gt;&lt;A HREF=&quot;http://www.hightopo.com/demos/index.html&quot; ADD_DATE=&quot;1472525305&quot; ICON=&quot;data:image/png;base64,&quot;&gt;Hightopo - Everything you need to create cutting-edge 2D and 3D visualization&lt;/A&gt;
+                &lt;DT&gt;&lt;A HREF=&quot;http://jekyllthemes.org/&quot; ADD_DATE=&quot;1459860502&quot;&gt;Jekyll Themes&lt;/A&gt;
+            &lt;/DL&gt;&lt;p&gt;
+            &lt;DT&gt;&lt;H3 ADD_DATE=&quot;1468076322&quot; LAST_MODIFIED=&quot;1538094516&quot;&gt;算法&lt;/H3&gt;
+            &lt;DL&gt;&lt;p&gt;
+                &lt;DT&gt;&lt;A HREF=&quot;http://www.pythontip.com/acm/problemCategory&quot; ADD_DATE=&quot;1468076332&quot; ICON=&quot;data:image/png;base64,&quot;&gt;各大OJ题目分类&lt;/A&gt;
+                &lt;DT&gt;&lt;A HREF=&quot;http://www.acmerblog.com/&quot; ADD_DATE=&quot;1468075312&quot; ICON=&quot;data:image/png;base64,&quot;&gt;Acm之家&lt;/A&gt;
+            &lt;/DL&gt;&lt;p&gt;
+            &lt;DT&gt;&lt;H3 ADD_DATE=&quot;1550926992&quot; LAST_MODIFIED=&quot;1582961771&quot;&gt;图标&lt;/H3&gt;
+            &lt;DL&gt;&lt;p&gt;
+                &lt;DT&gt;&lt;A HREF=&quot;https://www.emojicopy.com/&quot; ADD_DATE=&quot;1550926923&quot; ICON=&quot;data:image/png;base64,&quot;&gt;EmojiCopy | Simple emoji copy and paste by EmojiOne™&lt;/A&gt;
+                &lt;DT&gt;&lt;A HREF=&quot;https://www.webfx.com/tools/emoji-cheat-sheet/&quot; ADD_DATE=&quot;1582961771&quot; ICON=&quot;data:image/png;base64,&quot;&gt;🎁 Emoji cheat sheet for GitHub, Basecamp, Slack &amp;amp; more&lt;/A&gt;
+            &lt;/DL&gt;&lt;p&gt;
+            &lt;DT&gt;&lt;H3 ADD_DATE=&quot;1412991964&quot; LAST_MODIFIED=&quot;1586250269&quot;&gt;论坛&lt;/H3&gt;
+            &lt;DL&gt;&lt;p&gt;
+                &lt;DT&gt;&lt;A HREF=&quot;https://www.qt.io/&quot; ADD_DATE=&quot;1472370392&quot; ICON=&quot;data:image/png;base64,&quot;&gt;Qt&lt;/A&gt;
+                &lt;DT&gt;&lt;A HREF=&quot;https://freessl.cn/&quot; ADD_DATE=&quot;1566824588&quot; ICON=&quot;data:image/png;base64,&quot;&gt;FreeSSL首页 - FreeSSL.cn 一个申请免费HTTPS证书的网站&lt;/A&gt;
+            &lt;/DL&gt;&lt;p&gt;
+        &lt;/DL&gt;&lt;p&gt;
+        &lt;DT&gt;&lt;H3 ADD_DATE=&quot;1538059196&quot; LAST_MODIFIED=&quot;1569229251&quot;&gt;wiki&lt;/H3&gt;
+        &lt;DL&gt;&lt;p&gt;
+            &lt;DT&gt;&lt;A HREF=&quot;https://code.woboq.org/linux/linux/&quot; ADD_DATE=&quot;1528874869&quot; ICON=&quot;data:image/png;base64,&quot;&gt;linux/linux/ Source Tree - Woboq Code Browser&lt;/A&gt;
+            &lt;DT&gt;&lt;A HREF=&quot;https://www.geeksforgeeks.org/c-programming-language/&quot; ADD_DATE=&quot;1569229251&quot;&gt;C Programming Language - GeeksforGeeks&lt;/A&gt;
+        &lt;/DL&gt;&lt;p&gt;
+        &lt;DT&gt;&lt;A HREF=&quot;http://translate.google.cn/&quot; ADD_DATE=&quot;1446427265&quot; ICON=&quot;data:image/png;base64,&quot;&gt;&lt;/A&gt;
+        &lt;DT&gt;&lt;A HREF=&quot;http://www.litreily.top/&quot; ADD_DATE=&quot;1481438786&quot; ICON=&quot;data:image/png;base64,&quot;&gt;&lt;/A&gt;
+    &lt;/DL&gt;&lt;p&gt;
+&lt;/DL&gt;&lt;p&gt;
+</code></pre>
+<p>以上DOM结构中，每条收藏都有一个<code>&lt;A&gt;</code>标签，该标签有一个base64值对应的是base64编码后的图标，也就是每个收藏的图标，这个不是必须的，为了方便阅读，我将其删除了，并不影响。</p>
+<p>如果使用上面的html文件导入chrome的话，是下面这样的。</p>
+<p><img src="/assets/chrome/example.png" alt="chrome bookmark"></p>
+<p>注意其中两个收藏（谷歌翻译和我的博客主页）没有显示描述信息，这个在chrome中是允许的，因为根据图标就能知道这是什么站点。</p>
+<p>好啦，对比DOM结构和在收藏夹的展示，不难发现规律：</p>
+<ol>
+<li>所有收藏夹中的文件夹无论在哪一个层级，都对应DOM中的一个<code>&lt;DT&gt;&lt;H3&gt;</code>标签</li>
+<li><code>&lt;H3&gt;</code>标签包含属性：<code>ADD_DATE</code>, <code>LAST_MODIFIED</code></li>
+<li>收藏夹中文件夹可以嵌套</li>
+<li>每个<code>&lt;DT&gt;&lt;H3&gt;</code>标签都紧随着一组<code>&lt;DL&gt;&lt;p&gt;</code></li>
+<li>每个<code>&lt;DL&gt;&lt;p&gt;</code>里都包含一个收藏列表</li>
+<li>每条收藏都以<code>&lt;DT&gt;&lt;A&gt;</code>标签组合，对应收藏的链接</li>
+<li><code>&lt;A&gt;</code>标签包含属性：<code>HREF</code>,<code>ADD_DATE</code>,<code>ICON</code></li>
+</ol>
+<p>到此就完成了对收藏夹的分析，下面就可以按照这个格式将markdown转换成相应的html</p>
+<h2 id="markdown转html"><a href="#markdown转html" class="headerlink" title="markdown转html"></a>markdown转html</h2><p>markdown文档格式很简单，同样举例说明，下面是用markdown格式编写的收藏夹。</p>
+<pre><code class="md"># 收藏夹(Favorites)
+
+## 常用
+
+- [谷歌翻译](http://translate.google.cn/)
+- [litreily](http://www.litreily.top/)
+- [Notes](https://litreily.gitbook.io/notes/content/)
+- [smslit](http://www.smslit.top/)
+- [github](https://github.com/)
+- [coding](https://coding.net/user)
+
+## 论坛(forum)
+
+- [Coding 博客](https://blog.coding.net/)
+- [图灵社区](http://www.ituring.com.cn/)
+- [电子发烧友](http://www.elecfans.com/)
+
+## 编程(Programming)
+
+### 算法(Algorithm)
+
+- [Acm之家](http://www.acmerblog.com/)
+- [各大OJ题目分类](http://www.pythontip.com/acm/problemCategory)
+
+### linux
+
+- [linux - Elixir - Free Electrons](http://elixir.free-electrons.com/linux/latest/source)
+</code></pre>
+<p>我们使用Python对其逐行读取处理，处理策略如下：</p>
+<ol>
+<li>新建html文件favorites.html，添加HTML头部信息</li>
+<li>获取当前系统时间作为收藏夹中所有的<code>LAST_MODIFIED</code>和<code>ADD_DATE</code></li>
+<li>将所有以<code>#</code>开头的视为文件夹，添加<code>&lt;DT&gt;&lt;H3&gt;</code>标签，设置时间戳和文件夹名称</li>
+<li>在<code>&lt;DT&gt;&lt;H3&gt;</code>标签后紧跟<code>&lt;DL&gt;&lt;p&gt;</code>标签</li>
+<li>将所有链接替换为<code>&lt;DT&gt;&lt;A&gt;</code>格式，这个需要用到python的正则匹配和替换，非常方便</li>
+<li>在合适的位置添加<code>&lt;/DL&gt;&lt;p&gt;</code>标签，用以封装<code>&lt;DL&gt;&lt;p&gt;</code></li>
+</ol>
+<p>使用该策略编写的Python脚本如下：</p>
+<pre><code class="python">#!/usr/bin/env python3
+# -*- coding:utf-8 -*-
+# convert markdown to chrome bookmarks
+# @author: litreily
+# @date: 2020-04-25
+
+import sys
+import time
+import re
+
+
+TIMESTAMP = int(time.time())
+
+HTML_HEAD = &quot;&quot;&quot;\
+&lt;!DOCTYPE NETSCAPE-Bookmark&gt;
+&lt;!-- This is an automatically generated file.
+     It will be read and overwritten.
+     DO NOT EDIT! --&gt;
+&lt;META HTTP-EQUIV=&quot;Content-Type&quot; CONTENT=&quot;text/html; charset=UTF-8&quot;&gt;
+&lt;TITLE&gt;Bookmarks&lt;/TITLE&gt;
+&lt;H1&gt;Bookmarks&lt;/H1&gt;
+&lt;DL&gt;&lt;p&gt;
+&quot;&quot;&quot;.format(TIMESTAMP)
+HTML_END = &quot;&quot;&quot;&lt;/DL&gt;&lt;p&gt;\n&quot;&quot;&quot;
+
+GROUP_HEAD = &quot;&quot;&quot;\t&lt;DT&gt;&lt;H3 ADD_DATE=&quot;{ts}&quot; LAST_MODIFIED=&quot;{ts}&quot;&gt;{title}&lt;/H3&gt;
+\t&lt;DL&gt;&lt;p&gt;
+&quot;&quot;&quot;
+GROUP_END = &quot;\t&lt;/DL&gt;&lt;p&gt;\n&quot;
+
+MASK = &quot;&quot;&quot;\t&lt;DT&gt;\
+&lt;A HREF=&quot;{link}&quot; ADD_DATE=&quot;{ts}&quot; ICON=&quot;data:image/png;base64,{icon}&quot;&gt;{title}&lt;/A&gt;
+&quot;&quot;&quot;
+
+
+def main(input):
+    with open(input, &#39;r&#39;) as f:
+        lists = f.readlines()
+
+    # open html file to write into
+    output = open(&#39;favorites.html&#39;, &#39;w&#39;)
+    output.write(HTML_HEAD)
+
+    group_re = re.compile(r&#39;^(#+) +(.*)$&#39;) # eg. ## network
+    mask_re = re.compile(r&#39;\[(.*)\]\((.*)\)&#39;) # eg. [baidu](https://www.baidu.com)
+
+    pre_H_level = 0 # previous Header level, H2 or H3 or ...
+    for line in lists:
+        line = line.strip()
+
+        m = mask_re.search(line)
+        if m:
+            # find link
+            output.write(MASK.format(link=m.group(2), ts=TIMESTAMP, icon=None, title=m.group(1)))
+        else:
+            m = group_re.search(line)
+            if m:
+                # find header
+                cur_H_level = len(m.group(1)) # current Header level
+                if cur_H_level &lt;= pre_H_level:
+                    for _ in range(pre_H_level - cur_H_level + 1):
+                        output.write(GROUP_END)
+                pre_H_level = cur_H_level
+                output.write(GROUP_HEAD.format(ts=TIMESTAMP, title=m.group(2)))
+    output.write(HTML_END)
+
+if __name__ == &quot;__main__&quot;:
+    if len(sys.argv) &lt; 2:
+        print(&#39;No input files.&#39;)
+        sys.exit(1)
+    main(sys.argv[1])
+</code></pre>
+<p>这个脚本唯一需要注意的一点是：什么时候添加<code>&lt;DL&gt;&lt;p&gt;</code>对应的<code>&lt;/DL&gt;&lt;p&gt;</code>闭合标签？如果在错误位置添加了或者是没添加，都会导致收藏夹嵌套顺序错乱。</p>
+<p>对此我的思路是：对比前后两次markdown中读取到的HEADER层级，比如H2对应2，H3对应3. 前一次<code>pre_H_level</code>，当前<code>cur_H_level</code>，如果<code>cur_H_level</code> &lt;= <code>pre_H_level</code>就需要添加，而且添加个数等于前后两数之差加1.</p>
+<p>举例说明：</p>
+<pre><code class="md">## H2_1
+...
+### H3        # pre: H2, cur: H3. cur &gt; pre, 不加
+...
+## H2_2       # pre: H3, cur: H2, cur &lt; pre, 加(3-2+1)=2次
+...
+## H2_3       # pre: H2, cur: H2, cur = pre, 加(2-2+1)=1次
+</code></pre>
+<p>当然，这种做法的前提是markdown符合语法要求。</p>
+<h2 id="导入chrome"><a href="#导入chrome" class="headerlink" title="导入chrome"></a>导入chrome</h2><p>使用以上脚本将markdown转换为html</p>
+<pre><code class="sh">./md2bm test.md
+</code></pre>
+<pre><code class="html">&lt;!DOCTYPE NETSCAPE-Bookmark&gt;
+&lt;!-- This is an automatically generated file.
+     It will be read and overwritten.
+     DO NOT EDIT! --&gt;
+&lt;META HTTP-EQUIV=&quot;Content-Type&quot; CONTENT=&quot;text/html; charset=UTF-8&quot;&gt;
+&lt;TITLE&gt;Bookmarks&lt;/TITLE&gt;
+&lt;H1&gt;Bookmarks&lt;/H1&gt;
+&lt;DL&gt;&lt;p&gt;
+    &lt;DT&gt;&lt;H3 ADD_DATE=&quot;1588501602&quot; LAST_MODIFIED=&quot;1588501602&quot;&gt;收藏夹(Favorites)&lt;/H3&gt;
+    &lt;DL&gt;&lt;p&gt;
+    &lt;DT&gt;&lt;H3 ADD_DATE=&quot;1588501602&quot; LAST_MODIFIED=&quot;1588501602&quot;&gt;常用&lt;/H3&gt;
+    &lt;DL&gt;&lt;p&gt;
+    &lt;DT&gt;&lt;A HREF=&quot;http://translate.google.cn/&quot; ADD_DATE=&quot;1588501602&quot; ICON=&quot;data:image/png;base64,None&quot;&gt;谷歌翻译&lt;/A&gt;
+    &lt;DT&gt;&lt;A HREF=&quot;http://www.litreily.top/&quot; ADD_DATE=&quot;1588501602&quot; ICON=&quot;data:image/png;base64,None&quot;&gt;litreily&lt;/A&gt;
+    &lt;DT&gt;&lt;A HREF=&quot;https://litreily.gitbook.io/notes/content/&quot; ADD_DATE=&quot;1588501602&quot; ICON=&quot;data:image/png;base64,None&quot;&gt;Notes&lt;/A&gt;
+    &lt;DT&gt;&lt;A HREF=&quot;http://www.smslit.top/&quot; ADD_DATE=&quot;1588501602&quot; ICON=&quot;data:image/png;base64,None&quot;&gt;smslit&lt;/A&gt;
+    &lt;DT&gt;&lt;A HREF=&quot;https://github.com/&quot; ADD_DATE=&quot;1588501602&quot; ICON=&quot;data:image/png;base64,None&quot;&gt;github&lt;/A&gt;
+    &lt;DT&gt;&lt;A HREF=&quot;https://coding.net/user&quot; ADD_DATE=&quot;1588501602&quot; ICON=&quot;data:image/png;base64,None&quot;&gt;coding&lt;/A&gt;
+    &lt;/DL&gt;&lt;p&gt;
+    &lt;DT&gt;&lt;H3 ADD_DATE=&quot;1588501602&quot; LAST_MODIFIED=&quot;1588501602&quot;&gt;论坛(forum)&lt;/H3&gt;
+    &lt;DL&gt;&lt;p&gt;
+    &lt;DT&gt;&lt;A HREF=&quot;https://blog.coding.net/&quot; ADD_DATE=&quot;1588501602&quot; ICON=&quot;data:image/png;base64,None&quot;&gt;Coding 博客&lt;/A&gt;
+    &lt;DT&gt;&lt;A HREF=&quot;http://www.ituring.com.cn/&quot; ADD_DATE=&quot;1588501602&quot; ICON=&quot;data:image/png;base64,None&quot;&gt;图灵社区&lt;/A&gt;
+    &lt;DT&gt;&lt;A HREF=&quot;http://www.elecfans.com/&quot; ADD_DATE=&quot;1588501602&quot; ICON=&quot;data:image/png;base64,None&quot;&gt;电子发烧友&lt;/A&gt;
+    &lt;/DL&gt;&lt;p&gt;
+    &lt;DT&gt;&lt;H3 ADD_DATE=&quot;1588501602&quot; LAST_MODIFIED=&quot;1588501602&quot;&gt;编程(Programming)&lt;/H3&gt;
+    &lt;DL&gt;&lt;p&gt;
+    &lt;DT&gt;&lt;H3 ADD_DATE=&quot;1588501602&quot; LAST_MODIFIED=&quot;1588501602&quot;&gt;算法(Algorithm)&lt;/H3&gt;
+    &lt;DL&gt;&lt;p&gt;
+    &lt;DT&gt;&lt;A HREF=&quot;http://www.acmerblog.com/&quot; ADD_DATE=&quot;1588501602&quot; ICON=&quot;data:image/png;base64,None&quot;&gt;Acm之家&lt;/A&gt;
+    &lt;DT&gt;&lt;A HREF=&quot;http://www.pythontip.com/acm/problemCategory&quot; ADD_DATE=&quot;1588501602&quot; ICON=&quot;data:image/png;base64,None&quot;&gt;各大OJ题目分类&lt;/A&gt;
+    &lt;/DL&gt;&lt;p&gt;
+    &lt;DT&gt;&lt;H3 ADD_DATE=&quot;1588501602&quot; LAST_MODIFIED=&quot;1588501602&quot;&gt;linux&lt;/H3&gt;
+    &lt;DL&gt;&lt;p&gt;
+    &lt;DT&gt;&lt;A HREF=&quot;http://elixir.free-electrons.com/linux/latest/source&quot; ADD_DATE=&quot;1588501602&quot; ICON=&quot;data:image/png;base64,None&quot;&gt;linux - Elixir - Free Electrons&lt;/A&gt;
+&lt;/DL&gt;&lt;p&gt;
+</code></pre>
+<p>最后导入Chrome看下，Chrome会添加一个新的文件夹<strong>已导入</strong>，我们可以把子文件夹拖出来就ok了，再看看图标，如果最近有访问过，其实不加icon的base64信息也是可以显示出来的，就算现在没有，以后只要访问过一次就会自动更新，这点倒是有点像交换机的学习机制。</p>
+<p><img src="/assets/chrome/favorite.png" alt="favorites"></p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>这个脚本也已经更新到了<a href="https://github.com/Litreily/Python-scripts/blob/master/md2bm/mb2bm.py" target="_blank" rel="noopener">GitHub Litreily/Python-scripts</a>，欢迎有需要的小伙伴们使用。</p>
+]]></content>
+      
+        <categories>
+            
+            <category> Python </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> markdown </tag>
+            
+            <tag> chrome </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[解锁网易云音乐灰色无版权歌曲]]></title>
       <url>https://www.litreily.top/2020/05/03/netease/</url>
       <content type="html"><![CDATA[<p>由于版权之争，网易云的很多歌曲都灰掉并且无法播放了，想要使其可以播放还是有办法的，万能的Google和Github让我找到了<a href="https://github.com/nondanee/UnblockNeteaseMusic" target="_blank" rel="noopener">答案</a>，直接上享用方法吧。</p>
@@ -242,6 +498,47 @@ EOF
             <tag> shell </tag>
             
             <tag> tftp </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[使用油猴脚本批量下载canvas图片]]></title>
+      <url>https://www.litreily.top/2020/03/15/canvas-dl/</url>
+      <content type="html"><![CDATA[<p>女友最近在网上下载一些北大网盘的pdf<a href="https://disk.pku.edu.cn/#/link/3A7748E0466521E3E68A0CBA4C24DE20?gns=AE26ACF837E24D51B1EC40E0A80A5D23%2F7F0E54D7D92343B1B62031B1C41F2280" target="_blank" rel="noopener">文档</a>，结果发现没有下载接口，另存为也只能存储单张图片。找我帮忙，这时候发现程序员男票的好处了哈。</p>
+<h2 id="分析页面"><a href="#分析页面" class="headerlink" title="分析页面"></a>分析页面</h2><p>一开始想着使用Chrome调试工具看下pdf链接，发现这个网盘居然不是直接获取的pdf文件，而是使用js脚本动态渲染生成的，涨知识了。</p>
+<p><img src="/assets/canvas/pdf-js.png" alt="pdf-combine js"></p>
+<p>那看看是否可以以图片形式批量下载呢，结果查看pdf单页的html结构发现，这居然是个canvas!!!还不是普通图片，而是画布。</p>
+<p><img src="/assets/canvas/canvas.png" alt="cancvs"></p>
+<h2 id="下载插件"><a href="#下载插件" class="headerlink" title="下载插件"></a>下载插件</h2><p>没关系，canvas什么的也不是难事，万能的油猴插件总会有解决方案的，果不其然让我找到个专门用于下载svg, canvas的油猴插件↓</p>
+<ul>
+<li><a href="https://greasyfork.org/zh-CN/scripts/383101-%E7%BD%91%E7%AB%99%E5%9B%BE%E7%89%87-%E8%83%8C%E6%99%AF%E5%9B%BE-svg-canvas-%E6%8A%93%E5%8F%96%E9%A2%84%E8%A7%88%E4%B8%8B%E8%BD%BD" target="_blank" rel="noopener">网站图片（背景图，svg，canvas）抓取预览下载</a></li>
+</ul>
+<h2 id="下载图片"><a href="#下载图片" class="headerlink" title="下载图片"></a>下载图片</h2><p>这正是我想要的，安装好后，使用起来非常简单，刷新要下载canvas图片的页面，在右下角有一个按钮<strong>自动获取图片</strong>。</p>
+<p><img src="/assets/canvas/check-tampermonkey.png" alt="js extension"></p>
+<p>点击之后开始扫描，注意下图中的数字并不代表实际的图片数量，不用理会。</p>
+<p><img src="/assets/canvas/scanning.png" alt="scanning"></p>
+<p>扫描完成后，可以限定图片大小，以滤除不符合要求的小图片，然后通过<strong>批量下载</strong>完成下载，对于数量较多的页面可能需要稍微等一小会，绝大部分情况是很快的。</p>
+<p><img src="/assets/canvas/download.png" alt="download"></p>
+<p>这样就下载完成啦。</p>
+<p><img src="/assets/canvas/downloaded.png" alt="downloaded"></p>
+<p>至于如何将批量转换为pdf，那方法就多啦，福昕pdf编辑器、ABBYY等等，这个留待下回再讲，哈哈。</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>经评论区大佬@Axun提醒，本文所爬网站的PDF文件是可以直接提取的，刷新页面过滤<code>Access</code>即可得到下面的链接，右键在新页面打开即可保存，然后添加扩展名即可。</p>
+<p><img src="/assets/canvas/pdf-source-file.png" alt="PDF source file"></p>
+<p>当然啦，本文提及的canvas图片下载方法也适用于其它网站，欢迎食用。</p>
+]]></content>
+      
+        <categories>
+            
+            <category> 杂物柜 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> tampermonkey </tag>
             
         </tags>
         
@@ -607,47 +904,6 @@ Not in presentation format
         <tags>
             
             <tag> C/C++ </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[使用油猴脚本批量下载canvas图片]]></title>
-      <url>https://www.litreily.top/2020/03/15/canvas-dl/</url>
-      <content type="html"><![CDATA[<p>女友最近在网上下载一些北大网盘的pdf<a href="https://disk.pku.edu.cn/#/link/3A7748E0466521E3E68A0CBA4C24DE20?gns=AE26ACF837E24D51B1EC40E0A80A5D23%2F7F0E54D7D92343B1B62031B1C41F2280" target="_blank" rel="noopener">文档</a>，结果发现没有下载接口，另存为也只能存储单张图片。找我帮忙，这时候发现程序员男票的好处了哈。</p>
-<h2 id="分析页面"><a href="#分析页面" class="headerlink" title="分析页面"></a>分析页面</h2><p>一开始想着使用Chrome调试工具看下pdf链接，发现这个网盘居然不是直接获取的pdf文件，而是使用js脚本动态渲染生成的，涨知识了。</p>
-<p><img src="/assets/canvas/pdf-js.png" alt="pdf-combine js"></p>
-<p>那看看是否可以以图片形式批量下载呢，结果查看pdf单页的html结构发现，这居然是个canvas!!!还不是普通图片，而是画布。</p>
-<p><img src="/assets/canvas/canvas.png" alt="cancvs"></p>
-<h2 id="下载插件"><a href="#下载插件" class="headerlink" title="下载插件"></a>下载插件</h2><p>没关系，canvas什么的也不是难事，万能的油猴插件总会有解决方案的，果不其然让我找到个专门用于下载svg, canvas的油猴插件↓</p>
-<ul>
-<li><a href="https://greasyfork.org/zh-CN/scripts/383101-%E7%BD%91%E7%AB%99%E5%9B%BE%E7%89%87-%E8%83%8C%E6%99%AF%E5%9B%BE-svg-canvas-%E6%8A%93%E5%8F%96%E9%A2%84%E8%A7%88%E4%B8%8B%E8%BD%BD" target="_blank" rel="noopener">网站图片（背景图，svg，canvas）抓取预览下载</a></li>
-</ul>
-<h2 id="下载图片"><a href="#下载图片" class="headerlink" title="下载图片"></a>下载图片</h2><p>这正是我想要的，安装好后，使用起来非常简单，刷新要下载canvas图片的页面，在右下角有一个按钮<strong>自动获取图片</strong>。</p>
-<p><img src="/assets/canvas/check-tampermonkey.png" alt="js extension"></p>
-<p>点击之后开始扫描，注意下图中的数字并不代表实际的图片数量，不用理会。</p>
-<p><img src="/assets/canvas/scanning.png" alt="scanning"></p>
-<p>扫描完成后，可以限定图片大小，以滤除不符合要求的小图片，然后通过<strong>批量下载</strong>完成下载，对于数量较多的页面可能需要稍微等一小会，绝大部分情况是很快的。</p>
-<p><img src="/assets/canvas/download.png" alt="download"></p>
-<p>这样就下载完成啦。</p>
-<p><img src="/assets/canvas/downloaded.png" alt="downloaded"></p>
-<p>至于如何将批量转换为pdf，那方法就多啦，福昕pdf编辑器、ABBYY等等，这个留待下回再讲，哈哈。</p>
-<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>经评论区大佬@Axun提醒，本文所爬网站的PDF文件是可以直接提取的，刷新页面过滤<code>Access</code>即可得到下面的链接，右键在新页面打开即可保存，然后添加扩展名即可。</p>
-<p><img src="/assets/canvas/pdf-source-file.png" alt="PDF source file"></p>
-<p>当然啦，本文提及的canvas图片下载方法也适用于其它网站，欢迎食用。</p>
-]]></content>
-      
-        <categories>
-            
-            <category> 杂物柜 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> tampermonkey </tag>
             
         </tags>
         
@@ -9237,9 +9493,9 @@ Infos:File-main.c, Func-main, Line-14
             
             <tag> ubuntu </tag>
             
-            <tag> makefile </tag>
-            
             <tag> shell </tag>
+            
+            <tag> makefile </tag>
             
         </tags>
         
@@ -10227,9 +10483,9 @@ root: /
         
         <tags>
             
-            <tag> jekyll </tag>
-            
             <tag> hexo </tag>
+            
+            <tag> jekyll </tag>
             
             <tag> log </tag>
             
@@ -11028,9 +11284,9 @@ unsigned char canFreeData : 布尔变量，确定能否释放数据内存
         
         <tags>
             
-            <tag> labview </tag>
-            
             <tag> matlab </tag>
+            
+            <tag> labview </tag>
             
             <tag> VS </tag>
             
@@ -13065,11 +13321,11 @@ Categories=Development;IDE;Java;
         
         <tags>
             
+            <tag> atom </tag>
+            
             <tag> ubuntu </tag>
             
             <tag> linux </tag>
-            
-            <tag> atom </tag>
             
         </tags>
         
@@ -13424,9 +13680,9 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
         
         <tags>
             
-            <tag> git </tag>
-            
             <tag> atom </tag>
+            
+            <tag> git </tag>
             
         </tags>
         
@@ -13461,9 +13717,9 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
         
         <tags>
             
-            <tag> tools </tag>
-            
             <tag> utorrent </tag>
+            
+            <tag> tools </tag>
             
         </tags>
         
@@ -13769,11 +14025,11 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
         
         <tags>
             
-            <tag> brackets </tag>
-            
             <tag> git </tag>
             
             <tag> tools </tag>
+            
+            <tag> brackets </tag>
             
         </tags>
         
@@ -13921,9 +14177,9 @@ $ easy_install Pygments
         
         <tags>
             
-            <tag> windows </tag>
-            
             <tag> jekyll </tag>
+            
+            <tag> windows </tag>
             
             <tag> ruby </tag>
             
