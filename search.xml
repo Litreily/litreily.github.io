@@ -248,47 +248,6 @@ EOF
     </entry>
     
     <entry>
-      <title><![CDATA[使用油猴脚本批量下载canvas图片]]></title>
-      <url>https://www.litreily.top/2020/03/15/canvas-dl/</url>
-      <content type="html"><![CDATA[<p>女友最近在网上下载一些北大网盘的pdf<a href="https://disk.pku.edu.cn/#/link/3A7748E0466521E3E68A0CBA4C24DE20?gns=AE26ACF837E24D51B1EC40E0A80A5D23%2F7F0E54D7D92343B1B62031B1C41F2280" target="_blank" rel="noopener">文档</a>，结果发现没有下载接口，另存为也只能存储单张图片。找我帮忙，这时候发现程序员男票的好处了哈。</p>
-<h2 id="分析页面"><a href="#分析页面" class="headerlink" title="分析页面"></a>分析页面</h2><p>一开始想着使用Chrome调试工具看下pdf链接，发现这个网盘居然不是直接获取的pdf文件，而是使用js脚本动态渲染生成的，涨知识了。</p>
-<p><img src="/assets/canvas/pdf-js.png" alt="pdf-combine js"></p>
-<p>那看看是否可以以图片形式批量下载呢，结果查看pdf单页的html结构发现，这居然是个canvas!!!还不是普通图片，而是画布。</p>
-<p><img src="/assets/canvas/canvas.png" alt="cancvs"></p>
-<h2 id="下载插件"><a href="#下载插件" class="headerlink" title="下载插件"></a>下载插件</h2><p>没关系，canvas什么的也不是难事，万能的油猴插件总会有解决方案的，果不其然让我找到个专门用于下载svg, canvas的油猴插件↓</p>
-<ul>
-<li><a href="https://greasyfork.org/zh-CN/scripts/383101-%E7%BD%91%E7%AB%99%E5%9B%BE%E7%89%87-%E8%83%8C%E6%99%AF%E5%9B%BE-svg-canvas-%E6%8A%93%E5%8F%96%E9%A2%84%E8%A7%88%E4%B8%8B%E8%BD%BD" target="_blank" rel="noopener">网站图片（背景图，svg，canvas）抓取预览下载</a></li>
-</ul>
-<h2 id="下载图片"><a href="#下载图片" class="headerlink" title="下载图片"></a>下载图片</h2><p>这正是我想要的，安装好后，使用起来非常简单，刷新要下载canvas图片的页面，在右下角有一个按钮<strong>自动获取图片</strong>。</p>
-<p><img src="/assets/canvas/check-tampermonkey.png" alt="js extension"></p>
-<p>点击之后开始扫描，注意下图中的数字并不代表实际的图片数量，不用理会。</p>
-<p><img src="/assets/canvas/scanning.png" alt="scanning"></p>
-<p>扫描完成后，可以限定图片大小，以滤除不符合要求的小图片，然后通过<strong>批量下载</strong>完成下载，对于数量较多的页面可能需要稍微等一小会，绝大部分情况是很快的。</p>
-<p><img src="/assets/canvas/download.png" alt="download"></p>
-<p>这样就下载完成啦。</p>
-<p><img src="/assets/canvas/downloaded.png" alt="downloaded"></p>
-<p>至于如何将批量转换为pdf，那方法就多啦，福昕pdf编辑器、ABBYY等等，这个留待下回再讲，哈哈。</p>
-<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>经评论区大佬@Axun提醒，本文所爬网站的PDF文件是可以直接提取的，刷新页面过滤<code>Access</code>即可得到下面的链接，右键在新页面打开即可保存，然后添加扩展名即可。</p>
-<p><img src="/assets/canvas/pdf-source-file.png" alt="PDF source file"></p>
-<p>当然啦，本文提及的canvas图片下载方法也适用于其它网站，欢迎食用。</p>
-]]></content>
-      
-        <categories>
-            
-            <category> 杂物柜 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> tampermonkey </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
       <title><![CDATA[NBNS客户端的C语言实现]]></title>
       <url>https://www.litreily.top/2020/03/15/nbns_code/</url>
       <content type="html"><![CDATA[<p>接上一篇<a href="/2020/02/28/nbns/">【网络协议详解1 - NBNS】</a>对NBNS的介绍，这一篇将要讲述使用C语言如何实现一个NBNS客户端，用于向局域网内其它设备发送NBNS NODE STATUS QUERY，并将接收到的RESPONSE信息打印出来。其实也就是一个UDP socket的实例。</p>
@@ -648,6 +607,47 @@ Not in presentation format
         <tags>
             
             <tag> C/C++ </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[使用油猴脚本批量下载canvas图片]]></title>
+      <url>https://www.litreily.top/2020/03/15/canvas-dl/</url>
+      <content type="html"><![CDATA[<p>女友最近在网上下载一些北大网盘的pdf<a href="https://disk.pku.edu.cn/#/link/3A7748E0466521E3E68A0CBA4C24DE20?gns=AE26ACF837E24D51B1EC40E0A80A5D23%2F7F0E54D7D92343B1B62031B1C41F2280" target="_blank" rel="noopener">文档</a>，结果发现没有下载接口，另存为也只能存储单张图片。找我帮忙，这时候发现程序员男票的好处了哈。</p>
+<h2 id="分析页面"><a href="#分析页面" class="headerlink" title="分析页面"></a>分析页面</h2><p>一开始想着使用Chrome调试工具看下pdf链接，发现这个网盘居然不是直接获取的pdf文件，而是使用js脚本动态渲染生成的，涨知识了。</p>
+<p><img src="/assets/canvas/pdf-js.png" alt="pdf-combine js"></p>
+<p>那看看是否可以以图片形式批量下载呢，结果查看pdf单页的html结构发现，这居然是个canvas!!!还不是普通图片，而是画布。</p>
+<p><img src="/assets/canvas/canvas.png" alt="cancvs"></p>
+<h2 id="下载插件"><a href="#下载插件" class="headerlink" title="下载插件"></a>下载插件</h2><p>没关系，canvas什么的也不是难事，万能的油猴插件总会有解决方案的，果不其然让我找到个专门用于下载svg, canvas的油猴插件↓</p>
+<ul>
+<li><a href="https://greasyfork.org/zh-CN/scripts/383101-%E7%BD%91%E7%AB%99%E5%9B%BE%E7%89%87-%E8%83%8C%E6%99%AF%E5%9B%BE-svg-canvas-%E6%8A%93%E5%8F%96%E9%A2%84%E8%A7%88%E4%B8%8B%E8%BD%BD" target="_blank" rel="noopener">网站图片（背景图，svg，canvas）抓取预览下载</a></li>
+</ul>
+<h2 id="下载图片"><a href="#下载图片" class="headerlink" title="下载图片"></a>下载图片</h2><p>这正是我想要的，安装好后，使用起来非常简单，刷新要下载canvas图片的页面，在右下角有一个按钮<strong>自动获取图片</strong>。</p>
+<p><img src="/assets/canvas/check-tampermonkey.png" alt="js extension"></p>
+<p>点击之后开始扫描，注意下图中的数字并不代表实际的图片数量，不用理会。</p>
+<p><img src="/assets/canvas/scanning.png" alt="scanning"></p>
+<p>扫描完成后，可以限定图片大小，以滤除不符合要求的小图片，然后通过<strong>批量下载</strong>完成下载，对于数量较多的页面可能需要稍微等一小会，绝大部分情况是很快的。</p>
+<p><img src="/assets/canvas/download.png" alt="download"></p>
+<p>这样就下载完成啦。</p>
+<p><img src="/assets/canvas/downloaded.png" alt="downloaded"></p>
+<p>至于如何将批量转换为pdf，那方法就多啦，福昕pdf编辑器、ABBYY等等，这个留待下回再讲，哈哈。</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>经评论区大佬@Axun提醒，本文所爬网站的PDF文件是可以直接提取的，刷新页面过滤<code>Access</code>即可得到下面的链接，右键在新页面打开即可保存，然后添加扩展名即可。</p>
+<p><img src="/assets/canvas/pdf-source-file.png" alt="PDF source file"></p>
+<p>当然啦，本文提及的canvas图片下载方法也适用于其它网站，欢迎食用。</p>
+]]></content>
+      
+        <categories>
+            
+            <category> 杂物柜 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> tampermonkey </tag>
             
         </tags>
         
@@ -2397,9 +2397,9 @@ Configuring Watchdog Timer
         
         <tags>
             
-            <tag> openwrt </tag>
-            
             <tag> ftrace </tag>
+            
+            <tag> openwrt </tag>
             
         </tags>
         
@@ -8695,11 +8695,11 @@ mysql&gt; DROP tableName;
         
         <tags>
             
-            <tag> linux </tag>
-            
             <tag> mysql </tag>
             
             <tag> centos </tag>
+            
+            <tag> linux </tag>
             
         </tags>
         
@@ -12639,9 +12639,9 @@ static void vUasrtSendTask(void *pvParameters)
             
             <tag> C/C++ </tag>
             
-            <tag> FreeRTOS </tag>
-            
             <tag> stm32 </tag>
+            
+            <tag> FreeRTOS </tag>
             
         </tags>
         
@@ -13065,11 +13065,11 @@ Categories=Development;IDE;Java;
         
         <tags>
             
+            <tag> atom </tag>
+            
             <tag> ubuntu </tag>
             
             <tag> linux </tag>
-            
-            <tag> atom </tag>
             
         </tags>
         

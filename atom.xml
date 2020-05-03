@@ -119,33 +119,6 @@ EOF
   </entry>
   
   <entry>
-    <title>使用油猴脚本批量下载canvas图片</title>
-    <link href="https://www.litreily.top/2020/03/15/canvas-dl/"/>
-    <id>https://www.litreily.top/2020/03/15/canvas-dl/</id>
-    <published>2020-03-15T09:01:33.000Z</published>
-    <updated>2020-04-13T13:12:50.031Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;女友最近在网上下载一些北大网盘的pdf&lt;a href=&quot;https://disk.pku.edu.cn/#/link/3A7748E0466521E3E68A0CBA4C24DE20?gns=AE26ACF837E24D51B1EC40E0A80A5D23%2F7F0E54D7D92343B1B62031B1C41F2280&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;文档&lt;/a&gt;，结果发现没有下载接口，另存为也只能存储单张图片。找我帮忙，这时候发现程序员男票的好处了哈。&lt;/p&gt;
-&lt;h2 id=&quot;分析页面&quot;&gt;&lt;a href=&quot;#分析页面&quot; class=&quot;headerlink&quot; title=&quot;分析页面&quot;&gt;&lt;/a&gt;分析页面&lt;/h2&gt;&lt;p&gt;一开始想着使用Chrome调试工具看下pdf链接，发现这个网盘居然不是直接获取的pdf文件，而是使用js脚本动态渲染生成的，涨知识了。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/assets/canvas/pdf-js.png&quot; alt=&quot;pdf-combine js&quot;&gt;&lt;/p&gt;
-&lt;p&gt;那看看是否可以以图片形式批量下载呢，结果查看pdf单页的html结构发现，这居然是个canvas!!!还不是普通图片，而是画布。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/assets/canvas/canvas.png&quot; alt=&quot;cancvs&quot;&gt;&lt;/p
-      
-    
-    </summary>
-    
-      <category term="杂物柜" scheme="https://www.litreily.top/categories/%E6%9D%82%E7%89%A9%E6%9F%9C/"/>
-    
-    
-      <category term="tampermonkey" scheme="https://www.litreily.top/tags/tampermonkey/"/>
-    
-  </entry>
-  
-  <entry>
     <title>NBNS客户端的C语言实现</title>
     <link href="https://www.litreily.top/2020/03/15/nbns_code/"/>
     <id>https://www.litreily.top/2020/03/15/nbns_code/</id>
@@ -173,6 +146,33 @@ EOF
     
     
       <category term="C/C++" scheme="https://www.litreily.top/tags/C-C/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用油猴脚本批量下载canvas图片</title>
+    <link href="https://www.litreily.top/2020/03/15/canvas-dl/"/>
+    <id>https://www.litreily.top/2020/03/15/canvas-dl/</id>
+    <published>2020-03-15T09:01:33.000Z</published>
+    <updated>2020-04-13T13:12:50.031Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;女友最近在网上下载一些北大网盘的pdf&lt;a href=&quot;https://disk.pku.edu.cn/#/link/3A7748E0466521E3E68A0CBA4C24DE20?gns=AE26ACF837E24D51B1EC40E0A80A5D23%2F7F0E54D7D92343B1B62031B1C41F2280&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;文档&lt;/a&gt;，结果发现没有下载接口，另存为也只能存储单张图片。找我帮忙，这时候发现程序员男票的好处了哈。&lt;/p&gt;
+&lt;h2 id=&quot;分析页面&quot;&gt;&lt;a href=&quot;#分析页面&quot; class=&quot;headerlink&quot; title=&quot;分析页面&quot;&gt;&lt;/a&gt;分析页面&lt;/h2&gt;&lt;p&gt;一开始想着使用Chrome调试工具看下pdf链接，发现这个网盘居然不是直接获取的pdf文件，而是使用js脚本动态渲染生成的，涨知识了。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/canvas/pdf-js.png&quot; alt=&quot;pdf-combine js&quot;&gt;&lt;/p&gt;
+&lt;p&gt;那看看是否可以以图片形式批量下载呢，结果查看pdf单页的html结构发现，这居然是个canvas!!!还不是普通图片，而是画布。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/canvas/canvas.png&quot; alt=&quot;cancvs&quot;&gt;&lt;/p
+      
+    
+    </summary>
+    
+      <category term="杂物柜" scheme="https://www.litreily.top/categories/%E6%9D%82%E7%89%A9%E6%9F%9C/"/>
+    
+    
+      <category term="tampermonkey" scheme="https://www.litreily.top/tags/tampermonkey/"/>
     
   </entry>
   
@@ -414,9 +414,9 @@ CPU: 2 PID: 9465 Comm: swconfig Tainted: P        W    3.14.77 #1
       <category term="嵌入式" scheme="https://www.litreily.top/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/"/>
     
     
-      <category term="openwrt" scheme="https://www.litreily.top/tags/openwrt/"/>
-    
       <category term="ftrace" scheme="https://www.litreily.top/tags/ftrace/"/>
+    
+      <category term="openwrt" scheme="https://www.litreily.top/tags/openwrt/"/>
     
   </entry>
   
