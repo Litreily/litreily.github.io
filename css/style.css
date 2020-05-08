@@ -462,12 +462,6 @@ a, .m-nav a:hover, .l-post .p-desc a:hover, .ttl a:hover, .m-nav .dot, .l-pager 
 .p-content pre.prettyprint {
   width: initial;
   max-width: 95%; }
-  .p-content pre.prettyprint:before {
-    content: "code";
-    background: #1B1D1E;
-    display: block;
-    margin: -1em -1em 1em;
-    padding: 0 1em; }
 
 .p-content pre code {
   padding: 0;

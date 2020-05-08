@@ -2653,9 +2653,9 @@ Configuring Watchdog Timer
         
         <tags>
             
-            <tag> openwrt </tag>
-            
             <tag> ftrace </tag>
+            
+            <tag> openwrt </tag>
             
         </tags>
         
@@ -5190,9 +5190,9 @@ with open(&#39;products_new.json&#39;,&#39;w&#39;,encoding=&#39;utf-8&#39;) as f
         
         <tags>
             
-            <tag> visualization </tag>
-            
             <tag> MongoDB </tag>
+            
+            <tag> visualization </tag>
             
         </tags>
         
@@ -6917,9 +6917,9 @@ if __name__ == &#39;__main__&#39;:
             
             <tag> algorithm </tag>
             
-            <tag> sort </tag>
-            
             <tag> visualization </tag>
+            
+            <tag> sort </tag>
             
         </tags>
         
@@ -9493,9 +9493,9 @@ Infos:File-main.c, Func-main, Line-14
             
             <tag> ubuntu </tag>
             
-            <tag> shell </tag>
-            
             <tag> makefile </tag>
+            
+            <tag> shell </tag>
             
         </tags>
         
@@ -10483,9 +10483,9 @@ root: /
         
         <tags>
             
-            <tag> hexo </tag>
-            
             <tag> jekyll </tag>
+            
+            <tag> hexo </tag>
             
             <tag> log </tag>
             
@@ -12895,9 +12895,9 @@ static void vUasrtSendTask(void *pvParameters)
             
             <tag> C/C++ </tag>
             
-            <tag> FreeRTOS </tag>
-            
             <tag> stm32 </tag>
+            
+            <tag> FreeRTOS </tag>
             
         </tags>
         
@@ -13680,9 +13680,9 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
         
         <tags>
             
-            <tag> atom </tag>
-            
             <tag> git </tag>
+            
+            <tag> atom </tag>
             
         </tags>
         
@@ -13717,9 +13717,9 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
         
         <tags>
             
-            <tag> utorrent </tag>
-            
             <tag> tools </tag>
+            
+            <tag> utorrent </tag>
             
         </tags>
         
@@ -14025,11 +14025,11 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
         
         <tags>
             
+            <tag> brackets </tag>
+            
             <tag> git </tag>
             
             <tag> tools </tag>
-            
-            <tag> brackets </tag>
             
         </tags>
         
