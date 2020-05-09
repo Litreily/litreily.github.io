@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2020-05-03T10:42:22.813Z</updated>
+  <updated>2020-05-09T13:39:48.639Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -15,6 +15,71 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Win10中使用ssh访问WSL</title>
+    <link href="https://www.litreily.top/2020/05/08/putty-wsl/"/>
+    <id>https://www.litreily.top/2020/05/08/putty-wsl/</id>
+    <published>2020-05-08T14:31:20.000Z</published>
+    <updated>2020-05-09T13:39:48.639Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;win10的WSL作为目前日常必备，实在是爱不释手，奈何默认终端界面实在一言难尽，尽管配色问题可以解决，但是字体问题导致ohmyzsh的很多图标无法正常显示，配置好&lt;a href=&quot;https://github.com/powerline/fonts&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;powerline&lt;/a&gt;字体略有改善，但配合tmux使用又会出现乱码问题，实在难以忍受，于是准备通过ssh间接访问。&lt;/p&gt;
+&lt;h2 id=&quot;配置ssh&quot;&gt;&lt;a href=&quot;#配置ssh&quot; class=&quot;headerlink&quot; title=&quot;配置ssh&quot;&gt;&lt;/a&gt;配置ssh&lt;/h2&gt;&lt;p&gt;重装&lt;code&gt;openssh-server&lt;/code&gt;, 如果自带的没问题也不用重装。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;zsh&quot;&gt;sudo apt remove openssh-server
+sudo apt install openssh-server
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;修改&lt;code&gt;/etc/ssh/sshd_config&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;zsh&quot;&gt;# 服务端每分钟发送一次数据包给客户端，客户端回复即保持连接
+ClientAliveInterval 60
+# 客户端3次未响应则断开
+ClientAli
+      
+    
+    </summary>
+    
+      <category term="Linux" scheme="https://www.litreily.top/categories/Linux/"/>
+    
+    
+      <category term="ssh" scheme="https://www.litreily.top/tags/ssh/"/>
+    
+      <category term="putty" scheme="https://www.litreily.top/tags/putty/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Linux 内核驱动解析 - UBI坏块预留大小</title>
+    <link href="https://www.litreily.top/2020/05/07/ubi-driver/"/>
+    <id>https://www.litreily.top/2020/05/07/ubi-driver/</id>
+    <published>2020-05-07T01:21:29.000Z</published>
+    <updated>2020-05-09T15:16:40.136Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;在处理ubifs相关bug的过程中，学习了ubi驱动对坏块保留分区的处理方式，在此记录一下。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/linux/ubi-reserved-maps.png&quot; alt=&quot;ubi reserved mind maps&quot;&gt;&lt;/p&gt;
+&lt;h2 id=&quot;相关概念&quot;&gt;&lt;a href=&quot;#相关概念&quot; class=&quot;headerlink&quot; title=&quot;相关概念&quot;&gt;&lt;/a&gt;相关概念&lt;/h2&gt;&lt;h3 id=&quot;mtd&quot;&gt;&lt;a href=&quot;#mtd&quot; class=&quot;headerlink&quot; title=&quot;mtd&quot;&gt;&lt;/a&gt;mtd&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;mtd&lt;/strong&gt; 全称 memory technology device 内存技术设备，是用于访问内存设备(RAM, Flash)的Linux 子系统，在硬件层和用户空间之间提供抽象接口。&lt;/p&gt;
+&lt;p&gt;在嵌入式linux设备中的&lt;code&gt;/dev/&lt;/code&gt;目录下有很多&lt;code&gt;/dev/mtdxx&lt;/code&gt;文件，这些文件对应的就是内存设备。比如，嵌入式设备的Nand Flash被划分为多个分区，每个分区对应一个&lt;code&gt;/dev/mtdxx&lt;/code&gt;文件。&lt;/p&gt;
+&lt;p&gt;如下所示，&lt;code&gt;/dev/mtd0&lt;/code&gt;至&lt;code&gt;/dev/mtd10&lt;/code&gt;对
+      
+    
+    </summary>
+    
+      <category term="嵌入式" scheme="https://www.litreily.top/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/"/>
+    
+    
+      <category term="C/C++" scheme="https://www.litreily.top/tags/C-C/"/>
+    
+      <category term="ubi" scheme="https://www.litreily.top/tags/ubi/"/>
+    
+      <category term="flash" scheme="https://www.litreily.top/tags/flash/"/>
+    
+  </entry>
   
   <entry>
     <title>Python之markdown转Chrome收藏夹</title>
@@ -153,33 +218,6 @@ EOF
   </entry>
   
   <entry>
-    <title>使用油猴脚本批量下载canvas图片</title>
-    <link href="https://www.litreily.top/2020/03/15/canvas-dl/"/>
-    <id>https://www.litreily.top/2020/03/15/canvas-dl/</id>
-    <published>2020-03-15T09:01:33.000Z</published>
-    <updated>2020-04-13T13:12:50.031Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;女友最近在网上下载一些北大网盘的pdf&lt;a href=&quot;https://disk.pku.edu.cn/#/link/3A7748E0466521E3E68A0CBA4C24DE20?gns=AE26ACF837E24D51B1EC40E0A80A5D23%2F7F0E54D7D92343B1B62031B1C41F2280&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;文档&lt;/a&gt;，结果发现没有下载接口，另存为也只能存储单张图片。找我帮忙，这时候发现程序员男票的好处了哈。&lt;/p&gt;
-&lt;h2 id=&quot;分析页面&quot;&gt;&lt;a href=&quot;#分析页面&quot; class=&quot;headerlink&quot; title=&quot;分析页面&quot;&gt;&lt;/a&gt;分析页面&lt;/h2&gt;&lt;p&gt;一开始想着使用Chrome调试工具看下pdf链接，发现这个网盘居然不是直接获取的pdf文件，而是使用js脚本动态渲染生成的，涨知识了。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/assets/canvas/pdf-js.png&quot; alt=&quot;pdf-combine js&quot;&gt;&lt;/p&gt;
-&lt;p&gt;那看看是否可以以图片形式批量下载呢，结果查看pdf单页的html结构发现，这居然是个canvas!!!还不是普通图片，而是画布。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/assets/canvas/canvas.png&quot; alt=&quot;cancvs&quot;&gt;&lt;/p
-      
-    
-    </summary>
-    
-      <category term="杂物柜" scheme="https://www.litreily.top/categories/%E6%9D%82%E7%89%A9%E6%9F%9C/"/>
-    
-    
-      <category term="tampermonkey" scheme="https://www.litreily.top/tags/tampermonkey/"/>
-    
-  </entry>
-  
-  <entry>
     <title>NBNS客户端的C语言实现</title>
     <link href="https://www.litreily.top/2020/03/15/nbns_code/"/>
     <id>https://www.litreily.top/2020/03/15/nbns_code/</id>
@@ -207,6 +245,33 @@ EOF
     
     
       <category term="C/C++" scheme="https://www.litreily.top/tags/C-C/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用油猴脚本批量下载canvas图片</title>
+    <link href="https://www.litreily.top/2020/03/15/canvas-dl/"/>
+    <id>https://www.litreily.top/2020/03/15/canvas-dl/</id>
+    <published>2020-03-15T09:01:33.000Z</published>
+    <updated>2020-04-13T13:12:50.031Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;女友最近在网上下载一些北大网盘的pdf&lt;a href=&quot;https://disk.pku.edu.cn/#/link/3A7748E0466521E3E68A0CBA4C24DE20?gns=AE26ACF837E24D51B1EC40E0A80A5D23%2F7F0E54D7D92343B1B62031B1C41F2280&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;文档&lt;/a&gt;，结果发现没有下载接口，另存为也只能存储单张图片。找我帮忙，这时候发现程序员男票的好处了哈。&lt;/p&gt;
+&lt;h2 id=&quot;分析页面&quot;&gt;&lt;a href=&quot;#分析页面&quot; class=&quot;headerlink&quot; title=&quot;分析页面&quot;&gt;&lt;/a&gt;分析页面&lt;/h2&gt;&lt;p&gt;一开始想着使用Chrome调试工具看下pdf链接，发现这个网盘居然不是直接获取的pdf文件，而是使用js脚本动态渲染生成的，涨知识了。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/canvas/pdf-js.png&quot; alt=&quot;pdf-combine js&quot;&gt;&lt;/p&gt;
+&lt;p&gt;那看看是否可以以图片形式批量下载呢，结果查看pdf单页的html结构发现，这居然是个canvas!!!还不是普通图片，而是画布。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/canvas/canvas.png&quot; alt=&quot;cancvs&quot;&gt;&lt;/p
+      
+    
+    </summary>
+    
+      <category term="杂物柜" scheme="https://www.litreily.top/categories/%E6%9D%82%E7%89%A9%E6%9F%9C/"/>
+    
+    
+      <category term="tampermonkey" scheme="https://www.litreily.top/tags/tampermonkey/"/>
     
   </entry>
   
@@ -448,9 +513,9 @@ CPU: 2 PID: 9465 Comm: swconfig Tainted: P        W    3.14.77 #1
       <category term="嵌入式" scheme="https://www.litreily.top/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/"/>
     
     
-      <category term="ftrace" scheme="https://www.litreily.top/tags/ftrace/"/>
-    
       <category term="openwrt" scheme="https://www.litreily.top/tags/openwrt/"/>
+    
+      <category term="ftrace" scheme="https://www.litreily.top/tags/ftrace/"/>
     
   </entry>
   
@@ -773,9 +838,9 @@ struct linklist *hashtbl[TABLE_SIZE];
       <category term="Python" scheme="https://www.litreily.top/categories/Python/"/>
     
     
-      <category term="MongoDB" scheme="https://www.litreily.top/tags/MongoDB/"/>
-    
       <category term="visualization" scheme="https://www.litreily.top/tags/visualization/"/>
+    
+      <category term="MongoDB" scheme="https://www.litreily.top/tags/MongoDB/"/>
     
   </entry>
   
@@ -859,69 +924,6 @@ sudo pip install pypcap
       <category term="cache" scheme="https://www.litreily.top/tags/cache/"/>
     
       <category term="buffer" scheme="https://www.litreily.top/tags/buffer/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Linux指令 - tee的实现</title>
-    <link href="https://www.litreily.top/2018/09/27/tee/"/>
-    <id>https://www.litreily.top/2018/09/27/tee/</id>
-    <published>2018-09-27T06:34:30.000Z</published>
-    <updated>2020-02-26T13:11:56.210Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;近日学习&lt;a href=&quot;https://book.douban.com/subject/25809330/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;《Linux/UNIX 系统编程手册》&lt;/a&gt;一书，巩固了C语言中一些常用库函数的使用，主要涉及基本IO操作相关的库函数。为了加深理解，手动实现了Linux系统中的&lt;code&gt;tee&lt;/code&gt;指令的功能。借此文记述实现过程。&lt;/p&gt;
-&lt;h2 id=&quot;tee功能简述&quot;&gt;&lt;a href=&quot;#tee功能简述&quot; class=&quot;headerlink&quot; title=&quot;tee功能简述&quot;&gt;&lt;/a&gt;tee功能简述&lt;/h2&gt;&lt;p&gt;&lt;code&gt;tee&lt;/code&gt;类似于一个单输入双输出的三通管道，将标准输入的数据输出到指定文件和标准输出中。为实现这个指令，主要考虑以下几点：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;解析&lt;code&gt;tee&lt;/code&gt;包含的命令行参数&lt;/li&gt;
-&lt;li&gt;读取标准输入数据，并将数据写入标准输出和指定文件&lt;/li&gt;
-&lt;li&gt;若未指定文件，则仅将数据输出到标准输出&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;下面逐步分析每个要点的实现方法。&lt;/p&gt;
-&lt;h2 id=&quot;参数解析&quot;&gt;&lt;a href=&quot;#参数解析&quot; class=&quot;headerlink&quot; title=&quot;参数解析&quot;&gt;&lt;/a&gt;参数解析&lt;/h2&gt;&lt;p&gt;&lt;code&gt;tee&lt;/c
-      
-    
-    </summary>
-    
-      <category term="嵌入式" scheme="https://www.litreily.top/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/"/>
-    
-    
-      <category term="C/C++" scheme="https://www.litreily.top/tags/C-C/"/>
-    
-      <category term="linux" scheme="https://www.litreily.top/tags/linux/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>OpenWrt中使用gdb分析coredump</title>
-    <link href="https://www.litreily.top/2018/09/20/coredump/"/>
-    <id>https://www.litreily.top/2018/09/20/coredump/</id>
-    <published>2018-09-20T10:32:00.000Z</published>
-    <updated>2020-02-26T13:11:56.209Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;近日调试一个&lt;code&gt;bug&lt;/code&gt;，一个守护进程在特定情况下执行一段程序后便会挂掉。为了分析&lt;code&gt;bug&lt;/code&gt;产生原因，本人使用了printf, strace追踪，gdb调试等诸多调试工具和测试方法。本文对于在&lt;code&gt;OpenWrt&lt;/code&gt;嵌入式系统中启用&lt;code&gt;gdb&lt;/code&gt;功能及其使用方法进行详细说明。&lt;/p&gt;
-&lt;h2 id=&quot;调试背景&quot;&gt;&lt;a href=&quot;#调试背景&quot; class=&quot;headerlink&quot; title=&quot;调试背景&quot;&gt;&lt;/a&gt;调试背景&lt;/h2&gt;&lt;p&gt;我最先通过&lt;code&gt;strace&lt;/code&gt;工具追踪发现进程是在收到&lt;code&gt;SIGABRT&lt;/code&gt;信号后被&lt;code&gt;kill&lt;/code&gt;的。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;c&quot;&gt;pipe([8, 9])                            = 0
-fcntl64(8, F_GETFL)                     = 0 (flags O_RDONLY)
-ioctl(8, SNDCTL_TMR_TIMEBASE or TCGETS, 0xbe90a454) = -1 EINVAL (Invalid argument)
-rt_sigprocmask(SIG_UNBLOCK, [ABRT], NULL, 8) 
-      
-    
-    </summary>
-    
-      <category term="嵌入式" scheme="https://www.litreily.top/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/"/>
-    
-    
-      <category term="C/C++" scheme="https://www.litreily.top/tags/C-C/"/>
-    
-      <category term="linux" scheme="https://www.litreily.top/tags/linux/"/>
     
   </entry>
   
