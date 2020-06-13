@@ -541,9 +541,9 @@ CPU: 2 PID: 9465 Comm: swconfig Tainted: P        W    3.14.77 #1
       <category term="嵌入式" scheme="https://www.litreily.top/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/"/>
     
     
-      <category term="openwrt" scheme="https://www.litreily.top/tags/openwrt/"/>
-    
       <category term="ftrace" scheme="https://www.litreily.top/tags/ftrace/"/>
+    
+      <category term="openwrt" scheme="https://www.litreily.top/tags/openwrt/"/>
     
   </entry>
   
@@ -866,9 +866,9 @@ struct linklist *hashtbl[TABLE_SIZE];
       <category term="Python" scheme="https://www.litreily.top/categories/Python/"/>
     
     
-      <category term="visualization" scheme="https://www.litreily.top/tags/visualization/"/>
-    
       <category term="MongoDB" scheme="https://www.litreily.top/tags/MongoDB/"/>
+    
+      <category term="visualization" scheme="https://www.litreily.top/tags/visualization/"/>
     
   </entry>
   
