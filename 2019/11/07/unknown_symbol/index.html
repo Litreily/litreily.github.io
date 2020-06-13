@@ -33,7 +33,7 @@ extern void lock_release(struct lockdep_map *lock, int nested,
 <blockquote>
 <p><strong>问题</strong>：<a href="https://stackoverflow.com/questions/29578931/unknown-symbol-class-create-err-0" target="_blank" rel="noopener">unknown symbol __class_create (err 0)</a></p>
 <p>The function <code>__class_create</code> is exported only for GPL modules (exported with <strong>EXPORT_SYMBOL_GPL</strong>). So, you need to use a GPL license with MODULE_LICENSE macro to make use of that function. Same goes for other functions as well.</p>
-<p>This should do the trick:<br><strong>MODULE_LICENSE(“GPL”);</strong></p>
+<p>This should do the trick:<br><strong>MODULE_LICENSE(&quot;GPL&quot;);</strong></p>
 </blockquote>
 <p>发现这个问题和我遇到的情况基本一致，然后我重新检查了这几个Symbol的export方式，确实都是<code>EXPORT_SYMBOL_GPL</code>，接着我再去看<code>ip6t_CONE</code>的sourcecode，发现确实没有声明LICENSE！！！</p>
 <p>好了，解决方案来啦，立马加个kernel patch ↓</p>

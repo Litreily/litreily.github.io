@@ -40,7 +40,7 @@ inet6 addr: fe80::a263:91ff:fea7:6307/64 Scope:Link
 </code></pre>
 <p>此处说明一点，由于WAN端使用的<code>PPPoE</code>拨号上网方式，所以没有启动<code>dhcp6c</code>（用于获取ipv6的客户端程序）。那是不是还有其它相关的进程挂了呢？为此我问了下组长（大牛），发现确实还有个<code>radvd</code>进程！对比前后<code>log</code>中的<code>ps</code>输出发现确实是这个进程挂了！！！</p>
 <blockquote>
-<p><strong>路由广播守护</strong>（The Router Advertisement Daemon，简称：<code>radvd</code>）是一个符合<code>RFC 2461</code>使用邻居发现协议用于实现<code>IPv6</code>地址本地链接广播和<code>IPv6</code>路由前缀的开源软件。该软件是给系统管理员用于实现在<code>IPv6</code>下对主机进行无状态自动配置地址。<br>— <a href="https://zh.wikipedia.org/wiki/Radvd" target="_blank" rel="noopener">维基百科</a></p>
+<p><strong>路由广播守护</strong>（The Router Advertisement Daemon，简称：<code>radvd</code>）是一个符合<code>RFC 2461</code>使用邻居发现协议用于实现<code>IPv6</code>地址本地链接广播和<code>IPv6</code>路由前缀的开源软件。该软件是给系统管理员用于实现在<code>IPv6</code>下对主机进行无状态自动配置地址。<br>--- <a href="https://zh.wikipedia.org/wiki/Radvd" target="_blank" rel="noopener">维基百科</a></p>
 </blockquote>
 <p>总之，<code>radvd</code>也是<code>IPv6</code>必不可少的进程，而且莫名其妙的挂了。</p>
 <h2 id="radvd进程退出原因分析"><a href="#radvd进程退出原因分析" class="headerlink" title="radvd进程退出原因分析"></a>radvd进程退出原因分析</h2><p>为了分析<code>radvd</code>进程退出原因，我尝试手动重启进程</p>

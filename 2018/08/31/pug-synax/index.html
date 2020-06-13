@@ -136,7 +136,7 @@ ul
         span.dot ●
         a(href=href)= name
 </code></pre>
-<p>其中，<code>menu-item</code>为调用时所用名称，可认为是函数名，<code>href</code>及<code>name</code>是参数。同上<a href="#定义变量">定义变量</a>所说，<code>a(href=href)= name</code>中第二个<code>=</code>是为了将后面的<code>name</code>当作参数来处理，而不是当作字符串”name”来处理。</p>
+<p>其中，<code>menu-item</code>为调用时所用名称，可认为是函数名，<code>href</code>及<code>name</code>是参数。同上<a href="#定义变量">定义变量</a>所说，<code>a(href=href)= name</code>中第二个<code>=</code>是为了将后面的<code>name</code>当作参数来处理，而不是当作字符串&quot;name&quot;来处理。</p>
 <p>调用<code>mixin</code>定义的代码块，需通过<code>+</code>号紧跟<code>mixin</code>名称及参数:</p>
 <pre><code class="pug">+menu-item(&#39;/Archives&#39;,&#39;Archives&#39;)
 +menu-item(&#39;/About&#39;,&#39;About&#39;)

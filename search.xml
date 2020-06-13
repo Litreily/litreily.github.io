@@ -4,6 +4,55 @@
   
     
     <entry>
+      <title><![CDATA[VPS搭建在线VSCode Server]]></title>
+      <url>https://www.litreily.top/2020/06/13/code-server/</url>
+      <content type="html"><![CDATA[<h2 id="VSCode-Server"><a href="#VSCode-Server" class="headerlink" title="VSCode Server"></a>VSCode Server</h2><p>VSCode(Visual Studio Code), 是我目前使用过的最好的编辑器，也应该是很多程序员的首选。然而很多人不知道的是，这款开发利器还有在线版，这包括GitHub即将推出的<code>Satellite</code>, 也会搭载VSCode，那么如果我们想要搭建自己的在线开发环境呢？答案就是<a href="https://github.com/cdr/code-server" target="_blank" rel="noopener">Code Server</a>, 一款可以部署在个人服务器上的VSCode服务。</p>
+<p><img src="/assets/vscode/pods-lg.png" alt="pods logo"></p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>如果在本地，自然是无需搭建这个server的，我的选择是放在阿里云服务器上，对应的是Ubuntu系统，安装过程非常简单。</p>
+<pre><code class="zsh">curl -fsSL https://code-server.dev/install.sh |sh
+</code></pre>
+<p>安装完会给出提示该怎么操作，其它系统可以参考<a href="https://github.com/cdr/code-server/blob/master/doc/guide.md" target="_blank" rel="noopener">官方文档</a>。</p>
+<h3 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h3><p>使用<code>systemctl</code>启动服务，并保证系统重启可以自启动服务，可以执行以下指令：</p>
+<pre><code class="zsh">systemctl --user enable --now code-server
+</code></pre>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>VSCode服务有一个配置文件<code>~/.config/code-server/config.yaml</code>，默认配置包含：</p>
+<pre><code class="yaml">bind-addr: 127.0.0.1:8080
+auth: password
+password: somerandominfo
+cert: false
+</code></pre>
+<p>默认情况下开启了密码认证，同时给了一个初始密码。我们可以将端口号和密码都修改成自己想要的。修改完成以后，记得重启服务。</p>
+<pre><code class="zsh">systemctl --user restart code-server
+</code></pre>
+<h2 id="VPS安全组"><a href="#VPS安全组" class="headerlink" title="VPS安全组"></a>VPS安全组</h2><p>如果使用的是VPS，默认情况下是会将除ssh以外的其它端口都屏蔽的，所以我们需要在服务器的控制台修改安全组。</p>
+<p><img src="/assets/vscode/vps-port.png" alt="VPS 安全组"></p>
+<p>但是添加以后还是无法访问，后来谷歌后发现是配置问题，上面的<code>127.0.0.1</code>只是针对本地地址，无法被外部网络访问，因此，解决方案就是将<code>127.0.0.1</code>改为<code>0.0.0.0</code>，然后重启服务。</p>
+<h2 id="实例展示"><a href="#实例展示" class="headerlink" title="实例展示"></a>实例展示</h2><p>通过配置好的端口访问VPS的Code Server，首先进入登录页面，输入配置的密码即可。</p>
+<p><img src="/assets/vscode/code-login.png" alt="登录 Code Server"></p>
+<p>好啦，基本和本地的一毛一样，目前尝试过程发现无法复制网页外的其它数据，终端无法使用<code>Ctrl-L</code>清空，算是小瑕疵吧，不过真的超棒，我想，针对需要出差的人群算是福音了。</p>
+<p><img src="/assets/vscode/code-server.png" alt="Code Server"></p>
+<p>首次运行会比较慢，当然可能是我的网速问题，加载一个大型<code>js</code>文件<code>workbench.web.api.js</code>占据了大量时间，在启用浏览器缓存的情况下，往后启动就更快了。</p>
+<p>另外，如果有域名的话，可以按照官方教程安装<a href="https://github.com/cdr/code-server/blob/master/doc/guide.md#lets-encrypt" target="_blank" rel="noopener">Let&#39;s Encrypt.</a>证书，然后通过<code>https</code>访问，这样更加安全。</p>
+]]></content>
+      
+        <categories>
+            
+            <category> Linux </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> ubuntu </tag>
+            
+            <tag> vps </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[Win10中使用ssh访问WSL]]></title>
       <url>https://www.litreily.top/2020/05/08/putty-wsl/</url>
       <content type="html"><![CDATA[<p>win10的WSL作为目前日常必备，实在是爱不释手，奈何默认终端界面实在一言难尽，尽管配色问题可以解决，但是字体问题导致ohmyzsh的很多图标无法正常显示，配置好<a href="https://github.com/powerline/fonts" target="_blank" rel="noopener">powerline</a>字体略有改善，但配合tmux使用又会出现乱码问题，实在难以忍受，于是准备通过ssh间接访问。</p>
@@ -36,7 +85,7 @@ ws.run &quot;wsl -d ubuntu -u root /etc/init.d/ssh start&quot;, vbhide
 <h2 id="字体"><a href="#字体" class="headerlink" title="字体"></a>字体</h2><p>安装 <a href="https://github.com/tonsky/FiraCode" target="_blank" rel="noopener">Fira code</a> 字体，超46k的star，还是很强大的。安装后修改下putty和VSCode的字体。</p>
 <ul>
 <li>putty，打开settings，选择Window-&gt;Appearance-&gt;Font settings, 设置<code>Fira code</code>字体。</li>
-<li>VSCode，打开settings，搜索”font family”，在已有字体中加入<code>Fira Code Retina</code>字体。</li>
+<li>VSCode，打开settings，搜索&quot;font family&quot;，在已有字体中加入<code>Fira Code Retina</code>字体。</li>
 </ul>
 <p><img src="/assets/vscode/vscode-font.png" alt="VSCode Font family"></p>
 <p>配置VSCode的原因是VSCode本身也可以使用WSL，所以字体方面也可以进行修正。</p>
@@ -309,7 +358,7 @@ root:/sys/devices/virtual/ubi/ubi0# cat reserved_for_bad
 <p>在目录<code>/sys/class/ubi/ubi0</code>下还可以看到其它ubi信息，比如avail_eraseblocks（可用块）, bad_peb_count（坏块个数）等。</p>
 <p>好啦，用户空间就到这吧，我们已经搞清楚了<code>ubinfo -a</code>的信息来源是系统目录下的文件，当然我们也可以很容易猜到这些文件是系统内核产生的，确切的说是UBI驱动程序产生的。</p>
 <h2 id="内核空间"><a href="#内核空间" class="headerlink" title="内核空间"></a>内核空间</h2><p>接下来看内核空间的UBI驱动部分，查找底层驱动是如何计算坏块保留大小的。</p>
-<p>根据开机过程的UBI log，在linux内核的<code>drivers/mtd/ubi/</code>目录grep搜索相关字符串（如”PEBs reserved for bad PEB handling”），可以找到打印这些log的函数<code>ubi_attach_mtd_dev</code>.</p>
+<p>根据开机过程的UBI log，在linux内核的<code>drivers/mtd/ubi/</code>目录grep搜索相关字符串（如&quot;PEBs reserved for bad PEB handling&quot;），可以找到打印这些log的函数<code>ubi_attach_mtd_dev</code>.</p>
 <h3 id="ubi-attach-mtd-dev"><a href="#ubi-attach-mtd-dev" class="headerlink" title="ubi_attach_mtd_dev"></a>ubi_attach_mtd_dev</h3><p>该函数用于附加MTD device到UBI并分配@ubi_num给新创建的UBI设备，在附加过程中会打印UBI设备的相关信息，也就是<a href="#UBI-attach">UBI attach</a>部分的console log.</p>
 <pre><code class="c">int ubi_attach_mtd_dev(struct mtd_info *mtd, int ubi_num,
             int vid_hdr_offset, int max_beb_per1024)
@@ -776,7 +825,7 @@ if __name__ == &quot;__main__&quot;:
       <url>https://www.litreily.top/2020/05/03/netease/</url>
       <content type="html"><![CDATA[<p>由于版权之争，网易云的很多歌曲都灰掉并且无法播放了，想要使其可以播放还是有办法的，万能的Google和Github让我找到了<a href="https://github.com/nondanee/UnblockNeteaseMusic" target="_blank" rel="noopener">答案</a>，直接上享用方法吧。</p>
 <h2 id="前提条件"><a href="#前提条件" class="headerlink" title="前提条件"></a>前提条件</h2><ul>
-<li>一个可以远程访问的服务器，比如vps，阿里云、腾讯云、…</li>
+<li>一个可以远程访问的服务器，比如vps，阿里云、腾讯云、...</li>
 <li>如果没有服务器，只能寻找别人搭建好的服务</li>
 </ul>
 <h2 id="搭建服务"><a href="#搭建服务" class="headerlink" title="搭建服务"></a>搭建服务</h2><p>在服务器端，首先安装依赖的工具<code>npx</code>，如果有则忽略</p>
@@ -1010,6 +1059,47 @@ EOF
             <tag> shell </tag>
             
             <tag> tftp </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[使用油猴脚本批量下载canvas图片]]></title>
+      <url>https://www.litreily.top/2020/03/15/canvas-dl/</url>
+      <content type="html"><![CDATA[<p>女友最近在网上下载一些北大网盘的pdf<a href="https://disk.pku.edu.cn/#/link/3A7748E0466521E3E68A0CBA4C24DE20?gns=AE26ACF837E24D51B1EC40E0A80A5D23%2F7F0E54D7D92343B1B62031B1C41F2280" target="_blank" rel="noopener">文档</a>，结果发现没有下载接口，另存为也只能存储单张图片。找我帮忙，这时候发现程序员男票的好处了哈。</p>
+<h2 id="分析页面"><a href="#分析页面" class="headerlink" title="分析页面"></a>分析页面</h2><p>一开始想着使用Chrome调试工具看下pdf链接，发现这个网盘居然不是直接获取的pdf文件，而是使用js脚本动态渲染生成的，涨知识了。</p>
+<p><img src="/assets/canvas/pdf-js.png" alt="pdf-combine js"></p>
+<p>那看看是否可以以图片形式批量下载呢，结果查看pdf单页的html结构发现，这居然是个canvas!!!还不是普通图片，而是画布。</p>
+<p><img src="/assets/canvas/canvas.png" alt="cancvs"></p>
+<h2 id="下载插件"><a href="#下载插件" class="headerlink" title="下载插件"></a>下载插件</h2><p>没关系，canvas什么的也不是难事，万能的油猴插件总会有解决方案的，果不其然让我找到个专门用于下载svg, canvas的油猴插件↓</p>
+<ul>
+<li><a href="https://greasyfork.org/zh-CN/scripts/383101-%E7%BD%91%E7%AB%99%E5%9B%BE%E7%89%87-%E8%83%8C%E6%99%AF%E5%9B%BE-svg-canvas-%E6%8A%93%E5%8F%96%E9%A2%84%E8%A7%88%E4%B8%8B%E8%BD%BD" target="_blank" rel="noopener">网站图片（背景图，svg，canvas）抓取预览下载</a></li>
+</ul>
+<h2 id="下载图片"><a href="#下载图片" class="headerlink" title="下载图片"></a>下载图片</h2><p>这正是我想要的，安装好后，使用起来非常简单，刷新要下载canvas图片的页面，在右下角有一个按钮<strong>自动获取图片</strong>。</p>
+<p><img src="/assets/canvas/check-tampermonkey.png" alt="js extension"></p>
+<p>点击之后开始扫描，注意下图中的数字并不代表实际的图片数量，不用理会。</p>
+<p><img src="/assets/canvas/scanning.png" alt="scanning"></p>
+<p>扫描完成后，可以限定图片大小，以滤除不符合要求的小图片，然后通过<strong>批量下载</strong>完成下载，对于数量较多的页面可能需要稍微等一小会，绝大部分情况是很快的。</p>
+<p><img src="/assets/canvas/download.png" alt="download"></p>
+<p>这样就下载完成啦。</p>
+<p><img src="/assets/canvas/downloaded.png" alt="downloaded"></p>
+<p>至于如何将批量转换为pdf，那方法就多啦，福昕pdf编辑器、ABBYY等等，这个留待下回再讲，哈哈。</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>经评论区大佬@Axun提醒，本文所爬网站的PDF文件是可以直接提取的，刷新页面过滤<code>Access</code>即可得到下面的链接，右键在新页面打开即可保存，然后添加扩展名即可。</p>
+<p><img src="/assets/canvas/pdf-source-file.png" alt="PDF source file"></p>
+<p>当然啦，本文提及的canvas图片下载方法也适用于其它网站，欢迎食用。</p>
+]]></content>
+      
+        <categories>
+            
+            <category> 杂物柜 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> tampermonkey </tag>
             
         </tags>
         
@@ -1381,47 +1471,6 @@ Not in presentation format
     </entry>
     
     <entry>
-      <title><![CDATA[使用油猴脚本批量下载canvas图片]]></title>
-      <url>https://www.litreily.top/2020/03/15/canvas-dl/</url>
-      <content type="html"><![CDATA[<p>女友最近在网上下载一些北大网盘的pdf<a href="https://disk.pku.edu.cn/#/link/3A7748E0466521E3E68A0CBA4C24DE20?gns=AE26ACF837E24D51B1EC40E0A80A5D23%2F7F0E54D7D92343B1B62031B1C41F2280" target="_blank" rel="noopener">文档</a>，结果发现没有下载接口，另存为也只能存储单张图片。找我帮忙，这时候发现程序员男票的好处了哈。</p>
-<h2 id="分析页面"><a href="#分析页面" class="headerlink" title="分析页面"></a>分析页面</h2><p>一开始想着使用Chrome调试工具看下pdf链接，发现这个网盘居然不是直接获取的pdf文件，而是使用js脚本动态渲染生成的，涨知识了。</p>
-<p><img src="/assets/canvas/pdf-js.png" alt="pdf-combine js"></p>
-<p>那看看是否可以以图片形式批量下载呢，结果查看pdf单页的html结构发现，这居然是个canvas!!!还不是普通图片，而是画布。</p>
-<p><img src="/assets/canvas/canvas.png" alt="cancvs"></p>
-<h2 id="下载插件"><a href="#下载插件" class="headerlink" title="下载插件"></a>下载插件</h2><p>没关系，canvas什么的也不是难事，万能的油猴插件总会有解决方案的，果不其然让我找到个专门用于下载svg, canvas的油猴插件↓</p>
-<ul>
-<li><a href="https://greasyfork.org/zh-CN/scripts/383101-%E7%BD%91%E7%AB%99%E5%9B%BE%E7%89%87-%E8%83%8C%E6%99%AF%E5%9B%BE-svg-canvas-%E6%8A%93%E5%8F%96%E9%A2%84%E8%A7%88%E4%B8%8B%E8%BD%BD" target="_blank" rel="noopener">网站图片（背景图，svg，canvas）抓取预览下载</a></li>
-</ul>
-<h2 id="下载图片"><a href="#下载图片" class="headerlink" title="下载图片"></a>下载图片</h2><p>这正是我想要的，安装好后，使用起来非常简单，刷新要下载canvas图片的页面，在右下角有一个按钮<strong>自动获取图片</strong>。</p>
-<p><img src="/assets/canvas/check-tampermonkey.png" alt="js extension"></p>
-<p>点击之后开始扫描，注意下图中的数字并不代表实际的图片数量，不用理会。</p>
-<p><img src="/assets/canvas/scanning.png" alt="scanning"></p>
-<p>扫描完成后，可以限定图片大小，以滤除不符合要求的小图片，然后通过<strong>批量下载</strong>完成下载，对于数量较多的页面可能需要稍微等一小会，绝大部分情况是很快的。</p>
-<p><img src="/assets/canvas/download.png" alt="download"></p>
-<p>这样就下载完成啦。</p>
-<p><img src="/assets/canvas/downloaded.png" alt="downloaded"></p>
-<p>至于如何将批量转换为pdf，那方法就多啦，福昕pdf编辑器、ABBYY等等，这个留待下回再讲，哈哈。</p>
-<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>经评论区大佬@Axun提醒，本文所爬网站的PDF文件是可以直接提取的，刷新页面过滤<code>Access</code>即可得到下面的链接，右键在新页面打开即可保存，然后添加扩展名即可。</p>
-<p><img src="/assets/canvas/pdf-source-file.png" alt="PDF source file"></p>
-<p>当然啦，本文提及的canvas图片下载方法也适用于其它网站，欢迎食用。</p>
-]]></content>
-      
-        <categories>
-            
-            <category> 杂物柜 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> tampermonkey </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
       <title><![CDATA[网络协议详解1 - NBNS]]></title>
       <url>https://www.litreily.top/2020/02/28/nbns/</url>
       <content type="html"><![CDATA[<h2 id="NetBIOS-简介"><a href="#NetBIOS-简介" class="headerlink" title="NetBIOS 简介"></a>NetBIOS 简介</h2><p><strong>NetBIOS</strong>，Network Basic Input/Output System的缩写，一般指用于<strong>局域网</strong>通信的一套API，相关RFC文档包括 <a href="https://tools.ietf.org/html/rfc1001" target="_blank" rel="noopener">RFC 1001</a>, <a href="https://tools.ietf.org/html/rfc1002" target="_blank" rel="noopener">RFC 1002</a>. RFC 1001主要对NetBIOS及相关协议和服务进行解释说明，RFC 1002给出了相关协议和服务的数据组包格式。</p>
@@ -1570,7 +1619,7 @@ Not in presentation format
 </ul>
 <p><code>RA</code>与<code>RD</code>的原文解释如下：</p>
 <blockquote>
-<p><strong><code>RA</code></strong> 3 Recursion Available Flag.<br>Only valid in responses from a NetBIOS Name Server – must be zero in all other responses.<br>If one (1) then the NBNS supports recursive query, registration, and release.<br>If zero (0) then the end-node must iterate for query and challenge for registration.</p>
+<p><strong><code>RA</code></strong> 3 Recursion Available Flag.<br>Only valid in responses from a NetBIOS Name Server -- must be zero in all other responses.<br>If one (1) then the NBNS supports recursive query, registration, and release.<br>If zero (0) then the end-node must iterate for query and challenge for registration.</p>
 <p><strong><code>RD</code></strong> 6 Recursion Desired Flag.<br>May only be set on a request to a NetBIOS Name Server.<br>The NBNS will copy its state into the response packet.<br>If one (1) the NBNS will iterate on the query, registration, or release.</p>
 </blockquote>
 <p>大致意思是，对于请求、注册和释放，包含递归发送和迭代发送两种方式。<code>RA</code>为1说明支持递归，为0说明只能迭代，表征的是一种能力；<code>RD</code>则是说明具体以什么方式发送，如果为1则代表迭代，表征的是一个具体动作，这个值在响应包中会从请求包中复制得到。</p>
@@ -1818,7 +1867,7 @@ Not in presentation format
 <h2 id="NetBIOS-命名编码"><a href="#NetBIOS-命名编码" class="headerlink" title="NetBIOS 命名编码"></a>NetBIOS 命名编码</h2><p>上面所有提及的报文中都包含NetBIOS名称，这个名称是被经过编码处理的。参考以下<a href="https://tools.ietf.org/html/rfc1001" target="_blank" rel="noopener">RFC 1001 Ch14.1</a>可知，最长16Byte的NetBIOS name被要求映射为32Byte的可逆的、半ASCII偏置编码。</p>
 <blockquote>
 <p>The 16 byte NetBIOS name is mapped into a 32 byte wide field using a reversible, half-ASCII, biased encoding.  Each half-octet of the NetBIOS name is encoded into one byte of the 32 byte field.  The first half octet is encoded into the first byte, the second half- octet into the second byte, etc.</p>
-<p>Each 4-bit, half-octet of the NetBIOS name is treated as an 8-bit, right-adjusted, zero-filled binary number.  This number is added to value of the ASCII character ‘A’ (hexidecimal 41).  The resulting 8- bit number is stored in the appropriate byte.</p>
+<p>Each 4-bit, half-octet of the NetBIOS name is treated as an 8-bit, right-adjusted, zero-filled binary number.  This number is added to value of the ASCII character &#39;A&#39; (hexidecimal 41).  The resulting 8- bit number is stored in the appropriate byte.</p>
 </blockquote>
 <p>简单讲，就是将每个字符按ASCII拆成两部分，每部分再加上<code>A</code>，从而由1个字符变成两个字符。比如字符<code>L</code>，对应ASCII <code>0x4C</code>，拆成两部分为<code>0x4</code>和<code>0xC</code>，然后每部分都加上字符<code>A</code>对应的ASCII <code>0x41</code>，得到<code>0x45</code>和<code>0x4D</code>，对应字符<code>E</code>和<code>M</code>，这样原始字符<code>L</code>就变成了双字符<code>EM</code>。下面是这个示例的详细说明图解。</p>
 <p><img src="/assets/network/nbns/nbns_name.png" alt="NetBIOS命名编码示例"></p>
@@ -2063,7 +2112,7 @@ NetBIOS Name Service
             Type: NBSTAT (33)
             Class: IN (1)
 </code></pre>
-<p>该数据报包含一个请求，所以<code>Questions</code>为1，其余为0；请求包中的编码名称为<code>*</code>的编码后数据CKAAAAAAAAAAAAAAA…; 由于使用的是指定IP，所以是单播包；因为是NODE STATUS REQUEST, 所以QUESTION_TYPE是NBSTAT(0x0021).</p>
+<p>该数据报包含一个请求，所以<code>Questions</code>为1，其余为0；请求包中的编码名称为<code>*</code>的编码后数据CKAAAAAAAAAAAAAAA...; 由于使用的是指定IP，所以是单播包；因为是NODE STATUS REQUEST, 所以QUESTION_TYPE是NBSTAT(0x0021).</p>
 <p>从指定设备获取到的响应数据如下：</p>
 <p><img src="/assets/network/nbns/nodestatus_ws_response.png" alt="nbns node status response"></p>
 <p>从截图中已经可以清晰的看到数据格式及具体内容了，被折叠的名称信息中，<code>DZ-DN-700&lt;20&gt;</code>与<code>DIAS&lt;1e&gt;</code>如下：</p>
@@ -2505,7 +2554,7 @@ extern void lock_release(struct lockdep_map *lock, int nested,
 <blockquote>
 <p><strong>问题</strong>：<a href="https://stackoverflow.com/questions/29578931/unknown-symbol-class-create-err-0" target="_blank" rel="noopener">unknown symbol __class_create (err 0)</a></p>
 <p>The function <code>__class_create</code> is exported only for GPL modules (exported with <strong>EXPORT_SYMBOL_GPL</strong>). So, you need to use a GPL license with MODULE_LICENSE macro to make use of that function. Same goes for other functions as well.</p>
-<p>This should do the trick:<br><strong>MODULE_LICENSE(“GPL”);</strong></p>
+<p>This should do the trick:<br><strong>MODULE_LICENSE(&quot;GPL&quot;);</strong></p>
 </blockquote>
 <p>发现这个问题和我遇到的情况基本一致，然后我重新检查了这几个Symbol的export方式，确实都是<code>EXPORT_SYMBOL_GPL</code>，接着我再去看<code>ip6t_CONE</code>的sourcecode，发现确实没有声明LICENSE！！！</p>
 <p>好了，解决方案来啦，立马加个kernel patch ↓</p>
@@ -2649,14 +2698,14 @@ CPU: 2 PID: 9465 Comm: swconfig Tainted: P        W    3.14.77 #1
 </blockquote>
 <p><code>Ftrace</code>是一个内部跟踪器，用于追踪内核运行情况，帮助调试用户空间之外的潜在问题或性能问题。根据QCA提供的帮助文档，可以通过以下步骤开启ftrace功能。</p>
 <ol>
-<li>From “make menuconfig”, go to –&gt; “Global Build Settings” then go to –&gt; “Compile kernel with tracing support”</li>
-<li>In the “Compile kernel with tracing support”, enable the below options :-<ul>
+<li>From &quot;make menuconfig&quot;, go to --&gt; &quot;Global Build Settings&quot; then go to --&gt; &quot;Compile kernel with tracing support&quot;</li>
+<li>In the &quot;Compile kernel with tracing support&quot;, enable the below options :-<ul>
 <li>Enable/disable function tracing dynamically</li>
 <li>Trace process context switches and events</li>
 <li>Function tracer</li>
 </ul>
 </li>
-<li>Once above changes are done, then from the “make kernel_menuconfig”, go to –&gt; “Kernel hacking” –&gt; then enable the below options in “Tracers”:-<ul>
+<li>Once above changes are done, then from the &quot;make kernel_menuconfig&quot;, go to --&gt; &quot;Kernel hacking&quot; --&gt; then enable the below options in &quot;Tracers&quot;:-<ul>
 <li>Kernel Function Tracer</li>
 <li>enable/disable function tracing dynamically</li>
 </ul>
@@ -3188,8 +3237,8 @@ Configuring Watchdog Timer
 <p>网址是<a href="https://www.fabiaoqing.com/search/search/keyword/你好/type/bq/page/4.html" target="_blank" rel="noopener">https://www.fabiaoqing.com/search/search/keyword/你好/type/bq/page/4.html</a>，据此就可以分析出表情的分页格式</p>
 <ol>
 <li><code>keyword</code> 后接关键词，此处为“你好”</li>
-<li><code>type</code> 后接类型，此处为”bq”,对应<strong>表情</strong></li>
-<li><code>page</code> 后接页码，此处为”4.html”，对应第４页</li>
+<li><code>type</code> 后接类型，此处为&quot;bq&quot;,对应<strong>表情</strong></li>
+<li><code>page</code> 后接页码，此处为&quot;4.html&quot;，对应第４页</li>
 </ol>
 <p>到此就确定了关键词和分页信息的整合方式，根据这个可以按顺序获取指定关键词的所有分页。那么接下来的问题是如何解析每个分页中的图片信息，下面请看：</p>
 <p><img src="/assets/emotion/hello-3.png" alt="hello page 3"></p>
@@ -3448,7 +3497,7 @@ crw-rw---- 1 root dialout 188, 0 9月  12 22:42 /dev/ttyUSB0
 <h2 id="常用的ftp客户端"><a href="#常用的ftp客户端" class="headerlink" title="常用的ftp客户端"></a>常用的ftp客户端</h2><p>在介绍ftp数据传输之前，简单介绍下常用的几款ftp client：</p>
 <ul>
 <li><code>ftp</code> </li>
-<li><code>lftp</code>（支持ftp, http, https, sftp, fish, torrent, fxp, …）</li>
+<li><code>lftp</code>（支持ftp, http, https, sftp, fish, torrent, fxp, ...）</li>
 <li><code>sftp</code>(Secure File Transfer Protocol)</li>
 <li>FileZilla(图形化软件，支持ftp, ftps, sftp)</li>
 </ul>
@@ -3552,7 +3601,7 @@ EOF
 <blockquote>
 <p><strong>man bash</strong></p>
 <p>[n]&lt;&lt;[-]word<br>             here-document<br>delimiter</p>
-<p>……</p>
+<p>......</p>
 <p>If the redirection operator is <code>&lt;&lt;-</code>, then all leading tab characters are stripped from input lines and the line  containing  delimiter.   This  allows  here-documents within shell scripts to be indented in a natural fashion.</p>
 </blockquote>
 <p>简单点说，<code>&lt;&lt;-EOF</code>中的连接符<code>-</code>保证下面语句中的每行开头的<code>tab</code>分隔符会被忽略，但又可以保证代码的自然美观。如果下面语句中开头的<code>tab</code>键是空格替换的，那么有可能会报语法错误，这也是需要注意的。</p>
@@ -4744,7 +4793,7 @@ Line 1 will be cropped at 100 characters. All other lines will be wrapped after 
 </tr>
 <tr>
 <td style="text-align:center">chore</td>
-<td style="text-align:left">Other changes that don’t modify src or test files</td>
+<td style="text-align:left">Other changes that don&#39;t modify src or test files</td>
 </tr>
 <tr>
 <td style="text-align:center">revert</td>
@@ -5254,7 +5303,7 @@ inet6 addr: fe80::a263:91ff:fea7:6307/64 Scope:Link
 </code></pre>
 <p>此处说明一点，由于WAN端使用的<code>PPPoE</code>拨号上网方式，所以没有启动<code>dhcp6c</code>（用于获取ipv6的客户端程序）。那是不是还有其它相关的进程挂了呢？为此我问了下组长（大牛），发现确实还有个<code>radvd</code>进程！对比前后<code>log</code>中的<code>ps</code>输出发现确实是这个进程挂了！！！</p>
 <blockquote>
-<p><strong>路由广播守护</strong>（The Router Advertisement Daemon，简称：<code>radvd</code>）是一个符合<code>RFC 2461</code>使用邻居发现协议用于实现<code>IPv6</code>地址本地链接广播和<code>IPv6</code>路由前缀的开源软件。该软件是给系统管理员用于实现在<code>IPv6</code>下对主机进行无状态自动配置地址。<br>— <a href="https://zh.wikipedia.org/wiki/Radvd" target="_blank" rel="noopener">维基百科</a></p>
+<p><strong>路由广播守护</strong>（The Router Advertisement Daemon，简称：<code>radvd</code>）是一个符合<code>RFC 2461</code>使用邻居发现协议用于实现<code>IPv6</code>地址本地链接广播和<code>IPv6</code>路由前缀的开源软件。该软件是给系统管理员用于实现在<code>IPv6</code>下对主机进行无状态自动配置地址。<br>--- <a href="https://zh.wikipedia.org/wiki/Radvd" target="_blank" rel="noopener">维基百科</a></p>
 </blockquote>
 <p>总之，<code>radvd</code>也是<code>IPv6</code>必不可少的进程，而且莫名其妙的挂了。</p>
 <h2 id="radvd进程退出原因分析"><a href="#radvd进程退出原因分析" class="headerlink" title="radvd进程退出原因分析"></a>radvd进程退出原因分析</h2><p>为了分析<code>radvd</code>进程退出原因，我尝试手动重启进程</p>
@@ -5721,7 +5770,7 @@ sudo pip install pypcap
 <a id="more"></a>
 <h2 id="Windows-端安装-pypcap"><a href="#Windows-端安装-pypcap" class="headerlink" title="Windows 端安装 pypcap"></a>Windows 端安装 pypcap</h2><p>根据<code>pypcap</code>官方说明：</p>
 <blockquote>
-<p>WinPcap has compatibility issues with Windows 10, therefore it’s recommended to use Npcap (Nmap’s packet sniffing library for Windows, based on the WinPcap/Libpcap libraries, but with improved speed, portability, security, and efficiency). Please enable WinPcap API-compatible mode during the library installation.</p>
+<p>WinPcap has compatibility issues with Windows 10, therefore it&#39;s recommended to use Npcap (Nmap&#39;s packet sniffing library for Windows, based on the WinPcap/Libpcap libraries, but with improved speed, portability, security, and efficiency). Please enable WinPcap API-compatible mode during the library installation.</p>
 </blockquote>
 <p>这里提到<code>winpcap</code>与<code>win10</code>间存在兼容性问题，具体什么问题我也没搞清楚，之前使用<code>wireshark</code>抓包一直用的<code>winpcap</code>也没问题。不过我估计和后面要用到的<code>npcap sdk</code>有关吧。既如此，就需要在安装<code>pypcap</code>前安装好<code>Npcap</code>，并下载好<code>Npcap SDK</code>。</p>
 <h3 id="下载文件"><a href="#下载文件" class="headerlink" title="下载文件"></a>下载文件</h3><ol>
@@ -5970,7 +6019,7 @@ pkts_20181230-185017.pcap  pkts_20181231-203416.pcap  pkts_20181231-215837.pcap
 </code></pre>
 <p>代码已上传至<a href="https://github.com/Litreily/Python-demos.git" target="_blank" rel="noopener">github Python-demos</a> <code>sniffer.py</code></p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
-<li><a href="https://www.cnblogs.com/jackadam/p/8279080.html" target="_blank" rel="noopener">windows 环境下python 安装 pypcap…</a></li>
+<li><a href="https://www.cnblogs.com/jackadam/p/8279080.html" target="_blank" rel="noopener">windows 环境下python 安装 pypcap...</a></li>
 <li><a href="https://www.cnblogs.com/xuanhun/p/5625186.html" target="_blank" rel="noopener">Python黑客编程3网络数据监听和过滤</a></li>
 <li><a href="https://blog.csdn.net/weixin_39138707/article/details/74612637" target="_blank" rel="noopener">Mac下用python+pypcap+dpkt抓取IP数据包并分析</a></li>
 </ol>
@@ -6326,7 +6375,7 @@ int getopt_long(int argc, char * const argv[],
 </code></pre>
 <p>当<code>flag</code>为NULL时，<code>getopt_long</code>返回<code>val</code>，否则返回0,并将<code>val</code>值存入<code>flag</code></p>
 <ul>
-<li><code>longindex</code>: 用于存储当前解析的长选项在<code>longopts</code>中的索引值(0,1,…)，通常设为<code>NULL</code></li>
+<li><code>longindex</code>: 用于存储当前解析的长选项在<code>longopts</code>中的索引值(0,1,...)，通常设为<code>NULL</code></li>
 </ul>
 <p>下面使用<code>getopt_long</code>实现对选项<code>--help</code>，<code>--version</code>, <code>-a</code>的解析：</p>
 <pre><code class="c">int main(int argc, char *argv[])
@@ -6572,7 +6621,7 @@ test.txt
 </code></pre>
 <h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ol>
 <li><a href="http://man.linuxde.net/tee" target="_blank" rel="noopener">tee命令</a></li>
-<li><a href="http://blog.zhangjikai.com/2016/03/05/%E3%80%90C%E3%80%91%E8%A7%A3%E6%9E%90%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%8F%82%E6%95%B0--getopt%E5%92%8Cgetopt_long/" target="_blank" rel="noopener">解析命令行参数–getopt和getopt_long</a></li>
+<li><a href="http://blog.zhangjikai.com/2016/03/05/%E3%80%90C%E3%80%91%E8%A7%A3%E6%9E%90%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%8F%82%E6%95%B0--getopt%E5%92%8Cgetopt_long/" target="_blank" rel="noopener">解析命令行参数--getopt和getopt_long</a></li>
 </ol>
 ]]></content>
       
@@ -6703,7 +6752,7 @@ Program terminated with signal 6, Aborted.
 </code></pre>
 <blockquote>
 <p><strong>BackTrace (bt) 输出</strong>  </p>
-<p>#num memory_addr in function (arg1=val1, arg2=val2,…) at file.c:line<br><code>bt</code>输出前面的编号是进程执行时的压栈顺序，编号越小越底层。编号后面紧跟的是内存地址，从地址大小可以看出哪些是内核调用，哪些是用户调用。  </p>
+<p>#num memory_addr in function (arg1=val1, arg2=val2,...) at file.c:line<br><code>bt</code>输出前面的编号是进程执行时的压栈顺序，编号越小越底层。编号后面紧跟的是内存地址，从地址大小可以看出哪些是内核调用，哪些是用户调用。  </p>
 <p><strong>注意：</strong>由于编译器优化缘故，某些变量会显示<code>value optimized out</code>，如果想获取真实值，需要在编译时添加<code>-O0</code>，用以禁用编译器优化</p>
 </blockquote>
 <p>从<code>bt</code>结果可以看出，进程是在执行动态内存分配函数<code>malloc</code>时检测到错误，并执行<code>abort</code>函数触发<code>SIGABRT</code>信号后退出的。那就可以确定是内存问题，多半是内存多次释放或是未释放导致的。</p>
@@ -6905,7 +6954,7 @@ ul
         span.dot ●
         a(href=href)= name
 </code></pre>
-<p>其中，<code>menu-item</code>为调用时所用名称，可认为是函数名，<code>href</code>及<code>name</code>是参数。同上<a href="#定义变量">定义变量</a>所说，<code>a(href=href)= name</code>中第二个<code>=</code>是为了将后面的<code>name</code>当作参数来处理，而不是当作字符串”name”来处理。</p>
+<p>其中，<code>menu-item</code>为调用时所用名称，可认为是函数名，<code>href</code>及<code>name</code>是参数。同上<a href="#定义变量">定义变量</a>所说，<code>a(href=href)= name</code>中第二个<code>=</code>是为了将后面的<code>name</code>当作参数来处理，而不是当作字符串&quot;name&quot;来处理。</p>
 <p>调用<code>mixin</code>定义的代码块，需通过<code>+</code>号紧跟<code>mixin</code>名称及参数:</p>
 <pre><code class="pug">+menu-item(&#39;/Archives&#39;,&#39;Archives&#39;)
 +menu-item(&#39;/About&#39;,&#39;About&#39;)
@@ -8755,7 +8804,7 @@ if __name__ == &#39;__main__&#39;:
 </code></pre>
 <p>好像可以了，这不就可以按页抓取博客链接，然后接着分析每篇博文信息不就好了么。我原本就想这么干，可是当我查看了不同用户的排版以及相应的链接信息后，整个人都不好了，一千个用户就是一千个哈姆雷特啊。如果你发现有统一解析所有用户模板信息的方法，那肯定是你看的模板不够多。</p>
 <p>所以呢，这条路是走不通了，至少我没再往这条路上走。打道回府，只不过重头再来，路漫漫其修远兮，吾将上下而求索。</p>
-<p>靠，说了半天，原来走不通，那你说个毛线！！！淡定淡定，都是文明人，后面的风景很远，额不是，，，是很美，请耐心等待…</p>
+<p>靠，说了半天，原来走不通，那你说个毛线！！！淡定淡定，都是文明人，后面的风景很远，额不是，，，是很美，请耐心等待...</p>
 <h3 id="归档页信息"><a href="#归档页信息" class="headerlink" title="归档页信息"></a>归档页信息</h3><blockquote>
 <p>归档页：<code>http://[username].lofter.com/view</code></p>
 </blockquote>
@@ -8763,8 +8812,8 @@ if __name__ == &#39;__main__&#39;:
 <p><img src="/assets/spider/lofter/archive.png" alt="archive"></p>
 <p>先来看看归档页面的结构吧，博客按月份归档，每篇博客仅显示首张图片缩略图或纯文本。然后<code>F12</code>打开调试工具，如下图所示，每个月份对应一个<code>&lt;div class=&quot;m-filecnt m-filecnt-1&quot;&gt;</code>这样的节点，每个月份节点包含了本月所有博客的入口信息，一篇博客对应一个<code>id</code>号，以及一个博客的<strong>相对路径</strong>。<code>id</code>神马的不用关心，重点就是这个<strong>相对路径</strong>，有了它不就有了博客的绝对路径了么。</p>
 <ul>
-<li>相对路径：”/post/44fbca_1265bb3e”</li>
-<li>绝对路径：”http://[username].lofter.com/post/44fbca_1265bb3e”</li>
+<li>相对路径：&quot;/post/44fbca_1265bb3e&quot;</li>
+<li>绝对路径：&quot;http://[username].lofter.com/post/44fbca_1265bb3e&quot;</li>
 </ul>
 <p><img src="/assets/spider/lofter/archive_html.png" alt="archive structure"></p>
 <p>这样看来，那岂不是只要抓取这一个归档页面就可以抓到所有的博客路径了呢？呵呵，真的这么容易吗？显然不大可能，当我们下拉页面时，归档信息将动态加载刷新，没错，是动态的！！！意料之中的猝不及防</p>
@@ -9655,7 +9704,7 @@ $ export http_proxy=&quot;http://127.0.0.1:8123/&quot; curl ifconfig.me
 <p>安装路径：<code>~/lib/software/tmux</code></p>
 <h2 id="Download"><a href="#Download" class="headerlink" title="Download"></a>Download</h2><p><code>tmux</code>的下载地址 : <a href="https://github.com/tmux/tmux/releases/download/2.5/tmux-2.5.tar.gz" target="_blank" rel="noopener">https://github.com/tmux/tmux/releases/download/2.5/tmux-2.5.tar.gz</a></p>
 <p>依赖库<code>libevent</code>：<a href="https://github.com/libevent/libevent/releases/download/release-2.1.8-stable/libevent-2.1.8-stable.tar.gz" target="_blank" rel="noopener">https://github.com/libevent/libevent/releases/download/release-2.1.8-stable/libevent-2.1.8-stable.tar.gz</a></p>
-<p>下载后的文件通过一定方式(scp，共享服务，…)可以传入服务器中。</p>
+<p>下载后的文件通过一定方式(scp，共享服务，...)可以传入服务器中。</p>
 <h2 id="Move-files-optional"><a href="#Move-files-optional" class="headerlink" title="Move files (optional)"></a>Move files (optional)</h2><p>在服务器中执行以下指令，将文件放入<code>~/lib</code>文件夹。</p>
 <pre><code class="bash">cd
 mkdir lib
@@ -10066,7 +10115,7 @@ int main(void)
 ...
 ...
 </code></pre>
-<p><code>target</code>: 目标文件，可以是.o（object file）文件，也可以是最终的可执行文件<br><code>prerequisites</code> : 生成目标文件所需的文件或是目标（<em>.h, </em>.c, *.o, …）<br><code>command</code>: <code>make</code>需要执行的编译、链接等指令（所有指令前都以<code>TAB</code>键开头）</p>
+<p><code>target</code>: 目标文件，可以是.o（object file）文件，也可以是最终的可执行文件<br><code>prerequisites</code> : 生成目标文件所需的文件或是目标（<em>.h, </em>.c, *.o, ...）<br><code>command</code>: <code>make</code>需要执行的编译、链接等指令（所有指令前都以<code>TAB</code>键开头）</p>
 <h3 id="makefile-基础写法"><a href="#makefile-基础写法" class="headerlink" title="makefile 基础写法"></a>makefile 基础写法</h3><pre><code class="makefile">test : main.o add.o
     cc -o test main.o add.o
 
@@ -10083,7 +10132,7 @@ clean :
     rm test main.o add.o
 </code></pre>
 <p>其中，test, main.o, add.o均是目标文件<code>target</code>；所有源文件及头文件均为<code>prerequisites</code>；</p>
-<p><code>cc</code> : 编译器，与<code>gcc</code>相似，<code>-c</code>代表编译，执行后产生对象文件，即”.o”文件；<code>-o</code>代表链接，用于链接”.o”文件并生成可执行文件；</p>
+<p><code>cc</code> : 编译器，与<code>gcc</code>相似，<code>-c</code>代表编译，执行后产生对象文件，即&quot;.o&quot;文件；<code>-o</code>代表链接，用于链接&quot;.o&quot;文件并生成可执行文件；</p>
 <p><code>.PHONY</code> : 用于声明后面跟着的都是伪目标（类似于C语言中的标签(Label)）；</p>
 <p><code>clean</code> ： 一个伪目标，只有在外部执行<code>make clean</code>时方才执行相应的执行，此次用于删除生成的所有目标文件。</p>
 <h3 id="makefile-简化版1"><a href="#makefile-简化版1" class="headerlink" title="makefile 简化版1"></a>makefile 简化版1</h3><p>在<code>makefile</code>中可以通过<code>$</code>符号引用变量，简化文件。变量定义以等号连接，类似于宏定义，将需要多处使用的字符串存入变量中可以方便修改和管理，如本例，可定义以下变量：</p>
@@ -10107,8 +10156,8 @@ clean :
     rm test (objs)
 </code></pre>
 <p>当项目文件很多时，合理使用变量可以大大简化<code>makefile</code>的编写和修改。</p>
-<h3 id="makefile-简化版2"><a href="#makefile-简化版2" class="headerlink" title="makefile 简化版2"></a>makefile 简化版2</h3><p>要知道，<code>make</code>非常强大，具有<strong>自动推导</strong>的功能，可以自动推导”.o”目标文件下面的指令。如果目标文件为”main.o”，那么指令必然为”cc -c main.c”，依赖于<code>make</code>指令的推导功能，<code>makefile</code>可以省略该指令的编写。</p>
-<p>此外，每个”.o”目标文件的依赖文件必然包含一个文件名相同的”.c”文件，该文件可以通过自动推导得出，所以在<code>makefile</code>中同样可以省略。</p>
+<h3 id="makefile-简化版2"><a href="#makefile-简化版2" class="headerlink" title="makefile 简化版2"></a>makefile 简化版2</h3><p>要知道，<code>make</code>非常强大，具有<strong>自动推导</strong>的功能，可以自动推导&quot;.o&quot;目标文件下面的指令。如果目标文件为&quot;main.o&quot;，那么指令必然为&quot;cc -c main.c&quot;，依赖于<code>make</code>指令的推导功能，<code>makefile</code>可以省略该指令的编写。</p>
+<p>此外，每个&quot;.o&quot;目标文件的依赖文件必然包含一个文件名相同的&quot;.c&quot;文件，该文件可以通过自动推导得出，所以在<code>makefile</code>中同样可以省略。</p>
 <p>根据以上规则可以对<code>makefile</code>进一步简化：</p>
 <pre><code class="makefile">objs = main.o add.o
 test : $(objs)
@@ -10602,9 +10651,9 @@ VariantData : 键值数据（一维的变体数组）
 </ol>
 <h2 id="RSS阅读器"><a href="#RSS阅读器" class="headerlink" title="RSS阅读器"></a>RSS阅读器</h2><p>有了RSS资源，该用什么工具查看呢，这个通常分在线和离线两种。</p>
 <ul>
-<li><p>在线网站：<a href="http://reader.youdao.com/" target="_blank" rel="noopener">有道阅读</a>，<a href="http://www.yilan.io/" target="_blank" rel="noopener">一览</a> …</p>
+<li><p>在线网站：<a href="http://reader.youdao.com/" target="_blank" rel="noopener">有道阅读</a>，<a href="http://www.yilan.io/" target="_blank" rel="noopener">一览</a> ...</p>
 </li>
-<li><p>离线软件：<a href="http://www.feeddemon.com/" target="_blank" rel="noopener">FeedDemon</a>，<a href="http://www.appinn.com/inoreader/" target="_blank" rel="noopener">inoreader</a> …</p>
+<li><p>离线软件：<a href="http://www.feeddemon.com/" target="_blank" rel="noopener">FeedDemon</a>，<a href="http://www.appinn.com/inoreader/" target="_blank" rel="noopener">inoreader</a> ...</p>
 </li>
 </ul>
 <p>更详细的可以看这篇：<a href="https://www.zhihu.com/question/28808592" target="_blank" rel="noopener">2015 国内最好的 RSS 阅读器是什么？</a></p>
@@ -10814,7 +10863,7 @@ $ hexo new page message
 <h2 id="2016-12-12"><a href="#2016-12-12" class="headerlink" title="2016-12-12"></a>2016-12-12</h2><ul>
 <li>将评论系统改为 <a href="http://duoshuo.com/" target="_blank" rel="noopener">多说</a></li>
 <li>将原有博文的 <code>h4</code> 标题统一改为 <code>h3</code></li>
-<li>添加博文 “建站日志” ，用以记录网站建设过程</li>
+<li>添加博文 &quot;建站日志&quot; ，用以记录网站建设过程</li>
 <li>将博客部署到域名 <code>www.litreily.top</code></li>
 <li>修改 <code>primer\layout\_partial\footer.ejs</code> ，配置 <code>RSS</code> 路径，将 <code>atom.xml</code> 改为 <code>search.xml</code>。</li>
 </ul>
@@ -11747,7 +11796,7 @@ getFreq
 <h2 id="4-通过-LabVIEW-调用-dll文件"><a href="#4-通过-LabVIEW-调用-dll文件" class="headerlink" title="4. 通过 LabVIEW 调用 .dll文件"></a>4. 通过 LabVIEW 调用 .dll文件</h2><p>通过 VS，我们已经得到了想要的 .dll 文件，那么在 LabVIEW 中该如何调用呢？这里提供两种方法。</p>
 <ol>
 <li>通过调用库函数节点（Call Library Function Node）</li>
-<li>通过 LabVIEW 导入工具（Tools-&gt;Import-&gt;Shared Library(.dll)…）</li>
+<li>通过 LabVIEW 导入工具（Tools-&gt;Import-&gt;Shared Library(.dll)...）</li>
 </ol>
 <p>两种方法的原理一致，以第一种方法为例进行讲解。</p>
 <h3 id="4-1-Call-Library-Function-Node"><a href="#4-1-Call-Library-Function-Node" class="headerlink" title="4.1 Call Library Function Node"></a>4.1 Call Library Function Node</h3><p>在 LabVIEW 函数面板搜索 &quot;Call Library&quot; ，中文版可直接搜索 <code>dll</code>。将调用库函数节点放入程序框图中。</p>
@@ -11796,9 +11845,9 @@ unsigned char canFreeData : 布尔变量，确定能否释放数据内存
         
         <tags>
             
-            <tag> labview </tag>
-            
             <tag> matlab </tag>
+            
+            <tag> labview </tag>
             
             <tag> VS </tag>
             
@@ -13407,9 +13456,9 @@ static void vUasrtSendTask(void *pvParameters)
             
             <tag> C/C++ </tag>
             
-            <tag> stm32 </tag>
-            
             <tag> FreeRTOS </tag>
+            
+            <tag> stm32 </tag>
             
         </tags>
         
@@ -13833,11 +13882,11 @@ Categories=Development;IDE;Java;
         
         <tags>
             
+            <tag> atom </tag>
+            
             <tag> ubuntu </tag>
             
             <tag> linux </tag>
-            
-            <tag> atom </tag>
             
         </tags>
         
@@ -14004,7 +14053,64 @@ int main()
   }
 }
 </code></pre>
-<h3 id="2-3-希尔排序"><a href="#2-3-希尔排序" class="headerlink" title="2.3 希尔排序"></a>2.3 希尔排序</h3><p>持续更新中…</p>
+<h3 id="2-3-希尔排序"><a href="#2-3-希尔排序" class="headerlink" title="2.3 希尔排序"></a>2.3 希尔排序</h3><p>持续更新中...</p>
+]]></content>
+      
+        <categories>
+            
+            <category> 算法 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> algorithm </tag>
+            
+            <tag> C/C++ </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[前端岗位模拟试题2]]></title>
+      <url>https://www.litreily.top/2016/09/12/algor-WYMN2/</url>
+      <content type="html"><![CDATA[<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>二货小易有一个W*H的网格盒子，网格的行编号为0~H-1，网格的列编号为0~W-1。每个格子至多可以放一块蛋糕，任意两块蛋糕的欧几里得距离不能等于2。</p>
+<p>对于两个格子坐标(x1,y1),(x2,y2)的欧几里得距离为：((x1-x2)<em>(x1-x2)+(y1-y2)</em>(y1-y2))的算术平方根。</p>
+<p>小易想知道最多可以放多少块蛋糕在网格盒子里。</p>
+<h3 id="输入描述"><a href="#输入描述" class="headerlink" title="输入描述"></a>输入描述</h3><blockquote>
+<p>每组数组包含网格长宽W,H，用空格分隔。(1&lt;=W、H&lt;=1000)</p>
+</blockquote>
+<h3 id="输出描述"><a href="#输出描述" class="headerlink" title="输出描述"></a>输出描述</h3><blockquote>
+<p>输出一个最多可以放的蛋糕数</p>
+</blockquote>
+<h3 id="输入例子"><a href="#输入例子" class="headerlink" title="输入例子"></a>输入例子</h3><blockquote>
+<p>3 2</p>
+</blockquote>
+<h3 id="输出例子"><a href="#输出例子" class="headerlink" title="输出例子"></a>输出例子</h3><blockquote>
+<p>4</p>
+</blockquote>
+<h2 id="题目解析"><a href="#题目解析" class="headerlink" title="题目解析"></a>题目解析</h2><p>根据题意，可以推测出蛋糕数最多的放置方案：将网格进行分区，每四个构成一个正方形的网格作为一个分区，类似于坐标变换。假设原坐标为(x,y),那么变换后的分区坐标为(x/2,y/2)。当变换后的分区坐标满足横纵坐标之和为偶数时，该分区内的4个网格均可放置蛋糕。</p>
+<p><img src="/assets/algorithm/putCake.png" alt="putCake"></p>
+<h2 id="解题程序"><a href="#解题程序" class="headerlink" title="解题程序"></a>解题程序</h2><pre><code class="C++">#include &lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+
+  int W,H;
+  int cnt=0;                   // 定义可放的蛋糕数
+  cin&gt;&gt;W&gt;&gt;H;                // 输入盒子网格的行列数
+
+  for(int i=0;i&lt;H;i++)
+      for(int j=0;j&lt;W;j++)
+          if((i/2+j/2)%2==0)
+          cnt++;
+  cout&lt;&lt;cnt&lt;&lt;endl;
+  return 0;    
+}
+</code></pre>
 ]]></content>
       
         <categories>
@@ -14088,63 +14194,6 @@ int main()
     </entry>
     
     <entry>
-      <title><![CDATA[前端岗位模拟试题2]]></title>
-      <url>https://www.litreily.top/2016/09/12/algor-WYMN2/</url>
-      <content type="html"><![CDATA[<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>二货小易有一个W*H的网格盒子，网格的行编号为0~H-1，网格的列编号为0~W-1。每个格子至多可以放一块蛋糕，任意两块蛋糕的欧几里得距离不能等于2。</p>
-<p>对于两个格子坐标(x1,y1),(x2,y2)的欧几里得距离为：((x1-x2)<em>(x1-x2)+(y1-y2)</em>(y1-y2))的算术平方根。</p>
-<p>小易想知道最多可以放多少块蛋糕在网格盒子里。</p>
-<h3 id="输入描述"><a href="#输入描述" class="headerlink" title="输入描述"></a>输入描述</h3><blockquote>
-<p>每组数组包含网格长宽W,H，用空格分隔。(1&lt;=W、H&lt;=1000)</p>
-</blockquote>
-<h3 id="输出描述"><a href="#输出描述" class="headerlink" title="输出描述"></a>输出描述</h3><blockquote>
-<p>输出一个最多可以放的蛋糕数</p>
-</blockquote>
-<h3 id="输入例子"><a href="#输入例子" class="headerlink" title="输入例子"></a>输入例子</h3><blockquote>
-<p>3 2</p>
-</blockquote>
-<h3 id="输出例子"><a href="#输出例子" class="headerlink" title="输出例子"></a>输出例子</h3><blockquote>
-<p>4</p>
-</blockquote>
-<h2 id="题目解析"><a href="#题目解析" class="headerlink" title="题目解析"></a>题目解析</h2><p>根据题意，可以推测出蛋糕数最多的放置方案：将网格进行分区，每四个构成一个正方形的网格作为一个分区，类似于坐标变换。假设原坐标为(x,y),那么变换后的分区坐标为(x/2,y/2)。当变换后的分区坐标满足横纵坐标之和为偶数时，该分区内的4个网格均可放置蛋糕。</p>
-<p><img src="/assets/algorithm/putCake.png" alt="putCake"></p>
-<h2 id="解题程序"><a href="#解题程序" class="headerlink" title="解题程序"></a>解题程序</h2><pre><code class="C++">#include &lt;iostream&gt;
-using namespace std;
-
-int main()
-{
-
-  int W,H;
-  int cnt=0;                   // 定义可放的蛋糕数
-  cin&gt;&gt;W&gt;&gt;H;                // 输入盒子网格的行列数
-
-  for(int i=0;i&lt;H;i++)
-      for(int j=0;j&lt;W;j++)
-          if((i/2+j/2)%2==0)
-          cnt++;
-  cout&lt;&lt;cnt&lt;&lt;endl;
-  return 0;    
-}
-</code></pre>
-]]></content>
-      
-        <categories>
-            
-            <category> 算法 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> algorithm </tag>
-            
-            <tag> C/C++ </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
       <title><![CDATA[解决atom无法安装插件的问题]]></title>
       <url>https://www.litreily.top/2016/08/21/atom-packages/</url>
       <content type="html"><![CDATA[<h2 id="1-出错信息"><a href="#1-出错信息" class="headerlink" title="1. 出错信息"></a>1. 出错信息</h2><p>倘若使用<a href="https://atom.io/" target="_blank" rel="noopener">atom</a>自带的插件安装工具&quot;File-&gt;Settings-&gt;Install&quot;安装插件，通常会报错，以&quot;pp-markdown&quot;为例，其错误信息如下：</p>
@@ -14192,9 +14241,9 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
         
         <tags>
             
-            <tag> git </tag>
-            
             <tag> atom </tag>
+            
+            <tag> git </tag>
             
         </tags>
         
@@ -14229,9 +14278,9 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
         
         <tags>
             
-            <tag> tools </tag>
-            
             <tag> utorrent </tag>
+            
+            <tag> tools </tag>
             
         </tags>
         
@@ -14494,7 +14543,7 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
 <h3 id="3-3-git-remote"><a href="#3-3-git-remote" class="headerlink" title="3.3 git remote"></a>3.3 git remote</h3><p>为了推送代码至远程仓库，可以选择Github、Coding等带有Git管理器的网站，新建项目并复制仓库网址。为了实现:</p>
 <pre><code class="bash">$ git remote add origin https://git.coding.net/litreily/svg-social.git
 </code></pre>
-<p>可以在Brackets中打开git工具，点击右侧第一个按钮，选择“Create new remote…”，然后依次输入仓库名称以及网址，确认即可。</p>
+<p>可以在Brackets中打开git工具，点击右侧第一个按钮，选择“Create new remote...”，然后依次输入仓库名称以及网址，确认即可。</p>
 <p><img src="/assets/brackets/git/git remote.png" alt="git remote"></p>
 <p><img src="/assets/brackets/git/git remote add.png" alt="git remote"></p>
 <h3 id="3-4-git-commit"><a href="#3-4-git-commit" class="headerlink" title="3.4 git commit"></a>3.4 git commit</h3><p>当我们需要提交已修改文件时，可以执行<code>git add File_name</code>/<code>git add .</code>以及<code>git commit</code>。如果使用git插件，可以在git工具中勾选需要提交的文件，然后点击提交按钮，在弹出的界面中输入提交信息，点击确认即可。</p>
@@ -14537,11 +14586,11 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
         
         <tags>
             
-            <tag> brackets </tag>
+            <tag> tools </tag>
             
             <tag> git </tag>
             
-            <tag> tools </tag>
+            <tag> brackets </tag>
             
         </tags>
         
@@ -14643,7 +14692,7 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
 $ ruby dk.rb init
 </code></pre>
 <p><img src="/assets/jekyll/Ruby-init.png" alt="Ruby-init"></p>
-<p>运行以上指令后，devkit目录下将会多出一个”config.yml”,其内容为：</p>
+<p>运行以上指令后，devkit目录下将会多出一个&quot;config.yml&quot;,其内容为：</p>
 <pre><code class="bash"># This configuration file contains the absolute path locations of all
 # installed Rubies to be enhanced to work with the DevKit. This config
 # file is generated by the &#39;ruby dk.rb init&#39; step and may be modified

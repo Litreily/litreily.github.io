@@ -241,7 +241,7 @@ root:/sys/devices/virtual/ubi/ubi0# cat reserved_for_bad
 <p>在目录<code>/sys/class/ubi/ubi0</code>下还可以看到其它ubi信息，比如avail_eraseblocks（可用块）, bad_peb_count（坏块个数）等。</p>
 <p>好啦，用户空间就到这吧，我们已经搞清楚了<code>ubinfo -a</code>的信息来源是系统目录下的文件，当然我们也可以很容易猜到这些文件是系统内核产生的，确切的说是UBI驱动程序产生的。</p>
 <h2 id="内核空间"><a href="#内核空间" class="headerlink" title="内核空间"></a>内核空间</h2><p>接下来看内核空间的UBI驱动部分，查找底层驱动是如何计算坏块保留大小的。</p>
-<p>根据开机过程的UBI log，在linux内核的<code>drivers/mtd/ubi/</code>目录grep搜索相关字符串（如”PEBs reserved for bad PEB handling”），可以找到打印这些log的函数<code>ubi_attach_mtd_dev</code>.</p>
+<p>根据开机过程的UBI log，在linux内核的<code>drivers/mtd/ubi/</code>目录grep搜索相关字符串（如&quot;PEBs reserved for bad PEB handling&quot;），可以找到打印这些log的函数<code>ubi_attach_mtd_dev</code>.</p>
 <h3 id="ubi-attach-mtd-dev"><a href="#ubi-attach-mtd-dev" class="headerlink" title="ubi_attach_mtd_dev"></a>ubi_attach_mtd_dev</h3><p>该函数用于附加MTD device到UBI并分配@ubi_num给新创建的UBI设备，在附加过程中会打印UBI设备的相关信息，也就是<a href="#UBI-attach">UBI attach</a>部分的console log.</p>
 <pre><code class="c">int ubi_attach_mtd_dev(struct mtd_info *mtd, int ubi_num,
             int vid_hdr_offset, int max_beb_per1024)

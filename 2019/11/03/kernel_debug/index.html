@@ -16,14 +16,14 @@
 </blockquote>
 <p><code>Ftrace</code>是一个内部跟踪器，用于追踪内核运行情况，帮助调试用户空间之外的潜在问题或性能问题。根据QCA提供的帮助文档，可以通过以下步骤开启ftrace功能。</p>
 <ol>
-<li>From “make menuconfig”, go to –&gt; “Global Build Settings” then go to –&gt; “Compile kernel with tracing support”</li>
-<li>In the “Compile kernel with tracing support”, enable the below options :-<ul>
+<li>From &quot;make menuconfig&quot;, go to --&gt; &quot;Global Build Settings&quot; then go to --&gt; &quot;Compile kernel with tracing support&quot;</li>
+<li>In the &quot;Compile kernel with tracing support&quot;, enable the below options :-<ul>
 <li>Enable/disable function tracing dynamically</li>
 <li>Trace process context switches and events</li>
 <li>Function tracer</li>
 </ul>
 </li>
-<li>Once above changes are done, then from the “make kernel_menuconfig”, go to –&gt; “Kernel hacking” –&gt; then enable the below options in “Tracers”:-<ul>
+<li>Once above changes are done, then from the &quot;make kernel_menuconfig&quot;, go to --&gt; &quot;Kernel hacking&quot; --&gt; then enable the below options in &quot;Tracers&quot;:-<ul>
 <li>Kernel Function Tracer</li>
 <li>enable/disable function tracing dynamically</li>
 </ul>

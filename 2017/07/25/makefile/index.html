@@ -54,7 +54,7 @@ int main(void)
 ...
 ...
 </code></pre>
-<p><code>target</code>: 目标文件，可以是.o（object file）文件，也可以是最终的可执行文件<br><code>prerequisites</code> : 生成目标文件所需的文件或是目标（<em>.h, </em>.c, *.o, …）<br><code>command</code>: <code>make</code>需要执行的编译、链接等指令（所有指令前都以<code>TAB</code>键开头）</p>
+<p><code>target</code>: 目标文件，可以是.o（object file）文件，也可以是最终的可执行文件<br><code>prerequisites</code> : 生成目标文件所需的文件或是目标（<em>.h, </em>.c, *.o, ...）<br><code>command</code>: <code>make</code>需要执行的编译、链接等指令（所有指令前都以<code>TAB</code>键开头）</p>
 <h3 id="makefile-基础写法"><a href="#makefile-基础写法" class="headerlink" title="makefile 基础写法"></a>makefile 基础写法</h3><pre><code class="makefile">test : main.o add.o
     cc -o test main.o add.o
 
@@ -71,7 +71,7 @@ clean :
     rm test main.o add.o
 </code></pre>
 <p>其中，test, main.o, add.o均是目标文件<code>target</code>；所有源文件及头文件均为<code>prerequisites</code>；</p>
-<p><code>cc</code> : 编译器，与<code>gcc</code>相似，<code>-c</code>代表编译，执行后产生对象文件，即”.o”文件；<code>-o</code>代表链接，用于链接”.o”文件并生成可执行文件；</p>
+<p><code>cc</code> : 编译器，与<code>gcc</code>相似，<code>-c</code>代表编译，执行后产生对象文件，即&quot;.o&quot;文件；<code>-o</code>代表链接，用于链接&quot;.o&quot;文件并生成可执行文件；</p>
 <p><code>.PHONY</code> : 用于声明后面跟着的都是伪目标（类似于C语言中的标签(Label)）；</p>
 <p><code>clean</code> ： 一个伪目标，只有在外部执行<code>make clean</code>时方才执行相应的执行，此次用于删除生成的所有目标文件。</p>
 <h3 id="makefile-简化版1"><a href="#makefile-简化版1" class="headerlink" title="makefile 简化版1"></a>makefile 简化版1</h3><p>在<code>makefile</code>中可以通过<code>$</code>符号引用变量，简化文件。变量定义以等号连接，类似于宏定义，将需要多处使用的字符串存入变量中可以方便修改和管理，如本例，可定义以下变量：</p>
@@ -95,8 +95,8 @@ clean :
     rm test (objs)
 </code></pre>
 <p>当项目文件很多时，合理使用变量可以大大简化<code>makefile</code>的编写和修改。</p>
-<h3 id="makefile-简化版2"><a href="#makefile-简化版2" class="headerlink" title="makefile 简化版2"></a>makefile 简化版2</h3><p>要知道，<code>make</code>非常强大，具有<strong>自动推导</strong>的功能，可以自动推导”.o”目标文件下面的指令。如果目标文件为”main.o”，那么指令必然为”cc -c main.c”，依赖于<code>make</code>指令的推导功能，<code>makefile</code>可以省略该指令的编写。</p>
-<p>此外，每个”.o”目标文件的依赖文件必然包含一个文件名相同的”.c”文件，该文件可以通过自动推导得出，所以在<code>makefile</code>中同样可以省略。</p>
+<h3 id="makefile-简化版2"><a href="#makefile-简化版2" class="headerlink" title="makefile 简化版2"></a>makefile 简化版2</h3><p>要知道，<code>make</code>非常强大，具有<strong>自动推导</strong>的功能，可以自动推导&quot;.o&quot;目标文件下面的指令。如果目标文件为&quot;main.o&quot;，那么指令必然为&quot;cc -c main.c&quot;，依赖于<code>make</code>指令的推导功能，<code>makefile</code>可以省略该指令的编写。</p>
+<p>此外，每个&quot;.o&quot;目标文件的依赖文件必然包含一个文件名相同的&quot;.c&quot;文件，该文件可以通过自动推导得出，所以在<code>makefile</code>中同样可以省略。</p>
 <p>根据以上规则可以对<code>makefile</code>进一步简化：</p>
 <pre><code class="makefile">objs = main.o add.o
 test : $(objs)

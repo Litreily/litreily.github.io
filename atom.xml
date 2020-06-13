@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2020-05-09T13:39:48.639Z</updated>
+  <updated>2020-06-13T08:03:49.353Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>VPS搭建在线VSCode Server</title>
+    <link href="https://www.litreily.top/2020/06/13/code-server/"/>
+    <id>https://www.litreily.top/2020/06/13/code-server/</id>
+    <published>2020-06-13T06:41:26.000Z</published>
+    <updated>2020-06-13T08:03:49.353Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;VSCode-Server&quot;&gt;&lt;a href=&quot;#VSCode-Server&quot; class=&quot;headerlink&quot; title=&quot;VSCode Server&quot;&gt;&lt;/a&gt;VSCode Server&lt;/h2&gt;&lt;p&gt;VSCode(Visual Studio Code), 是我目前使用过的最好的编辑器，也应该是很多程序员的首选。然而很多人不知道的是，这款开发利器还有在线版，这包括GitHub即将推出的&lt;code&gt;Satellite&lt;/code&gt;, 也会搭载VSCode，那么如果我们想要搭建自己的在线开发环境呢？答案就是&lt;a href=&quot;https://github.com/cdr/code-server&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Code Server&lt;/a&gt;, 一款可以部署在个人服务器上的VSCode服务。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/vscode/pods-lg.png&quot; alt=&quot;pods logo&quot;&gt;&lt;/p&gt;
+&lt;h3 id=&quot;安装&quot;&gt;&lt;a href=&quot;#安装&quot; class=&quot;headerlink&quot; title=&quot;安装&quot;&gt;&lt;/a&gt;安装&lt;/h3&gt;&lt;p&gt;如果在本地，自然是无需搭建这个server的，我的选择是放在阿里云服务器上，对应的是Ubuntu系统，安装过程非常简单。&lt;/p&gt;
+&lt;pre&gt;&lt;code clas
+      
+    
+    </summary>
+    
+      <category term="Linux" scheme="https://www.litreily.top/categories/Linux/"/>
+    
+    
+      <category term="ubuntu" scheme="https://www.litreily.top/tags/ubuntu/"/>
+    
+      <category term="vps" scheme="https://www.litreily.top/tags/vps/"/>
+    
+  </entry>
   
   <entry>
     <title>Win10中使用ssh访问WSL</title>
@@ -128,7 +156,7 @@ ClientAli
       
         &lt;p&gt;由于版权之争，网易云的很多歌曲都灰掉并且无法播放了，想要使其可以播放还是有办法的，万能的Google和Github让我找到了&lt;a href=&quot;https://github.com/nondanee/UnblockNeteaseMusic&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;答案&lt;/a&gt;，直接上享用方法吧。&lt;/p&gt;
 &lt;h2 id=&quot;前提条件&quot;&gt;&lt;a href=&quot;#前提条件&quot; class=&quot;headerlink&quot; title=&quot;前提条件&quot;&gt;&lt;/a&gt;前提条件&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;一个可以远程访问的服务器，比如vps，阿里云、腾讯云、…&lt;/li&gt;
+&lt;li&gt;一个可以远程访问的服务器，比如vps，阿里云、腾讯云、...&lt;/li&gt;
 &lt;li&gt;如果没有服务器，只能寻找别人搭建好的服务&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&quot;搭建服务&quot;&gt;&lt;a href=&quot;#搭建服务&quot; class=&quot;headerlink&quot; title=&quot;搭建服务&quot;&gt;&lt;/a&gt;搭建服务&lt;/h2&gt;&lt;p&gt;在服务器端，首先安装依赖的工具&lt;code&gt;npx&lt;/code&gt;，如果有则忽略&lt;/p&gt;
@@ -136,7 +164,7 @@ ClientAli
 sudo npm i -g npx
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;然后clone项目UnblockNeteaseMusic.git到本地&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;zsh&quot;&gt;git clon
+&lt;pre&gt;&lt;code class=&quot;zsh&quot;&gt;git cl
       
     
     </summary>
@@ -218,6 +246,33 @@ EOF
   </entry>
   
   <entry>
+    <title>使用油猴脚本批量下载canvas图片</title>
+    <link href="https://www.litreily.top/2020/03/15/canvas-dl/"/>
+    <id>https://www.litreily.top/2020/03/15/canvas-dl/</id>
+    <published>2020-03-15T09:01:33.000Z</published>
+    <updated>2020-04-13T13:12:50.031Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;女友最近在网上下载一些北大网盘的pdf&lt;a href=&quot;https://disk.pku.edu.cn/#/link/3A7748E0466521E3E68A0CBA4C24DE20?gns=AE26ACF837E24D51B1EC40E0A80A5D23%2F7F0E54D7D92343B1B62031B1C41F2280&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;文档&lt;/a&gt;，结果发现没有下载接口，另存为也只能存储单张图片。找我帮忙，这时候发现程序员男票的好处了哈。&lt;/p&gt;
+&lt;h2 id=&quot;分析页面&quot;&gt;&lt;a href=&quot;#分析页面&quot; class=&quot;headerlink&quot; title=&quot;分析页面&quot;&gt;&lt;/a&gt;分析页面&lt;/h2&gt;&lt;p&gt;一开始想着使用Chrome调试工具看下pdf链接，发现这个网盘居然不是直接获取的pdf文件，而是使用js脚本动态渲染生成的，涨知识了。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/canvas/pdf-js.png&quot; alt=&quot;pdf-combine js&quot;&gt;&lt;/p&gt;
+&lt;p&gt;那看看是否可以以图片形式批量下载呢，结果查看pdf单页的html结构发现，这居然是个canvas!!!还不是普通图片，而是画布。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/canvas/canvas.png&quot; alt=&quot;cancvs&quot;&gt;&lt;/p
+      
+    
+    </summary>
+    
+      <category term="杂物柜" scheme="https://www.litreily.top/categories/%E6%9D%82%E7%89%A9%E6%9F%9C/"/>
+    
+    
+      <category term="tampermonkey" scheme="https://www.litreily.top/tags/tampermonkey/"/>
+    
+  </entry>
+  
+  <entry>
     <title>NBNS客户端的C语言实现</title>
     <link href="https://www.litreily.top/2020/03/15/nbns_code/"/>
     <id>https://www.litreily.top/2020/03/15/nbns_code/</id>
@@ -245,33 +300,6 @@ EOF
     
     
       <category term="C/C++" scheme="https://www.litreily.top/tags/C-C/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>使用油猴脚本批量下载canvas图片</title>
-    <link href="https://www.litreily.top/2020/03/15/canvas-dl/"/>
-    <id>https://www.litreily.top/2020/03/15/canvas-dl/</id>
-    <published>2020-03-15T09:01:33.000Z</published>
-    <updated>2020-04-13T13:12:50.031Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;女友最近在网上下载一些北大网盘的pdf&lt;a href=&quot;https://disk.pku.edu.cn/#/link/3A7748E0466521E3E68A0CBA4C24DE20?gns=AE26ACF837E24D51B1EC40E0A80A5D23%2F7F0E54D7D92343B1B62031B1C41F2280&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;文档&lt;/a&gt;，结果发现没有下载接口，另存为也只能存储单张图片。找我帮忙，这时候发现程序员男票的好处了哈。&lt;/p&gt;
-&lt;h2 id=&quot;分析页面&quot;&gt;&lt;a href=&quot;#分析页面&quot; class=&quot;headerlink&quot; title=&quot;分析页面&quot;&gt;&lt;/a&gt;分析页面&lt;/h2&gt;&lt;p&gt;一开始想着使用Chrome调试工具看下pdf链接，发现这个网盘居然不是直接获取的pdf文件，而是使用js脚本动态渲染生成的，涨知识了。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/assets/canvas/pdf-js.png&quot; alt=&quot;pdf-combine js&quot;&gt;&lt;/p&gt;
-&lt;p&gt;那看看是否可以以图片形式批量下载呢，结果查看pdf单页的html结构发现，这居然是个canvas!!!还不是普通图片，而是画布。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/assets/canvas/canvas.png&quot; alt=&quot;cancvs&quot;&gt;&lt;/p
-      
-    
-    </summary>
-    
-      <category term="杂物柜" scheme="https://www.litreily.top/categories/%E6%9D%82%E7%89%A9%E6%9F%9C/"/>
-    
-    
-      <category term="tampermonkey" scheme="https://www.litreily.top/tags/tampermonkey/"/>
     
   </entry>
   
@@ -898,32 +926,6 @@ sudo pip install pypcap
       <category term="proxy" scheme="https://www.litreily.top/tags/proxy/"/>
     
       <category term="vps" scheme="https://www.litreily.top/tags/vps/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Linux中的文件I/O缓冲</title>
-    <link href="https://www.litreily.top/2018/10/25/io-cache/"/>
-    <id>https://www.litreily.top/2018/10/25/io-cache/</id>
-    <published>2018-10-25T01:42:40.000Z</published>
-    <updated>2020-05-14T11:10:09.688Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;近日阅读《Linux/UNIX系统编程手册》第13章 - 文件I/O缓冲，有些收获，是以此文以记之。以往只知道Linux的I/O操作有缓冲机制，但始终不知道具体的缓冲流程及使用方法。读完本章节后方才有种恍然大悟的感觉，久违的因读书而觉得舒爽的感觉。&lt;/p&gt;
-&lt;p&gt;好了，进入正题，下图摘自原文(13.4-I/O缓冲小结)，此图概括了&lt;code&gt;stdio&lt;/code&gt;库及内核针对输出文件所用的缓冲以及各类缓冲的控制机制。本文依据此图逐步揭开文件I/O缓冲的面纱。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/assets/linux/io_buffer.jpg&quot; alt=&quot;I/O缓冲&quot;&gt;&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="Linux" scheme="https://www.litreily.top/categories/Linux/"/>
-    
-    
-      <category term="stdio" scheme="https://www.litreily.top/tags/stdio/"/>
-    
-      <category term="cache" scheme="https://www.litreily.top/tags/cache/"/>
-    
-      <category term="buffer" scheme="https://www.litreily.top/tags/buffer/"/>
     
   </entry>
   

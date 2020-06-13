@@ -111,7 +111,7 @@ Program terminated with signal 6, Aborted.
 </code></pre>
 <blockquote>
 <p><strong>BackTrace (bt) 输出</strong>  </p>
-<p>#num memory_addr in function (arg1=val1, arg2=val2,…) at file.c:line<br><code>bt</code>输出前面的编号是进程执行时的压栈顺序，编号越小越底层。编号后面紧跟的是内存地址，从地址大小可以看出哪些是内核调用，哪些是用户调用。  </p>
+<p>#num memory_addr in function (arg1=val1, arg2=val2,...) at file.c:line<br><code>bt</code>输出前面的编号是进程执行时的压栈顺序，编号越小越底层。编号后面紧跟的是内存地址，从地址大小可以看出哪些是内核调用，哪些是用户调用。  </p>
 <p><strong>注意：</strong>由于编译器优化缘故，某些变量会显示<code>value optimized out</code>，如果想获取真实值，需要在编译时添加<code>-O0</code>，用以禁用编译器优化</p>
 </blockquote>
 <p>从<code>bt</code>结果可以看出，进程是在执行动态内存分配函数<code>malloc</code>时检测到错误，并执行<code>abort</code>函数触发<code>SIGABRT</code>信号后退出的。那就可以确定是内存问题，多半是内存多次释放或是未释放导致的。</p>

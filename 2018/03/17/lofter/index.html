@@ -43,7 +43,7 @@
 </code></pre>
 <p>好像可以了，这不就可以按页抓取博客链接，然后接着分析每篇博文信息不就好了么。我原本就想这么干，可是当我查看了不同用户的排版以及相应的链接信息后，整个人都不好了，一千个用户就是一千个哈姆雷特啊。如果你发现有统一解析所有用户模板信息的方法，那肯定是你看的模板不够多。</p>
 <p>所以呢，这条路是走不通了，至少我没再往这条路上走。打道回府，只不过重头再来，路漫漫其修远兮，吾将上下而求索。</p>
-<p>靠，说了半天，原来走不通，那你说个毛线！！！淡定淡定，都是文明人，后面的风景很远，额不是，，，是很美，请耐心等待…</p>
+<p>靠，说了半天，原来走不通，那你说个毛线！！！淡定淡定，都是文明人，后面的风景很远，额不是，，，是很美，请耐心等待...</p>
 <h3 id="归档页信息"><a href="#归档页信息" class="headerlink" title="归档页信息"></a>归档页信息</h3><blockquote>
 <p>归档页：<code>http://[username].lofter.com/view</code></p>
 </blockquote>
@@ -51,8 +51,8 @@
 <p><img src="/assets/spider/lofter/archive.png" alt="archive"></p>
 <p>先来看看归档页面的结构吧，博客按月份归档，每篇博客仅显示首张图片缩略图或纯文本。然后<code>F12</code>打开调试工具，如下图所示，每个月份对应一个<code>&lt;div class=&quot;m-filecnt m-filecnt-1&quot;&gt;</code>这样的节点，每个月份节点包含了本月所有博客的入口信息，一篇博客对应一个<code>id</code>号，以及一个博客的<strong>相对路径</strong>。<code>id</code>神马的不用关心，重点就是这个<strong>相对路径</strong>，有了它不就有了博客的绝对路径了么。</p>
 <ul>
-<li>相对路径：”/post/44fbca_1265bb3e”</li>
-<li>绝对路径：”http://[username].lofter.com/post/44fbca_1265bb3e”</li>
+<li>相对路径：&quot;/post/44fbca_1265bb3e&quot;</li>
+<li>绝对路径：&quot;http://[username].lofter.com/post/44fbca_1265bb3e&quot;</li>
 </ul>
 <p><img src="/assets/spider/lofter/archive_html.png" alt="archive structure"></p>
 <p>这样看来，那岂不是只要抓取这一个归档页面就可以抓到所有的博客路径了呢？呵呵，真的这么容易吗？显然不大可能，当我们下拉页面时，归档信息将动态加载刷新，没错，是动态的！！！意料之中的猝不及防</p>

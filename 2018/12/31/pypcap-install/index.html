@@ -12,7 +12,7 @@ sudo pip install pypcap
 <a id="more"></a>
 <h2 id="Windows-端安装-pypcap"><a href="#Windows-端安装-pypcap" class="headerlink" title="Windows 端安装 pypcap"></a>Windows 端安装 pypcap</h2><p>根据<code>pypcap</code>官方说明：</p>
 <blockquote>
-<p>WinPcap has compatibility issues with Windows 10, therefore it’s recommended to use Npcap (Nmap’s packet sniffing library for Windows, based on the WinPcap/Libpcap libraries, but with improved speed, portability, security, and efficiency). Please enable WinPcap API-compatible mode during the library installation.</p>
+<p>WinPcap has compatibility issues with Windows 10, therefore it&#39;s recommended to use Npcap (Nmap&#39;s packet sniffing library for Windows, based on the WinPcap/Libpcap libraries, but with improved speed, portability, security, and efficiency). Please enable WinPcap API-compatible mode during the library installation.</p>
 </blockquote>
 <p>这里提到<code>winpcap</code>与<code>win10</code>间存在兼容性问题，具体什么问题我也没搞清楚，之前使用<code>wireshark</code>抓包一直用的<code>winpcap</code>也没问题。不过我估计和后面要用到的<code>npcap sdk</code>有关吧。既如此，就需要在安装<code>pypcap</code>前安装好<code>Npcap</code>，并下载好<code>Npcap SDK</code>。</p>
 <h3 id="下载文件"><a href="#下载文件" class="headerlink" title="下载文件"></a>下载文件</h3><ol>
@@ -261,7 +261,7 @@ pkts_20181230-185017.pcap  pkts_20181231-203416.pcap  pkts_20181231-215837.pcap
 </code></pre>
 <p>代码已上传至<a href="https://github.com/Litreily/Python-demos.git" target="_blank" rel="noopener">github Python-demos</a> <code>sniffer.py</code></p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
-<li><a href="https://www.cnblogs.com/jackadam/p/8279080.html" target="_blank" rel="noopener">windows 环境下python 安装 pypcap…</a></li>
+<li><a href="https://www.cnblogs.com/jackadam/p/8279080.html" target="_blank" rel="noopener">windows 环境下python 安装 pypcap...</a></li>
 <li><a href="https://www.cnblogs.com/xuanhun/p/5625186.html" target="_blank" rel="noopener">Python黑客编程3网络数据监听和过滤</a></li>
 <li><a href="https://blog.csdn.net/weixin_39138707/article/details/74612637" target="_blank" rel="noopener">Mac下用python+pypcap+dpkt抓取IP数据包并分析</a></li>
 </ol>
