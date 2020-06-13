@@ -83,7 +83,7 @@ ClientAli
     <link href="https://www.litreily.top/2020/05/07/ubi-driver/"/>
     <id>https://www.litreily.top/2020/05/07/ubi-driver/</id>
     <published>2020-05-07T01:21:29.000Z</published>
-    <updated>2020-05-09T15:16:40.136Z</updated>
+    <updated>2020-06-13T10:34:27.988Z</updated>
     
     <summary type="html">
     
@@ -98,7 +98,7 @@ ClientAli
     
     </summary>
     
-      <category term="嵌入式" scheme="https://www.litreily.top/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/"/>
+      <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
     
     
       <category term="C/C++" scheme="https://www.litreily.top/tags/C-C/"/>
@@ -250,7 +250,7 @@ EOF
     <link href="https://www.litreily.top/2020/03/15/canvas-dl/"/>
     <id>https://www.litreily.top/2020/03/15/canvas-dl/</id>
     <published>2020-03-15T09:01:33.000Z</published>
-    <updated>2020-04-13T13:12:50.031Z</updated>
+    <updated>2020-06-13T10:38:45.607Z</updated>
     
     <summary type="html">
     
@@ -265,7 +265,7 @@ EOF
     
     </summary>
     
-      <category term="杂物柜" scheme="https://www.litreily.top/categories/%E6%9D%82%E7%89%A9%E6%9F%9C/"/>
+      <category term="Tools" scheme="https://www.litreily.top/categories/Tools/"/>
     
     
       <category term="tampermonkey" scheme="https://www.litreily.top/tags/tampermonkey/"/>
@@ -277,7 +277,7 @@ EOF
     <link href="https://www.litreily.top/2020/03/15/nbns_code/"/>
     <id>https://www.litreily.top/2020/03/15/nbns_code/</id>
     <published>2020-03-15T09:01:33.000Z</published>
-    <updated>2020-03-19T13:39:28.984Z</updated>
+    <updated>2020-06-13T10:34:27.988Z</updated>
     
     <summary type="html">
     
@@ -296,7 +296,7 @@ EOF
     
     </summary>
     
-      <category term="嵌入式" scheme="https://www.litreily.top/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/"/>
+      <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
     
     
       <category term="C/C++" scheme="https://www.litreily.top/tags/C-C/"/>
@@ -308,7 +308,7 @@ EOF
     <link href="https://www.litreily.top/2020/02/28/nbns/"/>
     <id>https://www.litreily.top/2020/02/28/nbns/</id>
     <published>2020-02-28T01:48:26.000Z</published>
-    <updated>2020-04-11T09:35:21.427Z</updated>
+    <updated>2020-06-13T10:32:42.143Z</updated>
     
     <summary type="html">
     
@@ -362,7 +362,7 @@ EOF
     <link href="https://www.litreily.top/2020/01/17/dhcpd_server/"/>
     <id>https://www.litreily.top/2020/01/17/dhcpd_server/</id>
     <published>2020-01-17T13:36:16.000Z</published>
-    <updated>2020-02-26T13:11:56.224Z</updated>
+    <updated>2020-06-13T10:31:34.020Z</updated>
     
     <summary type="html">
     
@@ -459,7 +459,7 @@ tcp        0      0 192.168.1.1:23          192.168.1.10:10381      ESTABLISHED 
     <link href="https://www.litreily.top/2019/11/07/unknown_symbol/"/>
     <id>https://www.litreily.top/2019/11/07/unknown_symbol/</id>
     <published>2019-11-07T02:19:26.000Z</published>
-    <updated>2020-02-26T13:11:56.223Z</updated>
+    <updated>2020-06-13T10:33:48.582Z</updated>
     
     <summary type="html">
     
@@ -476,7 +476,7 @@ tcp        0      0 192.168.1.1:23          192.168.1.10:10381      ESTABLISHED 
     
     </summary>
     
-      <category term="嵌入式" scheme="https://www.litreily.top/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/"/>
+      <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
     
     
       <category term="IPv6" scheme="https://www.litreily.top/tags/IPv6/"/>
@@ -490,7 +490,7 @@ tcp        0      0 192.168.1.1:23          192.168.1.10:10381      ESTABLISHED 
     <link href="https://www.litreily.top/2019/11/06/swconfig_crash/"/>
     <id>https://www.litreily.top/2019/11/06/swconfig_crash/</id>
     <published>2019-11-06T11:04:20.000Z</published>
-    <updated>2020-02-26T13:11:56.221Z</updated>
+    <updated>2020-06-13T10:33:48.582Z</updated>
     
     <summary type="html">
     
@@ -508,7 +508,7 @@ CPU: 2 PID: 9465 Comm: swconfig Tainted: P        W    3.14.77 #1
     
     </summary>
     
-      <category term="嵌入式" scheme="https://www.litreily.top/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/"/>
+      <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
     
     
       <category term="openwrt" scheme="https://www.litreily.top/tags/openwrt/"/>
@@ -538,12 +538,12 @@ CPU: 2 PID: 9465 Comm: swconfig Tainted: P        W    3.14.77 #1
     
     </summary>
     
-      <category term="嵌入式" scheme="https://www.litreily.top/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/"/>
+      <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
     
-    
-      <category term="ftrace" scheme="https://www.litreily.top/tags/ftrace/"/>
     
       <category term="openwrt" scheme="https://www.litreily.top/tags/openwrt/"/>
+    
+      <category term="ftrace" scheme="https://www.litreily.top/tags/ftrace/"/>
     
   </entry>
   
@@ -656,7 +656,7 @@ CPU: 2 PID: 9465 Comm: swconfig Tainted: P        W    3.14.77 #1
     <link href="https://www.litreily.top/2019/06/11/mind-map/"/>
     <id>https://www.litreily.top/2019/06/11/mind-map/</id>
     <published>2019-06-11T12:23:34.000Z</published>
-    <updated>2020-02-26T13:11:56.218Z</updated>
+    <updated>2020-06-13T10:36:30.858Z</updated>
     
     <summary type="html">
     
@@ -674,7 +674,7 @@ CPU: 2 PID: 9465 Comm: swconfig Tainted: P        W    3.14.77 #1
     
     </summary>
     
-      <category term="杂物柜" scheme="https://www.litreily.top/categories/%E6%9D%82%E7%89%A9%E6%9F%9C/"/>
+      <category term="Tools" scheme="https://www.litreily.top/categories/Tools/"/>
     
     
       <category term="5W2H" scheme="https://www.litreily.top/tags/5W2H/"/>
@@ -688,7 +688,7 @@ CPU: 2 PID: 9465 Comm: swconfig Tainted: P        W    3.14.77 #1
     <link href="https://www.litreily.top/2019/05/24/hash-table/"/>
     <id>https://www.litreily.top/2019/05/24/hash-table/</id>
     <published>2019-05-24T12:00:00.000Z</published>
-    <updated>2020-02-26T13:11:56.217Z</updated>
+    <updated>2020-06-13T10:33:48.582Z</updated>
     
     <summary type="html">
     
@@ -710,7 +710,7 @@ struct linklist *hashtbl[TABLE_SIZE];
     
     </summary>
     
-      <category term="嵌入式" scheme="https://www.litreily.top/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/"/>
+      <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
     
     
       <category term="C/C++" scheme="https://www.litreily.top/tags/C-C/"/>
@@ -726,7 +726,7 @@ struct linklist *hashtbl[TABLE_SIZE];
     <link href="https://www.litreily.top/2019/03/12/commitizen/"/>
     <id>https://www.litreily.top/2019/03/12/commitizen/</id>
     <published>2019-03-12T13:39:10.000Z</published>
-    <updated>2020-02-26T13:11:56.217Z</updated>
+    <updated>2020-06-13T10:36:29.248Z</updated>
     
     <summary type="html">
     
@@ -736,7 +736,7 @@ struct linklist *hashtbl[TABLE_SIZE];
     
     </summary>
     
-      <category term="杂物柜" scheme="https://www.litreily.top/categories/%E6%9D%82%E7%89%A9%E6%9F%9C/"/>
+      <category term="Tools" scheme="https://www.litreily.top/categories/Tools/"/>
     
     
       <category term="git" scheme="https://www.litreily.top/tags/git/"/>
@@ -779,7 +779,7 @@ struct linklist *hashtbl[TABLE_SIZE];
     <link href="https://www.litreily.top/2019/02/27/ipv6/"/>
     <id>https://www.litreily.top/2019/02/27/ipv6/</id>
     <published>2019-02-27T05:47:30.000Z</published>
-    <updated>2020-02-26T13:11:56.216Z</updated>
+    <updated>2020-06-13T10:33:48.579Z</updated>
     
     <summary type="html">
     
@@ -787,7 +787,7 @@ struct linklist *hashtbl[TABLE_SIZE];
     
     </summary>
     
-      <category term="嵌入式" scheme="https://www.litreily.top/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/"/>
+      <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
     
     
       <category term="IPv6" scheme="https://www.litreily.top/tags/IPv6/"/>
@@ -830,7 +830,7 @@ struct linklist *hashtbl[TABLE_SIZE];
     <link href="https://www.litreily.top/2019/02/14/XSS/"/>
     <id>https://www.litreily.top/2019/02/14/XSS/</id>
     <published>2019-02-14T03:14:20.000Z</published>
-    <updated>2020-02-26T13:11:56.214Z</updated>
+    <updated>2020-06-13T10:32:24.439Z</updated>
     
     <summary type="html">
     
@@ -866,9 +866,9 @@ struct linklist *hashtbl[TABLE_SIZE];
       <category term="Python" scheme="https://www.litreily.top/categories/Python/"/>
     
     
-      <category term="MongoDB" scheme="https://www.litreily.top/tags/MongoDB/"/>
-    
       <category term="visualization" scheme="https://www.litreily.top/tags/visualization/"/>
+    
+      <category term="MongoDB" scheme="https://www.litreily.top/tags/MongoDB/"/>
     
   </entry>
   
@@ -903,7 +903,7 @@ sudo pip install pypcap
     <link href="https://www.litreily.top/2018/11/25/autossh/"/>
     <id>https://www.litreily.top/2018/11/25/autossh/</id>
     <published>2018-11-25T03:25:20.000Z</published>
-    <updated>2020-02-26T13:11:56.211Z</updated>
+    <updated>2020-06-13T10:31:34.020Z</updated>
     
     <summary type="html">
     

@@ -547,7 +547,7 @@ ubi-&gt;beb_rsvd_pebs = ubi-&gt;beb_rsvd_level;
       
         <categories>
             
-            <category> 嵌入式 </category>
+            <category> Embedded </category>
             
         </categories>
         
@@ -1092,7 +1092,7 @@ EOF
       
         <categories>
             
-            <category> 杂物柜 </category>
+            <category> Tools </category>
             
         </categories>
         
@@ -1457,7 +1457,7 @@ Not in presentation format
       
         <categories>
             
-            <category> 嵌入式 </category>
+            <category> Embedded </category>
             
         </categories>
         
@@ -2579,7 +2579,7 @@ extern void lock_release(struct lockdep_map *lock, int nested,
       
         <categories>
             
-            <category> 嵌入式 </category>
+            <category> Embedded </category>
             
         </categories>
         
@@ -2670,7 +2670,7 @@ CPU: 2 PID: 9465 Comm: swconfig Tainted: P        W    3.14.77 #1
       
         <categories>
             
-            <category> 嵌入式 </category>
+            <category> Embedded </category>
             
         </categories>
         
@@ -3207,16 +3207,16 @@ Configuring Watchdog Timer
       
         <categories>
             
-            <category> 嵌入式 </category>
+            <category> Embedded </category>
             
         </categories>
         
         
         <tags>
             
-            <tag> ftrace </tag>
-            
             <tag> openwrt </tag>
+            
+            <tag> ftrace </tag>
             
         </tags>
         
@@ -4268,7 +4268,7 @@ cmdline.execute(&#39;scrapy crawl vmgirl&#39;.split())
       
         <categories>
             
-            <category> 杂物柜 </category>
+            <category> Tools </category>
             
         </categories>
         
@@ -4694,7 +4694,7 @@ clean:
       
         <categories>
             
-            <category> 嵌入式 </category>
+            <category> Embedded </category>
             
         </categories>
         
@@ -4829,7 +4829,7 @@ Line 1 will be cropped at 100 characters. All other lines will be wrapped after 
       
         <categories>
             
-            <category> 杂物柜 </category>
+            <category> Tools </category>
             
         </categories>
         
@@ -5367,7 +5367,7 @@ $ /usr/sbin/ip -6 addr add fe80::a263:91ff:fea7:6307/64 dev br0
       
         <categories>
             
-            <category> 嵌入式 </category>
+            <category> Embedded </category>
             
         </categories>
         
@@ -5751,9 +5751,9 @@ with open(&#39;products_new.json&#39;,&#39;w&#39;,encoding=&#39;utf-8&#39;) as f
         
         <tags>
             
-            <tag> MongoDB </tag>
-            
             <tag> visualization </tag>
+            
+            <tag> MongoDB </tag>
             
         </tags>
         
@@ -6627,7 +6627,7 @@ test.txt
       
         <categories>
             
-            <category> 嵌入式 </category>
+            <category> Embedded </category>
             
         </categories>
         
@@ -6804,7 +6804,7 @@ Backtrace stopped: previous frame identical to this frame (corrupt stack?)
       
         <categories>
             
-            <category> 嵌入式 </category>
+            <category> Embedded </category>
             
         </categories>
         
@@ -7469,18 +7469,16 @@ if __name__ == &#39;__main__&#39;:
       
         <categories>
             
-            <category> 算法 </category>
+            <category> Python </category>
             
         </categories>
         
         
         <tags>
             
-            <tag> algorithm </tag>
+            <tag> sort </tag>
             
             <tag> visualization </tag>
-            
-            <tag> sort </tag>
             
         </tags>
         
@@ -7695,7 +7693,7 @@ Exit
       
         <categories>
             
-            <category> 嵌入式 </category>
+            <category> Embedded </category>
             
         </categories>
         
@@ -9505,7 +9503,7 @@ mysql&gt; DROP tableName;
       
         <categories>
             
-            <category> Network </category>
+            <category> Tools </category>
             
         </categories>
         
@@ -9613,7 +9611,7 @@ free(flv);
       
         <categories>
             
-            <category> 嵌入式 </category>
+            <category> Embedded </category>
             
         </categories>
         
@@ -9684,7 +9682,7 @@ $ export http_proxy=&quot;http://127.0.0.1:8123/&quot; curl ifconfig.me
       
         <categories>
             
-            <category> 杂物柜 </category>
+            <category> Network </category>
             
         </categories>
         
@@ -10557,16 +10555,16 @@ VariantData : 键值数据（一维的变体数组）
       
         <categories>
             
-            <category> 杂物柜 </category>
+            <category> Tools </category>
             
         </categories>
         
         
         <tags>
             
-            <tag> VS </tag>
-            
             <tag> git </tag>
+            
+            <tag> VS </tag>
             
         </tags>
         
@@ -10673,7 +10671,7 @@ VariantData : 键值数据（一维的变体数组）
       
         <categories>
             
-            <category> 杂物柜 </category>
+            <category> Tools </category>
             
         </categories>
         
@@ -11433,9 +11431,9 @@ n(u) = n(u)+1;
             
             <tag> matlab </tag>
             
-            <tag> algorithm </tag>
-            
             <tag> signal </tag>
+            
+            <tag> algorithm </tag>
             
         </tags>
         
@@ -11611,7 +11609,7 @@ only in Medium-density and Low-density Value Line devices*/
       
         <categories>
             
-            <category> 嵌入式 </category>
+            <category> Embedded </category>
             
         </categories>
         
@@ -13447,7 +13445,7 @@ static void vUasrtSendTask(void *pvParameters)
       
         <categories>
             
-            <category> 嵌入式 </category>
+            <category> Embedded </category>
             
         </categories>
         
@@ -13456,9 +13454,9 @@ static void vUasrtSendTask(void *pvParameters)
             
             <tag> C/C++ </tag>
             
-            <tag> stm32 </tag>
-            
             <tag> FreeRTOS </tag>
+            
+            <tag> stm32 </tag>
             
         </tags>
         
@@ -13882,11 +13880,11 @@ Categories=Development;IDE;Java;
         
         <tags>
             
+            <tag> atom </tag>
+            
             <tag> ubuntu </tag>
             
             <tag> linux </tag>
-            
-            <tag> atom </tag>
             
         </tags>
         
@@ -14058,14 +14056,12 @@ int main()
       
         <categories>
             
-            <category> 算法 </category>
+            <category> 杂物柜 </category>
             
         </categories>
         
         
         <tags>
-            
-            <tag> algorithm </tag>
             
             <tag> C/C++ </tag>
             
@@ -14074,12 +14070,12 @@ int main()
     </entry>
     
     <entry>
-      <title><![CDATA[前端岗位模拟试题1]]></title>
-      <url>https://www.litreily.top/2016/09/12/algor-WYMN1/</url>
-      <content type="html"><![CDATA[<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>正整数A的&quot;DA(1位整数)部分&quot;定义为由A中所有组成的新整数PA。例如：给定A=3862767，DA=6，则A的&quot;6部分&quot;PA是66，因为A中有2个6。</p>
-<p>现给定A、DA、B、DB，请编写程序计算PA+PB。</p>
+      <title><![CDATA[模拟试题1 - 计算PA+PB]]></title>
+      <url>https://www.litreily.top/2016/09/12/WYMN1/</url>
+      <content type="html"><![CDATA[<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>正整数A的<strong>DA(1位整数)部分</strong>定义为由A中所有组成的新整数PA。例如：给定A=3862767，DA=6，则A的<strong>6部分</strong>PA是66，因为A中有2个6。</p>
+<p>现给定A, DA, B, DB, 请编写程序计算PA+PB。</p>
 <h3 id="输入描述"><a href="#输入描述" class="headerlink" title="输入描述"></a>输入描述</h3><blockquote>
-<p>输入在一行中依次给出A，DA，B,DB，中间以空格分隔，其中 0&lt; A,B &lt;1e10</p>
+<p>输入在一行中依次给出A，DA，B,DB，中间以空格分隔，其中 0 &lt; A, B &lt; 1e10</p>
 </blockquote>
 <h3 id="输出描述"><a href="#输出描述" class="headerlink" title="输出描述"></a>输出描述</h3><blockquote>
 <p>在一行中输出PA+PB的值</p>
@@ -14121,14 +14117,12 @@ int main()
       
         <categories>
             
-            <category> 算法 </category>
+            <category> 杂物柜 </category>
             
         </categories>
         
         
         <tags>
-            
-            <tag> algorithm </tag>
             
             <tag> C/C++ </tag>
             
@@ -14137,10 +14131,10 @@ int main()
     </entry>
     
     <entry>
-      <title><![CDATA[前端岗位模拟试题2]]></title>
-      <url>https://www.litreily.top/2016/09/12/algor-WYMN2/</url>
+      <title><![CDATA[模拟试题2 - 二货小易的网格盒子]]></title>
+      <url>https://www.litreily.top/2016/09/12/WYMN2/</url>
       <content type="html"><![CDATA[<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>二货小易有一个W*H的网格盒子，网格的行编号为0~H-1，网格的列编号为0~W-1。每个格子至多可以放一块蛋糕，任意两块蛋糕的欧几里得距离不能等于2。</p>
-<p>对于两个格子坐标(x1,y1),(x2,y2)的欧几里得距离为：((x1-x2)<em>(x1-x2)+(y1-y2)</em>(y1-y2))的算术平方根。</p>
+<p>对于两个格子坐标(x1,y1), (x2,y2)的欧几里得距离为：((x1-x2)<em>(x1-x2)+(y1-y2)</em>(y1-y2))的算术平方根。</p>
 <p>小易想知道最多可以放多少块蛋糕在网格盒子里。</p>
 <h3 id="输入描述"><a href="#输入描述" class="headerlink" title="输入描述"></a>输入描述</h3><blockquote>
 <p>每组数组包含网格长宽W,H，用空格分隔。(1&lt;=W、H&lt;=1000)</p>
@@ -14163,29 +14157,27 @@ int main()
 {
 
   int W,H;
-  int cnt=0;                   // 定义可放的蛋糕数
-  cin&gt;&gt;W&gt;&gt;H;                // 输入盒子网格的行列数
+  int cnt=0; // 定义可放的蛋糕数
+  cin&gt;&gt;W&gt;&gt;H; // 输入盒子网格的行列数
 
-  for(int i=0;i&lt;H;i++)
-      for(int j=0;j&lt;W;j++)
-          if((i/2+j/2)%2==0)
+  for(int i = 0; i&lt;H; i++)
+      for(int j = 0; j &lt; W; j++)
+        if((i/2 + j/2) % 2 == 0)
           cnt++;
   cout&lt;&lt;cnt&lt;&lt;endl;
-  return 0;    
+  return 0;
 }
 </code></pre>
 ]]></content>
       
         <categories>
             
-            <category> 算法 </category>
+            <category> 杂物柜 </category>
             
         </categories>
         
         
         <tags>
-            
-            <tag> algorithm </tag>
             
             <tag> C/C++ </tag>
             
@@ -14271,7 +14263,7 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
       
         <categories>
             
-            <category> 杂物柜 </category>
+            <category> Tools </category>
             
         </categories>
         
@@ -14450,7 +14442,7 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
 </blockquote>
 <p><img src="/assets/labview/keyWords/Labview.png" alt="Labview"></p>
 <h2 id="2-基本概念"><a href="#2-基本概念" class="headerlink" title="2. 基本概念"></a>2. 基本概念</h2><p>在使用LabVIEW进行软件开发的过程中，少不了提及一些专有名词和概念，这里对常用的几个概念进行简要说明。</p>
-<h3 id="2-1-VI"><a href="#2-1-VI" class="headerlink" title="2.1 VI"></a>2.1 VI</h3><p><strong>VI</strong> 是虚拟仪器（Virtual Instrument）的简称，其对应的 <strong>.vi</strong> 文件是LabVIEW软件开发过程中用到的基本单元，类似于 <strong>C/C++</strong> 语言开发的 <strong>.c/.cpp</strong> 文件。无论是用于显示的用户界面，还是不用于显示的函数，都是以 <strong>.vi</strong> 文件形式存在。</p>
+<h3 id="2-1-VI"><a href="#2-1-VI" class="headerlink" title="2.1 VI"></a>2.1 VI</h3><p><strong>VI</strong> 是categories: LabVIEW（Virtual Instrument）的简称，其对应的 <strong>.vi</strong> 文件是LabVIEW软件开发过程中用到的基本单元，类似于 <strong>C/C++</strong> 语言开发的 <strong>.c/.cpp</strong> 文件。无论是用于显示的用户界面，还是不用于显示的函数，都是以 <strong>.vi</strong> 文件形式存在。</p>
 <h3 id="2-2-项目"><a href="#2-2-项目" class="headerlink" title="2.2 项目"></a>2.2 项目</h3><p>相对于独立的vi文件，LabVIEW<strong>项目</strong>则是一个大的容器，它可以包含一个或多个 <strong>.vi</strong> 文件，以及其它类型的依赖文件，如 <strong>.dll</strong> 链接库文件、<strong>.rhm</strong> 菜单文件、<strong>.lvproj</strong> 工程文件、<strong>.lib</strong> 函数库文件、<strong>.ctl</strong> 自定义控件文件等。当然，一个项目还可以包含<strong>.txt</strong> 等数据文件。独立的 <strong>vi</strong> 可以单独执行，但如果需要打包成 <strong>.exe</strong> 可执行文件或 <strong>.setup</strong> 安装包文件，就必须创建<strong>项目</strong>文件，通过 &quot;程序设计规范&quot; 对项目文件进行打包处理。</p>
 <p><img src="/assets/labview/keyWords/project.png" alt="Labview project"></p>
 <h3 id="2-3-前面板"><a href="#2-3-前面板" class="headerlink" title="2.3 前面板"></a>2.3 前面板</h3><p>在LabVIEW开发环境中，vi程序分<strong>前面板</strong>和<strong>程序框图</strong>两部分。其中，<strong>前面板</strong>用于设计用户界面，可以放置各种程序控件，是软件用户能够看见的交互界面。如果作为函数vi，其<strong>前面板</strong>还可以设置函数接口。软件完成并生成可执行文件后，软件用户界面显示的就是该界面所对应vi程序的<strong>前面板</strong>，而其它仅实现某种函数功能而无需显示的vi程序，其<strong>前面板</strong>将不会在调用过程中显示。</p>
@@ -14738,9 +14730,9 @@ $ easy_install Pygments
         
         <tags>
             
-            <tag> windows </tag>
-            
             <tag> jekyll </tag>
+            
+            <tag> windows </tag>
             
             <tag> ruby </tag>
             
