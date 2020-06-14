@@ -85,13 +85,11 @@ extern int optind, opterr, optopt;
                 | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
         //...
 </code></pre>
-<blockquote>
 <p>说明：  </p>
 <ol>
-<li>如果不带<code>-a</code>，程序默认会以<code>O_TRUNC</code>方式打开文件，表示截断，会以重写的方式覆盖原文件  </li>
+<li>如果不带<code>-a</code>，程序默认会以<code>O_TRUNC</code>方式打开文件，表示截断，会以重写的方式覆盖原文件；</li>
 <li><code>optind</code>小于<code>argc</code>时，说明除了可选参数之外，用户还输入了其它参数，这里对应的是<code>tee</code>指令所需的文件名称。此时argv[optind]刚好对应第一个非可选参数。</li>
 </ol>
-</blockquote>
 <h3 id="getopt-long"><a href="#getopt-long" class="headerlink" title="getopt_long"></a>getopt_long</h3><p><code>getopt_long</code>定义如下：</p>
 <pre><code class="c">#include &lt;getopt.h&gt;
 

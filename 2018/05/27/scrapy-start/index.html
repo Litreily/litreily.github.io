@@ -109,8 +109,8 @@ $ tree
 <li><code>__pycache__</code>: 存储解释器生成的<code>.pyc</code>文件（一种跨平台的字节码<code>byte code</code>），在<code>python2</code>中该类文件与<code>.py</code>保存在相同文件夹</li>
 </ol>
 <h2 id="scrapy-genspider"><a href="#scrapy-genspider" class="headerlink" title="scrapy genspider"></a>scrapy genspider</h2><p>项目生成以后，可以使用<code>scrapy genspider</code>指令自动生成一个爬虫文件，比如，如果要爬取<a href="www.huaban.com">花瓣网首页</a>，执行以下指令：</p>
-<pre><code class="sh">$ cd demo
-$ scrapy genspider huaban www.huaban.com
+<pre><code class="sh">cd demo
+scrapy genspider huaban www.huaban.com
 </code></pre>
 <p>默认生成的爬虫文件<code>huaban.py</code>如下：</p>
 <pre><code class="python"># -*- coding: utf-8 -*-

@@ -3496,7 +3496,7 @@ crw-rw---- 1 root dialout 188, 0 9月  12 22:42 /dev/ttyUSB0
 <a id="more"></a>
 <h2 id="常用的ftp客户端"><a href="#常用的ftp客户端" class="headerlink" title="常用的ftp客户端"></a>常用的ftp客户端</h2><p>在介绍ftp数据传输之前，简单介绍下常用的几款ftp client：</p>
 <ul>
-<li><code>ftp</code> </li>
+<li><code>ftp</code></li>
 <li><code>lftp</code>（支持ftp, http, https, sftp, fish, torrent, fxp, ...）</li>
 <li><code>sftp</code>(Secure File Transfer Protocol)</li>
 <li>FileZilla(图形化软件，支持ftp, ftps, sftp)</li>
@@ -3591,19 +3591,23 @@ EOF
 <p><strong>变量切割</strong></p>
 <p><code>#</code> 删除变量左侧的最短匹配；<code>##</code> 删除变量左侧的最长匹配</p>
 <p><code>%</code> 删除变量右侧的最短匹配；<code>%%</code>删除变量右侧的最长匹配</p>
-<p>${file##*/}    以<code>/</code>为分隔符，删除最后一个<code>/</code>往左的所有字符，此处用于获取文件名</p>
-<p>${file%/*}    以<code>/</code>为分隔符，删除最后一个<code>/</code>往右的所有字符，此处用于获取目录</p>
+<p>${file##*/} 以<code>/</code>为分隔符，删除最后一个<code>/</code>往左的所有字符，此处用于获取文件名</p>
+<p>${file%/*} 以<code>/</code>为分隔符，删除最后一个<code>/</code>往右的所有字符，此处用于获取目录</p>
 </blockquote>
 <p>我们通常在脚本中使用<code>${0##*/}</code>获取当前执行指令的文件名。</p>
 <ul>
 <li><code>&lt;&lt;-EOF</code>语法</li>
 </ul>
-<blockquote>
-<p><strong>man bash</strong></p>
-<p>[n]&lt;&lt;[-]word<br>             here-document<br>delimiter</p>
-<p>......</p>
-<p>If the redirection operator is <code>&lt;&lt;-</code>, then all leading tab characters are stripped from input lines and the line  containing  delimiter.   This  allows  here-documents within shell scripts to be indented in a natural fashion.</p>
-</blockquote>
+<pre><code class="bash">**man bash**
+
+[n]&lt;&lt;[-]word
+        here-document
+delimiter
+
+......
+
+If the redirection operator is `&lt;&lt;-`, then all leading tab characters are stripped from input lines and the line  containing  delimiter.   This  allows  here-documents within shell scripts to be indented in a natural fashion.
+</code></pre>
 <p>简单点说，<code>&lt;&lt;-EOF</code>中的连接符<code>-</code>保证下面语句中的每行开头的<code>tab</code>分隔符会被忽略，但又可以保证代码的自然美观。如果下面语句中开头的<code>tab</code>键是空格替换的，那么有可能会报语法错误，这也是需要注意的。</p>
 <h2 id="文件下载"><a href="#文件下载" class="headerlink" title="文件下载"></a>文件下载</h2><p>文件下载是本文重点，因为我们将完成ftp服务器端文件的模糊匹配下载。在讲述模糊匹配下载之前，先讲讲使用<code>lftp</code>实现下载的方法。</p>
 <pre><code class="bash">ftp_get_file()
@@ -3708,11 +3712,11 @@ test -z &quot;$ftp_user&quot; &amp;&amp; ftp_user=&quot;${USER}&quot;
 
 #usage()
 #{
-#    cat &lt;&lt;-EOF &gt;&amp;2
-#    Usage:    fput &lt;file&gt;
-#            fget &lt;file/dir&gt;
-#            fdel &lt;file/dir&gt;
-#    EOF
+#  cat &lt;&lt;-EOF &gt;&amp;2
+#  Usage: fput &lt;file&gt;
+#         fget &lt;file/dir&gt;
+#         fdel &lt;file/dir&gt;
+#  EOF
 #}
 
 get_ftp_pass()
@@ -3807,22 +3811,22 @@ esac
 <ul>
 <li>fput</li>
 </ul>
-<pre><code class="bash">fput test    # test文件将存放至server当天目录，并冠以时间戳为文件名前缀
+<pre><code class="bash">fput test # test文件将存放至server当天目录，并冠以时间戳为文件名前缀
 fput ~/bin/fget  # fget文件将存放至server当天目录，并冠以时间戳为文件名前缀
 </code></pre>
 <ul>
 <li>fget</li>
 </ul>
-<pre><code class="bash">fget 20190902/    # 获取服务器端20190902目录下所有文件
-fget 20190902/2019    # 获取服务器端20190902目录下包含2019字符的所有文件
-fget test    # 获取服务器端根目录下包含test子串的所有文件
+<pre><code class="bash">fget 20190902/ # 获取服务器端20190902目录下所有文件
+fget 20190902/2019 # 获取服务器端20190902目录下包含2019字符的所有文件
+fget test # 获取服务器端根目录下包含test子串的所有文件
 fget te.*st # 获取服务器端根目录下符合匹配符的所有文件，如test,teast,teost,teeest
 </code></pre>
 <ul>
 <li>fdel</li>
 </ul>
-<pre><code class="bash">fdel test    # 删除服务器端根目录名为test的文件
-fdel docs/test    # 删除服务器端docs目录下名为test的文件
+<pre><code class="bash">fdel test # 删除服务器端根目录名为test的文件
+fdel docs/test # 删除服务器端docs目录下名为test的文件
 </code></pre>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
 <li><a href="https://man.linuxde.net/lftp" target="_blank" rel="noopener">lftp命令</a></li>
@@ -3896,7 +3900,7 @@ total 320K
 &lt;li&gt;&lt;a href=&quot;https://www.vmgirls.com/12333.html&quot; title=&quot;少女情怀&quot; target=&quot;_blank&quot;&gt;少女情怀&lt;/a&gt;&lt;/li&gt;
 </code></pre>
 <p>从上图可以看出，网页网址以<code>&lt;li&gt;</code>列表形式存储，网页解析时使用以下xpath表达式即可获取到所有的网址和标题。</p>
-<pre><code class="python"># example: 
+<pre><code class="python"># example:
 # &lt;li&gt;&lt;a href=&quot;https://www.vmgirls.com/12419.html&quot; title=&quot;你眼睛一闪一闪的&quot; target=&quot;_blank&quot;&gt;你眼睛一闪一闪的&lt;/a&gt;&lt;/li&gt;
 urls = response.xpath(&#39;//*[@id=&quot;content&quot;][1]/ul/li/a/@href&#39;).extract()
 titles = response.xpath(&#39;//*[@id=&quot;content&quot;][1]/ul/li/a/text()&#39;).extract()
@@ -4092,7 +4096,7 @@ class VmgirlsPipeline(object):
 </ol>
 <p>可以注意到，两个管道类在处理<code>item</code>前都有通过<code>isinstance</code>函数判断当前的<code>pipeline</code>属于哪个类的实例，这是为了保证一个管道类只处理对应的管道数据。因为默认情况下，爬虫提交出来的所有<code>item</code>都会根据<code>pipeline</code>的优先级依次经过两个管道，但我们实际只需要每个<code>item</code>经过对应的管道即可，所以使用<code>isinstance</code>进行判断是非常有必要的，既可以提高处理效率，又可以避免过多无效log对调试过程产生的干扰。</p>
 <h2 id="爬取结果"><a href="#爬取结果" class="headerlink" title="爬取结果"></a>爬取结果</h2><p>为了方便爬取，可以使用以下的代码段作为爬虫的入口。</p>
-<pre><code class="python">from scrapy import cmdline 
+<pre><code class="python">from scrapy import cmdline
 cmdline.execute(&#39;scrapy crawl vmgirl&#39;.split())
 </code></pre>
 <p>执行后可以看到爬虫到的图片数据如下：</p>
@@ -4144,7 +4148,7 @@ cmdline.execute(&#39;scrapy crawl vmgirl&#39;.split())
 <p>一中心多枝条，枝条绕中心画，主干粗分支细，条条连不分家</p>
 </blockquote>
 <p><img src="/assets/mindmap/neure.jpg" alt="neure cell"></p>
-<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><p>思维导图可应用于生活、工作和学习的方方面面，下图是根据培训资料绘制的一个demo。</p>
+<h3 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h3><p>思维导图可应用于生活、工作和学习的方方面面，下图是根据培训资料绘制的一个demo。</p>
 <p><img src="/assets/mindmap/application.png" alt="application"></p>
 <p>总的来说，包含<strong>记理析创</strong>四个作用：</p>
 <ul>
@@ -4258,7 +4262,7 @@ cmdline.execute(&#39;scrapy crawl vmgirl&#39;.split())
 <p>那几个后缀是培训老师教的。。。好记！本文的几个思维导图是通过百度脑图绘制的。然而老师建议在使用软件之前，最少手绘<strong>21</strong>个思维导图，不要问为什么是这个数，我也不知道，我也没敢问。就像机械手表的广告中都是10点10分一样，没有为什么，就是好看。。。</p>
 <h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>在培训之前，我已经用过一段时间的思维导图了，主要用于梳理代码逻辑和制定项目计划。本次培训加深了对思维导图的理解，规范了导图的绘制和读图技巧，修正了几个之前绘图时没太注意的问题，同时也知晓了导图用途之广、功能之强！的确值得学习和应用。</p>
 <p>此外，也扩展几个知识点，如基于MECE原则的分类方法、基于SMART的目标制定、左逻右艺的大脑分工、先开花后接龙的思维发散技巧等。在以后的生活、学习和工作中，相信通过思维导图可以提高各方面的办事效率，节约时间。最后，希望看到这份总结的有缘人也能有所收获。</p>
-<h3 id="应用-1"><a href="#应用-1" class="headerlink" title="应用"></a>应用</h3><p>下面是我写这篇文章之前绘制的大纲，也是一张思维导图，帮我理清写作方向和思路。</p>
+<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><p>下面是我写这篇文章之前绘制的大纲，也是一张思维导图，帮我理清写作方向和思路。</p>
 <p><img src="/assets/mindmap/summary.jpeg" alt="summary"></p>
 <h3 id="老师推荐书籍"><a href="#老师推荐书籍" class="headerlink" title="老师推荐书籍"></a>老师推荐书籍</h3><ul>
 <li>《结构性思维》</li>
@@ -4583,7 +4587,7 @@ CMD&gt; show
 ---------------------------------------
 CMD&gt; commit
 CMD&gt; exit
-➜  hash git:(master) 
+➜  hash git:(master)
 </code></pre>
 <h3 id="test"><a href="#test" class="headerlink" title="test"></a>test</h3><p>除了交互式程序<code>hash</code>外，我还写了一个测试用例，用于生成100组随机键值对，键值对由随机长度及字符组成，最终得到的哈希表将存入本地文件<code>data.txt</code>中。</p>
 <pre><code class="c">#include &lt;time.h&gt;
@@ -4609,7 +4613,7 @@ void set_rand_key() {
     for(i = 0; i &lt; val_len; i++)
         val[i] = val_pool[rand() % val_maxlen];
 
-    set(key, val);    
+    set(key, val);
 }
 
 int main(int argc, char *argv[]) {
@@ -4951,7 +4955,7 @@ pageStart: 0
 pageNum: 30
 skipCmtCount: 0
 singleurl: 1
-batchId: 
+batchId:
 notice: 0
 appid: 4
 inCharset: utf-8
@@ -4961,8 +4965,8 @@ plat: qzone
 outstyle: json
 format: jsonp
 json_esc: 1
-question: 
-answer: 
+question:
+answer:
 callbackFun: shine0
 _: 1551790719497
 </code></pre>
@@ -6077,7 +6081,7 @@ $ ssh-copy-id -i ~/.ssh/id_rsa.pub -p 27000 root@222.222.222.222
 <li><code>-p 27000</code>: vps ssh 端口，默认值22</li>
 <li><code>-M 27440</code>: 中继服务器（vps）的代理服务监听端口，需保证不被vps其它进程占用</li>
 <li><code>-NR &#39;*:27401:localhost:27402&#39;</code>: 端口映射，vps的<code>27401</code>端口映射到内网PC的<code>27402</code>端口</li>
-<li><code><a href="mailto:root@222.222.222.222" target="_blank" rel="noopener">root@222.222.222.222</a></code>: vps的用户名及IP</li>
+<li><a href="mailto:`root@222.222.222.222" target="_blank" rel="noopener">`root@222.222.222.222</a>`: vps的用户名及IP</li>
 </ul>
 <p>这里涉及到4个端口，<code>27000</code>是vps ssh的监听端口，<code>27400</code>是vps代理服务的监听端口，<code>27401</code>和<code>27402</code>是vps与内网PC之间的一对端口映射，外网PC需要通过vps的<code>27401</code>端口访问内网。</p>
 <h3 id="配置autossh服务"><a href="#配置autossh服务" class="headerlink" title="配置autossh服务"></a>配置autossh服务</h3><p>使用以上指令已经可以完成所需的功能了，但是每次开机都得重新输一遍，很不方便，所以可以把指令封装成一个服务，然后设置为开机启动。在<code>ubuntu</code>中，可以在<code>lib/systemd/system</code>目录下新建一个<code>autossh.service</code>的文件，并输入以下内容：</p>
@@ -6348,13 +6352,11 @@ extern int optind, opterr, optopt;
                 | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
         //...
 </code></pre>
-<blockquote>
 <p>说明：  </p>
 <ol>
-<li>如果不带<code>-a</code>，程序默认会以<code>O_TRUNC</code>方式打开文件，表示截断，会以重写的方式覆盖原文件  </li>
+<li>如果不带<code>-a</code>，程序默认会以<code>O_TRUNC</code>方式打开文件，表示截断，会以重写的方式覆盖原文件；</li>
 <li><code>optind</code>小于<code>argc</code>时，说明除了可选参数之外，用户还输入了其它参数，这里对应的是<code>tee</code>指令所需的文件名称。此时argv[optind]刚好对应第一个非可选参数。</li>
 </ol>
-</blockquote>
 <h3 id="getopt-long"><a href="#getopt-long" class="headerlink" title="getopt_long"></a>getopt_long</h3><p><code>getopt_long</code>定义如下：</p>
 <pre><code class="c">#include &lt;getopt.h&gt;
 
@@ -7509,7 +7511,7 @@ $ sudo apt-get install tmux
 <h2 id="解决配色问题"><a href="#解决配色问题" class="headerlink" title="解决配色问题"></a>解决配色问题</h2><p>在<code>tmux</code>中，有可能部分应用的配色与纯<code>shell</code>下不一致，尤其是<code>vim</code>，后来发现<code>htop</code>也存在这个问题。要解决很简单，在<code>tmux</code>配置中加上一句：</p>
 <pre><code class="yml">set -g default-terminal &quot;screen-256color&quot;
 </code></pre>
-<h2 id="存储-恢复tmux工作环境"><a href="#存储-恢复tmux工作环境" class="headerlink" title="存储/恢复tmux工作环境"></a>存储/恢复tmux工作环境</h2><p>如果在服务器上使用<code>tmux</code>，由于服务器基本不关机，所以不用考虑<code>tmux</code>环境会丢失。但是在个人电脑上使用的话，重启电脑后<code>tmux</code>环境就丢失了，如果每次重启都要重新配置一遍环境的话，那未免太浪费时间了。所以这里推荐个插件<a href="https://github.com/tmux-plugins/tmux-resurrect" target="_blank" rel="noopener">tmux-resurrect</a> </p>
+<h2 id="存储-恢复tmux工作环境"><a href="#存储-恢复tmux工作环境" class="headerlink" title="存储/恢复tmux工作环境"></a>存储/恢复tmux工作环境</h2><p>如果在服务器上使用<code>tmux</code>，由于服务器基本不关机，所以不用考虑<code>tmux</code>环境会丢失。但是在个人电脑上使用的话，重启电脑后<code>tmux</code>环境就丢失了，如果每次重启都要重新配置一遍环境的话，那未免太浪费时间了。所以这里推荐个插件<a href="https://github.com/tmux-plugins/tmux-resurrect" target="_blank" rel="noopener">tmux-resurrect</a></p>
 <p><code>tmux-resurrect</code>可以对<code>tmux</code>环境进行保存和恢复，安装及配置如下：</p>
 <pre><code class="zsh">$ mkdir ~/.tmux
 $ git clone https://github.com/tmux-plugins/tmux-resurrect ~/.tmux/tmux-resurrect
@@ -7574,14 +7576,15 @@ $ tmux source ~/.tmux.conf
       <content type="html"><![CDATA[<p>如果想要在<code>Openwrt</code>系统中添加一个内核模块，其实并不难，对着某个已有的内核模块，依葫芦画瓢嘛，不难。本文将介绍一个最最简单的</p>
 <h2 id="sourcecode"><a href="#sourcecode" class="headerlink" title="sourcecode"></a>sourcecode</h2><p>path: <code>git_repo/package/kmod-demo/</code></p>
 <p>下面是源码包含的所有文件，根级<code>Makefile</code>提供给内核编译器使用，<code>src</code>级<code>Makefile</code>用于编译<code>.ko</code>文件。</p>
-<pre><code>$ tree
+<pre><code class="txt">$ tree
 .
 ├── Makefile
 └── src
     ├── demo.c
     ├── Kconfig
     └── Makefile
-</code></pre><h3 id="demo-c"><a href="#demo-c" class="headerlink" title="demo.c"></a>demo.c</h3><p>源码非常简单，在装载时打印<code>Hello World</code>，卸载时打印<code>Exit</code>。</p>
+</code></pre>
+<h3 id="demo-c"><a href="#demo-c" class="headerlink" title="demo.c"></a>demo.c</h3><p>源码非常简单，在装载时打印<code>Hello World</code>，卸载时打印<code>Exit</code>。</p>
 <pre><code class="c">#include &lt;linux/module.h&gt;
 #include &lt;linux/kernel.h&gt;
 
@@ -7599,7 +7602,7 @@ static void __exit hello_exit(void)
 module_init(hello_init);
 module_exit(hello_exit);
 MODULE_LICENSE(&quot;GPL&quot;);
-MODULE_AUTHOR(&quot;Guangtao.wu&quot;); 
+MODULE_AUTHOR(&quot;Guangtao.wu&quot;);
 </code></pre>
 <h3 id="Kconfig"><a href="#Kconfig" class="headerlink" title="Kconfig"></a>Kconfig</h3><p>在<code>Kconfig</code>文件中添加一些编译相关的选项</p>
 <pre><code class="json">config DEMO
@@ -7618,7 +7621,7 @@ MODULE_AUTHOR(&quot;Guangtao.wu&quot;);
 </li>
 </ul>
 <h3 id="Root-Makefile"><a href="#Root-Makefile" class="headerlink" title="Root - Makefile"></a>Root - Makefile</h3><p>根级<code>Makefile</code>仿其它内核模块编写，注意替换名称<code>demo</code>，<code>SUBMENU</code>以及<code>TITLE</code>将显示在<code>make menuconfig</code>的交互界面中。</p>
-<pre><code class="makefile"># 
+<pre><code class="makefile">#
 # Copyright (C) 2006 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -7638,28 +7641,28 @@ include $(INCLUDE_DIR)/package.mk
 
 define KernelPackage/demo
   SUBMENU:=Other modules
-  TITLE:=kernel demo 
+  TITLE:=kernel demo
   VERSION:=$(LINUX_VERSION)-$(BOARD)-$(PKG_RELEASE)
   FILES:= $(PKG_BUILD_DIR)/demo.$(LINUX_KMOD_SUFFIX)
   AUTOLOAD:=$(call AutoLoad,46,demo)
 endef
 
 define Build/Prepare
-    mkdir -p $(PKG_BUILD_DIR)
-    $(CP) ./src/* $(PKG_BUILD_DIR)
+  mkdir -p $(PKG_BUILD_DIR)
+  $(CP) ./src/* $(PKG_BUILD_DIR)
 endef
 
 define Build/Compile
-    $(MAKE) -C &quot;$(LINUX_DIR)&quot; \
-        CROSS_COMPILE=&quot;$(TARGET_CROSS)&quot; \
-        ARCH=&quot;$(LINUX_KARCH)&quot; \
-        SUBDIRS=&quot;$(PKG_BUILD_DIR)&quot; \
-        EXTRA_CFLAGS=&quot;$(BUILDFLAGS)&quot; \
-        modules
+  $(MAKE) -C &quot;$(LINUX_DIR)&quot; \
+    CROSS_COMPILE=&quot;$(TARGET_CROSS)&quot; \
+    ARCH=&quot;$(LINUX_KARCH)&quot; \
+    SUBDIRS=&quot;$(PKG_BUILD_DIR)&quot; \
+    EXTRA_CFLAGS=&quot;$(BUILDFLAGS)&quot; \
+    modules
 endef
 
 define KernelPackage/demo/install
-    $(INSTALL_DIR) $(1)/lib/network/
+  $(INSTALL_DIR) $(1)/lib/network/
 endef
 
 $(eval $(call KernelPackage,demo))
@@ -7677,8 +7680,8 @@ obj-$(CONFIG_DEMO) += demo.o
 <pre><code class="c">CONFIG_KERNEL_kmod_demo=y
 </code></pre>
 <h2 id="make"><a href="#make" class="headerlink" title="make"></a>make</h2><p>当源码和配置选项都准备好后，便可以编译安装了，单独安装需要整个<code>kernel</code>已经编译过一次，以保证交叉编译工具链能够正常使用。</p>
-<pre><code class="sh">$ make package/kmod-demo/compile V=s
-$ make package/kmod-demo/install V=s
+<pre><code class="sh">make package/kmod-demo/compile V=s
+make package/kmod-demo/install V=s
 </code></pre>
 <h2 id="insmod-rmmod"><a href="#insmod-rmmod" class="headerlink" title="insmod/rmmod"></a>insmod/rmmod</h2><pre><code class="sh"># insmod
 $ insmod demo.ko
@@ -7816,8 +7819,8 @@ $ tree
 <li><code>__pycache__</code>: 存储解释器生成的<code>.pyc</code>文件（一种跨平台的字节码<code>byte code</code>），在<code>python2</code>中该类文件与<code>.py</code>保存在相同文件夹</li>
 </ol>
 <h2 id="scrapy-genspider"><a href="#scrapy-genspider" class="headerlink" title="scrapy genspider"></a>scrapy genspider</h2><p>项目生成以后，可以使用<code>scrapy genspider</code>指令自动生成一个爬虫文件，比如，如果要爬取<a href="www.huaban.com">花瓣网首页</a>，执行以下指令：</p>
-<pre><code class="sh">$ cd demo
-$ scrapy genspider huaban www.huaban.com
+<pre><code class="sh">cd demo
+scrapy genspider huaban www.huaban.com
 </code></pre>
 <p>默认生成的爬虫文件<code>huaban.py</code>如下：</p>
 <pre><code class="python"># -*- coding: utf-8 -*-
@@ -8207,9 +8210,9 @@ page_cnt = url_re.search(html).group(1)
         finally:
             pass
 </code></pre>
-<p><strong>说明：</strong></p>
+<p>说明：</p>
 <ol>
-<li>一个文件对应一个机构的数据，需要多次读取和写入，所以需要计算文件写入时的行数偏移量<code>offset</code>，即当前文件已包含数据的行数</li>
+<li>一个文件对应一个机构的数据，需要多次读取和写入，所以需要计算文件写入时的行数偏移量<code>offset</code>，即当前文件已包含数据的行数；</li>
 <li>当被写入文件被人为打开时，会出现<code>PermissionError</code>异常，可以在捕获该异常然后提示错误信息，并定时等待直到文件被关闭。</li>
 </ol>
 <h3 id="main"><a href="#main" class="headerlink" title="main"></a>main</h3><p>主函数用于创建和启动生产者线程和消费者线程，同时为生产者线程提供机构编号队列。</p>
@@ -8261,7 +8264,7 @@ import time
 # organid: +G01001+, +G01002+, +G01003+, ...
 # currentPage: 1, 2, 3, ...
 # pageSize: 20(default)
-# 
+#
 # Algorithm design:
 # 2 threads with 2 queues
 # Thread-1, get first page url, then get page_num and mechanism_name from first page
@@ -8436,7 +8439,7 @@ class Storage():
     def save(self, data):
         &#39;&#39;&#39;Write data to local file.
 
-        According filetype to choose function to save data, filetype can be &#39;.txt&#39; 
+        According filetype to choose function to save data, filetype can be &#39;.txt&#39;
         or &#39;.xls&#39;, but &#39;.txt&#39; type is saved more faster then &#39;.xls&#39; type
 
         Args:
@@ -8543,7 +8546,7 @@ page_num: 1
 <p><img src="/assets/spider/sina/pictures.png" alt="pictures"></p>
 <p>图中的上面一篇微博只有一张图片，可以轻易获取到原图链接，注意是<strong>原图</strong>，因为我们在页面能看到的是缩略图，但要爬取的当然是<strong>原图</strong>啦。</p>
 <p>图中下面的微博包含组图，在图片右侧的<code>Chrome</code>开发工具可以看到组图链接。</p>
-<p><a href="https://weibo.cn/mblog/picAll/FCQefgeAr?rl=2" target="_blank" rel="noopener">https://weibo.cn/mblog/picAll/FCQefgeAr?rl=2</a> </p>
+<p><a href="https://weibo.cn/mblog/picAll/FCQefgeAr?rl=2" target="_blank" rel="noopener">https://weibo.cn/mblog/picAll/FCQefgeAr?rl=2</a></p>
 <p>打开组图链接，可以看到图片如下图所示：</p>
 <p><img src="/assets/spider/sina/picture_url.png" alt="picture&#39;s url"></p>
 <p>可以看到缩略图链接以及原图链接，然后我们点击<strong>原图</strong>看一下。</p>
@@ -8551,7 +8554,7 @@ page_num: 1
 <p>可以发现，弹出页面的链接与上图显示的不同，但与上图中的缩略图链接极为相似。它们分别是：</p>
 <ol>
 <li>缩略图：<a href="http://ww1.sinaimg.cn/thumb180/c260f7ably1fn4vd7ix0qj20rs1aj1kx.jpg" target="_blank" rel="noopener">http://ww1.sinaimg.cn/thumb180/c260f7ably1fn4vd7ix0qj20rs1aj1kx.jpg</a></li>
-<li>原图： <a href="http://wx1.sinaimg.cn/large/c260f7ably1fn4vd7ix0qj20rs1aj1kx.jpg" target="_blank" rel="noopener">http://wx1.sinaimg.cn/large/c260f7ably1fn4vd7ix0qj20rs1aj1kx.jpg</a></li>
+<li>原图：<a href="http://wx1.sinaimg.cn/large/c260f7ably1fn4vd7ix0qj20rs1aj1kx.jpg" target="_blank" rel="noopener">http://wx1.sinaimg.cn/large/c260f7ably1fn4vd7ix0qj20rs1aj1kx.jpg</a></li>
 </ol>
 <p>可以看出，只是一个<code>thumb180</code>和<code>large</code>的区别。既然发现了规律，那就好办多了，我们只要知道缩略图的网址，就可以将域名后的第一级子域名替换成<code>large</code>就可以了，而不用获取<strong>原图</strong>链接再跳转一次。</p>
 <p>而且，多次尝试可以发现组图链接及缩略图链接满足正则表达式：</p>
@@ -8567,7 +8570,7 @@ img_reg = r&#39;src=&quot;(http://w.{2}\.sinaimg.cn/(.{6,8})/.{32,33}.(jpg|gif))
 <li>给定微博用户名<code>litreily</code></li>
 <li>进入待爬取用户主页，即可从网址中获取<code>uid: 2657006573</code></li>
 <li>获取本人登录微博后的<code>cookies</code>（请求报文需要用到<code>cookies</code>）</li>
-<li>逐一爬取 <a href="https://weibo.cn/2657006573/profile?filter=0&amp;page={1,2,3,...}" target="_blank" rel="noopener">https://weibo.cn/2657006573/profile?filter=0&amp;page={1,2,3,...}</a> </li>
+<li>逐一爬取<a href="https://weibo.cn/2657006573/profile?filter=0&amp;page={1,2,3,...}" target="_blank" rel="noopener">https://weibo.cn/2657006573/profile?filter=0&amp;page={1,2,3,...}</a></li>
 <li>解析每一页的源码，获取单图链接及组图链接，<ul>
 <li>单图：直接获取该图缩略图链接；</li>
 <li>组图：爬取组图链接，循环获取组图页面所有图片的缩略图链接</li>
@@ -8678,7 +8681,7 @@ def _capture_images(uid, headers, path):
         blogs = soup.body.find_all(attrs={&#39;id&#39;:re.compile(r&#39;^M_&#39;)}, recursive=False)
         num_blogs += len(blogs)
 
-        imgurls = []        
+        imgurls = []
         for blog in blogs:
             blog = str(blog)
             imglist_url = imglist_pattern.findall(blog)
@@ -8778,7 +8781,7 @@ if __name__ == &#39;__main__&#39;:
 </ol>
 <p>当然，这些问题不是一下子就能想出来，可以在探索网页内容的过程逐步展开，并思考下一步该考虑的问题，下面针对各个问题对主页进行探索分析。</p>
 <h3 id="主页信息"><a href="#主页信息" class="headerlink" title="主页信息"></a>主页信息</h3><blockquote>
-<p>主页: http://[username].lofter.com</p>
+<p>主页: <code>http://[username].lofter.com</code></p>
 </blockquote>
 <p><img src="/assets/spider/lofter/litreily.png" alt="litreily"></p>
 <p>从主页可以看到<a href="http://litreily.lofter.com/view" target="_blank" rel="noopener">归档</a>的链接，暂时不管。不同的用户，其主页所用模板不尽一致，<code>LOFTER</code>为提供了大量精美的主页模板，以满足不同用户的需求：</p>
@@ -8811,7 +8814,7 @@ if __name__ == &#39;__main__&#39;:
 <p>先来看看归档页面的结构吧，博客按月份归档，每篇博客仅显示首张图片缩略图或纯文本。然后<code>F12</code>打开调试工具，如下图所示，每个月份对应一个<code>&lt;div class=&quot;m-filecnt m-filecnt-1&quot;&gt;</code>这样的节点，每个月份节点包含了本月所有博客的入口信息，一篇博客对应一个<code>id</code>号，以及一个博客的<strong>相对路径</strong>。<code>id</code>神马的不用关心，重点就是这个<strong>相对路径</strong>，有了它不就有了博客的绝对路径了么。</p>
 <ul>
 <li>相对路径：&quot;/post/44fbca_1265bb3e&quot;</li>
-<li>绝对路径：&quot;http://[username].lofter.com/post/44fbca_1265bb3e&quot;</li>
+<li>绝对路径：<code>http://[username].lofter.com/post/44fbca_1265bb3e</code></li>
 </ul>
 <p><img src="/assets/spider/lofter/archive_html.png" alt="archive structure"></p>
 <p>这样看来，那岂不是只要抓取这一个归档页面就可以抓到所有的博客路径了呢？呵呵，真的这么容易吗？显然不大可能，当我们下拉页面时，归档信息将动态加载刷新，没错，是动态的！！！意料之中的猝不及防</p>
@@ -8911,7 +8914,7 @@ def _get_timestamp(html, time_pattern):
 <pre><code class="python"># get urls of blogs: s3.permalink=&quot;44fbca_19a6b1b&quot;
 new_blogs = blog_url_pattern.findall(html)
 num_new_blogs = len(new_blogs)
-num_blogs += num_new_blogs 
+num_blogs += num_new_blogs
 
 if num_new_blogs != 0:
     print(&#39;NewBlogs:%d\tTotalBolgs:%d&#39; % (num_new_blogs, num_blogs))
@@ -9080,7 +9083,7 @@ def main():
     blogid = _get_blogid(username)
     query_number = 40
     time_pattern = re.compile(&#39;s%d\.time=(.*);s.*type&#39; % (query_number-1))
-    blog_url_pattern = re.compile(r&#39;s[\d]*\.permalink=&quot;([\w_]*)&quot;&#39;) 
+    blog_url_pattern = re.compile(r&#39;s[\d]*\.permalink=&quot;([\w_]*)&quot;&#39;)
 
     # creat path to save imgs
     path = _get_path(username)
@@ -9104,7 +9107,7 @@ def main():
         # get urls of blogs: s3.permalink=&quot;44fbca_19a6b1b&quot;
         new_blogs = blog_url_pattern.findall(html)
         num_new_blogs = len(new_blogs)
-        num_blogs += num_new_blogs 
+        num_blogs += num_new_blogs
 
         if num_new_blogs != 0:
             print(&#39;NewBlogs:%d\tTotalBolgs:%d&#39; % (num_new_blogs, num_blogs))
@@ -9200,38 +9203,26 @@ if __name__ == &#39;__main__&#39;:
 <p><code>hyenae</code>的界面比较简单，图中展示的是<code>SYN/ACK</code>洪泛攻击的配置选项。</p>
 <ul>
 <li><code>operation mode</code>中可以选择网卡</li>
-</ul>
-<ul>
 <li><code>Network Protocol</code>中可以选择攻击方式对应的网络协议，如<code>SYN</code>洪泛攻击对应传输层的<code>TCP</code>，<code>IP</code>协议可选<code>IPv4, IPv6</code></li>
-</ul>
-<ul>
 <li>攻击源的<code>IP</code>,<code>MAC</code>地址以及端口号可以非常灵活的设置，按<code>MAC-IP@port</code>的格式书写，如图中的攻击源匹配模式<code>%-172.17.14.158@80</code><ul>
 <li>% 代表任意，在此处代表任意的MAC地址</li>
 <li>172.17.14.158为伪造的攻击源IP，可以修改为任意的合法IP</li>
 <li>80为端口号，80同时也是网络服务器的默认端口</li>
 </ul>
 </li>
-</ul>
-<ul>
 <li>攻击目标的设置方式与攻击源一致，图中的<code>%-172.17.14.10@80</code><ul>
 <li>% 随机生成MAC地址</li>
 <li>172.17.14.10代表被攻击的IP</li>
 <li>80为攻击目标的被攻击端口号</li>
 </ul>
 </li>
-</ul>
-<ul>
 <li>针对<code>TCP</code>协议，右侧给出其对应的<code>5</code>个常见<code>flags</code>: <code>FIN, SYN, RST, PSH, ACK</code><ul>
 <li>可以随意进行单选或多选，以实现不同的攻击方式</li>
 <li>随意的组合可以产生正常通信过程中无法出现的数据包</li>
 </ul>
 </li>
-</ul>
-<ul>
 <li>软件下方可以设置数据包的发送速率，默认为无限速发送，这会暂用大量带宽，导致网络拥塞；当然啦，这个软件本就是为了攻击网络，导致网络瘫痪正是其目的所在</li>
-</ul>
-<ul>
-<li>选择不同的攻击方式，会显示相应不同的配置选项 </li>
+<li>选择不同的攻击方式，会显示相应不同的配置选项</li>
 </ul>
 <p>简单说，这幅图的作用是产生<code>MAC</code>地址随机，<code>IP</code>为<code>172.17.14.158</code>，端口为80的伪造源，去攻击目的<code>MAC</code>随机，<code>IP</code>为<code>172.17.14.10</code>的<code>web server</code>。</p>
 <p>由于目的<code>MAC</code>随机，<strong>当MAC地址首字节为奇数时，生成的数据包为广播包</strong>，此时将产生广播风暴，局域网内的所有设备都将收到大量的广播包，当速率很高时，很容易导致局域网瘫痪，这是需要注意的。本人当时年少轻狂，有次测试，使用全速率的广播式<code>SYN/ACK</code>攻击，直接导致部门的局域网瘫痪断网，幸好是晚上，后来找人重置了部门内的网络设备才恢复，想想真是罪过啊。</p>
@@ -9342,25 +9333,25 @@ $ sudo hping3 -V -c 10000 -d 120 -S -A -w 64 --keep -p 80 -s 80 --flood -a 172.1
 # -I interface
 </code></pre>
 <h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><ul>
-<li>网络攻击工具<ul>
+<li><p>网络攻击工具</p>
+<ul>
 <li>hping3<ul>
 <li><a href="http://man.linuxde.net/hping3" target="_blank" rel="noopener">http://man.linuxde.net/hping3</a></li>
 <li><a href="http://0daysecurity.com/articles/hping3_examples.html" target="_blank" rel="noopener">http://0daysecurity.com/articles/hping3_examples.html</a></li>
 </ul>
 </li>
 <li>LOIC</li>
-<li>hyenae <ul>
+<li>hyenae<ul>
 <li><a href="https://sourceforge.net/projects/hyenae/" target="_blank" rel="noopener">https://sourceforge.net/projects/hyenae/</a></li>
 </ul>
 </li>
 <li>免费DDOS攻击测试工具大合集 <a href="http://www.freebuf.com/sectool/36545.html" target="_blank" rel="noopener">http://www.freebuf.com/sectool/36545.html</a></li>
 </ul>
 </li>
-</ul>
+<li><p>ddos攻击说明</p>
 <ul>
-<li>ddos攻击说明<ul>
 <li><a href="https://security.radware.com/ddos-knowledge-center/ddospedia/syn-flood/" target="_blank" rel="noopener">https://security.radware.com/ddos-knowledge-center/ddospedia/syn-flood/</a></li>
-<li>网络攻击：半连接攻击(SYN攻击)、全连接攻击、RST攻击、IP欺骗、DNS欺骗、DOS/DDOS攻击  <a href="http://blog.csdn.net/guowenyan001/article/details/11777361" target="_blank" rel="noopener">http://blog.csdn.net/guowenyan001/article/details/11777361</a></li>
+<li>网络攻击：半连接攻击(SYN攻击)、全连接攻击、RST攻击、IP欺骗、DNS欺骗、DOS/DDOS攻击 <a href="http://blog.csdn.net/guowenyan001/article/details/11777361" target="_blank" rel="noopener">http://blog.csdn.net/guowenyan001/article/details/11777361</a></li>
 </ul>
 </li>
 </ul>
@@ -9395,9 +9386,9 @@ $ sudo yum install mysql-devel # install sdk of mysql
 # /usr/include/mysql/mysql.h
 </code></pre>
 <a id="more"></a>
-<h3 id="install-on-Ubuntu"><a href="#install-on-Ubuntu" class="headerlink" title="install on Ubuntu"></a>install on Ubuntu</h3><pre><code class="bash">$ sudo apt-get update
-$ sudo apt-get install mysql-server mysql-client
-$ sudo apt-get install libmysqlclient15-dev || sudo apt-get install libmysqlclient-dev
+<h3 id="install-on-Ubuntu"><a href="#install-on-Ubuntu" class="headerlink" title="install on Ubuntu"></a>install on Ubuntu</h3><pre><code class="bash">sudo apt-get update
+sudo apt-get install mysql-server mysql-client
+sudo apt-get install libmysqlclient15-dev || sudo apt-get install libmysqlclient-dev
 </code></pre>
 <h2 id="mySQL-cmd"><a href="#mySQL-cmd" class="headerlink" title="mySQL cmd"></a>mySQL cmd</h2><h3 id="login"><a href="#login" class="headerlink" title="login"></a>login</h3><pre><code class="bash">$ mysql -u USERNAME -p
 $ mysql -u root -p
@@ -9649,7 +9640,7 @@ free(flv);
 <li>如果是公司网设了代理，则默认设为代理<code>proxy</code>，并在代理<code>proxy</code>中设置好公司的代理服务器<code>IP</code>和端口号<code>port</code>.</li>
 </ul>
 </li>
-<li>在下面的规则列表配置中，选择<code>AutoProxy</code>,添加网址<a href="https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt，" target="_blank" rel="noopener">https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt，</a> 然后点击下方按钮更新列表信息，网址无误的话会提示成功更新规则列表；</li>
+<li>在下面的规则列表配置中，选择<code>AutoProxy</code>,添加网址<a href="https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt" target="_blank" rel="noopener">https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt</a>， 然后点击下方按钮更新列表信息，网址无误的话会提示成功更新规则列表；</li>
 <li>点击左侧应用修改<code>Apply changes</code>，在插件中选择<code>auto switch</code>选项即可开启自动切换代理模式。</li>
 </ol>
 <p>经过以上配置后，启动已配置好服务器信息的<code>Shadowsocks</code>客户端，正常情况下就可以访问<code>Google</code>, <code>youtube</code>等国外网站了。</p>
@@ -9781,7 +9772,7 @@ From: 182****2872@163.com
 To: 707***098@qq.com
 Subject: Test the use of smtp
 
-  Hello, litreily.                          
+  Hello, litreily.
   This is a message edit with telnet.
 
 Best wish to you.
@@ -9824,10 +9815,10 @@ S 354 End data with &lt;CR&gt;&lt;LF&gt;.&lt;CR&gt;&lt;LF&gt;
 C From: 182****2872@163.com
 C To: 707***098@qq.com
 C Subject: Test the use of smtp
-C 
-C   Hello, litreily.                          
+C
+C   Hello, litreily.
 C   This is a message edit with telnet.
-C 
+C
 C Best wish to you.
 C Litreily
 C .
@@ -10052,9 +10043,9 @@ Infos:File-main.c, Func-main, Line-14
             
             <tag> ubuntu </tag>
             
-            <tag> makefile </tag>
-            
             <tag> shell </tag>
+            
+            <tag> makefile </tag>
             
         </tags>
         
@@ -10113,21 +10104,21 @@ int main(void)
 ...
 ...
 </code></pre>
-<p><code>target</code>: 目标文件，可以是.o（object file）文件，也可以是最终的可执行文件<br><code>prerequisites</code> : 生成目标文件所需的文件或是目标（<em>.h, </em>.c, *.o, ...）<br><code>command</code>: <code>make</code>需要执行的编译、链接等指令（所有指令前都以<code>TAB</code>键开头）</p>
+<p><code>target</code>: 目标文件，可以是.o（object file）文件，也可以是最终的可执行文件<br><code>prerequisites</code> : 生成目标文件所需的文件或是目标（<code>*.h</code>, <code>*.c</code>, <code>*.o</code>, ...）<br><code>command</code>: <code>make</code>需要执行的编译、链接等指令（所有指令前都以<code>TAB</code>键开头）</p>
 <h3 id="makefile-基础写法"><a href="#makefile-基础写法" class="headerlink" title="makefile 基础写法"></a>makefile 基础写法</h3><pre><code class="makefile">test : main.o add.o
-    cc -o test main.o add.o
+cc -o test main.o add.o
 
 main.o : main.c main.h add.h
-    cc -c main.c
+cc -c main.c
 
 add.o : add.c add.h
-    cc -c add.c
+cc -c add.c
 
 # make clean : use to clean all the object files
 
 .PHONY : clean
 clean :
-    rm test main.o add.o
+rm test main.o add.o
 </code></pre>
 <p>其中，test, main.o, add.o均是目标文件<code>target</code>；所有源文件及头文件均为<code>prerequisites</code>；</p>
 <p><code>cc</code> : 编译器，与<code>gcc</code>相似，<code>-c</code>代表编译，执行后产生对象文件，即&quot;.o&quot;文件；<code>-o</code>代表链接，用于链接&quot;.o&quot;文件并生成可执行文件；</p>
@@ -10139,19 +10130,19 @@ clean :
 <p>简化后的<code>makefile</code>如下：</p>
 <pre><code class="makefile">objs = main.o add.o
 test : $(objs)
-    cc -o test $(objs)
+cc -o test $(objs)
 
 main.o : main.c main.h add.h
-    cc -c main.c
+cc -c main.c
 
 add.o : add.c add.h
-    cc -c add.c
+cc -c add.c
 
 # make clean : use to clean all the object files
 
 .PHONY : clean
 clean :
-    rm test (objs)
+rm test (objs)
 </code></pre>
 <p>当项目文件很多时，合理使用变量可以大大简化<code>makefile</code>的编写和修改。</p>
 <h3 id="makefile-简化版2"><a href="#makefile-简化版2" class="headerlink" title="makefile 简化版2"></a>makefile 简化版2</h3><p>要知道，<code>make</code>非常强大，具有<strong>自动推导</strong>的功能，可以自动推导&quot;.o&quot;目标文件下面的指令。如果目标文件为&quot;main.o&quot;，那么指令必然为&quot;cc -c main.c&quot;，依赖于<code>make</code>指令的推导功能，<code>makefile</code>可以省略该指令的编写。</p>
@@ -10159,7 +10150,7 @@ clean :
 <p>根据以上规则可以对<code>makefile</code>进一步简化：</p>
 <pre><code class="makefile">objs = main.o add.o
 test : $(objs)
-    cc -o test $(objs)
+cc -o test $(objs)
 
 main.o : main.h add.h
 add.o : add.h
@@ -10168,7 +10159,7 @@ add.o : add.h
 
 .PHONY : clean
 clean :
-    rm test (objs)
+rm test (objs)
 </code></pre>
 <h2 id="make"><a href="#make" class="headerlink" title="make"></a>make</h2><p>编写好<code>makefile</code>文件后，便可以使用<code>make</code>指令进行编译链接并生成可执行文件了。</p>
 <pre><code class="bash">$ make  # 生成可执行文件
@@ -10228,8 +10219,8 @@ ssh-keygen -t rsa -C &quot;emailname@email.com&quot;
 cd ~/.ssh
 gedit id_rsa.pub    # 将文件内容添加至github或其它代码托管平台
 </code></pre>
-<h3 id="系统指示器Syspeek"><a href="#系统指示器Syspeek" class="headerlink" title="系统指示器Syspeek"></a>系统指示器Syspeek</h3><pre><code class="bash">sudo add-apt-repository ppa:nilarimogard/webupd8    
-sudo apt-get update    
+<h3 id="系统指示器Syspeek"><a href="#系统指示器Syspeek" class="headerlink" title="系统指示器Syspeek"></a>系统指示器Syspeek</h3><pre><code class="bash">sudo add-apt-repository ppa:nilarimogard/webupd8
+sudo apt-get update
 sudo apt-get install syspeek  
 </code></pre>
 <h3 id="Hexo-amp-amp-Gitbook"><a href="#Hexo-amp-amp-Gitbook" class="headerlink" title="Hexo &amp;&amp; Gitbook"></a>Hexo &amp;&amp; Gitbook</h3><p>首先安装<code>node.js</code>与<code>npm</code>,然后使用<code>npm</code>安装<code>hexo</code>与<code>gitbook</code></p>
@@ -10298,52 +10289,52 @@ sudo apt-get install ultra-flat-icons
     <entry>
       <title><![CDATA[Labview - DAQ 助手详解]]></title>
       <url>https://www.litreily.top/2017/04/24/labview-DAQ/</url>
-      <content type="html"><![CDATA[<h2 id="1-DAQ-助手简介"><a href="#1-DAQ-助手简介" class="headerlink" title="1. DAQ 助手简介"></a>1. DAQ 助手简介</h2><h3 id="1-1-Express-VI"><a href="#1-1-Express-VI" class="headerlink" title="1.1 Express VI"></a>1.1 Express VI</h3><p><code>Express VI</code> 是 LabVIEW 7 及更高版本拥有的快速 VI，此类 VI 将一些常见的功能打包，然后封装在简单易用的交互式的 VI 程序中，方便开发人员配置参数和实现功能。</p>
+      <content type="html"><![CDATA[<h2 id="DAQ-助手简介"><a href="#DAQ-助手简介" class="headerlink" title="DAQ 助手简介"></a>DAQ 助手简介</h2><h3 id="Express-VI"><a href="#Express-VI" class="headerlink" title="Express VI"></a>Express VI</h3><p><code>Express VI</code> 是 LabVIEW 7 及更高版本拥有的快速 VI，此类 VI 将一些常见的功能打包，然后封装在简单易用的交互式的 VI 程序中，方便开发人员配置参数和实现功能。</p>
 <p><code>DAQ</code> 助手是完成信号采集任务的常用工具，以 <code>Express VI</code> 的形式呈现，具有交互式的配置界面，配合 NI 公司提供的采集卡，可以完成绝大部分的信号采集任务。</p>
-<h3 id="1-2-使用方法简述（采集-AI-信号）"><a href="#1-2-使用方法简述（采集-AI-信号）" class="headerlink" title="1.2 使用方法简述（采集 AI 信号）"></a>1.2 使用方法简述（采集 AI 信号）</h3><h4 id="1-2-1-选择信号类型"><a href="#1-2-1-选择信号类型" class="headerlink" title="1.2.1 选择信号类型"></a>1.2.1 选择信号类型</h4><p><img src="/assets/labview/daqAssistant/selectSignal.png" alt="DAQ助手信号类型选择界面"></p>
+<h3 id="使用方法简述（采集-AI-信号）"><a href="#使用方法简述（采集-AI-信号）" class="headerlink" title="使用方法简述（采集 AI 信号）"></a>使用方法简述（采集 AI 信号）</h3><h4 id="选择信号类型"><a href="#选择信号类型" class="headerlink" title="选择信号类型"></a>选择信号类型</h4><p><img src="/assets/labview/daqAssistant/selectSignal.png" alt="DAQ助手信号类型选择界面"></p>
 <p>在采集卡（虚拟的或实际的均可）已连接的情况下，从 VI 的程序框图中打开 <code>DAQ</code> 助手，选择待采集信号的类型，此处选择模拟输入电压信号。</p>
-<h4 id="1-2-2-选择物理通道"><a href="#1-2-2-选择物理通道" class="headerlink" title="1.2.2 选择物理通道"></a>1.2.2 选择物理通道</h4><p><img src="/assets/labview/daqAssistant/selectChannel.png" alt="DAQ助手物理通道选择界面"></p>
+<h4 id="选择物理通道"><a href="#选择物理通道" class="headerlink" title="选择物理通道"></a>选择物理通道</h4><p><img src="/assets/labview/daqAssistant/selectChannel.png" alt="DAQ助手物理通道选择界面"></p>
 <p>选择通道时，按住<code>Ctrl</code> 或 <code>Shift</code> 可同时选择多路通道</p>
-<h4 id="1-2-3-配置信号采集参数"><a href="#1-2-3-配置信号采集参数" class="headerlink" title="1.2.3 配置信号采集参数"></a>1.2.3 配置信号采集参数</h4><p><img src="/assets/labview/daqAssistant/daqConfig.png" alt="DAQ助手通道配置界面"></p>
+<h4 id="配置信号采集参数"><a href="#配置信号采集参数" class="headerlink" title="配置信号采集参数"></a>配置信号采集参数</h4><p><img src="/assets/labview/daqAssistant/daqConfig.png" alt="DAQ助手通道配置界面"></p>
 <p>配置界面中可以进行物理通道的删除与添加，通道名称的修改，接线端连接方式的选择，采集模式的选择等操作，配置界面右侧对于每个选项都有详细说明。</p>
 <p>信号采集模式包含“1 采样”、“N 采样”和“连续采样” 3 大类。对于连续采样而言，采样率决定了信号采样的间隔时间，通常将其设为最大有效信号频率的 10 倍左右；采样点数指定了连续采样时的数据缓冲区大小，简单来说，就是每次采样后得到的待处理数据长度，待读取采样与采样率之比就是连续采样的间隔时间。</p>
 <p>此外，信号输入范围默认为 <code>-10~10v</code> ；接线端配置默认为差分输入，通常情况下，我们会选择单端输入 <code>RSE</code>，表示一端接 <code>AGND</code>，一端接输入端口，不同的接线端配置方式对应的连线图也不一致，在进行信号端口连线时需要按所选方式进行连接。</p>
-<h4 id="1-2-4-启用-TDMS-记录"><a href="#1-2-4-启用-TDMS-记录" class="headerlink" title="1.2.4 启用 TDMS 记录"></a>1.2.4 启用 TDMS 记录</h4><p><img src="/assets/labview/daqAssistant/saveTdms.png" alt="DAQ助手启用TDMS记录"></p>
+<h4 id="启用-TDMS-记录"><a href="#启用-TDMS-记录" class="headerlink" title="启用 TDMS 记录"></a>启用 TDMS 记录</h4><p><img src="/assets/labview/daqAssistant/saveTdms.png" alt="DAQ助手启用TDMS记录"></p>
 <p>在配置界面中，还可以选择是否将采集的数据记录至 <code>TDMS</code> 文件中，同时可以选择好默认的存储路径、记录模式和组名。如果信号采集结束后需要实时处理，需要将记录模式设为“记录并读取”，如果仅仅是记录而无需处理，则选择“仅记录”。组名将会显示在 <code>TDMS</code> 文件的分组列表中。</p>
 <p>如果记录时间很长，长达几个小时甚至几天时，此时由于数据量过大，可以勾选“包含多个文件”，并规定单个文件的存储容量。</p>
-<h4 id="1-2-5-配置接口"><a href="#1-2-5-配置接口" class="headerlink" title="1.2.5 配置接口"></a>1.2.5 配置接口</h4><p><img src="/assets/labview/daqAssistant/daqIcon.png" alt="DAQ助手配置完成图"></p>
+<h4 id="配置接口"><a href="#配置接口" class="headerlink" title="配置接口"></a>配置接口</h4><p><img src="/assets/labview/daqAssistant/daqIcon.png" alt="DAQ助手配置完成图"></p>
 <p>当采集信息确定好以后，会在程序框图中生成相应的 <code>DAQ</code> 图标，后续如果需要更改参数，可以参考以下两种方法：</p>
 <ol>
 <li>双击 <code>DAQ</code> 助手，打开配置界面更改需要更新的参数</li>
 <li>通过 <code>DAQ</code> 助手提供的输入接口，从前面板或程序框图修改相应参数</li>
 </ol>
-<h2 id="2-DAQ-助手程序解析"><a href="#2-DAQ-助手程序解析" class="headerlink" title="2. DAQ 助手程序解析"></a>2. DAQ 助手程序解析</h2><p>对 <code>Express VI</code> 而言，双击无法打开程序框图，打开的是配置界面。此外，<code>Express VI</code> 的程序是动态的，对于 <code>DAQ</code> 助手而言，选择不同的通道数，不同的信号类型，其产生的执行程序都不一样。下面以双通道连续采集模拟输入电压信号为例，解析 <code>DAQ</code> 助手的内部执行程序。</p>
-<h3 id="2-1-Express-VI-转标准子-VI"><a href="#2-1-Express-VI-转标准子-VI" class="headerlink" title="2.1 Express VI 转标准子 VI"></a>2.1 Express VI 转标准子 VI</h3><p>想要查看 <code>DAQ</code> 助手的程序框图，必须先将其转换为标准子 VI，转换方法很简单，选择 <code>DAQ</code> 助手，右键选择“打开前面板”或“open front panel”（英文版）。</p>
-<h3 id="2-2-整体程序框图"><a href="#2-2-整体程序框图" class="headerlink" title="2.2 整体程序框图"></a>2.2 整体程序框图</h3><p><img src="/assets/labview/daqAssistant/daqDiagram.png" alt="DAQ助手程序框图"></p>
+<h2 id="DAQ-助手程序解析"><a href="#DAQ-助手程序解析" class="headerlink" title="DAQ 助手程序解析"></a>DAQ 助手程序解析</h2><p>对 <code>Express VI</code> 而言，双击无法打开程序框图，打开的是配置界面。此外，<code>Express VI</code> 的程序是动态的，对于 <code>DAQ</code> 助手而言，选择不同的通道数，不同的信号类型，其产生的执行程序都不一样。下面以双通道连续采集模拟输入电压信号为例，解析 <code>DAQ</code> 助手的内部执行程序。</p>
+<h3 id="Express-VI-转标准子-VI"><a href="#Express-VI-转标准子-VI" class="headerlink" title="Express VI 转标准子 VI"></a>Express VI 转标准子 VI</h3><p>想要查看 <code>DAQ</code> 助手的程序框图，必须先将其转换为标准子 VI，转换方法很简单，选择 <code>DAQ</code> 助手，右键选择“打开前面板”或“open front panel”（英文版）。</p>
+<h3 id="整体程序框图"><a href="#整体程序框图" class="headerlink" title="整体程序框图"></a>整体程序框图</h3><p><img src="/assets/labview/daqAssistant/daqDiagram.png" alt="DAQ助手程序框图"></p>
 <p>上图是 <code>DAQ</code> 助手的程序框图，可简化为如下图所示的程序流程图，图中的一对移位寄存器代指的是信号采集任务句柄。</p>
 <p><img src="/assets/labview/daqAssistant/daqDiagram_visio.png" alt="DAQ助手程序框图"></p>
-<h3 id="2-3-程序解析"><a href="#2-3-程序解析" class="headerlink" title="2.3 程序解析"></a>2.3 程序解析</h3><p>下面对以上程序框图中的每个模块进行详细分析。</p>
-<h4 id="2-3-1-创建采集任务"><a href="#2-3-1-创建采集任务" class="headerlink" title="2.3.1 创建采集任务"></a>2.3.1 创建采集任务</h4><p><img src="/assets/labview/daqAssistant/daqDiagram_1.png" alt="DAQ助手局部程序框图1"></p>
+<h3 id="程序解析"><a href="#程序解析" class="headerlink" title="程序解析"></a>程序解析</h3><p>下面对以上程序框图中的每个模块进行详细分析。</p>
+<h4 id="创建采集任务"><a href="#创建采集任务" class="headerlink" title="创建采集任务"></a>创建采集任务</h4><p><img src="/assets/labview/daqAssistant/daqDiagram_1.png" alt="DAQ助手局部程序框图1"></p>
 <p>图中包含两个移位寄存器，上面的寄存器用于存储采集任务的引用句柄，当该句柄无效或首次调用该 VI 时会执行 <code>DAQmx Create Task</code> 函数，即创建新的采集任务，并产生新任务的引用句柄。</p>
-<h4 id="2-3-2-生成通道名称"><a href="#2-3-2-生成通道名称" class="headerlink" title="2.3.2 生成通道名称"></a>2.3.2 生成通道名称</h4><p><img src="/assets/labview/daqAssistant/daqDiagram_2.png" alt="DAQ助手局部程序框图2"></p>
+<h4 id="生成通道名称"><a href="#生成通道名称" class="headerlink" title="生成通道名称"></a>生成通道名称</h4><p><img src="/assets/labview/daqAssistant/daqDiagram_2.png" alt="DAQ助手局部程序框图2"></p>
 <p>添加物理通道前，需要选择好相应的通道名称，模拟输入信号简称 <code>ai</code>，通道名称格式为 <code>ain</code>, n 从 0 开始增加。在此例中，所选通道为 <code>ai0</code> 与 <code>ai1</code>。设备名为 <code>Dev1</code>,所以最终得到的通道名称为 <code>Dev1/ai0</code> 与 <code>Dev1/ai1</code>。正常情况下，该条件结构内的程序仅在首次调用时执行一次。</p>
-<h4 id="2-3-3-添加物理通道"><a href="#2-3-3-添加物理通道" class="headerlink" title="2.3.3 添加物理通道"></a>2.3.3 添加物理通道</h4><p><img src="/assets/labview/daqAssistant/daqDiagram_3.png" alt="DAQ助手局部程序框图3"></p>
+<h4 id="添加物理通道"><a href="#添加物理通道" class="headerlink" title="添加物理通道"></a>添加物理通道</h4><p><img src="/assets/labview/daqAssistant/daqDiagram_3.png" alt="DAQ助手局部程序框图3"></p>
 <p>确定好通道名称后，便可根据需求添加相应的物理通道了，如图所示，标志 ① 连接的是输入接线端配置参数，往下的参数可以参考如下的函数 <code>IO</code> 接口图。之所以用 <code>for</code> 循环，是因为每个采集通道均需调用一次 <code>DAQmx Create Channel</code> 函数。本例创建的通道数为 2，所以 <code>for</code> 循环的执行次数为 2。</p>
 <p><img src="/assets/labview/daqAssistant/daqDiagram_3_1.png" alt="DAQ助手局部程序框图3-1"></p>
-<h4 id="2-3-4-配置采样时钟"><a href="#2-3-4-配置采样时钟" class="headerlink" title="2.3.4 配置采样时钟"></a>2.3.4 配置采样时钟</h4><p><img src="/assets/labview/daqAssistant/daqDiagram_4.png" alt="DAQ助手局部程序框图4"></p>
+<h4 id="配置采样时钟"><a href="#配置采样时钟" class="headerlink" title="配置采样时钟"></a>配置采样时钟</h4><p><img src="/assets/labview/daqAssistant/daqDiagram_4.png" alt="DAQ助手局部程序框图4"></p>
 <p>对于连续采样模式，必须调用 <code>DAQmx Timing</code> 定时函数，配置好采样率和采样点数。但在此处需要注意的是，<code>DAQ</code> 助手并没有实现采集过程中修改采样频率 <code>Sample rate</code> 的功能，也就是说：在信号采集过程中，无法修改采样频率，直到采集任务出错或停止。如果实际应用中有采集过程中修改采样率的需求，只能另行编写采集程序，这也是 <code>Express VI</code> 不够灵活的一个体现。</p>
-<h4 id="2-3-5-配置-TDMS-记录"><a href="#2-3-5-配置-TDMS-记录" class="headerlink" title="2.3.5 配置 TDMS 记录"></a>2.3.5 配置 TDMS 记录</h4><p><img src="/assets/labview/daqAssistant/daqDiagram_5.png" alt="DAQ助手局部程序框图5"></p>
+<h4 id="配置-TDMS-记录"><a href="#配置-TDMS-记录" class="headerlink" title="配置 TDMS 记录"></a>配置 TDMS 记录</h4><p><img src="/assets/labview/daqAssistant/daqDiagram_5.png" alt="DAQ助手局部程序框图5"></p>
 <p><code>TDMS</code> 文件记录是非常常用的功能，可以将采集到的信号快速存储至 <code>.tdms</code> 文件中。使用 <code>DAQmx Configure Logging(TDMS)</code> 函数配置 <code>TDMS</code> 记录功能时，可参考如下接口，设置好记录模式、组名、文件路径等。</p>
 <p><img src="/assets/labview/daqAssistant/daqDiagram_5_1.png" alt="DAQ助手局部程序框图5-1"></p>
-<h4 id="2-3-6-开始任务"><a href="#2-3-6-开始任务" class="headerlink" title="2.3.6 开始任务"></a>2.3.6 开始任务</h4><p><img src="/assets/labview/daqAssistant/daqDiagram_6.png" alt="DAQ助手局部程序框图6"></p>
+<h4 id="开始任务"><a href="#开始任务" class="headerlink" title="开始任务"></a>开始任务</h4><p><img src="/assets/labview/daqAssistant/daqDiagram_6.png" alt="DAQ助手局部程序框图6"></p>
 <p>当采集任务相关的参数都配置完成后，即可开始任务 <code>DAQmx Start Task</code>。</p>
 <p>此前 6 个步骤仅需执行一次，直到下一次重启软件或出现异常。</p>
-<h4 id="2-3-7-信号采集"><a href="#2-3-7-信号采集" class="headerlink" title="2.3.7 信号采集"></a>2.3.7 信号采集</h4><p><img src="/assets/labview/daqAssistant/daqDiagram_7.png" alt="DAQ助手局部程序框图7"></p>
+<h4 id="信号采集"><a href="#信号采集" class="headerlink" title="信号采集"></a>信号采集</h4><p><img src="/assets/labview/daqAssistant/daqDiagram_7.png" alt="DAQ助手局部程序框图7"></p>
 <p>开始任务后，物理采集卡就将按照给定的参数开始采集，并将数据存放至采集卡内的缓冲区内，通过相应的 <code>DAQmx Read</code> 函数，选择合适的采样方式（此处选为“模拟1D波形N通道N采样”）， <code>DAQ</code> 驱动程序便会从采集卡的缓冲区中读取数据，并默认以动态数据格式 DDT(Dynamic Data Type) 输出。<code>DAQ</code> 助手返回的动态数据便是该函数返回的数据 <code>data</code>。</p>
-<h4 id="2-3-8-异常处理"><a href="#2-3-8-异常处理" class="headerlink" title="2.3.8 异常处理"></a>2.3.8 异常处理</h4><p><img src="/assets/labview/daqAssistant/daqDiagram_8.png" alt="DAQ助手局部程序框图8"></p>
+<h4 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h4><p><img src="/assets/labview/daqAssistant/daqDiagram_8.png" alt="DAQ助手局部程序框图8"></p>
 <p>所谓异常处理，指的注意异常情况是采集卡在信号采集过程中被拔出，导致采集任务无法继续执行，此时 <code>DAQ</code> 助手将会停止并清除任务，并将任务的引用句柄重置为空。下一次 while 循环将判断出该空句柄，然后重新创建任务，如果采集任务被顺利创建，说明异常已解除，采集卡已重新连接，采集任务便可自动继续进行；如果采集任务创建失败，则循环创建任务直到成功为止。</p>
 <p>当然还有一种非异常情况也会停止并清除任务，那就是用户手动点击停止按钮 stop ，任务正常终止。</p>
-<h2 id="3-DAQ-助手程序简化"><a href="#3-DAQ-助手程序简化" class="headerlink" title="3. DAQ 助手程序简化"></a>3. DAQ 助手程序简化</h2><p>从上面的解析可以看出，<code>DAQ</code> 助手作为通用型工具，包含了所有需要的配置参数。<code>DAQ</code> 助手有其方便之处，但同时也存在许多不灵活的地方：</p>
+<h2 id="DAQ-助手程序简化"><a href="#DAQ-助手程序简化" class="headerlink" title="DAQ 助手程序简化"></a>DAQ 助手程序简化</h2><p>从上面的解析可以看出，<code>DAQ</code> 助手作为通用型工具，包含了所有需要的配置参数。<code>DAQ</code> 助手有其方便之处，但同时也存在许多不灵活的地方：</p>
 <ol>
 <li>经测试，对于单通道和 N 通道的采集任务，DAQ 助手的执行程序结构完全一致，生成通道名称和添加物理通道均采用了 for 循环结构，这对单通道采集原本是不需要的；</li>
 <li>实际应用中，添加物理通道时，有许多参数使用默认值即可，过多的参数只会使代码显得冗余；</li>
@@ -10352,10 +10343,10 @@ sudo apt-get install ultra-flat-icons
 <li>若要采集编码器的计数值时，使用 <code>DAQ</code> 助手的配置界面无法返回整型的原始计数值。</li>
 </ol>
 <p>鉴于以上种种原因，在实际编程过程中，完全可以使用底层的 <code>DAQmx</code> 函数编写信号采集程序，或者在原有的 <code>DAQ</code> 助手程序基础上修改和简化。</p>
-<h3 id="3-1-简化后程序"><a href="#3-1-简化后程序" class="headerlink" title="3.1 简化后程序"></a>3.1 简化后程序</h3><p>此处提供一个将上述代码简化并添加采样率可修改的程序。</p>
+<h3 id="简化后程序"><a href="#简化后程序" class="headerlink" title="简化后程序"></a>简化后程序</h3><p>此处提供一个将上述代码简化并添加采样率可修改的程序。</p>
 <p><img src="/assets/labview/daqAssistant/daqCustomsize.png" alt="DAQ助手简化改进版"></p>
 <p>在该修改版中，去掉了大量的默认参数，减少了条件分支个数；添加了一个反馈节点，用以判断采样率的变化情况，在采样率改变时，该程序将删除原有任务，并重新创建新的任务。</p>
-<h3 id="3-2-下载链接"><a href="#3-2-下载链接" class="headerlink" title="3.2 下载链接"></a>3.2 下载链接</h3><p><a href="http://pan.baidu.com/s/1i50wss9" target="_blank" rel="noopener">http://pan.baidu.com/s/1i50wss9</a></p>
+<h3 id="下载链接"><a href="#下载链接" class="headerlink" title="下载链接"></a>下载链接</h3><p><a href="http://pan.baidu.com/s/1i50wss9" target="_blank" rel="noopener">http://pan.baidu.com/s/1i50wss9</a></p>
 ]]></content>
       
         <categories>
@@ -10378,16 +10369,16 @@ sudo apt-get install ultra-flat-icons
     <entry>
       <title><![CDATA[Labview - 存储 .cfg 配置文件]]></title>
       <url>https://www.litreily.top/2017/03/25/labview-cfg/</url>
-      <content type="html"><![CDATA[<h2 id="1-配置文件简介"><a href="#1-配置文件简介" class="headerlink" title="1. 配置文件简介"></a>1. 配置文件简介</h2><p>在 LabVIEW 应用软件开发过程中，对于稍微大型一点的软件而言，一般都需要在本地文件中保存一些配置参数，如在 windows 系统中安装软件时，安装程序在 C 盘 documents 文件夹下自动创建的用户数据。对于需要更新的配置参数或者重要的常值参数，在 LabVIEW 中可以使用 <code>.cfg</code> 格式的配置文件进行存储与读取。</p>
-<h3 id="1-1-应用场合"><a href="#1-1-应用场合" class="headerlink" title="1.1 应用场合"></a>1.1 应用场合</h3><ul>
+      <content type="html"><![CDATA[<h2 id="配置文件简介"><a href="#配置文件简介" class="headerlink" title="配置文件简介"></a>配置文件简介</h2><p>在 LabVIEW 应用软件开发过程中，对于稍微大型一点的软件而言，一般都需要在本地文件中保存一些配置参数，如在 windows 系统中安装软件时，安装程序在 C 盘 documents 文件夹下自动创建的用户数据。对于需要更新的配置参数或者重要的常值参数，在 LabVIEW 中可以使用 <code>.cfg</code> 格式的配置文件进行存储与读取。</p>
+<h3 id="应用场合"><a href="#应用场合" class="headerlink" title="应用场合"></a>应用场合</h3><ul>
 <li>软件的全局配置参数（如：串口通讯参数，DAQ 采样参数，信号处理参数，···）</li>
 <li>软件主界面关闭前的输入、输出控件的最新数值</li>
 <li>报表生成时的默认信息（如：署名，标题，摘要，···）</li>
 <li>统计量（如：游戏最高分，排行榜排名，参与次数，···）</li>
 <li>···</li>
 </ul>
-<h3 id="1-2-cfg-文件格式"><a href="#1-2-cfg-文件格式" class="headerlink" title="1.2 .cfg 文件格式"></a>1.2 .cfg 文件格式</h3><p>如下所示，<code>.cfg</code> 文件的数据存储格式格式满足标记性语言的特点，有点类似于 <code>JSON</code> 和 <code>XML</code>，但与之不同的是 <code>.cfg</code> 不支持数据嵌套。<code>.cfg</code> 文件以<strong>段</strong>为基本单位、以<strong>键</strong>为最小单位组织数据，<strong>段</strong>包含了相应的<strong>段名</strong>及该段包含的所有键，每个<strong>键</strong>包含了相应的<strong>键名</strong>和<strong>键值</strong>，中间用等号连接。</p>
-<pre><code>[段名1]
+<h3 id="cfg-文件格式"><a href="#cfg-文件格式" class="headerlink" title=".cfg 文件格式"></a>.cfg 文件格式</h3><p>如下所示，<code>.cfg</code> 文件的数据存储格式格式满足标记性语言的特点，有点类似于 <code>JSON</code> 和 <code>XML</code>，但与之不同的是 <code>.cfg</code> 不支持数据嵌套。<code>.cfg</code> 文件以<strong>段</strong>为基本单位、以<strong>键</strong>为最小单位组织数据，<strong>段</strong>包含了相应的<strong>段名</strong>及该段包含的所有键，每个<strong>键</strong>包含了相应的<strong>键名</strong>和<strong>键值</strong>，中间用等号连接。</p>
+<pre><code class="txt">[段名1]
 键名1 = 键值1
 键名2 = 键值2
 键名3 = 键值3
@@ -10400,12 +10391,14 @@ sudo apt-get install ultra-flat-icons
 [段名3]
 键名7 = 键值7
 键名8 = 键值8
-</code></pre><p><strong>举例说明</strong>：某人要保存自己每日的就餐时间，此时可用一个<strong>段</strong>来存储，<strong>段名</strong>为“就餐时间”，三个<strong>键名</strong>依次为早餐、午餐和晚餐，具体的时间以字符串格式存储，存储后的结果如下：</p>
-<pre><code>[就餐时间]
+</code></pre>
+<p><strong>举例说明</strong>：某人要保存自己每日的就餐时间，此时可用一个<strong>段</strong>来存储，<strong>段名</strong>为“就餐时间”，三个<strong>键名</strong>依次为早餐、午餐和晚餐，具体的时间以字符串格式存储，存储后的结果如下：</p>
+<pre><code class="txt">[就餐时间]
 早餐 = 07:30
 午餐 = 12:00
 晚餐 = 05:30
-</code></pre><h3 id="1-3-数据类型"><a href="#1-3-数据类型" class="headerlink" title="1.3 数据类型"></a>1.3 数据类型</h3><p>LabVIEW 提供的与配置文件存取相关的函数支持以下6种数据类型，其中布尔型即开关量，仅包含 <code>TRUE</code>, <code>FALSE</code> 两个值；路径指的是文件或文件夹的路径。</p>
+</code></pre>
+<h3 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h3><p>LabVIEW 提供的与配置文件存取相关的函数支持以下6种数据类型，其中布尔型即开关量，仅包含 <code>TRUE</code>, <code>FALSE</code> 两个值；路径指的是文件或文件夹的路径。</p>
 <ul>
 <li>有符号整型： <code>I8</code>, <code>I16</code>, <code>I32</code></li>
 <li>无符号整型： <code>U8</code>, <code>U16</code>, <code>U32</code></li>
@@ -10414,37 +10407,35 @@ sudo apt-get install ultra-flat-icons
 <li>字符串： <code>STRING</code></li>
 <li>路径： <code>PATH</code></li>
 </ul>
-<h3 id="1-4-变体"><a href="#1-4-变体" class="headerlink" title="1.4 变体"></a>1.4 变体</h3><p>LabVIEW 提供了一种特殊的数据类型——变体，变体类似于 C 语言中的空类型指针 <code>void*</code>，不代表具体的类型，但可以存储任意类型的数据。</p>
+<h3 id="变体"><a href="#变体" class="headerlink" title="变体"></a>变体</h3><p>LabVIEW 提供了一种特殊的数据类型——变体，变体类似于 C 语言中的空类型指针 <code>void*</code>，不代表具体的类型，但可以存储任意类型的数据。</p>
 <p>在存储配置文件时，可以先将满足 <a href="#1-3-数据类型">1.3</a> 中类型的数据转换为变体数据，然后以变体数组形式存储，方便统一管理；同样，在读取配置文件时，也可以先将数据读取到变体数组中，后续再进一步解析。具体操作步骤后面会有详述。</p>
-<h2 id="2-代码实现"><a href="#2-代码实现" class="headerlink" title="2. 代码实现"></a>2. 代码实现</h2><p>了解了配置文件的格式及数据类型，下面介绍如何在 LabVIEW 实现配置文件的存取。</p>
-<h3 id="2-1-配置函数"><a href="#2-1-配置函数" class="headerlink" title="2.1 配置函数"></a>2.1 配置函数</h3><p>LabVIEW 提供了以下函数供开发人员使用：</p>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>了解了配置文件的格式及数据类型，下面介绍如何在 LabVIEW 实现配置文件的存取。</p>
+<h3 id="配置函数"><a href="#配置函数" class="headerlink" title="配置函数"></a>配置函数</h3><p>LabVIEW 提供了以下函数供开发人员使用：</p>
 <p><img src="/assets/labview/rwCFG/ConfigFunc.png" alt="ConfigFunc.vi"></p>
 <p>但应用较多的与配置文件存取相关的函数主要有：</p>
-<pre class="descriptions">
-1. 打开配置数据
-2. 关闭配置数据
-3. 转换至变体
-4. 从变体转换至数据
-5. 写入键
-6. 读取键
-</pre>
-
-
-<h4 id="2-1-1-打开配置数据"><a href="#2-1-1-打开配置数据" class="headerlink" title="2.1.1 打开配置数据"></a>2.1.1 打开配置数据</h4><p><img src="/assets/labview/rwCFG/OpenConfigData.png" alt="OpenConfigData.vi"></p>
+<ol>
+<li>打开配置数据</li>
+<li>关闭配置数据</li>
+<li>转换至变体</li>
+<li>从变体转换至数据</li>
+<li>写入键</li>
+<li>读取键</li>
+</ol>
+<h4 id="打开配置数据"><a href="#打开配置数据" class="headerlink" title="打开配置数据"></a>打开配置数据</h4><p><img src="/assets/labview/rwCFG/OpenConfigData.png" alt="OpenConfigData.vi"></p>
 <p><code>Open Config Data.vi</code> 用于打开配置文件，如果文件不存在则先创建再打开，返回引用句柄用于后续的数据存取。</p>
-<h4 id="2-1-2-关闭配置数据"><a href="#2-1-2-关闭配置数据" class="headerlink" title="2.1.2 关闭配置数据"></a>2.1.2 关闭配置数据</h4><p><img src="/assets/labview/rwCFG/CloseConfigData.png" alt="CloseConfigData.vi"></p>
+<h4 id="关闭配置数据"><a href="#关闭配置数据" class="headerlink" title="关闭配置数据"></a>关闭配置数据</h4><p><img src="/assets/labview/rwCFG/CloseConfigData.png" alt="CloseConfigData.vi"></p>
 <p>该函数与 <code>Open Config Data.vi</code> 成对出现，在对配置文件进行存取操作后，需要使用 <code>Close Config Data.vi</code> 关闭对配置文件的引用，释放配置文件占用的内存。</p>
-<h4 id="2-1-3-转换至变体"><a href="#2-1-3-转换至变体" class="headerlink" title="2.1.3 转换至变体"></a>2.1.3 转换至变体</h4><p><img src="/assets/labview/rwCFG/ToVariant.png" alt="ToVariant.vi"></p>
+<h4 id="转换至变体"><a href="#转换至变体" class="headerlink" title="转换至变体"></a>转换至变体</h4><p><img src="/assets/labview/rwCFG/ToVariant.png" alt="ToVariant.vi"></p>
 <p><code>To Variant.vi</code> 可将任意数据类型的数据转换为变体数据。</p>
-<h4 id="2-1-4-从变体转换至数据"><a href="#2-1-4-从变体转换至数据" class="headerlink" title="2.1.4 从变体转换至数据"></a>2.1.4 从变体转换至数据</h4><p><img src="/assets/labview/rwCFG/VariantToData.png" alt="VariantToData.vi"></p>
+<h4 id="从变体转换至数据"><a href="#从变体转换至数据" class="headerlink" title="从变体转换至数据"></a>从变体转换至数据</h4><p><img src="/assets/labview/rwCFG/VariantToData.png" alt="VariantToData.vi"></p>
 <p><code>Variant To Data.vi</code> 是 <code>To Variant.vi</code> 的逆过程，通过指定数据类型，可以将变体数据还原为转换为变体前的数据。</p>
-<h4 id="2-1-5-写入键"><a href="#2-1-5-写入键" class="headerlink" title="2.1.5 写入键"></a>2.1.5 写入键</h4><p><img src="/assets/labview/rwCFG/WriteKey.png" alt="WriteKey.vi"></p>
+<h4 id="写入键"><a href="#写入键" class="headerlink" title="写入键"></a>写入键</h4><p><img src="/assets/labview/rwCFG/WriteKey.png" alt="WriteKey.vi"></p>
 <p>除错误簇外，<code>Write Key.vi</code> 包含4个输入：<strong>段</strong>对应字符串类型的<strong>段名</strong>，<strong>键</strong>对应字符串类型的<strong>键名</strong>，<strong>值</strong>对应任意数据类型的<strong>键值</strong>，<strong>引用句柄</strong>用于连接配置文件的引用句柄。说明：LabVIEW 中的引用句柄等同于 <code>C/C++</code> 语言中的引用，即变量的别名。</p>
 <p>该函数根据输入参数将键名和键值保存到配置文件的指定段中，如果是首次创建指定的段，则自动在配置文件中添加新的段及键；如果段已存在键不存在，则仅添加键；如果段与键均已存在，则仅用新键值替换旧键值。</p>
-<h4 id="2-1-6-读取键"><a href="#2-1-6-读取键" class="headerlink" title="2.1.6 读取键"></a>2.1.6 读取键</h4><p><img src="/assets/labview/rwCFG/ReadKey.png" alt="ReadKey.vi"></p>
+<h4 id="读取键"><a href="#读取键" class="headerlink" title="读取键"></a>读取键</h4><p><img src="/assets/labview/rwCFG/ReadKey.png" alt="ReadKey.vi"></p>
 <p>使用 <code>Read Key.vi</code> ，通过<strong>段名</strong>和<strong>键名</strong>，我们可以从指定文件中获取所需的数据。</p>
 <p>需要说明的是， <code>Read Key.vi</code> 是多态VI，其键值的数据类型是多态可选的，可选项参见 <a href="#1-3-数据类型">1.3</a>。</p>
-<h3 id="2-2-存储配置文件"><a href="#2-2-存储配置文件" class="headerlink" title="2.2 存储配置文件"></a>2.2 存储配置文件</h3><p>说了一大堆，那到底如何存储呢，还是用程序框图来说话吧，一目了然。</p>
+<h3 id="存储配置文件"><a href="#存储配置文件" class="headerlink" title="存储配置文件"></a>存储配置文件</h3><p>说了一大堆，那到底如何存储呢，还是用程序框图来说话吧，一目了然。</p>
 <ul>
 <li><strong><code>RWConfigData.vi</code> 写操作</strong></li>
 </ul>
@@ -10453,13 +10444,11 @@ sudo apt-get install ultra-flat-icons
 <p><img src="/assets/labview/rwCFG/WriteToFileInterface.png" alt="RWConfigData.vi Interface"></p>
 <p>插播一句，在 LabVIEW 中，许多函数的输入输出都是成对出现的，尤其是引用句柄和错误簇，这有点类似于 java 语言中用于返回当前对象的 this 指针，便于实现函数的链式调用，令代码更简洁，并增强代码的可读性。</p>
 <p>言归正传，以上程序框图中，<code>CMD</code> 是个枚举变量，包含 <code>Write</code> 和 <code>Read</code> 两个值，分别对应文件的写操作和读操作；输入参数 <code>DataParam</code> 是一个簇，包含了需要存储的数据，簇包含的数据元素如下：</p>
-<pre>
-SectionName : 段名（单个字符串）
+<pre><code class="txt">SectionName : 段名（单个字符串）
 KeyName : 键名（一维的字符串数组）
 DataType : 数据类型（一维的枚举数组，枚举包含了文中提及的 6 种数据类型）
 VariantData : 键值数据（一维的变体数组）
-</pre>
-
+</code></pre>
 <p>用变体数组的方式可以批量处理待存参数，高效便捷，唯一繁琐的一点就是需要先将待存参数均都转换为变体数据。上面的程序框图仅显示了布尔型数据的存储方式，其它类型的数据的存储方式与之相似，每种类型的数据对应一个条件分支。</p>
 <p><img src="/assets/labview/rwCFG/WriteToFile1.png" alt="RWConfigData.vi Write Data"></p>
 <ul>
@@ -10469,7 +10458,7 @@ VariantData : 键值数据（一维的变体数组）
 <p><img src="/assets/labview/rwCFG/WriteSingleData.png" alt="RWSingleElement.vi Write Data"></p>
 <p>代码中的元素信息就是某个待存参数的相关信息，用到的存储子 VI 就是上面描述的 <strong><code>RWConfigData.vi</code></strong> 。该程序本身 <strong><code>RWSingleElement.vi</code></strong> 的函数接口如下：</p>
 <p><img src="/assets/labview/rwCFG/WriteSingleDataInterface.png" alt="RWSingleElement.vi Interface"></p>
-<h3 id="2-3-读取配置文件"><a href="#2-3-读取配置文件" class="headerlink" title="2.3 读取配置文件"></a>2.3 读取配置文件</h3><p>与存储相对应的操作是读取，上面提及的两个VI <strong><code>RWConfigData.vi</code></strong> 和 <strong><code>RWSingleElement.vi</code></strong> 对应的 <code>Read</code> 分支分别如下：</p>
+<h3 id="读取配置文件"><a href="#读取配置文件" class="headerlink" title="读取配置文件"></a>读取配置文件</h3><p>与存储相对应的操作是读取，上面提及的两个VI <strong><code>RWConfigData.vi</code></strong> 和 <strong><code>RWSingleElement.vi</code></strong> 对应的 <code>Read</code> 分支分别如下：</p>
 <ul>
 <li><strong><code>RWConfigData.vi</code> 读操作</strong></li>
 </ul>
@@ -10478,7 +10467,7 @@ VariantData : 键值数据（一维的变体数组）
 <li><strong><code>RWSingleElement.vi</code> 读操作</strong></li>
 </ul>
 <p><img src="/assets/labview/rwCFG/ReadSingleData.png" alt="RWSingleElement.vi Read Data"></p>
-<h2 id="3-配置文件存储例程"><a href="#3-配置文件存储例程" class="headerlink" title="3. 配置文件存储例程"></a>3. 配置文件存储例程</h2><p>下面给出一个非常简单的配置文件存取示例程序。</p>
+<h2 id="配置文件存储例程"><a href="#配置文件存储例程" class="headerlink" title="配置文件存储例程"></a>配置文件存储例程</h2><p>下面给出一个非常简单的配置文件存取示例程序。</p>
 <ul>
 <li><strong>示例程序前面板</strong></li>
 </ul>
@@ -10495,7 +10484,7 @@ VariantData : 键值数据（一维的变体数组）
 <li><strong>示例程序 执行结果</strong></li>
 </ul>
 <p><img src="/assets/labview/rwCFG/DemoResultFile.png" alt="RWConfigFileDemo.vi Result File"></p>
-<h2 id="4-下载链接"><a href="#4-下载链接" class="headerlink" title="4. 下载链接"></a>4. 下载链接</h2><p><a href="http://pan.baidu.com/s/1eRRVqRg" target="_blank" rel="noopener">http://pan.baidu.com/s/1eRRVqRg</a></p>
+<h2 id="下载链接"><a href="#下载链接" class="headerlink" title="下载链接"></a>下载链接</h2><p><a href="http://pan.baidu.com/s/1eRRVqRg" target="_blank" rel="noopener">http://pan.baidu.com/s/1eRRVqRg</a></p>
 <p>PS：最后友情说明一下，其实文件扩展名不一定要设为 <code>.cfg</code> ，其它类似 <code>.ini</code> , <code>.sys</code> 等扩展名也都是可以的。</p>
 ]]></content>
       
@@ -10587,13 +10576,11 @@ VariantData : 键值数据（一维的变体数组）
 <p><img src="/assets/word/numbering/type3.png" alt="type3"></p>
 <h2 id="效果展示"><a href="#效果展示" class="headerlink" title="效果展示"></a>效果展示</h2><p>点击确定以后，便可以看到所有标题都已经按给定格式添加好了编号。</p>
 <p><img src="/assets/word/numbering/effect.png" alt="effect"></p>
-<blockquote>
 <p>Notes：</p>
 <ol>
 <li>由于有的一级标题可能不需要编号，如<strong>参考文献</strong>，所以可以在设计多级列表时把右上角的 “将级别链接到样式” 选为 “(无样式)”，设置好后。对于需要编号的一级标题，可以手动选择标题后选择该多级列表样式。</li>
 <li>注意千万不要在设置编号的时候把默认的数字1删掉，即使自己后来再重新写上也不行，因为默认给定的数字都具有自动编号功能，自己手动加上的将视为固定字符而无法完成自动编号。</li>
 </ol>
-</blockquote>
 ]]></content>
       
         <categories>
@@ -10659,14 +10646,12 @@ VariantData : 键值数据（一维的变体数组）
 <p><img src="/assets/rss/feedDemon-addsite.png" alt="feedDemon-addSite"></p>
 <p>下面这是我的订阅情况</p>
 <p><img src="/assets/rss/feedDemon-sites.png" alt="feedDemon-sites"></p>
-<blockquote>
 <p>Notes:</p>
 <ol>
 <li>如果当前页没有感兴趣的文章，可以使用快捷键 <code>Ctrl+D</code> 直接将整页设为“已读”，并自动跳至下一页或下一个订阅源。</li>
 <li>该软件包含三种列表模式：标题、摘要和全文</li>
 <li>该软件包含三种排序依据：订阅源、时间和标题</li>
 </ol>
-</blockquote>
 ]]></content>
       
         <categories>
@@ -10706,17 +10691,17 @@ VariantData : 键值数据（一维的变体数组）
 <li>安装 <code>hexo</code></li>
 </ul>
 <p>在确保安装好 <a href="https://nodejs.org/en/" target="_blank" rel="noopener">node.js</a> 以及 <a href="https://git-scm.com/downloads" target="_blank" rel="noopener">git</a> 的情况下执行以下指令</p>
-<pre><code class="bash">$ npm install hexo-cli -g
-$ hexo init hexoBlog
-$ cd hexoBlog
-$ npm install
+<pre><code class="bash">npm install hexo-cli -g
+hexo init hexoBlog
+cd hexoBlog
+npm install
 </code></pre>
 <p><code>hexo</code>系统默认下载主题 <a href="https://github.com/hexojs/hexo-theme-landscape" target="_blank" rel="noopener">landscape</a> ，折腾了一小会觉得除了代码高亮不错外，其它样式略显一般，所以直接放弃，改用 <a href="https://github.com/yumemor/hexo-theme-primer" target="_blank" rel="noopener">primer</a>。</p>
 <ul>
 <li>下载 <code>primer</code></li>
 </ul>
 <p>在 <code>hexoBlog\themes</code> 目录下克隆主题</p>
-<pre><code class="bash">$ git clone https://github.com/yumemor/hexo-theme-primer.git
+<pre><code class="bash">git clone https://github.com/yumemor/hexo-theme-primer.git
 </code></pre>
 <ul>
 <li>新建 <code>github</code> 远程仓库</li>
@@ -10726,10 +10711,10 @@ $ npm install
 <li>安装插件</li>
 </ul>
 <p>为了使用 <code>hexo</code> 的发布功能、站内搜索等功能，需要安装以下插件</p>
-<pre><code class="bash">$ npm install hexo-server --save
-$ npm install hexo-renderer-less --save
-$ npm install hexo-generator-feed --save
-$ npm install hexo-generator-search --save
+<pre><code class="bash">npm install hexo-server --save
+npm install hexo-renderer-less --save
+npm install hexo-generator-feed --save
+npm install hexo-generator-search --save
 </code></pre>
 <h3 id="Config"><a href="#Config" class="headerlink" title="Config"></a>Config</h3><ul>
 <li>修改 <strong>根目录</strong> 下的 <code>_config.yml</code></li>
@@ -10816,14 +10801,14 @@ search:
 <li><p>发布博客</p>
 </li>
 </ul>
-<pre><code class="bash">$ hexo clean
-$ hexo generate
-$ hexo deploy
+<pre><code class="bash">hexo clean
+hexo generate
+hexo deploy
 </code></pre>
 <ul>
 <li>本地服务器</li>
 </ul>
-<pre><code class="bash">$ hexo serve
+<pre><code class="bash">hexo serve
 </code></pre>
 <h3 id="Fix"><a href="#Fix" class="headerlink" title="Fix"></a>Fix</h3><ul>
 <li>解决代码高亮不正常问题</li>
@@ -10843,18 +10828,19 @@ $ hexo deploy
 <li>解决留言板样式不正常问题</li>
 </ul>
 <p>首先需要说明的是， <code>primer</code> 主题自带 <strong>首页</strong>、<strong>分类</strong> 、 <strong>开源项目</strong> 和 <strong>留言板</strong> 4个页面，当然在使用时，需要通过</p>
-<pre><code class="bash">$ hexo new page categories
-$ hexo new page open-source
-$ hexo new page message
+<pre><code class="bash">hexo new page categories
+hexo new page open-source
+hexo new page message
 </code></pre>
 <p>创建好除首页外的其它三个页面后，因为主题中都有 <code>layout</code> 文件 <code>categories.ejs</code> 与 <code>open.ejs</code>与之对应，所以<code>category</code> 和 <code>open-source</code> 都能够正常显示。</p>
 <p>而 <code>message</code> 页面并没有，它默认使用 <code>layout:page</code> ，导致页面中保留了目录栏和分享栏，而这并不是我想要的，所以我在 <code>primer\layout\_partial\</code> 中添加 <code>message.ejs</code> 文件，在 <code>article-post.ejs</code> 文件基础上删除了多余项。</p>
 <p>最后在 <code>primer\layout\</code> 中添加 <code>message.ejs</code>（与<code>_partial</code>文件夹中的不同）文件，写入以下内容即可。</p>
-<pre><code>&lt;body&gt;
+<pre><code class="html">&lt;body&gt;
     &lt;%- partial(&#39;_partial/header&#39;) %&gt;
     &lt;%- partial(&#39;_partial/banner-post&#39;,{post: page,index: true}) %&gt;
     &lt;%- partial(&#39;_partial/message&#39;,{post: page,index: false}) %&gt;
-</code></pre><ul>
+</code></pre>
+<ul>
 <li>categories 与 tags</li>
 </ul>
 <p>在 <code>jekyll</code> 中，分类与标签基本是一个概念，但在 <code>hexo</code> 却截然不同， <code>categories</code> 有级别之分（按先后顺序分级），而 <code>tags</code> 并没有。所以需要将原有博客重新归类并设置标签。</p>
@@ -10875,8 +10861,6 @@ $ hexo new page message
 <li>对部分博文重新分类，减少 <code>categories</code> 数量</li>
 <li>将分类页面的标签栏 <code>Blog Tags</code> 换为分类栏 <code>Blog Categories</code>，并给所有类型添加链接</li>
 <li>去除留言板页面中标题下方的时间显示</li>
-</ul>
-<ul>
 <li>在 <code>css/_partial/article.styl</code> 中添加了 <code>pre.descriptions</code> 样式</li>
 </ul>
 <pre><code class="css">pre.descriptions
@@ -10886,7 +10870,7 @@ $ hexo new page message
     background-color: rgba(255,255,255,0) !important;
     margin-left: 2em;
 </code></pre>
-<p><strong>示例</strong></p>
+<p>示例</p>
 <hr>
 <pre><code class="html">&lt;pre class=&quot;descriptions&quot;&gt;
 1. step1
@@ -10894,13 +10878,6 @@ $ hexo new page message
 3. step3
 &lt;/pre&gt;
 </code></pre>
-<pre class="descriptions">
-1. step1
-2. step2
-3. step3
-</pre>
-
-<hr>
 <ul>
 <li>针对特定博文添加了两个标签样式 <code>tagBlack</code> &amp; <code>tagGrey</code></li>
 </ul>
@@ -10936,36 +10913,31 @@ $ hexo new page message
     }
 }
 </code></pre>
-<p><strong>示例</strong></p>
-<hr>
+<p>示例</p>
 <pre><code class="html">&lt;div class=&quot;tagBlack&quot;&gt;&lt;a href=&quot;http://www.mymmqm.com/&quot;&gt;莫明棋妙&lt;/a&gt;&lt;/div&gt;
+&lt;div class=&quot;tagGrey&quot;&gt;&lt;a href=&quot;http://www.xiami.com/artist/68934&quot;&gt;河图&lt;/a&gt;&lt;/div&gt;
 </code></pre>
-<div class="tagBlack"><a href="http://www.mymmqm.com/" target="_blank" rel="noopener">莫明棋妙</a></div>
-
-<pre><code class="html">&lt;div class=&quot;tagGrey&quot;&gt;&lt;a href=&quot;http://www.xiami.com/artist/68934&quot;&gt;河图&lt;/a&gt;&lt;/div&gt;
-</code></pre>
-<div class="tagGrey"><a href="http://www.xiami.com/artist/68934" target="_blank" rel="noopener">河图</a></div>
-
-<hr>
 <ul>
 <li>在菜单栏加入 <code>标签</code> 项，并在标签页内中加入 <code>标签云</code></li>
 </ul>
-<pre><code>tags.ejs: 标签云界面
+<pre><code class="txt">tags.ejs: 标签云界面
 tag.ejs:  单个标签页，显示某标签内的博客列表，并在侧边显示带有链接的标签栏
-</code></pre><ul>
+</code></pre>
+<ul>
 <li><p>修改 <code>search.js</code> 与 <code>search-local-js.ejs</code> ，在搜索后的路径中添加 <code>http://</code> , p修复搜索框链接出错问题</p>
 </li>
 <li><p>在 <code>themes\primer\source</code> 中添加文件 <code>CNAME</code>，添加域名</p>
 </li>
 </ul>
-<pre><code>www.litreily.top
-</code></pre><h2 id="2016-12-23"><a href="#2016-12-23" class="headerlink" title="2016-12-23"></a>2016-12-23</h2><ul>
+<pre><code class="yml">www.litreily.top
+</code></pre>
+<h2 id="2016-12-23"><a href="#2016-12-23" class="headerlink" title="2016-12-23"></a>2016-12-23</h2><ul>
 <li>修复RSS，将主题中的 <code>footer.ejs</code> ，将 <code>search</code> 改为 <code>atom</code></li>
 </ul>
 <pre><code class="html">&lt;a href=&quot;/atom.xml&quot;&gt;
 </code></pre>
 <p>当然，让博客成功生成 <code>atom.xml</code> 的前提是安装好 <code>feed</code> 生成插件</p>
-<pre><code class="bash">$ npm install hexo-generate-feed --save
+<pre><code class="bash">npm install hexo-generate-feed --save
 </code></pre>
 <ul>
 <li>参考<a href="http://ibruce.info/2015/04/04/busuanzi/" target="_blank" rel="noopener">不蒜子</a>，添加站点流量统计服务</li>
@@ -11042,9 +11014,9 @@ root: /
         
         <tags>
             
-            <tag> jekyll </tag>
-            
             <tag> hexo </tag>
+            
+            <tag> jekyll </tag>
             
             <tag> log </tag>
             
@@ -11056,16 +11028,16 @@ root: /
       <title><![CDATA[Welcome to hexo]]></title>
       <url>https://www.litreily.top/2016/12/10/hello-hexo/</url>
       <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post-named-new-post"><a href="#Create-a-new-post-named-new-post" class="headerlink" title="Create a new post named new post"></a>Create a new post named new post</h3><pre><code class="bash">$ hexo new &quot;My New Post&quot;
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post-named-new-post"><a href="#Create-a-new-post-named-new-post" class="headerlink" title="Create a new post named new post"></a>Create a new post named new post</h3><pre><code class="bash">hexo new &quot;My New Post&quot;
 </code></pre>
 <p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre><code class="bash">$ hexo server
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre><code class="bash">hexo server
 </code></pre>
 <p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre><code class="bash">$ hexo generate
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre><code class="bash">hexo generate
 </code></pre>
 <p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre><code class="bash">$ hexo deploy
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre><code class="bash">hexo deploy
 </code></pre>
 <p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
 ]]></content>
@@ -11627,7 +11599,7 @@ only in Medium-density and Low-density Value Line devices*/
     <entry>
       <title><![CDATA[Matlab - 经VS将.m文件转换为.dll文件]]></title>
       <url>https://www.litreily.top/2016/11/25/matlab-coder/</url>
-      <content type="html"><![CDATA[<h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1. 引言"></a>1. 引言</h2><p>在使用 LabVIEW 进行软件开发的过程中，有时需要使用 Matlab 强大的数据处理功能，以提高开发效率，此时可以通过 Matlab Coder 将 Matlab 中的函数转换为 C/C++ 源文件，然后通过 Visual Studio 将这些源文件封装为 .dll 文件，最后通过 LabVIEW 调用库函数实现对 Matlab 函数的调用。</p>
+      <content type="html"><![CDATA[<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>在使用 LabVIEW 进行软件开发的过程中，有时需要使用 Matlab 强大的数据处理功能，以提高开发效率，此时可以通过 Matlab Coder 将 Matlab 中的函数转换为 C/C++ 源文件，然后通过 Visual Studio 将这些源文件封装为 .dll 文件，最后通过 LabVIEW 调用库函数实现对 Matlab 函数的调用。</p>
 <p>本文将通过一个实例讲述以上功能的实现过程，大体步骤如下：</p>
 <ol>
 <li>Matlab 编写代码<br> 1.1 编写 .m 函数<br> 1.2 使用 Coder 生成 C/C++ 文件</li>
@@ -11640,9 +11612,8 @@ only in Medium-density and Low-density Value Line devices*/
 <li>LabVIEW 2015       (64bit)</li>
 <li>Visual Studio 2015 (64bit)</li>
 </ol>
-<h2 id="2-通过-Matlab-生成-C-C-源文件"><a href="#2-通过-Matlab-生成-C-C-源文件" class="headerlink" title="2. 通过 Matlab 生成 C/C++ 源文件"></a>2. 通过 Matlab 生成 C/C++ 源文件</h2><h3 id="2-1-m-函数编码"><a href="#2-1-m-函数编码" class="headerlink" title="2.1 .m 函数编码"></a>2.1 .m 函数编码</h3><p>在 Matlab 文件目录中新建文件夹&quot;CreateDll&quot;，在该文件夹下新建两个函数文件，分别实现简单加法运算函数，以及一个用自相关求解周期信号频率的函数。</p>
-<div class="smallTitle">add( a,b )</div>
-
+<h2 id="通过-Matlab-生成-C-C-源文件"><a href="#通过-Matlab-生成-C-C-源文件" class="headerlink" title="通过 Matlab 生成 C/C++ 源文件"></a>通过 Matlab 生成 C/C++ 源文件</h2><h3 id="m-函数编码"><a href="#m-函数编码" class="headerlink" title=".m 函数编码"></a>.m 函数编码</h3><p>在 Matlab 文件目录中新建文件夹&quot;CreateDll&quot;，在该文件夹下新建两个函数文件，分别实现简单加法运算函数，以及一个用自相关求解周期信号频率的函数。</p>
+<p>add(a, b)</p>
 <pre><code class="matlab">function [ answer ] = add( a,b )
 % 加法运算
 % a,b 均为 double 型数据
@@ -11651,8 +11622,7 @@ answer = a + b;
 
 end
 </code></pre>
-<div class="smallTitle">getFreq( signal, fs )</div>
-
+<p>getFreq( signal, fs )</p>
 <pre><code class="matlab">function [ frequency ] = getFreq( signal,fs )
 %GETFREQ 自相关法求周期信号频率
 % [input]
@@ -11668,11 +11638,12 @@ frequency = fs/(locs(middlePosition)-locs(middlePosition-1)); % 计算信号频�
 
 end
 </code></pre>
-<h3 id="2-2-使用-Coder-生成-C-C-文件"><a href="#2-2-使用-Coder-生成-C-C-文件" class="headerlink" title="2.2 使用 Coder 生成 C/C++ 文件"></a>2.2 使用 Coder 生成 C/C++ 文件</h3><ul>
+<h3 id="使用-Coder-生成-C-C-文件"><a href="#使用-Coder-生成-C-C-文件" class="headerlink" title="使用 Coder 生成 C/C++ 文件"></a>使用 Coder 生成 C/C++ 文件</h3><ul>
 <li>1.在命令行中输入 coder 打开 Matlab Coder 工具。</li>
 </ul>
-<pre><code>&gt;&gt; coder
-</code></pre><p><img src="/assets/matlab/coder1.png" alt="Matlab Coder"></p>
+<pre><code class="matlab">&gt;&gt; coder
+</code></pre>
+<p><img src="/assets/matlab/coder1.png" alt="Matlab Coder"></p>
 <ul>
 <li>2.添加 add 函数及 getFreq 函数</li>
 </ul>
@@ -11685,8 +11656,9 @@ end
 <li>输入函数调用示例，通过 Coder 工具的自定义输入功能自动匹配输入参数类型</li>
 </ol>
 <p>调用示例：</p>
-<pre><code>&gt;&gt; add(3,4);
-</code></pre><p><img src="/assets/matlab/coder3.png" alt="Matlab Coder"></p>
+<pre><code class="matlab">&gt;&gt; add(3,4);
+</code></pre>
+<p><img src="/assets/matlab/coder3.png" alt="Matlab Coder"></p>
 <p>手动可选择的数据类型如下图所示：</p>
 <p><img src="/assets/matlab/coder3_1.png" alt="Input types"></p>
 <ul>
@@ -11707,15 +11679,9 @@ end
 <li>6.Generate Code</li>
 </ul>
 <p>选择 C++ 语言，通过 &quot; More Settings &quot; 修改代码生成相关的配置选项,最后点击 &quot; Generate &quot; 按钮生成源代码。</p>
-<div class="smallTitle">选择语言</div>
-
-<p><img src="/assets/matlab/coder5.png" alt="Generate Code"></p>
-<div class="smallTitle">配置选项</div>
-
-<p><img src="/assets/matlab/coder5_1.png" alt="More Settings"></p>
-<div class="smallTitle">生成代码</div>
-
-<p><img src="/assets/matlab/coder6.png" alt="C++ Code"></p>
+<p>选择语言&lt;<img src="/assets/matlab/coder5.png" alt="Generate Code"></p>
+<p>配置选项&lt;<img src="/assets/matlab/coder5_1.png" alt="More Settings"></p>
+<p>生成代码&lt;<img src="/assets/matlab/coder6.png" alt="C++ Code"></p>
 <p>在代码生成界面可以看到以下内容：</p>
 <ol>
 <li>Source Code : Matlab 中创建的函数源代码</li>
@@ -11726,12 +11692,8 @@ end
 <ul>
 <li>7.Finsh Workflow</li>
 </ul>
-<div class="smallTitle">完成工作流程</div>
-
-<p><img src="/assets/matlab/coder7.png" alt="Finish WorkFlow"></p>
-<div class="smallTitle">查看代码</div>
-
-<p><img src="/assets/matlab/coder8.png" alt="Select Code"></p>
+<p>完成工作流程&lt;<img src="/assets/matlab/coder7.png" alt="Finish WorkFlow"></p>
+<p>查看代码&lt;<img src="/assets/matlab/coder8.png" alt="Select Code"></p>
 <p>可以看出，最终生成的文件较多，代码量较大，这可以归结为以下几个原因：</p>
 <ol>
 <li>重新实现fft等复杂算法</li>
@@ -11742,24 +11704,25 @@ end
 </ol>
 <p>当然，我们可以在代码生成前根据需求进行相关设置，以避免不必要文件的产生，此处不予详述。</p>
 <p>最后将生成的所有 .h/.cpp 文件复制到剪切板中以备后用。至此，Matlab 部分的工作已经全部完成。</p>
-<h2 id="3-通过-Visual-Studio-生成-dll-文件"><a href="#3-通过-Visual-Studio-生成-dll-文件" class="headerlink" title="3. 通过 Visual Studio 生成 .dll 文件"></a>3. 通过 Visual Studio 生成 .dll 文件</h2><p>在 VS 中要做的就是将 Matlab Coder 生成的 C++ 文件封装为 dll 文件，以供 LabVIEW 程序调用。</p>
-<h3 id="3-1-创建-win32-项目"><a href="#3-1-创建-win32-项目" class="headerlink" title="3.1 创建 win32 项目"></a>3.1 创建 win32 项目</h3><p><img src="/assets/matlab/CreateDll.png" alt="Create VS Project"></p>
+<h2 id="通过-Visual-Studio-生成-dll-文件"><a href="#通过-Visual-Studio-生成-dll-文件" class="headerlink" title="通过 Visual Studio 生成 .dll 文件"></a>通过 Visual Studio 生成 .dll 文件</h2><p>在 VS 中要做的就是将 Matlab Coder 生成的 C++ 文件封装为 dll 文件，以供 LabVIEW 程序调用。</p>
+<h3 id="创建-win32-项目"><a href="#创建-win32-项目" class="headerlink" title="创建 win32 项目"></a>创建 win32 项目</h3><p><img src="/assets/matlab/CreateDll.png" alt="Create VS Project"></p>
 <p>在win32应用程序向导中选择 <strong>DLL</strong>，并勾选 <strong>空项目</strong> ，然后点击完成。</p>
 <p><img src="/assets/matlab/CreateDll1.png" alt="Create VS Project"></p>
-<h3 id="3-2-添加文件"><a href="#3-2-添加文件" class="headerlink" title="3.2 添加文件"></a>3.2 添加文件</h3><p>将从 Matlab 中复制的 C++ 文件粘贴到 CreateDll 项目的本地文件中，然后在项目中添加这些文件。</p>
+<h3 id="添加文件"><a href="#添加文件" class="headerlink" title="添加文件"></a>添加文件</h3><p>将从 Matlab 中复制的 C++ 文件粘贴到 CreateDll 项目的本地文件中，然后在项目中添加这些文件。</p>
 <p><img src="/assets/matlab/CreateDll2_1.png" alt="Add Source Files to VS Project"></p>
 <p><img src="/assets/matlab/CreateDll2.png" alt="Add Source Files to VS Project"></p>
-<h3 id="3-3-新建模块定义文件"><a href="#3-3-新建模块定义文件" class="headerlink" title="3.3 新建模块定义文件"></a>3.3 新建模块定义文件</h3><p>在 VS 中新建 .def 模块定义文件，输入以下代码</p>
-<pre><code>LIBRARY CreateDll
+<h3 id="新建模块定义文件"><a href="#新建模块定义文件" class="headerlink" title="新建模块定义文件"></a>新建模块定义文件</h3><p>在 VS 中新建 .def 模块定义文件，输入以下代码</p>
+<pre><code class="def">LIBRARY CreateDll
 
 EXPORTS
 
 add
 getFreq
-</code></pre><p>LIBRARY 后面添加库名称，EXPORTS 后面添加需要导出的函数名称。</p>
+</code></pre>
+<p>LIBRARY 后面添加库名称，EXPORTS 后面添加需要导出的函数名称。</p>
 <p><img src="/assets/matlab/CreateDll3.png" alt=".def file"></p>
 <p>编辑完成后，可以在 &quot;项目属性&gt;&gt;链接器&gt;&gt;输入&gt;&gt;模块定义文件&quot; 中看到，项目已将该选项自动添加为了当前 .def 文件，对于低版本的 VS 可能需要手动添加。</p>
-<h3 id="3-4-生成-dll-文件"><a href="#3-4-生成-dll-文件" class="headerlink" title="3.4 生成 .dll 文件"></a>3.4 生成 .dll 文件</h3><p>最后一步，选中项目名称，点击右键选择 &quot;<strong>生成</strong>&quot; ，从本地项目目录的 Debug 文件夹中可以找到已生成的 .dll 文件。</p>
+<h3 id="生成-dll-文件"><a href="#生成-dll-文件" class="headerlink" title="生成 .dll 文件"></a>生成 .dll 文件</h3><p>最后一步，选中项目名称，点击右键选择 &quot;<strong>生成</strong>&quot; ，从本地项目目录的 Debug 文件夹中可以找到已生成的 .dll 文件。</p>
 <p>值得注意的是：</p>
 <ol>
 <li>选择 Debug 模式为 x64 时生成 64 位 dll 文件，文件存于 .\x64\Debug\Create.dll</li>
@@ -11767,11 +11730,11 @@ getFreq
 </ol>
 <p>对于不同位数的 LabVIEW 程序，我们可以选择对应的 Debug 模式，这个功能真的是非常棒！</p>
 <p><img src="/assets/matlab/CreateDll4.png" alt="Bulid .dll file"></p>
-<h3 id="3-5-函数接口"><a href="#3-5-函数接口" class="headerlink" title="3.5 函数接口"></a>3.5 函数接口</h3><p>经 VS 生成的 API 函数接口说明如下：</p>
-<p><strong>add</strong></p>
+<h3 id="函数接口"><a href="#函数接口" class="headerlink" title="函数接口"></a>函数接口</h3><p>经 VS 生成的 API 函数接口说明如下：</p>
+<p>add</p>
 <pre><code class="C++">double add(double a, double b);
 </code></pre>
-<p><strong>getFreq</strong></p>
+<p>getFreq</p>
 <pre><code class="C++">double getFreq(const double b_signal[1000], double fs);
 </code></pre>
 <p>因为例程所用数据为定长数组（1×1000），所以输入参数的数据类型为基本的 double 型。倘若定义的 b_signal 为不定长数组 （1×:inf） ,其格式将变为：</p>
@@ -11791,14 +11754,14 @@ getFreq
 <pre><code class="C++">typedef unsigned char boolean_T;
 </code></pre>
 <p>由于不定长数据会导致大量冗余代码，并且在 LabVIEW 中调用时非常麻烦，除非必须，否则不建议使用，本文后续所述也是定长数组。</p>
-<h2 id="4-通过-LabVIEW-调用-dll文件"><a href="#4-通过-LabVIEW-调用-dll文件" class="headerlink" title="4. 通过 LabVIEW 调用 .dll文件"></a>4. 通过 LabVIEW 调用 .dll文件</h2><p>通过 VS，我们已经得到了想要的 .dll 文件，那么在 LabVIEW 中该如何调用呢？这里提供两种方法。</p>
+<h2 id="通过-LabVIEW-调用-dll文件"><a href="#通过-LabVIEW-调用-dll文件" class="headerlink" title="通过 LabVIEW 调用 .dll文件"></a>通过 LabVIEW 调用 .dll文件</h2><p>通过 VS，我们已经得到了想要的 .dll 文件，那么在 LabVIEW 中该如何调用呢？这里提供两种方法。</p>
 <ol>
 <li>通过调用库函数节点（Call Library Function Node）</li>
 <li>通过 LabVIEW 导入工具（Tools-&gt;Import-&gt;Shared Library(.dll)...）</li>
 </ol>
 <p>两种方法的原理一致，以第一种方法为例进行讲解。</p>
-<h3 id="4-1-Call-Library-Function-Node"><a href="#4-1-Call-Library-Function-Node" class="headerlink" title="4.1 Call Library Function Node"></a>4.1 Call Library Function Node</h3><p>在 LabVIEW 函数面板搜索 &quot;Call Library&quot; ，中文版可直接搜索 <code>dll</code>。将调用库函数节点放入程序框图中。</p>
-<p><strong>调用 add 函数</strong></p>
+<h3 id="Call-Library-Function-Node"><a href="#Call-Library-Function-Node" class="headerlink" title="Call Library Function Node"></a>Call Library Function Node</h3><p>在 LabVIEW 函数面板搜索 &quot;Call Library&quot; ，中文版可直接搜索 <code>dll</code>。将调用库函数节点放入程序框图中。</p>
+<p>调用 add 函数</p>
 <ul>
 <li>选择 CreateDll.dll 文件</li>
 </ul>
@@ -11811,7 +11774,7 @@ getFreq
 <li>函数调用示例</li>
 </ul>
 <p><img src="/assets/matlab/UseDll1_2.png" alt="Use add function"></p>
-<p><strong>调用 getFreq 函数</strong></p>
+<p>调用 getFreq 函数</p>
 <ul>
 <li>配置 getFreq 函数接口</li>
 </ul>
@@ -11822,7 +11785,7 @@ getFreq
 <p><img src="/assets/matlab/UseDll2_2.png" alt="getFreq front panel"></p>
 <p>先产生一个数据长度为 1000 ，频率可调的正弦信号，采样频率 1kHz；然后调用 .dll文件中的 getFreq 函数，通过自相关方法求取信号频率，并输出到变量 getFreq 中。</p>
 <p><img src="/assets/matlab/UseDll2_3.png" alt="getFreq block diagram"></p>
-<h3 id="4-2-不定长数组问题"><a href="#4-2-不定长数组问题" class="headerlink" title="4.2 不定长数组问题"></a>4.2 不定长数组问题</h3><p>这里对不定长数组问题进行简单介绍：.dll 文件中的函数将不再是简单的 double 指针，而是一个结构体指针；在 LabVIEW 中调用时，可以创建自定义控件，用簇代替该结构体，簇的引用作为结构体指针；簇的内容包括以下几部分。</p>
+<h3 id="不定长数组问题"><a href="#不定长数组问题" class="headerlink" title="不定长数组问题"></a>不定长数组问题</h3><p>这里对不定长数组问题进行简单介绍：.dll 文件中的函数将不再是简单的 double 指针，而是一个结构体指针；在 LabVIEW 中调用时，可以创建自定义控件，用簇代替该结构体，簇的引用作为结构体指针；簇的内容包括以下几部分。</p>
 <pre><code class="c">double *pData : 一维数组引用，用于传递信号数据
 int    *pSize : 一维数组引用，用于传递数据长度
 int allocatedSize : 分配内存大小，调用时可设为 0
@@ -11830,7 +11793,7 @@ int numDimensions : 数组维数，设为 1 或 2
 unsigned char canFreeData : 布尔变量，确定能否释放数据内存
 </code></pre>
 <p><img src="/assets/matlab/UseDll2_1.png" alt="Create customsize control"></p>
-<h2 id="5-小结"><a href="#5-小结" class="headerlink" title="5. 小结"></a>5. 小结</h2><p>本文对 &quot;Matlab Coder 生成 C++ 代码&quot;，&quot;VS 生成 .dll 文件&quot;，&quot;LabVIEW 调用外部库函数&quot; 这三部分内容进行讲述。通过Matlab , VS , LabVIEW 的结合使用，我们便可实现 LabVIEW 程序调用 Matlab 函数的目的。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>本文对 &quot;Matlab Coder 生成 C++ 代码&quot;，&quot;VS 生成 .dll 文件&quot;，&quot;LabVIEW 调用外部库函数&quot; 这三部分内容进行讲述。通过Matlab , VS , LabVIEW 的结合使用，我们便可实现 LabVIEW 程序调用 Matlab 函数的目的。</p>
 <p>此外，在 64 位的 VS 中可以通过修改 Debug 模式生成 32 位或 64 位的动态链接库，以适配不同版本的 LabVIEW。当然最后不要忘了，不同编译模式下生成的 .dll 文件存放在不同的目录下。</p>
 ]]></content>
       
@@ -11858,14 +11821,13 @@ unsigned char canFreeData : 布尔变量，确定能否释放数据内存
       <url>https://www.litreily.top/2016/11/14/signal-Process/</url>
       <content type="html"><![CDATA[<h2 id="1-截止频率"><a href="#1-截止频率" class="headerlink" title="1. 截止频率"></a>1. 截止频率</h2><p>通常，我们将信号幅值衰减3dB处的频率作为截止频率，这是为何？</p>
 <p>首先，明确以下两点：</p>
-<pre class="descriptions">
-1. 幅值的平方为功率
-2. 信号功率衰减一半时的频率被称为<strong>截止频率</strong>
-</pre>
-
+<ol>
+<li>幅值的平方为功率</li>
+<li>信号功率衰减一半时的频率被称为<strong>截止频率</strong></li>
+</ol>
 <p>当信号功率衰减一半 (1/2) 时，幅值衰减 sqrt(1/2) ，那么其对应的 dB 值为：</p>
-<pre class="textContainer">20*log10(sqrt(2)/2) ≈ -3dB</pre>
-
+<pre><code class="bash">20*log10(sqrt(2)/2) ≈ -3dB
+</code></pre>
 <h2 id="2-举例说明"><a href="#2-举例说明" class="headerlink" title="2. 举例说明"></a>2. 举例说明</h2><h3 id="2-1-滤波器设计"><a href="#2-1-滤波器设计" class="headerlink" title="2.1 滤波器设计"></a>2.1 滤波器设计</h3><p>设计一个 butterworth 低通滤波器，采样频率 100Hz ，截止频率 20Hz ，阶次为 4 。</p>
 <pre><code class="matlab">clc
 fs = 100;           % 采样频率
@@ -11950,7 +11912,7 @@ end
       <title><![CDATA[stm32 - FreeRTOS系统移植]]></title>
       <url>https://www.litreily.top/2016/11/02/FreeRTOS/</url>
       <content type="html"><![CDATA[<p>前段时间研究了一下 FreeRTOS 在 stm32 的系统移植，觉得有必要做个总结，记录这研发路上的点点滴滴。</p>
-<h2 id="1-FreeRTOS"><a href="#1-FreeRTOS" class="headerlink" title="1. FreeRTOS"></a>1. FreeRTOS</h2><p>从 <a href="http://www.freertos.org/" target="_blank" rel="noopener">FreeRTOS官网</a> 下载最新源码，我下载的是 <a href="http://pan.baidu.com/s/1jIbOqDg" target="_blank" rel="noopener">FreeRTOSv9.0.0</a> ，其文件结构如下，根目录主要包含 FreeRTOS 和 FreeRTOS-Plus 两个文件夹， Plus 版系统添加了 TCP/UDP 等网络通信功能。</p>
+<h2 id="FreeRTOS"><a href="#FreeRTOS" class="headerlink" title="FreeRTOS"></a>FreeRTOS</h2><p>从 <a href="http://www.freertos.org/" target="_blank" rel="noopener">FreeRTOS官网</a> 下载最新源码，我下载的是 <a href="http://pan.baidu.com/s/1jIbOqDg" target="_blank" rel="noopener">FreeRTOSv9.0.0</a> ，其文件结构如下，根目录主要包含 FreeRTOS 和 FreeRTOS-Plus 两个文件夹， Plus 版系统添加了 TCP/UDP 等网络通信功能。</p>
 <pre><code class="txt">D:\FREERTOSV9.0.0
 │  New - Direct to Task Notifications.html
 │  New - FreeRTOS+TCP.html
@@ -11978,7 +11940,7 @@ end
 <li>License：许可证，对FreeRTOS使用范围进行授权</li>
 <li>Source：FreeRTOS源码</li>
 </ol>
-<h3 id="1-1-Demo"><a href="#1-1-Demo" class="headerlink" title="1.1 Demo"></a>1.1 Demo</h3><p>Demo 包含了官方提供的所有已适配处理器的移植例程，我们可以根据自己所用芯片和开发环境选择合适的例程进行学习。</p>
+<h3 id="Demo"><a href="#Demo" class="headerlink" title="Demo"></a>Demo</h3><p>Demo 包含了官方提供的所有已适配处理器的移植例程，我们可以根据自己所用芯片和开发环境选择合适的例程进行学习。</p>
 <pre><code class="txt">ARM7_AT91FR40008_GCC
 ARM7_AT91SAM7S64_IAR
 ARM7_AT91SAM7X256_Eclipse
@@ -12145,7 +12107,7 @@ WizNET_DEMO_TERN_186
 Xilinx_FreeRTOS_BSP
 
 </code></pre>
-<h3 id="1-2-Source"><a href="#1-2-Source" class="headerlink" title="1.2 Source"></a>1.2 Source</h3><p>Source 是 FreeRTOS 的核心，包含了系统内核及各类处理器系统移植所需的源码。</p>
+<h3 id="Source"><a href="#Source" class="headerlink" title="Source"></a>Source</h3><p>Source 是 FreeRTOS 的核心，包含了系统内核及各类处理器系统移植所需的源码。</p>
 <pre><code class="txt">
 D:\FREERTOSV9.0.0\FREERTOS\SOURCE
 │  croutine.c
@@ -12728,14 +12690,14 @@ D:\FREERTOSV9.0.0\FREERTOS\SOURCE
                         Tick.c
 
 </code></pre>
-<h2 id="2-系统移植"><a href="#2-系统移植" class="headerlink" title="2. 系统移植"></a>2. 系统移植</h2><p>以 stm32f103RCT6 为例，选择 Keil MDK v5.21.1.0 作为开发平台进行系统移植。</p>
-<h3 id="2-1-功能描述"><a href="#2-1-功能描述" class="headerlink" title="2.1 功能描述"></a>2.1 功能描述</h3><ol>
+<h2 id="系统移植"><a href="#系统移植" class="headerlink" title="系统移植"></a>系统移植</h2><p>以 stm32f103RCT6 为例，选择 Keil MDK v5.21.1.0 作为开发平台进行系统移植。</p>
+<h3 id="功能描述"><a href="#功能描述" class="headerlink" title="功能描述"></a>功能描述</h3><ol>
 <li>PB10 作为输出口，控制 LED 的亮灭；</li>
 <li>编写延时函数 delay ，以毫秒为单位；</li>
 <li>使用 USART2 循环发送数据，波特率9600，8位数据位，1位停止位，无校验，无硬件控制流；</li>
 <li>系统移植，添加 3 个 task：vLEDOnTask，vLEDOffTask，vUasrtSendTask</li>
 </ol>
-<h3 id="2-2-创建项目-BrightLed"><a href="#2-2-创建项目-BrightLed" class="headerlink" title="2.2 创建项目 (BrightLed)"></a>2.2 创建项目 (BrightLed)</h3><ul>
+<h3 id="创建项目-BrightLed"><a href="#创建项目-BrightLed" class="headerlink" title="创建项目 (BrightLed)"></a>创建项目 (BrightLed)</h3><ul>
 <li>选择芯片 (stm32f103RCT6)</li>
 </ul>
 <p><img src="/assets/stm32/selectChip.png" alt="选择芯片"></p>
@@ -12770,33 +12732,23 @@ D:\FREERTOSV9.0.0\FREERTOS\SOURCE
 <li>设置参数</li>
 </ul>
 <p>打开 <code>Options for target</code>，依次设置下列参数：</p>
-<pre class="descriptions">
-1. Target > Xtal(MHz)): 8.0
-2. C/C++  > Define: USE_STDPERIPH_DRIVER,STM32F10X_MD
-3. Debug  > Use: ST-Link Debugger
-    3.1 Settings > Debug > Debug Adapter: ST-LINK/V2; Port:SW; Max: 1.8MHz
-    3.2 Settings > Flash Download > Reset and Run:[√]
-    3.3 Settings > Flash Download > Programming Algorithm: STM32f10x Med-density Flash
-</pre>
-
+<ol>
+<li>Target &gt; Xtal(MHz)): 8.0</li>
+<li>C/C++  &gt; Define: USE_STDPERIPH_DRIVER,STM32F10X_MD</li>
+<li>Debug  &gt; Use: ST-Link Debugger<br> 3.1 Settings &gt; Debug &gt; Debug Adapter: ST-LINK/V2; Port:SW; Max: 1.8MHz<br> 3.2 Settings &gt; Flash Download &gt; Reset and Run:[√]<br> 3.3 Settings &gt; Flash Download &gt; Programming Algorithm: STM32f10x Med-density Flash</li>
+</ol>
 <p>所有参数均设置完成后，项目创建过程就结束了。</p>
 <p><img src="/assets/stm32/setSymbols.png" alt="设置Processing Symbols"></p>
 <p><img src="/assets/stm32/selectFlash.png" alt="选择flash大小"></p>
-<h3 id="2-3-初始化"><a href="#2-3-初始化" class="headerlink" title="2.3 初始化"></a>2.3 初始化</h3><p>创建项目后，需要编写代码以实现对系统时钟及所需外设的初始化。</p>
+<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><p>创建项目后，需要编写代码以实现对系统时钟及所需外设的初始化。</p>
 <ul>
 <li>初始化流程</li>
 </ul>
-<pre class="descriptions">
-1. 首先，将默认组名称改为 `USER` ，并在本地项目目录下添加文件夹，命名为 &quot;USER&quot; 。
-2. 其次，新建并保存以下文件至 &quot;USER&quot; 文件夹，同时添加其中的 .c 文件到项目组 `USER`中。
-    2.1 主程序：main.c / main.h
-    2.2 中断程序：stm32f10x_it.c / stm32f10x_it.h
-    2.3 延时模块: delay.c / delay.h
-    2.4 led控制模块：led.c / led.h
-    2.5 串口通信模块：usart.c / usart.h
-3. 最后，对各个文件进行编码，完成各项初始化任务
-</pre>
-
+<ol>
+<li>首先，将默认组名称改为 <code>USER</code> ，并在本地项目目录下添加文件夹，命名为 &quot;USER&quot; 。</li>
+<li>其次，新建并保存以下文件至 &quot;USER&quot; 文件夹，同时添加其中的 .c 文件到项目组 <code>USER</code>中。<br> 2.1 主程序：main.c / main.h<br> 2.2 中断程序：stm32f10x_it.c / stm32f10x_it.h<br> 2.3 延时模块: delay.c / delay.h<br> 2.4 led控制模块：led.c / led.h<br> 2.5 串口通信模块：usart.c / usart.h</li>
+<li>最后，对各个文件进行编码，完成各项初始化任务</li>
+</ol>
 <ul>
 <li>项目文件结构</li>
 </ul>
@@ -12807,8 +12759,7 @@ D:\FREERTOSV9.0.0\FREERTOS\SOURCE
 <blockquote>
 <p><strong>delay.c / delay.h</strong></p>
 </blockquote>
-<div class="smallTitle">delay.c</div>
-
+<p>delay.c</p>
 <pre><code class="C">#include &quot;delay.h&quot;
 
 volatile u32 TimingDelay;
@@ -12845,8 +12796,7 @@ void delayMicroseconds(__IO u32 nTime)
 }
 
 </code></pre>
-<div class="smallTitle">delay.h</div>
-
+<p>delay.h</p>
 <pre><code class="C">#ifndef DELAY_H_
 #define DELAY_H_
 
@@ -12861,8 +12811,7 @@ void delayMicroseconds(__IO u32 nTime);
 <blockquote>
 <p><strong>led.c / led.h</strong></p>
 </blockquote>
-<div class="smallTitle">led.c</div>
-
+<p>led.c</p>
 <pre><code class="C">#include &quot;led.h&quot;
 
 void ledGPIOConfiguration(void)
@@ -12875,8 +12824,7 @@ void ledGPIOConfiguration(void)
   GPIO_Init(GPIOB, &amp;GPIO_InitStructure);
 }
 </code></pre>
-<div class="smallTitle">led.h</div>
-
+<p>led.h</p>
 <pre><code class="C">#ifndef LED_H
 #define LED_H
 
@@ -12891,8 +12839,7 @@ void ledGPIOConfiguration(void);
 <blockquote>
 <p><strong>usart.c / usart.h</strong></p>
 </blockquote>
-<div class="smallTitle">usart.c</div>
-
+<p>usart.c</p>
 <pre><code class="C">#include &quot;usart.h&quot;
 
 //串口驱动应用标志
@@ -12978,8 +12925,7 @@ void UART_TRxOver_Interrupt(void)
 }
 
 </code></pre>
-<div class="smallTitle">usart.h</div>
-
+<p>usart.h</p>
 <pre><code class="C">#ifndef USART_H
 #define USART_H
 
@@ -13000,8 +12946,7 @@ void UARTSendByByter(u16 Data);
 <blockquote>
 <p><strong>stm32f10x_it.c / stm32f10x_it.h</strong></p>
 </blockquote>
-<div class="smallTitle">stm32f10x_it.c</div>
-
+<p>stm32f10x_it.c</p>
 <pre><code class="C">#include &quot;stm32f10x_it.h&quot;
 void NMI_Handler(void)
 {
@@ -13068,8 +13013,7 @@ void USART2_IRQHandler(void)
   UART_TRxOver_Interrupt();
 }
 </code></pre>
-<div class="smallTitle">stm32f10x_it.h</div>
-
+<p>stm32f10x_it.h</p>
 <pre><code class="C">#ifndef __STM32F10x_IT_H
 #define __STM32F10x_IT_H
 
@@ -13104,8 +13048,7 @@ void USART2_IRQHandler(void);
 <blockquote>
 <p><strong>main.c / main.h</strong></p>
 </blockquote>
-<div class="smallTitle">main.c</div>
-
+<p>main.c</p>
 <pre><code class="C">/*******************************************************************************
  * Header       : Learning FreeRTOS
  * File Name    : main.c
@@ -13196,8 +13139,7 @@ static void deviceInit(void)
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
 }
 </code></pre>
-<div class="smallTitle">main.h</div>
-
+<p>main.h</p>
 <pre><code class="C">#ifndef MAIN_H
 #define MAIN_H
 
@@ -13209,7 +13151,7 @@ static void deviceInit(void)
 #endif  /* MAIN_H */
 </code></pre>
 <p>至此，系统时钟及外设的初始化程序已经完成。以上程序，除去 led.c/led.h, usart.c/usart.h 外，可作为无需操作系统的stm32项目模板。</p>
-<h3 id="2-4-内核移植"><a href="#2-4-内核移植" class="headerlink" title="2.4 内核移植"></a>2.4 内核移植</h3><ul>
+<h3 id="内核移植"><a href="#内核移植" class="headerlink" title="内核移植"></a>内核移植</h3><ul>
 <li>新建组<ul>
 <li>在项目中添加一个组，命名为 <strong>FreeRTOS</strong> ；</li>
 <li>在本地目录新建文件夹，同样命名为 FreeRTOS ，用于存放系统内核的源文件；</li>
@@ -13237,15 +13179,11 @@ static void deviceInit(void)
 <p><strong>说明</strong>：FreeRTOS可以在很多不同编译器中编译，其中的一些编译器比同类有更高级特性。因为这个原因，FreeRTOS不使用任何非C语言标准的特性或语法。一个例外情况是头文件stdint.h。在文件夹FreeRTOS/Source/include下包含一个叫做stdint.readme的文件，如果你的编译器不提供stdint类型定义，可以将stdint.readme文件重命名为stdint.h。</p>
 </blockquote>
 <p>参考：<a href="http://blog.csdn.net/zhzht19861011/article/details/50057531" target="_blank" rel="noopener">FreeRTOS编码标准及风格指南</a></p>
-<p>完成以上步骤后，文件结构应该如下各图所示：</p>
-<div class="smallTitle">File - FreeRTOS</div>
-
+<p>完成以上步骤后，文件结构应该如下各图所示：<br>File - FreeRTOS</p>
 <p><img src="/assets/stm32/folderfreeRTOS.png" alt="本地文件中的FreeRTOS文件夹"></p>
-<div class="smallTitle">File - FreeRTOS\include</div>
-
+<p>File - FreeRTOS\include</p>
 <p><img src="/assets/stm32/folderfreeRTOSInclude.png" alt="本地文件中的include文件夹"></p>
-<div class="smallTitle">MDK - FreeRTOS</div>
-
+<p>MDK - FreeRTOS</p>
 <p><img src="/assets/stm32/groupfreeRTOS.png" alt="MDK中的FreeRTOS组"></p>
 <ul>
 <li>添加路径</li>
@@ -13281,7 +13219,7 @@ DCD     xPortSysTickHandler
 </code></pre>
 <p>文件修改后</p>
 <p><img src="/assets/stm32/afterAddExport.png" alt="添加Export之前的启动文件"></p>
-<h3 id="2-5-内核裁剪文件"><a href="#2-5-内核裁剪文件" class="headerlink" title="2.5 内核裁剪文件"></a>2.5 内核裁剪文件</h3><p>前面添加的头文件 &quot;FreeRTOSConfig.h&quot; 是系统内核配置文件，通过修改文件中的宏定义，可以对内核进行裁剪，保留所需功能。从例程中得到的该文件源码如下，更加详细的设置方法和各变量用途将在后续应用中介绍。</p>
+<h3 id="内核裁剪文件"><a href="#内核裁剪文件" class="headerlink" title="内核裁剪文件"></a>内核裁剪文件</h3><p>前面添加的头文件 &quot;FreeRTOSConfig.h&quot; 是系统内核配置文件，通过修改文件中的宏定义，可以对内核进行裁剪，保留所需功能。从例程中得到的该文件源码如下，更加详细的设置方法和各变量用途将在后续应用中介绍。</p>
 <pre><code class="C">#ifndef FREERTOS_CONFIG_H
 #define FREERTOS_CONFIG_H
 
@@ -13341,7 +13279,7 @@ NVIC value of 255. */
 
 #endif /* FREERTOS_CONFIG_H */
 </code></pre>
-<h3 id="2-6-功能实现"><a href="#2-6-功能实现" class="headerlink" title="2.6 功能实现"></a>2.6 功能实现</h3><p>经过以上步骤，系统移植工作已经完成，现在便可以创建多个任务，并启动任务调度器进行任务调度。</p>
+<h3 id="功能实现"><a href="#功能实现" class="headerlink" title="功能实现"></a>功能实现</h3><p>经过以上步骤，系统移植工作已经完成，现在便可以创建多个任务，并启动任务调度器进行任务调度。</p>
 <ul>
 <li>在 &quot;main.h&quot; 添加 FreeRTOS 相关的头文件</li>
 </ul>
@@ -13439,8 +13377,7 @@ static void vUasrtSendTask(void *pvParameters)
 </ul>
 <p><img src="/assets/stm32/tasksTest.png" alt="任务测试结果"></p>
 <p>从图中可以看出，16 进制数据 0x31, 0x32 交替出现，同时有一变量(假设为 y )从 0x01 逐一增至 0xff 后返回 0x01 继续增加，在 y 处于 0x32(50) 与 0x64(100) 之间时，0x32 暂停出现，后重新出现，直到 y 增至 0xff 后永不再现。此外，硬件部分，PB10 外接的 LED 也随着任务进行亮灭交替变换，最后保持在灯亮状态。</p>
-<p><img style="display:inline" alt="LedOn" src="/assets/stm32/ledOn.jpg"></p>
-<p><img style="display:inline" alt="LedOff" src="/assets/stm32/ledOff.jpg"></p>
+<p><img src="/assets/stm32/ledOn.jpg" alt="LedOn"><br><img src="/assets/stm32/ledOff.jpg" alt="LedOff"></p>
 ]]></content>
       
         <categories>
@@ -13465,8 +13402,8 @@ static void vUasrtSendTask(void *pvParameters)
     <entry>
       <title><![CDATA[在博客中添加音乐]]></title>
       <url>https://www.litreily.top/2016/10/28/add-Music/</url>
-      <content type="html"><![CDATA[<h2 id="1-音乐来源"><a href="#1-音乐来源" class="headerlink" title="1. 音乐来源"></a>1. 音乐来源</h2><p>现在要找个 <code>.mp3</code> 外链资源可真不容易，以往的酷狗歌曲信息里带着，现在也不见了，百度音乐下载也得用客户端，还不显示链接，各大音乐网站真是越来越小心了啊。</p>
-<h3 id="1-1-网易云音乐"><a href="#1-1-网易云音乐" class="headerlink" title="1.1 网易云音乐"></a>1.1 网易云音乐</h3><p>想要从网站获取音乐链接的方法还是有的，比如说  <a href="http://music.163.com/#" target="_blank" rel="noopener">网易云音乐</a>  。使用Google/firefox/edge等带开发者工具的浏览器打开网易云音乐，搜索自己想要的音乐，并进行播放，然后打开开发者工具。开发工具打开方式：</p>
+      <content type="html"><![CDATA[<h2 id="音乐来源"><a href="#音乐来源" class="headerlink" title="音乐来源"></a>音乐来源</h2><p>现在要找个 <code>.mp3</code> 外链资源可真不容易，以往的酷狗歌曲信息里带着，现在也不见了，百度音乐下载也得用客户端，还不显示链接，各大音乐网站真是越来越小心了啊。</p>
+<h3 id="网易云音乐"><a href="#网易云音乐" class="headerlink" title="网易云音乐"></a>网易云音乐</h3><p>想要从网站获取音乐链接的方法还是有的，比如说  <a href="http://music.163.com/#" target="_blank" rel="noopener">网易云音乐</a>  。使用Google/firefox/edge等带开发者工具的浏览器打开网易云音乐，搜索自己想要的音乐，并进行播放，然后打开开发者工具。开发工具打开方式：</p>
 <ol>
 <li>谷歌：右键点击  <strong>检查</strong>，或使用快捷键 <code>Ctrl+Shift+I</code> ;</li>
 <li>edge：右键点击 <strong>检查元素</strong>/ <strong>查看源</strong>，或使用快捷键 <code>F12</code> ;</li>
@@ -13476,35 +13413,25 @@ static void vUasrtSendTask(void *pvParameters)
 <p>以  <a href="http://music.163.com/#/song?id=405253647" target="_blank" rel="noopener">夕山谣</a>  为例，打开开发工具，找到  <code>Application</code> ，打开 <code>Frames/top/Media</code> 。</p>
 <p><img src="/assets/music/xishanyaoLink.png" alt="开发工具"></p>
 <p>右键选择&quot; Open link in new tab &quot; 或者 &quot; Copy link address &quot;，选取链接的前半部分,以 <code>.mp3</code> 结尾。得到链接：</p>
-<pre>
-夕山谣
+<pre><code class="yml">夕山谣
 http://m10.music.126.net/20161028204714/808f68e0d3afc7d68d6945d0ce8336eb/ymusic/5a20/163f/3437/9a6871479b12bc82fff53821676faedc.mp3
-</pre>
-
-
-<h3 id="1-2-本地上传"><a href="#1-2-本地上传" class="headerlink" title="1.2 本地上传"></a>1.2 本地上传</h3><p>除了上述方法外，也可以手动制作音乐外链，当然，这需要借助于其它网站，比如  <a href="http://www.111ttt.com/up/" target="_blank" rel="noopener">www.111ttt.com/up/</a>  。在该网站上传已经下好的音乐文件，然后点击播放地址，在弹出的页面底部就有已生成的外链地址了。</p>
+</code></pre>
+<h3 id="本地上传"><a href="#本地上传" class="headerlink" title="本地上传"></a>本地上传</h3><p>除了上述方法外，也可以手动制作音乐外链，当然，这需要借助于其它网站，比如  <a href="http://www.111ttt.com/up/" target="_blank" rel="noopener">www.111ttt.com/up/</a>  。在该网站上传已经下好的音乐文件，然后点击播放地址，在弹出的页面底部就有已生成的外链地址了。</p>
 <p><img src="/assets/music/upFile.png" alt="上传音乐"></p>
-<pre>
-Critty 杏花弦外雨
+<pre><code class="yml">Critty 杏花弦外雨
 http://sc.111ttt.com/up/mp3/193721/278DF18856D56FEC6B4E6EDC15D97906.mp3
-</pre>
-
-
-<h3 id="1-3-七牛云存储"><a href="#1-3-七牛云存储" class="headerlink" title="1.3 七牛云存储"></a>1.3 七牛云存储</h3><p><a href="http://www.qiniu.com/" target="_blank" rel="noopener">七牛云</a> 作为国内领先的企业级云服务商，当然提供了最基本的云存储服务。当前可以免费注册并进行实名认证，之后可以获取 10GB 的免费存储空间。</p>
+</code></pre>
+<h3 id="七牛云存储"><a href="#七牛云存储" class="headerlink" title="七牛云存储"></a>七牛云存储</h3><p><a href="http://www.qiniu.com/" target="_blank" rel="noopener">七牛云</a> 作为国内领先的企业级云服务商，当然提供了最基本的云存储服务。当前可以免费注册并进行实名认证，之后可以获取 10GB 的免费存储空间。</p>
 <p><img src="/assets/music/qiniuyunSpace.png" alt="七牛云免费空间"></p>
 <p>注册并登录后，需要先创建一个空间，如 <code>litreily</code>，然后打开 <code>对象存储</code> &gt;&gt; <code>litreily</code> &gt;&gt; <code>内容管理</code>。此时便可上传文件，文件类型不限，我们可以将本地音乐文件上传后获取其外链地址。</p>
 <p><img src="/assets/music/qiniuyunLink.png" alt="七牛云外链获取方法"></p>
 <p>所得外链地址为：</p>
-<pre>
-CRITTY - 轮回之境
+<pre><code class="yml">CRITTY - 轮回之境
 http://ofx35z92m.bkt.clouddn.com/CRITTY%20-%20%E8%BD%AE%E5%9B%9E%E4%B9%8B%E5%A2%83.mp3
-</pre>
-
+</code></pre>
 <audio class="musicPlayer" src="http://ofx35z92m.bkt.clouddn.com/CRITTY%20-%20%E8%BD%AE%E5%9B%9E%E4%B9%8B%E5%A2%83.mp3" autoplay></audio>
 
-
-
-<h2 id="2-音乐播放器"><a href="#2-音乐播放器" class="headerlink" title="2. 音乐播放器"></a>2. 音乐播放器</h2><h3 id="2-1-网易云音乐插件"><a href="#2-1-网易云音乐插件" class="headerlink" title="2.1 网易云音乐插件"></a>2.1 网易云音乐插件</h3><p>网易云音乐提供了外链播放器，官方提供的使用方法如下：</p>
+<h2 id="音乐播放器"><a href="#音乐播放器" class="headerlink" title="音乐播放器"></a>音乐播放器</h2><h3 id="网易云音乐插件"><a href="#网易云音乐插件" class="headerlink" title="网易云音乐插件"></a>网易云音乐插件</h3><p>网易云音乐提供了外链播放器，官方提供的使用方法如下：</p>
 <ol>
 <li>在 <a href="http://music.163.com/" target="_blank" rel="noopener">music.163.com</a> 进入单曲、歌单、专辑、电台节目页面后，点击 “生成外链播放器” 链接。</li>
 <li>歌单和专辑外链播放器可以选择大中小三种尺寸，单曲和电台节目可以选择中小两种尺寸。你可以选择最适合你网站设计的尺寸。</li>
@@ -13538,7 +13465,7 @@ height=&quot;86&quot; src=&quot;https://music.163.com/outchain/player?type=2&amp
 <pre><code class="html">&lt;iframe class=&quot;musicPlayer&quot; frameborder=&quot;no&quot; border=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; width=&quot;298&quot;
 height=&quot;52&quot; src=&quot;https://music.163.com/outchain/player?type=2&amp;id=32548265&amp;auto=0&amp;height=32&quot;&gt;&lt;/iframe&gt;
 </code></pre>
-<h3 id="2-2-audio-js"><a href="#2-2-audio-js" class="headerlink" title="2.2 audio.js"></a>2.2 audio.js</h3><p><a href="https://kolber.github.io/audiojs/" target="_blank" rel="noopener">audio.js</a>是一款轻量级的音乐播放器，下载文件后，将文件夹 &quot;audiojs&quot; 放在网站文件目录中，通过以下代码的形式将该播放器引入网页中。</p>
+<h3 id="audio-js"><a href="#audio-js" class="headerlink" title="audio.js"></a>audio.js</h3><p><a href="https://kolber.github.io/audiojs/" target="_blank" rel="noopener">audio.js</a>是一款轻量级的音乐播放器，下载文件后，将文件夹 &quot;audiojs&quot; 放在网站文件目录中，通过以下代码的形式将该播放器引入网页中。</p>
 <pre><code class="html">&lt;head&gt;
     ...
     &lt;script src=&quot;/audiojs/audio.min.js&quot;&gt;&lt;/script&gt;
@@ -13569,29 +13496,29 @@ height=&quot;52&quot; src=&quot;https://music.163.com/outchain/player?type=2&amp
 <p>[示例html源码]</p>
 <pre><code class="html">&lt;div class=&quot;audiojs   playing&quot; classname=&quot;audiojs&quot; id=&quot;audiojs_wrapper0&quot;&gt;
     &lt;audio class=&quot;musicPlayer&quot; src=&quot;https://sc.111ttt.com/up/mp3/397401/2A97E1C49899C77A559BCD1E224FCBAB.mp3&quot; preload=&quot;auto&quot;&gt;&lt;/audio&gt;
-    &lt;div class=&quot;play-pause&quot;&gt;             
-        &lt;p class=&quot;play&quot;&gt;&lt;/p&gt;             
-        &lt;p class=&quot;pause&quot;&gt;&lt;/p&gt;             
-        &lt;p class=&quot;loading&quot;&gt;&lt;/p&gt;             
-        &lt;p class=&quot;error&quot;&gt;&lt;/p&gt;           
-    &lt;/div&gt;           
+    &lt;div class=&quot;play-pause&quot;&gt;
+        &lt;p class=&quot;play&quot;&gt;&lt;/p&gt;
+        &lt;p class=&quot;pause&quot;&gt;&lt;/p&gt;
+        &lt;p class=&quot;loading&quot;&gt;&lt;/p&gt;
+        &lt;p class=&quot;error&quot;&gt;&lt;/p&gt;
+    &lt;/div&gt;
     &lt;div class=&quot;scrubber&quot;&gt;
         &lt;div class=&quot;progress&quot; style=&quot;width: 167.146px;&quot;&gt;&lt;/div&gt;
         &lt;div class=&quot;loaded&quot; style=&quot;width: 280px;&quot;&gt;&lt;/div&gt;
-    &lt;/div&gt;           
+    &lt;/div&gt;
     &lt;div class=&quot;time&quot;&gt;
-        &lt;em class=&quot;played&quot;&gt;02:22&lt;/em&gt;/&lt;strong class=&quot;duration&quot;&gt;03:57&lt;/strong&gt;           
+        &lt;em class=&quot;played&quot;&gt;02:22&lt;/em&gt;/&lt;strong class=&quot;duration&quot;&gt;03:57&lt;/strong&gt;
     &lt;/div&gt;  
     &lt;div class=&quot;error-message&quot;&gt;&lt;/div&gt;
 &lt;/div&gt;
 </code></pre>
-<h3 id="2-3-其它"><a href="#2-3-其它" class="headerlink" title="2.3 其它"></a>2.3 其它</h3><ul>
+<h3 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h3><ul>
 <li><a href="http://www.ithome.com/html/it/195970.htm" target="_blank" rel="noopener">7 款高颜值 HTML5 播放器</a></li>
 <li><a href="http://www.oschina.net/news/27466/html5-audio-players" target="_blank" rel="noopener">10 个基于 Web 的 HTML5 音乐播放器</a></li>
 <li><a href="http://www.shejidaren.com/free-audio-players.html" target="_blank" rel="noopener">10 个免费开源的 JS 音乐播放器插件</a></li>
 <li><a href="http://www.17sucai.com/pins/tag/3189.html" target="_blank" rel="noopener">播放器 jquery 特效代码</a></li>
 </ul>
-<h2 id="3-总结"><a href="#3-总结" class="headerlink" title="3. 总结"></a>3. 总结</h2><p>网易云音乐的播放器插件使用方便，但是连接效率太低，经常获取不到资源或者获取速度过慢，而  audiojs  播放器虽然外观简陋些，但资源下载效率还不错，而且资源地址可以自定义，不会受限。所以，各有利弊，依情况而定吧。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>网易云音乐的播放器插件使用方便，但是连接效率太低，经常获取不到资源或者获取速度过慢，而  audiojs  播放器虽然外观简陋些，但资源下载效率还不错，而且资源地址可以自定义，不会受限。所以，各有利弊，依情况而定吧。</p>
 ]]></content>
       
         <categories>
@@ -13615,23 +13542,15 @@ height=&quot;52&quot; src=&quot;https://music.163.com/outchain/player?type=2&amp
       <content type="html"><![CDATA[<h2 id="古风"><a href="#古风" class="headerlink" title="古风"></a>古风</h2><blockquote>
 <p><a href="http://baike.baidu.com/subview/297/9729252.htm" target="_blank" rel="noopener">古风</a> 是一类新型的文化，是现代人对古代曲风的称呼。&quot;古风&quot; 以中国的传统文化为基调，结合中国传统的文学、琴棋书画、诗词歌赋等，经过不断的发展磨合，形成了比较完备的音乐、文学、绘画等艺术形式。</p>
 </blockquote>
-<h3 id="古风音乐社团"><a href="#古风音乐社团" class="headerlink" title="古风音乐社团"></a>古风音乐社团</h3><div class="tagBlack"><a href="http://www.mymmqm.com/" target="_blank" rel="noopener">墨明棋妙</a>&nbsp;<a href="http://5sing.kugou.com/lfmmusic/default.html" target="_blank" rel="noopener">鸾凤鸣</a>&nbsp;<a href="http://5sing.kugou.com/pingshaluoyan/default.html" target="_blank" rel="noopener">平纱落雁</a>&nbsp;<a href="http://music.163.com/#/user/home?id=64846286" target="_blank" rel="noopener">满汉全席</a>&nbsp;<a href="http://www.oyinyue.com/11388725" target="_blank" rel="noopener">声自在</a>&nbsp;<a href="http://5sing.kugou.com/qianchengzuige/default.html" target="_blank" rel="noopener">千城醉歌</a>&nbsp;<a href="http://5sing.kugou.com/liushangqushui/default.html" target="_blank" rel="noopener">流觞曲水</a>&nbsp;<a href="http://5sing.kugou.com/5590972/default.html" target="_blank" rel="noopener">花魁楼</a>&nbsp;<a href="http://5sing.kugou.com/qiange/default.html" target="_blank" rel="noopener">千歌未央</a>&nbsp;<a href="http://5sing.kugou.com/27373394/default.html" target="_blank" rel="noopener">云歌落</a></div>
-
-<hr>
-<h3 id="古风音乐人"><a href="#古风音乐人" class="headerlink" title="古风音乐人"></a>古风音乐人</h3><div class="tagGrey"><a href="http://www.xiami.com/artist/68934" target="_blank" rel="noopener">河图</a>&nbsp;<a href="http://www.xiami.com/artist/52636" target="_blank" rel="noopener">董贞</a>&nbsp;<a href="http://www.xiami.com/artist/98637" target="_blank" rel="noopener">小曲儿</a>&nbsp;<a href="http://www.xiami.com/artist/103550" target="_blank" rel="noopener">少司命</a>&nbsp;<a href="http://y.baidu.com/qingnong914" target="_blank" rel="noopener">清弄</a>&nbsp;<a href="http://bd.kuwo.cn/mingxing/%E6%BD%87%E6%A2%A6%E4%B8%B4.htm?from=baidu" target="_blank" rel="noopener">潇梦临</a>&nbsp;<a href="http://www.xiami.com/artist/87301" target="_blank" rel="noopener">檀烧</a>&nbsp;<a href="http://www.xiami.com/artist/65156" target="_blank" rel="noopener">心然</a>&nbsp;<a href="http://www.xiami.com/artist/55553" target="_blank" rel="noopener">萧人凤</a>&nbsp;<a href="http://bd.kuwo.cn/mingxing/%E5%87%8C%E4%B9%8B%E8%BD%A9.htm?from=baidu" target="_blank" rel="noopener">凌之轩</a>&nbsp;<a href="http://i.xiami.com/huanger117" target="_blank" rel="noopener">晃儿</a>&nbsp;<a href="http://www.xiami.com/artist/102392" target="_blank" rel="noopener">重小烟</a>&nbsp;<a href="http://www.xiami.com/artist/80464" target="_blank" rel="noopener">音频怪物</a></div>
-
-<hr>
-<h3 id="古风网站"><a href="#古风网站" class="headerlink" title="古风网站"></a>古风网站</h3><div class="tagGrey"><a href="http://5sing.kugou.com/" target="_blank" rel="noopener">5sing</a>&nbsp;<a href="http://xingmaow.com/" target="_blank" rel="noopener">古风杏猫网</a>&nbsp;<a href="http://www.gufengquan.com/" target="_blank" rel="noopener">古风圈论坛</a></div>
-
-<hr>
+<h3 id="古风音乐社团"><a href="#古风音乐社团" class="headerlink" title="古风音乐社团"></a>古风音乐社团</h3><p><a href="http://www.mymmqm.com/" target="_blank" rel="noopener">墨明棋妙</a> <a href="http://5sing.kugou.com/lfmmusic/default.html" target="_blank" rel="noopener">鸾凤鸣</a> <a href="http://5sing.kugou.com/pingshaluoyan/default.html" target="_blank" rel="noopener">平纱落雁</a> <a href="http://music.163.com/#/user/home?id=64846286" target="_blank" rel="noopener">满汉全席</a> <a href="http://www.oyinyue.com/11388725" target="_blank" rel="noopener">声自在</a> <a href="http://5sing.kugou.com/qianchengzuige/default.html" target="_blank" rel="noopener">千城醉歌</a> <a href="http://5sing.kugou.com/liushangqushui/default.html" target="_blank" rel="noopener">流觞曲水</a> <a href="http://5sing.kugou.com/5590972/default.html" target="_blank" rel="noopener">花魁楼</a> <a href="http://5sing.kugou.com/qiange/default.html" target="_blank" rel="noopener">千歌未央</a> <a href="http://5sing.kugou.com/27373394/default.html" target="_blank" rel="noopener">云歌落</a></p>
+<h3 id="古风音乐人"><a href="#古风音乐人" class="headerlink" title="古风音乐人"></a>古风音乐人</h3><p><a href="http://www.xiami.com/artist/68934" target="_blank" rel="noopener">河图</a> <a href="http://www.xiami.com/artist/52636" target="_blank" rel="noopener">董贞</a> <a href="http://www.xiami.com/artist/98637" target="_blank" rel="noopener">小曲儿</a> <a href="http://www.xiami.com/artist/103550" target="_blank" rel="noopener">少司命</a> <a href="http://y.baidu.com/qingnong914" target="_blank" rel="noopener">清弄</a> <a href="http://bd.kuwo.cn/mingxing/%E6%BD%87%E6%A2%A6%E4%B8%B4.htm?from=baidu" target="_blank" rel="noopener">潇梦临</a> <a href="http://www.xiami.com/artist/87301" target="_blank" rel="noopener">檀烧</a> <a href="http://www.xiami.com/artist/65156" target="_blank" rel="noopener">心然</a> <a href="http://www.xiami.com/artist/55553" target="_blank" rel="noopener">萧人凤</a> <a href="http://bd.kuwo.cn/mingxing/%E5%87%8C%E4%B9%8B%E8%BD%A9.htm?from=baidu" target="_blank" rel="noopener">凌之轩</a> <a href="http://i.xiami.com/huanger117" target="_blank" rel="noopener">晃儿</a> <a href="http://www.xiami.com/artist/102392" target="_blank" rel="noopener">重小烟</a> <a href="http://www.xiami.com/artist/80464" target="_blank" rel="noopener">音频怪物</a></p>
+<h3 id="古风网站"><a href="#古风网站" class="headerlink" title="古风网站"></a>古风网站</h3><p><a href="http://5sing.kugou.com/" target="_blank" rel="noopener">5sing</a> <a href="http://xingmaow.com/" target="_blank" rel="noopener">古风杏猫网</a> <a href="http://www.gufengquan.com/" target="_blank" rel="noopener">古风圈论坛</a></p>
 <h2 id="古风歌曲品鉴"><a href="#古风歌曲品鉴" class="headerlink" title="古风歌曲品鉴"></a>古风歌曲品鉴</h2><h3 id="杏花弦外雨"><a href="#杏花弦外雨" class="headerlink" title="杏花弦外雨"></a>杏花弦外雨</h3><blockquote>
 <p><a href="http://baike.baidu.com/subview/10846918/19226803.htm" target="_blank" rel="noopener">杏花弦外雨</a>  是由  潇梦临  作曲及编曲，若紫鸢作词，由  <a href="http://baike.baidu.com/view/3113695.htm" target="_blank" rel="noopener">西国的海妖</a>、<a href="http://baike.baidu.com/view/8616563.htm" target="_blank" rel="noopener">CRITTY</a>  演唱的一首优质古风歌曲。收录在CRITTY的《弦上春雪》原创古风非实体专辑中。MV由尉迟嘉馨制作，展现了江南水乡的美丽风景，讲述了西厢记中一段才子佳人相思空守的故事。</p>
 </blockquote>
 <iframe class="musicPlayer" frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="https://music.163.com/outchain/player?type=2&id=32957012&auto=0&height=66"></iframe>
 
-<p><div class="poem"></div></p>
-<pre class="poemText">
-作曲/编曲：潇梦临
+<pre><code class="txt">作曲/编曲：潇梦临
 作词：若紫鸢
 演唱：西国的海妖、CRITTY
 
@@ -13672,17 +13591,14 @@ height=&quot;52&quot; src=&quot;https://music.163.com/outchain/player?type=2&amp
 当一阵阵临窗雨  洗旧那时心绪
 曲中人远隔千里万里  不知不觉的停笔
 留下余韵待续  就在那片烟波外淡成了迤逦
-</pre>
-
-<p><img class="poemCover" src="/assets/music/xinghuaxianwaiyu.png" alt="杏花弦外雨"><br><br><br></p>
+</code></pre>
+<p><img src="/assets/music/xinghuaxianwaiyu.png" alt="杏花弦外雨"></p>
 <h3 id="遇萤"><a href="#遇萤" class="headerlink" title="遇萤"></a>遇萤</h3><blockquote>
 <p>由  YT君  制作的橙光文字游戏《逆袭之星途闪耀》的剧中剧《遇龙》的主题曲《遇萤》。  <a href="http://baike.baidu.com/item/%E9%81%87%E8%90%A4" target="_blank" rel="noopener">遇萤</a>  是<a href="http://baike.baidu.com/view/8616563.htm" target="_blank" rel="noopener">CRITTY</a> 演唱歌曲，由执素兮作曲，顾聆落作词。</p>
 </blockquote>
 <iframe class="musicPlayer" frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="https://music.163.com/outchain/player?type=2&id=32548265&auto=0&height=66"></iframe>
 
-<p><div class="poem"></div></p>
-<pre class="poemText">
-演唱：CRITTY
+<pre><code class="txt">演唱：CRITTY
     歌曲监制：我是YT
     作曲/策划/和声编写：执素兮
     作词：顾聆落
@@ -13745,18 +13661,14 @@ height=&quot;52&quot; src=&quot;https://music.163.com/outchain/player?type=2&amp
 　　此情为你 在心上停栖
 　　这一世 愿与你共存天地
 　　这一世 愿与你共存天地
-</pre>
-
-<p><img class="poemCover" src="/assets/music/yuying.png" alt="遇萤"></p>
-<p><br><br></p>
+</code></pre>
+<p><img src="/assets/music/yuying.png" alt="遇萤"></p>
 <h3 id="倾尽天下"><a href="#倾尽天下" class="headerlink" title="倾尽天下"></a>倾尽天下</h3><blockquote>
 <p>倾尽天下 是音乐团队 <a href="http://baike.baidu.com/view/1204149.htm" target="_blank" rel="noopener">墨明棋妙</a> 创作的古风歌曲，由 <a href="http://baike.baidu.com/subview/649792/11273294.htm" target="_blank" rel="noopener">finale</a> 作词，<a href="http://baike.baidu.com/subview/4151/9915126.htm" target="_blank" rel="noopener">河图</a> 作曲、编曲并演唱。</p>
 </blockquote>
 <iframe class="musicPlayer" frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="https://music.163.com/outchain/player?type=2&id=27571867&auto=0&height=66"></iframe>
 
-<p><div class="poem"></div></p>
-<pre class="poemText">
-作词：Finale
+<pre><code class="txt">作词：Finale
 作曲/编曲/演唱：河图
 
 刀戟声共丝竹沙哑
@@ -13818,9 +13730,8 @@ height=&quot;52&quot; src=&quot;https://music.163.com/outchain/player?type=2&amp
 站着眉目依旧的你啊
 拂去衣上雪花
 并肩看 天地浩大
-</pre>
-
-<p><img class="poemCover" src="/assets/music/qingjintianxia.png" alt="倾尽天下"><br><br><br></p>
+</code></pre>
+<p><img src="/assets/music/qingjintianxia.png" alt="倾尽天下"></p>
 <h2 id="播放列表"><a href="#播放列表" class="headerlink" title="播放列表"></a>播放列表</h2><iframe class="musicPlayer" frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="450" src="https://music.163.com/outchain/player?type=0&id=2310717269&auto=0&height=430"></iframe>
 ]]></content>
       
@@ -13842,21 +13753,20 @@ height=&quot;52&quot; src=&quot;https://music.163.com/outchain/player?type=2&amp
     <entry>
       <title><![CDATA[Ubuntu下安装常用软件]]></title>
       <url>https://www.litreily.top/2016/10/12/installSW/</url>
-      <content type="html"><![CDATA[<h2 id="1-apt-get-install"><a href="#1-apt-get-install" class="headerlink" title="1. apt-get install"></a>1. apt-get install</h2><h3 id="1-1-Atom"><a href="#1-1-Atom" class="headerlink" title="1.1 Atom"></a>1.1 Atom</h3><pre><code class="bash">$ sudo add-apt-repository ppa:webupd8team/atom
-$ sudo apt-get update  
-$ sudo apt-get install atom
+      <content type="html"><![CDATA[<h2 id="1-apt-get-install"><a href="#1-apt-get-install" class="headerlink" title="1. apt-get install"></a>1. apt-get install</h2><h3 id="1-1-Atom"><a href="#1-1-Atom" class="headerlink" title="1.1 Atom"></a>1.1 Atom</h3><pre><code class="bash">sudo add-apt-repository ppa:webupd8team/atom
+sudo apt-get update  
+sudo apt-get install atom
 </code></pre>
 <p><code>add-apt-repository</code>用于添加软件源，<code>apt-get update</code>用于更新软件源，更新后即可使用<code>apt-get install</code>安装所需的软件。</p>
-<h3 id="1-2-Sublime-Text-3"><a href="#1-2-Sublime-Text-3" class="headerlink" title="1.2 Sublime Text 3"></a>1.2 Sublime Text 3</h3><pre><code class="bash">$ sudo add-apt-repository ppa:webupd8team/sublime-text-3  
-$ sudo apt-get update  
-$ sudo apt-get install sublime-text-install
+<h3 id="1-2-Sublime-Text-3"><a href="#1-2-Sublime-Text-3" class="headerlink" title="1.2 Sublime Text 3"></a>1.2 Sublime Text 3</h3><pre><code class="bash">sudo add-apt-repository ppa:webupd8team/sublime-text-3  
+sudo apt-get update  
+sudo apt-get install sublime-text-install
 </code></pre>
 <h2 id="2-添加快捷方式"><a href="#2-添加快捷方式" class="headerlink" title="2. 添加快捷方式"></a>2. 添加快捷方式</h2><p>在Ubuntu下，有些deb安装包，安装完成后只能通过终端启动，而且不能关闭终端，为此，我们可以给应用程序添加快捷方式。</p>
-<pre><code class="bash">$ sudo vim /usr/share/applications/appName.desktop
+<pre><code class="bash">sudo vim /usr/share/applications/appName.desktop
 </code></pre>
 <p>以eclipse为例在新添加的文件<code>eclipse.desktop</code>中添加以下内容：</p>
-<pre class="textContainer">
-[Desktop Entry]  
+<pre><code class="yml">[Desktop Entry]  
 Type=application  
 Name=eclipse  
 Commit=Eclipse Integrated Development Environment  
@@ -13865,9 +13775,7 @@ Icon=/opt/eclipse/icon.xpm
 Terminal=false  
 StartupNotify=true  
 Categories=Development;IDE;Java;
-</pre>
-
-
+</code></pre>
 <p>其中Exec指定应用路径，Icon指定应用图标，Categories用于分类。</p>
 ]]></content>
       
@@ -13893,7 +13801,7 @@ Categories=Development;IDE;Java;
     <entry>
       <title><![CDATA[常用的排序算法]]></title>
       <url>https://www.litreily.top/2016/09/20/algor-sort/</url>
-      <content type="html"><![CDATA[<h2 id="1-算法复杂度及稳定性"><a href="#1-算法复杂度及稳定性" class="headerlink" title="1. 算法复杂度及稳定性"></a>1. 算法复杂度及稳定性</h2><table>
+      <content type="html"><![CDATA[<h2 id="算法复杂度及稳定性"><a href="#算法复杂度及稳定性" class="headerlink" title="算法复杂度及稳定性"></a>算法复杂度及稳定性</h2><table>
 <thead>
 <tr>
 <th style="text-align:center">排序方法</th>
@@ -13979,12 +13887,12 @@ Categories=Development;IDE;Java;
 </tr>
 </tbody>
 </table>
-<h2 id="2-算法实现"><a href="#2-算法实现" class="headerlink" title="2. 算法实现"></a>2. 算法实现</h2><h3 id="2-1-直接插入"><a href="#2-1-直接插入" class="headerlink" title="2.1 直接插入"></a>2.1 直接插入</h3><h4 id="算法步骤"><a href="#算法步骤" class="headerlink" title="算法步骤"></a><strong>算法步骤</strong></h4><ol>
+<h2 id="算法实现"><a href="#算法实现" class="headerlink" title="算法实现"></a>算法实现</h2><h3 id="直接插入"><a href="#直接插入" class="headerlink" title="直接插入"></a>直接插入</h3><h4 id="算法步骤"><a href="#算法步骤" class="headerlink" title="算法步骤"></a>算法步骤</h4><ol>
 <li>将序列的第一个元素作为<strong>有序序列</strong>，第二个元素直至最后一个元素作为<strong>待排序序列</strong>;</li>
 <li>从前往后依次扫描<strong>待排序序列</strong>，将扫描的元素依次插入到<strong>有序序列</strong>的适当位置。</li>
 </ol>
-<h4 id="原理示意"><a href="#原理示意" class="headerlink" title="原理示意"></a><strong>原理示意</strong></h4><p><img src="/assets/algorithm/insertSort.gif" alt="insertSort"></p>
-<h4 id="程序实现"><a href="#程序实现" class="headerlink" title="程序实现"></a><strong>程序实现</strong></h4><pre><code class="C++">void insertsort(int array[], int length)
+<h4 id="原理示意"><a href="#原理示意" class="headerlink" title="原理示意"></a>原理示意</h4><p><img src="/assets/algorithm/insertSort.gif" alt="insertSort"></p>
+<h4 id="程序实现"><a href="#程序实现" class="headerlink" title="程序实现"></a>程序实现</h4><pre><code class="C++">void insertsort(int array[], int length)
 {
   if (array == NULL || length &lt;= 0)
     return;
@@ -14017,8 +13925,8 @@ int main()
   return 0;
 }
 </code></pre>
-<h3 id="2-2-二分查找插入"><a href="#2-2-二分查找插入" class="headerlink" title="2.2 二分查找插入"></a>2.2 二分查找插入</h3><h4 id="算法思想"><a href="#算法思想" class="headerlink" title="算法思想"></a><strong>算法思想</strong></h4><p>二分查找插入是在直接插入的基础上进行优化，由于在插入前需要查找插入位置，而插入位置处于<strong>有序</strong>序列中，所以可以使用<strong>二分查找</strong>替代原先的逐个扫描，提高查找效率。</p>
-<h4 id="程序实现-1"><a href="#程序实现-1" class="headerlink" title="程序实现"></a><strong>程序实现</strong></h4><pre><code class="C++">void binaryInsertsort(int array[], int length)
+<h3 id="二分查找插入"><a href="#二分查找插入" class="headerlink" title="二分查找插入"></a>二分查找插入</h3><h4 id="二分思想"><a href="#二分思想" class="headerlink" title="二分思想"></a>二分思想</h4><p>二分查找插入是在直接插入的基础上进行优化，由于在插入前需要查找插入位置，而插入位置处于<strong>有序</strong>序列中，所以可以使用<strong>二分查找</strong>替代原先的逐个扫描，提高查找效率。</p>
+<h4 id="二分实现"><a href="#二分实现" class="headerlink" title="二分实现"></a>二分实现</h4><pre><code class="C++">void binaryInsertsort(int array[], int length)
 {
   if (array == NULL || length &lt;= 0)
     return;
@@ -14051,7 +13959,61 @@ int main()
   }
 }
 </code></pre>
-<h3 id="2-3-希尔排序"><a href="#2-3-希尔排序" class="headerlink" title="2.3 希尔排序"></a>2.3 希尔排序</h3><p>持续更新中...</p>
+]]></content>
+      
+        <categories>
+            
+            <category> 杂物柜 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> C/C++ </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[模拟试题2 - 二货小易的网格盒子]]></title>
+      <url>https://www.litreily.top/2016/09/12/WYMN2/</url>
+      <content type="html"><![CDATA[<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>二货小易有一个W*H的网格盒子，网格的行编号为0~H-1，网格的列编号为0~W-1。每个格子至多可以放一块蛋糕，任意两块蛋糕的欧几里得距离不能等于2。</p>
+<p>对于两个格子坐标(x1,y1), (x2,y2)的欧几里得距离为：((x1-x2)<em>(x1-x2)+(y1-y2)</em>(y1-y2))的算术平方根。</p>
+<p>小易想知道最多可以放多少块蛋糕在网格盒子里。</p>
+<h3 id="输入描述"><a href="#输入描述" class="headerlink" title="输入描述"></a>输入描述</h3><blockquote>
+<p>每组数组包含网格长宽W,H，用空格分隔。(1&lt;=W、H&lt;=1000)</p>
+</blockquote>
+<h3 id="输出描述"><a href="#输出描述" class="headerlink" title="输出描述"></a>输出描述</h3><blockquote>
+<p>输出一个最多可以放的蛋糕数</p>
+</blockquote>
+<h3 id="输入例子"><a href="#输入例子" class="headerlink" title="输入例子"></a>输入例子</h3><blockquote>
+<p>3 2</p>
+</blockquote>
+<h3 id="输出例子"><a href="#输出例子" class="headerlink" title="输出例子"></a>输出例子</h3><blockquote>
+<p>4</p>
+</blockquote>
+<h2 id="题目解析"><a href="#题目解析" class="headerlink" title="题目解析"></a>题目解析</h2><p>根据题意，可以推测出蛋糕数最多的放置方案：将网格进行分区，每四个构成一个正方形的网格作为一个分区，类似于坐标变换。假设原坐标为(x,y),那么变换后的分区坐标为(x/2,y/2)。当变换后的分区坐标满足横纵坐标之和为偶数时，该分区内的4个网格均可放置蛋糕。</p>
+<p><img src="/assets/algorithm/putCake.png" alt="putCake"></p>
+<h2 id="解题程序"><a href="#解题程序" class="headerlink" title="解题程序"></a>解题程序</h2><pre><code class="C++">#include &lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+
+  int W,H;
+  int cnt=0; // 定义可放的蛋糕数
+  cin&gt;&gt;W&gt;&gt;H; // 输入盒子网格的行列数
+
+  for(int i = 0; i&lt;H; i++)
+      for(int j = 0; j &lt; W; j++)
+        if((i/2 + j/2) % 2 == 0)
+          cnt++;
+  cout&lt;&lt;cnt&lt;&lt;endl;
+  return 0;
+}
+</code></pre>
 ]]></content>
       
         <categories>
@@ -14131,66 +14093,10 @@ int main()
     </entry>
     
     <entry>
-      <title><![CDATA[模拟试题2 - 二货小易的网格盒子]]></title>
-      <url>https://www.litreily.top/2016/09/12/WYMN2/</url>
-      <content type="html"><![CDATA[<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>二货小易有一个W*H的网格盒子，网格的行编号为0~H-1，网格的列编号为0~W-1。每个格子至多可以放一块蛋糕，任意两块蛋糕的欧几里得距离不能等于2。</p>
-<p>对于两个格子坐标(x1,y1), (x2,y2)的欧几里得距离为：((x1-x2)<em>(x1-x2)+(y1-y2)</em>(y1-y2))的算术平方根。</p>
-<p>小易想知道最多可以放多少块蛋糕在网格盒子里。</p>
-<h3 id="输入描述"><a href="#输入描述" class="headerlink" title="输入描述"></a>输入描述</h3><blockquote>
-<p>每组数组包含网格长宽W,H，用空格分隔。(1&lt;=W、H&lt;=1000)</p>
-</blockquote>
-<h3 id="输出描述"><a href="#输出描述" class="headerlink" title="输出描述"></a>输出描述</h3><blockquote>
-<p>输出一个最多可以放的蛋糕数</p>
-</blockquote>
-<h3 id="输入例子"><a href="#输入例子" class="headerlink" title="输入例子"></a>输入例子</h3><blockquote>
-<p>3 2</p>
-</blockquote>
-<h3 id="输出例子"><a href="#输出例子" class="headerlink" title="输出例子"></a>输出例子</h3><blockquote>
-<p>4</p>
-</blockquote>
-<h2 id="题目解析"><a href="#题目解析" class="headerlink" title="题目解析"></a>题目解析</h2><p>根据题意，可以推测出蛋糕数最多的放置方案：将网格进行分区，每四个构成一个正方形的网格作为一个分区，类似于坐标变换。假设原坐标为(x,y),那么变换后的分区坐标为(x/2,y/2)。当变换后的分区坐标满足横纵坐标之和为偶数时，该分区内的4个网格均可放置蛋糕。</p>
-<p><img src="/assets/algorithm/putCake.png" alt="putCake"></p>
-<h2 id="解题程序"><a href="#解题程序" class="headerlink" title="解题程序"></a>解题程序</h2><pre><code class="C++">#include &lt;iostream&gt;
-using namespace std;
-
-int main()
-{
-
-  int W,H;
-  int cnt=0; // 定义可放的蛋糕数
-  cin&gt;&gt;W&gt;&gt;H; // 输入盒子网格的行列数
-
-  for(int i = 0; i&lt;H; i++)
-      for(int j = 0; j &lt; W; j++)
-        if((i/2 + j/2) % 2 == 0)
-          cnt++;
-  cout&lt;&lt;cnt&lt;&lt;endl;
-  return 0;
-}
-</code></pre>
-]]></content>
-      
-        <categories>
-            
-            <category> 杂物柜 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> C/C++ </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
       <title><![CDATA[解决atom无法安装插件的问题]]></title>
       <url>https://www.litreily.top/2016/08/21/atom-packages/</url>
-      <content type="html"><![CDATA[<h2 id="1-出错信息"><a href="#1-出错信息" class="headerlink" title="1. 出错信息"></a>1. 出错信息</h2><p>倘若使用<a href="https://atom.io/" target="_blank" rel="noopener">atom</a>自带的插件安装工具&quot;File-&gt;Settings-&gt;Install&quot;安装插件，通常会报错，以&quot;pp-markdown&quot;为例，其错误信息如下：</p>
-<pre>
-  gyp info it worked if it ends with ok
+      <content type="html"><![CDATA[<h2 id="出错信息"><a href="#出错信息" class="headerlink" title="出错信息"></a>出错信息</h2><p>倘若使用<a href="https://atom.io/" target="_blank" rel="noopener">atom</a>自带的插件安装工具&quot;File-&gt;Settings-&gt;Install&quot;安装插件，通常会报错，以&quot;pp-markdown&quot;为例，其错误信息如下：</p>
+<pre><code class="bash">  gyp info it worked if it ends with ok
   gyp info using node-gyp@2.0.2
   gyp info using node@0.10.40 | win32 | ia32
   gyp http GET http://gh-contractor-zcbenz.s3.amazonaws.com/atom-shell/dist/v0.37.8/node-v0.37.8.tar.gz
@@ -14199,19 +14105,18 @@ int main()
 
   ! Compiler tools not found
   Packages that depend on modules that contain C/C++ code will fail to install.
-  Read <a href="http://flight-manual.atom.io/" target="_blank" rel="noopener">here</a> for instructions on installing Python and Visual Studio.
+  Read &lt;a href=&quot;http://flight-manual.atom.io/&quot;&gt;here&lt;/a&gt; for instructions on installing Python and Visual Studio.
   Run apm install --check after installing to test compiling a native module.
-</pre>
-
-<h2 id="2-解决方案"><a href="#2-解决方案" class="headerlink" title="2. 解决方案"></a>2. 解决方案</h2><h3 id="2-1-安装node-js"><a href="#2-1-安装node-js" class="headerlink" title="2.1 安装node.js"></a>2.1 安装node.js</h3><p>安装<a href="https://nodejs.org/en/" target="_blank" rel="noopener">node.js</a>的目的在于使用npm工具，放弃apm工具。如果已经安装好，那么这一步自然可以略过。</p>
-<h3 id="2-2-下载插件"><a href="#2-2-下载插件" class="headerlink" title="2.2 下载插件"></a>2.2 下载插件</h3><p>在atom的插件安装界面搜索所需的插件，点击插件名称将会从网页打开atom的插件库。</p>
+</code></pre>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><h3 id="安装node-js"><a href="#安装node-js" class="headerlink" title="安装node.js"></a>安装node.js</h3><p>安装<a href="https://nodejs.org/en/" target="_blank" rel="noopener">node.js</a>的目的在于使用npm工具，放弃apm工具。如果已经安装好，那么这一步自然可以略过。</p>
+<h3 id="下载插件"><a href="#下载插件" class="headerlink" title="下载插件"></a>下载插件</h3><p>在atom的插件安装界面搜索所需的插件，点击插件名称将会从网页打开atom的插件库。</p>
 <p><img src="/assets/atom/package.png" alt="atompackage"></p>
 <p>此时我们点击<code>Repo</code>可以转至其github页面，复制插件的远程仓库目录。</p>
 <p><img src="/assets/atom/package_git.png" alt="gitpackage"></p>
 <p>在本地打开文件夹&quot;C:\Users\USER_NAME\.atom\packages&quot;，使用git指令将插件<code>clone</code>到该目录。</p>
-<pre><code class="bash">$ git clone 插件的远程仓库目录
+<pre><code class="bash">git clone 插件的远程仓库目录
 </code></pre>
-<h3 id="2-3-安装插件"><a href="#2-3-安装插件" class="headerlink" title="2.3 安装插件"></a>2.3 安装插件</h3><p>转至插件目录，使用<code>npm install</code>完成插件安装，重启atom即可。</p>
+<h3 id="安装插件"><a href="#安装插件" class="headerlink" title="安装插件"></a>安装插件</h3><p>转至插件目录，使用<code>npm install</code>完成插件安装，重启atom即可。</p>
 <pre><code class="bash">$ cd pp-markdown
 $ npm install
 marked@0.3.6 node_modules\marked
@@ -14220,7 +14125,7 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
 ├── fuzzaldrin@2.1.0
 └── space-pen@5.1.2 (underscore-plus@1.6.6, jquery@2.1.4, grim@1.5.0)
 </code></pre>
-<h3 id="2-4-效果预览"><a href="#2-4-效果预览" class="headerlink" title="2.4 效果预览"></a>2.4 效果预览</h3><p><img src="/assets/atom/pp-markdown.png" alt="pp-markdown"></p>
+<h3 id="效果预览"><a href="#效果预览" class="headerlink" title="效果预览"></a>效果预览</h3><p><img src="/assets/atom/pp-markdown.png" alt="pp-markdown"></p>
 <p>该方案看似有点繁琐，却也能够达到目的，毕竟我们需要安装的插件并不会太多，它日有更好的方法再用不迟。</p>
 ]]></content>
       
@@ -14281,32 +14186,116 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
     <entry>
       <title><![CDATA[Labview - 存储txt文件]]></title>
       <url>https://www.litreily.top/2016/06/10/labview-rwTxt/</url>
-      <content type="html"><![CDATA[<h2 id="1-存储文件"><a href="#1-存储文件" class="headerlink" title="1. 存储文件"></a>1. 存储文件</h2><h3 id="1-1-简单存储"><a href="#1-1-简单存储" class="headerlink" title="1.1 简单存储"></a>1.1 简单存储</h3><p>写个简单的小程序，用于存储四列随机数，每隔1s存储一次，数据之间以tab作为分隔符。</p>
+      <content type="html"><![CDATA[<h2 id="存储文件"><a href="#存储文件" class="headerlink" title="存储文件"></a>存储文件</h2><h3 id="简单存储"><a href="#简单存储" class="headerlink" title="简单存储"></a>简单存储</h3><p>写个简单的小程序，用于存储四列随机数，每隔1s存储一次，数据之间以tab作为分隔符。</p>
 <p><img src="/assets/labview/rwTxt/readTxt.png" alt="readTxt"></p>
 <p>存储后的文件:</p>
 <p><img src="/assets/labview/rwTxt/testTxt.png" alt="testTxt"></p>
-<h3 id="1-2-加入表头"><a href="#1-2-加入表头" class="headerlink" title="1.2 加入表头"></a>1.2 加入表头</h3><p>看着上面这个文件，总感觉少点什么，对了，表头还没加。那就加个判断，首次创建文件时添个表头。为了简化点，定时结构就不截图了。</p>
+<h3 id="加入表头"><a href="#加入表头" class="headerlink" title="加入表头"></a>加入表头</h3><p>看着上面这个文件，总感觉少点什么，对了，表头还没加。那就加个判断，首次创建文件时添个表头。为了简化点，定时结构就不截图了。</p>
 <p><img src="/assets/labview/rwTxt/addTitle.png" alt="addTitle"></p>
 <p>现在再来看看这个txt文件，表头已经被加上了，虽然看着没怎么对齐，但这是正常的，如果导入至Excel就可以看出来。</p>
 <p><img src="/assets/labview/rwTxt/testTitle.png" alt="testTitle"></p>
-<h3 id="1-3-存储时间"><a href="#1-3-存储时间" class="headerlink" title="1.3 存储时间"></a>1.3 存储时间</h3><p>大部分情况下，我们在存储数据的同时需要记录存储时间，那么就再稍稍修改一下程序。</p>
+<h3 id="存储时间"><a href="#存储时间" class="headerlink" title="存储时间"></a>存储时间</h3><p>大部分情况下，我们在存储数据的同时需要记录存储时间，那么就再稍稍修改一下程序。</p>
 <p><img src="/assets/labview/rwTxt/addTime.png" alt="addTime"></p>
 <p>添加的东西也不多，就是多了个表头，每组数据前多了个时间标识，需要说明一点的是，这里用到的&quot;格式化日期/时间字符串&quot;，它的格式化方法可以参考以下说明。</p>
 <p><img src="/assets/labview/rwTxt/timeStrHelp.png" alt="timeStrHelp"></p>
 <blockquote>
-<p> 下列代码为部分常用的时间格式代码：%c可显示依据地域语言设定的日期/时间。<br><br><strong>时间</strong>相关格式代码为：%X（指定地域的时间），%H（小时，24小时），%I（小时，12小时），%M（分钟），%S（秒），%<digit>u（分数秒，精度<digit>），%p（a.m./p.m.标识）。<br><strong>日期</strong>相关格式代码为：%x（指定地域日期），%y（两位年份），%Y（四位年份），%m（月份），%b（月名缩写），%d（一个月中的天值），%a（星期名缩写）。</digit></digit></p>
+<p>下列代码为部分常用的时间格式代码：%c可显示依据地域语言设定的日期/时间。<br><strong>时间</strong>相关格式代码为：%X（指定地域的时间），%H（小时，24小时），%I（小时，12小时），%M（分钟），%S（秒），%u（分数秒），%p（a.m./p.m.标识）。<br><strong>日期</strong>相关格式代码为：%x（指定地域日期），%y（两位年份），%Y（四位年份），%m（月份），%b（月名缩写），%d（一个月中的天值），%a（星期名缩写）。</p>
 </blockquote>
 <p>好了，改好了就测试一下，看看时间已经被加上了。</p>
 <p><img src="/assets/labview/rwTxt/testTime.png" alt="testTime"></p>
-<h3 id="1-4-有趣实例"><a href="#1-4-有趣实例" class="headerlink" title="1.4 有趣实例"></a>1.4 有趣实例</h3><p>好了，现在来写个有趣的小程序，定时存储一组数据至txt文件，包含人的姓名、性别、年龄、身高和名族。具体要求如下表所示。</p>
-<table class="normalTable"><th></th><td>姓名</td><td>性别</td><td>年龄</td><td>身高(m)</td><td>汉族</td><tr><td>数据类型</td><td>字符串</td><td>字符串</td><td>Byte</td><td>Double</td><td>布尔</td></tr><tr><td>要求</td><td>随机</td><td>男/女</td><td>12~40</td><td>1.40~1.80</td><td>T/F</td></tr></table>
-
+<h3 id="有趣实例"><a href="#有趣实例" class="headerlink" title="有趣实例"></a>有趣实例</h3><p>好了，现在来写个有趣的小程序，定时存储一组数据至txt文件，包含人的姓名、性别、年龄、身高和名族。具体要求如下表所示。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>姓名</th>
+<th>性别</th>
+<th>年龄</th>
+<th>身高(m)</th>
+<th>汉族</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数据类型</td>
+<td>字符串</td>
+<td>字符串</td>
+<td>Byte</td>
+<td>Double</td>
+<td>布尔</td>
+</tr>
+<tr>
+<td>要求</td>
+<td>随机</td>
+<td>男/女</td>
+<td>12~40</td>
+<td>1.40~1.80</td>
+<td>T/F</td>
+</tr>
+</tbody>
+</table>
 <p>程序框图如下：</p>
 <p><img src="/assets/labview/rwTxt/randomWrite.png" alt="randomWrite"></p>
 <p>好了，现在运行程序，看看会有哪些有趣的名字呢。</p>
 <p><img src="/assets/labview/rwTxt/randomTxt.png" alt="randomTxt"></p>
 <p>关于.txt文件存储就讲这些吧。以后若是有其它运用方式，遇到了再写不迟。</p>
-<h2 id="2-下载链接"><a href="#2-下载链接" class="headerlink" title="2. 下载链接"></a>2. 下载链接</h2><p>文中提到的两个vi文件已共享至百度网盘，以供<a href="http://pan.baidu.com/s/1kU7mveZ" target="_blank">下载！</a></p>
+<h2 id="下载链接"><a href="#下载链接" class="headerlink" title="下载链接"></a>下载链接</h2><p>文中提到的两个vi文件已共享至百度网盘，以供<a href="http://pan.baidu.com/s/1kU7mveZ" target="_blank" rel="noopener">下载</a>。</p>
+]]></content>
+      
+        <categories>
+            
+            <category> LabVIEW </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> labview </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Labview - 对话框程序模板]]></title>
+      <url>https://www.litreily.top/2016/06/06/labview-dialog/</url>
+      <content type="html"><![CDATA[<p>软件开发过程中，经常要使用对话框界面，例如各种参数设置界面等。为了减少重复性工作，我们可以创建一个对话框模板，往后就可以通过该模板直接新建对话框界面。</p>
+<h2 id="1-创建模板"><a href="#1-创建模板" class="headerlink" title="1. 创建模板"></a>1. 创建模板</h2><h3 id="1-1-新建vi"><a href="#1-1-新建vi" class="headerlink" title="1.1 新建vi"></a>1.1 新建vi</h3><p>打开LabVIEW软件，新建vi，保存为&quot;对话框模板.vi&quot;。</p>
+<p><img src="/assets/labview/dialog/template.png" alt="Labview template.vi"></p>
+<h3 id="1-2-添加while循环"><a href="#1-2-添加while循环" class="headerlink" title="1.2 添加while循环"></a>1.2 添加while循环</h3><p>对话框界面也属于用户界面，所以需要给它单独开辟一个线程，即一个while循环。</p>
+<p><img src="/assets/labview/dialog/while.png" alt="Labview while"></p>
+<h3 id="1-3-添加移位寄存器"><a href="#1-3-添加移位寄存器" class="headerlink" title="1.3 添加移位寄存器"></a>1.3 添加移位寄存器</h3><p>在while循环左上角添加一个移位寄存器，然后创建一个<strong>枚举常量</strong>，给其添加以下内容：</p>
+<ul>
+<li>init：初始化</li>
+<li>run：运行</li>
+<li>exit：退出</li>
+</ul>
+<p>编辑完成后点击确定，然后将其连接至移位寄存器的输入端，默认设为&quot;init&quot;。</p>
+<p><img src="/assets/labview/dialog/enum.png" alt="Labview enum"></p>
+<h3 id="1-4-添加条件结构"><a href="#1-4-添加条件结构" class="headerlink" title="1.4 添加条件结构"></a>1.4 添加条件结构</h3><p>在while循环中添加一个条件结构，将将移位寄存器的值作为判断条件。为条件结构的每个值添加分支。</p>
+<p><img src="/assets/labview/dialog/switch.png" alt="Labview switch"></p>
+<h3 id="1-5-添加事件结构"><a href="#1-5-添加事件结构" class="headerlink" title="1.5 添加事件结构"></a>1.5 添加事件结构</h3><p>在条件结构的&quot;run&quot;分支中添加事件结构，用于响应用户操作。至此，所需的三个主要控制结构就都有了。</p>
+<p><img src="/assets/labview/dialog/event.png" alt="Labview event"></p>
+<h3 id="1-6-修改init分支"><a href="#1-6-修改init分支" class="headerlink" title="1.6 修改init分支"></a>1.6 修改init分支</h3><p>在条件结构的&quot;init&quot;（初始化）分支中，用户可以添加对话框的<strong>初始化</strong>程序。该分支只执行一次，接着进入&quot;run&quot;（主程序运行）分支，所以需要将移位寄存器的值设为&quot;run&quot;。</p>
+<p><img src="/assets/labview/dialog/init.png" alt="Labview init"></p>
+<h3 id="1-7-添加前面板关闭事件"><a href="#1-7-添加前面板关闭事件" class="headerlink" title="1.7 添加前面板关闭事件"></a>1.7 添加前面板关闭事件</h3><p>给事件结构添加&quot;前面板关闭？&quot;事件分支，然后将&quot;放弃？&quot;设为真，不让前面板在此刻关闭。同时将移位寄存器的值设为&quot;exit&quot;。</p>
+<p><img src="/assets/labview/dialog/closeFront.png" alt="Labview closeFront"></p>
+<p><img src="/assets/labview/dialog/exit.png" alt="Labview exit"></p>
+<h3 id="1-8-添加循环停止条件"><a href="#1-8-添加循环停止条件" class="headerlink" title="1.8 添加循环停止条件"></a>1.8 添加循环停止条件</h3><p>所有的while循环都需要一个停止条件，这里的while循环同样也需要，其停止条件便是移位寄存器的值变为&quot;exit&quot;。</p>
+<p><img src="/assets/labview/dialog/exitRule.png" alt="Labview exitRule"></p>
+<h3 id="1-9-完善移位寄存器"><a href="#1-9-完善移位寄存器" class="headerlink" title="1.9 完善移位寄存器"></a>1.9 完善移位寄存器</h3><p>现在看看程序，是不是还无法执行，因为移位寄存器的部分连线没有赋值，现在简要演示一下完善过程。</p>
+<p><img src="/assets/labview/dialog/register.gif" alt="Labview register"></p>
+<h3 id="1-10-添加界面关闭程序"><a href="#1-10-添加界面关闭程序" class="headerlink" title="1.10 添加界面关闭程序"></a>1.10 添加界面关闭程序</h3><p>从上面可以看出，在关闭前面板时，我们选择了放弃，然后进入&quot;exit&quot;分支，就是为了在这个分支中处理界面关闭前的任务，例如存储数据，保存界面参数等操作。不过这样一来，我们就需要在while循环结束时关闭界面，此处可以使用属性节点。</p>
+<p><img src="/assets/labview/dialog/exitPanel.png" alt="Labview exitPanel"></p>
+<h2 id="2-设置vi属性"><a href="#2-设置vi属性" class="headerlink" title="2. 设置vi属性"></a>2. 设置vi属性</h2><p>以上操作完成了对话框界面的程序框图设计，但此时运行该对话框，它还包含了系统自带的菜单栏和工具栏，而这些都是对话框不需要的。</p>
+<p><img src="/assets/labview/dialog/dialog_1.png" alt="Labview dialog"></p>
+<p>此时，我们可以通过快捷键<code>Ctrl+I</code>打开<strong>VI属性</strong>界面，在类别中选择<strong>窗口外观</strong>，最后选择<strong>对话框</strong>，点击确定。</p>
+<p><img src="/assets/labview/dialog/dialog_view.png" alt="Labview VI Properties"></p>
+<p>到此为止，一个简单的对话框界面模板就完成了，往后使用时，就可以通过&quot;复制该模板&rarr;重命名vi文件&rarr;添砖加瓦&quot;得到新的对话框。</p>
+<p><img src="/assets/labview/dialog/dialog_2.png" alt="Labview dialog"></p>
+<p>该模板比较简单，但是非常实用，大多数设置界面都可以使用该模板进行设计。当然也可以进一步完善。例如，很多设置界面都有<strong>应用</strong>按钮和<strong>退出</strong>按钮，那么，我们可以在模板中添加一个应用按钮和一个退出按钮，并添加对应的按钮点击事件，修改移位寄存器的值。</p>
+<h2 id="3-下载模板"><a href="#3-下载模板" class="headerlink" title="3. 下载模板"></a>3. 下载模板</h2><p>我将模板存至网盘便于下载：<a href="http://pan.baidu.com/s/1pKUe7Ib" target="_blank" rel="noopener">下载链接</a>。</p>
 ]]></content>
       
         <categories>
@@ -14378,62 +14367,6 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
     </entry>
     
     <entry>
-      <title><![CDATA[Labview - 对话框程序模板]]></title>
-      <url>https://www.litreily.top/2016/06/06/labview-dialog/</url>
-      <content type="html"><![CDATA[<p>软件开发过程中，经常要使用对话框界面，例如各种参数设置界面等。为了减少重复性工作，我们可以创建一个对话框模板，往后就可以通过该模板直接新建对话框界面。</p>
-<h2 id="1-创建模板"><a href="#1-创建模板" class="headerlink" title="1. 创建模板"></a>1. 创建模板</h2><h3 id="1-1-新建vi"><a href="#1-1-新建vi" class="headerlink" title="1.1 新建vi"></a>1.1 新建vi</h3><p>打开LabVIEW软件，新建vi，保存为&quot;对话框模板.vi&quot;。</p>
-<p><img src="/assets/labview/dialog/template.png" alt="Labview template.vi"></p>
-<h3 id="1-2-添加while循环"><a href="#1-2-添加while循环" class="headerlink" title="1.2 添加while循环"></a>1.2 添加while循环</h3><p>对话框界面也属于用户界面，所以需要给它单独开辟一个线程，即一个while循环。</p>
-<p><img src="/assets/labview/dialog/while.png" alt="Labview while"></p>
-<h3 id="1-3-添加移位寄存器"><a href="#1-3-添加移位寄存器" class="headerlink" title="1.3 添加移位寄存器"></a>1.3 添加移位寄存器</h3><p>在while循环左上角添加一个移位寄存器，然后创建一个<strong>枚举常量</strong>，给其添加以下内容：</p>
-<ul>
-<li>init：初始化</li>
-<li>run：运行</li>
-<li>exit：退出</li>
-</ul>
-<p>编辑完成后点击确定，然后将其连接至移位寄存器的输入端，默认设为&quot;init&quot;。</p>
-<p><img src="/assets/labview/dialog/enum.png" alt="Labview enum"></p>
-<h3 id="1-4-添加条件结构"><a href="#1-4-添加条件结构" class="headerlink" title="1.4 添加条件结构"></a>1.4 添加条件结构</h3><p>在while循环中添加一个条件结构，将将移位寄存器的值作为判断条件。为条件结构的每个值添加分支。</p>
-<p><img src="/assets/labview/dialog/switch.png" alt="Labview switch"></p>
-<h3 id="1-5-添加事件结构"><a href="#1-5-添加事件结构" class="headerlink" title="1.5 添加事件结构"></a>1.5 添加事件结构</h3><p>在条件结构的&quot;run&quot;分支中添加事件结构，用于响应用户操作。至此，所需的三个主要控制结构就都有了。</p>
-<p><img src="/assets/labview/dialog/event.png" alt="Labview event"></p>
-<h3 id="1-6-修改init分支"><a href="#1-6-修改init分支" class="headerlink" title="1.6 修改init分支"></a>1.6 修改init分支</h3><p>在条件结构的&quot;init&quot;（初始化）分支中，用户可以添加对话框的<strong>初始化</strong>程序。该分支只执行一次，接着进入&quot;run&quot;（主程序运行）分支，所以需要将移位寄存器的值设为&quot;run&quot;。</p>
-<p><img src="/assets/labview/dialog/init.png" alt="Labview init"></p>
-<h3 id="1-7-添加前面板关闭事件"><a href="#1-7-添加前面板关闭事件" class="headerlink" title="1.7 添加前面板关闭事件"></a>1.7 添加前面板关闭事件</h3><p>给事件结构添加&quot;前面板关闭？&quot;事件分支，然后将&quot;放弃？&quot;设为真，不让前面板在此刻关闭。同时将移位寄存器的值设为&quot;exit&quot;。</p>
-<p><img src="/assets/labview/dialog/closeFront.png" alt="Labview closeFront"></p>
-<p><img src="/assets/labview/dialog/exit.png" alt="Labview exit"></p>
-<h3 id="1-8-添加循环停止条件"><a href="#1-8-添加循环停止条件" class="headerlink" title="1.8 添加循环停止条件"></a>1.8 添加循环停止条件</h3><p>所有的while循环都需要一个停止条件，这里的while循环同样也需要，其停止条件便是移位寄存器的值变为&quot;exit&quot;。</p>
-<p><img src="/assets/labview/dialog/exitRule.png" alt="Labview exitRule"></p>
-<h3 id="1-9-完善移位寄存器"><a href="#1-9-完善移位寄存器" class="headerlink" title="1.9 完善移位寄存器"></a>1.9 完善移位寄存器</h3><p>现在看看程序，是不是还无法执行，因为移位寄存器的部分连线没有赋值，现在简要演示一下完善过程。</p>
-<p><img src="/assets/labview/dialog/register.gif" alt="Labview register"></p>
-<h3 id="1-10-添加界面关闭程序"><a href="#1-10-添加界面关闭程序" class="headerlink" title="1.10 添加界面关闭程序"></a>1.10 添加界面关闭程序</h3><p>从上面可以看出，在关闭前面板时，我们选择了放弃，然后进入&quot;exit&quot;分支，就是为了在这个分支中处理界面关闭前的任务，例如存储数据，保存界面参数等操作。不过这样一来，我们就需要在while循环结束时关闭界面，此处可以使用属性节点。</p>
-<p><img src="/assets/labview/dialog/exitPanel.png" alt="Labview exitPanel"></p>
-<h2 id="2-设置vi属性"><a href="#2-设置vi属性" class="headerlink" title="2. 设置vi属性"></a>2. 设置vi属性</h2><p>以上操作完成了对话框界面的程序框图设计，但此时运行该对话框，它还包含了系统自带的菜单栏和工具栏，而这些都是对话框不需要的。</p>
-<p><img src="/assets/labview/dialog/dialog_1.png" alt="Labview dialog"></p>
-<p>此时，我们可以通过快捷键<code>Ctrl+I</code>打开<strong>VI属性</strong>界面，在类别中选择<strong>窗口外观</strong>，最后选择<strong>对话框</strong>，点击确定。</p>
-<p><img src="/assets/labview/dialog/dialog_view.png" alt="Labview VI Properties"></p>
-<p>到此为止，一个简单的对话框界面模板就完成了，往后使用时，就可以通过&quot;复制该模板&rarr;重命名vi文件&rarr;添砖加瓦&quot;得到新的对话框。</p>
-<p><img src="/assets/labview/dialog/dialog_2.png" alt="Labview dialog"></p>
-<p>该模板比较简单，但是非常实用，大多数设置界面都可以使用该模板进行设计。当然也可以进一步完善。例如，很多设置界面都有<strong>应用</strong>按钮和<strong>退出</strong>按钮，那么，我们可以在模板中添加一个应用按钮和一个退出按钮，并添加对应的按钮点击事件，修改移位寄存器的值。</p>
-<h2 id="3-下载模板"><a href="#3-下载模板" class="headerlink" title="3. 下载模板"></a>3. 下载模板</h2><p>我将模板存至网盘便于下载：<a href="http://pan.baidu.com/s/1pKUe7Ib" target="_blank">下载链接！</a></p>
-]]></content>
-      
-        <categories>
-            
-            <category> LabVIEW </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> labview </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
       <title><![CDATA[Labview - 基本概念]]></title>
       <url>https://www.litreily.top/2016/06/05/labview-base/</url>
       <content type="html"><![CDATA[<h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1. 引言"></a>1. 引言</h2><p>《百度百科》词条&quot;LabVIEW&quot;中提到：</p>
@@ -14442,14 +14375,14 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
 </blockquote>
 <p><img src="/assets/labview/keyWords/Labview.png" alt="Labview"></p>
 <h2 id="2-基本概念"><a href="#2-基本概念" class="headerlink" title="2. 基本概念"></a>2. 基本概念</h2><p>在使用LabVIEW进行软件开发的过程中，少不了提及一些专有名词和概念，这里对常用的几个概念进行简要说明。</p>
-<h3 id="2-1-VI"><a href="#2-1-VI" class="headerlink" title="2.1 VI"></a>2.1 VI</h3><p><strong>VI</strong> 是categories: LabVIEW（Virtual Instrument）的简称，其对应的 <strong>.vi</strong> 文件是LabVIEW软件开发过程中用到的基本单元，类似于 <strong>C/C++</strong> 语言开发的 <strong>.c/.cpp</strong> 文件。无论是用于显示的用户界面，还是不用于显示的函数，都是以 <strong>.vi</strong> 文件形式存在。</p>
-<h3 id="2-2-项目"><a href="#2-2-项目" class="headerlink" title="2.2 项目"></a>2.2 项目</h3><p>相对于独立的vi文件，LabVIEW<strong>项目</strong>则是一个大的容器，它可以包含一个或多个 <strong>.vi</strong> 文件，以及其它类型的依赖文件，如 <strong>.dll</strong> 链接库文件、<strong>.rhm</strong> 菜单文件、<strong>.lvproj</strong> 工程文件、<strong>.lib</strong> 函数库文件、<strong>.ctl</strong> 自定义控件文件等。当然，一个项目还可以包含<strong>.txt</strong> 等数据文件。独立的 <strong>vi</strong> 可以单独执行，但如果需要打包成 <strong>.exe</strong> 可执行文件或 <strong>.setup</strong> 安装包文件，就必须创建<strong>项目</strong>文件，通过 &quot;程序设计规范&quot; 对项目文件进行打包处理。</p>
+<h3 id="2-1-VI"><a href="#2-1-VI" class="headerlink" title="2.1 VI"></a>2.1 VI</h3><p><strong>VI</strong> 是categories: LabVIEW（Virtual Instrument）的简称，其对应的 <strong>.vi</strong> 文件是LabVIEW软件开发过程中用到的基本单元，类似于 <strong>C/C</strong> 语言开发的 <strong>.c/.cpp</strong> 文件。无论是用于显示的用户界面，还是不用于显示的函数，都是以 <strong>.vi</strong> 文件形式存在。</p>
+<h3 id="2-2-项目"><a href="#2-2-项目" class="headerlink" title="2.2 项目"></a>2.2 项目</h3><p>相对于独立的vi文件，LabVIEW<strong>项目</strong>则是一个大的容器，它可以包含一个或多个 <strong>.vi</strong> 文件，以及其它类型的依赖文件，如 <strong>.dll</strong> 链接库文件<strong>.rhm</strong> 菜单文件<strong>.lvproj</strong> 工程文件<strong>.lib</strong> 函数库文件<strong>.ctl</strong> 自定义控件文件等。当然，一个项目还可以包含<strong>.txt</strong> 等数据文件。独立的 <strong>vi</strong> 可以单独执行，但如果需要打包成 <strong>.exe</strong> 可执行文件或 <strong>.setup</strong> 安装包文件，就必须创建<strong>项目</strong>文件，通过 &quot;程序设计规范&quot; 对项目文件进行打包处理。</p>
 <p><img src="/assets/labview/keyWords/project.png" alt="Labview project"></p>
-<h3 id="2-3-前面板"><a href="#2-3-前面板" class="headerlink" title="2.3 前面板"></a>2.3 前面板</h3><p>在LabVIEW开发环境中，vi程序分<strong>前面板</strong>和<strong>程序框图</strong>两部分。其中，<strong>前面板</strong>用于设计用户界面，可以放置各种程序控件，是软件用户能够看见的交互界面。如果作为函数vi，其<strong>前面板</strong>还可以设置函数接口。软件完成并生成可执行文件后，软件用户界面显示的就是该界面所对应vi程序的<strong>前面板</strong>，而其它仅实现某种函数功能而无需显示的vi程序，其<strong>前面板</strong>将不会在调用过程中显示。</p>
+<h3 id="2-3-前面板"><a href="#2-3-前面板" class="headerlink" title="2.3 前面板"></a>2.3 前面板</h3><p>在LabVIEW开发环境中，vi程序分<strong>前面板</strong>和<strong>程序框图</strong>两部分。其中<strong>前面板</strong>用于设计用户界面，可以放置各种程序控件，是软件用户能够看见的交互界面。如果作为函数vi，其<strong>前面板</strong>还可以设置函数接口。软件完成并生成可执行文件后，软件用户界面显示的就是该界面所对应vi程序的<strong>前面板</strong>，而其它仅实现某种函数功能而无需显示的vi程序，其<strong>前面板</strong>将不会在调用过程中显示。</p>
 <p><img src="/assets/labview/keyWords/frontPanel.png" alt="Labview frontPanel"></p>
 <h3 id="2-4-程序框图"><a href="#2-4-程序框图" class="headerlink" title="2.4 程序框图"></a>2.4 程序框图</h3><p><strong>程序框图</strong>作为vi程序的另一部分，用于实现软件功能。从前面板获取用户数据，在<strong>程序框图</strong>中进行逻辑运算，并将运算结果返回前面板或存储至本地文件。在框图中，开发人员可以通过各种控制结构（顺序、循环、条件、事件、定时等）控制程序的执行顺序，通过调用LabVIEW内置函数库中的大量函数实现软件功能。</p>
 <p><img src="/assets/labview/keyWords/flowChart.png" alt="Labview flowChart"></p>
-<h3 id="2-5-局部变量"><a href="#2-5-局部变量" class="headerlink" title="2.5 局部变量"></a>2.5 局部变量</h3><p>与其它编程语言一样，LabVIEW也有<strong>局部变量</strong>和<strong>全局变量</strong>。<strong>局部变量</strong>作用域为本vi程序，只能在本vi中调用。本vi启动时，系统为其分配内存空间；当本vi结束运行后，系统释放其内存。</p>
+<h3 id="2-5-局部变量"><a href="#2-5-局部变量" class="headerlink" title="2.5 局部变量"></a>2.5 局部变量</h3><p>与其它编程语言一样，LabVIEW也有<strong>局部变量</strong>和<strong>全局变量</strong>局部变量**作用域为本vi程序，只能在本vi中调用。本vi启动时，系统为其分配内存空间；当本vi结束运行后，系统释放其内存。</p>
 <h3 id="2-6-全局变量"><a href="#2-6-全局变量" class="headerlink" title="2.6 全局变量"></a>2.6 全局变量</h3><p>对于一个多vi的项目而言，如果某个或某些变量需要被两个或多个vi调用时，可以考虑使用<strong>全局变量</strong>。该变量作用域为项目中的所有vi程序，软件启动时，系统为其分配内存空间；软件关闭后，系统释放其内存。</p>
 <p>根据我的编程经验，可以依据以下几种情况考虑是否使用全局变量：</p>
 <ul>
@@ -14459,12 +14392,12 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
 <li>某变量被两个或两个以上的<strong>用户界面</strong>调用，多个界面可能并行执行，必须使用全局变量。</li>
 </ul>
 <p><strong>注意</strong>：全局变量也是以vi形式存在，但是它只有前面板，没有程序框图。此外，多个全局变量可以放置在同一个vi中，我们也推荐这么做，这样可以减少全局vi的个数。如果项目文件较小，全局变量个数较少，完全可以只用一个vi文件存储所有的全局变量；如果项目比较庞大，所需的全局变量较多，可以适当增加全局vi文件个数，但也应该将全局变量归类，相同或相似功能的变量应放在一个vi中。</p>
-<h3 id="2-7-属性节点"><a href="#2-7-属性节点" class="headerlink" title="2.7 属性节点"></a>2.7 属性节点</h3><p>学习LabVIEW软件开发，<strong>属性节点</strong>也是必须掌握的一个内容。这个词可以分为&quot;属性&quot;和&quot;节点&quot;两部分，对应前面板的所有控件，即使是修饰性控件也有其属性。以数值输入控件为例，其属性配置界面如下图所示：</p>
+<h3 id="2-7-属性节点"><a href="#2-7-属性节点" class="headerlink" title="2.7 属性节点"></a>2.7 属性节点</h3><p>学习LabVIEW软件开发<strong>属性节点</strong>也是必须掌握的一个内容。这个词可以分为&quot;属性&quot;和&quot;节点&quot;两部分，对应前面板的所有控件，即使是修饰性控件也有其属性。以数值输入控件为例，其属性配置界面如下图所示：</p>
 <p><img src="/assets/labview/keyWords/properties.png" alt="Labview properties"></p>
 <p>开发人员可以在属性配置界面配置控件的默认属性，该操作适用于无需再次更改的属性。每个控件都有其可修改的属性列表，开发人员可以选择控件本身或其接线端，通过 &quot;右键&rarr;创建&rarr;属性节点&rarr;属性&quot; 创建或查看该控件的属性项。</p>
 <p><img src="/assets/labview/keyWords/node.png" alt="Labview node"></p>
-<p>除属性节点外，LabVIEW中还有大量的&quot;节点&quot;，如&quot;表达式节点&quot;、&quot;公式节点&quot;、&quot;反馈节点&quot;、&quot;调用节点&quot;等。对&quot;属性节点&quot;而言，可以举个简单的例子，以人为例，每个人都可以看做一个节点，人包含&quot;姓名&quot;、&quot;身高&quot;、&quot;体重&quot;、&quot;性别&quot;、&quot;年龄&quot;等属性，那么属性节点就可以理解为包含多个属性的人。读写&quot;属性节点&quot;就是对该节点的某项属性进行读写操作。</p>
-<h3 id="2-8-接线端"><a href="#2-8-接线端" class="headerlink" title="2.8 接线端"></a>2.8 接线端</h3><p>对于前面板上的一个控件而言，它在前面板仅出现一次，但在程序框图中可以多种方式出现，包括<strong>接线端</strong>、<strong>引用</strong>、<strong>局部变量</strong>和<strong>属性节点</strong>，但每个控件的<strong>接线端</strong>有且只有一个，其它方式则可以多次出现或不出现。<strong>接线端</strong>与我们所说的采集卡的接线端是一个道理，它是程序框图与前面板之间传递参数的桥梁。当我们删除前面板中的某个控件时，其程序框图中的接线端也会随之删除，反之亦然。</p>
+<p>除属性节点外，LabVIEW中还有大量的&quot;节点&quot;，如&quot;表达式节点&quot;公式节点&quot;反馈节点&quot;调用节点&quot;等。对&quot;属性节点&quot;而言，可以举个简单的例子，以人为例，每个人都可以看做一个节点，人包含&quot;姓名&quot;身高&quot;体重&quot;性别&quot;年龄&quot;等属性，那么属性节点就可以理解为包含多个属性的人。读写&quot;属性节点&quot;就是对该节点的某项属性进行读写操作。</p>
+<h3 id="2-8-接线端"><a href="#2-8-接线端" class="headerlink" title="2.8 接线端"></a>2.8 接线端</h3><p>对于前面板上的一个控件而言，它在前面板仅出现一次，但在程序框图中可以多种方式出现，包括<strong>接线端</strong>引用<strong>局部变量</strong>和<strong>属性节点</strong>，但每个控件的<strong>接线端</strong>有且只有一个，其它方式则可以多次出现或不出现<strong>接线端</strong>与我们所说的采集卡的接线端是一个道理，它是程序框图与前面板之间传递参数的桥梁。当我们删除前面板中的某个控件时，其程序框图中的接线端也会随之删除，反之亦然。</p>
 <p><img src="/assets/labview/keyWords/port.png" alt="Labview port"></p>
 <h3 id="2-9-引用"><a href="#2-9-引用" class="headerlink" title="2.9 引用"></a>2.9 引用</h3><p>上面提到的<strong>引用</strong>也是非常常用的一个功能，它相当于C/C++中的<strong>指针</strong>，通过它可以获取控件的识别标识、修改控件属性等。最重要的一点：当我们把控件A的引用作为函数参数传递至某个函数后，被调函数对该引用的操作直接作用在控件A上，而不再需要回调参数或全局变量的参与，这是非常重要和实用的功能。</p>
 <h3 id="2-10-标签-amp-标题"><a href="#2-10-标签-amp-标题" class="headerlink" title="2.10 标签&amp;标题"></a>2.10 标签&amp;标题</h3><p>在前面板中，每个控件都有对应的<strong>标签</strong>和<strong>标题</strong>，两者是有区别的。默认显示的是标签，而且标签和标题的默认值是一样的。在程序框图中，只能显示控件的标签，无法显示其标题。Ctrl+H打开控件的说明信息，其显示的既有标题信息，又有标签信息。通常，标签名称较短，用于程序框图使用；标题可以稍长些，在前面板显示标题可以详细描述控件功能，同时放在帮助信息中方便用户查询。</p>
@@ -14509,8 +14442,8 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
 <h3 id="1-3-查看Git插件"><a href="#1-3-查看Git插件" class="headerlink" title="1.3 查看Git插件"></a>1.3 查看Git插件</h3><p>安装完成后，可以在插件管理器的“Installed”选项卡中查看已安装的插件。</p>
 <p><img src="/assets/brackets/git/installed extensions.png" alt="installed extensions"></p>
 <p>此外，如果我们想知道它保存在哪个地方，可以打开文件资源管理器,在路径：</p>
-<pre>C:\\Users\USER_NAME\AppData\Roaming\Brackets\extensions\user</pre>
-
+<pre><code class="cmd">C:\\Users\USER_NAME\AppData\Roaming\Brackets\extensions\user
+</code></pre>
 <p>下进行查看。这里保存了用户安装的所有插件。</p>
 <p><img src="/assets/brackets/git/extensions.png" alt="extensions"></p>
 <h2 id="2-界面布局"><a href="#2-界面布局" class="headerlink" title="2. 界面布局"></a>2. 界面布局</h2><h3 id="2-1-整体布局"><a href="#2-1-整体布局" class="headerlink" title="2.1 整体布局"></a>2.1 整体布局</h3><p>在Brackets右侧插件栏中可以找到git图标，点击该图标或使用快捷键<code>Ctrl+ALG+G</code>可以打开或关闭界面下方的git工具。在界面左侧，当有文件被修改并且尚未<code>commit</code>时，文件名前面会出现红色竖杠标记，文件中被修改的地方也会出现相应的标记。此外，在界面左侧，项目文件夹下方有一个下拉选项，显示当前所在的git分支。</p>
@@ -14519,21 +14452,21 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
 <p><img src="/assets/brackets/git/git tools.png" alt="git tools"></p>
 <p>下面是对各个控件的简要说明：</p>
 <ul>
-<li><img class="inline-img" src="/assets/brackets/git/git%20clone.png">： 初始化/克隆项目</li>
-<li><img class="inline-img" src="/assets/brackets/git/git%20commit.png">： 提交当前更改内容</li>
-<li><img class="inline-img" src="/assets/brackets/git/git%20updown.png">： 跳至上一个/下一个文件修改位置</li>
-<li><img class="inline-img" src="/assets/brackets/git/git%20history.png">： 显示仓库历史提交记录/当前文件历史修改记录</li>
-<li><img class="inline-img" src="/assets/brackets/git/git%20refresh.png">： 刷新仓库内容/更多指令选项</li>
-<li><img class="inline-img" src="/assets/brackets/git/git%20tag.png">： 添加标签</li>
-<li><img class="inline-img" src="/assets/brackets/git/git%20push.png">： 切换远程仓库源/fetch/pull/push</li>
-<li><img class="inline-img" src="/assets/brackets/git/git%20settings.png">： 打开指令窗口/Git Settings界面</li>
+<li><img src="/assets/brackets/git/git%20clone.png" class="inline-img">:  初始化/克隆项目</li>
+<li><img src="/assets/brackets/git/git%20commit.png" class="inline-img">： 提交当前更改内容</li>
+<li><img src="/assets/brackets/git/git%20updown.png" class="inline-img">： 跳至上一个/下一个文件修改位置</li>
+<li><img src="/assets/brackets/git/git%20history.png" class="inline-img">： 显示仓库历史提交记录/当前文件历史修改记录</li>
+<li><img src="/assets/brackets/git/git%20refresh.png" class="inline-img">： 刷新仓库内容/更多指令选项</li>
+<li><img src="/assets/brackets/git/git%20tag.png" class="inline-img">： 添加标签</li>
+<li><img src="/assets/brackets/git/git%20push.png" class="inline-img">： 切换远程仓库源/fetch/pull/push</li>
+<li><img src="/assets/brackets/git/git%20settings.png" class="inline-img">： 打开指令窗口/Git Settings界面</li>
 </ul>
 <h2 id="3-使用方法"><a href="#3-使用方法" class="headerlink" title="3. 使用方法"></a>3. 使用方法</h2><h3 id="3-1-关联Git-GUI"><a href="#3-1-关联Git-GUI" class="headerlink" title="3.1 关联Git GUI"></a>3.1 关联Git GUI</h3><p>Brackets的git插件仅仅是个插件，要使用git进行代码管理，前提是电脑已装有git软件，如Windows的git for Windows，安装方法这里不多说。当我们安装好git软件并配置好环境变量后，默认情况下，Brackets能够自动识别git的安装路径；如果没有识别，可以手动设置，打开Git Settings界面，选择Git configuration选项卡，在“Path to Git executable”输入git的安装路径。</p>
 <p><img src="/assets/brackets/git/git setPath.png" alt="git settings"></p>
 <h3 id="3-2-git-init"><a href="#3-2-git-init" class="headerlink" title="3.2 git init"></a>3.2 git init</h3><p>当我们新建一个仓库，需要使用git进行管理时，首先应该在工程目录下执行<code>git init</code>指令，如果使用git插件，则只需在git工具面板中点击“Init”按钮即可。</p>
 <p><img src="/assets/brackets/git/git init.png" alt="git init"></p>
 <h3 id="3-3-git-remote"><a href="#3-3-git-remote" class="headerlink" title="3.3 git remote"></a>3.3 git remote</h3><p>为了推送代码至远程仓库，可以选择Github、Coding等带有Git管理器的网站，新建项目并复制仓库网址。为了实现:</p>
-<pre><code class="bash">$ git remote add origin https://git.coding.net/litreily/svg-social.git
+<pre><code class="bash">git remote add origin https://git.coding.net/litreily/svg-social.git
 </code></pre>
 <p>可以在Brackets中打开git工具，点击右侧第一个按钮，选择“Create new remote...”，然后依次输入仓库名称以及网址，确认即可。</p>
 <p><img src="/assets/brackets/git/git remote.png" alt="git remote"></p>
@@ -14541,13 +14474,13 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
 <h3 id="3-4-git-commit"><a href="#3-4-git-commit" class="headerlink" title="3.4 git commit"></a>3.4 git commit</h3><p>当我们需要提交已修改文件时，可以执行<code>git add File_name</code>/<code>git add .</code>以及<code>git commit</code>。如果使用git插件，可以在git工具中勾选需要提交的文件，然后点击提交按钮，在弹出的界面中输入提交信息，点击确认即可。</p>
 <p><img src="/assets/brackets/git/git commit files.png" alt="git commit"></p>
 <h3 id="3-5-git-push"><a href="#3-5-git-push" class="headerlink" title="3.5 git push"></a>3.5 git push</h3><p>在联网情况下，如果需要将代码推送至远程仓库，需要使用指令<code>git push</code>,如：</p>
-<pre><code class="bash">$ git push origin master
+<pre><code class="bash">git push origin master
 </code></pre>
 <p>如果使用git插件，可以点击推送按钮，首次推送需要填写用户名和密码，即远程仓库对应的用户名和密码。</p>
 <p><img src="/assets/brackets/git/git push files.png" alt="git push"></p>
 <p><img src="/assets/brackets/git/git push success.png" alt="git push"></p>
 <h3 id="3-6-git-pull-git-fetch"><a href="#3-6-git-pull-git-fetch" class="headerlink" title="3.6 git pull / git fetch"></a>3.6 git pull / git fetch</h3><p>如果用户在远程仓库修改了代码或添加了新的文件，此时可以在本地使用指令<code>git pull</code>获取更新文件，如：</p>
-<pre><code class="bash">$ git pull origin master
+<pre><code class="bash">git pull origin master
 </code></pre>
 <p>如果使用git插件，可以点击拉取按钮。</p>
 <p><img src="/assets/brackets/git/git pull.png" alt="git pull"></p>
@@ -14578,9 +14511,9 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
         
         <tags>
             
-            <tag> tools </tag>
-            
             <tag> git </tag>
+            
+            <tag> tools </tag>
             
             <tag> brackets </tag>
             
@@ -14632,8 +14565,9 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
 <h3 id="3-2-手动存储TDMS文件"><a href="#3-2-手动存储TDMS文件" class="headerlink" title="3.2 手动存储TDMS文件"></a>3.2 手动存储TDMS文件</h3><p>为了解决<strong>局限性</strong>提到的第2个问题，我尝试手动添加TDMS存储文件，用以替代DAQ自动存储TDMS方式。为此，我修改了部分程序，在保留DAQ自动存储的同时，在获取数据后再次存储。修改部分如下图所示：</p>
 <p><img src="/assets/labview/saveTdms/manualSaveTdms.png" alt="manualSaveTDMS"></p>
 <p>再次运行程序，自动存储的tdms文件大小与上述一致，手动存储的tdms文件大小为:</p>
-<pre><code>704kB(720,998Bytes) ≈ 90000 * 8.011089 (Bytes) ≈ 90000 * 8 (Bytes)
-</code></pre><p>可以看出，在手动存储时，每个数据的数据量为8个字节左右，恰好是双精度数据的大小。所以在一般情况下，我们优先考虑DAQ的自动存储功能，如果为了减少数据量使用手动存储方法，即使减少通道数，也未必能达到效果，除非减少后的通道数小等于总通道数的1/4.</p>
+<pre><code class="yml">704kB(720,998Bytes) ≈ 90000 * 8.011089 (Bytes) ≈ 90000 * 8 (Bytes)
+</code></pre>
+<p>可以看出，在手动存储时，每个数据的数据量为8个字节左右，恰好是双精度数据的大小。所以在一般情况下，我们优先考虑DAQ的自动存储功能，如果为了减少数据量使用手动存储方法，即使减少通道数，也未必能达到效果，除非减少后的通道数小等于总通道数的1/4.</p>
 <h3 id="3-3-文件属性对比"><a href="#3-3-文件属性对比" class="headerlink" title="3.3 文件属性对比"></a>3.3 文件属性对比</h3><ul>
 <li>自动存储文件的属性</li>
 </ul>
@@ -14680,8 +14614,8 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
 <h3 id="2-2-下载解压Devkit"><a href="#2-2-下载解压Devkit" class="headerlink" title="2.2 下载解压Devkit"></a>2.2 下载解压Devkit</h3><p>下载Ruby的开发工具DevKit，地址与Ruby的<a href="http://rubyinstaller.org/downloads/" target="_blank" rel="noopener">下载地址</a>一致。当然，别忘了根据系统位数选择最新版本的DevKit。至于解压路径，选择<code>C:\devkit</code>即可。</p>
 <p><img src="/assets/jekyll/DevKit.png" alt="Development Kit"></p>
 <h3 id="2-3-初始化Devkit"><a href="#2-3-初始化Devkit" class="headerlink" title="2.3 初始化Devkit"></a>2.3 初始化Devkit</h3><p>使用快捷键<code>Win+R</code>输入<code>cmd</code>打开命令窗口，输入以下指令：</p>
-<pre><code class="bash">$ cd C:\devkit
-$ ruby dk.rb init
+<pre><code class="bash">cd C:\devkit
+ruby dk.rb init
 </code></pre>
 <p><img src="/assets/jekyll/Ruby-init.png" alt="Ruby-init"></p>
 <p>运行以上指令后，devkit目录下将会多出一个&quot;config.yml&quot;,其内容为：</p>
@@ -14702,23 +14636,23 @@ $ ruby dk.rb init
 - C:/Ruby
 </code></pre>
 <h3 id="2-4-安装Devkit"><a href="#2-4-安装Devkit" class="headerlink" title="2.4 安装Devkit"></a>2.4 安装Devkit</h3><p>确保文件中指示的Ruby与安装好的Ruby路径一致，然后执行以下指令：</p>
-<pre><code class="bash">$ ruby dk.rb install
+<pre><code class="bash">ruby dk.rb install
 </code></pre>
 <p>至此，ruby开发环境已配置完成，如果中途出现错误，多半是路径问题或环境变量问题，为以防万一，可以在Windows系统属性中的环境变量中添加ruby路径。</p>
 <p><img src="/assets/jekyll/Ruby-envir.png" alt="Ruby-environment"></p>
 <h3 id="2-5-安装Jekyll"><a href="#2-5-安装Jekyll" class="headerlink" title="2.5 安装Jekyll"></a>2.5 安装Jekyll</h3><p>执行以下指令安装jekyll：</p>
-<pre><code class="bash">$ gem install jekyll
+<pre><code class="bash">gem install jekyll
 </code></pre>
-<p>这一步很有可能会报错，而报错原因基本上出于gem源地址，gem默认源地址为<a href="https://rubygems.org/，需要修改为http://rubygems.org/。修改指令如下：" target="_blank" rel="noopener">https://rubygems.org/，需要修改为http://rubygems.org/。修改指令如下：</a></p>
-<pre><code class="bash">$ gem sources -r https://rubygems.org
-$ gem sources -a http://rubygems.org
+<p>这一步很有可能会报错，而报错原因基本上出于gem源地址，gem默认源地址为<a href="https://rubygems.org/" target="_blank" rel="noopener">https://rubygems.org/</a>，需要修改为<a href="http://rubygems.org/" target="_blank" rel="noopener">http://rubygems.org/</a>. 修改指令如下：</p>
+<pre><code class="bash">gem sources -r https://rubygems.org
+gem sources -a http://rubygems.org
 </code></pre>
 <p>修改后即可正常完成jekyll的下载安装了。安装完成后，便可使用jekyll了。</p>
 <h3 id="2-6-可选操作"><a href="#2-6-可选操作" class="headerlink" title="2.6 可选操作"></a>2.6 可选操作</h3><p>如果需要使用Pygments提供的代码高亮功能，可以安装<a href="http://portablepython.com/wiki/PortablePython2.7.5.1/" target="_blank" rel="noopener">Python</a>，配置环境变量。再到<a href="https://pypi.python.org/pypi/setuptools#windows" target="_blank" rel="noopener">https://pypi.python.org/</a>下载<code>distribute_setup.py</code>。最后通过执行以下指令进行安装：</p>
-<pre><code class="bash">$ python distribute_setup.py
-$ easy_install Pygments 
+<pre><code class="bash">python distribute_setup.py
+easy_install Pygments
 </code></pre>
-<p>更加详细的Pygments说明可以参考<a href="http://havee.me/internet/2013-08/support-pygments-in-jekyll.html" target="_blank" rel="noopener">这里</a>。好了，一切准备就绪。 Enjoy Yourself！</p>
+<p>更加详细的Pygments说明可以参考<a href="http://havee.me/internet/2013-08/support-pygments-in-jekyll.html" target="_blank" rel="noopener">这里</a>。好了，一切准备就绪。 Enjoy Yourself!</p>
 ]]></content>
       
         <categories>

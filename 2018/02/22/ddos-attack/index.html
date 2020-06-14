@@ -35,38 +35,26 @@
 <p><code>hyenae</code>的界面比较简单，图中展示的是<code>SYN/ACK</code>洪泛攻击的配置选项。</p>
 <ul>
 <li><code>operation mode</code>中可以选择网卡</li>
-</ul>
-<ul>
 <li><code>Network Protocol</code>中可以选择攻击方式对应的网络协议，如<code>SYN</code>洪泛攻击对应传输层的<code>TCP</code>，<code>IP</code>协议可选<code>IPv4, IPv6</code></li>
-</ul>
-<ul>
 <li>攻击源的<code>IP</code>,<code>MAC</code>地址以及端口号可以非常灵活的设置，按<code>MAC-IP@port</code>的格式书写，如图中的攻击源匹配模式<code>%-172.17.14.158@80</code><ul>
 <li>% 代表任意，在此处代表任意的MAC地址</li>
 <li>172.17.14.158为伪造的攻击源IP，可以修改为任意的合法IP</li>
 <li>80为端口号，80同时也是网络服务器的默认端口</li>
 </ul>
 </li>
-</ul>
-<ul>
 <li>攻击目标的设置方式与攻击源一致，图中的<code>%-172.17.14.10@80</code><ul>
 <li>% 随机生成MAC地址</li>
 <li>172.17.14.10代表被攻击的IP</li>
 <li>80为攻击目标的被攻击端口号</li>
 </ul>
 </li>
-</ul>
-<ul>
 <li>针对<code>TCP</code>协议，右侧给出其对应的<code>5</code>个常见<code>flags</code>: <code>FIN, SYN, RST, PSH, ACK</code><ul>
 <li>可以随意进行单选或多选，以实现不同的攻击方式</li>
 <li>随意的组合可以产生正常通信过程中无法出现的数据包</li>
 </ul>
 </li>
-</ul>
-<ul>
 <li>软件下方可以设置数据包的发送速率，默认为无限速发送，这会暂用大量带宽，导致网络拥塞；当然啦，这个软件本就是为了攻击网络，导致网络瘫痪正是其目的所在</li>
-</ul>
-<ul>
-<li>选择不同的攻击方式，会显示相应不同的配置选项 </li>
+<li>选择不同的攻击方式，会显示相应不同的配置选项</li>
 </ul>
 <p>简单说，这幅图的作用是产生<code>MAC</code>地址随机，<code>IP</code>为<code>172.17.14.158</code>，端口为80的伪造源，去攻击目的<code>MAC</code>随机，<code>IP</code>为<code>172.17.14.10</code>的<code>web server</code>。</p>
 <p>由于目的<code>MAC</code>随机，<strong>当MAC地址首字节为奇数时，生成的数据包为广播包</strong>，此时将产生广播风暴，局域网内的所有设备都将收到大量的广播包，当速率很高时，很容易导致局域网瘫痪，这是需要注意的。本人当时年少轻狂，有次测试，使用全速率的广播式<code>SYN/ACK</code>攻击，直接导致部门的局域网瘫痪断网，幸好是晚上，后来找人重置了部门内的网络设备才恢复，想想真是罪过啊。</p>
@@ -177,25 +165,25 @@ $ sudo hping3 -V -c 10000 -d 120 -S -A -w 64 --keep -p 80 -s 80 --flood -a 172.1
 # -I interface
 </code></pre>
 <h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><ul>
-<li>网络攻击工具<ul>
+<li><p>网络攻击工具</p>
+<ul>
 <li>hping3<ul>
 <li><a href="http://man.linuxde.net/hping3" target="_blank" rel="noopener">http://man.linuxde.net/hping3</a></li>
 <li><a href="http://0daysecurity.com/articles/hping3_examples.html" target="_blank" rel="noopener">http://0daysecurity.com/articles/hping3_examples.html</a></li>
 </ul>
 </li>
 <li>LOIC</li>
-<li>hyenae <ul>
+<li>hyenae<ul>
 <li><a href="https://sourceforge.net/projects/hyenae/" target="_blank" rel="noopener">https://sourceforge.net/projects/hyenae/</a></li>
 </ul>
 </li>
 <li>免费DDOS攻击测试工具大合集 <a href="http://www.freebuf.com/sectool/36545.html" target="_blank" rel="noopener">http://www.freebuf.com/sectool/36545.html</a></li>
 </ul>
 </li>
-</ul>
+<li><p>ddos攻击说明</p>
 <ul>
-<li>ddos攻击说明<ul>
 <li><a href="https://security.radware.com/ddos-knowledge-center/ddospedia/syn-flood/" target="_blank" rel="noopener">https://security.radware.com/ddos-knowledge-center/ddospedia/syn-flood/</a></li>
-<li>网络攻击：半连接攻击(SYN攻击)、全连接攻击、RST攻击、IP欺骗、DNS欺骗、DOS/DDOS攻击  <a href="http://blog.csdn.net/guowenyan001/article/details/11777361" target="_blank" rel="noopener">http://blog.csdn.net/guowenyan001/article/details/11777361</a></li>
+<li>网络攻击：半连接攻击(SYN攻击)、全连接攻击、RST攻击、IP欺骗、DNS欺骗、DOS/DDOS攻击 <a href="http://blog.csdn.net/guowenyan001/article/details/11777361" target="_blank" rel="noopener">http://blog.csdn.net/guowenyan001/article/details/11777361</a></li>
 </ul>
 </li>
 </ul>

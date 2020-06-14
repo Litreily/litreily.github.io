@@ -5,7 +5,7 @@
     var s = document.getElementsByTagName("script")[0];
     s.parentNode.insertBefore(hm, s);
 })();</script></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">stm32 - FreeRTOS系统移植</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2016/11/02/FreeRTOS/">2016-11-02</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Embedded/">Embedded</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>前段时间研究了一下 FreeRTOS 在 stm32 的系统移植，觉得有必要做个总结，记录这研发路上的点点滴滴。</p>
-<h2 id="1-FreeRTOS"><a href="#1-FreeRTOS" class="headerlink" title="1. FreeRTOS"></a>1. FreeRTOS</h2><p>从 <a href="http://www.freertos.org/" target="_blank" rel="noopener">FreeRTOS官网</a> 下载最新源码，我下载的是 <a href="http://pan.baidu.com/s/1jIbOqDg" target="_blank" rel="noopener">FreeRTOSv9.0.0</a> ，其文件结构如下，根目录主要包含 FreeRTOS 和 FreeRTOS-Plus 两个文件夹， Plus 版系统添加了 TCP/UDP 等网络通信功能。</p>
+<h2 id="FreeRTOS"><a href="#FreeRTOS" class="headerlink" title="FreeRTOS"></a>FreeRTOS</h2><p>从 <a href="http://www.freertos.org/" target="_blank" rel="noopener">FreeRTOS官网</a> 下载最新源码，我下载的是 <a href="http://pan.baidu.com/s/1jIbOqDg" target="_blank" rel="noopener">FreeRTOSv9.0.0</a> ，其文件结构如下，根目录主要包含 FreeRTOS 和 FreeRTOS-Plus 两个文件夹， Plus 版系统添加了 TCP/UDP 等网络通信功能。</p>
 <pre><code class="txt">D:\FREERTOSV9.0.0
 │  New - Direct to Task Notifications.html
 │  New - FreeRTOS+TCP.html
@@ -33,7 +33,7 @@
 <li>License：许可证，对FreeRTOS使用范围进行授权</li>
 <li>Source：FreeRTOS源码</li>
 </ol>
-<h3 id="1-1-Demo"><a href="#1-1-Demo" class="headerlink" title="1.1 Demo"></a>1.1 Demo</h3><p>Demo 包含了官方提供的所有已适配处理器的移植例程，我们可以根据自己所用芯片和开发环境选择合适的例程进行学习。</p>
+<h3 id="Demo"><a href="#Demo" class="headerlink" title="Demo"></a>Demo</h3><p>Demo 包含了官方提供的所有已适配处理器的移植例程，我们可以根据自己所用芯片和开发环境选择合适的例程进行学习。</p>
 <pre><code class="txt">ARM7_AT91FR40008_GCC
 ARM7_AT91SAM7S64_IAR
 ARM7_AT91SAM7X256_Eclipse
@@ -200,7 +200,7 @@ WizNET_DEMO_TERN_186
 Xilinx_FreeRTOS_BSP
 
 </code></pre>
-<h3 id="1-2-Source"><a href="#1-2-Source" class="headerlink" title="1.2 Source"></a>1.2 Source</h3><p>Source 是 FreeRTOS 的核心，包含了系统内核及各类处理器系统移植所需的源码。</p>
+<h3 id="Source"><a href="#Source" class="headerlink" title="Source"></a>Source</h3><p>Source 是 FreeRTOS 的核心，包含了系统内核及各类处理器系统移植所需的源码。</p>
 <pre><code class="txt">
 D:\FREERTOSV9.0.0\FREERTOS\SOURCE
 │  croutine.c
@@ -783,14 +783,14 @@ D:\FREERTOSV9.0.0\FREERTOS\SOURCE
                         Tick.c
 
 </code></pre>
-<h2 id="2-系统移植"><a href="#2-系统移植" class="headerlink" title="2. 系统移植"></a>2. 系统移植</h2><p>以 stm32f103RCT6 为例，选择 Keil MDK v5.21.1.0 作为开发平台进行系统移植。</p>
-<h3 id="2-1-功能描述"><a href="#2-1-功能描述" class="headerlink" title="2.1 功能描述"></a>2.1 功能描述</h3><ol>
+<h2 id="系统移植"><a href="#系统移植" class="headerlink" title="系统移植"></a>系统移植</h2><p>以 stm32f103RCT6 为例，选择 Keil MDK v5.21.1.0 作为开发平台进行系统移植。</p>
+<h3 id="功能描述"><a href="#功能描述" class="headerlink" title="功能描述"></a>功能描述</h3><ol>
 <li>PB10 作为输出口，控制 LED 的亮灭；</li>
 <li>编写延时函数 delay ，以毫秒为单位；</li>
 <li>使用 USART2 循环发送数据，波特率9600，8位数据位，1位停止位，无校验，无硬件控制流；</li>
 <li>系统移植，添加 3 个 task：vLEDOnTask，vLEDOffTask，vUasrtSendTask</li>
 </ol>
-<h3 id="2-2-创建项目-BrightLed"><a href="#2-2-创建项目-BrightLed" class="headerlink" title="2.2 创建项目 (BrightLed)"></a>2.2 创建项目 (BrightLed)</h3><ul>
+<h3 id="创建项目-BrightLed"><a href="#创建项目-BrightLed" class="headerlink" title="创建项目 (BrightLed)"></a>创建项目 (BrightLed)</h3><ul>
 <li>选择芯片 (stm32f103RCT6)</li>
 </ul>
 <p><img src="/assets/stm32/selectChip.png" alt="选择芯片"></p>
@@ -825,33 +825,23 @@ D:\FREERTOSV9.0.0\FREERTOS\SOURCE
 <li>设置参数</li>
 </ul>
 <p>打开 <code>Options for target</code>，依次设置下列参数：</p>
-<pre class="descriptions">
-1. Target > Xtal(MHz)): 8.0
-2. C/C++  > Define: USE_STDPERIPH_DRIVER,STM32F10X_MD
-3. Debug  > Use: ST-Link Debugger
-    3.1 Settings > Debug > Debug Adapter: ST-LINK/V2; Port:SW; Max: 1.8MHz
-    3.2 Settings > Flash Download > Reset and Run:[√]
-    3.3 Settings > Flash Download > Programming Algorithm: STM32f10x Med-density Flash
-</pre>
-
+<ol>
+<li>Target &gt; Xtal(MHz)): 8.0</li>
+<li>C/C++  &gt; Define: USE_STDPERIPH_DRIVER,STM32F10X_MD</li>
+<li>Debug  &gt; Use: ST-Link Debugger<br> 3.1 Settings &gt; Debug &gt; Debug Adapter: ST-LINK/V2; Port:SW; Max: 1.8MHz<br> 3.2 Settings &gt; Flash Download &gt; Reset and Run:[√]<br> 3.3 Settings &gt; Flash Download &gt; Programming Algorithm: STM32f10x Med-density Flash</li>
+</ol>
 <p>所有参数均设置完成后，项目创建过程就结束了。</p>
 <p><img src="/assets/stm32/setSymbols.png" alt="设置Processing Symbols"></p>
 <p><img src="/assets/stm32/selectFlash.png" alt="选择flash大小"></p>
-<h3 id="2-3-初始化"><a href="#2-3-初始化" class="headerlink" title="2.3 初始化"></a>2.3 初始化</h3><p>创建项目后，需要编写代码以实现对系统时钟及所需外设的初始化。</p>
+<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><p>创建项目后，需要编写代码以实现对系统时钟及所需外设的初始化。</p>
 <ul>
 <li>初始化流程</li>
 </ul>
-<pre class="descriptions">
-1. 首先，将默认组名称改为 `USER` ，并在本地项目目录下添加文件夹，命名为 &quot;USER&quot; 。
-2. 其次，新建并保存以下文件至 &quot;USER&quot; 文件夹，同时添加其中的 .c 文件到项目组 `USER`中。
-    2.1 主程序：main.c / main.h
-    2.2 中断程序：stm32f10x_it.c / stm32f10x_it.h
-    2.3 延时模块: delay.c / delay.h
-    2.4 led控制模块：led.c / led.h
-    2.5 串口通信模块：usart.c / usart.h
-3. 最后，对各个文件进行编码，完成各项初始化任务
-</pre>
-
+<ol>
+<li>首先，将默认组名称改为 <code>USER</code> ，并在本地项目目录下添加文件夹，命名为 &quot;USER&quot; 。</li>
+<li>其次，新建并保存以下文件至 &quot;USER&quot; 文件夹，同时添加其中的 .c 文件到项目组 <code>USER</code>中。<br> 2.1 主程序：main.c / main.h<br> 2.2 中断程序：stm32f10x_it.c / stm32f10x_it.h<br> 2.3 延时模块: delay.c / delay.h<br> 2.4 led控制模块：led.c / led.h<br> 2.5 串口通信模块：usart.c / usart.h</li>
+<li>最后，对各个文件进行编码，完成各项初始化任务</li>
+</ol>
 <ul>
 <li>项目文件结构</li>
 </ul>
@@ -862,8 +852,7 @@ D:\FREERTOSV9.0.0\FREERTOS\SOURCE
 <blockquote>
 <p><strong>delay.c / delay.h</strong></p>
 </blockquote>
-<div class="smallTitle">delay.c</div>
-
+<p>delay.c</p>
 <pre><code class="C">#include &quot;delay.h&quot;
 
 volatile u32 TimingDelay;
@@ -900,8 +889,7 @@ void delayMicroseconds(__IO u32 nTime)
 }
 
 </code></pre>
-<div class="smallTitle">delay.h</div>
-
+<p>delay.h</p>
 <pre><code class="C">#ifndef DELAY_H_
 #define DELAY_H_
 
@@ -916,8 +904,7 @@ void delayMicroseconds(__IO u32 nTime);
 <blockquote>
 <p><strong>led.c / led.h</strong></p>
 </blockquote>
-<div class="smallTitle">led.c</div>
-
+<p>led.c</p>
 <pre><code class="C">#include &quot;led.h&quot;
 
 void ledGPIOConfiguration(void)
@@ -930,8 +917,7 @@ void ledGPIOConfiguration(void)
   GPIO_Init(GPIOB, &amp;GPIO_InitStructure);
 }
 </code></pre>
-<div class="smallTitle">led.h</div>
-
+<p>led.h</p>
 <pre><code class="C">#ifndef LED_H
 #define LED_H
 
@@ -946,8 +932,7 @@ void ledGPIOConfiguration(void);
 <blockquote>
 <p><strong>usart.c / usart.h</strong></p>
 </blockquote>
-<div class="smallTitle">usart.c</div>
-
+<p>usart.c</p>
 <pre><code class="C">#include &quot;usart.h&quot;
 
 //串口驱动应用标志
@@ -1033,8 +1018,7 @@ void UART_TRxOver_Interrupt(void)
 }
 
 </code></pre>
-<div class="smallTitle">usart.h</div>
-
+<p>usart.h</p>
 <pre><code class="C">#ifndef USART_H
 #define USART_H
 
@@ -1055,8 +1039,7 @@ void UARTSendByByter(u16 Data);
 <blockquote>
 <p><strong>stm32f10x_it.c / stm32f10x_it.h</strong></p>
 </blockquote>
-<div class="smallTitle">stm32f10x_it.c</div>
-
+<p>stm32f10x_it.c</p>
 <pre><code class="C">#include &quot;stm32f10x_it.h&quot;
 void NMI_Handler(void)
 {
@@ -1123,8 +1106,7 @@ void USART2_IRQHandler(void)
   UART_TRxOver_Interrupt();
 }
 </code></pre>
-<div class="smallTitle">stm32f10x_it.h</div>
-
+<p>stm32f10x_it.h</p>
 <pre><code class="C">#ifndef __STM32F10x_IT_H
 #define __STM32F10x_IT_H
 
@@ -1159,8 +1141,7 @@ void USART2_IRQHandler(void);
 <blockquote>
 <p><strong>main.c / main.h</strong></p>
 </blockquote>
-<div class="smallTitle">main.c</div>
-
+<p>main.c</p>
 <pre><code class="C">/*******************************************************************************
  * Header       : Learning FreeRTOS
  * File Name    : main.c
@@ -1251,8 +1232,7 @@ static void deviceInit(void)
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
 }
 </code></pre>
-<div class="smallTitle">main.h</div>
-
+<p>main.h</p>
 <pre><code class="C">#ifndef MAIN_H
 #define MAIN_H
 
@@ -1264,7 +1244,7 @@ static void deviceInit(void)
 #endif  /* MAIN_H */
 </code></pre>
 <p>至此，系统时钟及外设的初始化程序已经完成。以上程序，除去 led.c/led.h, usart.c/usart.h 外，可作为无需操作系统的stm32项目模板。</p>
-<h3 id="2-4-内核移植"><a href="#2-4-内核移植" class="headerlink" title="2.4 内核移植"></a>2.4 内核移植</h3><ul>
+<h3 id="内核移植"><a href="#内核移植" class="headerlink" title="内核移植"></a>内核移植</h3><ul>
 <li>新建组<ul>
 <li>在项目中添加一个组，命名为 <strong>FreeRTOS</strong> ；</li>
 <li>在本地目录新建文件夹，同样命名为 FreeRTOS ，用于存放系统内核的源文件；</li>
@@ -1292,15 +1272,11 @@ static void deviceInit(void)
 <p><strong>说明</strong>：FreeRTOS可以在很多不同编译器中编译，其中的一些编译器比同类有更高级特性。因为这个原因，FreeRTOS不使用任何非C语言标准的特性或语法。一个例外情况是头文件stdint.h。在文件夹FreeRTOS/Source/include下包含一个叫做stdint.readme的文件，如果你的编译器不提供stdint类型定义，可以将stdint.readme文件重命名为stdint.h。</p>
 </blockquote>
 <p>参考：<a href="http://blog.csdn.net/zhzht19861011/article/details/50057531" target="_blank" rel="noopener">FreeRTOS编码标准及风格指南</a></p>
-<p>完成以上步骤后，文件结构应该如下各图所示：</p>
-<div class="smallTitle">File - FreeRTOS</div>
-
+<p>完成以上步骤后，文件结构应该如下各图所示：<br>File - FreeRTOS</p>
 <p><img src="/assets/stm32/folderfreeRTOS.png" alt="本地文件中的FreeRTOS文件夹"></p>
-<div class="smallTitle">File - FreeRTOS\include</div>
-
+<p>File - FreeRTOS\include</p>
 <p><img src="/assets/stm32/folderfreeRTOSInclude.png" alt="本地文件中的include文件夹"></p>
-<div class="smallTitle">MDK - FreeRTOS</div>
-
+<p>MDK - FreeRTOS</p>
 <p><img src="/assets/stm32/groupfreeRTOS.png" alt="MDK中的FreeRTOS组"></p>
 <ul>
 <li>添加路径</li>
@@ -1336,7 +1312,7 @@ DCD     xPortSysTickHandler
 </code></pre>
 <p>文件修改后</p>
 <p><img src="/assets/stm32/afterAddExport.png" alt="添加Export之前的启动文件"></p>
-<h3 id="2-5-内核裁剪文件"><a href="#2-5-内核裁剪文件" class="headerlink" title="2.5 内核裁剪文件"></a>2.5 内核裁剪文件</h3><p>前面添加的头文件 &quot;FreeRTOSConfig.h&quot; 是系统内核配置文件，通过修改文件中的宏定义，可以对内核进行裁剪，保留所需功能。从例程中得到的该文件源码如下，更加详细的设置方法和各变量用途将在后续应用中介绍。</p>
+<h3 id="内核裁剪文件"><a href="#内核裁剪文件" class="headerlink" title="内核裁剪文件"></a>内核裁剪文件</h3><p>前面添加的头文件 &quot;FreeRTOSConfig.h&quot; 是系统内核配置文件，通过修改文件中的宏定义，可以对内核进行裁剪，保留所需功能。从例程中得到的该文件源码如下，更加详细的设置方法和各变量用途将在后续应用中介绍。</p>
 <pre><code class="C">#ifndef FREERTOS_CONFIG_H
 #define FREERTOS_CONFIG_H
 
@@ -1396,7 +1372,7 @@ NVIC value of 255. */
 
 #endif /* FREERTOS_CONFIG_H */
 </code></pre>
-<h3 id="2-6-功能实现"><a href="#2-6-功能实现" class="headerlink" title="2.6 功能实现"></a>2.6 功能实现</h3><p>经过以上步骤，系统移植工作已经完成，现在便可以创建多个任务，并启动任务调度器进行任务调度。</p>
+<h3 id="功能实现"><a href="#功能实现" class="headerlink" title="功能实现"></a>功能实现</h3><p>经过以上步骤，系统移植工作已经完成，现在便可以创建多个任务，并启动任务调度器进行任务调度。</p>
 <ul>
 <li>在 &quot;main.h&quot; 添加 FreeRTOS 相关的头文件</li>
 </ul>
@@ -1494,9 +1470,8 @@ static void vUasrtSendTask(void *pvParameters)
 </ul>
 <p><img src="/assets/stm32/tasksTest.png" alt="任务测试结果"></p>
 <p>从图中可以看出，16 进制数据 0x31, 0x32 交替出现，同时有一变量(假设为 y )从 0x01 逐一增至 0xff 后返回 0x01 继续增加，在 y 处于 0x32(50) 与 0x64(100) 之间时，0x32 暂停出现，后重新出现，直到 y 增至 0xff 后永不再现。此外，硬件部分，PB10 外接的 LED 也随着任务进行亮灭交替变换，最后保持在灯亮状态。</p>
-<p><img style="display:inline" alt="LedOn" src="/assets/stm32/ledOn.jpg"></p>
-<p><img style="display:inline" alt="LedOff" src="/assets/stm32/ledOff.jpg"></p>
-</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2016/11/02/FreeRTOS/">https://www.litreily.top/2016/11/02/FreeRTOS/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tags"></i><a href="/tags/C-C/">C/C++</a><a href="/tags/FreeRTOS/">FreeRTOS</a><a href="/tags/stm32/">stm32</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-FreeRTOS"><span class="toc-number">1.</span> <span class="toc-text">1. FreeRTOS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-Demo"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 Demo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-Source"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 Source</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-系统移植"><span class="toc-number">2.</span> <span class="toc-text">2. 系统移植</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-功能描述"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 功能描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-创建项目-BrightLed"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 创建项目 (BrightLed)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-初始化"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 初始化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-内核移植"><span class="toc-number">2.4.</span> <span class="toc-text">2.4 内核移植</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-内核裁剪文件"><span class="toc-number">2.5.</span> <span class="toc-text">2.5 内核裁剪文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6-功能实现"><span class="toc-number">2.6.</span> <span class="toc-text">2.6 功能实现</span></a></li></ol></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2016/11/14/signal-Process/">&lt; Matlab - 设计滤波器截止频率</a><a class="next" href="/2016/10/28/add-Music/">在博客中添加音乐 &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+<p><img src="/assets/stm32/ledOn.jpg" alt="LedOn"><br><img src="/assets/stm32/ledOff.jpg" alt="LedOff"></p>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2016/11/02/FreeRTOS/">https://www.litreily.top/2016/11/02/FreeRTOS/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tags"></i><a href="/tags/C-C/">C/C++</a><a href="/tags/FreeRTOS/">FreeRTOS</a><a href="/tags/stm32/">stm32</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#FreeRTOS"><span class="toc-number">1.</span> <span class="toc-text">FreeRTOS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Demo"><span class="toc-number">1.1.</span> <span class="toc-text">Demo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Source"><span class="toc-number">1.2.</span> <span class="toc-text">Source</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#系统移植"><span class="toc-number">2.</span> <span class="toc-text">系统移植</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#功能描述"><span class="toc-number">2.1.</span> <span class="toc-text">功能描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建项目-BrightLed"><span class="toc-number">2.2.</span> <span class="toc-text">创建项目 (BrightLed)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#初始化"><span class="toc-number">2.3.</span> <span class="toc-text">初始化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#内核移植"><span class="toc-number">2.4.</span> <span class="toc-text">内核移植</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#内核裁剪文件"><span class="toc-number">2.5.</span> <span class="toc-text">内核裁剪文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#功能实现"><span class="toc-number">2.6.</span> <span class="toc-text">功能实现</span></a></li></ol></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2016/11/14/signal-Process/">&lt; Matlab - 设计滤波器截止频率</a><a class="next" href="/2016/10/28/add-Music/">在博客中添加音乐 &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
 .night .v[data-class=v] a:hover { color: #216C73 !important; }
 .night .v[data-class=v] li { list-style: inherit; }
 .night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }

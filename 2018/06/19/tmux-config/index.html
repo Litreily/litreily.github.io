@@ -26,7 +26,7 @@ $ sudo apt-get install tmux
 <h2 id="解决配色问题"><a href="#解决配色问题" class="headerlink" title="解决配色问题"></a>解决配色问题</h2><p>在<code>tmux</code>中，有可能部分应用的配色与纯<code>shell</code>下不一致，尤其是<code>vim</code>，后来发现<code>htop</code>也存在这个问题。要解决很简单，在<code>tmux</code>配置中加上一句：</p>
 <pre><code class="yml">set -g default-terminal &quot;screen-256color&quot;
 </code></pre>
-<h2 id="存储-恢复tmux工作环境"><a href="#存储-恢复tmux工作环境" class="headerlink" title="存储/恢复tmux工作环境"></a>存储/恢复tmux工作环境</h2><p>如果在服务器上使用<code>tmux</code>，由于服务器基本不关机，所以不用考虑<code>tmux</code>环境会丢失。但是在个人电脑上使用的话，重启电脑后<code>tmux</code>环境就丢失了，如果每次重启都要重新配置一遍环境的话，那未免太浪费时间了。所以这里推荐个插件<a href="https://github.com/tmux-plugins/tmux-resurrect" target="_blank" rel="noopener">tmux-resurrect</a> </p>
+<h2 id="存储-恢复tmux工作环境"><a href="#存储-恢复tmux工作环境" class="headerlink" title="存储/恢复tmux工作环境"></a>存储/恢复tmux工作环境</h2><p>如果在服务器上使用<code>tmux</code>，由于服务器基本不关机，所以不用考虑<code>tmux</code>环境会丢失。但是在个人电脑上使用的话，重启电脑后<code>tmux</code>环境就丢失了，如果每次重启都要重新配置一遍环境的话，那未免太浪费时间了。所以这里推荐个插件<a href="https://github.com/tmux-plugins/tmux-resurrect" target="_blank" rel="noopener">tmux-resurrect</a></p>
 <p><code>tmux-resurrect</code>可以对<code>tmux</code>环境进行保存和恢复，安装及配置如下：</p>
 <pre><code class="zsh">$ mkdir ~/.tmux
 $ git clone https://github.com/tmux-plugins/tmux-resurrect ~/.tmux/tmux-resurrect

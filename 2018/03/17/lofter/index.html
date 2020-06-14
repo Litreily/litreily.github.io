@@ -19,7 +19,7 @@
 </ol>
 <p>当然，这些问题不是一下子就能想出来，可以在探索网页内容的过程逐步展开，并思考下一步该考虑的问题，下面针对各个问题对主页进行探索分析。</p>
 <h3 id="主页信息"><a href="#主页信息" class="headerlink" title="主页信息"></a>主页信息</h3><blockquote>
-<p>主页: http://[username].lofter.com</p>
+<p>主页: <code>http://[username].lofter.com</code></p>
 </blockquote>
 <p><img src="/assets/spider/lofter/litreily.png" alt="litreily"></p>
 <p>从主页可以看到<a href="http://litreily.lofter.com/view" target="_blank" rel="noopener">归档</a>的链接，暂时不管。不同的用户，其主页所用模板不尽一致，<code>LOFTER</code>为提供了大量精美的主页模板，以满足不同用户的需求：</p>
@@ -52,7 +52,7 @@
 <p>先来看看归档页面的结构吧，博客按月份归档，每篇博客仅显示首张图片缩略图或纯文本。然后<code>F12</code>打开调试工具，如下图所示，每个月份对应一个<code>&lt;div class=&quot;m-filecnt m-filecnt-1&quot;&gt;</code>这样的节点，每个月份节点包含了本月所有博客的入口信息，一篇博客对应一个<code>id</code>号，以及一个博客的<strong>相对路径</strong>。<code>id</code>神马的不用关心，重点就是这个<strong>相对路径</strong>，有了它不就有了博客的绝对路径了么。</p>
 <ul>
 <li>相对路径：&quot;/post/44fbca_1265bb3e&quot;</li>
-<li>绝对路径：&quot;http://[username].lofter.com/post/44fbca_1265bb3e&quot;</li>
+<li>绝对路径：<code>http://[username].lofter.com/post/44fbca_1265bb3e</code></li>
 </ul>
 <p><img src="/assets/spider/lofter/archive_html.png" alt="archive structure"></p>
 <p>这样看来，那岂不是只要抓取这一个归档页面就可以抓到所有的博客路径了呢？呵呵，真的这么容易吗？显然不大可能，当我们下拉页面时，归档信息将动态加载刷新，没错，是动态的！！！意料之中的猝不及防</p>
@@ -152,7 +152,7 @@ def _get_timestamp(html, time_pattern):
 <pre><code class="python"># get urls of blogs: s3.permalink=&quot;44fbca_19a6b1b&quot;
 new_blogs = blog_url_pattern.findall(html)
 num_new_blogs = len(new_blogs)
-num_blogs += num_new_blogs 
+num_blogs += num_new_blogs
 
 if num_new_blogs != 0:
     print(&#39;NewBlogs:%d\tTotalBolgs:%d&#39; % (num_new_blogs, num_blogs))
@@ -321,7 +321,7 @@ def main():
     blogid = _get_blogid(username)
     query_number = 40
     time_pattern = re.compile(&#39;s%d\.time=(.*);s.*type&#39; % (query_number-1))
-    blog_url_pattern = re.compile(r&#39;s[\d]*\.permalink=&quot;([\w_]*)&quot;&#39;) 
+    blog_url_pattern = re.compile(r&#39;s[\d]*\.permalink=&quot;([\w_]*)&quot;&#39;)
 
     # creat path to save imgs
     path = _get_path(username)
@@ -345,7 +345,7 @@ def main():
         # get urls of blogs: s3.permalink=&quot;44fbca_19a6b1b&quot;
         new_blogs = blog_url_pattern.findall(html)
         num_new_blogs = len(new_blogs)
-        num_blogs += num_new_blogs 
+        num_blogs += num_new_blogs
 
         if num_new_blogs != 0:
             print(&#39;NewBlogs:%d\tTotalBolgs:%d&#39; % (num_new_blogs, num_blogs))

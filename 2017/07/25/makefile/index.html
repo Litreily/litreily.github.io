@@ -54,21 +54,21 @@ int main(void)
 ...
 ...
 </code></pre>
-<p><code>target</code>: 目标文件，可以是.o（object file）文件，也可以是最终的可执行文件<br><code>prerequisites</code> : 生成目标文件所需的文件或是目标（<em>.h, </em>.c, *.o, ...）<br><code>command</code>: <code>make</code>需要执行的编译、链接等指令（所有指令前都以<code>TAB</code>键开头）</p>
+<p><code>target</code>: 目标文件，可以是.o（object file）文件，也可以是最终的可执行文件<br><code>prerequisites</code> : 生成目标文件所需的文件或是目标（<code>*.h</code>, <code>*.c</code>, <code>*.o</code>, ...）<br><code>command</code>: <code>make</code>需要执行的编译、链接等指令（所有指令前都以<code>TAB</code>键开头）</p>
 <h3 id="makefile-基础写法"><a href="#makefile-基础写法" class="headerlink" title="makefile 基础写法"></a>makefile 基础写法</h3><pre><code class="makefile">test : main.o add.o
-    cc -o test main.o add.o
+cc -o test main.o add.o
 
 main.o : main.c main.h add.h
-    cc -c main.c
+cc -c main.c
 
 add.o : add.c add.h
-    cc -c add.c
+cc -c add.c
 
 # make clean : use to clean all the object files
 
 .PHONY : clean
 clean :
-    rm test main.o add.o
+rm test main.o add.o
 </code></pre>
 <p>其中，test, main.o, add.o均是目标文件<code>target</code>；所有源文件及头文件均为<code>prerequisites</code>；</p>
 <p><code>cc</code> : 编译器，与<code>gcc</code>相似，<code>-c</code>代表编译，执行后产生对象文件，即&quot;.o&quot;文件；<code>-o</code>代表链接，用于链接&quot;.o&quot;文件并生成可执行文件；</p>
@@ -80,19 +80,19 @@ clean :
 <p>简化后的<code>makefile</code>如下：</p>
 <pre><code class="makefile">objs = main.o add.o
 test : $(objs)
-    cc -o test $(objs)
+cc -o test $(objs)
 
 main.o : main.c main.h add.h
-    cc -c main.c
+cc -c main.c
 
 add.o : add.c add.h
-    cc -c add.c
+cc -c add.c
 
 # make clean : use to clean all the object files
 
 .PHONY : clean
 clean :
-    rm test (objs)
+rm test (objs)
 </code></pre>
 <p>当项目文件很多时，合理使用变量可以大大简化<code>makefile</code>的编写和修改。</p>
 <h3 id="makefile-简化版2"><a href="#makefile-简化版2" class="headerlink" title="makefile 简化版2"></a>makefile 简化版2</h3><p>要知道，<code>make</code>非常强大，具有<strong>自动推导</strong>的功能，可以自动推导&quot;.o&quot;目标文件下面的指令。如果目标文件为&quot;main.o&quot;，那么指令必然为&quot;cc -c main.c&quot;，依赖于<code>make</code>指令的推导功能，<code>makefile</code>可以省略该指令的编写。</p>
@@ -100,7 +100,7 @@ clean :
 <p>根据以上规则可以对<code>makefile</code>进一步简化：</p>
 <pre><code class="makefile">objs = main.o add.o
 test : $(objs)
-    cc -o test $(objs)
+cc -o test $(objs)
 
 main.o : main.h add.h
 add.o : add.h
@@ -109,7 +109,7 @@ add.o : add.h
 
 .PHONY : clean
 clean :
-    rm test (objs)
+rm test (objs)
 </code></pre>
 <h2 id="make"><a href="#make" class="headerlink" title="make"></a>make</h2><p>编写好<code>makefile</code>文件后，便可以使用<code>make</code>指令进行编译链接并生成可执行文件了。</p>
 <pre><code class="bash">$ make  # 生成可执行文件

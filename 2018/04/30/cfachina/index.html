@@ -192,9 +192,9 @@ page_cnt = url_re.search(html).group(1)
         finally:
             pass
 </code></pre>
-<p><strong>说明：</strong></p>
+<p>说明：</p>
 <ol>
-<li>一个文件对应一个机构的数据，需要多次读取和写入，所以需要计算文件写入时的行数偏移量<code>offset</code>，即当前文件已包含数据的行数</li>
+<li>一个文件对应一个机构的数据，需要多次读取和写入，所以需要计算文件写入时的行数偏移量<code>offset</code>，即当前文件已包含数据的行数；</li>
 <li>当被写入文件被人为打开时，会出现<code>PermissionError</code>异常，可以在捕获该异常然后提示错误信息，并定时等待直到文件被关闭。</li>
 </ol>
 <h3 id="main"><a href="#main" class="headerlink" title="main"></a>main</h3><p>主函数用于创建和启动生产者线程和消费者线程，同时为生产者线程提供机构编号队列。</p>
@@ -246,7 +246,7 @@ import time
 # organid: +G01001+, +G01002+, +G01003+, ...
 # currentPage: 1, 2, 3, ...
 # pageSize: 20(default)
-# 
+#
 # Algorithm design:
 # 2 threads with 2 queues
 # Thread-1, get first page url, then get page_num and mechanism_name from first page
@@ -421,7 +421,7 @@ class Storage():
     def save(self, data):
         &#39;&#39;&#39;Write data to local file.
 
-        According filetype to choose function to save data, filetype can be &#39;.txt&#39; 
+        According filetype to choose function to save data, filetype can be &#39;.txt&#39;
         or &#39;.xls&#39;, but &#39;.txt&#39; type is saved more faster then &#39;.xls&#39; type
 
         Args:

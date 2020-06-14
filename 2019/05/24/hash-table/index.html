@@ -301,7 +301,7 @@ CMD&gt; show
 ---------------------------------------
 CMD&gt; commit
 CMD&gt; exit
-➜  hash git:(master) 
+➜  hash git:(master)
 </code></pre>
 <h3 id="test"><a href="#test" class="headerlink" title="test"></a>test</h3><p>除了交互式程序<code>hash</code>外，我还写了一个测试用例，用于生成100组随机键值对，键值对由随机长度及字符组成，最终得到的哈希表将存入本地文件<code>data.txt</code>中。</p>
 <pre><code class="c">#include &lt;time.h&gt;
@@ -327,7 +327,7 @@ void set_rand_key() {
     for(i = 0; i &lt; val_len; i++)
         val[i] = val_pool[rand() % val_maxlen];
 
-    set(key, val);    
+    set(key, val);
 }
 
 int main(int argc, char *argv[]) {

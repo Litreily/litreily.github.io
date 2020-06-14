@@ -50,7 +50,7 @@ total 320K
 &lt;li&gt;&lt;a href=&quot;https://www.vmgirls.com/12333.html&quot; title=&quot;少女情怀&quot; target=&quot;_blank&quot;&gt;少女情怀&lt;/a&gt;&lt;/li&gt;
 </code></pre>
 <p>从上图可以看出，网页网址以<code>&lt;li&gt;</code>列表形式存储，网页解析时使用以下xpath表达式即可获取到所有的网址和标题。</p>
-<pre><code class="python"># example: 
+<pre><code class="python"># example:
 # &lt;li&gt;&lt;a href=&quot;https://www.vmgirls.com/12419.html&quot; title=&quot;你眼睛一闪一闪的&quot; target=&quot;_blank&quot;&gt;你眼睛一闪一闪的&lt;/a&gt;&lt;/li&gt;
 urls = response.xpath(&#39;//*[@id=&quot;content&quot;][1]/ul/li/a/@href&#39;).extract()
 titles = response.xpath(&#39;//*[@id=&quot;content&quot;][1]/ul/li/a/text()&#39;).extract()
@@ -246,7 +246,7 @@ class VmgirlsPipeline(object):
 </ol>
 <p>可以注意到，两个管道类在处理<code>item</code>前都有通过<code>isinstance</code>函数判断当前的<code>pipeline</code>属于哪个类的实例，这是为了保证一个管道类只处理对应的管道数据。因为默认情况下，爬虫提交出来的所有<code>item</code>都会根据<code>pipeline</code>的优先级依次经过两个管道，但我们实际只需要每个<code>item</code>经过对应的管道即可，所以使用<code>isinstance</code>进行判断是非常有必要的，既可以提高处理效率，又可以避免过多无效log对调试过程产生的干扰。</p>
 <h2 id="爬取结果"><a href="#爬取结果" class="headerlink" title="爬取结果"></a>爬取结果</h2><p>为了方便爬取，可以使用以下的代码段作为爬虫的入口。</p>
-<pre><code class="python">from scrapy import cmdline 
+<pre><code class="python">from scrapy import cmdline
 cmdline.execute(&#39;scrapy crawl vmgirl&#39;.split())
 </code></pre>
 <p>执行后可以看到爬虫到的图片数据如下：</p>

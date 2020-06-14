@@ -45,7 +45,7 @@ page_num: 1
 <p><img src="/assets/spider/sina/pictures.png" alt="pictures"></p>
 <p>图中的上面一篇微博只有一张图片，可以轻易获取到原图链接，注意是<strong>原图</strong>，因为我们在页面能看到的是缩略图，但要爬取的当然是<strong>原图</strong>啦。</p>
 <p>图中下面的微博包含组图，在图片右侧的<code>Chrome</code>开发工具可以看到组图链接。</p>
-<p><a href="https://weibo.cn/mblog/picAll/FCQefgeAr?rl=2" target="_blank" rel="noopener">https://weibo.cn/mblog/picAll/FCQefgeAr?rl=2</a> </p>
+<p><a href="https://weibo.cn/mblog/picAll/FCQefgeAr?rl=2" target="_blank" rel="noopener">https://weibo.cn/mblog/picAll/FCQefgeAr?rl=2</a></p>
 <p>打开组图链接，可以看到图片如下图所示：</p>
 <p><img src="/assets/spider/sina/picture_url.png" alt="picture&#39;s url"></p>
 <p>可以看到缩略图链接以及原图链接，然后我们点击<strong>原图</strong>看一下。</p>
@@ -53,7 +53,7 @@ page_num: 1
 <p>可以发现，弹出页面的链接与上图显示的不同，但与上图中的缩略图链接极为相似。它们分别是：</p>
 <ol>
 <li>缩略图：<a href="http://ww1.sinaimg.cn/thumb180/c260f7ably1fn4vd7ix0qj20rs1aj1kx.jpg" target="_blank" rel="noopener">http://ww1.sinaimg.cn/thumb180/c260f7ably1fn4vd7ix0qj20rs1aj1kx.jpg</a></li>
-<li>原图： <a href="http://wx1.sinaimg.cn/large/c260f7ably1fn4vd7ix0qj20rs1aj1kx.jpg" target="_blank" rel="noopener">http://wx1.sinaimg.cn/large/c260f7ably1fn4vd7ix0qj20rs1aj1kx.jpg</a></li>
+<li>原图：<a href="http://wx1.sinaimg.cn/large/c260f7ably1fn4vd7ix0qj20rs1aj1kx.jpg" target="_blank" rel="noopener">http://wx1.sinaimg.cn/large/c260f7ably1fn4vd7ix0qj20rs1aj1kx.jpg</a></li>
 </ol>
 <p>可以看出，只是一个<code>thumb180</code>和<code>large</code>的区别。既然发现了规律，那就好办多了，我们只要知道缩略图的网址，就可以将域名后的第一级子域名替换成<code>large</code>就可以了，而不用获取<strong>原图</strong>链接再跳转一次。</p>
 <p>而且，多次尝试可以发现组图链接及缩略图链接满足正则表达式：</p>
@@ -69,7 +69,7 @@ img_reg = r&#39;src=&quot;(http://w.{2}\.sinaimg.cn/(.{6,8})/.{32,33}.(jpg|gif))
 <li>给定微博用户名<code>litreily</code></li>
 <li>进入待爬取用户主页，即可从网址中获取<code>uid: 2657006573</code></li>
 <li>获取本人登录微博后的<code>cookies</code>（请求报文需要用到<code>cookies</code>）</li>
-<li>逐一爬取 <a href="https://weibo.cn/2657006573/profile?filter=0&amp;page={1,2,3,...}" target="_blank" rel="noopener">https://weibo.cn/2657006573/profile?filter=0&amp;page={1,2,3,...}</a> </li>
+<li>逐一爬取<a href="https://weibo.cn/2657006573/profile?filter=0&amp;page={1,2,3,...}" target="_blank" rel="noopener">https://weibo.cn/2657006573/profile?filter=0&amp;page={1,2,3,...}</a></li>
 <li>解析每一页的源码，获取单图链接及组图链接，<ul>
 <li>单图：直接获取该图缩略图链接；</li>
 <li>组图：爬取组图链接，循环获取组图页面所有图片的缩略图链接</li>
@@ -180,7 +180,7 @@ def _capture_images(uid, headers, path):
         blogs = soup.body.find_all(attrs={&#39;id&#39;:re.compile(r&#39;^M_&#39;)}, recursive=False)
         num_blogs += len(blogs)
 
-        imgurls = []        
+        imgurls = []
         for blog in blogs:
             blog = str(blog)
             imglist_url = imglist_pattern.findall(blog)

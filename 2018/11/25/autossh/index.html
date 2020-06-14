@@ -36,7 +36,7 @@ $ ssh-copy-id -i ~/.ssh/id_rsa.pub -p 27000 root@222.222.222.222
 <li><code>-p 27000</code>: vps ssh 端口，默认值22</li>
 <li><code>-M 27440</code>: 中继服务器（vps）的代理服务监听端口，需保证不被vps其它进程占用</li>
 <li><code>-NR &#39;*:27401:localhost:27402&#39;</code>: 端口映射，vps的<code>27401</code>端口映射到内网PC的<code>27402</code>端口</li>
-<li><code><a href="mailto:root@222.222.222.222" target="_blank" rel="noopener">root@222.222.222.222</a></code>: vps的用户名及IP</li>
+<li><a href="mailto:`root@222.222.222.222" target="_blank" rel="noopener">`root@222.222.222.222</a>`: vps的用户名及IP</li>
 </ul>
 <p>这里涉及到4个端口，<code>27000</code>是vps ssh的监听端口，<code>27400</code>是vps代理服务的监听端口，<code>27401</code>和<code>27402</code>是vps与内网PC之间的一对端口映射，外网PC需要通过vps的<code>27401</code>端口访问内网。</p>
 <h3 id="配置autossh服务"><a href="#配置autossh服务" class="headerlink" title="配置autossh服务"></a>配置autossh服务</h3><p>使用以上指令已经可以完成所需的功能了，但是每次开机都得重新输一遍，很不方便，所以可以把指令封装成一个服务，然后设置为开机启动。在<code>ubuntu</code>中，可以在<code>lib/systemd/system</code>目录下新建一个<code>autossh.service</code>的文件，并输入以下内容：</p>
