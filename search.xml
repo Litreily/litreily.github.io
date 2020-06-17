@@ -11414,15 +11414,15 @@ n(u) = n(u)+1;
     <entry>
       <title><![CDATA[stm32 - DAC基本输出方式]]></title>
       <url>https://www.litreily.top/2016/12/05/stm32-dac/</url>
-      <content type="html"><![CDATA[<h2 id="1-DAC简介"><a href="#1-DAC简介" class="headerlink" title="1. DAC简介"></a>1. DAC简介</h2><p>数模转换器(DAC)是极为常用的电子器件，可以将数字量转换为以参考量为基准的模拟量，以满足应用需求。</p>
-<h3 id="1-1-电压输出模式"><a href="#1-1-电压输出模式" class="headerlink" title="1.1 电压输出模式"></a>1.1 电压输出模式</h3><p>在<code>stm32</code>中，<code>D/A</code>转换器包含以下三种输出方式：</p>
+      <content type="html"><![CDATA[<h2 id="DAC简介"><a href="#DAC简介" class="headerlink" title="DAC简介"></a>DAC简介</h2><p>数模转换器(DAC)是极为常用的电子器件，可以将数字量转换为以参考量为基准的模拟量，以满足应用需求。</p>
+<h3 id="电压输出模式"><a href="#电压输出模式" class="headerlink" title="电压输出模式"></a>电压输出模式</h3><p>在<code>stm32</code>中，<code>D/A</code>转换器包含以下三种输出方式：</p>
 <ol>
 <li>输出电压</li>
 <li>噪声生成</li>
 <li>三角波生成</li>
 </ol>
 <p>本文将着重介绍最基本的电压输出方式。</p>
-<h3 id="1-2-主要特征"><a href="#1-2-主要特征" class="headerlink" title="1.2 主要特征"></a>1.2 主要特征</h3><p>DAC的主要特征有：</p>
+<h3 id="主要特征"><a href="#主要特征" class="headerlink" title="主要特征"></a>主要特征</h3><p>DAC的主要特征有：</p>
 <ol>
 <li>2个DAC转换器：1个输出通道对应1个转换器</li>
 <li>8位或者12位单调输出</li>
@@ -11435,7 +11435,7 @@ n(u) = n(u)+1;
 <li>外部触发转换</li>
 <li>输入参考电压V_REF+</li>
 </ol>
-<h3 id="1-3-数据对齐方式"><a href="#1-3-数据对齐方式" class="headerlink" title="1.3 数据对齐方式"></a>1.3 数据对齐方式</h3><p>DAC 输出通道的数据对齐方式包含以下三种：</p>
+<h3 id="数据对齐方式"><a href="#数据对齐方式" class="headerlink" title="数据对齐方式"></a>数据对齐方式</h3><p>DAC 输出通道的数据对齐方式包含以下三种：</p>
 <ol>
 <li>8位右对齐</li>
 <li>12位左对齐</li>
@@ -11446,14 +11446,14 @@ n(u) = n(u)+1;
 <p>在双 DAC 通道模式下，数据寄存器的存储方式则为：</p>
 <p><img src="/assets/stm32/dacAlignMode2.png" alt="dacAlignMode2"></p>
 <p>我通常会选择12位右对齐方式，并在单通道模式设置数据时与<code>0x0fff</code>进行&quot;位与&quot;。</p>
-<h3 id="1-4-DAC转换"><a href="#1-4-DAC转换" class="headerlink" title="1.4 DAC转换"></a>1.4 DAC转换</h3><p><img src="/assets/stm32/dacConvert.png" alt="dacConvert"></p>
+<h3 id="DAC转换"><a href="#DAC转换" class="headerlink" title="DAC转换"></a>DAC转换</h3><p><img src="/assets/stm32/dacConvert.png" alt="dacConvert"></p>
 <p>用户无法直接对DAC的数据寄存器 DAC_DORx 写入数据，只能通过修改数据保持寄存器 DAC_DHRx 装入数据。</p>
 <ol>
 <li>未选择&quot;硬件触发&quot;时，保持寄存器 DAC_DHRx 的值将在1个APB1周期后自动传入数据寄存器 DAC_DORx；</li>
 <li>已选择&quot;硬件触发&quot;时，保持寄存器 DAC_DHRx 的值将在触发发生后3个APB1后传入数据寄存器 DAC_DORx。</li>
 <li>当数据存入 DAC_DORx 后再经过时间 t_settings（与负载和电源电压有关），输出变为有效。</li>
 </ol>
-<h3 id="1-5-DAC触发方式"><a href="#1-5-DAC触发方式" class="headerlink" title="1.5 DAC触发方式"></a>1.5 DAC触发方式</h3><pre><code class="C">#define DAC_Trigger_None                   ((uint32_t)0x00000000)
+<h3 id="DAC触发方式"><a href="#DAC触发方式" class="headerlink" title="DAC触发方式"></a>DAC触发方式</h3><pre><code class="C">#define DAC_Trigger_None                   ((uint32_t)0x00000000)
 /*!&lt; Conversion is automatic once the DAC1_DHRxxxx register
 has been loaded, and not by external trigger */
 
@@ -11498,9 +11498,9 @@ only in Medium-density and Low-density Value Line devices*/
 <li>DAC_Trigger_Software : 来自软件控制位 SWTRIG</li>
 </ol>
 <p>当 DAC 接口检测到来自定时器 <strong>TRGO输出</strong> 或 <strong>EXTI9</strong> 的上升沿时，最近存入 DAC_DHRx 中的数据将被传入 DAC_DORx 中。经3个APB1周期后更新 DAC_DORx 的值。对于 &quot;软件触发&quot;，需要在程序中对 <strong>SWTRIG</strong> 置位完成触发，该触发位将被硬件自动清零。</p>
-<h3 id="1-6-DAC输出电压"><a href="#1-6-DAC输出电压" class="headerlink" title="1.6 DAC输出电压"></a>1.6 DAC输出电压</h3><p>DAC输出 = V_reference × DOR /4095;</p>
+<h3 id="DAC输出电压"><a href="#DAC输出电压" class="headerlink" title="DAC输出电压"></a>DAC输出电压</h3><p>DAC输出 = V_reference × DOR /4095;</p>
 <p>式中，V_reference 为参考电压，DOR 为 DAC 输出数据寄存器的值（0~255/0~4095）。</p>
-<h2 id="2-DAC-基本输出方式"><a href="#2-DAC-基本输出方式" class="headerlink" title="2. DAC 基本输出方式"></a>2. DAC 基本输出方式</h2><h3 id="2-1-DAC-参数设置"><a href="#2-1-DAC-参数设置" class="headerlink" title="2.1 DAC 参数设置"></a>2.1 DAC 参数设置</h3><p>在<code>stm32f103</code>中包含2个通道的12位<code>D/A</code>转换器，<code>PA4</code>与<code>PA5</code>作为两个通道输出接口，在使用时需要配置为模拟输入<code>AIN</code>。当使能 DAC 的输出通道后，相应的 GPIO 管脚将自动与 DAC 的模拟输出接口（DAC_OUTx）相连。</p>
+<h2 id="DAC-基本输出方式"><a href="#DAC-基本输出方式" class="headerlink" title="DAC 基本输出方式"></a>DAC 基本输出方式</h2><h3 id="DAC-参数设置"><a href="#DAC-参数设置" class="headerlink" title="DAC 参数设置"></a>DAC 参数设置</h3><p>在<code>stm32f103</code>中包含2个通道的12位<code>D/A</code>转换器，<code>PA4</code>与<code>PA5</code>作为两个通道输出接口，在使用时需要配置为模拟输入<code>AIN</code>。当使能 DAC 的输出通道后，相应的 GPIO 管脚将自动与 DAC 的模拟输出接口（DAC_OUTx）相连。</p>
 <pre><code class="C">void dacConfig(void)
 {
   GPIO_InitTypeDef  GPIO_InitStructure;
@@ -11530,7 +11530,7 @@ only in Medium-density and Low-density Value Line devices*/
   DAC_Cmd(DAC_Channel_1,ENABLE);
 }
 </code></pre>
-<h3 id="2-2-设置-DAC-输出电压"><a href="#2-2-设置-DAC-输出电压" class="headerlink" title="2.2 设置 DAC 输出电压"></a>2.2 设置 DAC 输出电压</h3><p>经测试，我所用最小系统板的DA参考电压并非<code>3.3v</code>，而是接近于<code>3.24v</code>，我们可以通过宏定义配置好参考电压。</p>
+<h3 id="设置-DAC-输出电压"><a href="#设置-DAC-输出电压" class="headerlink" title="设置 DAC 输出电压"></a>设置 DAC 输出电压</h3><p>经测试，我所用最小系统板的DA参考电压并非<code>3.3v</code>，而是接近于<code>3.24v</code>，我们可以通过宏定义配置好参考电压。</p>
 <pre><code class="C">#define REFERENCE_VOLTAGE 3.24f      // DAC 参考电压
 </code></pre>
 <p>根据公式 <code>data = 4095*(v/v_ref)</code>可以求得电压v对应的12位数。</p>
@@ -11546,7 +11546,7 @@ only in Medium-density and Low-density Value Line devices*/
   DAC_SetChannel1Data(DAC_Align_12b_R,temp);     // 电压输出：12位右对齐
 }
 </code></pre>
-<h3 id="2-3-产生正弦波信号"><a href="#2-3-产生正弦波信号" class="headerlink" title="2.3 产生正弦波信号"></a>2.3 产生正弦波信号</h3><p>使用宏定义<code>PI</code>以及采样频率，并添加头文件<code>math.h</code>。</p>
+<h3 id="产生正弦波信号"><a href="#产生正弦波信号" class="headerlink" title="产生正弦波信号"></a>产生正弦波信号</h3><p>使用宏定义<code>PI</code>以及采样频率，并添加头文件<code>math.h</code>。</p>
 <pre><code class="C">#include &lt;math.h&gt;
 
 #define PI  3.14159f
@@ -11575,7 +11575,7 @@ only in Medium-density and Low-density Value Line devices*/
   }
 }
 </code></pre>
-<h3 id="2-4-查看波形"><a href="#2-4-查看波形" class="headerlink" title="2.4 查看波形"></a>2.4 查看波形</h3><p>使用示波器或NI采集卡即可查看生成的正弦信号。</p>
+<h3 id="查看波形"><a href="#查看波形" class="headerlink" title="查看波形"></a>查看波形</h3><p>使用示波器或NI采集卡即可查看生成的正弦信号。</p>
 <p><img src="/assets/stm32/dacOutput.png" alt="DacOutput"></p>
 ]]></content>
       
@@ -11819,7 +11819,7 @@ unsigned char canFreeData : 布尔变量，确定能否释放数据内存
     <entry>
       <title><![CDATA[Matlab - 设计滤波器截止频率]]></title>
       <url>https://www.litreily.top/2016/11/14/signal-Process/</url>
-      <content type="html"><![CDATA[<h2 id="1-截止频率"><a href="#1-截止频率" class="headerlink" title="1. 截止频率"></a>1. 截止频率</h2><p>通常，我们将信号幅值衰减3dB处的频率作为截止频率，这是为何？</p>
+      <content type="html"><![CDATA[<h2 id="截止频率"><a href="#截止频率" class="headerlink" title="截止频率"></a>截止频率</h2><p>通常，我们将信号幅值衰减3dB处的频率作为截止频率，这是为何？</p>
 <p>首先，明确以下两点：</p>
 <ol>
 <li>幅值的平方为功率</li>
@@ -11828,7 +11828,7 @@ unsigned char canFreeData : 布尔变量，确定能否释放数据内存
 <p>当信号功率衰减一半 (1/2) 时，幅值衰减 sqrt(1/2) ，那么其对应的 dB 值为：</p>
 <pre><code class="bash">20*log10(sqrt(2)/2) ≈ -3dB
 </code></pre>
-<h2 id="2-举例说明"><a href="#2-举例说明" class="headerlink" title="2. 举例说明"></a>2. 举例说明</h2><h3 id="2-1-滤波器设计"><a href="#2-1-滤波器设计" class="headerlink" title="2.1 滤波器设计"></a>2.1 滤波器设计</h3><p>设计一个 butterworth 低通滤波器，采样频率 100Hz ，截止频率 20Hz ，阶次为 4 。</p>
+<h2 id="举例说明"><a href="#举例说明" class="headerlink" title="举例说明"></a>举例说明</h2><h3 id="滤波器设计"><a href="#滤波器设计" class="headerlink" title="滤波器设计"></a>滤波器设计</h3><p>设计一个 butterworth 低通滤波器，采样频率 100Hz ，截止频率 20Hz ，阶次为 4 。</p>
 <pre><code class="matlab">clc
 fs = 100;           % 采样频率
 tLen = 2;           % 时间长度
@@ -11851,7 +11851,7 @@ text(fpass+2,fcAmp-1,num2str(fcAmp));
 
 setPlot(&#39;滤波器幅频特性&#39;,&#39;frequency(Hz)&#39;,&#39;amptitude(dB)&#39;,[F(1) F(end)],[-50,10]);
 </code></pre>
-<h3 id="2-2-setPlot"><a href="#2-2-setPlot" class="headerlink" title="2.2 setPlot"></a>2.2 setPlot</h3><p>程序中用到的 setPlot 函数用于设置图形的 title , xlabel , ylabel , xlim , ylim.</p>
+<h3 id="setPlot"><a href="#setPlot" class="headerlink" title="setPlot"></a>setPlot</h3><p>程序中用到的 setPlot 函数用于设置图形的 title , xlabel , ylabel , xlim , ylim.</p>
 <pre><code class="matlab">function [  ] = setPlot( varargin )
 % setPlot()
 % setPlot(title)
@@ -11887,7 +11887,7 @@ end
 
 end
 </code></pre>
-<h3 id="2-3-滤波器幅频特性"><a href="#2-3-滤波器幅频特性" class="headerlink" title="2.3 滤波器幅频特性"></a>2.3 滤波器幅频特性</h3><p><img src="/assets/matlab/fc20Hz.png" alt="截止频率"></p>
+<h3 id="滤波器幅频特性"><a href="#滤波器幅频特性" class="headerlink" title="滤波器幅频特性"></a>滤波器幅频特性</h3><p><img src="/assets/matlab/fc20Hz.png" alt="截止频率"></p>
 <p>从图中可以看出，按照要求设计得到的滤波器，截止频率 20Hz 对应的幅值衰减为 -3.0103dB ,约为 -3dB ，与理论所述相吻合。</p>
 ]]></content>
       
@@ -13753,16 +13753,16 @@ height=&quot;52&quot; src=&quot;https://music.163.com/outchain/player?type=2&amp
     <entry>
       <title><![CDATA[Ubuntu下安装常用软件]]></title>
       <url>https://www.litreily.top/2016/10/12/installSW/</url>
-      <content type="html"><![CDATA[<h2 id="1-apt-get-install"><a href="#1-apt-get-install" class="headerlink" title="1. apt-get install"></a>1. apt-get install</h2><h3 id="1-1-Atom"><a href="#1-1-Atom" class="headerlink" title="1.1 Atom"></a>1.1 Atom</h3><pre><code class="bash">sudo add-apt-repository ppa:webupd8team/atom
+      <content type="html"><![CDATA[<h2 id="apt-get-install"><a href="#apt-get-install" class="headerlink" title="apt-get install"></a>apt-get install</h2><h3 id="Atom"><a href="#Atom" class="headerlink" title="Atom"></a>Atom</h3><pre><code class="bash">sudo add-apt-repository ppa:webupd8team/atom
 sudo apt-get update  
 sudo apt-get install atom
 </code></pre>
 <p><code>add-apt-repository</code>用于添加软件源，<code>apt-get update</code>用于更新软件源，更新后即可使用<code>apt-get install</code>安装所需的软件。</p>
-<h3 id="1-2-Sublime-Text-3"><a href="#1-2-Sublime-Text-3" class="headerlink" title="1.2 Sublime Text 3"></a>1.2 Sublime Text 3</h3><pre><code class="bash">sudo add-apt-repository ppa:webupd8team/sublime-text-3  
+<h3 id="Sublime-Text-3"><a href="#Sublime-Text-3" class="headerlink" title="Sublime Text 3"></a>Sublime Text 3</h3><pre><code class="bash">sudo add-apt-repository ppa:webupd8team/sublime-text-3  
 sudo apt-get update  
 sudo apt-get install sublime-text-install
 </code></pre>
-<h2 id="2-添加快捷方式"><a href="#2-添加快捷方式" class="headerlink" title="2. 添加快捷方式"></a>2. 添加快捷方式</h2><p>在Ubuntu下，有些deb安装包，安装完成后只能通过终端启动，而且不能关闭终端，为此，我们可以给应用程序添加快捷方式。</p>
+<h2 id="添加快捷方式"><a href="#添加快捷方式" class="headerlink" title="添加快捷方式"></a>添加快捷方式</h2><p>在Ubuntu下，有些deb安装包，安装完成后只能通过终端启动，而且不能关闭终端，为此，我们可以给应用程序添加快捷方式。</p>
 <pre><code class="bash">sudo vim /usr/share/applications/appName.desktop
 </code></pre>
 <p>以eclipse为例在新添加的文件<code>eclipse.desktop</code>中添加以下内容：</p>
@@ -14261,11 +14261,11 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
       <title><![CDATA[Labview - 对话框程序模板]]></title>
       <url>https://www.litreily.top/2016/06/06/labview-dialog/</url>
       <content type="html"><![CDATA[<p>软件开发过程中，经常要使用对话框界面，例如各种参数设置界面等。为了减少重复性工作，我们可以创建一个对话框模板，往后就可以通过该模板直接新建对话框界面。</p>
-<h2 id="1-创建模板"><a href="#1-创建模板" class="headerlink" title="1. 创建模板"></a>1. 创建模板</h2><h3 id="1-1-新建vi"><a href="#1-1-新建vi" class="headerlink" title="1.1 新建vi"></a>1.1 新建vi</h3><p>打开LabVIEW软件，新建vi，保存为&quot;对话框模板.vi&quot;。</p>
+<h2 id="创建模板"><a href="#创建模板" class="headerlink" title="创建模板"></a>创建模板</h2><h3 id="新建vi"><a href="#新建vi" class="headerlink" title="新建vi"></a>新建vi</h3><p>打开LabVIEW软件，新建vi，保存为&quot;对话框模板.vi&quot;。</p>
 <p><img src="/assets/labview/dialog/template.png" alt="Labview template.vi"></p>
-<h3 id="1-2-添加while循环"><a href="#1-2-添加while循环" class="headerlink" title="1.2 添加while循环"></a>1.2 添加while循环</h3><p>对话框界面也属于用户界面，所以需要给它单独开辟一个线程，即一个while循环。</p>
+<h3 id="添加while循环"><a href="#添加while循环" class="headerlink" title="添加while循环"></a>添加while循环</h3><p>对话框界面也属于用户界面，所以需要给它单独开辟一个线程，即一个while循环。</p>
 <p><img src="/assets/labview/dialog/while.png" alt="Labview while"></p>
-<h3 id="1-3-添加移位寄存器"><a href="#1-3-添加移位寄存器" class="headerlink" title="1.3 添加移位寄存器"></a>1.3 添加移位寄存器</h3><p>在while循环左上角添加一个移位寄存器，然后创建一个<strong>枚举常量</strong>，给其添加以下内容：</p>
+<h3 id="添加移位寄存器"><a href="#添加移位寄存器" class="headerlink" title="添加移位寄存器"></a>添加移位寄存器</h3><p>在while循环左上角添加一个移位寄存器，然后创建一个<strong>枚举常量</strong>，给其添加以下内容：</p>
 <ul>
 <li>init：初始化</li>
 <li>run：运行</li>
@@ -14273,29 +14273,29 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
 </ul>
 <p>编辑完成后点击确定，然后将其连接至移位寄存器的输入端，默认设为&quot;init&quot;。</p>
 <p><img src="/assets/labview/dialog/enum.png" alt="Labview enum"></p>
-<h3 id="1-4-添加条件结构"><a href="#1-4-添加条件结构" class="headerlink" title="1.4 添加条件结构"></a>1.4 添加条件结构</h3><p>在while循环中添加一个条件结构，将将移位寄存器的值作为判断条件。为条件结构的每个值添加分支。</p>
+<h3 id="添加条件结构"><a href="#添加条件结构" class="headerlink" title="添加条件结构"></a>添加条件结构</h3><p>在while循环中添加一个条件结构，将将移位寄存器的值作为判断条件。为条件结构的每个值添加分支。</p>
 <p><img src="/assets/labview/dialog/switch.png" alt="Labview switch"></p>
-<h3 id="1-5-添加事件结构"><a href="#1-5-添加事件结构" class="headerlink" title="1.5 添加事件结构"></a>1.5 添加事件结构</h3><p>在条件结构的&quot;run&quot;分支中添加事件结构，用于响应用户操作。至此，所需的三个主要控制结构就都有了。</p>
+<h3 id="添加事件结构"><a href="#添加事件结构" class="headerlink" title="添加事件结构"></a>添加事件结构</h3><p>在条件结构的&quot;run&quot;分支中添加事件结构，用于响应用户操作。至此，所需的三个主要控制结构就都有了。</p>
 <p><img src="/assets/labview/dialog/event.png" alt="Labview event"></p>
-<h3 id="1-6-修改init分支"><a href="#1-6-修改init分支" class="headerlink" title="1.6 修改init分支"></a>1.6 修改init分支</h3><p>在条件结构的&quot;init&quot;（初始化）分支中，用户可以添加对话框的<strong>初始化</strong>程序。该分支只执行一次，接着进入&quot;run&quot;（主程序运行）分支，所以需要将移位寄存器的值设为&quot;run&quot;。</p>
+<h3 id="修改init分支"><a href="#修改init分支" class="headerlink" title="修改init分支"></a>修改init分支</h3><p>在条件结构的&quot;init&quot;（初始化）分支中，用户可以添加对话框的<strong>初始化</strong>程序。该分支只执行一次，接着进入&quot;run&quot;（主程序运行）分支，所以需要将移位寄存器的值设为&quot;run&quot;。</p>
 <p><img src="/assets/labview/dialog/init.png" alt="Labview init"></p>
-<h3 id="1-7-添加前面板关闭事件"><a href="#1-7-添加前面板关闭事件" class="headerlink" title="1.7 添加前面板关闭事件"></a>1.7 添加前面板关闭事件</h3><p>给事件结构添加&quot;前面板关闭？&quot;事件分支，然后将&quot;放弃？&quot;设为真，不让前面板在此刻关闭。同时将移位寄存器的值设为&quot;exit&quot;。</p>
+<h3 id="添加前面板关闭事件"><a href="#添加前面板关闭事件" class="headerlink" title="添加前面板关闭事件"></a>添加前面板关闭事件</h3><p>给事件结构添加&quot;前面板关闭？&quot;事件分支，然后将&quot;放弃？&quot;设为真，不让前面板在此刻关闭。同时将移位寄存器的值设为&quot;exit&quot;。</p>
 <p><img src="/assets/labview/dialog/closeFront.png" alt="Labview closeFront"></p>
 <p><img src="/assets/labview/dialog/exit.png" alt="Labview exit"></p>
-<h3 id="1-8-添加循环停止条件"><a href="#1-8-添加循环停止条件" class="headerlink" title="1.8 添加循环停止条件"></a>1.8 添加循环停止条件</h3><p>所有的while循环都需要一个停止条件，这里的while循环同样也需要，其停止条件便是移位寄存器的值变为&quot;exit&quot;。</p>
+<h3 id="添加循环停止条件"><a href="#添加循环停止条件" class="headerlink" title="添加循环停止条件"></a>添加循环停止条件</h3><p>所有的while循环都需要一个停止条件，这里的while循环同样也需要，其停止条件便是移位寄存器的值变为&quot;exit&quot;。</p>
 <p><img src="/assets/labview/dialog/exitRule.png" alt="Labview exitRule"></p>
-<h3 id="1-9-完善移位寄存器"><a href="#1-9-完善移位寄存器" class="headerlink" title="1.9 完善移位寄存器"></a>1.9 完善移位寄存器</h3><p>现在看看程序，是不是还无法执行，因为移位寄存器的部分连线没有赋值，现在简要演示一下完善过程。</p>
+<h3 id="完善移位寄存器"><a href="#完善移位寄存器" class="headerlink" title="完善移位寄存器"></a>完善移位寄存器</h3><p>现在看看程序，是不是还无法执行，因为移位寄存器的部分连线没有赋值，现在简要演示一下完善过程。</p>
 <p><img src="/assets/labview/dialog/register.gif" alt="Labview register"></p>
-<h3 id="1-10-添加界面关闭程序"><a href="#1-10-添加界面关闭程序" class="headerlink" title="1.10 添加界面关闭程序"></a>1.10 添加界面关闭程序</h3><p>从上面可以看出，在关闭前面板时，我们选择了放弃，然后进入&quot;exit&quot;分支，就是为了在这个分支中处理界面关闭前的任务，例如存储数据，保存界面参数等操作。不过这样一来，我们就需要在while循环结束时关闭界面，此处可以使用属性节点。</p>
+<h3 id="添加界面关闭程序"><a href="#添加界面关闭程序" class="headerlink" title="添加界面关闭程序"></a>添加界面关闭程序</h3><p>从上面可以看出，在关闭前面板时，我们选择了放弃，然后进入&quot;exit&quot;分支，就是为了在这个分支中处理界面关闭前的任务，例如存储数据，保存界面参数等操作。不过这样一来，我们就需要在while循环结束时关闭界面，此处可以使用属性节点。</p>
 <p><img src="/assets/labview/dialog/exitPanel.png" alt="Labview exitPanel"></p>
-<h2 id="2-设置vi属性"><a href="#2-设置vi属性" class="headerlink" title="2. 设置vi属性"></a>2. 设置vi属性</h2><p>以上操作完成了对话框界面的程序框图设计，但此时运行该对话框，它还包含了系统自带的菜单栏和工具栏，而这些都是对话框不需要的。</p>
+<h2 id="设置vi属性"><a href="#设置vi属性" class="headerlink" title="设置vi属性"></a>设置vi属性</h2><p>以上操作完成了对话框界面的程序框图设计，但此时运行该对话框，它还包含了系统自带的菜单栏和工具栏，而这些都是对话框不需要的。</p>
 <p><img src="/assets/labview/dialog/dialog_1.png" alt="Labview dialog"></p>
 <p>此时，我们可以通过快捷键<code>Ctrl+I</code>打开<strong>VI属性</strong>界面，在类别中选择<strong>窗口外观</strong>，最后选择<strong>对话框</strong>，点击确定。</p>
 <p><img src="/assets/labview/dialog/dialog_view.png" alt="Labview VI Properties"></p>
 <p>到此为止，一个简单的对话框界面模板就完成了，往后使用时，就可以通过&quot;复制该模板&rarr;重命名vi文件&rarr;添砖加瓦&quot;得到新的对话框。</p>
 <p><img src="/assets/labview/dialog/dialog_2.png" alt="Labview dialog"></p>
 <p>该模板比较简单，但是非常实用，大多数设置界面都可以使用该模板进行设计。当然也可以进一步完善。例如，很多设置界面都有<strong>应用</strong>按钮和<strong>退出</strong>按钮，那么，我们可以在模板中添加一个应用按钮和一个退出按钮，并添加对应的按钮点击事件，修改移位寄存器的值。</p>
-<h2 id="3-下载模板"><a href="#3-下载模板" class="headerlink" title="3. 下载模板"></a>3. 下载模板</h2><p>我将模板存至网盘便于下载：<a href="http://pan.baidu.com/s/1pKUe7Ib" target="_blank" rel="noopener">下载链接</a>。</p>
+<h2 id="下载模板"><a href="#下载模板" class="headerlink" title="下载模板"></a>下载模板</h2><p>我将模板存至网盘便于下载：<a href="http://pan.baidu.com/s/1pKUe7Ib" target="_blank" rel="noopener">下载链接</a>。</p>
 ]]></content>
       
         <categories>
@@ -14317,10 +14317,10 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
       <title><![CDATA[Labview - 常用快捷键]]></title>
       <url>https://www.litreily.top/2016/06/06/shrotcuts/</url>
       <content type="html"><![CDATA[<p>作为一款功能强大的编程软件，自然少不了大量的快捷键支持。在开发过程中，熟练使用这些快捷键，可以高效完成编码调试过程，减少手动操作，提高工作效率。</p>
-<h2 id="1-菜单快捷键"><a href="#1-菜单快捷键" class="headerlink" title="1. 菜单快捷键"></a>1. 菜单快捷键</h2><p>打开LabVIEW中的&quot;选项&quot;界面，在&quot;菜单快捷键&quot;中可以看到所有可用的快捷键。当然，如果觉得不够用或是与其它软件有冲突，可以手动添加或修改新的快捷键。</p>
+<h2 id="菜单快捷键"><a href="#菜单快捷键" class="headerlink" title="菜单快捷键"></a>菜单快捷键</h2><p>打开LabVIEW中的&quot;选项&quot;界面，在&quot;菜单快捷键&quot;中可以看到所有可用的快捷键。当然，如果觉得不够用或是与其它软件有冲突，可以手动添加或修改新的快捷键。</p>
 <p><img src="/assets/labview/shortcuts/editPanel.png" alt="Labview editPanel"></p>
-<h2 id="2-常用快捷键"><a href="#2-常用快捷键" class="headerlink" title="2. 常用快捷键"></a>2. 常用快捷键</h2><p>快捷键虽多，但常用的却有限。我简单将其分为通用键、功能键和技巧键。</p>
-<h3 id="2-1-通用键"><a href="#2-1-通用键" class="headerlink" title="2.1 通用键"></a>2.1 通用键</h3><p>有些快捷键是大部分软件共有的，其功能也类似。</p>
+<h2 id="常用快捷键"><a href="#常用快捷键" class="headerlink" title="常用快捷键"></a>常用快捷键</h2><p>快捷键虽多，但常用的却有限。我简单将其分为通用键、功能键和技巧键。</p>
+<h3 id="通用键"><a href="#通用键" class="headerlink" title="通用键"></a>通用键</h3><p>有些快捷键是大部分软件共有的，其功能也类似。</p>
 <ul>
 <li>Ctrl+N：新建</li>
 <li>Ctrl+A：全选</li>
@@ -14329,7 +14329,7 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
 <li>Ctrl+S：保存</li>
 <li>Ctrl+Shift+S：保存全部</li>
 </ul>
-<h3 id="2-2-功能键"><a href="#2-2-功能键" class="headerlink" title="2.2 功能键"></a>2.2 功能键</h3><p>在代码编辑过程中经常会用到的功能性快捷键包括：</p>
+<h3 id="功能键"><a href="#功能键" class="headerlink" title="功能键"></a>功能键</h3><p>在代码编辑过程中经常会用到的功能性快捷键包括：</p>
 <ul>
 <li>Ctrl+R：运行程序</li>
 <li>Ctrl+E：在前面板和程序框图之间切换</li>
@@ -14340,14 +14340,14 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
 <li>Ctrl+W：关闭当前界面或项目</li>
 <li>Ctrl+Q：退出LabVIEW</li>
 </ul>
-<h3 id="2-3-技巧键"><a href="#2-3-技巧键" class="headerlink" title="2.3 技巧键"></a>2.3 技巧键</h3><ul>
+<h3 id="技巧键"><a href="#技巧键" class="headerlink" title="技巧键"></a>技巧键</h3><ul>
 <li>Ctrl+鼠标拖动：复制被选控件或函数</li>
 <li>Ctrl+鼠标滚轮：切换多层结构的当前结构帧</li>
 <li>Shift+控件：将鼠标改为选择指针，用于选中某个或多个控件</li>
 <li>双击鼠标左键：添加注释</li>
 <li>Ctrl+Shift+鼠标拖动：将鼠标改为手形指针，用于拖动程序框图</li>
 </ul>
-<h3 id="2-4-其它"><a href="#2-4-其它" class="headerlink" title="2.4 其它"></a>2.4 其它</h3><p>如果一个函数仅包含两个输入接口时，例如：加、减、乘、除。当我们要切换两个输入接口的连线时，例如减法的两个输入A和B，开始连接的时候是A-B，现在发现不对，要改成B-A。默认我们会去删除两条线然后重新连接，但使用快捷键<code>Ctrl+Click</code>可以直接完成切换。<br><img src="/assets/labview/shortcuts/exchange.gif" alt="Labview exchange"></p>
+<h3 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h3><p>如果一个函数仅包含两个输入接口时，例如：加、减、乘、除。当我们要切换两个输入接口的连线时，例如减法的两个输入A和B，开始连接的时候是A-B，现在发现不对，要改成B-A。默认我们会去删除两条线然后重新连接，但使用快捷键<code>Ctrl+Click</code>可以直接完成切换。<br><img src="/assets/labview/shortcuts/exchange.gif" alt="Labview exchange"></p>
 <p><strong>使用方法：</strong>在点击Ctrl后移动鼠标至函数的任一输入端，鼠标指针会变为类似数字8的一个图标，此时点击鼠标左键即可完成切换。</p>
 ]]></content>
       
@@ -14369,21 +14369,21 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
     <entry>
       <title><![CDATA[Labview - 基本概念]]></title>
       <url>https://www.litreily.top/2016/06/05/labview-base/</url>
-      <content type="html"><![CDATA[<h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1. 引言"></a>1. 引言</h2><p>《百度百科》词条&quot;LabVIEW&quot;中提到：</p>
+      <content type="html"><![CDATA[<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>《百度百科》词条&quot;LabVIEW&quot;中提到：</p>
 <blockquote>
 <p><strong>LabVIEW</strong>（Laboratory Virtual Instrument Engineering Workbench）由美国国家仪器（NI）公司研制开发，是一种用图标代替文本行创建应用程序的图形化编程语言，它广泛地被工业界、学术界和研究实验室所接受，视为一个标准的数据采集和仪器控制软件。与<strong>C</strong>和<strong>BASIC</strong>一样，LabVIEW也是通用的编程系统，有一个完成任何编程任务的庞大函数库。采用数据流编程方式，程序框图中节点之间的数据流向决定了VI及函数的执行顺序。</p>
 </blockquote>
 <p><img src="/assets/labview/keyWords/Labview.png" alt="Labview"></p>
-<h2 id="2-基本概念"><a href="#2-基本概念" class="headerlink" title="2. 基本概念"></a>2. 基本概念</h2><p>在使用LabVIEW进行软件开发的过程中，少不了提及一些专有名词和概念，这里对常用的几个概念进行简要说明。</p>
-<h3 id="2-1-VI"><a href="#2-1-VI" class="headerlink" title="2.1 VI"></a>2.1 VI</h3><p><strong>VI</strong> 是categories: LabVIEW（Virtual Instrument）的简称，其对应的 <strong>.vi</strong> 文件是LabVIEW软件开发过程中用到的基本单元，类似于 <strong>C/C</strong> 语言开发的 <strong>.c/.cpp</strong> 文件。无论是用于显示的用户界面，还是不用于显示的函数，都是以 <strong>.vi</strong> 文件形式存在。</p>
-<h3 id="2-2-项目"><a href="#2-2-项目" class="headerlink" title="2.2 项目"></a>2.2 项目</h3><p>相对于独立的vi文件，LabVIEW<strong>项目</strong>则是一个大的容器，它可以包含一个或多个 <strong>.vi</strong> 文件，以及其它类型的依赖文件，如 <strong>.dll</strong> 链接库文件<strong>.rhm</strong> 菜单文件<strong>.lvproj</strong> 工程文件<strong>.lib</strong> 函数库文件<strong>.ctl</strong> 自定义控件文件等。当然，一个项目还可以包含<strong>.txt</strong> 等数据文件。独立的 <strong>vi</strong> 可以单独执行，但如果需要打包成 <strong>.exe</strong> 可执行文件或 <strong>.setup</strong> 安装包文件，就必须创建<strong>项目</strong>文件，通过 &quot;程序设计规范&quot; 对项目文件进行打包处理。</p>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>在使用LabVIEW进行软件开发的过程中，少不了提及一些专有名词和概念，这里对常用的几个概念进行简要说明。</p>
+<h3 id="VI"><a href="#VI" class="headerlink" title="VI"></a>VI</h3><p><strong>VI</strong> 是categories: LabVIEW（Virtual Instrument）的简称，其对应的 <strong>.vi</strong> 文件是LabVIEW软件开发过程中用到的基本单元，类似于 <strong>C/C</strong> 语言开发的 <strong>.c/.cpp</strong> 文件。无论是用于显示的用户界面，还是不用于显示的函数，都是以 <strong>.vi</strong> 文件形式存在。</p>
+<h3 id="项目"><a href="#项目" class="headerlink" title="项目"></a>项目</h3><p>相对于独立的vi文件，LabVIEW<strong>项目</strong>则是一个大的容器，它可以包含一个或多个 <strong>.vi</strong> 文件，以及其它类型的依赖文件，如 <strong>.dll</strong> 链接库文件<strong>.rhm</strong> 菜单文件<strong>.lvproj</strong> 工程文件<strong>.lib</strong> 函数库文件<strong>.ctl</strong> 自定义控件文件等。当然，一个项目还可以包含<strong>.txt</strong> 等数据文件。独立的 <strong>vi</strong> 可以单独执行，但如果需要打包成 <strong>.exe</strong> 可执行文件或 <strong>.setup</strong> 安装包文件，就必须创建<strong>项目</strong>文件，通过 &quot;程序设计规范&quot; 对项目文件进行打包处理。</p>
 <p><img src="/assets/labview/keyWords/project.png" alt="Labview project"></p>
-<h3 id="2-3-前面板"><a href="#2-3-前面板" class="headerlink" title="2.3 前面板"></a>2.3 前面板</h3><p>在LabVIEW开发环境中，vi程序分<strong>前面板</strong>和<strong>程序框图</strong>两部分。其中<strong>前面板</strong>用于设计用户界面，可以放置各种程序控件，是软件用户能够看见的交互界面。如果作为函数vi，其<strong>前面板</strong>还可以设置函数接口。软件完成并生成可执行文件后，软件用户界面显示的就是该界面所对应vi程序的<strong>前面板</strong>，而其它仅实现某种函数功能而无需显示的vi程序，其<strong>前面板</strong>将不会在调用过程中显示。</p>
+<h3 id="前面板"><a href="#前面板" class="headerlink" title="前面板"></a>前面板</h3><p>在LabVIEW开发环境中，vi程序分<strong>前面板</strong>和<strong>程序框图</strong>两部分。其中<strong>前面板</strong>用于设计用户界面，可以放置各种程序控件，是软件用户能够看见的交互界面。如果作为函数vi，其<strong>前面板</strong>还可以设置函数接口。软件完成并生成可执行文件后，软件用户界面显示的就是该界面所对应vi程序的<strong>前面板</strong>，而其它仅实现某种函数功能而无需显示的vi程序，其<strong>前面板</strong>将不会在调用过程中显示。</p>
 <p><img src="/assets/labview/keyWords/frontPanel.png" alt="Labview frontPanel"></p>
-<h3 id="2-4-程序框图"><a href="#2-4-程序框图" class="headerlink" title="2.4 程序框图"></a>2.4 程序框图</h3><p><strong>程序框图</strong>作为vi程序的另一部分，用于实现软件功能。从前面板获取用户数据，在<strong>程序框图</strong>中进行逻辑运算，并将运算结果返回前面板或存储至本地文件。在框图中，开发人员可以通过各种控制结构（顺序、循环、条件、事件、定时等）控制程序的执行顺序，通过调用LabVIEW内置函数库中的大量函数实现软件功能。</p>
+<h3 id="程序框图"><a href="#程序框图" class="headerlink" title="程序框图"></a>程序框图</h3><p><strong>程序框图</strong>作为vi程序的另一部分，用于实现软件功能。从前面板获取用户数据，在<strong>程序框图</strong>中进行逻辑运算，并将运算结果返回前面板或存储至本地文件。在框图中，开发人员可以通过各种控制结构（顺序、循环、条件、事件、定时等）控制程序的执行顺序，通过调用LabVIEW内置函数库中的大量函数实现软件功能。</p>
 <p><img src="/assets/labview/keyWords/flowChart.png" alt="Labview flowChart"></p>
-<h3 id="2-5-局部变量"><a href="#2-5-局部变量" class="headerlink" title="2.5 局部变量"></a>2.5 局部变量</h3><p>与其它编程语言一样，LabVIEW也有<strong>局部变量</strong>和<strong>全局变量</strong>局部变量**作用域为本vi程序，只能在本vi中调用。本vi启动时，系统为其分配内存空间；当本vi结束运行后，系统释放其内存。</p>
-<h3 id="2-6-全局变量"><a href="#2-6-全局变量" class="headerlink" title="2.6 全局变量"></a>2.6 全局变量</h3><p>对于一个多vi的项目而言，如果某个或某些变量需要被两个或多个vi调用时，可以考虑使用<strong>全局变量</strong>。该变量作用域为项目中的所有vi程序，软件启动时，系统为其分配内存空间；软件关闭后，系统释放其内存。</p>
+<h3 id="局部变量"><a href="#局部变量" class="headerlink" title="局部变量"></a>局部变量</h3><p>与其它编程语言一样，LabVIEW也有<strong>局部变量</strong>和<strong>全局变量</strong>局部变量**作用域为本vi程序，只能在本vi中调用。本vi启动时，系统为其分配内存空间；当本vi结束运行后，系统释放其内存。</p>
+<h3 id="全局变量"><a href="#全局变量" class="headerlink" title="全局变量"></a>全局变量</h3><p>对于一个多vi的项目而言，如果某个或某些变量需要被两个或多个vi调用时，可以考虑使用<strong>全局变量</strong>。该变量作用域为项目中的所有vi程序，软件启动时，系统为其分配内存空间；软件关闭后，系统释放其内存。</p>
 <p>根据我的编程经验，可以依据以下几种情况考虑是否使用全局变量：</p>
 <ul>
 <li>某变量仅被一个vi调用，无需设定全局变量；</li>
@@ -14392,18 +14392,18 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
 <li>某变量被两个或两个以上的<strong>用户界面</strong>调用，多个界面可能并行执行，必须使用全局变量。</li>
 </ul>
 <p><strong>注意</strong>：全局变量也是以vi形式存在，但是它只有前面板，没有程序框图。此外，多个全局变量可以放置在同一个vi中，我们也推荐这么做，这样可以减少全局vi的个数。如果项目文件较小，全局变量个数较少，完全可以只用一个vi文件存储所有的全局变量；如果项目比较庞大，所需的全局变量较多，可以适当增加全局vi文件个数，但也应该将全局变量归类，相同或相似功能的变量应放在一个vi中。</p>
-<h3 id="2-7-属性节点"><a href="#2-7-属性节点" class="headerlink" title="2.7 属性节点"></a>2.7 属性节点</h3><p>学习LabVIEW软件开发<strong>属性节点</strong>也是必须掌握的一个内容。这个词可以分为&quot;属性&quot;和&quot;节点&quot;两部分，对应前面板的所有控件，即使是修饰性控件也有其属性。以数值输入控件为例，其属性配置界面如下图所示：</p>
+<h3 id="属性节点"><a href="#属性节点" class="headerlink" title="属性节点"></a>属性节点</h3><p>学习LabVIEW软件开发<strong>属性节点</strong>也是必须掌握的一个内容。这个词可以分为&quot;属性&quot;和&quot;节点&quot;两部分，对应前面板的所有控件，即使是修饰性控件也有其属性。以数值输入控件为例，其属性配置界面如下图所示：</p>
 <p><img src="/assets/labview/keyWords/properties.png" alt="Labview properties"></p>
 <p>开发人员可以在属性配置界面配置控件的默认属性，该操作适用于无需再次更改的属性。每个控件都有其可修改的属性列表，开发人员可以选择控件本身或其接线端，通过 &quot;右键&rarr;创建&rarr;属性节点&rarr;属性&quot; 创建或查看该控件的属性项。</p>
 <p><img src="/assets/labview/keyWords/node.png" alt="Labview node"></p>
 <p>除属性节点外，LabVIEW中还有大量的&quot;节点&quot;，如&quot;表达式节点&quot;公式节点&quot;反馈节点&quot;调用节点&quot;等。对&quot;属性节点&quot;而言，可以举个简单的例子，以人为例，每个人都可以看做一个节点，人包含&quot;姓名&quot;身高&quot;体重&quot;性别&quot;年龄&quot;等属性，那么属性节点就可以理解为包含多个属性的人。读写&quot;属性节点&quot;就是对该节点的某项属性进行读写操作。</p>
-<h3 id="2-8-接线端"><a href="#2-8-接线端" class="headerlink" title="2.8 接线端"></a>2.8 接线端</h3><p>对于前面板上的一个控件而言，它在前面板仅出现一次，但在程序框图中可以多种方式出现，包括<strong>接线端</strong>引用<strong>局部变量</strong>和<strong>属性节点</strong>，但每个控件的<strong>接线端</strong>有且只有一个，其它方式则可以多次出现或不出现<strong>接线端</strong>与我们所说的采集卡的接线端是一个道理，它是程序框图与前面板之间传递参数的桥梁。当我们删除前面板中的某个控件时，其程序框图中的接线端也会随之删除，反之亦然。</p>
+<h3 id="接线端"><a href="#接线端" class="headerlink" title="接线端"></a>接线端</h3><p>对于前面板上的一个控件而言，它在前面板仅出现一次，但在程序框图中可以多种方式出现，包括<strong>接线端</strong>引用<strong>局部变量</strong>和<strong>属性节点</strong>，但每个控件的<strong>接线端</strong>有且只有一个，其它方式则可以多次出现或不出现<strong>接线端</strong>与我们所说的采集卡的接线端是一个道理，它是程序框图与前面板之间传递参数的桥梁。当我们删除前面板中的某个控件时，其程序框图中的接线端也会随之删除，反之亦然。</p>
 <p><img src="/assets/labview/keyWords/port.png" alt="Labview port"></p>
-<h3 id="2-9-引用"><a href="#2-9-引用" class="headerlink" title="2.9 引用"></a>2.9 引用</h3><p>上面提到的<strong>引用</strong>也是非常常用的一个功能，它相当于C/C++中的<strong>指针</strong>，通过它可以获取控件的识别标识、修改控件属性等。最重要的一点：当我们把控件A的引用作为函数参数传递至某个函数后，被调函数对该引用的操作直接作用在控件A上，而不再需要回调参数或全局变量的参与，这是非常重要和实用的功能。</p>
-<h3 id="2-10-标签-amp-标题"><a href="#2-10-标签-amp-标题" class="headerlink" title="2.10 标签&amp;标题"></a>2.10 标签&amp;标题</h3><p>在前面板中，每个控件都有对应的<strong>标签</strong>和<strong>标题</strong>，两者是有区别的。默认显示的是标签，而且标签和标题的默认值是一样的。在程序框图中，只能显示控件的标签，无法显示其标题。Ctrl+H打开控件的说明信息，其显示的既有标题信息，又有标签信息。通常，标签名称较短，用于程序框图使用；标题可以稍长些，在前面板显示标题可以详细描述控件功能，同时放在帮助信息中方便用户查询。</p>
+<h3 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h3><p>上面提到的<strong>引用</strong>也是非常常用的一个功能，它相当于C/C++中的<strong>指针</strong>，通过它可以获取控件的识别标识、修改控件属性等。最重要的一点：当我们把控件A的引用作为函数参数传递至某个函数后，被调函数对该引用的操作直接作用在控件A上，而不再需要回调参数或全局变量的参与，这是非常重要和实用的功能。</p>
+<h3 id="标签-amp-标题"><a href="#标签-amp-标题" class="headerlink" title="标签&amp;标题"></a>标签&amp;标题</h3><p>在前面板中，每个控件都有对应的<strong>标签</strong>和<strong>标题</strong>，两者是有区别的。默认显示的是标签，而且标签和标题的默认值是一样的。在程序框图中，只能显示控件的标签，无法显示其标题。Ctrl+H打开控件的说明信息，其显示的既有标题信息，又有标签信息。通常，标签名称较短，用于程序框图使用；标题可以稍长些，在前面板显示标题可以详细描述控件功能，同时放在帮助信息中方便用户查询。</p>
 <p><img src="/assets/labview/keyWords/tag&amp;title.png" alt="Labview tag&amp;title"></p>
 <p>不同控件的标签和标题都可以相同，但不建议这样做，标签通常是唯一的，唯一指定某一个控件，类似于人的学号。对标题的要求则宽松些，可同可不同。</p>
-<h2 id="3-小结"><a href="#3-小结" class="headerlink" title="3. 小结"></a>3. 小结</h2><p>这里讲述了LabVIEW常用的一些基本概念，其它未提及的常用概念较为简单，或是仅对某些特定控件有意义，这就不多说了。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>这里讲述了LabVIEW常用的一些基本概念，其它未提及的常用概念较为简单，或是仅对某些特定控件有意义，这就不多说了。</p>
 ]]></content>
       
         <categories>
@@ -14425,9 +14425,9 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
       <title><![CDATA[Brackets - Git插件的使用方法]]></title>
       <url>https://www.litreily.top/2016/05/15/brackets-git/</url>
       <content type="html"><![CDATA[<p>Brackets，一款专职做网页设计的开发工具，其插件也是极为丰富，Git自然是少不了的，那么如何安装和使用它呢，我以Windows 10环境为例进行说明。</p>
-<h2 id="1-安装插件"><a href="#1-安装插件" class="headerlink" title="1. 安装插件"></a>1. 安装插件</h2><h3 id="1-1-打开插件管理器"><a href="#1-1-打开插件管理器" class="headerlink" title="1.1 打开插件管理器"></a>1.1 打开插件管理器</h3><p>在Brackets中，基本上所有的插件都可以从插件管理器(Extension Manager)中安装，该管理器可以从Brackets软件菜单栏File中找到。</p>
+<h2 id="安装插件"><a href="#安装插件" class="headerlink" title="安装插件"></a>安装插件</h2><h3 id="打开插件管理器"><a href="#打开插件管理器" class="headerlink" title="打开插件管理器"></a>打开插件管理器</h3><p>在Brackets中，基本上所有的插件都可以从插件管理器(Extension Manager)中安装，该管理器可以从Brackets软件菜单栏File中找到。</p>
 <p><img src="/assets/brackets/git/extension manager.png" alt="Extension Manager"></p>
-<h3 id="1-2-搜素并安装git插件"><a href="#1-2-搜素并安装git插件" class="headerlink" title="1.2 搜素并安装git插件"></a>1.2 搜素并安装git插件</h3><ul>
+<h3 id="搜素并安装git插件"><a href="#搜素并安装git插件" class="headerlink" title="搜素并安装git插件"></a>搜素并安装git插件</h3><ul>
 <li>打开插件管理器后，选择“Available”选项卡，在搜索框中输入“git”。</li>
 </ul>
 <p><img src="/assets/brackets/git/input git.png" alt="input git"></p>
@@ -14439,16 +14439,16 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
 <li>安装完成后，将提示“Installation successful!”。</li>
 </ul>
 <p><img src="/assets/brackets/git/install success.png" alt="install success"></p>
-<h3 id="1-3-查看Git插件"><a href="#1-3-查看Git插件" class="headerlink" title="1.3 查看Git插件"></a>1.3 查看Git插件</h3><p>安装完成后，可以在插件管理器的“Installed”选项卡中查看已安装的插件。</p>
+<h3 id="查看Git插件"><a href="#查看Git插件" class="headerlink" title="查看Git插件"></a>查看Git插件</h3><p>安装完成后，可以在插件管理器的“Installed”选项卡中查看已安装的插件。</p>
 <p><img src="/assets/brackets/git/installed extensions.png" alt="installed extensions"></p>
 <p>此外，如果我们想知道它保存在哪个地方，可以打开文件资源管理器,在路径：</p>
 <pre><code class="cmd">C:\\Users\USER_NAME\AppData\Roaming\Brackets\extensions\user
 </code></pre>
 <p>下进行查看。这里保存了用户安装的所有插件。</p>
 <p><img src="/assets/brackets/git/extensions.png" alt="extensions"></p>
-<h2 id="2-界面布局"><a href="#2-界面布局" class="headerlink" title="2. 界面布局"></a>2. 界面布局</h2><h3 id="2-1-整体布局"><a href="#2-1-整体布局" class="headerlink" title="2.1 整体布局"></a>2.1 整体布局</h3><p>在Brackets右侧插件栏中可以找到git图标，点击该图标或使用快捷键<code>Ctrl+ALG+G</code>可以打开或关闭界面下方的git工具。在界面左侧，当有文件被修改并且尚未<code>commit</code>时，文件名前面会出现红色竖杠标记，文件中被修改的地方也会出现相应的标记。此外，在界面左侧，项目文件夹下方有一个下拉选项，显示当前所在的git分支。</p>
+<h2 id="界面布局"><a href="#界面布局" class="headerlink" title="界面布局"></a>界面布局</h2><h3 id="整体布局"><a href="#整体布局" class="headerlink" title="整体布局"></a>整体布局</h3><p>在Brackets右侧插件栏中可以找到git图标，点击该图标或使用快捷键<code>Ctrl+ALG+G</code>可以打开或关闭界面下方的git工具。在界面左侧，当有文件被修改并且尚未<code>commit</code>时，文件名前面会出现红色竖杠标记，文件中被修改的地方也会出现相应的标记。此外，在界面左侧，项目文件夹下方有一个下拉选项，显示当前所在的git分支。</p>
 <p><img src="/assets/brackets/git/git layout.png" alt="git layout"></p>
-<h3 id="2-2-工具面板"><a href="#2-2-工具面板" class="headerlink" title="2.2 工具面板"></a>2.2 工具面板</h3><p>git工具面板按区域可分为两大块，上面是控件栏，下面是内容指示。</p>
+<h3 id="工具面板"><a href="#工具面板" class="headerlink" title="工具面板"></a>工具面板</h3><p>git工具面板按区域可分为两大块，上面是控件栏，下面是内容指示。</p>
 <p><img src="/assets/brackets/git/git tools.png" alt="git tools"></p>
 <p>下面是对各个控件的简要说明：</p>
 <ul>
@@ -14461,45 +14461,45 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
 <li><img src="/assets/brackets/git/git%20push.png" class="inline-img">： 切换远程仓库源/fetch/pull/push</li>
 <li><img src="/assets/brackets/git/git%20settings.png" class="inline-img">： 打开指令窗口/Git Settings界面</li>
 </ul>
-<h2 id="3-使用方法"><a href="#3-使用方法" class="headerlink" title="3. 使用方法"></a>3. 使用方法</h2><h3 id="3-1-关联Git-GUI"><a href="#3-1-关联Git-GUI" class="headerlink" title="3.1 关联Git GUI"></a>3.1 关联Git GUI</h3><p>Brackets的git插件仅仅是个插件，要使用git进行代码管理，前提是电脑已装有git软件，如Windows的git for Windows，安装方法这里不多说。当我们安装好git软件并配置好环境变量后，默认情况下，Brackets能够自动识别git的安装路径；如果没有识别，可以手动设置，打开Git Settings界面，选择Git configuration选项卡，在“Path to Git executable”输入git的安装路径。</p>
+<h2 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h2><h3 id="关联Git-GUI"><a href="#关联Git-GUI" class="headerlink" title="关联Git GUI"></a>关联Git GUI</h3><p>Brackets的git插件仅仅是个插件，要使用git进行代码管理，前提是电脑已装有git软件，如Windows的git for Windows，安装方法这里不多说。当我们安装好git软件并配置好环境变量后，默认情况下，Brackets能够自动识别git的安装路径；如果没有识别，可以手动设置，打开Git Settings界面，选择Git configuration选项卡，在“Path to Git executable”输入git的安装路径。</p>
 <p><img src="/assets/brackets/git/git setPath.png" alt="git settings"></p>
-<h3 id="3-2-git-init"><a href="#3-2-git-init" class="headerlink" title="3.2 git init"></a>3.2 git init</h3><p>当我们新建一个仓库，需要使用git进行管理时，首先应该在工程目录下执行<code>git init</code>指令，如果使用git插件，则只需在git工具面板中点击“Init”按钮即可。</p>
+<h3 id="git-init"><a href="#git-init" class="headerlink" title="git init"></a>git init</h3><p>当我们新建一个仓库，需要使用git进行管理时，首先应该在工程目录下执行<code>git init</code>指令，如果使用git插件，则只需在git工具面板中点击“Init”按钮即可。</p>
 <p><img src="/assets/brackets/git/git init.png" alt="git init"></p>
-<h3 id="3-3-git-remote"><a href="#3-3-git-remote" class="headerlink" title="3.3 git remote"></a>3.3 git remote</h3><p>为了推送代码至远程仓库，可以选择Github、Coding等带有Git管理器的网站，新建项目并复制仓库网址。为了实现:</p>
+<h3 id="git-remote"><a href="#git-remote" class="headerlink" title="git remote"></a>git remote</h3><p>为了推送代码至远程仓库，可以选择Github、Coding等带有Git管理器的网站，新建项目并复制仓库网址。为了实现:</p>
 <pre><code class="bash">git remote add origin https://git.coding.net/litreily/svg-social.git
 </code></pre>
 <p>可以在Brackets中打开git工具，点击右侧第一个按钮，选择“Create new remote...”，然后依次输入仓库名称以及网址，确认即可。</p>
 <p><img src="/assets/brackets/git/git remote.png" alt="git remote"></p>
 <p><img src="/assets/brackets/git/git remote add.png" alt="git remote"></p>
-<h3 id="3-4-git-commit"><a href="#3-4-git-commit" class="headerlink" title="3.4 git commit"></a>3.4 git commit</h3><p>当我们需要提交已修改文件时，可以执行<code>git add File_name</code>/<code>git add .</code>以及<code>git commit</code>。如果使用git插件，可以在git工具中勾选需要提交的文件，然后点击提交按钮，在弹出的界面中输入提交信息，点击确认即可。</p>
+<h3 id="git-commit"><a href="#git-commit" class="headerlink" title="git commit"></a>git commit</h3><p>当我们需要提交已修改文件时，可以执行<code>git add File_name</code>/<code>git add .</code>以及<code>git commit</code>。如果使用git插件，可以在git工具中勾选需要提交的文件，然后点击提交按钮，在弹出的界面中输入提交信息，点击确认即可。</p>
 <p><img src="/assets/brackets/git/git commit files.png" alt="git commit"></p>
-<h3 id="3-5-git-push"><a href="#3-5-git-push" class="headerlink" title="3.5 git push"></a>3.5 git push</h3><p>在联网情况下，如果需要将代码推送至远程仓库，需要使用指令<code>git push</code>,如：</p>
+<h3 id="git-push"><a href="#git-push" class="headerlink" title="git push"></a>git push</h3><p>在联网情况下，如果需要将代码推送至远程仓库，需要使用指令<code>git push</code>,如：</p>
 <pre><code class="bash">git push origin master
 </code></pre>
 <p>如果使用git插件，可以点击推送按钮，首次推送需要填写用户名和密码，即远程仓库对应的用户名和密码。</p>
 <p><img src="/assets/brackets/git/git push files.png" alt="git push"></p>
 <p><img src="/assets/brackets/git/git push success.png" alt="git push"></p>
-<h3 id="3-6-git-pull-git-fetch"><a href="#3-6-git-pull-git-fetch" class="headerlink" title="3.6 git pull / git fetch"></a>3.6 git pull / git fetch</h3><p>如果用户在远程仓库修改了代码或添加了新的文件，此时可以在本地使用指令<code>git pull</code>获取更新文件，如：</p>
+<h3 id="git-pull-git-fetch"><a href="#git-pull-git-fetch" class="headerlink" title="git pull / git fetch"></a>git pull / git fetch</h3><p>如果用户在远程仓库修改了代码或添加了新的文件，此时可以在本地使用指令<code>git pull</code>获取更新文件，如：</p>
 <pre><code class="bash">git pull origin master
 </code></pre>
 <p>如果使用git插件，可以点击拉取按钮。</p>
 <p><img src="/assets/brackets/git/git pull.png" alt="git pull"></p>
 <p><img src="/assets/brackets/git/git pull success.png" alt="git pull"></p>
 <p>指令<code>git fetch</code>的操作方法类似，辞不赘述。</p>
-<h3 id="3-7-git-branch-git-checkout-git-merge"><a href="#3-7-git-branch-git-checkout-git-merge" class="headerlink" title="3.7 git branch / git checkout / git merge"></a>3.7 git branch / git checkout / git merge</h3><p>如果需要创建新的分支、切换分支或是合并分支，我们通常需要使用指令<code>git branch</code>/<code>git checkout</code>/<code>git merge</code>,在Brackets中，可以通过界面右侧的分支选项完成这些操作。</p>
+<h3 id="git-branch-git-checkout-git-merge"><a href="#git-branch-git-checkout-git-merge" class="headerlink" title="git branch / git checkout / git merge"></a>git branch / git checkout / git merge</h3><p>如果需要创建新的分支、切换分支或是合并分支，我们通常需要使用指令<code>git branch</code>/<code>git checkout</code>/<code>git merge</code>,在Brackets中，可以通过界面右侧的分支选项完成这些操作。</p>
 <p><img src="/assets/brackets/git/git checkout.png" alt="git checkout"></p>
 <p><img src="/assets/brackets/git/git branch.png" alt="git branch"></p>
-<h3 id="3-8-git-tag"><a href="#3-8-git-tag" class="headerlink" title="3.8 git tag"></a>3.8 git tag</h3><p>如果需要给当前版本添加标签，可以点击标签按钮，输入标签名，点击确定即可，下次推送的时候记得在推送窗口勾选“Send tags”。</p>
+<h3 id="git-tag"><a href="#git-tag" class="headerlink" title="git tag"></a>git tag</h3><p>如果需要给当前版本添加标签，可以点击标签按钮，输入标签名，点击确定即可，下次推送的时候记得在推送窗口勾选“Send tags”。</p>
 <p><img src="/assets/brackets/git/git new tag.png" alt="git new tag"></p>
-<h3 id="3-9-打开指令窗口"><a href="#3-9-打开指令窗口" class="headerlink" title="3.9 打开指令窗口"></a>3.9 打开指令窗口</h3><p>如果习惯使用敲指令，或是有些指令不得不通过指令窗口才能实现，可以通过git插件打开git bash。</p>
+<h3 id="打开指令窗口"><a href="#打开指令窗口" class="headerlink" title="打开指令窗口"></a>打开指令窗口</h3><p>如果习惯使用敲指令，或是有些指令不得不通过指令窗口才能实现，可以通过git插件打开git bash。</p>
 <p><img src="/assets/brackets/git/git bash.png" alt="git bash"></p>
-<h3 id="3-10-查看历史记录"><a href="#3-10-查看历史记录" class="headerlink" title="3.10 查看历史记录"></a>3.10 查看历史记录</h3><p>查看推送记录：</p>
+<h3 id="查看历史记录"><a href="#查看历史记录" class="headerlink" title="查看历史记录"></a>查看历史记录</h3><p>查看推送记录：</p>
 <p><img src="/assets/brackets/git/git history push.png" alt="git push history"></p>
 <p>查看某文件的提交记录：</p>
 <p><img src="/assets/brackets/git/git history file.png" alt="git file history"></p>
-<h3 id="3-11-放弃更改"><a href="#3-11-放弃更改" class="headerlink" title="3.11 放弃更改"></a>3.11 放弃更改</h3><p>如果我们需要放弃某些文件的修改时，可以在git工具的内容显示区域找到该文件，点击“discard changes”。如果想要删除某些刚刚添加但还未提交的文件，同样可以在该区域找到文件，通过点击“Delete file”删除文件。</p>
+<h3 id="放弃更改"><a href="#放弃更改" class="headerlink" title="放弃更改"></a>放弃更改</h3><p>如果我们需要放弃某些文件的修改时，可以在git工具的内容显示区域找到该文件，点击“discard changes”。如果想要删除某些刚刚添加但还未提交的文件，同样可以在该区域找到文件，通过点击“Delete file”删除文件。</p>
 <p><img src="/assets/brackets/git/git discard.png" alt="git discard"></p>
-<h2 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h2><p>git指令丰富，上述并非全部，但是尚且够用，往后更新同步。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>git指令丰富，上述并非全部，但是尚且够用，往后更新同步。</p>
 ]]></content>
       
         <categories>
@@ -14526,7 +14526,7 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
       <url>https://www.litreily.top/2016/05/11/DAQ-TDMS/</url>
       <content type="html"><![CDATA[<p>在Labview的软件开发过程中，少不了使用DAQ（Data Acquisition）助手，在使用DAQ助手采集数据时，通常需要存储数据，此时我们可以使用DAQ助手的配置界面设置TDMS（Technical Data Management Streaming）文件路径。而TDMS文件是NI主推的一种二进制记录文件，可以大大减小数据的存储容量。</p>
 <p>为了研究使用DAQ助手自动存储TDMS文件产生的数据大小，我专程写了个测试程序，使用NI MAX创建的模拟采集卡生成模拟正弦波信号，通过测试程序进行采集和存储。</p>
-<h2 id="1-示例程序"><a href="#1-示例程序" class="headerlink" title="1. 示例程序"></a>1. 示例程序</h2><p>程序名称：仿DAQ设计.vi</p>
+<h2 id="示例程序"><a href="#示例程序" class="headerlink" title="示例程序"></a>示例程序</h2><p>程序名称：仿DAQ设计.vi</p>
 <ul>
 <li>前面板</li>
 </ul>
@@ -14535,14 +14535,14 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
 <li>程序框图</li>
 </ul>
 <p><img src="/assets/labview/saveTdms/codeBlock.png" alt="程序框图"></p>
-<h2 id="2-程序测试"><a href="#2-程序测试" class="headerlink" title="2. 程序测试"></a>2. 程序测试</h2><h3 id="2-1-采样信息"><a href="#2-1-采样信息" class="headerlink" title="2.1 采样信息"></a>2.1 采样信息</h3><ul>
+<h2 id="程序测试"><a href="#程序测试" class="headerlink" title="程序测试"></a>程序测试</h2><h3 id="采样信息"><a href="#采样信息" class="headerlink" title="采样信息"></a>采样信息</h3><ul>
 <li>模拟采集卡：NI USB-6341</li>
 <li>采样频率：100Hz；</li>
 <li>采样点数：100；</li>
 <li>采样时间：5分钟；</li>
 <li>物理通道：ai0,ai1,ai2;</li>
 </ul>
-<h3 id="2-2-采样过程"><a href="#2-2-采样过程" class="headerlink" title="2.2 采样过程"></a>2.2 采样过程</h3><ul>
+<h3 id="采样过程"><a href="#采样过程" class="headerlink" title="采样过程"></a>采样过程</h3><ul>
 <li>程序运行中</li>
 </ul>
 <p><img src="/assets/labview/saveTdms/saveTdms.png" alt="saveTdms"></p>
@@ -14550,25 +14550,25 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
 <li>程序运行结束</li>
 </ul>
 <p><img src="/assets/labview/saveTdms/saveTdmsEnd.png" alt="saveTdmsEnd"></p>
-<h3 id="2-3-采样结果"><a href="#2-3-采样结果" class="headerlink" title="2.3 采样结果"></a>2.3 采样结果</h3><pre><code class="txt">总采样点数：30000*3 = 90000
+<h3 id="采样结果"><a href="#采样结果" class="headerlink" title="采样结果"></a>采样结果</h3><pre><code class="txt">总采样点数：30000*3 = 90000
 .tdms文件大小：180kB(185,132Bytes)
 185216(Bytes)/90000 ≈ 2.057956Bytes ≈ 2Bytes
 .tdms_index文件大小：5.01kB(5132Bytes)
 </code></pre>
 <p>说明每个采样点对应的存储大小为2Bytes左右。如果使用普通文件（如：.txt/.dat等）存储，一个双精度型数据需要占用8Bytes的空间，对应其文件大小将是tdms文件的4倍左右。</p>
-<h2 id="3-说明"><a href="#3-说明" class="headerlink" title="3. 说明"></a>3. 说明</h2><h3 id="3-1-局限性"><a href="#3-1-局限性" class="headerlink" title="3.1 局限性"></a>3.1 局限性</h3><ol>
+<h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><h3 id="局限性"><a href="#局限性" class="headerlink" title="局限性"></a>局限性</h3><ol>
 <li><p>如果使用DAQ助手自动存储TDMS文件，它将存储已创建的所有虚拟通道的数据，无法单独存储某一通道的数据。</p>
 </li>
 <li><p>对于同一个采集卡设备，当用户需要连续采集多路通道的电压/电流信号时，因为采集卡的多路通道使用相同的参考时钟源和多路复用器，所以只能使用一个DAQ助手。此外，该设备的所有通道对应的采样频率也必须一致。但如果用户的多路通道不是同一类型，例如：电压和计数值，像这种情况，用户能且只能使用多个DAQ助手。</p>
 </li>
 </ol>
-<h3 id="3-2-手动存储TDMS文件"><a href="#3-2-手动存储TDMS文件" class="headerlink" title="3.2 手动存储TDMS文件"></a>3.2 手动存储TDMS文件</h3><p>为了解决<strong>局限性</strong>提到的第2个问题，我尝试手动添加TDMS存储文件，用以替代DAQ自动存储TDMS方式。为此，我修改了部分程序，在保留DAQ自动存储的同时，在获取数据后再次存储。修改部分如下图所示：</p>
+<h3 id="手动存储TDMS文件"><a href="#手动存储TDMS文件" class="headerlink" title="手动存储TDMS文件"></a>手动存储TDMS文件</h3><p>为了解决<strong>局限性</strong>提到的第2个问题，我尝试手动添加TDMS存储文件，用以替代DAQ自动存储TDMS方式。为此，我修改了部分程序，在保留DAQ自动存储的同时，在获取数据后再次存储。修改部分如下图所示：</p>
 <p><img src="/assets/labview/saveTdms/manualSaveTdms.png" alt="manualSaveTDMS"></p>
 <p>再次运行程序，自动存储的tdms文件大小与上述一致，手动存储的tdms文件大小为:</p>
 <pre><code class="yml">704kB(720,998Bytes) ≈ 90000 * 8.011089 (Bytes) ≈ 90000 * 8 (Bytes)
 </code></pre>
 <p>可以看出，在手动存储时，每个数据的数据量为8个字节左右，恰好是双精度数据的大小。所以在一般情况下，我们优先考虑DAQ的自动存储功能，如果为了减少数据量使用手动存储方法，即使减少通道数，也未必能达到效果，除非减少后的通道数小等于总通道数的1/4.</p>
-<h3 id="3-3-文件属性对比"><a href="#3-3-文件属性对比" class="headerlink" title="3.3 文件属性对比"></a>3.3 文件属性对比</h3><ul>
+<h3 id="文件属性对比"><a href="#文件属性对比" class="headerlink" title="文件属性对比"></a>文件属性对比</h3><ul>
 <li>自动存储文件的属性</li>
 </ul>
 <p><img src="/assets/labview/saveTdms/autoSaveProperties.png" alt="AutoSaveTdmsProperties"></p>
@@ -14602,18 +14602,18 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
       <title><![CDATA[在Windows中安装Jekyll]]></title>
       <url>https://www.litreily.top/2016/04/15/install-jekyll/</url>
       <content type="html"><![CDATA[<p>本着无聊爱折腾的精神，又鉴于Windows系统的限制，无奈寻觅网上资料千千万，终寻得一卷 <strong><a href="http://www.madhur.co.in/blog/2011/09/01/runningjekyllwindows.html" target="_blank" rel="noopener">奇书</a></strong>，得偿所愿！</p>
-<h2 id="1-依赖工具"><a href="#1-依赖工具" class="headerlink" title="1. 依赖工具"></a>1. 依赖工具</h2><ul>
+<h2 id="依赖工具"><a href="#依赖工具" class="headerlink" title="依赖工具"></a>依赖工具</h2><ul>
 <li><a href="http://rubyinstaller.org/downloads/" target="_blank" rel="noopener">Ruby &amp; Ruby Development Kit</a></li>
 <li>Jekyll</li>
 <li><a href="http://portablepython.com/wiki/PortablePython2.7.5.1/" target="_blank" rel="noopener">Python</a>(可选)</li>
 <li>Pygments(可选)</li>
 </ul>
-<h2 id="2-搭建Jekyll环境"><a href="#2-搭建Jekyll环境" class="headerlink" title="2. 搭建Jekyll环境"></a>2. 搭建Jekyll环境</h2><p>在Windows中下载安装所需的依赖包，并配置好对应的环境变量。</p>
-<h3 id="2-1-安装Ruby"><a href="#2-1-安装Ruby" class="headerlink" title="2.1 安装Ruby"></a>2.1 安装Ruby</h3><p>由于jekyll采用Ruby开发而得，所以想要使用它就得安装Ruby语言环境。可以从<a href="http://rubyinstaller.org/downloads/" target="_blank" rel="noopener">http://rubyinstaller.org/downloads/</a>下载Ruby安装包，推荐选择<code>Ruby 2.2.4</code>。下载后安装在<code>C:\Ruby</code>，当然，路径不是固定的。</p>
+<h2 id="搭建Jekyll环境"><a href="#搭建Jekyll环境" class="headerlink" title="搭建Jekyll环境"></a>搭建Jekyll环境</h2><p>在Windows中下载安装所需的依赖包，并配置好对应的环境变量。</p>
+<h3 id="安装Ruby"><a href="#安装Ruby" class="headerlink" title="安装Ruby"></a>安装Ruby</h3><p>由于jekyll采用Ruby开发而得，所以想要使用它就得安装Ruby语言环境。可以从<a href="http://rubyinstaller.org/downloads/" target="_blank" rel="noopener">http://rubyinstaller.org/downloads/</a>下载Ruby安装包，推荐选择<code>Ruby 2.2.4</code>。下载后安装在<code>C:\Ruby</code>，当然，路径不是固定的。</p>
 <p><img src="/assets/jekyll/Ruby.png" alt="Ruby"></p>
-<h3 id="2-2-下载解压Devkit"><a href="#2-2-下载解压Devkit" class="headerlink" title="2.2 下载解压Devkit"></a>2.2 下载解压Devkit</h3><p>下载Ruby的开发工具DevKit，地址与Ruby的<a href="http://rubyinstaller.org/downloads/" target="_blank" rel="noopener">下载地址</a>一致。当然，别忘了根据系统位数选择最新版本的DevKit。至于解压路径，选择<code>C:\devkit</code>即可。</p>
+<h3 id="下载解压Devkit"><a href="#下载解压Devkit" class="headerlink" title="下载解压Devkit"></a>下载解压Devkit</h3><p>下载Ruby的开发工具DevKit，地址与Ruby的<a href="http://rubyinstaller.org/downloads/" target="_blank" rel="noopener">下载地址</a>一致。当然，别忘了根据系统位数选择最新版本的DevKit。至于解压路径，选择<code>C:\devkit</code>即可。</p>
 <p><img src="/assets/jekyll/DevKit.png" alt="Development Kit"></p>
-<h3 id="2-3-初始化Devkit"><a href="#2-3-初始化Devkit" class="headerlink" title="2.3 初始化Devkit"></a>2.3 初始化Devkit</h3><p>使用快捷键<code>Win+R</code>输入<code>cmd</code>打开命令窗口，输入以下指令：</p>
+<h3 id="初始化Devkit"><a href="#初始化Devkit" class="headerlink" title="初始化Devkit"></a>初始化Devkit</h3><p>使用快捷键<code>Win+R</code>输入<code>cmd</code>打开命令窗口，输入以下指令：</p>
 <pre><code class="bash">cd C:\devkit
 ruby dk.rb init
 </code></pre>
@@ -14635,12 +14635,12 @@ ruby dk.rb init
 ---
 - C:/Ruby
 </code></pre>
-<h3 id="2-4-安装Devkit"><a href="#2-4-安装Devkit" class="headerlink" title="2.4 安装Devkit"></a>2.4 安装Devkit</h3><p>确保文件中指示的Ruby与安装好的Ruby路径一致，然后执行以下指令：</p>
+<h3 id="安装Devkit"><a href="#安装Devkit" class="headerlink" title="安装Devkit"></a>安装Devkit</h3><p>确保文件中指示的Ruby与安装好的Ruby路径一致，然后执行以下指令：</p>
 <pre><code class="bash">ruby dk.rb install
 </code></pre>
 <p>至此，ruby开发环境已配置完成，如果中途出现错误，多半是路径问题或环境变量问题，为以防万一，可以在Windows系统属性中的环境变量中添加ruby路径。</p>
 <p><img src="/assets/jekyll/Ruby-envir.png" alt="Ruby-environment"></p>
-<h3 id="2-5-安装Jekyll"><a href="#2-5-安装Jekyll" class="headerlink" title="2.5 安装Jekyll"></a>2.5 安装Jekyll</h3><p>执行以下指令安装jekyll：</p>
+<h3 id="安装Jekyll"><a href="#安装Jekyll" class="headerlink" title="安装Jekyll"></a>安装Jekyll</h3><p>执行以下指令安装jekyll：</p>
 <pre><code class="bash">gem install jekyll
 </code></pre>
 <p>这一步很有可能会报错，而报错原因基本上出于gem源地址，gem默认源地址为<a href="https://rubygems.org/" target="_blank" rel="noopener">https://rubygems.org/</a>，需要修改为<a href="http://rubygems.org/" target="_blank" rel="noopener">http://rubygems.org/</a>. 修改指令如下：</p>
@@ -14648,7 +14648,7 @@ ruby dk.rb init
 gem sources -a http://rubygems.org
 </code></pre>
 <p>修改后即可正常完成jekyll的下载安装了。安装完成后，便可使用jekyll了。</p>
-<h3 id="2-6-可选操作"><a href="#2-6-可选操作" class="headerlink" title="2.6 可选操作"></a>2.6 可选操作</h3><p>如果需要使用Pygments提供的代码高亮功能，可以安装<a href="http://portablepython.com/wiki/PortablePython2.7.5.1/" target="_blank" rel="noopener">Python</a>，配置环境变量。再到<a href="https://pypi.python.org/pypi/setuptools#windows" target="_blank" rel="noopener">https://pypi.python.org/</a>下载<code>distribute_setup.py</code>。最后通过执行以下指令进行安装：</p>
+<h3 id="可选操作"><a href="#可选操作" class="headerlink" title="可选操作"></a>可选操作</h3><p>如果需要使用Pygments提供的代码高亮功能，可以安装<a href="http://portablepython.com/wiki/PortablePython2.7.5.1/" target="_blank" rel="noopener">Python</a>，配置环境变量。再到<a href="https://pypi.python.org/pypi/setuptools#windows" target="_blank" rel="noopener">https://pypi.python.org/</a>下载<code>distribute_setup.py</code>。最后通过执行以下指令进行安装：</p>
 <pre><code class="bash">python distribute_setup.py
 easy_install Pygments
 </code></pre>
