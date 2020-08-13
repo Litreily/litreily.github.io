@@ -4,6 +4,162 @@
   
     
     <entry>
+      <title><![CDATA[python之给pdf添加页码]]></title>
+      <url>https://www.litreily.top/2020/08/13/python-pdf/</url>
+      <content type="html"><![CDATA[<p>最近写release note, 总感觉用<code>tex</code>不太方便，特别是装<code>texlive</code>占用大量空间，还有各种依赖问题，想着能不能用<code>markdown</code>写更方便。实践证明，<a href="https://typora.io/" target="_blank" rel="noopener">typora</a>导出pdf的功能真的很棒，唯独一个不足之处就是生成的PDF不带<strong>页码</strong>。</p>
+<p>这个虽然可以使用在线工具实现，或者使用Adobe、福昕的 pdf 编辑功能，但是很多情况，尤其是工作平台是不方便使用的。为此我想到了<code>Python</code>，通过脚本把页码加上。</p>
+<h2 id="安装Python库"><a href="#安装Python库" class="headerlink" title="安装Python库"></a>安装Python库</h2><p>首先需要安装两个依赖库，<code>PyPDF2</code>以及<code>reportLab</code>, <code>PyPDF2</code>可以对PDF进行拆分、合并、删除、加密等操作；<code>reportlab</code>则更是强大，看看下面的官方介绍。</p>
+<blockquote>
+<p>We build solutions to generate rich, attractive and fully bespoke PDFs at incredible speeds.<br>Over 5 million documents are generated each month using Reportlab&#39;s software<br>--- <a href="https://www.reportlab.com/" target="_blank" rel="noopener">https://www.reportlab.com/</a></p>
+</blockquote>
+<pre><code class="py">sudo pip3 install pypdf2
+sudo pip3 install reportlab
+</code></pre>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>添加页码思路如下：</p>
+<ol>
+<li>使用<code>PyPDF2</code>打开待添加页码的PDF, 记录总页数</li>
+<li>使用<code>reportlab</code>创建只带有页码的临时PDF，页面数量与待修改文件一致</li>
+<li>将临时PDF和待修改PDF合并在一起</li>
+<li>保存合并以后的PDF文件</li>
+</ol>
+<p>具体实现如下：</p>
+<h3 id="创建临时PDF"><a href="#创建临时PDF" class="headerlink" title="创建临时PDF"></a>创建临时PDF</h3><p>使用<code>reportlab</code>创建PDF，每个页面对应一个画布<code>canvas</code>，创建页面的过程就像是在画布上画画，把页码画在指定的位置，A4纸张210mm*297mm，以画布左下角为原点，那么页码的坐标大概是 (210/2-1, 4) = (104, 4), 单位mm</p>
+<p>下面的函数就是在已知总页面数的情况下逐页绘制页码，然后保存至tmp文件中。</p>
+<pre><code class="py">from reportlab.lib.units import mm
+from reportlab.pdfgen import canvas
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+
+
+def create_pdf_with_pagenumber(tmp, num):
+    &#39;&#39;&#39;create tmp pdf that only include page number&#39;&#39;&#39;
+    pdfmetrics.registerFont(
+        TTFont(&#39;Times-New-Roman&#39;, &#39;C:\\Windows\\Fonts\\times.ttf&#39;))
+    c = canvas.Canvas(tmp)
+    for i in range(num):
+        c.setFont(&#39;Times-New-Roman&#39;, 10)
+        c.drawString((104)*mm, (4)*mm, str(i + 1))
+        c.showPage()
+    c.save()
+</code></pre>
+<h3 id="合并PDF"><a href="#合并PDF" class="headerlink" title="合并PDF"></a>合并PDF</h3><p>合并PDF主要用到的是<code>PyPDF2</code>的PdfFileWriter, PdfFileReader, 一个写，一个读。合并过程很简单，打开文件，逐页读取(getPage)，使用mergePage合并两个PDF的对应页面，然后将合并后的页面写入(addPage)到输出文件中。</p>
+<pre><code class="py">from PyPDF2 import PdfFileWriter, PdfFileReader
+
+path = &#39;release_notes.pdf&#39;
+tmp = &quot;tmp.pdf&quot;
+
+dst_pdf = PdfFileWriter()
+with open(path, &#39;rb&#39;) as f:
+    src_pdf = PdfFileReader(f, strict=False)
+    n = src_pdf.getNumPages()
+    create_pdf_with_pagenumber(tmp, n)
+
+    with open(tmp, &#39;rb&#39;) as ftmp:
+        num_pdf = PdfFileReader(ftmp)
+        for i in range(n):
+            print(&#39;page: %d of %d&#39; % (i+1, n))
+            page = src_pdf.getPage(i)
+            num_layer = num_pdf.getPage(i)
+
+            page.mergePage(num_layer)
+            dst_pdf.addPage(page)
+
+    if dst_pdf.getNumPages():
+        output = &#39;{}_new.pdf&#39;.format(path.split(&#39;.&#39;)[0])
+        with open(output, &#39;wb&#39;) as f:
+            dst_pdf.write(f)
+
+    os.remove(tmp)
+</code></pre>
+<h3 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h3><pre><code class="python">#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+&#39;&#39;&#39;add page number to pdf file&#39;&#39;&#39;
+
+import sys
+import os
+
+import reportlab
+from reportlab.lib.units import mm
+from reportlab.pdfgen import canvas
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+
+from PyPDF2 import PdfFileWriter, PdfFileReader
+
+
+def create_pdf_with_pagenumber(tmp, num):
+    &#39;&#39;&#39;create tmp pdf that only include page number&#39;&#39;&#39;
+    pdfmetrics.registerFont(
+        TTFont(&#39;Times-New-Roman&#39;, &#39;C:\\Windows\\Fonts\\times.ttf&#39;))
+    c = canvas.Canvas(tmp)
+    for i in range(num):
+        c.setFont(&#39;Times-New-Roman&#39;, 10)
+        c.drawString((104)*mm, (4)*mm, str(i + 1))
+        c.showPage()
+    c.save()
+
+
+def main():
+    path = &#39;release_notes.pdf&#39;
+    if len(sys.argv) == 1:
+        if not os.path.isfile(path):
+            sys.exit(1)
+    else:
+        path = os.path.basename(sys.argv[1])
+
+    tmp = &quot;tmp.pdf&quot;
+    dst_pdf = PdfFileWriter()
+    with open(path, &#39;rb&#39;) as f:
+        src_pdf = PdfFileReader(f, strict=False)
+        n = src_pdf.getNumPages()
+        create_pdf_with_pagenumber(tmp, n)
+
+        with open(tmp, &#39;rb&#39;) as ftmp:
+            num_pdf = PdfFileReader(ftmp)
+            for i in range(n):
+                print(&#39;page: %d of %d&#39; % (i+1, n))
+                page = src_pdf.getPage(i)
+                num_layer = num_pdf.getPage(i)
+
+                page.mergePage(num_layer)
+                dst_pdf.addPage(page)
+
+        if dst_pdf.getNumPages():
+            output = &#39;{}_new.pdf&#39;.format(path.split(&#39;.&#39;)[0])
+            with open(output, &#39;wb&#39;) as f:
+                dst_pdf.write(f)
+
+        os.remove(tmp)
+
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre>
+<p>使用很简单</p>
+<pre><code class="bash">python3 main.py filename.pdf
+</code></pre>
+<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><ul>
+<li><a href="https://gist.github.com/DIYer22/b9ede6b5b96109788a47973649645c1f" target="_blank" rel="noopener">https://gist.github.com/DIYer22/b9ede6b5b96109788a47973649645c1f</a></li>
+<li><a href="https://www.reportlab.com/docs/reportlab-userguide.pdf" target="_blank" rel="noopener">ReportLab PDF Library User Guide.pdf</a></li>
+</ul>
+]]></content>
+      
+        <categories>
+            
+            <category> Python </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> pdf </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[Python网络爬虫8 - 爬取彼岸图网美图]]></title>
       <url>https://www.litreily.top/2020/08/09/netbian/</url>
       <content type="html"><![CDATA[<p><a href="http://pic.netbian.com/" target="_blank" rel="noopener">彼岸图网</a>收集了大量美图，是个不错的爬取对象。话不多说，直接上图。</p>
@@ -10241,9 +10397,9 @@ Infos:File-main.c, Func-main, Line-14
             
             <tag> ubuntu </tag>
             
-            <tag> shell </tag>
-            
             <tag> makefile </tag>
+            
+            <tag> shell </tag>
             
         </tags>
         
@@ -11212,9 +11368,9 @@ root: /
         
         <tags>
             
-            <tag> hexo </tag>
-            
             <tag> jekyll </tag>
+            
+            <tag> hexo </tag>
             
             <tag> log </tag>
             
@@ -12004,9 +12160,9 @@ unsigned char canFreeData : 布尔变量，确定能否释放数据内存
         
         <tags>
             
-            <tag> labview </tag>
-            
             <tag> matlab </tag>
+            
+            <tag> labview </tag>
             
             <tag> VS </tag>
             
@@ -14175,6 +14331,61 @@ int main()
     </entry>
     
     <entry>
+      <title><![CDATA[模拟试题2 - 二货小易的网格盒子]]></title>
+      <url>https://www.litreily.top/2016/09/12/WYMN2/</url>
+      <content type="html"><![CDATA[<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>二货小易有一个W*H的网格盒子，网格的行编号为0~H-1，网格的列编号为0~W-1。每个格子至多可以放一块蛋糕，任意两块蛋糕的欧几里得距离不能等于2。</p>
+<p>对于两个格子坐标(x1,y1), (x2,y2)的欧几里得距离为：((x1-x2)<em>(x1-x2)+(y1-y2)</em>(y1-y2))的算术平方根。</p>
+<p>小易想知道最多可以放多少块蛋糕在网格盒子里。</p>
+<h3 id="输入描述"><a href="#输入描述" class="headerlink" title="输入描述"></a>输入描述</h3><blockquote>
+<p>每组数组包含网格长宽W,H，用空格分隔。(1&lt;=W、H&lt;=1000)</p>
+</blockquote>
+<h3 id="输出描述"><a href="#输出描述" class="headerlink" title="输出描述"></a>输出描述</h3><blockquote>
+<p>输出一个最多可以放的蛋糕数</p>
+</blockquote>
+<h3 id="输入例子"><a href="#输入例子" class="headerlink" title="输入例子"></a>输入例子</h3><blockquote>
+<p>3 2</p>
+</blockquote>
+<h3 id="输出例子"><a href="#输出例子" class="headerlink" title="输出例子"></a>输出例子</h3><blockquote>
+<p>4</p>
+</blockquote>
+<h2 id="题目解析"><a href="#题目解析" class="headerlink" title="题目解析"></a>题目解析</h2><p>根据题意，可以推测出蛋糕数最多的放置方案：将网格进行分区，每四个构成一个正方形的网格作为一个分区，类似于坐标变换。假设原坐标为(x,y),那么变换后的分区坐标为(x/2,y/2)。当变换后的分区坐标满足横纵坐标之和为偶数时，该分区内的4个网格均可放置蛋糕。</p>
+<p><img src="/assets/algorithm/putCake.png" alt="putCake"></p>
+<h2 id="解题程序"><a href="#解题程序" class="headerlink" title="解题程序"></a>解题程序</h2><pre><code class="C++">#include &lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+
+  int W,H;
+  int cnt=0; // 定义可放的蛋糕数
+  cin&gt;&gt;W&gt;&gt;H; // 输入盒子网格的行列数
+
+  for(int i = 0; i&lt;H; i++)
+      for(int j = 0; j &lt; W; j++)
+        if((i/2 + j/2) % 2 == 0)
+          cnt++;
+  cout&lt;&lt;cnt&lt;&lt;endl;
+  return 0;
+}
+</code></pre>
+]]></content>
+      
+        <categories>
+            
+            <category> 杂物柜 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> C/C++ </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[模拟试题1 - 计算PA+PB]]></title>
       <url>https://www.litreily.top/2016/09/12/WYMN1/</url>
       <content type="html"><![CDATA[<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>正整数A的<strong>DA(1位整数)部分</strong>定义为由A中所有组成的新整数PA。例如：给定A=3862767，DA=6，则A的<strong>6部分</strong>PA是66，因为A中有2个6。</p>
@@ -14216,61 +14427,6 @@ int main()
     getPA(B,DB,PB);      // 计算PB
     cout&lt;&lt;PA+PB&lt;&lt;endl;
     return 0;
-}
-</code></pre>
-]]></content>
-      
-        <categories>
-            
-            <category> 杂物柜 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> C/C++ </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[模拟试题2 - 二货小易的网格盒子]]></title>
-      <url>https://www.litreily.top/2016/09/12/WYMN2/</url>
-      <content type="html"><![CDATA[<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>二货小易有一个W*H的网格盒子，网格的行编号为0~H-1，网格的列编号为0~W-1。每个格子至多可以放一块蛋糕，任意两块蛋糕的欧几里得距离不能等于2。</p>
-<p>对于两个格子坐标(x1,y1), (x2,y2)的欧几里得距离为：((x1-x2)<em>(x1-x2)+(y1-y2)</em>(y1-y2))的算术平方根。</p>
-<p>小易想知道最多可以放多少块蛋糕在网格盒子里。</p>
-<h3 id="输入描述"><a href="#输入描述" class="headerlink" title="输入描述"></a>输入描述</h3><blockquote>
-<p>每组数组包含网格长宽W,H，用空格分隔。(1&lt;=W、H&lt;=1000)</p>
-</blockquote>
-<h3 id="输出描述"><a href="#输出描述" class="headerlink" title="输出描述"></a>输出描述</h3><blockquote>
-<p>输出一个最多可以放的蛋糕数</p>
-</blockquote>
-<h3 id="输入例子"><a href="#输入例子" class="headerlink" title="输入例子"></a>输入例子</h3><blockquote>
-<p>3 2</p>
-</blockquote>
-<h3 id="输出例子"><a href="#输出例子" class="headerlink" title="输出例子"></a>输出例子</h3><blockquote>
-<p>4</p>
-</blockquote>
-<h2 id="题目解析"><a href="#题目解析" class="headerlink" title="题目解析"></a>题目解析</h2><p>根据题意，可以推测出蛋糕数最多的放置方案：将网格进行分区，每四个构成一个正方形的网格作为一个分区，类似于坐标变换。假设原坐标为(x,y),那么变换后的分区坐标为(x/2,y/2)。当变换后的分区坐标满足横纵坐标之和为偶数时，该分区内的4个网格均可放置蛋糕。</p>
-<p><img src="/assets/algorithm/putCake.png" alt="putCake"></p>
-<h2 id="解题程序"><a href="#解题程序" class="headerlink" title="解题程序"></a>解题程序</h2><pre><code class="C++">#include &lt;iostream&gt;
-using namespace std;
-
-int main()
-{
-
-  int W,H;
-  int cnt=0; // 定义可放的蛋糕数
-  cin&gt;&gt;W&gt;&gt;H; // 输入盒子网格的行列数
-
-  for(int i = 0; i&lt;H; i++)
-      for(int j = 0; j &lt; W; j++)
-        if((i/2 + j/2) % 2 == 0)
-          cnt++;
-  cout&lt;&lt;cnt&lt;&lt;endl;
-  return 0;
 }
 </code></pre>
 ]]></content>
@@ -14336,9 +14492,9 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
         
         <tags>
             
-            <tag> git </tag>
-            
             <tag> atom </tag>
+            
+            <tag> git </tag>
             
         </tags>
         
@@ -14373,9 +14529,9 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
         
         <tags>
             
-            <tag> tools </tag>
-            
             <tag> utorrent </tag>
+            
+            <tag> tools </tag>
             
         </tags>
         
@@ -14456,59 +14612,6 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
     </entry>
     
     <entry>
-      <title><![CDATA[Labview - 常用快捷键]]></title>
-      <url>https://www.litreily.top/2016/06/06/shrotcuts/</url>
-      <content type="html"><![CDATA[<p>作为一款功能强大的编程软件，自然少不了大量的快捷键支持。在开发过程中，熟练使用这些快捷键，可以高效完成编码调试过程，减少手动操作，提高工作效率。</p>
-<h2 id="菜单快捷键"><a href="#菜单快捷键" class="headerlink" title="菜单快捷键"></a>菜单快捷键</h2><p>打开LabVIEW中的&quot;选项&quot;界面，在&quot;菜单快捷键&quot;中可以看到所有可用的快捷键。当然，如果觉得不够用或是与其它软件有冲突，可以手动添加或修改新的快捷键。</p>
-<p><img src="/assets/labview/shortcuts/editPanel.png" alt="Labview editPanel"></p>
-<h2 id="常用快捷键"><a href="#常用快捷键" class="headerlink" title="常用快捷键"></a>常用快捷键</h2><p>快捷键虽多，但常用的却有限。我简单将其分为通用键、功能键和技巧键。</p>
-<h3 id="通用键"><a href="#通用键" class="headerlink" title="通用键"></a>通用键</h3><p>有些快捷键是大部分软件共有的，其功能也类似。</p>
-<ul>
-<li>Ctrl+N：新建</li>
-<li>Ctrl+A：全选</li>
-<li>Ctrl+C：复制</li>
-<li>Ctrl+V：粘贴</li>
-<li>Ctrl+S：保存</li>
-<li>Ctrl+Shift+S：保存全部</li>
-</ul>
-<h3 id="功能键"><a href="#功能键" class="headerlink" title="功能键"></a>功能键</h3><p>在代码编辑过程中经常会用到的功能性快捷键包括：</p>
-<ul>
-<li>Ctrl+R：运行程序</li>
-<li>Ctrl+E：在前面板和程序框图之间切换</li>
-<li>Ctrl+H：打开/关闭即时帮助</li>
-<li>Ctrl+B：删除断线</li>
-<li>Ctrl+I：查看当前VI属性</li>
-<li>Ctrl+T：左右两栏显示前面板和程序框图</li>
-<li>Ctrl+W：关闭当前界面或项目</li>
-<li>Ctrl+Q：退出LabVIEW</li>
-</ul>
-<h3 id="技巧键"><a href="#技巧键" class="headerlink" title="技巧键"></a>技巧键</h3><ul>
-<li>Ctrl+鼠标拖动：复制被选控件或函数</li>
-<li>Ctrl+鼠标滚轮：切换多层结构的当前结构帧</li>
-<li>Shift+控件：将鼠标改为选择指针，用于选中某个或多个控件</li>
-<li>双击鼠标左键：添加注释</li>
-<li>Ctrl+Shift+鼠标拖动：将鼠标改为手形指针，用于拖动程序框图</li>
-</ul>
-<h3 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h3><p>如果一个函数仅包含两个输入接口时，例如：加、减、乘、除。当我们要切换两个输入接口的连线时，例如减法的两个输入A和B，开始连接的时候是A-B，现在发现不对，要改成B-A。默认我们会去删除两条线然后重新连接，但使用快捷键<code>Ctrl+Click</code>可以直接完成切换。<br><img src="/assets/labview/shortcuts/exchange.gif" alt="Labview exchange"></p>
-<p><strong>使用方法：</strong>在点击Ctrl后移动鼠标至函数的任一输入端，鼠标指针会变为类似数字8的一个图标，此时点击鼠标左键即可完成切换。</p>
-]]></content>
-      
-        <categories>
-            
-            <category> LabVIEW </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> labview </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
       <title><![CDATA[Labview - 对话框程序模板]]></title>
       <url>https://www.litreily.top/2016/06/06/labview-dialog/</url>
       <content type="html"><![CDATA[<p>软件开发过程中，经常要使用对话框界面，例如各种参数设置界面等。为了减少重复性工作，我们可以创建一个对话框模板，往后就可以通过该模板直接新建对话框界面。</p>
@@ -14547,6 +14650,59 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
 <p><img src="/assets/labview/dialog/dialog_2.png" alt="Labview dialog"></p>
 <p>该模板比较简单，但是非常实用，大多数设置界面都可以使用该模板进行设计。当然也可以进一步完善。例如，很多设置界面都有<strong>应用</strong>按钮和<strong>退出</strong>按钮，那么，我们可以在模板中添加一个应用按钮和一个退出按钮，并添加对应的按钮点击事件，修改移位寄存器的值。</p>
 <h2 id="下载模板"><a href="#下载模板" class="headerlink" title="下载模板"></a>下载模板</h2><p>我将模板存至网盘便于下载：<a href="http://pan.baidu.com/s/1pKUe7Ib" target="_blank" rel="noopener">下载链接</a>。</p>
+]]></content>
+      
+        <categories>
+            
+            <category> LabVIEW </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> labview </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Labview - 常用快捷键]]></title>
+      <url>https://www.litreily.top/2016/06/06/shrotcuts/</url>
+      <content type="html"><![CDATA[<p>作为一款功能强大的编程软件，自然少不了大量的快捷键支持。在开发过程中，熟练使用这些快捷键，可以高效完成编码调试过程，减少手动操作，提高工作效率。</p>
+<h2 id="菜单快捷键"><a href="#菜单快捷键" class="headerlink" title="菜单快捷键"></a>菜单快捷键</h2><p>打开LabVIEW中的&quot;选项&quot;界面，在&quot;菜单快捷键&quot;中可以看到所有可用的快捷键。当然，如果觉得不够用或是与其它软件有冲突，可以手动添加或修改新的快捷键。</p>
+<p><img src="/assets/labview/shortcuts/editPanel.png" alt="Labview editPanel"></p>
+<h2 id="常用快捷键"><a href="#常用快捷键" class="headerlink" title="常用快捷键"></a>常用快捷键</h2><p>快捷键虽多，但常用的却有限。我简单将其分为通用键、功能键和技巧键。</p>
+<h3 id="通用键"><a href="#通用键" class="headerlink" title="通用键"></a>通用键</h3><p>有些快捷键是大部分软件共有的，其功能也类似。</p>
+<ul>
+<li>Ctrl+N：新建</li>
+<li>Ctrl+A：全选</li>
+<li>Ctrl+C：复制</li>
+<li>Ctrl+V：粘贴</li>
+<li>Ctrl+S：保存</li>
+<li>Ctrl+Shift+S：保存全部</li>
+</ul>
+<h3 id="功能键"><a href="#功能键" class="headerlink" title="功能键"></a>功能键</h3><p>在代码编辑过程中经常会用到的功能性快捷键包括：</p>
+<ul>
+<li>Ctrl+R：运行程序</li>
+<li>Ctrl+E：在前面板和程序框图之间切换</li>
+<li>Ctrl+H：打开/关闭即时帮助</li>
+<li>Ctrl+B：删除断线</li>
+<li>Ctrl+I：查看当前VI属性</li>
+<li>Ctrl+T：左右两栏显示前面板和程序框图</li>
+<li>Ctrl+W：关闭当前界面或项目</li>
+<li>Ctrl+Q：退出LabVIEW</li>
+</ul>
+<h3 id="技巧键"><a href="#技巧键" class="headerlink" title="技巧键"></a>技巧键</h3><ul>
+<li>Ctrl+鼠标拖动：复制被选控件或函数</li>
+<li>Ctrl+鼠标滚轮：切换多层结构的当前结构帧</li>
+<li>Shift+控件：将鼠标改为选择指针，用于选中某个或多个控件</li>
+<li>双击鼠标左键：添加注释</li>
+<li>Ctrl+Shift+鼠标拖动：将鼠标改为手形指针，用于拖动程序框图</li>
+</ul>
+<h3 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h3><p>如果一个函数仅包含两个输入接口时，例如：加、减、乘、除。当我们要切换两个输入接口的连线时，例如减法的两个输入A和B，开始连接的时候是A-B，现在发现不对，要改成B-A。默认我们会去删除两条线然后重新连接，但使用快捷键<code>Ctrl+Click</code>可以直接完成切换。<br><img src="/assets/labview/shortcuts/exchange.gif" alt="Labview exchange"></p>
+<p><strong>使用方法：</strong>在点击Ctrl后移动鼠标至函数的任一输入端，鼠标指针会变为类似数字8的一个图标，此时点击鼠标左键即可完成切换。</p>
 ]]></content>
       
         <categories>
@@ -14709,11 +14865,11 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
         
         <tags>
             
-            <tag> brackets </tag>
+            <tag> tools </tag>
             
             <tag> git </tag>
             
-            <tag> tools </tag>
+            <tag> brackets </tag>
             
         </tags>
         
@@ -14862,9 +15018,9 @@ easy_install Pygments
         
         <tags>
             
-            <tag> jekyll </tag>
-            
             <tag> windows </tag>
+            
+            <tag> jekyll </tag>
             
             <tag> ruby </tag>
             

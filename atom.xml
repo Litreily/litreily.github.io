@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2020-08-09T09:48:22.137Z</updated>
+  <updated>2020-08-13T11:34:41.043Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -17,11 +17,37 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>python之给pdf添加页码</title>
+    <link href="https://www.litreily.top/2020/08/13/python-pdf/"/>
+    <id>https://www.litreily.top/2020/08/13/python-pdf/</id>
+    <published>2020-08-13T08:56:37.000Z</published>
+    <updated>2020-08-13T11:34:41.043Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;最近写release note, 总感觉用&lt;code&gt;tex&lt;/code&gt;不太方便，特别是装&lt;code&gt;texlive&lt;/code&gt;占用大量空间，还有各种依赖问题，想着能不能用&lt;code&gt;markdown&lt;/code&gt;写更方便。实践证明，&lt;a href=&quot;https://typora.io/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;typora&lt;/a&gt;导出pdf的功能真的很棒，唯独一个不足之处就是生成的PDF不带&lt;strong&gt;页码&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;这个虽然可以使用在线工具实现，或者使用Adobe、福昕的 pdf 编辑功能，但是很多情况，尤其是工作平台是不方便使用的。为此我想到了&lt;code&gt;Python&lt;/code&gt;，通过脚本把页码加上。&lt;/p&gt;
+&lt;h2 id=&quot;安装Python库&quot;&gt;&lt;a href=&quot;#安装Python库&quot; class=&quot;headerlink&quot; title=&quot;安装Python库&quot;&gt;&lt;/a&gt;安装Python库&lt;/h2&gt;&lt;p&gt;首先需要安装两个依赖库，&lt;code&gt;PyPDF2&lt;/code&gt;以及&lt;code&gt;reportLab&lt;/code&gt;, &lt;code&gt;PyPDF2&lt;/code&gt;可以对PDF进行拆分、合并、删除、加密等操作；&lt;code&gt;reportlab&lt;/code&gt;则更是强大，看看下面的官方介绍。&lt;/p&gt;
+&lt;blockqu
+      
+    
+    </summary>
+    
+      <category term="Python" scheme="https://www.litreily.top/categories/Python/"/>
+    
+    
+      <category term="pdf" scheme="https://www.litreily.top/tags/pdf/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Python网络爬虫8 - 爬取彼岸图网美图</title>
     <link href="https://www.litreily.top/2020/08/09/netbian/"/>
     <id>https://www.litreily.top/2020/08/09/netbian/</id>
     <published>2020-08-09T02:54:47.000Z</published>
-    <updated>2020-08-09T09:48:22.137Z</updated>
+    <updated>2020-08-11T10:28:13.625Z</updated>
     
     <summary type="html">
     
@@ -913,32 +939,6 @@ struct linklist *hashtbl[TABLE_SIZE];
       <category term="visualization" scheme="https://www.litreily.top/tags/visualization/"/>
     
       <category term="MongoDB" scheme="https://www.litreily.top/tags/MongoDB/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Python之pypcap库的安装及简单抓包工具的实现</title>
-    <link href="https://www.litreily.top/2018/12/31/pypcap-install/"/>
-    <id>https://www.litreily.top/2018/12/31/pypcap-install/</id>
-    <published>2018-12-31T11:22:30.000Z</published>
-    <updated>2020-06-14T02:12:06.932Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;a href=&quot;https://github.com/pynetwork/pypcap&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;pypcap&lt;/a&gt;是一个对&lt;code&gt;libpcap&lt;/code&gt;C库进行封装和简化的面向对象的抓包工具库，可以非常方便的用于抓包和过滤，结合&lt;code&gt;dpkt&lt;/code&gt;解析库可以完成许多网络数据包的抓取和分析。本文讲述的就是如何使用&lt;code&gt;pypcap&lt;/code&gt;及&lt;code&gt;dpkt&lt;/code&gt;库实现简单抓包工具，也称为嗅探器(sniffer).&lt;/p&gt;
-&lt;h2 id=&quot;Linux-端安装-pypcap&quot;&gt;&lt;a href=&quot;#Linux-端安装-pypcap&quot; class=&quot;headerlink&quot; title=&quot;Linux 端安装 pypcap&quot;&gt;&lt;/a&gt;Linux 端安装 pypcap&lt;/h2&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;sudo apt-get install libpcap-dev
-sudo pip install pypcap
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;这里有个问题,如果使用&lt;code&gt;Anaconda&lt;/code&gt;目录的&lt;code&gt;pip&lt;/code&gt;安装则可能失败,目前原因未明,但官方的&lt;code&gt;python3&lt;/code&gt;对应的&lt;code&gt;pip3&lt;/code&gt;及&lt;code&gt;python2&lt;/code&gt;对应的&lt;code&gt;pip&lt;/code&gt;均无此问题.&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="Python" scheme="https://www.litreily.top/categories/Python/"/>
-    
-    
-      <category term="pypcap" scheme="https://www.litreily.top/tags/pypcap/"/>
-    
-      <category term="dpkt" scheme="https://www.litreily.top/tags/dpkt/"/>
     
   </entry>
   
