@@ -1,0 +1,62 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification"><title>VPS搭建在线VSCode Server | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><meta name="generator" content="Hexo 5.0.2"></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">VPS搭建在线VSCode Server</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2020/06/13/code-server/">2020-06-13</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Linux/">Linux</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><h2 id="VSCode-Server"><a href="#VSCode-Server" class="headerlink" title="VSCode Server"></a>VSCode Server</h2><p>VSCode(Visual Studio Code), 是我目前使用过的最好的编辑器，也应该是很多程序员的首选。然而很多人不知道的是，这款开发利器还有在线版，这包括GitHub即将推出的<code>Satellite</code>, 也会搭载VSCode，那么如果我们想要搭建自己的在线开发环境呢？答案就是<a target="_blank" rel="noopener" href="https://github.com/cdr/code-server">Code Server</a>, 一款可以部署在个人服务器上的VSCode服务。</p>
+<p><img src="/assets/vscode/pods-lg.png" alt="pods logo"></p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>如果在本地，自然是无需搭建这个server的，我的选择是放在阿里云服务器上，对应的是Ubuntu系统，安装过程非常简单。</p>
+<pre><code class="zsh">curl -fsSL https://code-server.dev/install.sh |sh</code></pre>
+<p>安装完会给出提示该怎么操作，其它系统可以参考<a target="_blank" rel="noopener" href="https://github.com/cdr/code-server/blob/master/doc/guide.md">官方文档</a>。</p>
+<h3 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h3><p>使用<code>systemctl</code>启动服务，并保证系统重启可以自启动服务，可以执行以下指令：</p>
+<pre><code class="zsh">systemctl --user enable --now code-server</code></pre>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>VSCode服务有一个配置文件<code>~/.config/code-server/config.yaml</code>，默认配置包含：</p>
+<pre><code class="yaml">bind-addr: 127.0.0.1:8080
+auth: password
+password: somerandominfo
+cert: false</code></pre>
+<p>默认情况下开启了密码认证，同时给了一个初始密码。我们可以将端口号和密码都修改成自己想要的。修改完成以后，记得重启服务。</p>
+<pre><code class="zsh">systemctl --user restart code-server</code></pre>
+<h2 id="VPS安全组"><a href="#VPS安全组" class="headerlink" title="VPS安全组"></a>VPS安全组</h2><p>如果使用的是VPS，默认情况下是会将除ssh以外的其它端口都屏蔽的，所以我们需要在服务器的控制台修改安全组。</p>
+<p><img src="/assets/vscode/vps-port.png" alt="VPS 安全组"></p>
+<p>但是添加以后还是无法访问，后来谷歌后发现是配置问题，上面的<code>127.0.0.1</code>只是针对本地地址，无法被外部网络访问，因此，解决方案就是将<code>127.0.0.1</code>改为<code>0.0.0.0</code>，然后重启服务。</p>
+<h2 id="实例展示"><a href="#实例展示" class="headerlink" title="实例展示"></a>实例展示</h2><p>通过配置好的端口访问VPS的Code Server，首先进入登录页面，输入配置的密码即可。</p>
+<p><img src="/assets/vscode/code-login.png" alt="登录 Code Server"></p>
+<p>好啦，基本和本地的一毛一样，目前尝试过程发现无法复制网页外的其它数据，终端无法使用<code>Ctrl-L</code>清空，算是小瑕疵吧，不过真的超棒，我想，针对需要出差的人群算是福音了。</p>
+<p><img src="/assets/vscode/code-server.png" alt="Code Server"></p>
+<p>首次运行会比较慢，当然可能是我的网速问题，加载一个大型<code>js</code>文件<code>workbench.web.api.js</code>占据了大量时间，在启用浏览器缓存的情况下，往后启动就更快了。</p>
+<p>另外，如果有域名的话，可以按照官方教程安装<a target="_blank" rel="noopener" href="https://github.com/cdr/code-server/blob/master/doc/guide.md#lets-encrypt">Let&#39;s Encrypt.</a>证书，然后通过<code>https</code>访问，这样更加安全。</p>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2020/06/13/code-server/">https://www.litreily.top/2020/06/13/code-server/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tags"></i><a href="/tags/ubuntu/">ubuntu</a><a href="/tags/vps/">vps</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#VSCode-Server"><span class="toc-number">1.</span> <span class="toc-text">VSCode Server</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-number">1.1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C"><span class="toc-number">1.2.</span> <span class="toc-text">运行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE"><span class="toc-number">1.3.</span> <span class="toc-text">配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#VPS%E5%AE%89%E5%85%A8%E7%BB%84"><span class="toc-number">2.</span> <span class="toc-text">VPS安全组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B%E5%B1%95%E7%A4%BA"><span class="toc-number">3.</span> <span class="toc-text">实例展示</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2020/08/09/netbian/">&lt; Python网络爬虫8 - 爬取彼岸图网美图</a><a class="next" href="/2020/05/08/putty-wsl/">Win10中使用ssh访问WSL &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+.night .v[data-class=v] a:hover { color: #216C73 !important; }
+.night .v[data-class=v] li { list-style: inherit; }
+.night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
+.night .v[data-class=v] .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.night .v[data-class=v] .vbtn { border-radius: 0; background: none; }
+.night .v[data-class=v] .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.night .v[data-class=v] .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.night .v[data-class=v] .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre,.night .v[data-class=v] .vlist .vcard .vhead .vsys { background: #203240 !important; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre { color: #F0F0F0; font-size: 95%; }
+.v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
+</style><div id="vcomment"></div><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'',
+  appKey:'',
+  lang: 'zh-cn',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></section><footer><p>Copyright © 2016 - 2020 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/plugins/prettify/prettify.js"></script><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script></body></html>

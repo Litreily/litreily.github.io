@@ -1,0 +1,95 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification"><title>解锁网易云音乐灰色无版权歌曲 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><meta name="generator" content="Hexo 5.0.2"></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">解锁网易云音乐灰色无版权歌曲</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2020/05/03/netease/">2020-05-03</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Media/">Media</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>由于版权之争，网易云的很多歌曲都灰掉并且无法播放了，想要使其可以播放还是有办法的，万能的Google和Github让我找到了<a target="_blank" rel="noopener" href="https://github.com/nondanee/UnblockNeteaseMusic">答案</a>，直接上享用方法吧。</p>
+<h2 id="前提条件"><a href="#前提条件" class="headerlink" title="前提条件"></a>前提条件</h2><ul>
+<li>一个可以远程访问的服务器，比如vps，阿里云、腾讯云、...</li>
+<li>如果没有服务器，只能寻找别人搭建好的服务</li>
+</ul>
+<h2 id="搭建服务"><a href="#搭建服务" class="headerlink" title="搭建服务"></a>搭建服务</h2><p>在服务器端，首先安装依赖的工具<code>npx</code>，如果有则忽略</p>
+<pre><code class="zsh">sudo apt install npm
+sudo npm i -g npx</code></pre>
+<p>然后clone项目UnblockNeteaseMusic.git到本地</p>
+<pre><code class="zsh">git clone git@github.com:nondanee/UnblockNeteaseMusic.git
+cd UnblockNeteaseMusic</code></pre>
+<p>接下来是运行服务，有好几种方式，下面介绍3种</p>
+<h3 id="npx启动"><a href="#npx启动" class="headerlink" title="npx启动"></a>npx启动</h3><p>第一种，最简单的是直接用npx启动，默认以8080端口打开</p>
+<pre><code class="zsh">npx @npndanee/unblockneteasemusic</code></pre>
+<h3 id="node启动"><a href="#node启动" class="headerlink" title="node启动"></a>node启动</h3><p>第二种方式，使用node, <code>-p</code>参数指定端口</p>
+<pre><code class="zsh">npde app.js -p 4321</code></pre>
+<h3 id="搭建系统服务"><a href="#搭建系统服务" class="headerlink" title="搭建系统服务"></a>搭建系统服务</h3><p>第三种，使用服务方式，方便管理和查看状态</p>
+<pre><code class="zsh"># 新建服务
+# 注意填写的路径是clone的UnblockNeteaseMusic所在目录
+sudo cat &gt; /etc/systemd/system/UnblockNeteaseMusic.service &lt;&lt;EOF
+[Unit]
+Description=UnblockNeteaseMusic
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+PIDFile=/var/run/UnblockNeteaseMusic.pid
+WorkingDirectory=/home/litreily/UnblockNeteaseMusic
+ExecStart=/home/litreily/UnblockNeteaseMusic/app.js -p 4321
+RestartPreventExitStatus=23
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# 添加app.js的执行权限，不添加可能无法启动服务
+sudo chmod a+x app.js
+
+# 启动、停止、重启、查看服务
+systemctl start UnblockNeteaseMusic.service
+systemctl stop UnblockNeteaseMusic.service
+systemctl restart UnblockNeteaseMusic.service
+systemctl status UnblockNeteaseMusic.service</code></pre>
+<p>除了这三种以外，还可以使用Docker，具体参考github文档即可</p>
+<h2 id="使用代理"><a href="#使用代理" class="headerlink" title="使用代理"></a>使用代理</h2><p>在服务器端搭建好了代理，就需要在我们的客户端使用它咯，在windows上，网易云音乐不管UWP应用还是普通安装应用都是直接设置代理的。</p>
+<p><img src="/assets/music/netease-proxy.png" alt="网易云音乐代理"></p>
+<p>当然，也可以使用其它工具设置代理，比如小飞机、系统代理等等，因为这个代理已经实现了完整的http/https服务，所以也是可以作为全局代理使用的，不过我已经使用其它代理用于科学上网，所以就只在网易云配置下代理就好了。</p>
+<p>该工具非常强大，代理配置好后，我看了下之前灰掉的歌曲，确实可以正常播放了，amazing!</p>
+<p><img src="/assets/stickers/cheers.gif" alt="cheers"></p>
+<p>该工具也适用于其它系统和移动端，有需要的可以尝试下。最后提醒下各位，有能力的还是支持正版，同时也请低调使用。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/nondanee/UnblockNeteaseMusic">Github UnblockNeteaseMusic</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.nange.cn/unlock-netease-music.html">解锁网易云音乐灰色无版权歌曲，使其变为正常可听可下载状态</a></li>
+</ul>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2020/05/03/netease/">https://www.litreily.top/2020/05/03/netease/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tag"></i><a href="/tags/music/">music</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E6%8F%90%E6%9D%A1%E4%BB%B6"><span class="toc-number">1.</span> <span class="toc-text">前提条件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%90%AD%E5%BB%BA%E6%9C%8D%E5%8A%A1"><span class="toc-number">2.</span> <span class="toc-text">搭建服务</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#npx%E5%90%AF%E5%8A%A8"><span class="toc-number">2.1.</span> <span class="toc-text">npx启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#node%E5%90%AF%E5%8A%A8"><span class="toc-number">2.2.</span> <span class="toc-text">node启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%90%AD%E5%BB%BA%E7%B3%BB%E7%BB%9F%E6%9C%8D%E5%8A%A1"><span class="toc-number">2.3.</span> <span class="toc-text">搭建系统服务</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%90%86"><span class="toc-number">3.</span> <span class="toc-text">使用代理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2020/05/03/md2bm/">&lt; Python之markdown转Chrome收藏夹</a><a class="next" href="/2020/04/30/lftp_get/">lftp获取FTP Server端最新文件 &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+.night .v[data-class=v] a:hover { color: #216C73 !important; }
+.night .v[data-class=v] li { list-style: inherit; }
+.night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
+.night .v[data-class=v] .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.night .v[data-class=v] .vbtn { border-radius: 0; background: none; }
+.night .v[data-class=v] .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.night .v[data-class=v] .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.night .v[data-class=v] .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre,.night .v[data-class=v] .vlist .vcard .vhead .vsys { background: #203240 !important; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre { color: #F0F0F0; font-size: 95%; }
+.v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
+</style><div id="vcomment"></div><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'',
+  appKey:'',
+  lang: 'zh-cn',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></section><footer><p>Copyright © 2016 - 2020 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/plugins/prettify/prettify.js"></script><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script></body></html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification"><title>python之给pdf添加页码 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><meta name="generator" content="Hexo 5.0.2"></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">python之给pdf添加页码</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2020/08/13/python-pdf/">2020-08-13</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Python/">Python</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>最近写release note, 总感觉用<code>tex</code>不太方便，特别是装<code>texlive</code>占用大量空间，还有各种依赖问题，想着能不能用<code>markdown</code>写更方便。实践证明，<a target="_blank" rel="noopener" href="https://typora.io/">typora</a>导出pdf的功能真的很棒，唯独一个不足之处就是生成的PDF不带<strong>页码</strong>。</p>
+<p>这个虽然可以使用在线工具实现，或者使用Adobe、福昕的 pdf 编辑功能，但是很多情况，尤其是工作平台是不方便使用的。为此我想到了<code>Python</code>，通过脚本把页码加上。</p>
+<h2 id="安装Python库"><a href="#安装Python库" class="headerlink" title="安装Python库"></a>安装Python库</h2><p>首先需要安装两个依赖库，<code>PyPDF2</code>以及<code>reportLab</code>, <code>PyPDF2</code>可以对PDF进行拆分、合并、删除、加密等操作；<code>reportlab</code>则更是强大，看看下面的官方介绍。</p>
+<blockquote>
+<p>We build solutions to generate rich, attractive and fully bespoke PDFs at incredible speeds.<br>Over 5 million documents are generated each month using Reportlab&#39;s software<br>--- <a target="_blank" rel="noopener" href="https://www.reportlab.com/">https://www.reportlab.com/</a></p>
+</blockquote>
+<pre><code class="py">sudo pip3 install pypdf2
+sudo pip3 install reportlab</code></pre>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>添加页码思路如下：</p>
+<ol>
+<li>使用<code>PyPDF2</code>打开待添加页码的PDF, 记录总页数</li>
+<li>使用<code>reportlab</code>创建只带有页码的临时PDF，页面数量与待修改文件一致</li>
+<li>将临时PDF和待修改PDF合并在一起</li>
+<li>保存合并以后的PDF文件</li>
+</ol>
+<p>具体实现如下：</p>
+<h3 id="创建临时PDF"><a href="#创建临时PDF" class="headerlink" title="创建临时PDF"></a>创建临时PDF</h3><p>使用<code>reportlab</code>创建PDF，每个页面对应一个画布<code>canvas</code>，创建页面的过程就像是在画布上画画，把页码画在指定的位置，A4纸张210mm*297mm，以画布左下角为原点，那么页码的坐标大概是 (210/2-1, 4) = (104, 4), 单位mm</p>
+<p>下面的函数就是在已知总页面数的情况下逐页绘制页码，然后保存至tmp文件中。</p>
+<pre><code class="py">from reportlab.lib.units import mm
+from reportlab.pdfgen import canvas
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+
+
+def create_pdf_with_pagenumber(tmp, num):
+    &#39;&#39;&#39;create tmp pdf that only include page number&#39;&#39;&#39;
+    pdfmetrics.registerFont(
+        TTFont(&#39;Times-New-Roman&#39;, &#39;C:\\Windows\\Fonts\\times.ttf&#39;))
+    c = canvas.Canvas(tmp)
+    for i in range(num):
+        c.setFont(&#39;Times-New-Roman&#39;, 10)
+        c.drawString((104)*mm, (4)*mm, str(i + 1))
+        c.showPage()
+    c.save()</code></pre>
+<h3 id="合并PDF"><a href="#合并PDF" class="headerlink" title="合并PDF"></a>合并PDF</h3><p>合并PDF主要用到的是<code>PyPDF2</code>的PdfFileWriter, PdfFileReader, 一个写，一个读。合并过程很简单，打开文件，逐页读取(getPage)，使用mergePage合并两个PDF的对应页面，然后将合并后的页面写入(addPage)到输出文件中。</p>
+<pre><code class="py">from PyPDF2 import PdfFileWriter, PdfFileReader
+
+path = &#39;release_notes.pdf&#39;
+tmp = &quot;tmp.pdf&quot;
+
+dst_pdf = PdfFileWriter()
+with open(path, &#39;rb&#39;) as f:
+    src_pdf = PdfFileReader(f, strict=False)
+    n = src_pdf.getNumPages()
+    create_pdf_with_pagenumber(tmp, n)
+
+    with open(tmp, &#39;rb&#39;) as ftmp:
+        num_pdf = PdfFileReader(ftmp)
+        for i in range(n):
+            print(&#39;page: %d of %d&#39; % (i+1, n))
+            page = src_pdf.getPage(i)
+            num_layer = num_pdf.getPage(i)
+
+            page.mergePage(num_layer)
+            dst_pdf.addPage(page)
+
+    if dst_pdf.getNumPages():
+        output = &#39;&amp;#123;&amp;#125;_new.pdf&#39;.format(path.split(&#39;.&#39;)[0])
+        with open(output, &#39;wb&#39;) as f:
+            dst_pdf.write(f)
+
+    os.remove(tmp)</code></pre>
+<h3 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h3><pre><code class="python">#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+&#39;&#39;&#39;add page number to pdf file&#39;&#39;&#39;
+
+import sys
+import os
+
+import reportlab
+from reportlab.lib.units import mm
+from reportlab.pdfgen import canvas
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+
+from PyPDF2 import PdfFileWriter, PdfFileReader
+
+
+def create_pdf_with_pagenumber(tmp, num):
+    &#39;&#39;&#39;create tmp pdf that only include page number&#39;&#39;&#39;
+    pdfmetrics.registerFont(
+        TTFont(&#39;Times-New-Roman&#39;, &#39;C:\\Windows\\Fonts\\times.ttf&#39;))
+    c = canvas.Canvas(tmp)
+    for i in range(num):
+        c.setFont(&#39;Times-New-Roman&#39;, 10)
+        c.drawString((104)*mm, (4)*mm, str(i + 1))
+        c.showPage()
+    c.save()
+
+
+def main():
+    path = &#39;release_notes.pdf&#39;
+    if len(sys.argv) == 1:
+        if not os.path.isfile(path):
+            sys.exit(1)
+    else:
+        path = os.path.basename(sys.argv[1])
+
+    tmp = &quot;tmp.pdf&quot;
+    dst_pdf = PdfFileWriter()
+    with open(path, &#39;rb&#39;) as f:
+        src_pdf = PdfFileReader(f, strict=False)
+        n = src_pdf.getNumPages()
+        create_pdf_with_pagenumber(tmp, n)
+
+        with open(tmp, &#39;rb&#39;) as ftmp:
+            num_pdf = PdfFileReader(ftmp)
+            for i in range(n):
+                print(&#39;page: %d of %d&#39; % (i+1, n))
+                page = src_pdf.getPage(i)
+                num_layer = num_pdf.getPage(i)
+
+                page.mergePage(num_layer)
+                dst_pdf.addPage(page)
+
+        if dst_pdf.getNumPages():
+            output = &#39;&amp;#123;&amp;#125;_new.pdf&#39;.format(path.split(&#39;.&#39;)[0])
+            with open(output, &#39;wb&#39;) as f:
+                dst_pdf.write(f)
+
+        os.remove(tmp)
+
+
+if __name__ == &quot;__main__&quot;:
+    main()</code></pre>
+<p>使用很简单</p>
+<pre><code class="bash">python3 main.py filename.pdf</code></pre>
+<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://gist.github.com/DIYer22/b9ede6b5b96109788a47973649645c1f">https://gist.github.com/DIYer22/b9ede6b5b96109788a47973649645c1f</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.reportlab.com/docs/reportlab-userguide.pdf">ReportLab PDF Library User Guide.pdf</a></li>
+</ul>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2020/08/13/python-pdf/">https://www.litreily.top/2020/08/13/python-pdf/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tag"></i><a href="/tags/pdf/">pdf</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Python%E5%BA%93"><span class="toc-number">1.</span> <span class="toc-text">安装Python库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.</span> <span class="toc-text">代码实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%B4%E6%97%B6PDF"><span class="toc-number">2.1.</span> <span class="toc-text">创建临时PDF</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%88%E5%B9%B6PDF"><span class="toc-number">2.2.</span> <span class="toc-text">合并PDF</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%8C%E6%95%B4%E4%BB%A3%E7%A0%81"><span class="toc-number">2.3.</span> <span class="toc-text">完整代码</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#reference"><span class="toc-number">3.</span> <span class="toc-text">reference</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2020/09/17/openssl/">&lt; openssl 验证证书有效性</a><a class="next" href="/2020/08/09/netbian/">Python网络爬虫8 - 爬取彼岸图网美图 &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+.night .v[data-class=v] a:hover { color: #216C73 !important; }
+.night .v[data-class=v] li { list-style: inherit; }
+.night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
+.night .v[data-class=v] .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.night .v[data-class=v] .vbtn { border-radius: 0; background: none; }
+.night .v[data-class=v] .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.night .v[data-class=v] .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.night .v[data-class=v] .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre,.night .v[data-class=v] .vlist .vcard .vhead .vsys { background: #203240 !important; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre { color: #F0F0F0; font-size: 95%; }
+.v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
+</style><div id="vcomment"></div><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'',
+  appKey:'',
+  lang: 'zh-cn',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></section><footer><p>Copyright © 2016 - 2020 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/plugins/prettify/prettify.js"></script><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script></body></html>

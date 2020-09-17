@@ -1,0 +1,150 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification"><title>初探makefile | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><meta name="generator" content="Hexo 5.0.2"></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">初探makefile</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2017/07/25/makefile/">2017-07-25</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Linux/">Linux</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>嵌入式软件开发少不了使用makefile进行软件编译，写好一个makefile，让其完成所有程序代码的自动化编译链接，可以提高软件开发效率。<code>make</code>是一个命令工具，用于解释并执行makefile中的指令。大多数IDE都有这个命令工具，如<code>Visual C++</code>的<code>nmake</code>，<code>Linux</code>中<code>GNU</code>的<code>make</code>。本文以一个简单例子说明<code>makefile</code>文件的书写规范和执行过程。</p>
+<h2 id="创建待编译的文件"><a href="#创建待编译的文件" class="headerlink" title="创建待编译的文件"></a>创建待编译的文件</h2><pre><code class="bash">mkdir mkfiles
+vim add.h add.c main.h main.c</code></pre>
+<p>然后逐个编辑头文件和源文件，实现一个简单的加法运算。</p>
+<h3 id="add-h"><a href="#add-h" class="headerlink" title="add.h"></a>add.h</h3><p>加法函数放于<code>add.c</code>中，对应头文件为<code>add.h</code>，用于存放函数声明。</p>
+<pre><code class="c">#ifndef __ADD_H_
+#define __ADD_H_
+
+// declaration functions
+int add(int a,int b);
+
+#endif // __ADD_H_</code></pre>
+<h3 id="add-c"><a href="#add-c" class="headerlink" title="add.c"></a>add.c</h3><p>在<code>add.c</code>中实现加法函数。</p>
+<pre><code class="c">#include &quot;add.h&quot;
+
+int add(int a, int b)
+&amp;#123;
+  return a+b;
+&amp;#125;</code></pre>
+<h3 id="main-h"><a href="#main-h" class="headerlink" title="main.h"></a>main.h</h3><p>在主函数对应的头文件<code>main.h</code>中添加依赖的头文件。</p>
+<pre><code class="c">#ifndef __MAIN_H_
+#define __MAIN_H_
+
+#include &lt;math.h&gt;
+
+#endif // __MAIN_H_</code></pre>
+<h3 id="main-c"><a href="#main-c" class="headerlink" title="main.c"></a>main.c</h3><p>在<code>main.c</code>中实现主函数，打印出一个加法运算结果。</p>
+<pre><code class="c">#include &lt;stdio.h&gt;
+#include &quot;main.h&quot;
+#include &quot;add.h&quot;
+
+int main(void)
+&amp;#123;
+  int a = 10;
+  int b = 1;
+  int c = add(a,b);
+  printf(&quot;%d + %d = %d\n&quot;,a,b,c);
+  return 0;
+&amp;#125;</code></pre>
+<h2 id="创建-makefile"><a href="#创建-makefile" class="headerlink" title="创建 makefile"></a>创建 makefile</h2><h3 id="makefile-规则"><a href="#makefile-规则" class="headerlink" title="makefile 规则"></a>makefile 规则</h3><pre><code class="bash">target ... : prerequisites ...
+&lt;tab&gt;   command
+
+...
+...</code></pre>
+<p><code>target</code>: 目标文件，可以是.o（object file）文件，也可以是最终的可执行文件<br><code>prerequisites</code> : 生成目标文件所需的文件或是目标（<code>*.h</code>, <code>*.c</code>, <code>*.o</code>, ...）<br><code>command</code>: <code>make</code>需要执行的编译、链接等指令（所有指令前都以<code>TAB</code>键开头）</p>
+<h3 id="makefile-基础写法"><a href="#makefile-基础写法" class="headerlink" title="makefile 基础写法"></a>makefile 基础写法</h3><pre><code class="makefile">test : main.o add.o
+cc -o test main.o add.o
+
+main.o : main.c main.h add.h
+cc -c main.c
+
+add.o : add.c add.h
+cc -c add.c
+
+# make clean : use to clean all the object files
+
+.PHONY : clean
+clean :
+rm test main.o add.o</code></pre>
+<p>其中，test, main.o, add.o均是目标文件<code>target</code>；所有源文件及头文件均为<code>prerequisites</code>；</p>
+<p><code>cc</code> : 编译器，与<code>gcc</code>相似，<code>-c</code>代表编译，执行后产生对象文件，即&quot;.o&quot;文件；<code>-o</code>代表链接，用于链接&quot;.o&quot;文件并生成可执行文件；</p>
+<p><code>.PHONY</code> : 用于声明后面跟着的都是伪目标（类似于C语言中的标签(Label)）；</p>
+<p><code>clean</code> ： 一个伪目标，只有在外部执行<code>make clean</code>时方才执行相应的执行，此次用于删除生成的所有目标文件。</p>
+<h3 id="makefile-简化版1"><a href="#makefile-简化版1" class="headerlink" title="makefile 简化版1"></a>makefile 简化版1</h3><p>在<code>makefile</code>中可以通过<code>$</code>符号引用变量，简化文件。变量定义以等号连接，类似于宏定义，将需要多处使用的字符串存入变量中可以方便修改和管理，如本例，可定义以下变量：</p>
+<pre><code class="makefile">objs = main.o add.o  # 引用方法 $(objs)</code></pre>
+<p>简化后的<code>makefile</code>如下：</p>
+<pre><code class="makefile">objs = main.o add.o
+test : $(objs)
+cc -o test $(objs)
+
+main.o : main.c main.h add.h
+cc -c main.c
+
+add.o : add.c add.h
+cc -c add.c
+
+# make clean : use to clean all the object files
+
+.PHONY : clean
+clean :
+rm test (objs)</code></pre>
+<p>当项目文件很多时，合理使用变量可以大大简化<code>makefile</code>的编写和修改。</p>
+<h3 id="makefile-简化版2"><a href="#makefile-简化版2" class="headerlink" title="makefile 简化版2"></a>makefile 简化版2</h3><p>要知道，<code>make</code>非常强大，具有<strong>自动推导</strong>的功能，可以自动推导&quot;.o&quot;目标文件下面的指令。如果目标文件为&quot;main.o&quot;，那么指令必然为&quot;cc -c main.c&quot;，依赖于<code>make</code>指令的推导功能，<code>makefile</code>可以省略该指令的编写。</p>
+<p>此外，每个&quot;.o&quot;目标文件的依赖文件必然包含一个文件名相同的&quot;.c&quot;文件，该文件可以通过自动推导得出，所以在<code>makefile</code>中同样可以省略。</p>
+<p>根据以上规则可以对<code>makefile</code>进一步简化：</p>
+<pre><code class="makefile">objs = main.o add.o
+test : $(objs)
+cc -o test $(objs)
+
+main.o : main.h add.h
+add.o : add.h
+
+# make clean : use to clean all the object files
+
+.PHONY : clean
+clean :
+rm test (objs)</code></pre>
+<h2 id="make"><a href="#make" class="headerlink" title="make"></a>make</h2><p>编写好<code>makefile</code>文件后，便可以使用<code>make</code>指令进行编译链接并生成可执行文件了。</p>
+<pre><code class="bash">$ make  # 生成可执行文件
+cc -c main.c
+cc -c add.c
+cc -o test main.o add.o
+$ ls
+add.c  add.h  add.o  main.c  main.h  main.o  makefile  test
+$ ./test  # 执行可执行文件
+10 + 1 = 11
+$ make clean  # 清除所有目标文件
+rm test main.o add.o
+$ ls
+add.c  add.h  main.c  main.h  makefile</code></pre>
+<p>至此，一个简单的<code>makefile</code>编写过程及执行过程便结束了。</p>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2017/07/25/makefile/">https://www.litreily.top/2017/07/25/makefile/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tags"></i><a href="/tags/C-C/">C/C++</a><a href="/tags/ubuntu/">ubuntu</a><a href="/tags/makefile/">makefile</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%BE%85%E7%BC%96%E8%AF%91%E7%9A%84%E6%96%87%E4%BB%B6"><span class="toc-number">1.</span> <span class="toc-text">创建待编译的文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#add-h"><span class="toc-number">1.1.</span> <span class="toc-text">add.h</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#add-c"><span class="toc-number">1.2.</span> <span class="toc-text">add.c</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#main-h"><span class="toc-number">1.3.</span> <span class="toc-text">main.h</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#main-c"><span class="toc-number">1.4.</span> <span class="toc-text">main.c</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA-makefile"><span class="toc-number">2.</span> <span class="toc-text">创建 makefile</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#makefile-%E8%A7%84%E5%88%99"><span class="toc-number">2.1.</span> <span class="toc-text">makefile 规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#makefile-%E5%9F%BA%E7%A1%80%E5%86%99%E6%B3%95"><span class="toc-number">2.2.</span> <span class="toc-text">makefile 基础写法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#makefile-%E7%AE%80%E5%8C%96%E7%89%881"><span class="toc-number">2.3.</span> <span class="toc-text">makefile 简化版1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#makefile-%E7%AE%80%E5%8C%96%E7%89%882"><span class="toc-number">2.4.</span> <span class="toc-text">makefile 简化版2</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#make"><span class="toc-number">3.</span> <span class="toc-text">make</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2017/07/27/mixwith-shell/">&lt; C程序与Shell脚本混合编程</a><a class="next" href="/2017/06/11/initial-ubuntu/">安装Ubuntu后的系统精简与美化 &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+.night .v[data-class=v] a:hover { color: #216C73 !important; }
+.night .v[data-class=v] li { list-style: inherit; }
+.night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
+.night .v[data-class=v] .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.night .v[data-class=v] .vbtn { border-radius: 0; background: none; }
+.night .v[data-class=v] .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.night .v[data-class=v] .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.night .v[data-class=v] .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre,.night .v[data-class=v] .vlist .vcard .vhead .vsys { background: #203240 !important; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre { color: #F0F0F0; font-size: 95%; }
+.v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
+</style><div id="vcomment"></div><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'',
+  appKey:'',
+  lang: 'zh-cn',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></section><footer><p>Copyright © 2016 - 2020 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/plugins/prettify/prettify.js"></script><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script></body></html>

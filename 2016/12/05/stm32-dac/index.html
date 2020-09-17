@@ -1,0 +1,195 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification"><title>stm32 - DAC基本输出方式 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><meta name="generator" content="Hexo 5.0.2"></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">stm32 - DAC基本输出方式</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2016/12/05/stm32-dac/">2016-12-05</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Embedded/">Embedded</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><h2 id="DAC简介"><a href="#DAC简介" class="headerlink" title="DAC简介"></a>DAC简介</h2><p>数模转换器(DAC)是极为常用的电子器件，可以将数字量转换为以参考量为基准的模拟量，以满足应用需求。</p>
+<h3 id="电压输出模式"><a href="#电压输出模式" class="headerlink" title="电压输出模式"></a>电压输出模式</h3><p>在<code>stm32</code>中，<code>D/A</code>转换器包含以下三种输出方式：</p>
+<ol>
+<li>输出电压</li>
+<li>噪声生成</li>
+<li>三角波生成</li>
+</ol>
+<p>本文将着重介绍最基本的电压输出方式。</p>
+<h3 id="主要特征"><a href="#主要特征" class="headerlink" title="主要特征"></a>主要特征</h3><p>DAC的主要特征有：</p>
+<ol>
+<li>2个DAC转换器：1个输出通道对应1个转换器</li>
+<li>8位或者12位单调输出</li>
+<li>12位模式下数据左对齐或者右对齐</li>
+<li>同步更新功能</li>
+<li>噪声波形生成</li>
+<li>三角波形生成</li>
+<li>双DAC通道同时或者分别转换</li>
+<li>每个通道都有DMA功能</li>
+<li>外部触发转换</li>
+<li>输入参考电压V_REF+</li>
+</ol>
+<h3 id="数据对齐方式"><a href="#数据对齐方式" class="headerlink" title="数据对齐方式"></a>数据对齐方式</h3><p>DAC 输出通道的数据对齐方式包含以下三种：</p>
+<ol>
+<li>8位右对齐</li>
+<li>12位左对齐</li>
+<li>12位右对齐</li>
+</ol>
+<p>此外，在单 DAC 通道模式下，数据寄存器的存储方式如下：</p>
+<p><img src="/assets/stm32/dacAlignMode.png" alt="dacAlignMode1"></p>
+<p>在双 DAC 通道模式下，数据寄存器的存储方式则为：</p>
+<p><img src="/assets/stm32/dacAlignMode2.png" alt="dacAlignMode2"></p>
+<p>我通常会选择12位右对齐方式，并在单通道模式设置数据时与<code>0x0fff</code>进行&quot;位与&quot;。</p>
+<h3 id="DAC转换"><a href="#DAC转换" class="headerlink" title="DAC转换"></a>DAC转换</h3><p><img src="/assets/stm32/dacConvert.png" alt="dacConvert"></p>
+<p>用户无法直接对DAC的数据寄存器 DAC_DORx 写入数据，只能通过修改数据保持寄存器 DAC_DHRx 装入数据。</p>
+<ol>
+<li>未选择&quot;硬件触发&quot;时，保持寄存器 DAC_DHRx 的值将在1个APB1周期后自动传入数据寄存器 DAC_DORx；</li>
+<li>已选择&quot;硬件触发&quot;时，保持寄存器 DAC_DHRx 的值将在触发发生后3个APB1后传入数据寄存器 DAC_DORx。</li>
+<li>当数据存入 DAC_DORx 后再经过时间 t_settings（与负载和电源电压有关），输出变为有效。</li>
+</ol>
+<h3 id="DAC触发方式"><a href="#DAC触发方式" class="headerlink" title="DAC触发方式"></a>DAC触发方式</h3><pre><code class="C">#define DAC_Trigger_None                   ((uint32_t)0x00000000)
+/*!&lt; Conversion is automatic once the DAC1_DHRxxxx register
+has been loaded, and not by external trigger */
+
+#define DAC_Trigger_T6_TRGO                ((uint32_t)0x00000004)
+/*!&lt; TIM6 TRGO selected as external conversion trigger for DAC channel */
+
+#define DAC_Trigger_T8_TRGO                ((uint32_t)0x0000000C)
+/*!&lt; TIM8 TRGO selected as external conversion trigger for DAC channel
+only in High-density devices*/
+
+#define DAC_Trigger_T3_TRGO                ((uint32_t)0x0000000C)
+/*!&lt; TIM8 TRGO selected as external conversion trigger for DAC channel
+only in Connectivity line, Medium-density and Low-density Value Line devices */
+
+#define DAC_Trigger_T7_TRGO                ((uint32_t)0x00000014)
+/*!&lt; TIM7 TRGO selected as external conversion trigger for DAC channel */
+
+#define DAC_Trigger_T5_TRGO                ((uint32_t)0x0000001C)
+/*!&lt; TIM5 TRGO selected as external conversion trigger for DAC channel */
+
+#define DAC_Trigger_T15_TRGO               ((uint32_t)0x0000001C)
+/*!&lt; TIM15 TRGO selected as external conversion trigger for DAC channel
+only in Medium-density and Low-density Value Line devices*/
+
+#define DAC_Trigger_T2_TRGO                ((uint32_t)0x00000024)
+/*!&lt; TIM2 TRGO selected as external conversion trigger for DAC channel */
+
+#define DAC_Trigger_T4_TRGO                ((uint32_t)0x0000002C)
+/*!&lt; TIM4 TRGO selected as external conversion trigger for DAC channel */
+
+#define DAC_Trigger_Ext_IT9                ((uint32_t)0x00000034)
+/*!&lt; EXTI Line9 event selected as external conversion trigger for DAC channel */
+
+#define DAC_Trigger_Software               ((uint32_t)0x0000003C)
+/*!&lt; Conversion started by software trigger for DAC channel */</code></pre>
+<p><strong>触发方式</strong> 大致可分为四类：</p>
+<ol>
+<li>DAC_Trigger_None : 无触发;</li>
+<li>DAC_Trigger_Tx_TRGO : 来自片上定时器的TRGO输出</li>
+<li>DAC_Trigger_Ext_IT9 : 来自外部中断线9的上升沿</li>
+<li>DAC_Trigger_Software : 来自软件控制位 SWTRIG</li>
+</ol>
+<p>当 DAC 接口检测到来自定时器 <strong>TRGO输出</strong> 或 <strong>EXTI9</strong> 的上升沿时，最近存入 DAC_DHRx 中的数据将被传入 DAC_DORx 中。经3个APB1周期后更新 DAC_DORx 的值。对于 &quot;软件触发&quot;，需要在程序中对 <strong>SWTRIG</strong> 置位完成触发，该触发位将被硬件自动清零。</p>
+<h3 id="DAC输出电压"><a href="#DAC输出电压" class="headerlink" title="DAC输出电压"></a>DAC输出电压</h3><p>DAC输出 = V_reference × DOR /4095;</p>
+<p>式中，V_reference 为参考电压，DOR 为 DAC 输出数据寄存器的值（0<del>255/0</del>4095）。</p>
+<h2 id="DAC-基本输出方式"><a href="#DAC-基本输出方式" class="headerlink" title="DAC 基本输出方式"></a>DAC 基本输出方式</h2><h3 id="DAC-参数设置"><a href="#DAC-参数设置" class="headerlink" title="DAC 参数设置"></a>DAC 参数设置</h3><p>在<code>stm32f103</code>中包含2个通道的12位<code>D/A</code>转换器，<code>PA4</code>与<code>PA5</code>作为两个通道输出接口，在使用时需要配置为模拟输入<code>AIN</code>。当使能 DAC 的输出通道后，相应的 GPIO 管脚将自动与 DAC 的模拟输出接口（DAC_OUTx）相连。</p>
+<pre><code class="C">void dacConfig(void)
+&amp;#123;
+GPIO_InitTypeDef  GPIO_InitStructure;
+DAC_InitTypeDef DAC_InitStructure;
+
+/* 开启GPIOA时钟 */
+RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
+
+GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
+GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;
+/* 配置DAC输出通道 */
+GPIO_Init(GPIOA, &amp;GPIO_InitStructure);
+
+
+/* 开启DAC时钟 */
+RCC_APB1PeriphClockCmd(RCC_APB1Periph_DAC,ENABLE);
+
+DAC_InitStructure.DAC_Trigger = DAC_Trigger_None;                  // 无触发
+DAC_InitStructure.DAC_WaveGeneration = DAC_WaveGeneration_None;    // 无波形生成
+DAC_InitStructure.DAC_LFSRUnmask_TriangleAmplitude = DAC_LFSRUnmask_Bit0;
+DAC_InitStructure.DAC_OutputBuffer = DAC_OutputBuffer_Disable;     // 禁用输出缓存
+/* 配置DAC参数 */
+DAC_Init(DAC_Channel_1,&amp;DAC_InitStructure);
+
+/* enable dac1 */
+DAC_Cmd(DAC_Channel_1,ENABLE);
+&amp;#125;</code></pre>
+<h3 id="设置-DAC-输出电压"><a href="#设置-DAC-输出电压" class="headerlink" title="设置 DAC 输出电压"></a>设置 DAC 输出电压</h3><p>经测试，我所用最小系统板的DA参考电压并非<code>3.3v</code>，而是接近于<code>3.24v</code>，我们可以通过宏定义配置好参考电压。</p>
+<pre><code class="C">#define REFERENCE_VOLTAGE 3.24f      // DAC 参考电压</code></pre>
+<p>根据公式 <code>data = 4095*(v/v_ref)</code>可以求得电压v对应的12位数。</p>
+<pre><code class="C">void setVoltage(double voltage)
+&amp;#123;
+uint16_t temp;
+
+if(voltage &lt; 0.0 || voltage &gt; REFERENCE_VOLTAGE)
+  return;
+
+temp = (uint16_t)(4095*voltage/REFERENCE_VOLTAGE) &amp; 0x0fff;
+
+DAC_SetChannel1Data(DAC_Align_12b_R,temp);     // 电压输出：12位右对齐
+&amp;#125;</code></pre>
+<h3 id="产生正弦波信号"><a href="#产生正弦波信号" class="headerlink" title="产生正弦波信号"></a>产生正弦波信号</h3><p>使用宏定义<code>PI</code>以及采样频率，并添加头文件<code>math.h</code>。</p>
+<pre><code class="C">#include &lt;math.h&gt;
+
+#define PI  3.14159f
+#define FSAMPLE 100                 // 采样频率 （Hz）</code></pre>
+<p>使用<code>sin</code>函数和一个<code>static</code>变量即可生成正弦信号。</p>
+<pre><code class="C">void createSinWave(double baseAmp, double amp, double frequency, double fSample)
+&amp;#123;
+static uint32_t time = 0;
+double voltage = 0.0;
+
+voltage = amp*sin(2*PI*frequency*time/fSample) + baseAmp;
+time++;
+
+setVoltage(voltage);
+&amp;#125;</code></pre>
+<p>修改<code>main</code>函数，每隔一个采样周期修改一次DA输出电压，完成正弦信号的输出。</p>
+<pre><code class="C">int main(void)
+&amp;#123;
+dacConfig();
+while(1)
+&amp;#123;
+  createSinWave(2,0.5,1,FSAMPLE); // 产生 2±0.5v , 1Hz 的正弦信号
+  delayMs(1000.0/FSAMPLE);
+&amp;#125;
+&amp;#125;</code></pre>
+<h3 id="查看波形"><a href="#查看波形" class="headerlink" title="查看波形"></a>查看波形</h3><p>使用示波器或NI采集卡即可查看生成的正弦信号。</p>
+<p><img src="/assets/stm32/dacOutput.png" alt="DacOutput"></p>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2016/12/05/stm32-dac/">https://www.litreily.top/2016/12/05/stm32-dac/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tags"></i><a href="/tags/C-C/">C/C++</a><a href="/tags/stm32/">stm32</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#DAC%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">DAC简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%B5%E5%8E%8B%E8%BE%93%E5%87%BA%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.1.</span> <span class="toc-text">电压输出模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E8%A6%81%E7%89%B9%E5%BE%81"><span class="toc-number">1.2.</span> <span class="toc-text">主要特征</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%AF%B9%E9%BD%90%E6%96%B9%E5%BC%8F"><span class="toc-number">1.3.</span> <span class="toc-text">数据对齐方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DAC%E8%BD%AC%E6%8D%A2"><span class="toc-number">1.4.</span> <span class="toc-text">DAC转换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DAC%E8%A7%A6%E5%8F%91%E6%96%B9%E5%BC%8F"><span class="toc-number">1.5.</span> <span class="toc-text">DAC触发方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DAC%E8%BE%93%E5%87%BA%E7%94%B5%E5%8E%8B"><span class="toc-number">1.6.</span> <span class="toc-text">DAC输出电压</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DAC-%E5%9F%BA%E6%9C%AC%E8%BE%93%E5%87%BA%E6%96%B9%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">DAC 基本输出方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#DAC-%E5%8F%82%E6%95%B0%E8%AE%BE%E7%BD%AE"><span class="toc-number">2.1.</span> <span class="toc-text">DAC 参数设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE-DAC-%E8%BE%93%E5%87%BA%E7%94%B5%E5%8E%8B"><span class="toc-number">2.2.</span> <span class="toc-text">设置 DAC 输出电压</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%A7%E7%94%9F%E6%AD%A3%E5%BC%A6%E6%B3%A2%E4%BF%A1%E5%8F%B7"><span class="toc-number">2.3.</span> <span class="toc-text">产生正弦波信号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E6%B3%A2%E5%BD%A2"><span class="toc-number">2.4.</span> <span class="toc-text">查看波形</span></a></li></ol></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2016/12/09/matlab-Funcs/">&lt; Matlab - 常用函数集锦</a><a class="next" href="/2016/11/25/matlab-coder/">Matlab - 经VS将.m文件转换为.dll文件 &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+.night .v[data-class=v] a:hover { color: #216C73 !important; }
+.night .v[data-class=v] li { list-style: inherit; }
+.night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
+.night .v[data-class=v] .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.night .v[data-class=v] .vbtn { border-radius: 0; background: none; }
+.night .v[data-class=v] .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.night .v[data-class=v] .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.night .v[data-class=v] .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre,.night .v[data-class=v] .vlist .vcard .vhead .vsys { background: #203240 !important; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre { color: #F0F0F0; font-size: 95%; }
+.v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
+</style><div id="vcomment"></div><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'',
+  appKey:'',
+  lang: 'zh-cn',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></section><footer><p>Copyright © 2016 - 2020 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/plugins/prettify/prettify.js"></script><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script></body></html>

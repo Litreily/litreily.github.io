@@ -1,0 +1,97 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification"><title>安装Ubuntu后的系统精简与美化 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><meta name="generator" content="Hexo 5.0.2"></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">安装Ubuntu后的系统精简与美化</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2017/06/11/initial-ubuntu/">2017-06-11</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Linux/">Linux</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>安装好Ubuntu系统后，通常需要卸载许多用不上的软件，并安装一些常用以及实用的软件。当然，Ubuntu默认的主题实在不敢恭维，为此有必要换一套主题予以美化。</p>
+<h2 id="系统精简"><a href="#系统精简" class="headerlink" title="系统精简"></a>系统精简</h2><p>删除不必要的软件</p>
+<h3 id="删除libreoffice"><a href="#删除libreoffice" class="headerlink" title="删除libreoffice"></a>删除libreoffice</h3><pre><code class="bash">sudo apt-get remove libreoffice-common</code></pre>
+<h3 id="删除Amazon链接"><a href="#删除Amazon链接" class="headerlink" title="删除Amazon链接"></a>删除Amazon链接</h3><pre><code class="bash">sudo apt-get remove unity-webapps-common</code></pre>
+<h3 id="删除其它极少用的软件"><a href="#删除其它极少用的软件" class="headerlink" title="删除其它极少用的软件"></a>删除其它极少用的软件</h3><pre><code class="bash">sudo apt-get remove thunderbird totem rhythmbox empathy brasero simple-scan gnome-mahjongg aisleriot gnome-mines cheese transmission-common gnome-orca webbrowser-app gnome-sudoku
+sudo apt-get remove onboard deja-dup</code></pre>
+<h2 id="常用软件安装"><a href="#常用软件安装" class="headerlink" title="常用软件安装"></a>常用软件安装</h2><h3 id="常用工具"><a href="#常用工具" class="headerlink" title="常用工具"></a>常用工具</h3><pre><code class="bash">sudo apt-get install vim    # Vim
+sudo apt-get install git    # Git</code></pre>
+<p>安装<code>Git</code>之后需要配置以下全局变量，并生成<code>ssh-key</code></p>
+<pre><code class="bash">git config --global user.email &quot;emailname@email.com&quot;
+git config --global user.name &quot;username&quot;
+ssh-keygen -t rsa -C &quot;emailname@email.com&quot;
+cd ~/.ssh
+gedit id_rsa.pub    # 将文件内容添加至github或其它代码托管平台</code></pre>
+<h3 id="系统指示器Syspeek"><a href="#系统指示器Syspeek" class="headerlink" title="系统指示器Syspeek"></a>系统指示器Syspeek</h3><pre><code class="bash">sudo add-apt-repository ppa:nilarimogard/webupd8
+sudo apt-get update
+sudo apt-get install syspeek  </code></pre>
+<h3 id="Hexo-amp-amp-Gitbook"><a href="#Hexo-amp-amp-Gitbook" class="headerlink" title="Hexo &amp;&amp; Gitbook"></a>Hexo &amp;&amp; Gitbook</h3><p>首先安装<code>node.js</code>与<code>npm</code>,然后使用<code>npm</code>安装<code>hexo</code>与<code>gitbook</code></p>
+<pre><code class="bash">npm install hexo-cli -g
+npm install -g gitbook-cli
+gitbook -V</code></pre>
+<h3 id="必备软件"><a href="#必备软件" class="headerlink" title="必备软件"></a>必备软件</h3><ul>
+<li>汉字输入法： 搜狗拼音</li>
+<li>音乐播放器： 网易云音乐</li>
+</ul>
+<pre><code class="bash">sudo dpkg -i netease-cloud-music_1.0.0_amd64_ubuntu16.04.deb   # 下载安装包后执行该指令
+sudo apt-get -f install</code></pre>
+<ul>
+<li>视频播放器： VLC（自带software 管理软件中下载安装）</li>
+<li>网络浏览器： Google Chrome</li>
+</ul>
+<pre><code class="bash">sudo dpkg -i google-chrome-stable_current_amd64.deb   # 下载安装包后执行该指令
+sudo apt-get -f install</code></pre>
+<ul>
+<li>截图软件： Shutter</li>
+<li>社交软件： <a target="_blank" rel="noopener" href="https://github.com/geeeeeeeeek/electronic-wechat.git">微信</a></li>
+<li>办公软件： WPS</li>
+</ul>
+<h2 id="系统美化"><a href="#系统美化" class="headerlink" title="系统美化"></a>系统美化</h2><p>参考资料：<a target="_blank" rel="noopener" href="http://www.jcodecraeer.com/plus/view.php?aid=3502">http://www.jcodecraeer.com/plus/view.php?aid=3502</a></p>
+<h3 id="安装Flatabulous主题"><a href="#安装Flatabulous主题" class="headerlink" title="安装Flatabulous主题"></a>安装Flatabulous主题</h3><ul>
+<li>首先安装 Unity-tweak-tool软件（从Ubuntu软件商店可以找到）</li>
+<li>然后在<code>~</code>目录下创建系统主题文件夹<code>.themes</code></li>
+</ul>
+<pre><code class="bash">mkdir ~/.themes</code></pre>
+<ul>
+<li>在<a target="_blank" rel="noopener" href="https://github.com/anmoljagetia/Flatabulous/archive/master.zip">https://github.com/anmoljagetia/Flatabulous/archive/master.zip</a> 下载 Flatabulous 主题</li>
+<li>解压主题后移动到<code>~/.themes</code>文件夹下</li>
+<li>打开tweak软件，在theme面板中选择Flatabulous主题</li>
+</ul>
+<h3 id="安装ultra-flat-icons图标主题"><a href="#安装ultra-flat-icons图标主题" class="headerlink" title="安装ultra-flat-icons图标主题"></a>安装ultra-flat-icons图标主题</h3><ul>
+<li>安装图标主题</li>
+</ul>
+<pre><code class="bash">sudo add-apt-repository ppa:noobslab/icons  
+sudo apt-get update  
+sudo apt-get install ultra-flat-icons</code></pre>
+<ul>
+<li>在tweak软件中的icon面板中选择Ultra-flat</li>
+</ul>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2017/06/11/initial-ubuntu/">https://www.litreily.top/2017/06/11/initial-ubuntu/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tag"></i><a href="/tags/ubuntu/">ubuntu</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E7%B2%BE%E7%AE%80"><span class="toc-number">1.</span> <span class="toc-text">系统精简</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A0%E9%99%A4libreoffice"><span class="toc-number">1.1.</span> <span class="toc-text">删除libreoffice</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A0%E9%99%A4Amazon%E9%93%BE%E6%8E%A5"><span class="toc-number">1.2.</span> <span class="toc-text">删除Amazon链接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E5%85%B6%E5%AE%83%E6%9E%81%E5%B0%91%E7%94%A8%E7%9A%84%E8%BD%AF%E4%BB%B6"><span class="toc-number">1.3.</span> <span class="toc-text">删除其它极少用的软件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85"><span class="toc-number">2.</span> <span class="toc-text">常用软件安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7"><span class="toc-number">2.1.</span> <span class="toc-text">常用工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E6%8C%87%E7%A4%BA%E5%99%A8Syspeek"><span class="toc-number">2.2.</span> <span class="toc-text">系统指示器Syspeek</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hexo-amp-amp-Gitbook"><span class="toc-number">2.3.</span> <span class="toc-text">Hexo &amp;&amp; Gitbook</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BF%85%E5%A4%87%E8%BD%AF%E4%BB%B6"><span class="toc-number">2.4.</span> <span class="toc-text">必备软件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E7%BE%8E%E5%8C%96"><span class="toc-number">3.</span> <span class="toc-text">系统美化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Flatabulous%E4%B8%BB%E9%A2%98"><span class="toc-number">3.1.</span> <span class="toc-text">安装Flatabulous主题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85ultra-flat-icons%E5%9B%BE%E6%A0%87%E4%B8%BB%E9%A2%98"><span class="toc-number">3.2.</span> <span class="toc-text">安装ultra-flat-icons图标主题</span></a></li></ol></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2017/07/25/makefile/">&lt; 初探makefile</a><a class="next" href="/2017/04/24/labview-DAQ/">Labview - DAQ 助手详解 &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+.night .v[data-class=v] a:hover { color: #216C73 !important; }
+.night .v[data-class=v] li { list-style: inherit; }
+.night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
+.night .v[data-class=v] .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.night .v[data-class=v] .vbtn { border-radius: 0; background: none; }
+.night .v[data-class=v] .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.night .v[data-class=v] .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.night .v[data-class=v] .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre,.night .v[data-class=v] .vlist .vcard .vhead .vsys { background: #203240 !important; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre { color: #F0F0F0; font-size: 95%; }
+.v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
+</style><div id="vcomment"></div><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'',
+  appKey:'',
+  lang: 'zh-cn',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></section><footer><p>Copyright © 2016 - 2020 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/plugins/prettify/prettify.js"></script><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script></body></html>

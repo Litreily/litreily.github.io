@@ -1,0 +1,722 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification"><title>网络协议详解1 - NBNS | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><meta name="generator" content="Hexo 5.0.2"></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">网络协议详解1 - NBNS</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2020/02/28/nbns/">2020-02-28</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Network/">Network</a>&nbsp;&bull;&nbsp;<a href="/categories/Network/Protocol/">Protocol</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><h2 id="NetBIOS-简介"><a href="#NetBIOS-简介" class="headerlink" title="NetBIOS 简介"></a>NetBIOS 简介</h2><p><strong>NetBIOS</strong>，Network Basic Input/Output System的缩写，一般指用于<strong>局域网</strong>通信的一套API，相关RFC文档包括 <a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc1001">RFC 1001</a>, <a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc1002">RFC 1002</a>. RFC 1001主要对NetBIOS及相关协议和服务进行解释说明，RFC 1002给出了相关协议和服务的数据组包格式。</p>
+<p>NetBIOS提供三种软件服务：</p>
+<table>
+<thead>
+<tr>
+<th>Service Name</th>
+<th>Port</th>
+<th>Protocol</th>
+<th>Short Name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>NetBIOS Name service</td>
+<td>137</td>
+<td>UDP/TCP</td>
+<td>NBNS</td>
+</tr>
+<tr>
+<td>NetBIOS Datagram</td>
+<td>138</td>
+<td>UDP</td>
+<td>NBND</td>
+</tr>
+<tr>
+<td>NetBIOS Session service</td>
+<td>139</td>
+<td>TCP</td>
+<td>NBSS</td>
+</tr>
+</tbody></table>
+<p>本文主要描述最常见的<code>NBNS</code>.</p>
+<a id="more"></a>
+
+<h2 id="NBNS-简介"><a href="#NBNS-简介" class="headerlink" title="NBNS 简介"></a>NBNS 简介</h2><p><strong>NBNS</strong>是NetBIOS name service的缩写，是NetBIOS的命名服务，用于将NetBIOS名称映射到IP地址上，是NetBIOS-over-TCP(NBT)协议族的一份子。NBNS是动态DNS的一种，Microsoft的NBNS实现称为<code>WINS</code>。路由器可以通过发送NBNS状态请求以获取设备名，windows PC 接收到后通过WINS或将本地缓存发送命名信息给路由器。</p>
+<h2 id="NBNS-数据报格式"><a href="#NBNS-数据报格式" class="headerlink" title="NBNS 数据报格式"></a>NBNS 数据报格式</h2><p>NBNS的数据报文格式在RFC 1002 Ch4.2中定义，包含以下信息</p>
+<pre><code class="md">&gt; 4.2.1 GENERAL FORMAT OF NAME SERVICE PACKETS
+&gt;   4.2.1.1 HEADER
+&gt;   4.2.1.2 QUESTION SECTION
+&gt;   4.2.1.3 RESOURCE RECORD
+&gt; 4.2.2 NAME REGISTRATION REQUEST
+  4.2.3 NAME OVERWRITE REQUEST &amp; DEMAND
+  4.2.4 NAME REFRESH REQUEST
+&gt; 4.2.5 POSITIVE NAME REGISTRATION RESPONSE
+  4.2.6 NEGATIVE NAME REGISTRATION RESPONSE
+  4.2.7 END-NODE CHALLENGE REGISTRATION RESPONSE
+  4.2.8 NAME CONFLICT DEMAND
+  4.2.9 NAME RELEASE REQUEST &amp; DEMAND
+  4.2.10 POSITIVE NAME RELEASE RESPONSE
+  4.2.11 NEGATIVE NAME RELEASE RESPONSE
+  4.2.12 NAME QUERY REQUEST
+  4.2.13 POSITIVE NAME QUERY RESPONSE
+  4.2.14 NEGATIVE NAME QUERY RESPONSE
+  4.2.15 REDIRECT NAME QUERY RESPONSE
+  4.2.16 WAIT FOR ACKNOWLEDGEMENT (WACK) RESPONSE
+&gt; 4.2.17 NODE STATUS REQUEST
+&gt; 4.2.18 NODE STATUS RESPONSE</code></pre>
+<p>本文主要介绍列表中<code>&gt;</code>开头的部分。</p>
+<h3 id="GENERL-HEADER"><a href="#GENERL-HEADER" class="headerlink" title="GENERL HEADER"></a>GENERL HEADER</h3><p>NetBIOS数据包的通用格式如下：</p>
+<pre><code class="yml">                     1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 3 3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
++ ------                                                ------- +
+|                            HEADER                             |
++ ------                                                ------- +
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                       QUESTION ENTRIES                        /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                   ANSWER RESOURCE RECORDS                     /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                  AUTHORITY RESOURCE RECORDS                   /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                  ADDITIONAL RESOURCE RECORDS                  /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</code></pre>
+<ul>
+<li>HEADER: 头部信息，包含ID信息等</li>
+<li>QUESTION ENTRIES: 请求信息</li>
+<li>ANSWER RESOURCE RECORDS: 应答信息</li>
+<li>AUTHORITY RESOURCE RECORDS: 授权信息</li>
+<li>ADDITIONAL RESOURCE RECORDS: 额外添加信息，如注册信息、刷新信息</li>
+</ul>
+<h4 id="HEADER"><a href="#HEADER" class="headerlink" title="HEADER"></a>HEADER</h4><p>下面先来看<code>HEADER</code>信息。</p>
+<pre><code class="yml">                     1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 3 3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           NAME_TRN_ID         | OPCODE  |   NM_FLAGS  | RCODE |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|             QDCOUNT           |            ANCOUNT            |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|             NSCOUNT           |            ARCOUNT            |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</code></pre>
+<ul>
+<li>NAME_TRN_ID: Transaction ID, 可以称为交易ID，就是针对本次请求或应答对应的ID</li>
+<li>OPCODE: 包的类型码，后面详述</li>
+<li>NM_FLAGS: 本次操作相关的标志位，后面详述</li>
+<li>RCODE: result code or request, 在应答信息中被填入，具体数值依情况而定</li>
+<li>QDCOUNT: uint_16 请求信息条例数量</li>
+<li>ANCOUNT: uint_16 应答信息记录数量</li>
+<li>NSCOUNT: uint_16 授权资源记录数量</li>
+<li>ARCOUNT: uint_16 额外资源记录数量</li>
+</ul>
+<p>关于<strong>OPCODE</strong>，如下表所示：</p>
+<pre><code class="yml">  0   1   2   3   4
++---+---+---+---+---+
+| R |    OPCODE     |
++---+---+---+---+---+</code></pre>
+<ul>
+<li>R: 为0代表请求包，为1代表应答包</li>
+<li>1-4bit的值标志不同的操作：<ul>
+<li>0 = query</li>
+<li>5 = registration</li>
+<li>6 = release</li>
+<li>7 = WACK</li>
+<li>8 = refresh</li>
+</ul>
+</li>
+</ul>
+<p>关于<strong>NM_FLAGS</strong>, 如下表所示：</p>
+<pre><code class="yml">  0   1   2   3   4   5   6
++---+---+---+---+---+---+---+
+|AA |TC |RD |RA | 0 | 0 | B |
++---+---+---+---+---+---+---+</code></pre>
+<ul>
+<li>AA - Authoritative Answer flag, 当OPCODE中的R为0时必须为0，在响应报文中总是被设为1</li>
+<li>TC - 截断标志，当数据报长度超过576字节后，需要截断</li>
+<li>RD - 仅用于请求包，应答包会复制该值；该值为1代表NBNS会迭代请求、注册和释放</li>
+<li>RA - 为1代表可以递归请求、注册和释放，为0则必须迭代请求</li>
+<li>B - 为1代表广播包或多播包，为0代表单播包</li>
+</ul>
+<p><code>RA</code>与<code>RD</code>的原文解释如下：</p>
+<blockquote>
+<p><strong><code>RA</code></strong> 3 Recursion Available Flag.<br>Only valid in responses from a NetBIOS Name Server -- must be zero in all other responses.<br>If one (1) then the NBNS supports recursive query, registration, and release.<br>If zero (0) then the end-node must iterate for query and challenge for registration.</p>
+<p><strong><code>RD</code></strong> 6 Recursion Desired Flag.<br>May only be set on a request to a NetBIOS Name Server.<br>The NBNS will copy its state into the response packet.<br>If one (1) the NBNS will iterate on the query, registration, or release.</p>
+</blockquote>
+<p>大致意思是，对于请求、注册和释放，包含递归发送和迭代发送两种方式。<code>RA</code>为1说明支持递归，为0说明只能迭代，表征的是一种能力；<code>RD</code>则是说明具体以什么方式发送，如果为1则代表迭代，表征的是一个具体动作，这个值在响应包中会从请求包中复制得到。</p>
+<h4 id="QUESTION-SECTION"><a href="#QUESTION-SECTION" class="headerlink" title="QUESTION SECTION"></a>QUESTION SECTION</h4><p>NBNS的请求数据段格式如下：</p>
+<pre><code class="yml">                     1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 3 3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                          QUESTION_NAME                        /
+/                                                               /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|         QUESTION_TYPE         |          QUESTION_CLASS       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</code></pre>
+<ul>
+<li>QUESTION_NAME: 被压缩的NetBIOS，编码格式如 <a href="#NetBIOS-%E5%91%BD%E5%90%8D%E7%BC%96%E7%A0%81">NetBIOS-命名编码</a></li>
+<li>QUESTION_TYPE: 请求类型<ul>
+<li>0x0020 NB: NetBIOS 通用名称服务资源记录</li>
+<li>0x0021 NBSTAT: <a href="#NODE-STATUS-REQUEST">NetBIOS NODE STATUS</a> 资源记录</li>
+</ul>
+</li>
+<li>QUESTION_CLASS: 请求类别<ul>
+<li>0x0001 Internet class</li>
+</ul>
+</li>
+</ul>
+<h4 id="RESOURCE-RECORD"><a href="#RESOURCE-RECORD" class="headerlink" title="RESOURCE RECORD"></a>RESOURCE RECORD</h4><p>NBNS的资源数据段可以存在于请求报文和应答报文中，数据格式如下：</p>
+<pre><code class="yml">                     1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 3 3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                            RR_NAME                            /
+/                                                               /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|            RR_TYPE            |            RR_CLASS           |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                              TTL                              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|            RDLENGTH           |                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               |
+/                                                               /
+/                             RDATA                             /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</code></pre>
+<ul>
+<li>RR_NAME: 与上述的<code>QUESTION_NAME</code>一致</li>
+<li>RR_TYPE: 记录类型<ul>
+<li>0x0001 A: IP地址记录</li>
+<li>0x0002 NS: Name Server资源记录</li>
+<li>0x000A NULL: 空记录</li>
+<li>0x0020 NB: NetBIOS 通用名称服务资源记录</li>
+<li>0x0021 NBSTAT: <a href="#NODE-STATUS-REQUEST">NetBIOS NODE STATUS</a> 资源记录</li>
+</ul>
+</li>
+<li>RR_CLASS: 记录类别<ul>
+<li>0x0001 Internet class</li>
+</ul>
+</li>
+<li>RDLENGTH: uint_16 指定RDATA数据段的数据长度</li>
+<li>TTL: 某资源记录名称的生存时间</li>
+<li>RDATA: 基于<code>RR_TYPE</code>和<code>RR_CLASS</code>的数据信息，包含具体的NetBIOS name.</li>
+</ul>
+<p>针对RR_TYPE为NB的情况，RDATA的<code>NB_FLAGS</code>部分的数据格式如下：</p>
+<pre><code class="yml">                                          1   1   1   1   1   1
+  0   1   2   3   4   5   6   7   8   9   0   1   2   3   4   5
++---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+| G |  ONT  |                RESERVED                           |
++---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+</code></pre>
+<ul>
+<li>G: 为0代表unique NetBIOS name, 即唯一名称；为1代表group NetBIOS name, 即组名称。</li>
+<li>ONT: Owner Node Type<ul>
+<li>00 = B node, 广播节点(Broadcast)</li>
+<li>01 = P node, 单播节点(Point to Point)</li>
+<li>10 = M node, 混合节点(Mixed)</li>
+<li>11 = Reserved</li>
+</ul>
+</li>
+<li>RESERVED</li>
+</ul>
+<p>以上便是HEADER, QUESTION SECTION以及RESOURCE RECORD 3个部分的主要内容，所有NBNS相关的请求包和响应包都依循以上格式，具体的信息细节则依情况而定。</p>
+<h3 id="NAME-REGISTRATION-REQUEST"><a href="#NAME-REGISTRATION-REQUEST" class="headerlink" title="NAME REGISTRATION REQUEST"></a>NAME REGISTRATION REQUEST</h3><p>名称注册请求格式如下：</p>
+<pre><code class="yml">                     1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 3 3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|         NAME_TRN_ID           |0|  0x5  |0|0|1|0|0 0|B|  0x0  |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|          0x0001               |           0x0000              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|          0x0000               |           0x0001              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                         QUESTION_NAME                         /
+/                                                               /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           NB (0x0020)         |        IN (0x0001)            |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                            RR_NAME                            /
+/                                                               /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           NB (0x0020)         |        IN (0x0001)            |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                              TTL                              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           0x0006              |        NB_FLAGS               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                          NB_ADDRESS                           |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</code></pre>
+<p>可以和上面介绍的进行一一核对，头部信息的<code>OPCODE</code>为<code>0|0x5</code>, R为0说明是请求包，0x5说明是registration，即注册信息请求；NM_FLAGS<code>AA|TC|RD|RA|0|0|B</code>为<code>0|0|1|0|0|0|B</code>, 因为是请求包，所以<code>AA=0</code>；默认支持注册信息请求包含query和additional两部分信息，所以<code>QDCOUNT</code>和<code>ARCOUND</code>均为1，其余两个计数值为0。</p>
+<p>HEADER往后是QUESTION_NAME，NB (0x0020)说明名称请求类型为<code>NB</code>, 请求类别通常均为0x0001, 固定不变。</p>
+<p>再往后是TTL，固定的0x0006表征NB_FLAGS和NB_ADDRESS的总长为6个字节。其中NB_ADDRESS就是要注册的地址，而NB_FLAGS标记了这个名称的唯一性和数据包的类型（广播还是单播）。</p>
+<h3 id="POSTIVE-NAME-REGISTRATION-RESPONSE"><a href="#POSTIVE-NAME-REGISTRATION-RESPONSE" class="headerlink" title="POSTIVE NAME REGISTRATION RESPONSE"></a>POSTIVE NAME REGISTRATION RESPONSE</h3><pre><code class="yml">                     1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 3 3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+| NAME_TRN_ID |1| 0x5 |1|0|1|1|0 0|0| 0x0 |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|          0x0000               |           0x0001              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|          0x0000               |           0x0000              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                            RR_NAME                            /
+/                                                               /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           NB (0x0020)         |        IN (0x0001)            |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                              TTL                              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           0x0006              |        NB_FLAGS               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                          NB_ADDRESS                           |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</code></pre>
+<p>在Registration response中，HEADER的<code>R</code>和<code>AA</code>都变成了1，代表响应包；<code>B</code>为0代表单播包形式发送；<code>RA</code>与<code>RD</code>均为1，说明终端支持递归请求、注册和释放，但是会以迭代的方式进行请求、注册或释放。后面部分与请求注册的信息一致。</p>
+<h3 id="NODE-STATUS-REQUEST"><a href="#NODE-STATUS-REQUEST" class="headerlink" title="NODE STATUS REQUEST"></a>NODE STATUS REQUEST</h3><p>Node status request也是路由器获取PC设备名称的常用方式，其请求格式如下：</p>
+<pre><code class="yml">                     1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 3 3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+| NAME_TRN_ID |0| 0x0 |0|0|0|0|0 0|B| 0x0 |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|          0x0001               |           0x0000              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|          0x0000               |           0x0000              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                         QUESTION_NAME                         /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|         NBSTAT (0x0021)       |        IN (0x0001)            |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</code></pre>
+<p>与registration相比，RR_TYPE由NB变味了NBSTAT，少了Additional部分，仅仅包含请求信息。</p>
+<h3 id="NODE-STATUS-RESPONSE"><a href="#NODE-STATUS-RESPONSE" class="headerlink" title="NODE STATUS RESPONSE"></a>NODE STATUS RESPONSE</h3><p>Node status response的数据包格式如下：</p>
+<pre><code class="yml">                     1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 3 3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|         NAME_TRN_ID           |1|  0x0  |1|0|0|0|0 0|0|  0x0  |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|          0x0000               |           0x0001              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|          0x0000               |           0x0000              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                            RR_NAME                            /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|         NBSTAT (0x0021)       |        IN (0x0001)            |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                          0x00000000                           |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|            RDLENGTH           |   NUM_NAMES   |               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+               +
+|                                                               |
++                                                               +
+/                         NODE_NAME ARRAY                       /
++                                                               +
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
++                                                               +
+/                           STATISTICS                          /
++                                                               +
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</code></pre>
+<p>节点状态信息很多，其中<code>NUM_NAMES</code>表示后面紧随的节点名称数组长度，每个数组元素包含18字节：16字节的名称和2个字节的NAME_FLAGS. NAME_FLAGS格式如下：</p>
+<pre><code class="yml">                                          1   1   1   1   1   1
+  0   1   2   3   4   5   6   7   8   9   0   1   2   3   4   5
++---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+| G |  ONT  |DRG|CNF|ACT|PRM|          RESERVED                 |
++---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+</code></pre>
+<ul>
+<li>G: 组名标志，为1代表组名，为0代表唯一名称</li>
+<li>ONT: Owner Node Type<ul>
+<li>00 = B node</li>
+<li>01 = P node</li>
+<li>10 = M node</li>
+<li>11 = Reserved</li>
+</ul>
+</li>
+<li>DRG: 注销标志</li>
+<li>CNF: 冲突标志</li>
+<li>ACT: 有效名称标志，均设置为1</li>
+<li>PRM: 永久名称标志</li>
+<li>RESERVED</li>
+</ul>
+<p>STATISTICS字段的格式如下：</p>
+<pre><code class="yml">                     1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 3 3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|               UNIT_ID (Unique unit ID)                        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|       UNIT_ID,continued       |    JUMPERS    |  TEST_RESULT  |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|       VERSION_NUMBER          |      PERIOD_OF_STATISTICS     |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|       NUMBER_OF_CRCs          |     NUMBER_ALIGNMENT_ERRORS   |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|       NUMBER_OF_COLLISIONS    |       NUMBER_SEND_ABORTS      |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                       NUMBER_GOOD_SENDS                       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                      NUMBER_GOOD_RECEIVES                     |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|       NUMBER_RETRANSMITS      | NUMBER_NO_RESOURCE_CONDITIONS |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|  NUMBER_FREE_COMMAND_BLOCKS   |  TOTAL_NUMBER_COMMAND_BLOCKS  |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|MAX_TOTAL_NUMBER_COMMAND_BLOCKS|    NUMBER_PENDING_SESSIONS    |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|  MAX_NUMBER_PENDING_SESSIONS  |  MAX_TOTAL_SESSIONS_POSSIBLE  |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|   SESSION_DATA_PACKET_SIZE    |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</code></pre>
+<h2 id="NetBIOS-命名编码"><a href="#NetBIOS-命名编码" class="headerlink" title="NetBIOS 命名编码"></a>NetBIOS 命名编码</h2><p>上面所有提及的报文中都包含NetBIOS名称，这个名称是被经过编码处理的。参考以下<a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc1001">RFC 1001 Ch14.1</a>可知，最长16Byte的NetBIOS name被要求映射为32Byte的可逆的、半ASCII偏置编码。</p>
+<blockquote>
+<p>The 16 byte NetBIOS name is mapped into a 32 byte wide field using a reversible, half-ASCII, biased encoding.  Each half-octet of the NetBIOS name is encoded into one byte of the 32 byte field.  The first half octet is encoded into the first byte, the second half- octet into the second byte, etc.</p>
+<p>Each 4-bit, half-octet of the NetBIOS name is treated as an 8-bit, right-adjusted, zero-filled binary number.  This number is added to value of the ASCII character &#39;A&#39; (hexidecimal 41).  The resulting 8- bit number is stored in the appropriate byte.</p>
+</blockquote>
+<p>简单讲，就是将每个字符按ASCII拆成两部分，每部分再加上<code>A</code>，从而由1个字符变成两个字符。比如字符<code>L</code>，对应ASCII <code>0x4C</code>，拆成两部分为<code>0x4</code>和<code>0xC</code>，然后每部分都加上字符<code>A</code>对应的ASCII <code>0x41</code>，得到<code>0x45</code>和<code>0x4D</code>，对应字符<code>E</code>和<code>M</code>，这样原始字符<code>L</code>就变成了双字符<code>EM</code>。下面是这个示例的详细说明图解。</p>
+<p><img src="/assets/network/nbns/nbns_name.png" alt="NetBIOS命名编码示例"></p>
+<p>注意原始名称不足16字节可以补空格<code>0x20</code>或NULL<code>0x00</code>，这里补的是空格；如果长度超过16则需要截取前16字节。</p>
+<p>使用<code>Python</code>可以快速完成编码↓</p>
+<pre><code class="python">&gt;&gt;&gt; orig_name = &#39;LITREILY&#39;.ljust(16)
+&gt;&gt;&gt; encoded_name = &#39;&#39;.join([ chr((ord(c)&gt;&gt;4) + ord(&#39;A&#39;)) + chr((ord(c)&amp;0x0F) + ord(&#39;A&#39;)) for c in orig_name ])
+&gt;&gt;&gt; encoded_name
+&#39;EMEJFEFCEFEJEMFJCACACACACACACACA&#39;</code></pre>
+<p>在真实的数据包中，NetBIOS名称前面是<code>0x20</code>，代表名称固定长度32字节，名称后面填补一个<code>0x00</code>即<code>\0</code>作为结束符。那么上面的<code>LITREILY</code>对应的数据为：</p>
+<pre><code class="yml">20 45 4d 45 4a 46 45 46 43 45 46 45 4a 45 4d 46
+4a 43 41 43 41 43 41 43 41 43 41 43 41 43 41 43
+41 00</code></pre>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p>A label length count is actually a 6-bit field in the label length field. The most significant 2 bits of the field, bits 7 and 6, are flags allowing an escape from the above compressed representation. <strong>If bits 7 and 6 are both set (11), the following 14 bits are an offset pointer into the full message to the actual label string from another domain name that belongs in this name.</strong> This label pointer allows for a further compression of a domain name in a packet.</p>
+<p>简单说，当长度设置不为<code>0x20</code>，而是将最高两位置1，即设为<code>0xc0</code>时，代表当前名称使用指针，随后的字节指定名称所在的位置。</p>
+</blockquote>
+<h2 id="nbtstat"><a href="#nbtstat" class="headerlink" title="nbtstat"></a>nbtstat</h2><p><code>nbtstat.exe</code>是Windows中用于查看NBT status的工具，通过它可以查看当前局域网内的NetBIOS name.</p>
+<h3 id="帮助信息"><a href="#帮助信息" class="headerlink" title="帮助信息"></a>帮助信息</h3><pre><code class="yml">C:\Users\Litre&gt;nbtstat.exe -a
+显示协议统计和当前使用 NBI 的 TCP/IP 连接
+(在 TCP/IP 上的 NetBIOS)。
+
+NBTSTAT [ [-a RemoteName] [-A IP address] [-c] [-n]
+        [-r] [-R] [-RR] [-s] [-S] [interval] ]
+
+  -a   (适配器状态)    列出指定名称的远程机器的名称表
+  -A   (适配器状态)    列出指定 IP 地址的远程机器的名称表。
+  -c   (缓存)          列出远程[计算机]名称及其 IP 地址的 NBT 缓存
+  -n   (名称)          列出本地 NetBIOS 名称。
+  -r   (已解析)        列出通过广播和经由 WINS 解析的名称
+  -R   (重新加载)      清除和重新加载远程缓存名称表
+  -S   (会话)          列出具有目标 IP 地址的会话表
+  -s   (会话)          列出将目标 IP 地址转换成计算机 NETBIOS 名称的会话表。
+  -RR  (释放刷新)      将名称释放包发送到 WINS，然后启动刷新
+
+  RemoteName   远程主机计算机名。
+  IP address   用点分隔的十进制表示的 IP 地址。
+  interval     重新显示选定的统计、每次显示之间暂停的间隔秒数。
+               按 Ctrl+C 停止重新显示统计。</code></pre>
+<p>其中<code>RemoteName</code>既可以是ASCII形式的名称，也可以是IP地址。</p>
+<h3 id="使用示例一"><a href="#使用示例一" class="headerlink" title="使用示例一"></a>使用示例一</h3><p>第一个例子，在加入域<code>DELTA</code>的办公电脑上。3个网卡，第1个网卡连接路由器，第2个网卡连接公司网，第3个为虚拟网卡。</p>
+<pre><code class="yml">C:\WINDOWS\system32&gt;nbtstat.exe -n
+
+Router:
+节点 IP 址址: [192.168.1.10] 范围 ID: []
+
+                NetBIOS 本地名称表
+
+       名称               类型         状态
+    ---------------------------------------------
+    CNSHDNI2PC074  &lt;00&gt;  唯一          已注册
+    DELTA          &lt;00&gt;  组           已注册
+    CNSHDNI2PC074  &lt;20&gt;  唯一          已注册
+    DELTA          &lt;1E&gt;  组           已注册
+    DELTA          &lt;1D&gt;  唯一          已注册
+    ..__MSBROWSE__.&lt;01&gt;  组           已注册
+
+Company:
+节点 IP 址址: [172.17.144.33] 范围 ID: []
+
+                NetBIOS 本地名称表
+
+       名称               类型         状态
+    ---------------------------------------------
+    CNSHDNI2PC074  &lt;00&gt;  唯一          已注册
+    DELTA          &lt;00&gt;  组           已注册
+    CNSHDNI2PC074  &lt;20&gt;  唯一          已注册
+    DELTA          &lt;1E&gt;  组           已注册
+
+以太网:
+节点 IP 址址: [0.0.0.0] 范围 ID: []
+
+    缓存中没有名称</code></pre>
+<p>需要注意的是，名称表中每个名称都是16字节，中间空白处是空格符，最后一个字节用<code>&lt;&gt;</code>显示，里面使用16进制数表示。如<code>CHSH2DNIPC074__&lt;00&gt;</code>，<code>_</code>代表空格，最后一个字节<code>&lt;00&gt;</code>是<code>\0</code>. NetBIOS name可以唯一，也可以是多个设备共用一个组，唯一名称用于指定唯一一台设备，而组名如此处的<code>DELTA</code>是域名称，局域网加入域对应的域名就是这种组名称，也称之为<strong>工作组</strong>。</p>
+<h3 id="使用示例二"><a href="#使用示例二" class="headerlink" title="使用示例二"></a>使用示例二</h3><p>第二个例子，我使用家用台式PC在局域网内进行了反复测试。下面是简要的抓包信息。</p>
+<p><img src="/assets/network/nbns/nbns.png" alt="nbns packets"></p>
+<p><code>nbtstat -a RemoteName</code>用于请求指定名称所在设备的名称表。</p>
+<pre><code class="yml">C:\WINDOWS\system32&gt;nbtstat -a DZ-DN-700
+
+eth0:
+节点 IP 址址: [192.168.1.14] 范围 ID: []
+
+           NetBIOS 远程计算机名称表
+
+       名称               类型         状态
+    ---------------------------------------------
+    DZ-DN-700      &lt;20&gt;  唯一          已注册
+    DZ-DN-700      &lt;00&gt;  唯一          已注册
+    DIAS           &lt;00&gt;  组           已注册
+    DIAS           &lt;1E&gt;  组           已注册
+
+    MAC 地址 = E4-42-A6-18-AB-00
+
+
+C:\WINDOWS\system32&gt;nbtstat -a 192.168.1.12
+
+eth0:
+节点 IP 址址: [192.168.1.14] 范围 ID: []
+
+           NetBIOS 远程计算机名称表
+
+       名称               类型         状态
+    ---------------------------------------------
+    DZ-DN-700      &lt;20&gt;  唯一          已注册
+    DZ-DN-700      &lt;00&gt;  唯一          已注册
+    DIAS           &lt;00&gt;  组           已注册
+    DIAS           &lt;1E&gt;  组           已注册
+
+    MAC 地址 = E4-42-A6-18-AB-00</code></pre>
+<p><code>nbtstat -A IP_Address</code>用于请求指定IP所在设备的名称表。</p>
+<pre><code class="yml">C:\WINDOWS\system32&gt;nbtstat -A 192.168.1.12
+
+eth0:
+节点 IP 址址: [192.168.1.14] 范围 ID: []
+
+           NetBIOS 远程计算机名称表
+
+       名称               类型         状态
+    ---------------------------------------------
+    DZ-DN-700      &lt;20&gt;  唯一          已注册
+    DZ-DN-700      &lt;00&gt;  唯一          已注册
+    DIAS           &lt;00&gt;  组           已注册
+    DIAS           &lt;1E&gt;  组           已注册
+    DIAS           &lt;1D&gt;  唯一          已注册
+    ..__MSBROWSE__.&lt;01&gt;  组           已注册
+
+    MAC 地址 = E4-42-A6-18-AB-00</code></pre>
+<p><code>nbtstat -c</code>用于查看当前设备缓存中的名称表，注意每个名称都是可以被修改的，所以需要定时刷新，同时每个名称都有其寿命，寿命耗尽后需要重新请求。</p>
+<pre><code class="yml">C:\WINDOWS\system32&gt;nbtstat -c
+
+eth0:
+节点 IP 址址: [192.168.1.14] 范围 ID: []
+
+                  NetBIOS 远程缓存名称表
+
+        名称              类型       主机地址    寿命[秒]
+    ------------------------------------------------------------
+    DZ-DN-700      &lt;20&gt;  唯一              192.168.1.12        269
+    DZ-DN-700      &lt;00&gt;  唯一              192.168.1.12        269</code></pre>
+<p><code>nbtstat -n</code>用于查看当前设备的本地名称表，与第一个例子一样。</p>
+<pre><code class="yml">C:\WINDOWS\system32&gt;nbtstat -n
+
+eth0:
+节点 IP 址址: [192.168.1.14] 范围 ID: []
+
+                NetBIOS 本地名称表
+
+       名称               类型         状态
+    ---------------------------------------------
+    DT-LITREILY    &lt;20&gt;  唯一          已注册
+    DT-LITREILY    &lt;00&gt;  唯一          已注册
+    WORKGROUP      &lt;00&gt;  组           已注册</code></pre>
+<p><code>nbtstat -r</code>用于查看通过广播和经由 WINS 解析的名称</p>
+<pre><code class="yml">C:\WINDOWS\system32&gt;nbtstat -r
+
+    NetBIOS 名称解析和注册统计
+    ----------------------------------------------------
+
+    通过广播解析的     = 5
+    通过名称服务器解析   = 0
+
+    通过广播注册的   = 3
+    通过名称服务器注册的 = 0
+
+    通过广播解析的 NetBIOS 名称
+    ---------------------------------------------
+           DZ-DN-700      &lt;00&gt;
+           DZ-DN-700      &lt;00&gt;
+           DZ-DN-700      &lt;00&gt;
+           DIAS           &lt;00&gt;
+           DZ-DN-700      &lt;00&gt;</code></pre>
+<p><code>nbtstat -s</code>与<code>nbtstat -S</code>都用于会话服务信息查询，因为没有连接所以信息为空。</p>
+<pre><code class="yml">C:\WINDOWS\system32&gt;nbtstat -s
+
+eth0:
+节点 IP 址址: [192.168.1.14] 范围 ID: []
+
+    无连接
+
+C:\WINDOWS\system32&gt;nbtstat -S
+
+eth0:
+节点 IP 址址: [192.168.1.14] 范围 ID: []
+
+    无连接</code></pre>
+<p><code>nbtstat -R</code>用于清除缓存，清除后再用<code>-c</code>查看就会显示没有名称了。</p>
+<pre><code class="yml">C:\WINDOWS\system32&gt;nbtstat -R
+    NBT 远程缓存名称表的成功清除和预加载。
+
+C:\WINDOWS\system32&gt;nbtstat -c
+
+eth0:
+节点 IP 址址: [192.168.1.14] 范围 ID: []
+
+    缓存中没有名称</code></pre>
+<p><code>nbtstat -RR</code>用于刷新经本机注册的NetBIOS名称，间隔一段时间方能刷新第二次。</p>
+<pre><code class="yml">C:\WINDOWS\system32&gt;nbtstat -RR
+    已经刷新经过此计算机注册的 NetBIOS 名称。</code></pre>
+<h2 id="Windows-配置NetBIOS"><a href="#Windows-配置NetBIOS" class="headerlink" title="Windows 配置NetBIOS"></a>Windows 配置NetBIOS</h2><p>在Windows操作系统中，可以打开某网卡的属性配置，然后选择IPv4配置的高级选项，<code>WINS</code>选项卡即可配置<code>NetBIOS</code>。默认情况是启用的，与下图所示一致。</p>
+<p><img src="/assets/network/nbns/netbios_config.png" alt="Windows上的NetBIOS配置"></p>
+<h2 id="wireshark-实例分析"><a href="#wireshark-实例分析" class="headerlink" title="wireshark 实例分析"></a>wireshark 实例分析</h2><p>最后来分析两个使用wireshark抓的NBNS数据包，以便更直观的理解和记忆。</p>
+<h3 id="Node-Status"><a href="#Node-Status" class="headerlink" title="Node Status"></a>Node Status</h3><p>使用指令<code>nbtstat -A 192.168.1.12</code>向指定设备发送Node status query，使用wireshark抓包。</p>
+<p><img src="/assets/network/nbns/nodestatus_ws.png" alt="nbns node status"></p>
+<p>请求数据包如下：</p>
+<p><img src="/assets/network/nbns/nodestatus_ws_query.png" alt="nbns node status query"></p>
+<p>从wireshark得到的解析数据如下：</p>
+<pre><code class="yml">0000   e4 42 a6 18 ab 00 00 e0 4c 5a 0a 78 08 00 45 00   äB¦.«..àLZ.x..E.
+0010   00 4e 1e 82 00 00 80 11 98 b2 c0 a8 01 0e c0 a8   .N.......²À¨..À¨
+0020   01 0c 00 89 00 89 00 3a 5a 12 e2 b1 00 00 00 01   .......:Z.â±....
+0030   00 00 00 00 00 00 20 43 4b 41 41 41 41 41 41 41   ...... CKAAAAAAA
+0040   41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41   AAAAAAAAAAAAAAAA
+0050   41 41 41 41 41 41 41 00 00 21 00 01               AAAAAAA..!..
+
+NetBIOS Name Service
+    Transaction ID: 0xe2b1
+    Flags: 0x0000, Opcode: Name query
+        0... .... .... .... = Response: Message is a query
+        .000 0... .... .... = Opcode: Name query (0)
+        .... ..0. .... .... = Truncated: Message is not truncated
+        .... ...0 .... .... = Recursion desired: Do not do query recursively
+        .... .... ...0 .... = Broadcast: Not a broadcast packet
+    Questions: 1
+    Answer RRs: 0
+    Authority RRs: 0
+    Additional RRs: 0
+    Queries
+        *&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;: type NBSTAT, class IN
+            Name: *&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt; (Workstation/Redirector)
+            Type: NBSTAT (33)
+            Class: IN (1)</code></pre>
+<p>该数据报包含一个请求，所以<code>Questions</code>为1，其余为0；请求包中的编码名称为<code>*</code>的编码后数据CKAAAAAAAAAAAAAAA...; 由于使用的是指定IP，所以是单播包；因为是NODE STATUS REQUEST, 所以QUESTION_TYPE是NBSTAT(0x0021).</p>
+<p>从指定设备获取到的响应数据如下：</p>
+<p><img src="/assets/network/nbns/nodestatus_ws_response.png" alt="nbns node status response"></p>
+<p>从截图中已经可以清晰的看到数据格式及具体内容了，被折叠的名称信息中，<code>DZ-DN-700&lt;20&gt;</code>与<code>DIAS&lt;1e&gt;</code>如下：</p>
+<pre><code class="yml">0000   00 e0 4c 5a 0a 78 e4 42 a6 18 ab 00 08 00 45 00   ..LZ.x........E.
+0010   00 cb 53 50 00 00 80 11 63 67 c0 a8 01 0c c0 a8   ..SP....cg......
+0020   01 0e 00 89 00 89 00 b7 01 c0                     .........
+
+0020                                 e2 b1 84 00 00 00            .......
+0030   00 01 00 00 00 00 20 43 4b 41 41 41 41 41 41 41   ...... CKAAAAAAA
+0040   41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41   AAAAAAAAAAAAAAAA
+0050   41 41 41 41 41 41 41 00 00 21 00 01 00 00 00 00   AAAAAAA..!......
+0060   00 77 04                                          .w.
+
+0060            44 5a 2d 44 4e 2d 37 30 30 20 20 20 20      DZ-DN-700    
+0070   20 20 20 04 00                                       ..
+Name: DZ-DN-700&lt;20&gt; (Server service)
+Name flags: 0x0400, ONT: B-node, Name is active
+    0... .... .... .... = Name type: Unique name
+    .00. .... .... .... = ONT: B-node (0)
+    ...0 .... .... .... = Name is being deregistered: No
+    .... 0... .... .... = Name is in conflict: No
+    .... .1.. .... .... = Name is active: Yes
+    .... ..0. .... .... = Permanent node name: No
+
+0070                  44 5a 2d 44 4e 2d 37 30 30 20 20        DZ-DN-700  
+0080   20 20 20 20 00 04 00                                  ...
+Name: DZ-DN-700&lt;00&gt; (Workstation/Redirector)
+Name flags: 0x0400, ONT: B-node, Name is active
+    0... .... .... .... = Name type: Unique name
+    .00. .... .... .... = ONT: B-node (0)
+    ...0 .... .... .... = Name is being deregistered: No
+    .... 0... .... .... = Name is in conflict: No
+    .... .1.. .... .... = Name is active: Yes
+    .... ..0. .... .... = Permanent node name: No
+
+0080                        44 49 41 53 20 20 20 20 20          DIAS     
+0090   20 20 20 20 20 20 00 84 00                              ...
+Name: DIAS&lt;00&gt; (Workstation/Redirector)
+Name flags: 0x8400, Name type, ONT: B-node, Name is active
+    1... .... .... .... = Name type: Group name
+    .00. .... .... .... = ONT: B-node (0)
+    ...0 .... .... .... = Name is being deregistered: No
+    .... 0... .... .... = Name is in conflict: No
+    .... .1.. .... .... = Name is active: Yes
+    .... ..0. .... .... = Permanent node name: No
+
+0090                              44 49 41 53 20 20 20            DIAS   
+00a0   20 20 20 20 20 20 20 20 1e 84 00                          ...
+Name: DIAS&lt;1e&gt; (Browser Election Service)
+Name flags: 0x8400, Name type, ONT: B-node, Name is active
+    1... .... .... .... = Name type: Group name
+    .00. .... .... .... = ONT: B-node (0)
+    ...0 .... .... .... = Name is being deregistered: No
+    .... 0... .... .... = Name is in conflict: No
+    .... .1.. .... .... = Name is active: Yes
+    .... ..0. .... .... = Permanent node name: No
+
+00a0                                    e4 42 a6 18 ab              .B...
+00b0   00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   ................
+00c0   00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   ................
+00d0   00 00 00 00 00 00 00 00 00                        .........</code></pre>
+<h3 id="Name-Registration"><a href="#Name-Registration" class="headerlink" title="Name Registration"></a>Name Registration</h3><p><img src="/assets/network/nbns/registration_ws.png" alt="nbns registration"></p>
+<p>NBNS名称注册请求包如下图所示：</p>
+<p><img src="/assets/network/nbns/registration_ws_pkt.png" alt="nbns registration query"></p>
+<p>请求包格式与<a href="#NAME-REGISTRATION-REQUEST">NAME REGISTRATION REQUEST</a>中的一致。使用广播包方式，<code>OPCODE</code>为5，包含一条Questions记录和Additional记录，注册地址为发送方的IP地址192.168.1.12.</p>
+<p>在局域网内的其它设备或路由器接收到该广播包后，即可将其名称和IP地址记录到本地缓存当中。</p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc1001">rfc1001 - protocol standard for a nETbios service on a tcp/udp transport: concepts and methods</a></li>
+<li><a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc1002">rfc1002 - protocol standard for a nETbios service on a tcp/udp transport: detailed specifications</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/Litreily/Net_packets/tree/master/NetBIOS">wireshark抓包数据</a></li>
+</ol>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2020/02/28/nbns/">https://www.litreily.top/2020/02/28/nbns/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tag"></i><a href="/tags/wireshark/">wireshark</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#NetBIOS-%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">NetBIOS 简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NBNS-%E7%AE%80%E4%BB%8B"><span class="toc-number">2.</span> <span class="toc-text">NBNS 简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NBNS-%E6%95%B0%E6%8D%AE%E6%8A%A5%E6%A0%BC%E5%BC%8F"><span class="toc-number">3.</span> <span class="toc-text">NBNS 数据报格式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#GENERL-HEADER"><span class="toc-number">3.1.</span> <span class="toc-text">GENERL HEADER</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#HEADER"><span class="toc-number">3.1.1.</span> <span class="toc-text">HEADER</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#QUESTION-SECTION"><span class="toc-number">3.1.2.</span> <span class="toc-text">QUESTION SECTION</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#RESOURCE-RECORD"><span class="toc-number">3.1.3.</span> <span class="toc-text">RESOURCE RECORD</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NAME-REGISTRATION-REQUEST"><span class="toc-number">3.2.</span> <span class="toc-text">NAME REGISTRATION REQUEST</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#POSTIVE-NAME-REGISTRATION-RESPONSE"><span class="toc-number">3.3.</span> <span class="toc-text">POSTIVE NAME REGISTRATION RESPONSE</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NODE-STATUS-REQUEST"><span class="toc-number">3.4.</span> <span class="toc-text">NODE STATUS REQUEST</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NODE-STATUS-RESPONSE"><span class="toc-number">3.5.</span> <span class="toc-text">NODE STATUS RESPONSE</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NetBIOS-%E5%91%BD%E5%90%8D%E7%BC%96%E7%A0%81"><span class="toc-number">4.</span> <span class="toc-text">NetBIOS 命名编码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nbtstat"><span class="toc-number">5.</span> <span class="toc-text">nbtstat</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%AE%E5%8A%A9%E4%BF%A1%E6%81%AF"><span class="toc-number">5.1.</span> <span class="toc-text">帮助信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B%E4%B8%80"><span class="toc-number">5.2.</span> <span class="toc-text">使用示例一</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B%E4%BA%8C"><span class="toc-number">5.3.</span> <span class="toc-text">使用示例二</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Windows-%E9%85%8D%E7%BD%AENetBIOS"><span class="toc-number">6.</span> <span class="toc-text">Windows 配置NetBIOS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#wireshark-%E5%AE%9E%E4%BE%8B%E5%88%86%E6%9E%90"><span class="toc-number">7.</span> <span class="toc-text">wireshark 实例分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Node-Status"><span class="toc-number">7.1.</span> <span class="toc-text">Node Status</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Name-Registration"><span class="toc-number">7.2.</span> <span class="toc-text">Name Registration</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reference"><span class="toc-number">8.</span> <span class="toc-text">Reference</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2020/03/15/nbns_code/">&lt; NBNS客户端的C语言实现</a><a class="next" href="/2020/01/17/dhcpd_server/">Setup dhcpd/dhcpdv6 server &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+.night .v[data-class=v] a:hover { color: #216C73 !important; }
+.night .v[data-class=v] li { list-style: inherit; }
+.night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
+.night .v[data-class=v] .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.night .v[data-class=v] .vbtn { border-radius: 0; background: none; }
+.night .v[data-class=v] .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.night .v[data-class=v] .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.night .v[data-class=v] .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre,.night .v[data-class=v] .vlist .vcard .vhead .vsys { background: #203240 !important; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre { color: #F0F0F0; font-size: 95%; }
+.v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
+</style><div id="vcomment"></div><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'',
+  appKey:'',
+  lang: 'zh-cn',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></section><footer><p>Copyright © 2016 - 2020 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/plugins/prettify/prettify.js"></script><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script></body></html>

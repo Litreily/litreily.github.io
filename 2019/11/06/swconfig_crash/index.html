@@ -1,0 +1,105 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification"><title>openwrt swconfig stack trace分析 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><meta name="generator" content="Hexo 5.0.2"></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">openwrt swconfig stack trace分析</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2019/11/06/swconfig_crash/">2019-11-06</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Embedded/">Embedded</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>接上一篇博客 <a href="/2019/11/03/kernel_debug/" title="watchdog bite导致系统重启问题的调试">watchdog bite导致系统重启问题的调试</a> ，打开调试功能后开始压力测试，在测试过程中发现DUT每隔2s打印一次以下异常信息</p>
+<pre><code class="log">BUG: sleeping function called from invalid context at kernel/locking/mutex.c:616
+in_atomic(): 1, irqs_disabled(): 0, pid: 9465, name: swconfig
+INFO: lockdep is turned off.
+CPU: 2 PID: 9465 Comm: swconfig Tainted: P        W    3.14.77 #1
+[&lt;c021561c&gt;] (unwind_backtrace) from [&lt;c0211d44&gt;] (show_stack+0x18/0x1c)
+[&lt;c0211d44&gt;] (show_stack) from [&lt;c062ea98&gt;] (dump_stack+0x9c/0xd4)
+[&lt;c062ea98&gt;] (dump_stack) from [&lt;c06312d8&gt;] (mutex_lock_nested+0x2c/0x450)
+[&lt;c06312d8&gt;] (mutex_lock_nested) from [&lt;c0499df8&gt;] (swconfig_get_dev+0x70/0x88)
+[&lt;c0499df8&gt;] (swconfig_get_dev) from [&lt;c049a808&gt;] (swconfig_list_attrs+0x20/0x20c)
+[&lt;c049a808&gt;] (swconfig_list_attrs) from [&lt;c054fde8&gt;] (genl_rcv_msg+0x260/0x2e0)
+[&lt;c054fde8&gt;] (genl_rcv_msg) from [&lt;c054f2d0&gt;] (netlink_rcv_skb+0x60/0xbc)
+[&lt;c054f2d0&gt;] (netlink_rcv_skb) from [&lt;c054fb74&gt;] (genl_rcv+0x28/0x3c)
+[&lt;c054fb74&gt;] (genl_rcv) from [&lt;c054ec94&gt;] (netlink_unicast+0x11c/0x1d0)
+[&lt;c054ec94&gt;] (netlink_unicast) from [&lt;c054f114&gt;] (netlink_sendmsg+0x30c/0x368)
+[&lt;c054f114&gt;] (netlink_sendmsg) from [&lt;c050fb78&gt;] (sock_sendmsg+0x78/0x8c)
+[&lt;c050fb78&gt;] (sock_sendmsg) from [&lt;c0511310&gt;] (___sys_sendmsg.part.3+0x184/0x20c)
+[&lt;c0511310&gt;] (___sys_sendmsg.part.3) from [&lt;c0512340&gt;] (__sys_sendmsg+0x54/0x78)
+[&lt;c0512340&gt;] (__sys_sendmsg) from [&lt;c020df40&gt;] (ret_fast_syscall+0x0/0x50)</code></pre>
+<h2 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h2><p>每隔2s是因为在<code>detcable</code>模块的主循环中执行了以下代码，并且在while循环中每2s执行一次。</p>
+<pre><code class="c">system(&quot;/sbin/swconfig dev switch0 show |grep \&quot;link: port\&quot; &gt; /tmp/switch);</code></pre>
+<p>根据log首行提示<code>kernel/locking/mutex.c:616</code>找到相关代码：</p>
+<p><img src="/assets/kernel/mutex.c.png" alt="mutex.c:616"></p>
+<p>在内核代码中搜索<code>might_sleep</code>找到其定义于<code>include/linux/kernel.h</code></p>
+<p><img src="/assets/kernel/might_sleep.png" alt="kernel.h might_sleep"></p>
+<p>从说明信息可以看出，这些<code>stack trace</code>提示<code>swconfig</code>进程运行过程中进入内核态时可能进入不被允许的睡眠状态。而这些信息是在启用<code>CONFIG_DEBUG_ATOMIC_SLEEP</code>后打印的，该CONFIG是在启用lockup相关调试功能时打开，所以想要停止打印可以禁用该CONFIG。</p>
+<p>但是实际上这个问题是swconfig的内核驱动导致的，具体代码如下：</p>
+<p><img src="/assets/kernel/swconfig_drivers.png" alt="swconfig drviers"></p>
+<p><code>spinlock</code>自旋锁不允许临界区有触发sleep的函数，而<code>mutex_lock</code>正好就是可能进入sleep状态的函数，所以才触发了这个stack trace</p>
+<blockquote>
+<p><strong>mutex_lock</strong> — acquire the mutex<br>Lock the mutex exclusively for this task. If the mutex is not available right now, it will sleep until it can get it.</p>
+</blockquote>
+<p>为了解决这个问题，可以将加锁方式由<code>spin_lock</code>改为<code>mutex_lock</code>，这个解决方案是组长<code>google</code>来的，我这是拾人牙慧了，哈哈哈。</p>
+<pre><code class="patch">index 78569a9..e8a6847 100644 (file)
+--- a/target/linux/generic/files/drivers/net/phy/swconfig.c
++++ b/target/linux/generic/files/drivers/net/phy/swconfig.c
+@@ -36,7 +36,7 @@ MODULE_LICENSE(&quot;GPL&quot;);
+
+ static int swdev_id;
+ static struct list_head swdevs;
+-static DEFINE_SPINLOCK(swdevs_lock);
++static DEFINE_MUTEX(swdevs_lock);
+ struct swconfig_callback;
+
+ struct swconfig_callback &amp;#123;
+@@ -296,13 +296,13 @@ static struct nla_policy link_policy[SWITCH_LINK_ATTR_MAX] = &amp;#123;
+ static inline void
+ swconfig_lock(void)
+ &amp;#123;
+-       spin_lock(&amp;swdevs_lock);
++       mutex_lock(&amp;swdevs_lock);
+ &amp;#125;
+
+ static inline void
+ swconfig_unlock(void)
+ &amp;#123;
+-       spin_unlock(&amp;swdevs_lock);
++       mutex_unlock(&amp;swdevs_lock);
+ &amp;#125;
+
+ static struct switch_dev *</code></pre>
+<p>加入patch后完美解决问题。</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.kernel.org/doc/htmldocs/kernel-locking/API-mutex-lock.html">API mutex_lock</a></li>
+<li><a target="_blank" rel="noopener" href="https://git.openwrt.org/?p=openwrt/openwrt.git;a=commitdiff;h=ed3860c3e3ebe484c00cf603c29e68af28eb0839;ds=inline">swconfig: convert swdevs_lock from spinlock to mutex</a></li>
+</ul>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2019/11/06/swconfig_crash/">https://www.litreily.top/2019/11/06/swconfig_crash/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tag"></i><a href="/tags/openwrt/">openwrt</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%90"><span class="toc-number">1.</span> <span class="toc-text">问题分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="toc-number">2.</span> <span class="toc-text">参考文献</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2019/11/07/unknown_symbol/">&lt; insmod内核模块提示Unknown Symbol问题处理</a><a class="next" href="/2019/11/03/kernel_debug/">watchdog bite导致系统重启问题的调试 &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+.night .v[data-class=v] a:hover { color: #216C73 !important; }
+.night .v[data-class=v] li { list-style: inherit; }
+.night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
+.night .v[data-class=v] .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.night .v[data-class=v] .vbtn { border-radius: 0; background: none; }
+.night .v[data-class=v] .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.night .v[data-class=v] .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.night .v[data-class=v] .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre,.night .v[data-class=v] .vlist .vcard .vhead .vsys { background: #203240 !important; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre { color: #F0F0F0; font-size: 95%; }
+.v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
+</style><div id="vcomment"></div><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'',
+  appKey:'',
+  lang: 'zh-cn',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></section><footer><p>Copyright © 2016 - 2020 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/plugins/prettify/prettify.js"></script><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script></body></html>

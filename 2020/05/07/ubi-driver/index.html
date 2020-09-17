@@ -1,0 +1,441 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification"><title>Linux 内核驱动解析 - UBI坏块预留大小 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><meta name="generator" content="Hexo 5.0.2"></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">Linux 内核驱动解析 - UBI坏块预留大小</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2020/05/07/ubi-driver/">2020-05-07</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Embedded/">Embedded</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>在处理ubifs相关bug的过程中，学习了ubi驱动对坏块保留分区的处理方式，在此记录一下。</p>
+<p><img src="/assets/linux/ubi-reserved-maps.png" alt="ubi reserved mind maps"></p>
+<h2 id="相关概念"><a href="#相关概念" class="headerlink" title="相关概念"></a>相关概念</h2><h3 id="mtd"><a href="#mtd" class="headerlink" title="mtd"></a>mtd</h3><p><strong>mtd</strong> 全称 memory technology device 内存技术设备，是用于访问内存设备(RAM, Flash)的Linux 子系统，在硬件层和用户空间之间提供抽象接口。</p>
+<p>在嵌入式linux设备中的<code>/dev/</code>目录下有很多<code>/dev/mtdxx</code>文件，这些文件对应的就是内存设备。比如，嵌入式设备的Nand Flash被划分为多个分区，每个分区对应一个<code>/dev/mtdxx</code>文件。</p>
+<p>如下所示，<code>/dev/mtd0</code>至<code>/dev/mtd10</code>对应uboot分区，<code>mtd21</code>对应固件分区，<code>mtd20</code>就是本文将要用到的数据分区。</p>
+<pre><code class="sh">root:/dev# ls mtd* |grep -v block
+mtd0        mtd16ro     mtd23ro     mtd30ro
+mtd0ro      mtd17       mtd24       mtd31
+mtd1        mtd17ro     mtd24ro     mtd31ro
+mtd10       mtd18       mtd25       mtd3ro
+mtd10ro     mtd18ro     mtd25ro     mtd4
+mtd11       mtd19       mtd26       mtd4ro
+mtd11ro     mtd19ro     mtd26ro     mtd5
+mtd12       mtd1ro      mtd27       mtd5ro
+mtd12ro     mtd2        mtd27ro     mtd6
+mtd13       mtd20       mtd28       mtd6ro
+mtd13ro     mtd20ro     mtd28ro     mtd7
+mtd14       mtd21       mtd29       mtd7ro
+mtd14ro     mtd21ro     mtd29ro     mtd8
+mtd15       mtd22       mtd2ro      mtd8ro
+mtd15ro     mtd22ro     mtd3        mtd9
+mtd16       mtd23       mtd30       mtd9ro
+root:/dev#
+root:/dev# cat /proc/mtd
+dev:    size   erasesize  name
+mtd0: 00100000 00020000 &quot;0:SBL1&quot;
+mtd1: 00100000 00020000 &quot;0:MIBIB&quot;
+mtd2: 00100000 00020000 &quot;0:BOOTCONFIG&quot;
+...
+mtd7: 00080000 00020000 &quot;0:BOOTCONFIG1&quot;
+mtd8: 00080000 00020000 &quot;0:APPSBLENV&quot;
+mtd9: 00200000 00020000 &quot;0:APPSBL&quot;
+mtd10: 00200000 00020000 &quot;0:APPSBL_1&quot;
+mtd11: 00080000 00020000 &quot;0:ART&quot;
+mtd12: 00080000 00020000 &quot;0:ART.bak&quot;
+mtd13: 00100000 00020000 &quot;config&quot;
+mtd14: 00080000 00020000 &quot;data1&quot;
+mtd15: 00040000 00020000 &quot;data2&quot;
+...
+mtd20: 01e00000 00020000 &quot;mtddata&quot;
+mtd21: 02800000 00020000 &quot;firmware&quot;
+...
+mtd25: 02780000 00020000 &quot;reserved&quot;</code></pre>
+<h3 id="ubi"><a href="#ubi" class="headerlink" title="ubi"></a>ubi</h3><p><strong>ubi</strong> 是Unsorted Block Image的简称，ubifs是Unsorted Block Image File System(无序区块镜像文件系统)的简称，构建于MTD之上，可操控大容量的Nand flash.</p>
+<p>nand flash, mtd 和ubifs三者关系可以简述为：nand flash作为硬件设备，mtd介于硬件设备和用户层间提供抽象接口，ubifs是在mtd之上构建的文件系统，方便对nand flash进行数据读写。</p>
+<p>ubi相关概念有:</p>
+<ul>
+<li>PEB: physical eraseblock, 物理擦除块，通常为128KB(131072 Bytes)</li>
+<li>LEB: logical eraseblock, 逻辑擦除块，通常为124KB(126976 Bytes)</li>
+</ul>
+<blockquote>
+<p><strong>UBI Headers</strong><br>UBI stores 2 small 64-byte headers at the beginning of each non-bad physical eraseblock:  </p>
+<ul>
+<li>erase counter header (or <strong>EC</strong> header) which contains the erase counter of the physical eraseblock (PEB) plus other information;</li>
+<li>volume identifier header (or <strong>VID</strong> header) which stores the volume ID and the logical eraseblock (LEB) number to which this PEB belongs.</li>
+</ul>
+</blockquote>
+<p>从字面意思也可以理解，LEB是逻辑块，PEB是物理块，实际上LEB包含于PEB，通常LEB会比PEB小4KB，其中2KB用于存储VID Headers, 另外2KB是偏移量，用于对齐。</p>
+<h2 id="console-log"><a href="#console-log" class="headerlink" title="console log"></a>console log</h2><p>了解了相关概念，接下来从嵌入式设备的console log看看UBI相关的信息，依据log可以方便在用户空间或者内核空间搜索相关信息，定位到与之相关的代码。</p>
+<h3 id="UBI-attach"><a href="#UBI-attach" class="headerlink" title="UBI attach"></a>UBI attach</h3><p>首先来看下嵌入式linux设备开机过程中UBI设备的加载信息</p>
+<pre><code class="zsh">Info: init ubi volumes on mtddata raw partition
+UBI: attaching mtd20 to ubi0
+random: procd: uninitialized urandom read (4 bytes read, 60 bits of entropy available)
+UBI: scanning is finished
+UBI: attached mtd20 (name &quot;mtddata&quot;, size 30 MiB) to ubi0
+UBI: PEB size: 131072 bytes (128 KiB), LEB size: 126976 bytes
+UBI: min./max. I/O unit sizes: 2048/2048, sub-page size 2048
+UBI: VID header offset: 2048 (aligned 2048), data offset: 4096
+UBI: good PEBs: 240, bad PEBs: 0, corrupted PEBs: 0
+UBI: user volume: 5, internal volumes: 1, max. volumes count: 128
+UBI: max/mean erase counter: 2/1, WL threshold: 4096, image sequence number: 860068978
+UBI: available PEBs: 3, total reserved PEBs: 237, PEBs reserved for bad PEB handling: 20
+UBI: background thread &quot;ubi_bgt0d&quot; started, PID 115
+UBI device number 0, total 240 LEBs (30474240 bytes, 29.1 MiB), available 3 LEBs (380928 bytes, 372.0 KiB), LEB size 126976 bytes (124.0 KiB)
+Info: attach ubi device on mtddata success!</code></pre>
+<p>以上信息绝大部分在内核UBI驱动的<code>build.c/ubi_attach_mtd_dev</code>函数中打印输出，下面内核空间部分会讲到。</p>
+<p>下面分析其中几条主要信息：</p>
+<pre><code class="zsh"># 在 mtddata 原始分区初始化 ubi 卷
+Info: init ubi volumes on mtddata raw partition
+# 将mtd20附加到ubi0...
+UBI: attaching mtd20 to ubi0
+# 将mtd20附加到ubi0 完成
+UBI: attached mtd20 (name &quot;mtddata&quot;, size 30 MiB) to ubi0
+# PEB 128KB, LEB 124KB
+UBI: PEB size: 131072 bytes (128 KiB), LEB size: 126976 bytes
+# 最小最大I/O读写单元：2048/2048, subpage 2048, 就是2KB
+UBI: min./max. I/O unit sizes: 2048/2048, sub-page size 2048
+# VID header偏移量2KB，用于对齐，数据偏移量4KB
+UBI: VID header offset: 2048 (aligned 2048), data offset: 4096
+# 240 pebs正常，无坏块
+UBI: good PEBs: 240, bad PEBs: 0, corrupted PEBs: 0
+# 剩余可用3 PEBs, 总保留 237 PEBs(已用或保留)，用于坏块处理的保留PEBs 20（本文讨论重点）
+UBI: available PEBs: 3, total reserved PEBs: 237, PEBs reserved for bad PEB handling: 20
+# UBI 设备号0，共240 LEBs（29.1MB)，剩余可用3 LEBs，每个LEB大小为124KB
+UBI device number 0, total 240 LEBs (30474240 bytes, 29.1 MiB), available 3 LEBs (380928 bytes, 372.0 KiB), LEB size 126976 bytes (124.0 KiB)
+# 成功在mtddata附加ubi设备
+Info: attach ubi device on mtddata success!</code></pre>
+<p>从log中可以知晓很多关键信息，UBI挂载的分区名称为mtddata，对应mtd20; PEB 128KB， LEB 124KB; ubi0共240 LEBs/PEBs, 剩余可以3 LEBs/PEBs, 无坏块; 用于坏块处理的保留部分为20 PEBs, 本文后续将要介绍的就是这个保留20 PEBs是如何得来的。</p>
+<h3 id="ubinfo-a"><a href="#ubinfo-a" class="headerlink" title="ubinfo -a"></a>ubinfo -a</h3><p>开机过程会自动打印UBI的信息，那开机后如何手动获取呢，这就要用到ubi相关的工具集了，ubi相关的指令包含：</p>
+<pre><code class="zsh">root:/# ubi
+ubiattach     ubidetach     ubinfo        ubirmvol
+ubiblock      ubiformat     ubinize       ubirsvol
+ubicrc32      ubimkvol      ubirename     ubiupdatevol</code></pre>
+<p>其中的<code>ubinfo</code>就可以查看ubi信息</p>
+<pre><code class="sh">root:/# ubinfo -a
+UBI version:                    1
+Count of UBI devices:           1
+UBI control device major/minor: 10:60
+Present UBI devices:            ubi0
+
+ubi0
+Volumes count:                           5
+Logical eraseblock size:                 126976 bytes, 124.0 KiB
+Total amount of logical eraseblocks:     240 (30474240 bytes, 29.1 MiB)
+Amount of available logical eraseblocks: 3 (380928 bytes, 372.0 KiB)
+Maximum count of volumes                 128
+Count of bad physical eraseblocks:       0
+Count of reserved physical eraseblocks:  20
+Current maximum erase counter value:     2
+Minimum input/output unit size:          2048 bytes
+Character device major/minor:            249:0
+Present volumes:                         0, 1, 2, 3, 4
+...</code></pre>
+<p>ubi0包含5个分卷，最多可包含128个分卷，其它基本信息与开机过程中内核打印的信息一致，本文主要关心下面这一条信息。</p>
+<pre><code class="sh">Count of reserved physical eraseblocks:  20</code></pre>
+<p>好啦，到此就获取并分析了最直观的log信息，下面将从用户空间和内核空间两个维度来追溯这个20 PEBs是怎么来的。</p>
+<h2 id="用户空间"><a href="#用户空间" class="headerlink" title="用户空间"></a>用户空间</h2><p>在用户空间的ubi-utils代码库中搜索“Count of reserved physical eraseblocks”，就可以定位到函数<code>ubinfo.c/print_dev_info</code></p>
+<h3 id="print-dev-info"><a href="#print-dev-info" class="headerlink" title="print_dev_info"></a>print_dev_info</h3><pre><code class="c">static int print_dev_info(libubi_t libubi, int dev_num, int all)
+&amp;#123;
+    int i, err, first = 1;
+    struct ubi_dev_info dev_info;
+    struct ubi_vol_info vol_info;
+
+    err = ubi_get_dev_info1(libubi, dev_num, &amp;dev_info);
+    if (err)
+        return sys_errmsg(&quot;cannot get information about UBI device %d&quot;, dev_num);
+
+    printf(&quot;ubi%d\n&quot;, dev_info.dev_num);
+    printf(&quot;Volumes count:                           %d\n&quot;, dev_info.vol_count);
+    printf(&quot;Logical eraseblock size:                 &quot;);
+    util_print_bytes(dev_info.leb_size, 0);
+    printf(&quot;\n&quot;);
+
+    printf(&quot;Total amount of logical eraseblocks:     %d (&quot;, dev_info.total_lebs);
+    util_print_bytes(dev_info.total_bytes, 0);
+    printf(&quot;)\n&quot;);
+
+    printf(&quot;Amount of available logical eraseblocks: %d (&quot;, dev_info.avail_lebs);
+    util_print_bytes(dev_info.avail_bytes, 0);
+    printf(&quot;)\n&quot;);
+
+    printf(&quot;Maximum count of volumes                 %d\n&quot;, dev_info.max_vol_count);
+    printf(&quot;Count of bad physical eraseblocks:       %d\n&quot;, dev_info.bad_count);
+    printf(&quot;Count of reserved physical eraseblocks:  %d\n&quot;, dev_info.bad_rsvd);
+    printf(&quot;Current maximum erase counter value:     %lld\n&quot;, dev_info.max_ec);
+    printf(&quot;Minimum input/output unit size:          %d %s\n&quot;,
+           dev_info.min_io_size, dev_info.min_io_size &gt; 1 ? &quot;bytes&quot; : &quot;byte&quot;);
+    printf(&quot;Character device major/minor:            %d:%d\n&quot;,
+           dev_info.major, dev_info.minor);
+
+    if (dev_info.vol_count == 0)
+        return 0;
+
+    printf(&quot;Present volumes:                         &quot;);
+    for (i = dev_info.lowest_vol_id;
+         i &lt;= dev_info.highest_vol_id; i++) &amp;#123;
+        err = ubi_get_vol_info1(libubi, dev_info.dev_num, i, &amp;vol_info);
+        if (err == -1) &amp;#123;
+            if (errno == ENOENT)
+                continue;
+
+            return sys_errmsg(&quot;libubi failed to probe volume %d on ubi%d&quot;,
+                      i, dev_info.dev_num);
+        &amp;#125;
+
+        if (!first)
+            printf(&quot;, %d&quot;, i);
+        else &amp;#123;
+            printf(&quot;%d&quot;, i);
+            first = 0;
+        &amp;#125;
+    &amp;#125;
+    printf(&quot;\n&quot;);
+
+    if (!all)
+        return 0;
+
+    first = 1;
+    printf(&quot;\n&quot;);
+
+    for (i = dev_info.lowest_vol_id;
+         i &lt;= dev_info.highest_vol_id; i++) &amp;#123;
+        if(!first)
+            printf(&quot;-----------------------------------\n&quot;);
+        err = ubi_get_vol_info1(libubi, dev_info.dev_num, i, &amp;vol_info);
+        if (err == -1) &amp;#123;
+            if (errno == ENOENT)
+                continue;
+
+            return sys_errmsg(&quot;libubi failed to probe volume %d on ubi%d&quot;,
+                      i, dev_info.dev_num);
+        &amp;#125;
+        first = 0;
+
+        err = print_vol_info(libubi, dev_info.dev_num, i);
+        if (err)
+            return err;
+    &amp;#125;
+
+    return 0;
+&amp;#125;</code></pre>
+<p>ref: <a target="_blank" rel="noopener" href="http://git.infradead.org/mtd-utils.git/blob/639b871fe3d2cb3e73d21363e8c13ede2bbd9f99:/ubi-utils/ubinfo.c">http://git.infradead.org/mtd-utils.git/blob/639b871fe3d2cb3e73d21363e8c13ede2bbd9f99:/ubi-utils/ubinfo.c</a></p>
+<p>打印保留size的是下面这一行，对应变量<code>dev_info.bad_rsvd</code></p>
+<pre><code class="c">printf(&quot;Count of reserved physical eraseblocks:  %d\n&quot;, dev_info.bad_rsvd);</code></pre>
+<h3 id="追踪-bad-rsvd"><a href="#追踪-bad-rsvd" class="headerlink" title="追踪 bad_rsvd"></a>追踪 bad_rsvd</h3><p>根据 <code>dev_info.bad_rsvd</code> 这个变量可以逐步逆向追溯到信息来源</p>
+<p><img src="/assets/linux/get-bad_rsvd.png" alt="print_dev_info 函数调用关系"></p>
+<p>从以上函数调用关系可以看出，饶了一大圈，实际上就是读了个文件里的值，没错，这个值就是存在<code>/sys/class/ubi/ubi0/reserved_for_bad</code>文件里</p>
+<pre><code class="sh">root:/sys/devices/virtual/ubi/ubi0# ls
+avail_eraseblocks  max_ec             reserved_for_bad   ubi0_2
+bad_peb_count      max_vol_count      subsystem          ubi0_3
+bgt_enabled        min_io_size        total_eraseblocks  ubi0_4
+dev                mtd_num            ubi0_0             uevent
+eraseblock_size    power              ubi0_1             volumes_count
+root:/sys/devices/virtual/ubi/ubi0# cat reserved_for_bad
+20</code></pre>
+<p>在目录<code>/sys/class/ubi/ubi0</code>下还可以看到其它ubi信息，比如avail_eraseblocks（可用块）, bad_peb_count（坏块个数）等。</p>
+<p>好啦，用户空间就到这吧，我们已经搞清楚了<code>ubinfo -a</code>的信息来源是系统目录下的文件，当然我们也可以很容易猜到这些文件是系统内核产生的，确切的说是UBI驱动程序产生的。</p>
+<h2 id="内核空间"><a href="#内核空间" class="headerlink" title="内核空间"></a>内核空间</h2><p>接下来看内核空间的UBI驱动部分，查找底层驱动是如何计算坏块保留大小的。</p>
+<p>根据开机过程的UBI log，在linux内核的<code>drivers/mtd/ubi/</code>目录grep搜索相关字符串（如&quot;PEBs reserved for bad PEB handling&quot;），可以找到打印这些log的函数<code>ubi_attach_mtd_dev</code>.</p>
+<h3 id="ubi-attach-mtd-dev"><a href="#ubi-attach-mtd-dev" class="headerlink" title="ubi_attach_mtd_dev"></a>ubi_attach_mtd_dev</h3><p>该函数用于附加MTD device到UBI并分配@ubi_num给新创建的UBI设备，在附加过程中会打印UBI设备的相关信息，也就是<a href="#UBI-attach">UBI attach</a>部分的console log.</p>
+<pre><code class="c">int ubi_attach_mtd_dev(struct mtd_info *mtd, int ubi_num,
+            int vid_hdr_offset, int max_beb_per1024)
+&amp;#123;
+  struct ubi_device *ubi;
+  int i, err, ref = 0;
+
+  /*省略部分代码*/
+
+  ubi_msg(&quot;attached mtd%d (name \&quot;%s\&quot;, size %llu MiB) to ubi%d&quot;,
+     mtd-&gt;index, mtd-&gt;name, ubi-&gt;flash_size &gt;&gt; 20, ubi_num);
+  ubi_msg(&quot;PEB size: %d bytes (%d KiB), LEB size: %d bytes&quot;,
+     ubi-&gt;peb_size, ubi-&gt;peb_size &gt;&gt; 10, ubi-&gt;leb_size);
+  ubi_msg(&quot;min./max. I/O unit sizes: %d/%d, sub-page size %d&quot;,
+     ubi-&gt;min_io_size, ubi-&gt;max_write_size, ubi-&gt;hdrs_min_io_size);
+  ubi_msg(&quot;VID header offset: %d (aligned %d), data offset: %d&quot;,
+     ubi-&gt;vid_hdr_offset, ubi-&gt;vid_hdr_aloffset, ubi-&gt;leb_start);
+  ubi_msg(&quot;good PEBs: %d, bad PEBs: %d, corrupted PEBs: %d&quot;,
+     ubi-&gt;good_peb_count, ubi-&gt;bad_peb_count, ubi-&gt;corr_peb_count);
+  ubi_msg(&quot;user volume: %d, internal volumes: %d, max. volumes count: %d&quot;,
+     ubi-&gt;vol_count - UBI_INT_VOL_COUNT, UBI_INT_VOL_COUNT,
+     ubi-&gt;vtbl_slots);
+  ubi_msg(&quot;max/mean erase counter: %d/%d, WL threshold: %d, image sequence number: %u&quot;,
+     ubi-&gt;max_ec, ubi-&gt;mean_ec, CONFIG_MTD_UBI_WL_THRESHOLD,
+     ubi-&gt;image_seq);
+  ubi_msg(&quot;available PEBs: %d, total reserved PEBs: %d, PEBs reserved for bad PEB handling: %d&quot;,
+     ubi-&gt;avail_pebs, ubi-&gt;rsvd_pebs, ubi-&gt;beb_rsvd_pebs);
+
+  /*省略部分代码*/
+&amp;#125;</code></pre>
+<p>ref: <a target="_blank" rel="noopener" href="https://elixir.bootlin.com/linux/v3.14.77/source/drivers/mtd/ubi/build.c#L867">https://elixir.bootlin.com/linux/v3.14.77/source/drivers/mtd/ubi/build.c#L867</a></p>
+<p>从函数可以看到打印坏块保留分区的语句：</p>
+<pre><code class="c">ubi_msg(&quot;available PEBs: %d, total reserved PEBs: %d, PEBs reserved for bad PEB handling: %d&quot;,
+   ubi-&gt;avail_pebs, ubi-&gt;rsvd_pebs, ubi-&gt;beb_rsvd_pebs);</code></pre>
+<p>结合以下变量定义</p>
+<pre><code class="c">/**
+ * struct ubi_device - UBI device description structure
+ * ...
+ * @rsvd_pebs: count of reserved physical eraseblocks
+ * @avail_pebs: count of available physical eraseblocks
+ * @beb_rsvd_pebs: how many physical eraseblocks are reserved for bad PEB
+ *                 handling
+ * @beb_rsvd_level: normal level of PEBs reserved for bad PEB handling
+ * ...
+ */</code></pre>
+<p>ref: <a target="_blank" rel="noopener" href="https://elixir.bootlin.com/linux/v3.14.77/source/drivers/mtd/ubi/ubi.h#L383">https://elixir.bootlin.com/linux/v3.14.77/source/drivers/mtd/ubi/ubi.h#L383</a></p>
+<p>可知变量<code>beb_rsvd_pebs</code>对应的就是为坏块预留的大小，<code>beb_rsvd_level</code>是坏块预留的常规等级，这两者有啥联系呢。OK，接下来要做的和用户空间一样，我们进行逆向追踪，看下这两个变量的值是如何获取的。</p>
+<h3 id="追踪-beb-rsvd-pebs"><a href="#追踪-beb-rsvd-pebs" class="headerlink" title="追踪 beb_rsvd_pebs"></a>追踪 beb_rsvd_pebs</h3><p><img src="/assets/linux/get-beb_rsvd_pebs.png" alt="get beb_rsvd_pebs"></p>
+<p>图中虚线代表非直接调用关系，虚线中间的全局变量代表的是两个节点的关联信息，捋一下：</p>
+<ol>
+<li>ubi_eba_init 调用 ubi_calculate_reserved 函数计算出 <code>beb_rsvd_level</code><ul>
+<li>ubi_calculate_reserved 调用了 get_bad_peb_limit 获取 <code>bad_peb_limit</code></li>
+<li>get_bad_peb_limit 调用了其它3个函数计算 <code>bad_peb_limit</code></li>
+</ul>
+</li>
+<li>ubi_eba_init 将 <code>beb_rsvd_level</code> 赋值给 <code>beb_rsvd_level</code></li>
+<li>ubi_attach_mtd_dev 将 <code>beb_rsvd_pebs</code> 打印到 console</li>
+</ol>
+<p>有点绕，没关系，下面按照箭头方向从下往上逐一细说。</p>
+<h3 id="ubi-eba-init"><a href="#ubi-eba-init" class="headerlink" title="ubi_eba_init"></a>ubi_eba_init</h3><p><code>ubi_eba_init</code> 使用ubi信息初始化EBA子系统，但是这个我们不关心，主要看其中一小段代码。</p>
+<pre><code class="c">int ubi_eba_init(struct ubi_device *ubi, struct ubi_attach_info *ai)
+&amp;#123;
+   /*省略部分代码*/
+
+  if (ubi-&gt;bad_allowed) &amp;#123;
+    ubi_calculate_reserved(ubi);
+
+    if (ubi-&gt;avail_pebs &lt; ubi-&gt;beb_rsvd_level) &amp;#123;
+      /* No enough free physical eraseblocks */
+      ubi-&gt;beb_rsvd_pebs = ubi-&gt;avail_pebs;
+      print_rsvd_warning(ubi, ai);
+    &amp;#125; else
+      ubi-&gt;beb_rsvd_pebs = ubi-&gt;beb_rsvd_level;
+
+    ubi-&gt;avail_pebs -= ubi-&gt;beb_rsvd_pebs;
+    ubi-&gt;rsvd_pebs  += ubi-&gt;beb_rsvd_pebs;
+  &amp;#125;
+
+   /*省略部分代码*/
+&amp;#125;</code></pre>
+<p>在允许坏块，并且有足够PEBs的情况下, <code>beb_rsvd_pebs</code> 等于 <code>beb_rsvd_level</code></p>
+<pre><code class="c">ubi-&gt;beb_rsvd_pebs = ubi-&gt;beb_rsvd_level;</code></pre>
+<p>ok，那接下来的问题是<code>beb_rsvd_level</code>如何得来，继续往下↓</p>
+<h3 id="ubi-calculate-reserved"><a href="#ubi-calculate-reserved" class="headerlink" title="ubi_calculate_reserved"></a>ubi_calculate_reserved</h3><p>从上面的流程图可知，<code>beb_rsvd_level</code> 由 以下函数计算得到。</p>
+<pre><code class="c">/**
+ * ubi_calculate_reserved - calculate how many PEBs must be reserved for bad
+ * eraseblock handling.
+ * @ubi: UBI device description object
+ */
+void ubi_calculate_reserved(struct ubi_device *ubi)
+&amp;#123;
+  /*
+   * Calculate the actual number of PEBs currently needed to be reserved
+   * for future bad eraseblock handling.
+   */
+  ubi-&gt;beb_rsvd_level = ubi-&gt;bad_peb_limit - ubi-&gt;bad_peb_count;
+  if (ubi-&gt;beb_rsvd_level &lt; 0) &amp;#123;
+     ubi-&gt;beb_rsvd_level = 0;
+     ubi_warn(&quot;number of bad PEBs (%d) is above the expected limit (%d), not reserving any PEBs for bad PEB handling, will use available PEBs (if any)&quot;,
+        ubi-&gt;bad_peb_count, ubi-&gt;bad_peb_limit);
+  &amp;#125;
+&amp;#125;</code></pre>
+<p>这个函数的精髓就一行, <code>beb_rsvd_level</code> 等于坏块限制 <code>bad_peb_limit</code> 减去当前已检测到的坏块数量<code>bad_peb_count</code>.</p>
+<pre><code class="c">ubi-&gt;beb_rsvd_level = ubi-&gt;bad_peb_limit - ubi-&gt;bad_peb_count;</code></pre>
+<p>由于检测到的坏块数量与硬件实际情况有关，我们不深究，接下来继续追溯 <code>bad_peb_limit</code> 的来源。</p>
+<h3 id="get-bad-peb-limit"><a href="#get-bad-peb-limit" class="headerlink" title="get_bad_peb_limit"></a>get_bad_peb_limit</h3><p><code>get_bad_peb_limit</code> 就是用来计算坏块限制的函数，函数中有段注释，大致意思是我们不能保证坏块平均分摊在整个flash芯片，考虑最坏情况，有可能所有坏块都出现在附加了ubi的MTD分区。因此在计算限制大小时使用的是整个flash size.</p>
+<pre><code class="c">static int get_bad_peb_limit(const struct ubi_device *ubi, int max_beb_per1024)
+&amp;#123;
+  int limit, device_pebs;
+  uint64_t device_size;
+
+  if (!max_beb_per1024)
+     return 0;
+
+  /*
+   * Here we are using size of the entire flash chip and
+   * not just the MTD partition size because the maximum
+   * number of bad eraseblocks is a percentage of the
+   * whole device and bad eraseblocks are not fairly
+   * distributed over the flash chip. So the worst case
+   * is that all the bad eraseblocks of the chip are in
+   * the MTD partition we are attaching (ubi-&gt;mtd).
+   */
+  device_size = mtd_get_device_size(ubi-&gt;mtd);
+  device_pebs = mtd_div_by_eb(device_size, ubi-&gt;mtd);
+  limit = mult_frac(device_pebs, max_beb_per1024, 1024);
+
+  /* Round it up */
+  if (mult_frac(limit, 1024, max_beb_per1024) &lt; device_pebs)
+     limit += 1;
+
+  return limit;
+&amp;#125;</code></pre>
+<p>这里用到3个函数：</p>
+<ol>
+<li><code>mtd_get_device_size</code> - 获取整个flash芯片的大小</li>
+<li><code>mtd_div_by_eb</code> - 将flash大小换算成eraseblock个数，就是将Bytes单位换算为PEBs</li>
+<li><code>mult_frac</code> - 分数相乘函数，把以PEB为单位的limit值乘以一个坏块系数</li>
+</ol>
+<p>前面两个函数都好理解，单独来看下<code>mult_frac</code>, 这其实是个宏定义，用于分数相乘。</p>
+<pre><code class="c">/*
+ * Multiplies an integer by a fraction, while avoiding unnecessary
+ * overflow or loss of precision.
+ */
+#define mult_frac(x, numer, denom)( \
+&amp;#123; \
+  typeof(x) quot = (x) / (denom); \
+  typeof(x) rem  = (x) % (denom); \
+  (quot * (numer)) + ((rem * (numer)) / (denom)); \
+&amp;#125; \
+)</code></pre>
+<p>举例说明，假设flash为128MB(134,217,728 Bytes), <code>get_bad_peb_limit</code>函数用到的<code>max_beb_per1024</code>来自于kernel config, 默认值为20，代表每1024 PEBs中最多允许20个坏块，那么对应的limit计算如下：</p>
+<pre><code class="c">device_size = 134217728; /* flash size 128MB */
+device_pebs = 134217728 / (128 * 1024) = 1024; /* eraseblock: 128KB */
+limit = mult_frac(device_pebs, max_beb_per1024, 1024) = 1024 * (20 / 1024) = 20;</code></pre>
+<p>最终计算得到<code>bad_peb_limit</code>为20 PEBs, 与 <a href="#ubinfo-a">ubinfo -a</a> 中的结果一致。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>本文首先从 console log 入手分析了UBI相关配置信息，然后从用户空间和内核空间两个方面分析了UBI信息的来源以及坏块保留大小的计算. 其中坏块保留大小 <code>beb_rsvd_pebs</code> 的计算过程可以归结为：</p>
+<pre><code class="c">/* get_bad_peb_limit */
+device_size = mtd_get_device_size(ubi-&gt;mtd);
+device_pebs = mtd_div_by_eb(device_size, ubi-&gt;mtd);
+limit = mult_frac(device_pebs, max_beb_per1024, 1024);
+
+ubi-&gt;bad_peb_limit = get_bad_peb_limit(ubi, max_beb_per1024);
+
+/* ubi_calculate_reserved */
+ubi-&gt;beb_rsvd_level = ubi-&gt;bad_peb_limit - ubi-&gt;bad_peb_count;
+
+/* ubi_eba_init */
+ubi-&gt;beb_rsvd_pebs = ubi-&gt;beb_rsvd_level;</code></pre>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://elixir.bootlin.com/linux/v3.14.77/source/drivers/mtd/ubi">https://elixir.bootlin.com/linux/v3.14.77/source/drivers/mtd/ubi</a></li>
+<li><a target="_blank" rel="noopener" href="http://git.infradead.org/mtd-utils.git">http://git.infradead.org/mtd-utils.git</a></li>
+</ul>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2020/05/07/ubi-driver/">https://www.litreily.top/2020/05/07/ubi-driver/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tags"></i><a href="/tags/C-C/">C/C++</a><a href="/tags/ubi/">ubi</a><a href="/tags/flash/">flash</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">相关概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#mtd"><span class="toc-number">1.1.</span> <span class="toc-text">mtd</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ubi"><span class="toc-number">1.2.</span> <span class="toc-text">ubi</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#console-log"><span class="toc-number">2.</span> <span class="toc-text">console log</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#UBI-attach"><span class="toc-number">2.1.</span> <span class="toc-text">UBI attach</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ubinfo-a"><span class="toc-number">2.2.</span> <span class="toc-text">ubinfo -a</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E7%A9%BA%E9%97%B4"><span class="toc-number">3.</span> <span class="toc-text">用户空间</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#print-dev-info"><span class="toc-number">3.1.</span> <span class="toc-text">print_dev_info</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%BD%E8%B8%AA-bad-rsvd"><span class="toc-number">3.2.</span> <span class="toc-text">追踪 bad_rsvd</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E6%A0%B8%E7%A9%BA%E9%97%B4"><span class="toc-number">4.</span> <span class="toc-text">内核空间</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ubi-attach-mtd-dev"><span class="toc-number">4.1.</span> <span class="toc-text">ubi_attach_mtd_dev</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%BD%E8%B8%AA-beb-rsvd-pebs"><span class="toc-number">4.2.</span> <span class="toc-text">追踪 beb_rsvd_pebs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ubi-eba-init"><span class="toc-number">4.3.</span> <span class="toc-text">ubi_eba_init</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ubi-calculate-reserved"><span class="toc-number">4.4.</span> <span class="toc-text">ubi_calculate_reserved</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#get-bad-peb-limit"><span class="toc-number">4.5.</span> <span class="toc-text">get_bad_peb_limit</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-number">5.</span> <span class="toc-text">小结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">6.</span> <span class="toc-text">参考</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2020/05/08/putty-wsl/">&lt; Win10中使用ssh访问WSL</a><a class="next" href="/2020/05/03/md2bm/">Python之markdown转Chrome收藏夹 &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+.night .v[data-class=v] a:hover { color: #216C73 !important; }
+.night .v[data-class=v] li { list-style: inherit; }
+.night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
+.night .v[data-class=v] .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.night .v[data-class=v] .vbtn { border-radius: 0; background: none; }
+.night .v[data-class=v] .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.night .v[data-class=v] .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.night .v[data-class=v] .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre,.night .v[data-class=v] .vlist .vcard .vhead .vsys { background: #203240 !important; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre { color: #F0F0F0; font-size: 95%; }
+.v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
+</style><div id="vcomment"></div><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'',
+  appKey:'',
+  lang: 'zh-cn',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></section><footer><p>Copyright © 2016 - 2020 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/plugins/prettify/prettify.js"></script><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script></body></html>
