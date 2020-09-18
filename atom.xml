@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2020-08-13T11:34:41.043Z</updated>
+  <updated>2020-09-18T12:10:23.062Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>openssl 验证证书有效性</title>
+    <link href="https://www.litreily.top/2020/09/17/openssl/"/>
+    <id>https://www.litreily.top/2020/09/17/openssl/</id>
+    <published>2020-09-17T06:17:27.000Z</published>
+    <updated>2020-09-18T12:10:23.062Z</updated>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;OpenSSL is a robust, commercial-grade, and full-featured toolkit for the Transport Layer Security (TLS) and Secure Sockets Layer (SSL) protocols. It is also a general-purpose cryptography library.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;openssl是非常强大的TLS/SSL协议相关的工具集，包含丰富的测试工具。 这篇文章来讲讲如何使用openssl工具集中的&lt;code&gt;s_client&lt;/code&gt;测试证书认证。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Network" scheme="https://www.litreily.top/categories/Network/"/>
+    
+      <category term="Security" scheme="https://www.litreily.top/categories/Network/Security/"/>
+    
+    
+      <category term="openssl" scheme="https://www.litreily.top/tags/openssl/"/>
+    
+  </entry>
   
   <entry>
     <title>python之给pdf添加页码</title>
@@ -316,33 +341,6 @@ EOF
   </entry>
   
   <entry>
-    <title>使用油猴脚本批量下载canvas图片</title>
-    <link href="https://www.litreily.top/2020/03/15/canvas-dl/"/>
-    <id>https://www.litreily.top/2020/03/15/canvas-dl/</id>
-    <published>2020-03-15T09:01:33.000Z</published>
-    <updated>2020-06-13T10:38:45.607Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;女友最近在网上下载一些北大网盘的pdf&lt;a href=&quot;https://disk.pku.edu.cn/#/link/3A7748E0466521E3E68A0CBA4C24DE20?gns=AE26ACF837E24D51B1EC40E0A80A5D23%2F7F0E54D7D92343B1B62031B1C41F2280&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;文档&lt;/a&gt;，结果发现没有下载接口，另存为也只能存储单张图片。找我帮忙，这时候发现程序员男票的好处了哈。&lt;/p&gt;
-&lt;h2 id=&quot;分析页面&quot;&gt;&lt;a href=&quot;#分析页面&quot; class=&quot;headerlink&quot; title=&quot;分析页面&quot;&gt;&lt;/a&gt;分析页面&lt;/h2&gt;&lt;p&gt;一开始想着使用Chrome调试工具看下pdf链接，发现这个网盘居然不是直接获取的pdf文件，而是使用js脚本动态渲染生成的，涨知识了。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/assets/canvas/pdf-js.png&quot; alt=&quot;pdf-combine js&quot;&gt;&lt;/p&gt;
-&lt;p&gt;那看看是否可以以图片形式批量下载呢，结果查看pdf单页的html结构发现，这居然是个canvas!!!还不是普通图片，而是画布。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/assets/canvas/canvas.png&quot; alt=&quot;cancvs&quot;&gt;&lt;/p
-      
-    
-    </summary>
-    
-      <category term="Tools" scheme="https://www.litreily.top/categories/Tools/"/>
-    
-    
-      <category term="tampermonkey" scheme="https://www.litreily.top/tags/tampermonkey/"/>
-    
-  </entry>
-  
-  <entry>
     <title>NBNS客户端的C语言实现</title>
     <link href="https://www.litreily.top/2020/03/15/nbns_code/"/>
     <id>https://www.litreily.top/2020/03/15/nbns_code/</id>
@@ -370,6 +368,33 @@ EOF
     
     
       <category term="C/C++" scheme="https://www.litreily.top/tags/C-C/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用油猴脚本批量下载canvas图片</title>
+    <link href="https://www.litreily.top/2020/03/15/canvas-dl/"/>
+    <id>https://www.litreily.top/2020/03/15/canvas-dl/</id>
+    <published>2020-03-15T09:01:33.000Z</published>
+    <updated>2020-06-13T10:38:45.607Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;女友最近在网上下载一些北大网盘的pdf&lt;a href=&quot;https://disk.pku.edu.cn/#/link/3A7748E0466521E3E68A0CBA4C24DE20?gns=AE26ACF837E24D51B1EC40E0A80A5D23%2F7F0E54D7D92343B1B62031B1C41F2280&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;文档&lt;/a&gt;，结果发现没有下载接口，另存为也只能存储单张图片。找我帮忙，这时候发现程序员男票的好处了哈。&lt;/p&gt;
+&lt;h2 id=&quot;分析页面&quot;&gt;&lt;a href=&quot;#分析页面&quot; class=&quot;headerlink&quot; title=&quot;分析页面&quot;&gt;&lt;/a&gt;分析页面&lt;/h2&gt;&lt;p&gt;一开始想着使用Chrome调试工具看下pdf链接，发现这个网盘居然不是直接获取的pdf文件，而是使用js脚本动态渲染生成的，涨知识了。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/canvas/pdf-js.png&quot; alt=&quot;pdf-combine js&quot;&gt;&lt;/p&gt;
+&lt;p&gt;那看看是否可以以图片形式批量下载呢，结果查看pdf单页的html结构发现，这居然是个canvas!!!还不是普通图片，而是画布。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/canvas/canvas.png&quot; alt=&quot;cancvs&quot;&gt;&lt;/p
+      
+    
+    </summary>
+    
+      <category term="Tools" scheme="https://www.litreily.top/categories/Tools/"/>
+    
+    
+      <category term="tampermonkey" scheme="https://www.litreily.top/tags/tampermonkey/"/>
     
   </entry>
   
@@ -611,9 +636,9 @@ CPU: 2 PID: 9465 Comm: swconfig Tainted: P        W    3.14.77 #1
       <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
     
     
-      <category term="ftrace" scheme="https://www.litreily.top/tags/ftrace/"/>
-    
       <category term="openwrt" scheme="https://www.litreily.top/tags/openwrt/"/>
+    
+      <category term="ftrace" scheme="https://www.litreily.top/tags/ftrace/"/>
     
   </entry>
   
@@ -917,28 +942,6 @@ struct linklist *hashtbl[TABLE_SIZE];
     
     
       <category term="xss" scheme="https://www.litreily.top/tags/xss/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Python之MongoDB数据分析及其Highcharts可视化</title>
-    <link href="https://www.litreily.top/2019/01/22/highcharts/"/>
-    <id>https://www.litreily.top/2019/01/22/highcharts/</id>
-    <published>2019-01-22T01:35:40.000Z</published>
-    <updated>2020-02-26T13:11:56.213Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;近期使用&lt;code&gt;requests&lt;/code&gt;把内部&lt;code&gt;bugziila&lt;/code&gt;上的&lt;code&gt;bug&lt;/code&gt;数据爬取了一遍，并存入了本地的&lt;code&gt;MongoDB&lt;/code&gt;数据库，想着对数据做些简单的可视化处理，将所有产品的bug数做一个统计和可视化，于是便有了这篇简短的文章。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="Python" scheme="https://www.litreily.top/categories/Python/"/>
-    
-    
-      <category term="visualization" scheme="https://www.litreily.top/tags/visualization/"/>
-    
-      <category term="MongoDB" scheme="https://www.litreily.top/tags/MongoDB/"/>
     
   </entry>
   

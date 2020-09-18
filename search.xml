@@ -4,6 +4,295 @@
   
     
     <entry>
+      <title><![CDATA[openssl 验证证书有效性]]></title>
+      <url>https://www.litreily.top/2020/09/17/openssl/</url>
+      <content type="html"><![CDATA[<blockquote>
+<p>OpenSSL is a robust, commercial-grade, and full-featured toolkit for the Transport Layer Security (TLS) and Secure Sockets Layer (SSL) protocols. It is also a general-purpose cryptography library.</p>
+</blockquote>
+<p>openssl是非常强大的TLS/SSL协议相关的工具集，包含丰富的测试工具。 这篇文章来讲讲如何使用openssl工具集中的<code>s_client</code>测试证书认证。</p>
+<a id="more"></a>
+<pre><code class="bash">$ openssl -h
+openssl:Error: &#39;-h&#39; is an invalid command.
+
+Standard commands
+asn1parse      ca             ciphers        cms            crl
+crl2pkcs7      dgst           dh             dhparam        dsa
+dsaparam       ec             ecparam        enc            engine
+errstr         gendh          gendsa         genpkey        genrsa
+nseq           ocsp           passwd         pkcs12         pkcs7
+pkcs8          pkey           pkeyparam      pkeyutl        prime
+rand           req            rsa            rsautl         s_client
+s_server       s_time         sess_id        smime          speed
+spkac          srp            ts             verify         version
+x509
+
+Message Digest commands (see the `dgst` command for more details)
+md4            md5            rmd160         sha            sha1
+
+Cipher commands (see the `enc` command for more details)
+aes-128-cbc    aes-128-ecb    aes-192-cbc    aes-192-ecb    aes-256-cbc
+aes-256-ecb    base64         bf             bf-cbc         bf-cfb
+bf-ecb         bf-ofb         cast           cast-cbc       cast5-cbc
+cast5-cfb      cast5-ecb      cast5-ofb      des            des-cbc
+des-cfb        des-ecb        des-ede        des-ede-cbc    des-ede-cfb
+des-ede-ofb    des-ede3       des-ede3-cbc   des-ede3-cfb   des-ede3-ofb
+des-ofb        des3           desx           rc2            rc2-40-cbc
+rc2-64-cbc     rc2-cbc        rc2-cfb        rc2-ecb        rc2-ofb
+rc4            rc4-40         seed           seed-cbc       seed-cfb
+seed-ecb       seed-ofb       zlib
+</code></pre>
+<p>以站点<code>devicelocation.ngxcld.com</code>为例，修改当前系统时间，测试不同时间下的认证情况。</p>
+<h2 id="DNS解析"><a href="#DNS解析" class="headerlink" title="DNS解析"></a>DNS解析</h2><p>首先使用<code>nslookup</code>获取server ip.</p>
+<pre><code class="bash">$ nslookup devicelocation.ngxcld.com
+Server:    112.65.184.255
+Address 1: 112.65.184.255
+
+Name:      devicelocation.ngxcld.com
+Address 1: 54.72.14.214 ec2-54-72-14-214.eu-west-1.compute.amazonaws.com
+Address 2: 52.48.74.182 ec2-52-48-74-182.eu-west-1.compute.amazonaws.com
+</code></pre>
+<p>选择两个地址之一，此处选择<code>52.48.74.182</code>.</p>
+<h2 id="openssl-s-client"><a href="#openssl-s-client" class="headerlink" title="openssl s_client"></a>openssl s_client</h2><p><code>s_client</code>使用方法如下，详细参数说明可以通过<code>openssl s_client -h</code> 获得</p>
+<pre><code class="bash">openssl s_client -connect serverip:port
+</code></pre>
+<p>正常情况下，当前系统时间为正确的格林尼治时间，使用<code>openssl s_client</code>进行测试，测试结果如下↓</p>
+<pre><code>$ openssl s_client -connect 52.48.74.182:443
+CONNECTED(00000003)
+depth=4 C = US, O = &quot;Starfield Technologies, Inc.&quot;, OU = Starfield Class 2 Certification Authority
+verify return:1
+depth=3 C = US, ST = Arizona, L = Scottsdale, O = &quot;Starfield Technologies, Inc.&quot;, CN = Starfield Services Root Certificate Authority - G2
+verify return:1
+depth=2 C = US, O = Amazon, CN = Amazon Root CA 1
+verify return:1
+depth=1 C = US, O = Amazon, OU = Server CA 1B, CN = Amazon
+verify return:1
+depth=0 CN = devicelocation.ngxcld.com
+verify return:1
+---
+Certificate chain
+ 0 s:/CN=devicelocation.ngxcld.com
+   i:/C=US/O=Amazon/OU=Server CA 1B/CN=Amazon
+ 1 s:/C=US/O=Amazon/OU=Server CA 1B/CN=Amazon
+   i:/C=US/O=Amazon/CN=Amazon Root CA 1
+ 2 s:/C=US/O=Amazon/CN=Amazon Root CA 1
+   i:/C=US/ST=Arizona/L=Scottsdale/O=Starfield Technologies, Inc./CN=Starfield Services Root Certificate Authority - G2
+ 3 s:/C=US/ST=Arizona/L=Scottsdale/O=Starfield Technologies, Inc./CN=Starfield Services Root Certificate Authority - G2
+   i:/C=US/O=Starfield Technologies, Inc./OU=Starfield Class 2 Certification Authority
+---
+Server certificate
+-----BEGIN CERTIFICATE-----
+MIIFezCCBGOgAwIBAgIQD2G5WRjlpBXraGmoG0C50TANBgkqhkiG9w0BAQsFADBG
+MQswCQYDVQQGEwJVUzEPMA0GA1UEChMGQW1hem9uMRUwEwYDVQQLEwxTZXJ2ZXIg
+Q0EgMUIxDzANBgNVBAMTBkFtYXpvbjAeFw0yMDA4MjgwMDAwMDBaFw0yMTA5Mjcx
+MjAwMDBaMCQxIjAgBgNVBAMTGWRldmljZWxvY2F0aW9uLm5neGNsZC5jb20wggEi
+MA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCZw+BtpGv+SopXdXVjxvRJb1It
+3MqlCXyFp+lRxuM9ySLT0IFCMqhBadzJCIB32VZP4ixQ0WjqGDjwcXVau2ka0SDN
+e+xjhYzc6FKzgRmIy016sBQiadasadAZbbcJeRTNrhjD0PqjCE7DbKmQWx8SEoY0
+Nm1fnq/TPwBIKqo1vdS2e6CiXcfH5LTBLLE4Ryw9aloWDQ2nud/x8lRMlY+0Gird
+X1abENX9++gpoS/TUQ2uXxbFKDPb/Moi/3hirivQiVi1R9CjEYYcmlSr+XctUjk/
+VgzqwgUukC15YABvfxCjZRHyNQ85SJ2vDtDhxMfQfhZHqcUozkQPqw28SUVhAgMB
+AAGjggKFMIICgTAfBgNVHSMEGDAWgBRZpGYGUqB7lZI8o5QHJ5Z0W/k90DAdBgNV
+HQ4EFgQUtbIEC2lD6lx/E0fmPY/OICyl9HQwJAYDVR0RBB0wG4IZZGV2aWNlbG9j
+YXRpb24ubmd4Y2xkLmNvbTAOBgNVHQ8BAf8EBAMCBaAwHQYDVR0lBBYwFAYIKwYB
+BQUHAwEGCCsGAQUFBwMCMDsGA1UdHwQ0MDIwMKAuoCyGKmh0dHA6Ly9jcmwuc2Nh
+MWIuYW1hem9udHJ1c3QuY29tL3NjYTFiLmNybDAgBgNVHSAEGTAXMAsGCWCGSAGG
+/WwBAjAIBgZngQwBAgEwdQYIKwYBBQUHAQEEaTBnMC0GCCsGAQUFBzABhiFodHRw
+Oi8vb2NzcC5zY2ExYi5hbWF6b250cnVzdC5jb20wNgYIKwYBBQUHMAKGKmh0dHA6
+Ly9jcnQuc2NhMWIuYW1hem9udHJ1c3QuY29tL3NjYTFiLmNydDAMBgNVHRMBAf8E
+AjAAMIIBBAYKKwYBBAHWeQIEAgSB9QSB8gDwAHYA9lyUL9F3MCIUVBgIMJRWjuNN
+Exkzv98MLyALzE7xZOMAAAF0Moj6QwAABAMARzBFAiArdrj+FzgNhO3UOShNAThI
+dUxRgP21OgRiZCsOv3UZDwIhAJFyF0BC4kYsJqJFkc+n/ZMmmVrrAG4WPIfGqwq/
+nqc+AHYAXNxDkv7mq0VEsV6a1FbmEDf71fpH3KFzlLJe5vbHDsoAAAF0Moj6PQAA
+BAMARzBFAiEA+twofyIX7Z2fSqY3OJsHzw2c39o3oBVkwuthnGmsIegCIHNCLMBY
+lrkWX0V9j+7Pi+NHe57Bj2+IgWqlw/CHeM5OMA0GCSqGSIb3DQEBCwUAA4IBAQAf
+2CtL8DliTB9Inf1+ZKTg6JjCebH4iH61gSfqxJZyDgW+7umFQguL+hEpdDUd6tcq
+Uj9ibAxtcdOLSbIjJKwC1cN+gcgSHYbPBD2mQU4U7wPhfFSZRDBoFBH4n13OkgT+
+f2tO/byQ7uchJvnezVhjYdJwZoBpPi6IXpzqE5A6IH9AJz0iQJLUyyC1b8fQNiFQ
+5j65t5FrLqf9LU82hrDrPLjEvR9v6BAumlH/0FmaIbXPwZm6kMXmTqRoPzX0+R5W
+M8bUGEDnkWMwzj+1eW64hpu8Fwsq17SAeITVclj2ZNjz2LaNyuLbdKkMatnLq1M6
+2sq4dgrQ1Jx90PGLzAbi
+-----END CERTIFICATE-----
+subject=/CN=devicelocation.ngxcld.com
+issuer=/C=US/O=Amazon/OU=Server CA 1B/CN=Amazon
+---
+No client certificate CA names sent
+Peer signing digest: SHA512
+Server Temp Key: ECDH, P-256, 256 bits
+---
+SSL handshake has read 5506 bytes and written 400 bytes
+---
+New, TLSv1/SSLv3, Cipher is ECDHE-RSA-AES128-GCM-SHA256
+Server public key is 2048 bit
+Secure Renegotiation IS supported
+Compression: NONE
+Expansion: NONE
+No ALPN negotiated
+SSL-Session:
+    Protocol  : TLSv1.2
+    Cipher    : ECDHE-RSA-AES128-GCM-SHA256
+    Session-ID: EFA5500D91F4403CA0D2003B98F790B238F68D34E4A9D1F7CB6E382B1C762588
+    Session-ID-ctx:
+    Master-Key: 8CEE4FCFC53AA6CB66F915D5C0911D28F59D30477EEDDA1E2A5E6C0DEE3FE24F8CC7918EF85717D34BC675F83F1BB892
+    Key-Arg   : None
+    PSK identity: None
+    PSK identity hint: None
+    SRP username: None
+    TLS session ticket lifetime hint: 43200 (seconds)
+    TLS session ticket:
+    0000 - c3 33 dc 6e 4b 4c 35 4f-3a 84 49 5d 7f 4a 12 30   .3.nKL5O:.I].J.0
+    0010 - cb be 29 f6 6c 04 78 61-19 48 9a ba e8 b8 21 31   ..).l.xa.H....!1
+    0020 - 56 52 ab d0 16 eb 56 6f-b6 8c 00 42 f6 14 cd 49   VR....Vo...B...I
+    0030 - b4 a1 09 5b 0e ea 11 1c-0c 85 61 4d 9b b3 75 49   ...[......aM..uI
+    0040 - 80 d5 ab da c8 2d 07 4c-c0 dc 9a dc 9c 4d 66 87   .....-.L.....Mf.
+    0050 - b3 8c 72 f4 c3 75 9a cf-76 46 75 35 81 54 48 ad   ..r..u..vFu5.TH.
+    0060 - 71 16 db 55 12 61 fe da-87 1a bc eb 43 83 2d 75   q..U.a......C.-u
+    0070 - 6a 6d 97 4a de 09 e1 b2-5c 18 2e af ac a0 a1 7a   jm.J....\......z
+    0080 - b8 e9 3f 83 65 5e 3e da-db 4f 1d fd 94 b6 66 e1   ..?.e^&gt;..O....f.
+    0090 - 74 73 3b 09 93 83 2f 23-7f 13 98 8c 63 3b 13 6b   ts;.../#....c;.k
+    00a0 - 03 07 0f d2 b2 66 37 df-92 e7 c9 c1 7b da 26 67   .....f7.....{.&amp;g
+
+    Start Time: 1600248002
+    Timeout   : 300 (sec)
+    Verify return code: 0 (ok)
+---
+</code></pre><p>输出结果中包含server端的证书以及认证结果，Verify return code 为0(ok)，说明一切正常。</p>
+<p>现在我故意将系统时间调整为去年的时间</p>
+<pre><code class="bash">date -s 2019-09-14
+</code></pre>
+<p>重新执行一遍指令，结果如下↓</p>
+<pre><code class="bash">$ openssl s_client -connect 52.48.74.182:443
+CONNECTED(00000003)
+depth=4 C = US, O = &quot;Starfield Technologies, Inc.&quot;, OU = Starfield Class 2 Certification Authority
+verify return:1
+depth=3 C = US, ST = Arizona, L = Scottsdale, O = &quot;Starfield Technologies, Inc.&quot;, CN = Starfield Services Root Certificate Authority - G2
+verify return:1
+depth=2 C = US, O = Amazon, CN = Amazon Root CA 1
+verify return:1
+depth=1 C = US, O = Amazon, OU = Server CA 1B, CN = Amazon
+verify return:1
+depth=0 CN = devicelocation.ngxcld.com
+verify error:num=9:certificate is not yet valid
+notBefore=Aug 28 00:00:00 2020 GMT
+verify return:1
+depth=0 CN = devicelocation.ngxcld.com
+notBefore=Aug 28 00:00:00 2020 GMT
+verify return:1
+---
+Certificate chain
+ 0 s:/CN=devicelocation.ngxcld.com
+   i:/C=US/O=Amazon/OU=Server CA 1B/CN=Amazon
+ 1 s:/C=US/O=Amazon/OU=Server CA 1B/CN=Amazon
+   i:/C=US/O=Amazon/CN=Amazon Root CA 1
+ 2 s:/C=US/O=Amazon/CN=Amazon Root CA 1
+   i:/C=US/ST=Arizona/L=Scottsdale/O=Starfield Technologies, Inc./CN=Starfield Services Root Certificate Authority - G2
+ 3 s:/C=US/ST=Arizona/L=Scottsdale/O=Starfield Technologies, Inc./CN=Starfield Services Root Certificate Authority - G2
+   i:/C=US/O=Starfield Technologies, Inc./OU=Starfield Class 2 Certification Authority
+---
+Server certificate
+-----BEGIN CERTIFICATE-----
+MIIFezCCBGOgAwIBAgIQD2G5WRjlpBXraGmoG0C50TANBgkqhkiG9w0BAQsFADBG
+MQswCQYDVQQGEwJVUzEPMA0GA1UEChMGQW1hem9uMRUwEwYDVQQLEwxTZXJ2ZXIg
+Q0EgMUIxDzANBgNVBAMTBkFtYXpvbjAeFw0yMDA4MjgwMDAwMDBaFw0yMTA5Mjcx
+MjAwMDBaMCQxIjAgBgNVBAMTGWRldmljZWxvY2F0aW9uLm5neGNsZC5jb20wggEi
+MA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCZw+BtpGv+SopXdXVjxvRJb1It
+3MqlCXyFp+lRxuM9ySLT0IFCMqhBadzJCIB32VZP4ixQ0WjqGDjwcXVau2ka0SDN
+e+xjhYzc6FKzgRmIy016sBQiadasadAZbbcJeRTNrhjD0PqjCE7DbKmQWx8SEoY0
+Nm1fnq/TPwBIKqo1vdS2e6CiXcfH5LTBLLE4Ryw9aloWDQ2nud/x8lRMlY+0Gird
+X1abENX9++gpoS/TUQ2uXxbFKDPb/Moi/3hirivQiVi1R9CjEYYcmlSr+XctUjk/
+VgzqwgUukC15YABvfxCjZRHyNQ85SJ2vDtDhxMfQfhZHqcUozkQPqw28SUVhAgMB
+AAGjggKFMIICgTAfBgNVHSMEGDAWgBRZpGYGUqB7lZI8o5QHJ5Z0W/k90DAdBgNV
+HQ4EFgQUtbIEC2lD6lx/E0fmPY/OICyl9HQwJAYDVR0RBB0wG4IZZGV2aWNlbG9j
+YXRpb24ubmd4Y2xkLmNvbTAOBgNVHQ8BAf8EBAMCBaAwHQYDVR0lBBYwFAYIKwYB
+BQUHAwEGCCsGAQUFBwMCMDsGA1UdHwQ0MDIwMKAuoCyGKmh0dHA6Ly9jcmwuc2Nh
+MWIuYW1hem9udHJ1c3QuY29tL3NjYTFiLmNybDAgBgNVHSAEGTAXMAsGCWCGSAGG
+/WwBAjAIBgZngQwBAgEwdQYIKwYBBQUHAQEEaTBnMC0GCCsGAQUFBzABhiFodHRw
+Oi8vb2NzcC5zY2ExYi5hbWF6b250cnVzdC5jb20wNgYIKwYBBQUHMAKGKmh0dHA6
+Ly9jcnQuc2NhMWIuYW1hem9udHJ1c3QuY29tL3NjYTFiLmNydDAMBgNVHRMBAf8E
+AjAAMIIBBAYKKwYBBAHWeQIEAgSB9QSB8gDwAHYA9lyUL9F3MCIUVBgIMJRWjuNN
+Exkzv98MLyALzE7xZOMAAAF0Moj6QwAABAMARzBFAiArdrj+FzgNhO3UOShNAThI
+dUxRgP21OgRiZCsOv3UZDwIhAJFyF0BC4kYsJqJFkc+n/ZMmmVrrAG4WPIfGqwq/
+nqc+AHYAXNxDkv7mq0VEsV6a1FbmEDf71fpH3KFzlLJe5vbHDsoAAAF0Moj6PQAA
+BAMARzBFAiEA+twofyIX7Z2fSqY3OJsHzw2c39o3oBVkwuthnGmsIegCIHNCLMBY
+lrkWX0V9j+7Pi+NHe57Bj2+IgWqlw/CHeM5OMA0GCSqGSIb3DQEBCwUAA4IBAQAf
+2CtL8DliTB9Inf1+ZKTg6JjCebH4iH61gSfqxJZyDgW+7umFQguL+hEpdDUd6tcq
+Uj9ibAxtcdOLSbIjJKwC1cN+gcgSHYbPBD2mQU4U7wPhfFSZRDBoFBH4n13OkgT+
+f2tO/byQ7uchJvnezVhjYdJwZoBpPi6IXpzqE5A6IH9AJz0iQJLUyyC1b8fQNiFQ
+5j65t5FrLqf9LU82hrDrPLjEvR9v6BAumlH/0FmaIbXPwZm6kMXmTqRoPzX0+R5W
+M8bUGEDnkWMwzj+1eW64hpu8Fwsq17SAeITVclj2ZNjz2LaNyuLbdKkMatnLq1M6
+2sq4dgrQ1Jx90PGLzAbi
+-----END CERTIFICATE-----
+subject=/CN=devicelocation.ngxcld.com
+issuer=/C=US/O=Amazon/OU=Server CA 1B/CN=Amazon
+---
+No client certificate CA names sent
+Peer signing digest: SHA512
+Server Temp Key: ECDH, P-256, 256 bits
+---
+SSL handshake has read 5506 bytes and written 400 bytes
+---
+New, TLSv1/SSLv3, Cipher is ECDHE-RSA-AES128-GCM-SHA256
+Server public key is 2048 bit
+Secure Renegotiation IS supported
+Compression: NONE
+Expansion: NONE
+No ALPN negotiated
+SSL-Session:
+    Protocol  : TLSv1.2
+    Cipher    : ECDHE-RSA-AES128-GCM-SHA256
+    Session-ID: 979E3C71B293EDF1923989B706B0B315A638046A30DA9E6B77C8889DF94BC613
+    Session-ID-ctx:
+    Master-Key: 24F7FD66C5A195765C62FE5B8D5304F94F3006A1A2993B7C3FB5B1D9162A9E5BFD6CADC984458153E32F012AD30A3F7A
+    Key-Arg   : None
+    PSK identity: None
+    PSK identity hint: None
+    SRP username: None
+    TLS session ticket lifetime hint: 43200 (seconds)
+    TLS session ticket:
+    0000 - c3 33 dc 6e 4b 4c 35 4f-3a 84 49 5d 7f 4a 12 30   .3.nKL5O:.I].J.0
+    0010 - be c3 28 c9 3a fd 73 6a-c7 65 65 b0 a7 69 a1 ca   ..(.:.sj.ee..i..
+    0020 - f8 89 1d 62 75 3d 46 7d-92 62 01 f6 8b fa 40 c7   ...bu=F}.b....@.
+    0030 - ef de 3b 35 50 ab 0c 45-79 ce 97 2f 13 9e 0c 10   ..;5P..Ey../....
+    0040 - 4c d2 2a 4e 85 fc 8f b1-4c c9 98 1a 0d 39 a9 26   L.*N....L....9.&amp;
+    0050 - e3 c3 18 16 fc ad b9 9a-ba 5d f7 b1 db 70 ab 30   .........]...p.0
+    0060 - 04 b3 9a 2f 66 97 74 e6-74 c9 04 59 3b 18 df 67   .../f.t.t..Y;..g
+    0070 - a3 17 03 52 c8 c9 b9 8c-1f 11 01 8e cf bc 17 22   ...R...........&quot;
+    0080 - e7 7d 40 ad 53 c6 04 83-d2 80 24 28 3f cb f8 c6   .}@.S.....$(?...
+    0090 - c4 1c 2f 42 15 7b a3 13-c7 4f 8f 62 18 71 0f 2a   ../B.{...O.b.q.*
+    00a0 - 90 8b 8b d9 64 b8 1e 0d-cf df 62 cc fc 95 d0 ce   ....d.....b.....
+
+    Start Time: 1598327363
+    Timeout   : 300 (sec)
+    Verify return code: 9 (certificate is not yet valid)
+---
+</code></pre>
+<p>可以看到最后的<code>Verify return code</code>变为9了，而且提示<code>certificate is not yet vaild</code>, 说明证书无效，实际上不是证书无效，而是本地系统时间没有同步，然后认为server端的证书有效期太超前，错认为是证书无效。在前半部分的错误信息中</p>
+<pre><code class="bash">verify error:num=9:certificate is not yet valid
+notBefore=Aug 28 00:00:00 2020 GMT
+</code></pre>
+<p>可以看出server端证书的起始时间是<code>Aug 28 00:00:00 2020 GMT</code>，所以只要当前系统时间在这个时间之后就是正常的。</p>
+<p>在出错的情况下使用<code>wireshark</code>抓包就可以发现，client端认为证书无效，会alert一个<code>Bad Certificate</code>的错误信息，然后关闭当前连接。</p>
+<p><img src="/assets/network/ssl/bad-certificate.png" alt="wireshark Bad Certificate"></p>
+<p>在嵌入式设备中，如果NTP没有同步，当前系统时间就有可能是错误的，此时使用<code>https</code>与远程服务器通信就可能出错。</p>
+]]></content>
+      
+        <categories>
+            
+            <category> Network </category>
+            
+            <category> Security </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> openssl </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[python之给pdf添加页码]]></title>
       <url>https://www.litreily.top/2020/08/13/python-pdf/</url>
       <content type="html"><![CDATA[<p>最近写release note, 总感觉用<code>tex</code>不太方便，特别是装<code>texlive</code>占用大量空间，还有各种依赖问题，想着能不能用<code>markdown</code>写更方便。实践证明，<a href="https://typora.io/" target="_blank" rel="noopener">typora</a>导出pdf的功能真的很棒，唯独一个不足之处就是生成的PDF不带<strong>页码</strong>。</p>
@@ -1419,47 +1708,6 @@ EOF
     </entry>
     
     <entry>
-      <title><![CDATA[使用油猴脚本批量下载canvas图片]]></title>
-      <url>https://www.litreily.top/2020/03/15/canvas-dl/</url>
-      <content type="html"><![CDATA[<p>女友最近在网上下载一些北大网盘的pdf<a href="https://disk.pku.edu.cn/#/link/3A7748E0466521E3E68A0CBA4C24DE20?gns=AE26ACF837E24D51B1EC40E0A80A5D23%2F7F0E54D7D92343B1B62031B1C41F2280" target="_blank" rel="noopener">文档</a>，结果发现没有下载接口，另存为也只能存储单张图片。找我帮忙，这时候发现程序员男票的好处了哈。</p>
-<h2 id="分析页面"><a href="#分析页面" class="headerlink" title="分析页面"></a>分析页面</h2><p>一开始想着使用Chrome调试工具看下pdf链接，发现这个网盘居然不是直接获取的pdf文件，而是使用js脚本动态渲染生成的，涨知识了。</p>
-<p><img src="/assets/canvas/pdf-js.png" alt="pdf-combine js"></p>
-<p>那看看是否可以以图片形式批量下载呢，结果查看pdf单页的html结构发现，这居然是个canvas!!!还不是普通图片，而是画布。</p>
-<p><img src="/assets/canvas/canvas.png" alt="cancvs"></p>
-<h2 id="下载插件"><a href="#下载插件" class="headerlink" title="下载插件"></a>下载插件</h2><p>没关系，canvas什么的也不是难事，万能的油猴插件总会有解决方案的，果不其然让我找到个专门用于下载svg, canvas的油猴插件↓</p>
-<ul>
-<li><a href="https://greasyfork.org/zh-CN/scripts/383101-%E7%BD%91%E7%AB%99%E5%9B%BE%E7%89%87-%E8%83%8C%E6%99%AF%E5%9B%BE-svg-canvas-%E6%8A%93%E5%8F%96%E9%A2%84%E8%A7%88%E4%B8%8B%E8%BD%BD" target="_blank" rel="noopener">网站图片（背景图，svg，canvas）抓取预览下载</a></li>
-</ul>
-<h2 id="下载图片"><a href="#下载图片" class="headerlink" title="下载图片"></a>下载图片</h2><p>这正是我想要的，安装好后，使用起来非常简单，刷新要下载canvas图片的页面，在右下角有一个按钮<strong>自动获取图片</strong>。</p>
-<p><img src="/assets/canvas/check-tampermonkey.png" alt="js extension"></p>
-<p>点击之后开始扫描，注意下图中的数字并不代表实际的图片数量，不用理会。</p>
-<p><img src="/assets/canvas/scanning.png" alt="scanning"></p>
-<p>扫描完成后，可以限定图片大小，以滤除不符合要求的小图片，然后通过<strong>批量下载</strong>完成下载，对于数量较多的页面可能需要稍微等一小会，绝大部分情况是很快的。</p>
-<p><img src="/assets/canvas/download.png" alt="download"></p>
-<p>这样就下载完成啦。</p>
-<p><img src="/assets/canvas/downloaded.png" alt="downloaded"></p>
-<p>至于如何将批量转换为pdf，那方法就多啦，福昕pdf编辑器、ABBYY等等，这个留待下回再讲，哈哈。</p>
-<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>经评论区大佬@Axun提醒，本文所爬网站的PDF文件是可以直接提取的，刷新页面过滤<code>Access</code>即可得到下面的链接，右键在新页面打开即可保存，然后添加扩展名即可。</p>
-<p><img src="/assets/canvas/pdf-source-file.png" alt="PDF source file"></p>
-<p>当然啦，本文提及的canvas图片下载方法也适用于其它网站，欢迎食用。</p>
-]]></content>
-      
-        <categories>
-            
-            <category> Tools </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> tampermonkey </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
       <title><![CDATA[NBNS客户端的C语言实现]]></title>
       <url>https://www.litreily.top/2020/03/15/nbns_code/</url>
       <content type="html"><![CDATA[<p>接上一篇<a href="/2020/02/28/nbns/">【网络协议详解1 - NBNS】</a>对NBNS的介绍，这一篇将要讲述使用C语言如何实现一个NBNS客户端，用于向局域网内其它设备发送NBNS NODE STATUS QUERY，并将接收到的RESPONSE信息打印出来。其实也就是一个UDP socket的实例。</p>
@@ -1819,6 +2067,47 @@ Not in presentation format
         <tags>
             
             <tag> C/C++ </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[使用油猴脚本批量下载canvas图片]]></title>
+      <url>https://www.litreily.top/2020/03/15/canvas-dl/</url>
+      <content type="html"><![CDATA[<p>女友最近在网上下载一些北大网盘的pdf<a href="https://disk.pku.edu.cn/#/link/3A7748E0466521E3E68A0CBA4C24DE20?gns=AE26ACF837E24D51B1EC40E0A80A5D23%2F7F0E54D7D92343B1B62031B1C41F2280" target="_blank" rel="noopener">文档</a>，结果发现没有下载接口，另存为也只能存储单张图片。找我帮忙，这时候发现程序员男票的好处了哈。</p>
+<h2 id="分析页面"><a href="#分析页面" class="headerlink" title="分析页面"></a>分析页面</h2><p>一开始想着使用Chrome调试工具看下pdf链接，发现这个网盘居然不是直接获取的pdf文件，而是使用js脚本动态渲染生成的，涨知识了。</p>
+<p><img src="/assets/canvas/pdf-js.png" alt="pdf-combine js"></p>
+<p>那看看是否可以以图片形式批量下载呢，结果查看pdf单页的html结构发现，这居然是个canvas!!!还不是普通图片，而是画布。</p>
+<p><img src="/assets/canvas/canvas.png" alt="cancvs"></p>
+<h2 id="下载插件"><a href="#下载插件" class="headerlink" title="下载插件"></a>下载插件</h2><p>没关系，canvas什么的也不是难事，万能的油猴插件总会有解决方案的，果不其然让我找到个专门用于下载svg, canvas的油猴插件↓</p>
+<ul>
+<li><a href="https://greasyfork.org/zh-CN/scripts/383101-%E7%BD%91%E7%AB%99%E5%9B%BE%E7%89%87-%E8%83%8C%E6%99%AF%E5%9B%BE-svg-canvas-%E6%8A%93%E5%8F%96%E9%A2%84%E8%A7%88%E4%B8%8B%E8%BD%BD" target="_blank" rel="noopener">网站图片（背景图，svg，canvas）抓取预览下载</a></li>
+</ul>
+<h2 id="下载图片"><a href="#下载图片" class="headerlink" title="下载图片"></a>下载图片</h2><p>这正是我想要的，安装好后，使用起来非常简单，刷新要下载canvas图片的页面，在右下角有一个按钮<strong>自动获取图片</strong>。</p>
+<p><img src="/assets/canvas/check-tampermonkey.png" alt="js extension"></p>
+<p>点击之后开始扫描，注意下图中的数字并不代表实际的图片数量，不用理会。</p>
+<p><img src="/assets/canvas/scanning.png" alt="scanning"></p>
+<p>扫描完成后，可以限定图片大小，以滤除不符合要求的小图片，然后通过<strong>批量下载</strong>完成下载，对于数量较多的页面可能需要稍微等一小会，绝大部分情况是很快的。</p>
+<p><img src="/assets/canvas/download.png" alt="download"></p>
+<p>这样就下载完成啦。</p>
+<p><img src="/assets/canvas/downloaded.png" alt="downloaded"></p>
+<p>至于如何将批量转换为pdf，那方法就多啦，福昕pdf编辑器、ABBYY等等，这个留待下回再讲，哈哈。</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>经评论区大佬@Axun提醒，本文所爬网站的PDF文件是可以直接提取的，刷新页面过滤<code>Access</code>即可得到下面的链接，右键在新页面打开即可保存，然后添加扩展名即可。</p>
+<p><img src="/assets/canvas/pdf-source-file.png" alt="PDF source file"></p>
+<p>当然啦，本文提及的canvas图片下载方法也适用于其它网站，欢迎食用。</p>
+]]></content>
+      
+        <categories>
+            
+            <category> Tools </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> tampermonkey </tag>
             
         </tags>
         
@@ -3568,9 +3857,9 @@ Configuring Watchdog Timer
         
         <tags>
             
-            <tag> ftrace </tag>
-            
             <tag> openwrt </tag>
+            
+            <tag> ftrace </tag>
             
         </tags>
         
@@ -11755,9 +12044,9 @@ n(u) = n(u)+1;
         
         <tags>
             
-            <tag> matlab </tag>
-            
             <tag> signal </tag>
+            
+            <tag> matlab </tag>
             
             <tag> algorithm </tag>
             
@@ -12160,9 +12449,9 @@ unsigned char canFreeData : 布尔变量，确定能否释放数据内存
         
         <tags>
             
-            <tag> matlab </tag>
-            
             <tag> labview </tag>
+            
+            <tag> matlab </tag>
             
             <tag> VS </tag>
             
@@ -12254,9 +12543,9 @@ end
         
         <tags>
             
-            <tag> matlab </tag>
-            
             <tag> signal </tag>
+            
+            <tag> matlab </tag>
             
         </tags>
         
@@ -13745,9 +14034,9 @@ static void vUasrtSendTask(void *pvParameters)
             
             <tag> C/C++ </tag>
             
-            <tag> FreeRTOS </tag>
-            
             <tag> stm32 </tag>
+            
+            <tag> FreeRTOS </tag>
             
         </tags>
         
@@ -14492,9 +14781,9 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
         
         <tags>
             
-            <tag> atom </tag>
-            
             <tag> git </tag>
+            
+            <tag> atom </tag>
             
         </tags>
         
@@ -14529,9 +14818,9 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
         
         <tags>
             
-            <tag> utorrent </tag>
-            
             <tag> tools </tag>
+            
+            <tag> utorrent </tag>
             
         </tags>
         
@@ -14612,6 +14901,59 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
     </entry>
     
     <entry>
+      <title><![CDATA[Labview - 常用快捷键]]></title>
+      <url>https://www.litreily.top/2016/06/06/shrotcuts/</url>
+      <content type="html"><![CDATA[<p>作为一款功能强大的编程软件，自然少不了大量的快捷键支持。在开发过程中，熟练使用这些快捷键，可以高效完成编码调试过程，减少手动操作，提高工作效率。</p>
+<h2 id="菜单快捷键"><a href="#菜单快捷键" class="headerlink" title="菜单快捷键"></a>菜单快捷键</h2><p>打开LabVIEW中的&quot;选项&quot;界面，在&quot;菜单快捷键&quot;中可以看到所有可用的快捷键。当然，如果觉得不够用或是与其它软件有冲突，可以手动添加或修改新的快捷键。</p>
+<p><img src="/assets/labview/shortcuts/editPanel.png" alt="Labview editPanel"></p>
+<h2 id="常用快捷键"><a href="#常用快捷键" class="headerlink" title="常用快捷键"></a>常用快捷键</h2><p>快捷键虽多，但常用的却有限。我简单将其分为通用键、功能键和技巧键。</p>
+<h3 id="通用键"><a href="#通用键" class="headerlink" title="通用键"></a>通用键</h3><p>有些快捷键是大部分软件共有的，其功能也类似。</p>
+<ul>
+<li>Ctrl+N：新建</li>
+<li>Ctrl+A：全选</li>
+<li>Ctrl+C：复制</li>
+<li>Ctrl+V：粘贴</li>
+<li>Ctrl+S：保存</li>
+<li>Ctrl+Shift+S：保存全部</li>
+</ul>
+<h3 id="功能键"><a href="#功能键" class="headerlink" title="功能键"></a>功能键</h3><p>在代码编辑过程中经常会用到的功能性快捷键包括：</p>
+<ul>
+<li>Ctrl+R：运行程序</li>
+<li>Ctrl+E：在前面板和程序框图之间切换</li>
+<li>Ctrl+H：打开/关闭即时帮助</li>
+<li>Ctrl+B：删除断线</li>
+<li>Ctrl+I：查看当前VI属性</li>
+<li>Ctrl+T：左右两栏显示前面板和程序框图</li>
+<li>Ctrl+W：关闭当前界面或项目</li>
+<li>Ctrl+Q：退出LabVIEW</li>
+</ul>
+<h3 id="技巧键"><a href="#技巧键" class="headerlink" title="技巧键"></a>技巧键</h3><ul>
+<li>Ctrl+鼠标拖动：复制被选控件或函数</li>
+<li>Ctrl+鼠标滚轮：切换多层结构的当前结构帧</li>
+<li>Shift+控件：将鼠标改为选择指针，用于选中某个或多个控件</li>
+<li>双击鼠标左键：添加注释</li>
+<li>Ctrl+Shift+鼠标拖动：将鼠标改为手形指针，用于拖动程序框图</li>
+</ul>
+<h3 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h3><p>如果一个函数仅包含两个输入接口时，例如：加、减、乘、除。当我们要切换两个输入接口的连线时，例如减法的两个输入A和B，开始连接的时候是A-B，现在发现不对，要改成B-A。默认我们会去删除两条线然后重新连接，但使用快捷键<code>Ctrl+Click</code>可以直接完成切换。<br><img src="/assets/labview/shortcuts/exchange.gif" alt="Labview exchange"></p>
+<p><strong>使用方法：</strong>在点击Ctrl后移动鼠标至函数的任一输入端，鼠标指针会变为类似数字8的一个图标，此时点击鼠标左键即可完成切换。</p>
+]]></content>
+      
+        <categories>
+            
+            <category> LabVIEW </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> labview </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[Labview - 对话框程序模板]]></title>
       <url>https://www.litreily.top/2016/06/06/labview-dialog/</url>
       <content type="html"><![CDATA[<p>软件开发过程中，经常要使用对话框界面，例如各种参数设置界面等。为了减少重复性工作，我们可以创建一个对话框模板，往后就可以通过该模板直接新建对话框界面。</p>
@@ -14650,59 +14992,6 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
 <p><img src="/assets/labview/dialog/dialog_2.png" alt="Labview dialog"></p>
 <p>该模板比较简单，但是非常实用，大多数设置界面都可以使用该模板进行设计。当然也可以进一步完善。例如，很多设置界面都有<strong>应用</strong>按钮和<strong>退出</strong>按钮，那么，我们可以在模板中添加一个应用按钮和一个退出按钮，并添加对应的按钮点击事件，修改移位寄存器的值。</p>
 <h2 id="下载模板"><a href="#下载模板" class="headerlink" title="下载模板"></a>下载模板</h2><p>我将模板存至网盘便于下载：<a href="http://pan.baidu.com/s/1pKUe7Ib" target="_blank" rel="noopener">下载链接</a>。</p>
-]]></content>
-      
-        <categories>
-            
-            <category> LabVIEW </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> labview </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[Labview - 常用快捷键]]></title>
-      <url>https://www.litreily.top/2016/06/06/shrotcuts/</url>
-      <content type="html"><![CDATA[<p>作为一款功能强大的编程软件，自然少不了大量的快捷键支持。在开发过程中，熟练使用这些快捷键，可以高效完成编码调试过程，减少手动操作，提高工作效率。</p>
-<h2 id="菜单快捷键"><a href="#菜单快捷键" class="headerlink" title="菜单快捷键"></a>菜单快捷键</h2><p>打开LabVIEW中的&quot;选项&quot;界面，在&quot;菜单快捷键&quot;中可以看到所有可用的快捷键。当然，如果觉得不够用或是与其它软件有冲突，可以手动添加或修改新的快捷键。</p>
-<p><img src="/assets/labview/shortcuts/editPanel.png" alt="Labview editPanel"></p>
-<h2 id="常用快捷键"><a href="#常用快捷键" class="headerlink" title="常用快捷键"></a>常用快捷键</h2><p>快捷键虽多，但常用的却有限。我简单将其分为通用键、功能键和技巧键。</p>
-<h3 id="通用键"><a href="#通用键" class="headerlink" title="通用键"></a>通用键</h3><p>有些快捷键是大部分软件共有的，其功能也类似。</p>
-<ul>
-<li>Ctrl+N：新建</li>
-<li>Ctrl+A：全选</li>
-<li>Ctrl+C：复制</li>
-<li>Ctrl+V：粘贴</li>
-<li>Ctrl+S：保存</li>
-<li>Ctrl+Shift+S：保存全部</li>
-</ul>
-<h3 id="功能键"><a href="#功能键" class="headerlink" title="功能键"></a>功能键</h3><p>在代码编辑过程中经常会用到的功能性快捷键包括：</p>
-<ul>
-<li>Ctrl+R：运行程序</li>
-<li>Ctrl+E：在前面板和程序框图之间切换</li>
-<li>Ctrl+H：打开/关闭即时帮助</li>
-<li>Ctrl+B：删除断线</li>
-<li>Ctrl+I：查看当前VI属性</li>
-<li>Ctrl+T：左右两栏显示前面板和程序框图</li>
-<li>Ctrl+W：关闭当前界面或项目</li>
-<li>Ctrl+Q：退出LabVIEW</li>
-</ul>
-<h3 id="技巧键"><a href="#技巧键" class="headerlink" title="技巧键"></a>技巧键</h3><ul>
-<li>Ctrl+鼠标拖动：复制被选控件或函数</li>
-<li>Ctrl+鼠标滚轮：切换多层结构的当前结构帧</li>
-<li>Shift+控件：将鼠标改为选择指针，用于选中某个或多个控件</li>
-<li>双击鼠标左键：添加注释</li>
-<li>Ctrl+Shift+鼠标拖动：将鼠标改为手形指针，用于拖动程序框图</li>
-</ul>
-<h3 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h3><p>如果一个函数仅包含两个输入接口时，例如：加、减、乘、除。当我们要切换两个输入接口的连线时，例如减法的两个输入A和B，开始连接的时候是A-B，现在发现不对，要改成B-A。默认我们会去删除两条线然后重新连接，但使用快捷键<code>Ctrl+Click</code>可以直接完成切换。<br><img src="/assets/labview/shortcuts/exchange.gif" alt="Labview exchange"></p>
-<p><strong>使用方法：</strong>在点击Ctrl后移动鼠标至函数的任一输入端，鼠标指针会变为类似数字8的一个图标，此时点击鼠标左键即可完成切换。</p>
 ]]></content>
       
         <categories>
@@ -14865,11 +15154,11 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
         
         <tags>
             
-            <tag> tools </tag>
+            <tag> brackets </tag>
             
             <tag> git </tag>
             
-            <tag> brackets </tag>
+            <tag> tools </tag>
             
         </tags>
         
