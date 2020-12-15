@@ -4,6 +4,154 @@
   
     
     <entry>
+      <title><![CDATA[Setup PPTP and DNS server]]></title>
+      <url>https://www.litreily.top/2020/12/02/setup-pptp/</url>
+      <content type="html"><![CDATA[<p>PPTP (Point to Point Tunneling Protocol) 点对点隧道协议，与PPPoE, L2TP 均属于 PPP(Point to Point Protocol) 点对点协议。这篇来记录下PPTP server的安装和配置过程。</p>
+<h2 id="install-DHCP-server"><a href="#install-DHCP-server" class="headerlink" title="install DHCP server"></a>install DHCP server</h2><p>除了PPPoE外，PPTP 与 L2TP 都无法直接给client分配IP，需要使用dhcp server分配。所以在安装PPTP的同时，也要保证DHCP server也已安装。具体方法参考 <a href="https://www.litreily.top/2020/01/17/dhcpd_server/">Setup dhcpd/dhcpdv6 server</a>.</p>
+<p>需要注意的是，在Ubuntu 20.10 版本中，网卡的静态IP管理模式与以往有所不同。在以往版本中，是修改 <code>/etc/network/interfaces</code> 文件，但是在最新Ubuntu确不一样，最新版提出了一个叫 <code>netplan</code> 的概念，修改的文件是：</p>
+<ul>
+<li>/etc/netplan/01-network-manager-all.yaml</li>
+</ul>
+<p>以 <code>yaml</code> 文件存储配置信息，我们将配置dhcp 对应接口的静态IP为 <code>10.0.0.138/24</code>, 对应配置文件内容如下：</p>
+<pre><code class="yaml"># Let NetworkManager manage all devices on this system
+network:
+   version: 2
+   renderer: NetworkManager
+   ethernets:
+       enp0s8:
+           dhcp4: no
+           dhcp6: no
+           addresses: [10.0.0.138/24]
+           gateway4: 10.0.0.138
+           nameservers:
+               addresses: [10.0.0.138]
+</code></pre>
+<p>其中 <code>enp0s8</code> 为 interface 名称，从 <code>ifconfig</code> 可以获得。让该配置生效的方式为：</p>
+<pre><code class="bash">sudo netplan apply
+</code></pre>
+<p>重新执行 <code>ifconfig</code> 查看已生效的静态IP.</p>
+<h2 id="install-PPTP-server"><a href="#install-PPTP-server" class="headerlink" title="install PPTP server"></a>install PPTP server</h2><p>PPTP Server 的安装其实很简单，就一个指令。</p>
+<pre><code class="bash">sudo apt install pptpd
+</code></pre>
+<p>对 pptpd 的操作与大多数服务一样。</p>
+<pre><code class="bash">sudo service pptpd [force-reload|restart|start|status|stop]
+</code></pre>
+<p>主要是配置稍微复杂些，某些配置与PPPoE, L2TP是共用的，比如密码信息等。</p>
+<h3 id="common-config"><a href="#common-config" class="headerlink" title="common config"></a>common config</h3><p>PPPoE, PPTP, L2TP 共用以下文件</p>
+<ul>
+<li>/etc/ppp/chap-secrets</li>
+<li>/etc/ppp/options</li>
+</ul>
+<p>其中 <code>/etc/ppp/chap-secrets</code> 用于存储密码信息。</p>
+<pre><code class="bash"># Secrets for authentication using CHAP
+# client        server  secret                  IP addresses
+&quot;test123&quot;       *       &quot;123456&quot;                *
+</code></pre>
+<p>以上 &quot;test123&quot; 为PPTP拨号时的用户名， &quot;123456&quot; 为拨号密码。可以添加多行，代表多个账户。</p>
+<p><code>/etc/ppp/options</code>也是共用的，是大部分常用配置的基地。我们通常只需要修改以下部分参数。</p>
+<pre><code class="bash"># Require the peer to authenticate itself before allowing network
+auth
+
+# Require the peer to authenticate itself using CHAP
++chap
+
+# Send an LCP echo-request frame to the peer every n seconds
+lcp-echo-interval 30
+# Retry to send LCP echo -request max n times if not receive echo-response
+lcp-echo-failure 4
+
+# Disable the IPXCP and IPX protocols
+noipx
+</code></pre>
+<p>以上配置主要是使能密码认证，并启用echo包监听client状态，在无消息响应情况下自动断开连接。</p>
+<h3 id="pptpd-config"><a href="#pptpd-config" class="headerlink" title="pptpd config"></a>pptpd config</h3><p>针对pptp server也有对应的特定配置文件，</p>
+<ul>
+<li>/etc/ppp/pptpd-options</li>
+<li>/etc/pptpd.conf</li>
+</ul>
+<p><code>/etc/ppp/pptpd-options</code> 文件内容较多，但基本不需要修改，只需要添加dns信息即可</p>
+<pre><code class="bash">ms-dns 10.0.0.138
+</code></pre>
+<p><code>/etc/pptpd.conf</code> 文件是配置IP网段的，pptp拨号成功后，会在特定interface (如ppp0) 分配IP，通常是192.168.*网段。</p>
+<p>配置该文件时，只需要在文件末尾添加以下信息即可：</p>
+<pre><code class="conf">localip 192.168.0.1
+remoteip 192.168.0.10-200
+</code></pre>
+<p><code>localip</code> 代表本地IP，用于与 remote client 通信，<code>remoteip</code> 自然就是需要拨号上网的client对应ip了。</p>
+<p>到此就基本配置完成了。</p>
+<h2 id="install-DNS-server"><a href="#install-DNS-server" class="headerlink" title="install DNS server"></a>install DNS server</h2><p>想要 PPTP server 完全正常工作，除了dhcp server和以上配置外，还少不了 DNS server 提供 DNS 解析服务。</p>
+<p>安装同样很简单，一步到位。</p>
+<pre><code class="bash">sudo apt install dnsmasq
+</code></pre>
+<p>操作与 <code>pptpd</code> 类似，</p>
+<pre><code class="bash">sudo service dnsmasq [dump-stats|force-reload|restart|start|status|stop]
+</code></pre>
+<h3 id="config-dnsmasq"><a href="#config-dnsmasq" class="headerlink" title="config dnsmasq"></a>config dnsmasq</h3><p>dns server 的配置文件主要有：</p>
+<ol>
+<li>/etc/dnsmasq.conf</li>
+<li>/etc/default/dnsmasq</li>
+<li>/etc/dnsmasq/dnsmasq.resolv</li>
+<li>/etc/dnsmasq/dnsmasq.hosts</li>
+</ol>
+<p>第 3,4 个是自己手动创建的，也不是必须的，但是创建后更方便管理。</p>
+<p>以上配置文件中，<code>/etc/dnsmasq.conf</code>是基础，主要用于指定 <code>resolv</code> 和 <code>hosts</code> 文件, 以及监听地址。</p>
+<pre><code class="bash">resolv-file=/etc/dnsmasq/dnsmasq.resolv
+listen-address=127.0.0.1, 10.0.0.138
+addn-hosts=/etc/dnsmasq/dnsmasq.hosts
+</code></pre>
+<p><code>/etc/dnsmasq/dnsmasq.resolv</code>用于存储 DNS server IP</p>
+<pre><code class="bash">nameserver 127.0.0.1
+nameserver 10.0.0.138
+</code></pre>
+<p><code>/etc/dnsmasq/dnsmasq.hosts</code>用于存储hosts信息，与Windows的hosts是一样的，Ubuntu默认路径是 /etc/hosts.</p>
+<pre><code class="bash">10.0.0.138 netgear.com
+1.2.3.4 baidu.com
+</code></pre>
+<h3 id="start-dnsmasq"><a href="#start-dnsmasq" class="headerlink" title="start dnsmasq"></a>start dnsmasq</h3><p>上面讲dns配置好了，使用 <code>sudo service dnsmasq start</code> 可以启动服务。</p>
+<p>但是我在这一步出现了问题，提示53端口已经被占用。解决方案如下：</p>
+<pre><code class="bash">sudo systemctl stop systemd-resolved.service
+sudo systemctl disable systemd-resolved.service
+</code></pre>
+<h2 id="config-sysctl-conf"><a href="#config-sysctl-conf" class="headerlink" title="config sysctl.conf"></a>config sysctl.conf</h2><p>将<code>ubuntu</code> 系统作为server，还需要开启IP转发功能，所以需要修改以下文件:</p>
+<ul>
+<li>/etc/sysctl.conf</li>
+</ul>
+<pre><code class="bash">net.ipv4.ip_forward=1
+</code></pre>
+<p>然后使用 <code>sudo sysctl -p</code> 使其生效。</p>
+<h2 id="summary"><a href="#summary" class="headerlink" title="summary"></a>summary</h2><p>总结下，在Ubuntu安装PPTP server，共安装了</p>
+<ul>
+<li>dhcp server</li>
+<li>pptp server</li>
+<li>dns server</li>
+</ul>
+<p>此外，添加了对应的接口信息，静态IP，分配IP网段，启用IP转发功能。不同的操作系统安装可能略有不同，但流程大同小异。</p>
+<p>如果在使用多个虚拟网卡的虚拟机中使用，可能还需要添加默认路由。</p>
+<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><ul>
+<li><a href="https://www.cnblogs.com/Yogile/p/12779744.html" target="_blank" rel="noopener">启动或重启 dnsmasq 提示端口 53 被占用的解决方案</a></li>
+</ul>
+]]></content>
+      
+        <categories>
+            
+            <category> Network </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> ubuntu </tag>
+            
+            <tag> pptp </tag>
+            
+            <tag> dns </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[openssl 验证证书有效性]]></title>
       <url>https://www.litreily.top/2020/09/17/openssl/</url>
       <content type="html"><![CDATA[<blockquote>
