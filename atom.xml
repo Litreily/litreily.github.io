@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2020-09-17T06:59:44.025Z</updated>
+  <updated>2020-12-15T11:36:47.795Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Setup PPTP and DNS server</title>
+    <link href="https://www.litreily.top/2020/12/02/setup-pptp/"/>
+    <id>https://www.litreily.top/2020/12/02/setup-pptp/</id>
+    <published>2020-12-02T11:06:32.000Z</published>
+    <updated>2020-12-15T11:36:47.795Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;PPTP (Point to Point Tunneling Protocol) 点对点隧道协议，与PPPoE, L2TP 均属于 PPP(Point to Point Protocol) 点对点协议。这篇来记录下PPTP server的安装和配置过程。&lt;/p&gt;
+&lt;h2 id=&quot;install-DHCP-server&quot;&gt;&lt;a href=&quot;#install-DHCP-server&quot; class=&quot;headerlink&quot; title=&quot;install DHCP server&quot;&gt;&lt;/a&gt;install DHCP server&lt;/h2&gt;&lt;p&gt;除了PPPoE外，PPTP 与 L2TP 都无法直接给client分配IP，需要使用dhcp server分配。所以在安装PPTP的同时，也要保证DHCP server也已安装。具体方法参考 &lt;a href=&quot;https://www.litreily.top/2020/01/17/dhcpd_server/&quot;&gt;Setup dhcpd/dhcpdv6 server&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;需要注意的是，在Ubuntu 20.10 版本中，网卡的静态IP管理模式与以往有所不同。在以往版本中，是修改 &lt;code&gt;/etc/network/interfaces&lt;/code&gt; 文件，但是在最新Ubuntu确不一样，最新版提出了一个叫 &lt;code&gt;netpl
+      
+    
+    </summary>
+    
+      <category term="Network" scheme="https://www.litreily.top/categories/Network/"/>
+    
+    
+      <category term="ubuntu" scheme="https://www.litreily.top/tags/ubuntu/"/>
+    
+      <category term="pptp" scheme="https://www.litreily.top/tags/pptp/"/>
+    
+      <category term="dns" scheme="https://www.litreily.top/tags/dns/"/>
+    
+  </entry>
   
   <entry>
     <title>openssl 验证证书有效性</title>
@@ -911,31 +940,6 @@ struct linklist *hashtbl[TABLE_SIZE];&lt;/code&gt;&lt;/pre&gt;
       <category term="ubuntu" scheme="https://www.litreily.top/tags/ubuntu/"/>
     
       <category term="mount" scheme="https://www.litreily.top/tags/mount/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>XSS跨站脚本攻击</title>
-    <link href="https://www.litreily.top/2019/02/14/XSS/"/>
-    <id>https://www.litreily.top/2019/02/14/XSS/</id>
-    <published>2019-02-14T03:14:20.000Z</published>
-    <updated>2020-06-16T01:04:32.626Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;近期遇到一堆 Stored XSS vulnerability 问题，即存储型跨站脚本漏洞，所以有必要学习一下XSS相关的知识。&lt;/p&gt;
-&lt;h2 id=&quot;XSS简介&quot;&gt;&lt;a href=&quot;#XSS简介&quot; class=&quot;headerlink&quot; title=&quot;XSS简介&quot;&gt;&lt;/a&gt;XSS简介&lt;/h2&gt;&lt;p&gt;&lt;code&gt;XSS&lt;/code&gt;是跨站脚本&lt;code&gt;Cross-Site Scripting&lt;/code&gt;的简写，至于为什么不是&lt;code&gt;CSS&lt;/code&gt;，相信大家很容易猜到，是为了避免与前端的层叠样式表&lt;code&gt;Cascading Style Sheets&lt;/code&gt;重名。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;XSS&lt;/code&gt;涉及三个要素：一个站点，攻击者和受害者。攻击者通过某站点的漏洞注入脚本到该站点，受害者在使用浏览器访问该站点时就可能遭受&lt;code&gt;XSS&lt;/code&gt;攻击。&lt;/p&gt;
-&lt;p&gt;脚本类型不限于&lt;code&gt;javascript&lt;/code&gt;, 也可以是其它脚本，如&lt;code&gt;VBScript&lt;/code&gt;, &lt;code&gt;ActiveX&lt;/code&gt; 和 &lt;code&gt;flash&lt;/code&gt;等，但主要还是以&lt;code&gt;javascript&lt;/code&gt;为主。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="Network" scheme="https://www.litreily.top/categories/Network/"/>
-    
-      <category term="Security" scheme="https://www.litreily.top/categories/Network/Security/"/>
-    
-    
-      <category term="xss" scheme="https://www.litreily.top/tags/xss/"/>
     
   </entry>
   
