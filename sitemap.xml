@@ -2,9 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://www.litreily.top/2018/09/20/coredump/</loc>
+    
+    <lastmod>2020-12-16T21:26:22.073Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://www.litreily.top/2020/12/17/gdb-kernel/</loc>
     
-    <lastmod>2020-12-16T21:13:30.635Z</lastmod>
+    <lastmod>2020-12-16T21:25:14.735Z</lastmod>
     
   </url>
   
@@ -453,13 +460,6 @@
     <loc>https://www.litreily.top/2019/11/06/swconfig_crash/</loc>
     
     <lastmod>2020-06-13T10:33:48.582Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.litreily.top/2018/09/20/coredump/</loc>
-    
-    <lastmod>2020-06-13T10:33:48.579Z</lastmod>
     
   </url>
   

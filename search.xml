@@ -330,8 +330,6 @@ ppp_channel_push(struct channel *pch)
             
             <tag> openwrt </tag>
             
-            <tag> crash </tag>
-            
             <tag> gdb </tag>
             
         </tags>
@@ -7941,7 +7939,9 @@ Backtrace stopped: previous frame identical to this frame (corrupt stack?)
             
             <tag> C/C++ </tag>
             
-            <tag> linux </tag>
+            <tag> openwrt </tag>
+            
+            <tag> gdb </tag>
             
         </tags>
         

@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2020-12-16T21:13:30.635Z</updated>
+  <updated>2020-12-16T21:25:14.735Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://www.litreily.top/2020/12/17/gdb-kernel/"/>
     <id>https://www.litreily.top/2020/12/17/gdb-kernel/</id>
     <published>2020-12-17T06:04:28.000Z</published>
-    <updated>2020-12-16T21:13:30.635Z</updated>
+    <updated>2020-12-16T21:25:14.735Z</updated>
     
     <summary type="html">
     
@@ -46,8 +46,6 @@ brwan     Link encap:Ethernet  HWaddr 00:13:2F:34:42:59
     
     
       <category term="openwrt" scheme="https://www.litreily.top/tags/openwrt/"/>
-    
-      <category term="crash" scheme="https://www.litreily.top/tags/crash/"/>
     
       <category term="gdb" scheme="https://www.litreily.top/tags/gdb/"/>
     
