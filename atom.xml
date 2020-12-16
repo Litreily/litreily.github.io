@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2020-12-15T12:32:21.604Z</updated>
+  <updated>2020-12-16T21:13:30.635Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -15,6 +15,43 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>使用 gdb 解析 ppp driver crash log</title>
+    <link href="https://www.litreily.top/2020/12/17/gdb-kernel/"/>
+    <id>https://www.litreily.top/2020/12/17/gdb-kernel/</id>
+    <published>2020-12-17T06:04:28.000Z</published>
+    <updated>2020-12-16T21:13:30.635Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;由于项目整合，经过一次大版本升级后的项目，继承了大家族中许多新的特性，然而在正常功能测试中崩溃了，而且还是kernel crash, 会导致reboot的那种。本文就此问题重现、调试分析过程予以归纳总结。&lt;/p&gt;
+&lt;h2 id=&quot;问题描述&quot;&gt;&lt;a href=&quot;#问题描述&quot; class=&quot;headerlink&quot; title=&quot;问题描述&quot;&gt;&lt;/a&gt;问题描述&lt;/h2&gt;&lt;p&gt;PPTP 拨号上网模式下，Router 在添加特定静态路由后crash. 添加路由的原因在本文讨论内容中不重要，因此略过。&lt;/p&gt;
+&lt;h2 id=&quot;问题再现&quot;&gt;&lt;a href=&quot;#问题再现&quot; class=&quot;headerlink&quot; title=&quot;问题再现&quot;&gt;&lt;/a&gt;问题再现&lt;/h2&gt;&lt;p&gt;实际测试过程中寻找重现方法耗时较长，经过大量实验后简化如下：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;连接 WAN Port&lt;/li&gt;
+&lt;li&gt;PPTP 拨号上网&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;拨号成功后，查看 &lt;code&gt;WAN&lt;/code&gt; 口及 &lt;code&gt;ppp0&lt;/code&gt; 的 IP.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;root@model:$ ifconfig brwan
+brwan     Link encap:Ethernet  HWaddr 00:13:2F:34:42:59
+          inet
+      
+    
+    </summary>
+    
+      <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
+    
+    
+      <category term="openwrt" scheme="https://www.litreily.top/tags/openwrt/"/>
+    
+      <category term="crash" scheme="https://www.litreily.top/tags/crash/"/>
+    
+      <category term="gdb" scheme="https://www.litreily.top/tags/gdb/"/>
+    
+  </entry>
   
   <entry>
     <title>Setup PPTP and DNS server</title>
@@ -370,6 +407,33 @@ EOF
   </entry>
   
   <entry>
+    <title>使用油猴脚本批量下载canvas图片</title>
+    <link href="https://www.litreily.top/2020/03/15/canvas-dl/"/>
+    <id>https://www.litreily.top/2020/03/15/canvas-dl/</id>
+    <published>2020-03-15T09:01:33.000Z</published>
+    <updated>2020-06-13T10:38:45.607Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;女友最近在网上下载一些北大网盘的pdf&lt;a href=&quot;https://disk.pku.edu.cn/#/link/3A7748E0466521E3E68A0CBA4C24DE20?gns=AE26ACF837E24D51B1EC40E0A80A5D23%2F7F0E54D7D92343B1B62031B1C41F2280&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;文档&lt;/a&gt;，结果发现没有下载接口，另存为也只能存储单张图片。找我帮忙，这时候发现程序员男票的好处了哈。&lt;/p&gt;
+&lt;h2 id=&quot;分析页面&quot;&gt;&lt;a href=&quot;#分析页面&quot; class=&quot;headerlink&quot; title=&quot;分析页面&quot;&gt;&lt;/a&gt;分析页面&lt;/h2&gt;&lt;p&gt;一开始想着使用Chrome调试工具看下pdf链接，发现这个网盘居然不是直接获取的pdf文件，而是使用js脚本动态渲染生成的，涨知识了。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/canvas/pdf-js.png&quot; alt=&quot;pdf-combine js&quot;&gt;&lt;/p&gt;
+&lt;p&gt;那看看是否可以以图片形式批量下载呢，结果查看pdf单页的html结构发现，这居然是个canvas!!!还不是普通图片，而是画布。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/canvas/canvas.png&quot; alt=&quot;cancvs&quot;&gt;&lt;/p
+      
+    
+    </summary>
+    
+      <category term="Tools" scheme="https://www.litreily.top/categories/Tools/"/>
+    
+    
+      <category term="tampermonkey" scheme="https://www.litreily.top/tags/tampermonkey/"/>
+    
+  </entry>
+  
+  <entry>
     <title>NBNS客户端的C语言实现</title>
     <link href="https://www.litreily.top/2020/03/15/nbns_code/"/>
     <id>https://www.litreily.top/2020/03/15/nbns_code/</id>
@@ -397,33 +461,6 @@ EOF
     
     
       <category term="C/C++" scheme="https://www.litreily.top/tags/C-C/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>使用油猴脚本批量下载canvas图片</title>
-    <link href="https://www.litreily.top/2020/03/15/canvas-dl/"/>
-    <id>https://www.litreily.top/2020/03/15/canvas-dl/</id>
-    <published>2020-03-15T09:01:33.000Z</published>
-    <updated>2020-06-13T10:38:45.607Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;女友最近在网上下载一些北大网盘的pdf&lt;a href=&quot;https://disk.pku.edu.cn/#/link/3A7748E0466521E3E68A0CBA4C24DE20?gns=AE26ACF837E24D51B1EC40E0A80A5D23%2F7F0E54D7D92343B1B62031B1C41F2280&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;文档&lt;/a&gt;，结果发现没有下载接口，另存为也只能存储单张图片。找我帮忙，这时候发现程序员男票的好处了哈。&lt;/p&gt;
-&lt;h2 id=&quot;分析页面&quot;&gt;&lt;a href=&quot;#分析页面&quot; class=&quot;headerlink&quot; title=&quot;分析页面&quot;&gt;&lt;/a&gt;分析页面&lt;/h2&gt;&lt;p&gt;一开始想着使用Chrome调试工具看下pdf链接，发现这个网盘居然不是直接获取的pdf文件，而是使用js脚本动态渲染生成的，涨知识了。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/assets/canvas/pdf-js.png&quot; alt=&quot;pdf-combine js&quot;&gt;&lt;/p&gt;
-&lt;p&gt;那看看是否可以以图片形式批量下载呢，结果查看pdf单页的html结构发现，这居然是个canvas!!!还不是普通图片，而是画布。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/assets/canvas/canvas.png&quot; alt=&quot;cancvs&quot;&gt;&lt;/p
-      
-    
-    </summary>
-    
-      <category term="Tools" scheme="https://www.litreily.top/categories/Tools/"/>
-    
-    
-      <category term="tampermonkey" scheme="https://www.litreily.top/tags/tampermonkey/"/>
     
   </entry>
   
@@ -917,35 +954,6 @@ struct linklist *hashtbl[TABLE_SIZE];
       <category term="IPv6" scheme="https://www.litreily.top/tags/IPv6/"/>
     
       <category term="router" scheme="https://www.litreily.top/tags/router/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Ubuntu开机自动挂载Windows系统中的磁盘分区</title>
-    <link href="https://www.litreily.top/2019/02/17/mount/"/>
-    <id>https://www.litreily.top/2019/02/17/mount/</id>
-    <published>2019-02-17T12:39:57.000Z</published>
-    <updated>2020-06-14T02:11:50.115Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;本人电脑装有&lt;code&gt;ubuntu&lt;/code&gt;和&lt;code&gt;windows&lt;/code&gt;双系统，有时候需要在&lt;code&gt;ubuntu&lt;/code&gt;下使用&lt;code&gt;windows&lt;/code&gt;系统下的文件，每次手动挂载的话很麻烦，所以想让它开机自动挂载常用的&lt;code&gt;windows&lt;/code&gt;磁盘分区。&lt;/p&gt;
-&lt;h2 id=&quot;查看分区&quot;&gt;&lt;a href=&quot;#查看分区&quot; class=&quot;headerlink&quot; title=&quot;查看分区&quot;&gt;&lt;/a&gt;查看分区&lt;/h2&gt;&lt;p&gt;在挂载windows磁盘前，需要知道每个磁盘的路径或&lt;code&gt;UUID&lt;/code&gt;，此时主要依靠&lt;code&gt;fdisk&lt;/code&gt;和&lt;code&gt;blkid&lt;/code&gt;两个指令，前一个指令获取分区信息，后一个指令获取&lt;code&gt;Block device&lt;/code&gt;块设备的属性。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;sh&quot;&gt;$ sudo blkid
-/dev/sda1: LABEL=&amp;quot;Win10&amp;quot; UUID=&amp;quot;C4A0E65EA0E65708&amp;quot; TYPE=&amp;quot;ntfs&amp;quot; PARTUUID=&amp;quot;6190c592-01&amp;quot;
-/dev/sda2: UUID=&amp;quot;AE3C137D3C133FAF&amp;quot; TYPE=&amp;
-      
-    
-    </summary>
-    
-      <category term="Linux" scheme="https://www.litreily.top/categories/Linux/"/>
-    
-    
-      <category term="ubuntu" scheme="https://www.litreily.top/tags/ubuntu/"/>
-    
-      <category term="mount" scheme="https://www.litreily.top/tags/mount/"/>
     
   </entry>
   
