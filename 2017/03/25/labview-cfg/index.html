@@ -1,0 +1,162 @@
+<!DOCTYPE html><html lang="en"><head><meta name="generator" content="Hexo 3.9.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>Labview - 存储 .cfg 配置文件 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">Labview - 存储 .cfg 配置文件</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2017/03/25/labview-cfg/">2017-03-25</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/LabVIEW/">LabVIEW</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><h2 id="配置文件简介"><a href="#配置文件简介" class="headerlink" title="配置文件简介"></a>配置文件简介</h2><p>在 LabVIEW 应用软件开发过程中，对于稍微大型一点的软件而言，一般都需要在本地文件中保存一些配置参数，如在 windows 系统中安装软件时，安装程序在 C 盘 documents 文件夹下自动创建的用户数据。对于需要更新的配置参数或者重要的常值参数，在 LabVIEW 中可以使用 <code>.cfg</code> 格式的配置文件进行存储与读取。</p>
+<h3 id="应用场合"><a href="#应用场合" class="headerlink" title="应用场合"></a>应用场合</h3><ul>
+<li>软件的全局配置参数（如：串口通讯参数，DAQ 采样参数，信号处理参数，···）</li>
+<li>软件主界面关闭前的输入、输出控件的最新数值</li>
+<li>报表生成时的默认信息（如：署名，标题，摘要，···）</li>
+<li>统计量（如：游戏最高分，排行榜排名，参与次数，···）</li>
+<li>···</li>
+</ul>
+<h3 id="cfg-文件格式"><a href="#cfg-文件格式" class="headerlink" title=".cfg 文件格式"></a>.cfg 文件格式</h3><p>如下所示，<code>.cfg</code> 文件的数据存储格式格式满足标记性语言的特点，有点类似于 <code>JSON</code> 和 <code>XML</code>，但与之不同的是 <code>.cfg</code> 不支持数据嵌套。<code>.cfg</code> 文件以<strong>段</strong>为基本单位、以<strong>键</strong>为最小单位组织数据，<strong>段</strong>包含了相应的<strong>段名</strong>及该段包含的所有键，每个<strong>键</strong>包含了相应的<strong>键名</strong>和<strong>键值</strong>，中间用等号连接。</p>
+<pre><code class="txt">[段名1]
+键名1 = 键值1
+键名2 = 键值2
+键名3 = 键值3
+
+[段名2]
+键名4 = 键值4
+键名5 = 键值5
+键名6 = 键值6
+
+[段名3]
+键名7 = 键值7
+键名8 = 键值8
+</code></pre>
+<p><strong>举例说明</strong>：某人要保存自己每日的就餐时间，此时可用一个<strong>段</strong>来存储，<strong>段名</strong>为“就餐时间”，三个<strong>键名</strong>依次为早餐、午餐和晚餐，具体的时间以字符串格式存储，存储后的结果如下：</p>
+<pre><code class="txt">[就餐时间]
+早餐 = 07:30
+午餐 = 12:00
+晚餐 = 05:30
+</code></pre>
+<h3 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h3><p>LabVIEW 提供的与配置文件存取相关的函数支持以下6种数据类型，其中布尔型即开关量，仅包含 <code>TRUE</code>, <code>FALSE</code> 两个值；路径指的是文件或文件夹的路径。</p>
+<ul>
+<li>有符号整型： <code>I8</code>, <code>I16</code>, <code>I32</code></li>
+<li>无符号整型： <code>U8</code>, <code>U16</code>, <code>U32</code></li>
+<li>浮点型： <code>DBL</code>, <code>SGL</code></li>
+<li>布尔型： <code>BOOL</code></li>
+<li>字符串： <code>STRING</code></li>
+<li>路径： <code>PATH</code></li>
+</ul>
+<h3 id="变体"><a href="#变体" class="headerlink" title="变体"></a>变体</h3><p>LabVIEW 提供了一种特殊的数据类型——变体，变体类似于 C 语言中的空类型指针 <code>void*</code>，不代表具体的类型，但可以存储任意类型的数据。</p>
+<p>在存储配置文件时，可以先将满足 <a href="#1-3-数据类型">1.3</a> 中类型的数据转换为变体数据，然后以变体数组形式存储，方便统一管理；同样，在读取配置文件时，也可以先将数据读取到变体数组中，后续再进一步解析。具体操作步骤后面会有详述。</p>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>了解了配置文件的格式及数据类型，下面介绍如何在 LabVIEW 实现配置文件的存取。</p>
+<h3 id="配置函数"><a href="#配置函数" class="headerlink" title="配置函数"></a>配置函数</h3><p>LabVIEW 提供了以下函数供开发人员使用：</p>
+<p><img src="/assets/labview/rwCFG/ConfigFunc.png" alt="ConfigFunc.vi"></p>
+<p>但应用较多的与配置文件存取相关的函数主要有：</p>
+<ol>
+<li>打开配置数据</li>
+<li>关闭配置数据</li>
+<li>转换至变体</li>
+<li>从变体转换至数据</li>
+<li>写入键</li>
+<li>读取键</li>
+</ol>
+<h4 id="打开配置数据"><a href="#打开配置数据" class="headerlink" title="打开配置数据"></a>打开配置数据</h4><p><img src="/assets/labview/rwCFG/OpenConfigData.png" alt="OpenConfigData.vi"></p>
+<p><code>Open Config Data.vi</code> 用于打开配置文件，如果文件不存在则先创建再打开，返回引用句柄用于后续的数据存取。</p>
+<h4 id="关闭配置数据"><a href="#关闭配置数据" class="headerlink" title="关闭配置数据"></a>关闭配置数据</h4><p><img src="/assets/labview/rwCFG/CloseConfigData.png" alt="CloseConfigData.vi"></p>
+<p>该函数与 <code>Open Config Data.vi</code> 成对出现，在对配置文件进行存取操作后，需要使用 <code>Close Config Data.vi</code> 关闭对配置文件的引用，释放配置文件占用的内存。</p>
+<h4 id="转换至变体"><a href="#转换至变体" class="headerlink" title="转换至变体"></a>转换至变体</h4><p><img src="/assets/labview/rwCFG/ToVariant.png" alt="ToVariant.vi"></p>
+<p><code>To Variant.vi</code> 可将任意数据类型的数据转换为变体数据。</p>
+<h4 id="从变体转换至数据"><a href="#从变体转换至数据" class="headerlink" title="从变体转换至数据"></a>从变体转换至数据</h4><p><img src="/assets/labview/rwCFG/VariantToData.png" alt="VariantToData.vi"></p>
+<p><code>Variant To Data.vi</code> 是 <code>To Variant.vi</code> 的逆过程，通过指定数据类型，可以将变体数据还原为转换为变体前的数据。</p>
+<h4 id="写入键"><a href="#写入键" class="headerlink" title="写入键"></a>写入键</h4><p><img src="/assets/labview/rwCFG/WriteKey.png" alt="WriteKey.vi"></p>
+<p>除错误簇外，<code>Write Key.vi</code> 包含4个输入：<strong>段</strong>对应字符串类型的<strong>段名</strong>，<strong>键</strong>对应字符串类型的<strong>键名</strong>，<strong>值</strong>对应任意数据类型的<strong>键值</strong>，<strong>引用句柄</strong>用于连接配置文件的引用句柄。说明：LabVIEW 中的引用句柄等同于 <code>C/C++</code> 语言中的引用，即变量的别名。</p>
+<p>该函数根据输入参数将键名和键值保存到配置文件的指定段中，如果是首次创建指定的段，则自动在配置文件中添加新的段及键；如果段已存在键不存在，则仅添加键；如果段与键均已存在，则仅用新键值替换旧键值。</p>
+<h4 id="读取键"><a href="#读取键" class="headerlink" title="读取键"></a>读取键</h4><p><img src="/assets/labview/rwCFG/ReadKey.png" alt="ReadKey.vi"></p>
+<p>使用 <code>Read Key.vi</code> ，通过<strong>段名</strong>和<strong>键名</strong>，我们可以从指定文件中获取所需的数据。</p>
+<p>需要说明的是， <code>Read Key.vi</code> 是多态VI，其键值的数据类型是多态可选的，可选项参见 <a href="#1-3-数据类型">1.3</a>。</p>
+<h3 id="存储配置文件"><a href="#存储配置文件" class="headerlink" title="存储配置文件"></a>存储配置文件</h3><p>说了一大堆，那到底如何存储呢，还是用程序框图来说话吧，一目了然。</p>
+<ul>
+<li><strong><code>RWConfigData.vi</code> 写操作</strong></li>
+</ul>
+<p><img src="/assets/labview/rwCFG/WriteToFile.png" alt="RWConfigData.vi Write Data"></p>
+<p>该 VI 名为 <strong><code>RWConfigData.vi</code></strong> ，不涉及配置文件的打开与关闭，是配置文件打开以后的操作，文件的引用句柄为 <code>refnum in</code> 和 <code>refnum out</code> 。函数接口如下：</p>
+<p><img src="/assets/labview/rwCFG/WriteToFileInterface.png" alt="RWConfigData.vi Interface"></p>
+<p>插播一句，在 LabVIEW 中，许多函数的输入输出都是成对出现的，尤其是引用句柄和错误簇，这有点类似于 java 语言中用于返回当前对象的 this 指针，便于实现函数的链式调用，令代码更简洁，并增强代码的可读性。</p>
+<p>言归正传，以上程序框图中，<code>CMD</code> 是个枚举变量，包含 <code>Write</code> 和 <code>Read</code> 两个值，分别对应文件的写操作和读操作；输入参数 <code>DataParam</code> 是一个簇，包含了需要存储的数据，簇包含的数据元素如下：</p>
+<pre><code class="txt">SectionName : 段名（单个字符串）
+KeyName : 键名（一维的字符串数组）
+DataType : 数据类型（一维的枚举数组，枚举包含了文中提及的 6 种数据类型）
+VariantData : 键值数据（一维的变体数组）
+</code></pre>
+<p>用变体数组的方式可以批量处理待存参数，高效便捷，唯一繁琐的一点就是需要先将待存参数均都转换为变体数据。上面的程序框图仅显示了布尔型数据的存储方式，其它类型的数据的存储方式与之相似，每种类型的数据对应一个条件分支。</p>
+<p><img src="/assets/labview/rwCFG/WriteToFile1.png" alt="RWConfigData.vi Write Data"></p>
+<ul>
+<li><strong><code>RWSingleElement.vi</code> 写操作</strong></li>
+</ul>
+<p>对于单个参数的存储，同样可以使用该函数，结合配置文件的打开、关闭函数，具体代码实现如下：</p>
+<p><img src="/assets/labview/rwCFG/WriteSingleData.png" alt="RWSingleElement.vi Write Data"></p>
+<p>代码中的元素信息就是某个待存参数的相关信息，用到的存储子 VI 就是上面描述的 <strong><code>RWConfigData.vi</code></strong> 。该程序本身 <strong><code>RWSingleElement.vi</code></strong> 的函数接口如下：</p>
+<p><img src="/assets/labview/rwCFG/WriteSingleDataInterface.png" alt="RWSingleElement.vi Interface"></p>
+<h3 id="读取配置文件"><a href="#读取配置文件" class="headerlink" title="读取配置文件"></a>读取配置文件</h3><p>与存储相对应的操作是读取，上面提及的两个VI <strong><code>RWConfigData.vi</code></strong> 和 <strong><code>RWSingleElement.vi</code></strong> 对应的 <code>Read</code> 分支分别如下：</p>
+<ul>
+<li><strong><code>RWConfigData.vi</code> 读操作</strong></li>
+</ul>
+<p><img src="/assets/labview/rwCFG/ReadFromFile.png" alt="RWConfigData.vi Read Data"></p>
+<ul>
+<li><strong><code>RWSingleElement.vi</code> 读操作</strong></li>
+</ul>
+<p><img src="/assets/labview/rwCFG/ReadSingleData.png" alt="RWSingleElement.vi Read Data"></p>
+<h2 id="配置文件存储例程"><a href="#配置文件存储例程" class="headerlink" title="配置文件存储例程"></a>配置文件存储例程</h2><p>下面给出一个非常简单的配置文件存取示例程序。</p>
+<ul>
+<li><strong>示例程序前面板</strong></li>
+</ul>
+<p><img src="/assets/labview/rwCFG/DemoFrontPanel.png" alt="RWConfigFileDemo.vi FrontPanel"></p>
+<ul>
+<li><strong>示例程序框图 写操作</strong></li>
+</ul>
+<p><img src="/assets/labview/rwCFG/DemoWriteData.png" alt="RWConfigFileDemo.vi Block diagram: Write"></p>
+<ul>
+<li><strong>示例程序框图 读操作</strong></li>
+</ul>
+<p><img src="/assets/labview/rwCFG/DemoReadData.png" alt="RWConfigFileDemo.vi Block diagram: Read"></p>
+<ul>
+<li><strong>示例程序 执行结果</strong></li>
+</ul>
+<p><img src="/assets/labview/rwCFG/DemoResultFile.png" alt="RWConfigFileDemo.vi Result File"></p>
+<h2 id="下载链接"><a href="#下载链接" class="headerlink" title="下载链接"></a>下载链接</h2><p><a href="http://pan.baidu.com/s/1eRRVqRg" target="_blank" rel="noopener">http://pan.baidu.com/s/1eRRVqRg</a></p>
+<p>PS：最后友情说明一下，其实文件扩展名不一定要设为 <code>.cfg</code> ，其它类似 <code>.ini</code> , <code>.sys</code> 等扩展名也都是可以的。</p>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2017/03/25/labview-cfg/">https://www.litreily.top/2017/03/25/labview-cfg/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tag"></i><a href="/tags/labview/">labview</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#配置文件简介"><span class="toc-number">1.</span> <span class="toc-text">配置文件简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#应用场合"><span class="toc-number">1.1.</span> <span class="toc-text">应用场合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cfg-文件格式"><span class="toc-number">1.2.</span> <span class="toc-text">.cfg 文件格式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数据类型"><span class="toc-number">1.3.</span> <span class="toc-text">数据类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#变体"><span class="toc-number">1.4.</span> <span class="toc-text">变体</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码实现"><span class="toc-number">2.</span> <span class="toc-text">代码实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#配置函数"><span class="toc-number">2.1.</span> <span class="toc-text">配置函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#打开配置数据"><span class="toc-number">2.1.1.</span> <span class="toc-text">打开配置数据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#关闭配置数据"><span class="toc-number">2.1.2.</span> <span class="toc-text">关闭配置数据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#转换至变体"><span class="toc-number">2.1.3.</span> <span class="toc-text">转换至变体</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#从变体转换至数据"><span class="toc-number">2.1.4.</span> <span class="toc-text">从变体转换至数据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#写入键"><span class="toc-number">2.1.5.</span> <span class="toc-text">写入键</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#读取键"><span class="toc-number">2.1.6.</span> <span class="toc-text">读取键</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#存储配置文件"><span class="toc-number">2.2.</span> <span class="toc-text">存储配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#读取配置文件"><span class="toc-number">2.3.</span> <span class="toc-text">读取配置文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置文件存储例程"><span class="toc-number">3.</span> <span class="toc-text">配置文件存储例程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#下载链接"><span class="toc-number">4.</span> <span class="toc-text">下载链接</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2017/04/24/labview-DAQ/">&lt; Labview - DAQ 助手详解</a><a class="next" href="/2017/03/23/code-Platform/">常用的代码托管平台 &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+.night .v[data-class=v] a:hover { color: #216C73 !important; }
+.night .v[data-class=v] li { list-style: inherit; }
+.night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
+.night .v[data-class=v] .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.night .v[data-class=v] .vbtn { border-radius: 0; background: none; }
+.night .v[data-class=v] .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.night .v[data-class=v] .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.night .v[data-class=v] .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre,.night .v[data-class=v] .vlist .vcard .vhead .vsys { background: #203240 !important; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre { color: #F0F0F0; font-size: 95%; }
+.v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
+</style><div id="vcomment"></div><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
+  lang: 'zh-cn',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></section><footer><p>Copyright © 2016 - 2020 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/plugins/prettify/prettify.js"></script><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script></body></html>
