@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2020-12-16T21:25:14.735Z</updated>
+  <updated>2020-12-23T10:29:10.979Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -15,6 +15,71 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>lua 基本语法</title>
+    <link href="https://www.litreily.top/2020/12/24/lua-basic/"/>
+    <id>https://www.litreily.top/2020/12/24/lua-basic/</id>
+    <published>2020-12-24T03:19:14.000Z</published>
+    <updated>2020-12-23T10:29:10.979Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;基本语法&quot;&gt;&lt;a href=&quot;#基本语法&quot; class=&quot;headerlink&quot; title=&quot;基本语法&quot;&gt;&lt;/a&gt;基本语法&lt;/h2&gt;&lt;h3 id=&quot;注释&quot;&gt;&lt;a href=&quot;#注释&quot; class=&quot;headerlink&quot; title=&quot;注释&quot;&gt;&lt;/a&gt;注释&lt;/h3&gt;&lt;pre&gt;&lt;code class=&quot;lua&quot;&gt;-- single line comment
+
+--[[
+    mutil line comments
+]]
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+      <category term="Language" scheme="https://www.litreily.top/categories/Language/"/>
+    
+      <category term="Lua" scheme="https://www.litreily.top/categories/Language/Lua/"/>
+    
+    
+      <category term="lua" scheme="https://www.litreily.top/tags/lua/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>lua 语言的基本使用</title>
+    <link href="https://www.litreily.top/2020/12/23/lua/"/>
+    <id>https://www.litreily.top/2020/12/23/lua/</id>
+    <published>2020-12-23T01:07:51.000Z</published>
+    <updated>2020-12-23T10:17:18.833Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;下载安装&quot;&gt;&lt;a href=&quot;#下载安装&quot; class=&quot;headerlink&quot; title=&quot;下载安装&quot;&gt;&lt;/a&gt;下载安装&lt;/h2&gt;&lt;p&gt;在联网状态下，Ubuntu可以直接apt安装。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;sudo apt install lua
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;如果是不直接联网的服务器，并且没有root权限的情况下，需要先在联网PC上下载后导入，再编译安装。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;wget http://www.lua.org/ftp/lua-5.1.5.tar.gz
+# copy lua-5.1.5.tar.gz to server by scp or ftp
+tar -xvf lua-5.1.5.tar.gz
+cd lua-5.1.5
+sed -i &amp;#39;s/\/usr\/local/~\/bin\/local/&amp;#39; Makefile
+make generic
+make install
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;默认安装目录是&lt;code&gt;/usr/local&lt;/code&gt;, 如果没有root权限，需要修改Makefile，将其改为指定目录(~/bin/local)，上面通过sed修改。&lt;/p&gt;
+&lt;h2 id=&quot;执行&quot;&gt;&lt;a href=&quot;#执行&quot; clas
+      
+    
+    </summary>
+    
+      <category term="Language" scheme="https://www.litreily.top/categories/Language/"/>
+    
+      <category term="Lua" scheme="https://www.litreily.top/categories/Language/Lua/"/>
+    
+    
+      <category term="lua" scheme="https://www.litreily.top/tags/lua/"/>
+    
+  </entry>
   
   <entry>
     <title>使用 gdb 解析 ppp driver crash log</title>
@@ -110,7 +175,7 @@ brwan     Link encap:Ethernet  HWaddr 00:13:2F:34:42:59
     <link href="https://www.litreily.top/2020/08/13/python-pdf/"/>
     <id>https://www.litreily.top/2020/08/13/python-pdf/</id>
     <published>2020-08-13T08:56:37.000Z</published>
-    <updated>2020-08-13T11:34:41.043Z</updated>
+    <updated>2020-12-23T10:17:18.828Z</updated>
     
     <summary type="html">
     
@@ -124,7 +189,9 @@ brwan     Link encap:Ethernet  HWaddr 00:13:2F:34:42:59
     
     </summary>
     
-      <category term="Python" scheme="https://www.litreily.top/categories/Python/"/>
+      <category term="Language" scheme="https://www.litreily.top/categories/Language/"/>
+    
+      <category term="Python" scheme="https://www.litreily.top/categories/Language/Python/"/>
     
     
       <category term="pdf" scheme="https://www.litreily.top/tags/pdf/"/>
@@ -136,7 +203,7 @@ brwan     Link encap:Ethernet  HWaddr 00:13:2F:34:42:59
     <link href="https://www.litreily.top/2020/08/09/netbian/"/>
     <id>https://www.litreily.top/2020/08/09/netbian/</id>
     <published>2020-08-09T02:54:47.000Z</published>
-    <updated>2020-08-11T10:28:13.625Z</updated>
+    <updated>2020-12-23T10:17:18.818Z</updated>
     
     <summary type="html">
     
@@ -164,7 +231,9 @@ brwan     Link encap:Ethernet  HWaddr 00:13:2F:34:42:59
     
     </summary>
     
-      <category term="Python" scheme="https://www.litreily.top/categories/Python/"/>
+      <category term="Language" scheme="https://www.litreily.top/categories/Language/"/>
+    
+      <category term="Python" scheme="https://www.litreily.top/categories/Language/Python/"/>
     
     
       <category term="spider" scheme="https://www.litreily.top/tags/spider/"/>
@@ -273,7 +342,7 @@ ClientAli
     <link href="https://www.litreily.top/2020/05/03/md2bm/"/>
     <id>https://www.litreily.top/2020/05/03/md2bm/</id>
     <published>2020-05-03T08:49:25.000Z</published>
-    <updated>2020-05-03T10:42:22.813Z</updated>
+    <updated>2020-12-23T10:17:18.809Z</updated>
     
     <summary type="html">
     
@@ -293,7 +362,9 @@ ClientAli
     
     </summary>
     
-      <category term="Python" scheme="https://www.litreily.top/categories/Python/"/>
+      <category term="Language" scheme="https://www.litreily.top/categories/Language/"/>
+    
+      <category term="Python" scheme="https://www.litreily.top/categories/Language/Python/"/>
     
     
       <category term="markdown" scheme="https://www.litreily.top/tags/markdown/"/>
@@ -711,7 +782,7 @@ CPU: 2 PID: 9465 Comm: swconfig Tainted: P        W    3.14.77 #1
     <link href="https://www.litreily.top/2019/10/09/fabiaoqing/"/>
     <id>https://www.litreily.top/2019/10/09/fabiaoqing/</id>
     <published>2019-10-09T12:22:30.000Z</published>
-    <updated>2020-08-09T03:13:30.510Z</updated>
+    <updated>2020-12-23T10:17:18.799Z</updated>
     
     <summary type="html">
     
@@ -728,7 +799,9 @@ CPU: 2 PID: 9465 Comm: swconfig Tainted: P        W    3.14.77 #1
     
     </summary>
     
-      <category term="Python" scheme="https://www.litreily.top/categories/Python/"/>
+      <category term="Language" scheme="https://www.litreily.top/categories/Language/"/>
+    
+      <category term="Python" scheme="https://www.litreily.top/categories/Language/Python/"/>
     
     
       <category term="spider" scheme="https://www.litreily.top/tags/spider/"/>
@@ -792,7 +865,7 @@ CPU: 2 PID: 9465 Comm: swconfig Tainted: P        W    3.14.77 #1
     <link href="https://www.litreily.top/2019/08/09/vmgirls/"/>
     <id>https://www.litreily.top/2019/08/09/vmgirls/</id>
     <published>2019-08-09T12:09:10.000Z</published>
-    <updated>2020-06-14T02:08:52.910Z</updated>
+    <updated>2020-12-23T10:17:18.790Z</updated>
     
     <summary type="html">
     
@@ -801,7 +874,9 @@ CPU: 2 PID: 9465 Comm: swconfig Tainted: P        W    3.14.77 #1
     
     </summary>
     
-      <category term="Python" scheme="https://www.litreily.top/categories/Python/"/>
+      <category term="Language" scheme="https://www.litreily.top/categories/Language/"/>
+    
+      <category term="Python" scheme="https://www.litreily.top/categories/Language/Python/"/>
     
     
       <category term="spider" scheme="https://www.litreily.top/tags/spider/"/>
@@ -899,59 +974,6 @@ struct linklist *hashtbl[TABLE_SIZE];
     
     
       <category term="git" scheme="https://www.litreily.top/tags/git/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Python网络爬虫5 - 爬取QQ空间相册</title>
-    <link href="https://www.litreily.top/2019/03/03/qqzone/"/>
-    <id>https://www.litreily.top/2019/03/03/qqzone/</id>
-    <published>2019-03-03T10:34:20.000Z</published>
-    <updated>2020-06-14T02:11:37.325Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;自毕业后，就再也没有用过QQ，QQ空间里记录的是些并不精彩的青葱岁月，但好歹也是份回忆，近日想着学以致用，用&lt;code&gt;Python&lt;/code&gt;把QQ空间相册的所有照片爬取下来，以作备份。&lt;/p&gt;
-&lt;h2 id=&quot;分析QQ空间&quot;&gt;&lt;a href=&quot;#分析QQ空间&quot; class=&quot;headerlink&quot; title=&quot;分析QQ空间&quot;&gt;&lt;/a&gt;分析QQ空间&lt;/h2&gt;&lt;h3 id=&quot;登录QQ空间&quot;&gt;&lt;a href=&quot;#登录QQ空间&quot; class=&quot;headerlink&quot; title=&quot;登录QQ空间&quot;&gt;&lt;/a&gt;登录QQ空间&lt;/h3&gt;&lt;p&gt;爬取第一步，分析站点，首先需要知道如何登录QQ空间。最初想法是用&lt;code&gt;requests&lt;/code&gt;库配置登录请求，模拟登录，但是不久便放弃了这一思路，请看下图↓&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/assets/qqzone/login.png&quot; alt=&quot;login&quot;&gt;&lt;/p&gt;
-&lt;p&gt;根据登录按钮绑定的监听事件可以追踪到该按钮的点击事件如下：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/assets/qqzone/login_func.png&quot; alt=&quot;login function&quot;&gt;&lt;/p&gt;
-&lt;p&gt;账号加密是必然的，但这一堆堆的代码真心不好解析，有耐心的勇士尽情一试！&lt;/p&gt;
-&lt;p&gt;在排除这种登录方法后，选择&lt;code&gt;selenium&lt;/c
-      
-    
-    </summary>
-    
-      <category term="Python" scheme="https://www.litreily.top/categories/Python/"/>
-    
-    
-      <category term="spider" scheme="https://www.litreily.top/tags/spider/"/>
-    
-      <category term="qqzone" scheme="https://www.litreily.top/tags/qqzone/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>记一次Client无法获取IPv6地址问题的分析过程</title>
-    <link href="https://www.litreily.top/2019/02/27/ipv6/"/>
-    <id>https://www.litreily.top/2019/02/27/ipv6/</id>
-    <published>2019-02-27T05:47:30.000Z</published>
-    <updated>2020-06-13T10:33:48.579Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;近日SQA报了一个bug，对路由器经过6天左右的压力测试后，无论是有线设备还是无线设备都拿不到&lt;code&gt;IPv6&lt;/code&gt;地址了。经过层层分析发现可能是&lt;code&gt;kernel&lt;/code&gt;内存泄漏。本文便记录这一问题的分析过程。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
-    
-    
-      <category term="IPv6" scheme="https://www.litreily.top/tags/IPv6/"/>
-    
-      <category term="router" scheme="https://www.litreily.top/tags/router/"/>
     
   </entry>
   
