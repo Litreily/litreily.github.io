@@ -1,4 +1,10 @@
-<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification"><title>Python网络爬虫5 - 爬取QQ空间相册 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><meta name="generator" content="Hexo 5.0.2"></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">Python网络爬虫5 - 爬取QQ空间相册</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2019/03/03/qqzone/">2019-03-03</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Python/">Python</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>自毕业后，就再也没有用过QQ，QQ空间里记录的是些并不精彩的青葱岁月，但好歹也是份回忆，近日想着学以致用，用<code>Python</code>把QQ空间相册的所有照片爬取下来，以作备份。</p>
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>Python网络爬虫5 - 爬取QQ空间相册 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script><meta name="generator" content="Hexo 5.3.0"></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">Python网络爬虫5 - 爬取QQ空间相册</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2019/03/03/qqzone/">2019-03-03</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Language/">Language</a>&nbsp;&bull;&nbsp;<a href="/categories/Language/Python/">Python</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>自毕业后，就再也没有用过QQ，QQ空间里记录的是些并不精彩的青葱岁月，但好歹也是份回忆，近日想着学以致用，用<code>Python</code>把QQ空间相册的所有照片爬取下来，以作备份。</p>
 <h2 id="分析QQ空间"><a href="#分析QQ空间" class="headerlink" title="分析QQ空间"></a>分析QQ空间</h2><h3 id="登录QQ空间"><a href="#登录QQ空间" class="headerlink" title="登录QQ空间"></a>登录QQ空间</h3><p>爬取第一步，分析站点，首先需要知道如何登录QQ空间。最初想法是用<code>requests</code>库配置登录请求，模拟登录，但是不久便放弃了这一思路，请看下图↓</p>
 <p><img src="/assets/qqzone/login.png" alt="login"></p>
 <p>根据登录按钮绑定的监听事件可以追踪到该按钮的点击事件如下：</p>
@@ -39,7 +45,7 @@ idcNum: 4
 callbackFun: shine0
 _: 1551788226819</code></pre>
 <p>其中<code>hostUin</code>, <code>uin</code>都是QQ号，<code>g_tk</code>是必须的且每次重新登录都会更新（后面有讲如何获取），其它有些参数不是必须的，我尝试后整理出如下请求参数：</p>
-<pre><code class="python">query = &amp;#123;
+<pre><code class="python">query = &#123;
     &#39;g_tk&#39;: self.g_tk,
     &#39;hostUin&#39;: self.username,
     &#39;uin&#39;: self.username,
@@ -49,17 +55,17 @@ _: 1551788226819</code></pre>
     &#39;source&#39;: &#39;qzone&#39;,
     &#39;plat&#39;: &#39;qzone&#39;,
     &#39;format&#39;: &#39;jsonp&#39;
-&amp;#125;</code></pre>
+&#125;</code></pre>
 <p>接下来看<code>jsonp</code>格式的跨域响应包：</p>
-<pre><code class="json">shine0_Callback(&amp;#123;
+<pre><code class="json">shine0_Callback(&#123;
     &quot;code&quot;:0,
     &quot;subcode&quot;:0,
     &quot;message&quot;:&quot;&quot;,
     &quot;default&quot;:0,
     &quot;data&quot;:
-&amp;#123;
+&#123;
    &quot;albumListModeSort&quot; : [
-      &amp;#123;
+      &#123;
          &quot;allowAccess&quot; : 1,
          &quot;anonymity&quot; : 0,
          &quot;bitmap&quot; : &quot;10000000&quot;,
@@ -78,7 +84,7 @@ _: 1551788226819</code></pre>
          &quot;pypriv&quot; : 1,
          &quot;total&quot; : 4,
          &quot;viewtype&quot; : 0
-      &amp;#125;,</code></pre>
+      &#125;,</code></pre>
 <p>shine0_Callback是请求包的<code>callbackFun</code>参数决定的，如果没这个参数，响应包会以<code>_Callback</code>作为默认名，当然这都不重要。所有相册信息以<code>json</code>格式存入<code>albumListModeSort</code>中，上面仅截取了一个相册的信息。</p>
 <p>相册信息中，<code>name</code>代表相册名称，<code>id</code>作为唯一标识可用于请求该相册内的照片信息，而<code>pre</code>仅仅是一个预览缩略图的链接，无关紧要。</p>
 <h3 id="分析单个相册"><a href="#分析单个相册" class="headerlink" title="分析单个相册"></a>分析单个相册</h3><p>与获取相册信息类似，进入某一相册，使用<code>cgi_list</code>过滤数据包，找到该相册的照片信息</p>
@@ -127,16 +133,16 @@ _: 1551790719497</code></pre>
 </blockquote>
 <p>同样可以对上面的参数进行简化，在相册列表请求参数的基础上添加<code>topicId</code>，<code>pageStart</code>和<code>pageNum</code>三个参数即可。</p>
 <p>下面来看返回的照片列表信息：</p>
-<pre><code class="json">shine0_Callback(&amp;#123;
+<pre><code class="json">shine0_Callback(&#123;
     &quot;code&quot;:0,
     &quot;subcode&quot;:0,
     &quot;message&quot;:&quot;&quot;,
     &quot;default&quot;:0,
     &quot;data&quot;:
-&amp;#123;
+&#123;
    &quot;limit&quot; : 0,
    &quot;photoList&quot; : [
-      &amp;#123;
+      &#123;
          &quot;batchId&quot; : &quot;1402662093402000&quot;,
          &quot;browser&quot; : 0,
          &quot;cameratype&quot; : &quot; &quot;,
@@ -144,7 +150,7 @@ _: 1551790719497</code></pre>
          &quot;cp_x&quot; : 455,
          &quot;cp_y&quot; : 388,
          &quot;desc&quot; : &quot;&quot;,
-         &quot;exif&quot; : &amp;#123;
+         &quot;exif&quot; : &#123;
             &quot;exposureCompensation&quot; : &quot;&quot;,
             &quot;exposureMode&quot; : &quot;&quot;,
             &quot;exposureProgram&quot; : &quot;&quot;,
@@ -158,7 +164,7 @@ _: 1551790719497</code></pre>
             &quot;meteringMode&quot; : &quot;&quot;,
             &quot;model&quot; : &quot;&quot;,
             &quot;originalTime&quot; : &quot;&quot;
-         &amp;#125;,
+         &#125;,
          &quot;forum&quot; : 0,
          &quot;frameno&quot; : 0,
          &quot;height&quot; : 621,
@@ -193,11 +199,11 @@ _: 1551790719497</code></pre>
          &quot;url&quot; : &quot;http:\/\/b171.photo.store.qq.com\/psb?\/V13LmPKk0JLNRY\/eSAslg*mYWaytEtLysg*Q*5Km91gIWfSk58K2rQY!\/b\/dIY29GUbJgAA&amp;bo=pANtAgAAAAABCeY!&quot;,
          &quot;width&quot; : 932,
          &quot;yurl&quot; : 0
-      &amp;#125;,
+      &#125;,
       // ...
    ]
    &quot;t&quot; : &quot;952444063&quot;,
-   &quot;topic&quot; : &amp;#123;
+   &quot;topic&quot; : &#123;
       &quot;bitmap&quot; : &quot;10000000&quot;,
       &quot;browser&quot; : 0,
       &quot;classid&quot; : 106,
@@ -220,10 +226,10 @@ _: 1551790719497</code></pre>
       &quot;total&quot; : 4,
       &quot;url&quot; : &quot;http:\/\/b171.photo.store.qq.com\/psb?\/V13LmPKk0JLNRY\/eSAslg*mYWaytEtLysg*Q*5Km91gIWfGuwSk58K2rQY!\/b\/dIY29GUbJgAA&quot;,
       &quot;viewtype&quot; : 0
-   &amp;#125;,
+   &#125;,
    &quot;totalInAlbum&quot; : 4,
    &quot;totalInPage&quot; : 4
-&amp;#125;</code></pre>
+&#125;</code></pre>
 <p>返回的照片信息都存于<code>photoList</code>, 上面同样只截取了一张照片的信息，后面一部分返回的是当前相册的一些基本信息。<code>totalInAlbum</code>， <code>totalInPage</code>存储了当前相册总共包含的照片数及本次返回的照片数。而我们需要下载的图片链接则是<code>url</code>！</p>
 <p>OK, 到此，所有请求和响应数据都分析清楚了，接下来便是<code>coding</code>的时候了。</p>
 <h2 id="确定爬取方案"><a href="#确定爬取方案" class="headerlink" title="确定爬取方案"></a>确定爬取方案</h2><ol>
@@ -253,7 +259,7 @@ def _login_and_get_args(self):
     driver.get(&#39;https://i.qq.com/&#39;)
     # time.sleep(2)
 
-    logging.info(&#39;User &amp;#123;&amp;#125; login...&#39;.format(self.username))
+    logging.info(&#39;User &#123;&#125; login...&#39;.format(self.username))
     driver.switch_to.frame(&#39;login_frame&#39;)
     driver.find_element_by_id(&#39;switcher_plogin&#39;).click()
     driver.find_element_by_id(&#39;u&#39;).clear()
@@ -263,7 +269,7 @@ def _login_and_get_args(self):
     driver.find_element_by_id(&#39;login_button&#39;).click()
 
     time.sleep(1)
-    driver.get(&#39;https://user.qzone.qq.com/&amp;#123;&amp;#125;&#39;.format(self.username))</code></pre>
+    driver.get(&#39;https://user.qzone.qq.com/&#123;&#125;&#39;.format(self.username))</code></pre>
 <p>此处需要注意的是：</p>
 <ol>
 <li>使用<code>selenium</code>需要安装对应的<code>webdriver</code></li>
@@ -282,14 +288,14 @@ def _login_and_get_args(self):
     self.session = requests.Session()
     for cookie in self.cookies:
         self.session.cookies.set(cookie[&#39;name&#39;], cookie[&#39;value&#39;])
-    self.session.headers = &amp;#123;
+    self.session.headers = &#123;
         &#39;Referer&#39;: &#39;https://qzs.qq.com/qzone/photo/v7/page/photo.html?init=photo.v7/module/albumList/index&amp;navBar=1&#39;,
         &#39;User-Agent&#39;: &#39;Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.109 Safari/537.36&#39;
-    &amp;#125;</code></pre>
+    &#125;</code></pre>
 <h3 id="请求相册信息"><a href="#请求相册信息" class="headerlink" title="请求相册信息"></a>请求相册信息</h3><p>获取相册信息，需要先封装好请求参数，然后通过<code>session.get</code>爬取数据，再通过正则匹配以<code>json</code>格式读取<code>jsonp</code>数据，最后解析所需的<code>name</code>和<code>id</code>。</p>
 <pre><code class="python">def _get_ablum_list(self):
     &quot;&quot;&quot;获取相册的列表信息&quot;&quot;&quot;
-    album_url = &#39;&amp;#123;&amp;#125;&amp;#123;&amp;#125;&#39;.format(
+    album_url = &#39;&#123;&#125;&#123;&#125;&#39;.format(
         &#39;https://h5.qzone.qq.com/proxy/domain/photo.qzone.qq.com/fcgi-bin/fcg_list_album_v3?&#39;,
         self._get_query_for_request())
 
@@ -297,7 +303,7 @@ def _login_and_get_args(self):
     resp = self.session.get(album_url)
     data = self._load_callback_data(resp)
 
-    album_list = &amp;#123;&amp;#125;
+    album_list = &#123;&#125;
     for item in data[&#39;data&#39;][&#39;albumListModeSort&#39;]:
         album_list[item[&#39;name&#39;]] = item[&#39;id&#39;]
 
@@ -314,7 +320,7 @@ def _login_and_get_args(self):
     Returns:
         一个组合好所有请求参数的字符串
     &quot;&quot;&quot;
-    query = &amp;#123;
+    query = &#123;
         &#39;g_tk&#39;: self.g_tk,
         &#39;hostUin&#39;: self.username,
         &#39;uin&#39;: self.username,
@@ -324,29 +330,29 @@ def _login_and_get_args(self):
         &#39;source&#39;: &#39;qzone&#39;,
         &#39;plat&#39;: &#39;qzone&#39;,
         &#39;format&#39;: &#39;jsonp&#39;
-    &amp;#125;
+    &#125;
     if topicId:
         query[&#39;topicId&#39;] = topicId
         query[&#39;pageStart&#39;] = pageStart
         query[&#39;pageNum&#39;] = pageNum
-    return &#39;&amp;&#39;.join(&#39;&amp;#123;&amp;#125;=&amp;#123;&amp;#125;&#39;.format(key, val) for key, val in query.items())</code></pre>
+    return &#39;&amp;&#39;.join(&#39;&#123;&#125;=&#123;&#125;&#39;.format(key, val) for key, val in query.items())</code></pre>
 <p>其中的<code>jsonp</code>解析函数如下，主体部分就是一个正则匹配，非常简单。</p>
 <pre><code class="Python">def _load_callback_data(self, resp):
     &quot;&quot;&quot;以json格式解析返回的jsonp数据&quot;&quot;&quot;
     try:
         resp.encoding = &#39;utf-8&#39;
-        data = loads(re.search(r&#39;.*?\((&amp;#123;.*&amp;#125;).*?\).*&#39;, resp.text, re.S)[1])
+        data = loads(re.search(r&#39;.*?\((&#123;.*&#125;).*?\).*&#39;, resp.text, re.S)[1])
         return data
     except ValueError:
         logging.error(&#39;Invalid input&#39;)</code></pre>
 <h3 id="解析并下载照片"><a href="#解析并下载照片" class="headerlink" title="解析并下载照片"></a>解析并下载照片</h3><p>获取相册列表后，逐个请求照片列表信息，进而逐一下载</p>
 <pre><code class="python">def _get_photo(self, album_name, album_id):
     &quot;&quot;&quot;获取单个相册的照片列表信息，并下载该相册所有照片&quot;&quot;&quot;
-    photo_list_url = &#39;&amp;#123;&amp;#125;&amp;#123;&amp;#125;&#39;.format(
+    photo_list_url = &#39;&#123;&#125;&#123;&#125;&#39;.format(
         &#39;https://h5.qzone.qq.com/proxy/domain/photo.qzone.qq.com/fcgi-bin/cgi_list_photo?&#39;,
         self._get_query_for_request(topicId=album_id))
 
-    logging.info(&#39;Getting photo list for album &amp;#123;&amp;#125;...&#39;.format(album_name))
+    logging.info(&#39;Getting photo list for album &#123;&#125;...&#39;.format(album_name))
     resp = self.session.get(photo_list_url)
     data = self._load_callback_data(resp)
     if data[&#39;data&#39;][&#39;totalInPage&#39;] == 0:
@@ -354,8 +360,8 @@ def _login_and_get_args(self):
 
     file_dir = self.get_path(album_name)
     for item in data[&#39;data&#39;][&#39;photoList&#39;]:
-        path = &#39;&amp;#123;&amp;#125;/&amp;#123;&amp;#125;.jpg&#39;.format(file_dir, item[&#39;name&#39;])
-        logging.info(&#39;Downloading &amp;#123;&amp;#125;-&amp;#123;&amp;#125;&#39;.format(album_name, item[&#39;name&#39;]))
+        path = &#39;&#123;&#125;/&#123;&#125;.jpg&#39;.format(file_dir, item[&#39;name&#39;])
+        logging.info(&#39;Downloading &#123;&#125;-&#123;&#125;&#39;.format(album_name, item[&#39;name&#39;]))
         self._download_image(item[&#39;url&#39;], path)</code></pre>
 <p>下载图片也是通过<code>request</code>,记得设置超时时间。</p>
 <pre><code class="python">def _download_image(self, url, path):
@@ -365,7 +371,7 @@ def _login_and_get_args(self):
         if resp.status_code == 200:
             open(path, &#39;wb&#39;).write(resp.content)
     except requests.exceptions.Timeout:
-        logging.warning(&#39;get &amp;#123;&amp;#125; timeout&#39;.format(url))
+        logging.warning(&#39;get &#123;&#125; timeout&#39;.format(url))
     except requests.exceptions.ConnectionError as e:
         logging.error(e.__str__)
     finally:
@@ -408,8 +414,8 @@ window.valine = new Valine({
   el:'#vcomment',
   notify:notify,
   verify:verify,
-  appId:'',
-  appKey:'',
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
   lang: 'zh-cn',
   placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
   avatar:'identicon',

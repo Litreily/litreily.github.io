@@ -1,4 +1,10 @@
-<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification"><title>Python网络爬虫7 - 爬取表情包 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><meta name="generator" content="Hexo 5.0.2"></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">Python网络爬虫7 - 爬取表情包</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2019/10/09/fabiaoqing/">2019-10-09</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Python/">Python</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>为了逗女朋友开心，想找一堆表情包，那么作为一名程序员，自然是会想到用程序来完成这个事情，而Python爬虫就是一个非常好的方法。</p>
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>Python网络爬虫7 - 爬取表情包 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script><meta name="generator" content="Hexo 5.3.0"></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">Python网络爬虫7 - 爬取表情包</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2019/10/09/fabiaoqing/">2019-10-09</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Language/">Language</a>&nbsp;&bull;&nbsp;<a href="/categories/Language/Python/">Python</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>为了逗女朋友开心，想找一堆表情包，那么作为一名程序员，自然是会想到用程序来完成这个事情，而Python爬虫就是一个非常好的方法。</p>
 <p>我先找到了一个专门发布表情包的网站，就叫做<a target="_blank" rel="noopener" href="https://www.fabiaoqing.com/">发表情</a>网，可以通过搜索关键词得到大量相关的表情包，下面对这个网站的爬取进行详细介绍。</p>
 <p><img src="/assets/emotion/fabiaoqing.png" alt="fabiaoqing"></p>
 <h2 id="分析站点"><a href="#分析站点" class="headerlink" title="分析站点"></a>分析站点</h2><p>为了不引起不适，我选择搜索“你好”，出来的结果是这样的</p>
@@ -35,13 +41,13 @@
     while True:
         page_index = page_index + 1
         # https://fabiaoqing.com/search/search/keyword/抱抱/type/bq/page/1.html
-        url = &#39;&amp;#123;&amp;#125;&amp;#123;&amp;#125;/type/bq/page/&amp;#123;&amp;#125;.html&#39;.format(base_url, keyword, page_index)
+        url = &#39;&#123;&#125;&#123;&#125;/type/bq/page/&#123;&#125;.html&#39;.format(base_url, keyword, page_index)
         response = requests.get(url, headers=headers).content
         page = html.fromstring(response)
         imgs = page.xpath(
             &#39;//div[@class=&quot;searchbqppdiv tagbqppdiv&quot;]//img/@data-original&#39;)
 
-        print(&#39;爬取 &quot;&amp;#123;&amp;#125;&quot; 相关表情包第 &amp;#123;&amp;#125; 页:&#39;.format(keyword, page_index))
+        print(&#39;爬取 &quot;&#123;&#125;&quot; 相关表情包第 &#123;&#125; 页:&#39;.format(keyword, page_index))
         img_cnts = download_imgs(imgs, img_cnts, save_dir)
 
         if page_index == 1:
@@ -55,9 +61,9 @@
 <p>思路很简单，就是从１不断增加分页页码<code>page_index</code>，然后使用<code>lxml</code>中的<code>xpath</code>解析网页得到图片链接，最后使用下面介绍的<code>download_imgs</code>函数下载图片。那么什么时候停止获取呢？就是比较首页获取的总分页数<code>page_num</code>和当前分页数<code>page_index</code>是否一致，如果一致说明已经到最后一页。</p>
 <p>函数中的<code>get_path</code>是个获取本地存储链接的函数，<code>base_url</code>和<code>headers</code>是两个全局变量</p>
 <pre><code class="python">base_url = &#39;https://fabiaoqing.com/search/search/keyword/&#39;
-headers = &amp;#123;
+headers = &#123;
     &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36&#39;
-&amp;#125;
+&#125;
 
 
 def get_path(keyword):
@@ -79,7 +85,7 @@ def get_path(keyword):
     for img in img_urls:
         print(&#39;\t&#39; + img)
         fid = fid + 1
-        file_name = &#39;&amp;#123;&amp;#125;.&amp;#123;&amp;#125;&#39;.format(fid, os.path.basename(img).split(&#39;.&#39;)[-1])
+        file_name = &#39;&#123;&#125;.&#123;&#125;&#39;.format(fid, os.path.basename(img).split(&#39;.&#39;)[-1])
         save_path = os.path.join(save_dir, file_name)
 
         try:
@@ -90,7 +96,7 @@ def get_path(keyword):
         except requests.exceptions.MissingSchema:
             print(img + &#39; missing schema&#39;)
         except requests.exceptions.ReadTimeout:
-            print(&#39;get &amp;#123;&amp;#125; timeout, skip this item.&#39;.format(img))
+            print(&#39;get &#123;&#125; timeout, skip this item.&#39;.format(img))
         finally:
             pass
 
@@ -106,10 +112,10 @@ def get_path(keyword):
 
     print(&#39;============================================&#39;)
     for keyword in sys.argv[1:]:
-        print(&#39;开始爬取关键词为 &quot;&amp;#123;&amp;#125;&quot; 的表情包:&#39;.format(keyword))
+        print(&#39;开始爬取关键词为 &quot;&#123;&#125;&quot; 的表情包:&#39;.format(keyword))
         count, save_dir = get_imgs(keyword)
-        print(&#39;共爬取 &quot;&amp;#123;&amp;#125;&quot; 表情包 &amp;#123;&amp;#125; 个&#39;.format(keyword, count))
-        print(&#39;文件存储于&quot;&amp;#123;&amp;#125;&quot;&#39;.format(save_dir))
+        print(&#39;共爬取 &quot;&#123;&#125;&quot; 表情包 &#123;&#125; 个&#39;.format(keyword, count))
+        print(&#39;文件存储于&quot;&#123;&#125;&quot;&#39;.format(save_dir))
     print(&#39;\n爬取完成！&#39;)
     print(&#39;============================================&#39;)</code></pre>
 <p>由于我们的目的是根据输入的关键词参数获取相关的表情，代码完成后的使用方式是这样的：</p>
@@ -151,8 +157,8 @@ window.valine = new Valine({
   el:'#vcomment',
   notify:notify,
   verify:verify,
-  appId:'',
-  appKey:'',
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
   lang: 'zh-cn',
   placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
   avatar:'identicon',

@@ -1,4 +1,10 @@
-<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification"><title>Python之pypcap库的安装及简单抓包工具的实现 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><meta name="generator" content="Hexo 5.0.2"></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">Python之pypcap库的安装及简单抓包工具的实现</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2018/12/31/pypcap-install/">2018-12-31</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Python/">Python</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p><a target="_blank" rel="noopener" href="https://github.com/pynetwork/pypcap">pypcap</a>是一个对<code>libpcap</code>C库进行封装和简化的面向对象的抓包工具库，可以非常方便的用于抓包和过滤，结合<code>dpkt</code>解析库可以完成许多网络数据包的抓取和分析。本文讲述的就是如何使用<code>pypcap</code>及<code>dpkt</code>库实现简单抓包工具，也称为嗅探器(sniffer).</p>
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>Python之pypcap库的安装及简单抓包工具的实现 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script><meta name="generator" content="Hexo 5.3.0"></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">Python之pypcap库的安装及简单抓包工具的实现</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2018/12/31/pypcap-install/">2018-12-31</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Language/">Language</a>&nbsp;&bull;&nbsp;<a href="/categories/Language/Python/">Python</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p><a target="_blank" rel="noopener" href="https://github.com/pynetwork/pypcap">pypcap</a>是一个对<code>libpcap</code>C库进行封装和简化的面向对象的抓包工具库，可以非常方便的用于抓包和过滤，结合<code>dpkt</code>解析库可以完成许多网络数据包的抓取和分析。本文讲述的就是如何使用<code>pypcap</code>及<code>dpkt</code>库实现简单抓包工具，也称为嗅探器(sniffer).</p>
 <h2 id="Linux-端安装-pypcap"><a href="#Linux-端安装-pypcap" class="headerlink" title="Linux 端安装 pypcap"></a>Linux 端安装 pypcap</h2><pre><code class="bash">sudo apt-get install libpcap-dev
 sudo pip install pypcap</code></pre>
 <p>这里有个问题,如果使用<code>Anaconda</code>目录的<code>pip</code>安装则可能失败,目前原因未明,但官方的<code>python3</code>对应的<code>pip3</code>及<code>python2</code>对应的<code>pip</code>均无此问题.</p>
@@ -54,7 +60,7 @@ Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;licen
 <p>Windows版则比较复杂，下面是某台电脑<code>win10</code>操作系统输出的结果，这个直接看是看不出什么的, 因为使用<code>cmd</code>指令<code>ipconfig /all</code>输出的接口信息并不包含以下内容，而是接口名称及描述信息等，如果想知道下面接口如何与接口名对应起来，可以参考后面抓包工具使用注册表来获取接口信息,或是打开<code>wireshark</code>抓包，每个报文的帧头都会显示当前接口的接口信息．</p>
 <pre><code class="zsh">&gt;&gt;&gt; import pcap
 &gt;&gt;&gt; pcap.findalldevs()
-[&#39;\Device\NPF_&amp;#123;839768E4-726A-48BB-9CEC-BD6FD670CB8F&amp;#125;&#39;, &#39;\Device\NPF_&amp;#123;C4D1AF17-C5C9-40C5-90F8-17781657FC9E&amp;#125;&#39;, &#39;\Device\NPF_&amp;#123;26024876-9711-428F-89D3-B91D2C488AC5&amp;#125;&#39;, &#39;\Device\NPF_&amp;#123;E26BFFEF-0644-4C13-8016-EB408AE1D471&amp;#125;&#39;, &#39;\Device\NPF_&amp;#123;9ED3674C-211E-4A57-923A-F8DBE6E6B704&amp;#125;&#39;, &#39;\Device\NPF_&amp;#123;A0B8B562-F309-44F3-95A1-BF34F5465925&amp;#125;&#39;, &#39;\Device\NPF_&amp;#123;9D76B006-6946-4C88-AED2-7F7A9194303C&amp;#125;&#39;]</code></pre>
+[&#39;\Device\NPF_&#123;839768E4-726A-48BB-9CEC-BD6FD670CB8F&#125;&#39;, &#39;\Device\NPF_&#123;C4D1AF17-C5C9-40C5-90F8-17781657FC9E&#125;&#39;, &#39;\Device\NPF_&#123;26024876-9711-428F-89D3-B91D2C488AC5&#125;&#39;, &#39;\Device\NPF_&#123;E26BFFEF-0644-4C13-8016-EB408AE1D471&#125;&#39;, &#39;\Device\NPF_&#123;9ED3674C-211E-4A57-923A-F8DBE6E6B704&#125;&#39;, &#39;\Device\NPF_&#123;A0B8B562-F309-44F3-95A1-BF34F5465925&#125;&#39;, &#39;\Device\NPF_&#123;9D76B006-6946-4C88-AED2-7F7A9194303C&#125;&#39;]</code></pre>
 <h3 id="pcap-pcap"><a href="#pcap-pcap" class="headerlink" title="pcap.pcap"></a>pcap.pcap</h3><pre><code class="py">pc = pcap.pcap(devs[3], promisc=True, immediate=True, timeout_ms=50)</code></pre>
 <p>以上代码定义了一个pcap对象，首个参数<code>devs[3]</code>对应接口名，<code>promisc</code>为真代表打开混杂模式，<code>immediate</code>代表立即模式，启用将不缓存数据包,<code>timeout_ms</code>代表接收数据包的超时时间</p>
 <h3 id="setfilter"><a href="#setfilter" class="headerlink" title="setfilter"></a>setfilter</h3><p><code>setfilter</code>用来设置数据包过滤器，比如只想抓<code>http</code>的包，那就通过<code>setfilter(tcp port 80)</code>实现，更加详细的过滤规则请自行谷歌．</p>
@@ -78,7 +84,7 @@ if &#39;Windows&#39; in platform.platform():
     import winreg as wr
 
 
-IF_REG = r&#39;SYSTEM\CurrentControlSet\Control\Network\&amp;#123;4d36e972-e325-11ce-bfc1-08002be10318&amp;#125;&#39;
+IF_REG = r&#39;SYSTEM\CurrentControlSet\Control\Network\&#123;4d36e972-e325-11ce-bfc1-08002be10318&#125;&#39;
 def getInterfaceByName(name):
     &#39;&#39;&#39;Get guid of interface from regedit of windows system
 
@@ -115,13 +121,13 @@ def ip_addr(ip):
 def captureData(iface):
     pkt = pcap.pcap(iface, promisc=True, immediate=True, timeout_ms=50)
     # filter method
-    filters = &amp;#123;
+    filters = &#123;
         &#39;DNS&#39;: &#39;udp port 53&#39;,
         &#39;HTTP&#39;: &#39;tcp port 80&#39;
-    &amp;#125;
+    &#125;
     # pkt.setfilter(filters[&#39;HTTP&#39;])
 
-    pcap_filepath = &#39;pkts/pkts_&amp;#123;&amp;#125;.pcap&#39;.format(time.strftime(&quot;%Y%m%d-%H%M%S&quot;,
+    pcap_filepath = &#39;pkts/pkts_&#123;&#125;.pcap&#39;.format(time.strftime(&quot;%Y%m%d-%H%M%S&quot;,
         time.localtime()))
     pcap_file = open(pcap_filepath, &#39;wb&#39;)
     writer = dpkt.pcap.Writer(pcap_file)
@@ -275,8 +281,8 @@ window.valine = new Valine({
   el:'#vcomment',
   notify:notify,
   verify:verify,
-  appId:'',
-  appKey:'',
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
   lang: 'zh-cn',
   placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
   avatar:'identicon',

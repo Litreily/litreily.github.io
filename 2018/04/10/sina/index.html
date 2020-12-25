@@ -1,4 +1,10 @@
-<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification"><title>Python网络爬虫2 - 爬取新浪微博用户图片 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><meta name="generator" content="Hexo 5.0.2"></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">Python网络爬虫2 - 爬取新浪微博用户图片</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2018/04/10/sina/">2018-04-10</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Python/">Python</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>其实，新浪微博用户图片爬虫是我学习<code>python</code>以来写的第一个爬虫，只不过当时懒，后来爬完<code>Lofter</code>后觉得有必要总结一下，所以就有了第一篇爬虫博客。现在暂时闲下来了，准备把新浪的这个也补上。</p>
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>Python网络爬虫2 - 爬取新浪微博用户图片 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script><meta name="generator" content="Hexo 5.3.0"></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">Python网络爬虫2 - 爬取新浪微博用户图片</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2018/04/10/sina/">2018-04-10</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Language/">Language</a>&nbsp;&bull;&nbsp;<a href="/categories/Language/Python/">Python</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>其实，新浪微博用户图片爬虫是我学习<code>python</code>以来写的第一个爬虫，只不过当时懒，后来爬完<code>Lofter</code>后觉得有必要总结一下，所以就有了第一篇爬虫博客。现在暂时闲下来了，准备把新浪的这个也补上。</p>
 <p>言归正传，既然选择爬新浪微博，那当然是有需求的，这也是学习的主要动力之一，没错，就是美图。<code>sina</code>用户多数微博都是包含图片的，而且是组图居多，单个图片的较少。</p>
 <p>为了避免侵权，本文以本人微博<a target="_blank" rel="noopener" href="https://weibo.com/litreily">litreily</a>为例说明整个爬取过程，虽然图片较少，质量较低，但爬取方案是绝对ok的，使用时只要换个用户ID就可以了。</p>
 <h2 id="分析sina站点"><a href="#分析sina站点" class="headerlink" title="分析sina站点"></a>分析sina站点</h2><h3 id="获取用户ID"><a href="#获取用户ID" class="headerlink" title="获取用户ID"></a>获取用户ID</h3><p>在爬取前，我们需要知道的是每个用户都有一个用户名，而一个用户名又对应一个唯一的整型数字ID，类似于学生的学号，本人的是<code>2657006573</code>。至于怎么根据用户名去获取ID，有以下两种方法：</p>
@@ -8,7 +14,7 @@
 </ol>
 <p>其实是可以在已知用户名的情况下通过爬虫自动获取到<code>uid</code>的，但是我当时初学<code>python</code>，并没有考虑充分，所以后面的源码是以用户ID作为输入参数的。</p>
 <h3 id="图片存储参数解析"><a href="#图片存储参数解析" class="headerlink" title="图片存储参数解析"></a>图片存储参数解析</h3><p>用户所有的图片都被存放至这样的路径下，真的是<strong>所有图片</strong>哦！！！</p>
-<pre><code class="yml">https://weibo.cn/&amp;#123;uid&amp;#125;/profile?filter=&amp;#123;filter_type&amp;#125;&amp;page=&amp;#123;page_num&amp;#125;
+<pre><code class="yml">https://weibo.cn/&#123;uid&#125;/profile?filter=&#123;filter_type&#125;&amp;page=&#123;page_num&#125;
 
 # example
 https://weibo.cn/2657006573/profile?filter=0&amp;page=1
@@ -51,10 +57,10 @@ page_num: 1</code></pre>
 <p>可以看出，只是一个<code>thumb180</code>和<code>large</code>的区别。既然发现了规律，那就好办多了，我们只要知道缩略图的网址，就可以将域名后的第一级子域名替换成<code>large</code>就可以了，而不用获取<strong>原图</strong>链接再跳转一次。</p>
 <p>而且，多次尝试可以发现组图链接及缩略图链接满足正则表达式：</p>
 <pre><code class="python"># 1. 组图链接：
-imglist_reg = r&#39;href=&quot;(https://weibo.cn/mblog/picAll/.&amp;#123;9&amp;#125;\?rl=2)&quot;&#39;
+imglist_reg = r&#39;href=&quot;(https://weibo.cn/mblog/picAll/.&#123;9&#125;\?rl=2)&quot;&#39;
 
 # 2. 缩略图
-img_reg = r&#39;src=&quot;(http://w.&amp;#123;2&amp;#125;\.sinaimg.cn/(.&amp;#123;6,8&amp;#125;)/.&amp;#123;32,33&amp;#125;.(jpg|gif))&quot;&#39;</code></pre>
+img_reg = r&#39;src=&quot;(http://w.&#123;2&#125;\.sinaimg.cn/(.&#123;6,8&#125;)/.&#123;32,33&#125;.(jpg|gif))&quot;&#39;</code></pre>
 <p>到此，新浪微博的解析过程就结束了，图链的格式以及获取方式也都清楚了。下面就可以设计方案进行爬取了。</p>
 <h2 id="确定爬取方案"><a href="#确定爬取方案" class="headerlink" title="确定爬取方案"></a>确定爬取方案</h2><p>根据解析结果，很容易制定出以下爬取方案：</p>
 <ol>
@@ -84,10 +90,10 @@ img_reg = r&#39;src=&quot;(http://w.&amp;#123;2&amp;#125;\.sinaimg.cn/(.&amp;#12
     return html</code></pre>
 <h3 id="获取存储路径"><a href="#获取存储路径" class="headerlink" title="获取存储路径"></a>获取存储路径</h3><p>由于我是在<code>win10</code>下编写的代码，但是个人比较喜欢用<code>bash</code>，所以图片的存储路径有以下两种格式，<code>_get_path</code>函数会自动判断当前操作系统的类型，然后选择相应的路径。</p>
 <pre><code class="python">def _get_path(uid):
-    path = &amp;#123;
+    path = &#123;
         &#39;Windows&#39;: &#39;D:/litreily/Pictures/python/sina/&#39; + uid,
         &#39;Linux&#39;: &#39;/mnt/d/litreily/Pictures/python/sina/&#39; + uid
-    &amp;#125;.get(platform.system())
+    &#125;.get(platform.system())
 
     if not os.path.isdir(path):
         os.makedirs(path)
@@ -99,7 +105,7 @@ for img in imgurls:
     imgurl = img[0].replace(img[1], &#39;large&#39;)
     num_imgs += 1
     try:
-        urllib.request.urlretrieve(imgurl, &#39;&amp;#123;&amp;#125;/&amp;#123;&amp;#125;.&amp;#123;&amp;#125;&#39;.format(path, num_imgs, img[2]))
+        urllib.request.urlretrieve(imgurl, &#39;&#123;&#125;/&#123;&#125;.&#123;&#125;&#39;.format(path, num_imgs, img[2]))
         # display the raw url of images
         print(&#39;\t%d\t%s&#39; % (num_imgs, imgurl))
     except Exception as e:
@@ -123,10 +129,10 @@ from bs4 import BeautifulSoup
 
 
 def _get_path(uid):
-    path = &amp;#123;
+    path = &#123;
         &#39;Windows&#39;: &#39;D:/litreily/Pictures/python/sina/&#39; + uid,
         &#39;Linux&#39;: &#39;/mnt/d/litreily/Pictures/python/sina/&#39; + uid
-    &amp;#125;.get(platform.system())
+    &#125;.get(platform.system())
 
     if not os.path.isdir(path):
         os.makedirs(path)
@@ -151,9 +157,9 @@ def _capture_images(uid, headers, path):
     num_imgs = 0
 
     # regular expression of imgList and img
-    imglist_reg = r&#39;href=&quot;(https://weibo.cn/mblog/picAll/.&amp;#123;9&amp;#125;\?rl=2)&quot;&#39;
+    imglist_reg = r&#39;href=&quot;(https://weibo.cn/mblog/picAll/.&#123;9&#125;\?rl=2)&quot;&#39;
     imglist_pattern = re.compile(imglist_reg)
-    img_reg = r&#39;src=&quot;(http://w.&amp;#123;2&amp;#125;\.sinaimg.cn/(.&amp;#123;6,8&amp;#125;)/.&amp;#123;32,33&amp;#125;.(jpg|gif))&quot;&#39;
+    img_reg = r&#39;src=&quot;(http://w.&#123;2&#125;\.sinaimg.cn/(.&#123;6,8&#125;)/.&#123;32,33&#125;.(jpg|gif))&quot;&#39;
     img_pattern = re.compile(img_reg)
 
     print(&#39;start capture picture of uid:&#39; + uid)
@@ -166,7 +172,7 @@ def _capture_images(uid, headers, path):
         # 2. parse the html and find all the imgList Url of each page
         soup = BeautifulSoup(html, &quot;lxml&quot;)
         # &lt;div class=&quot;c&quot; id=&quot;M_G4gb5pY8t&quot;&gt;&lt;div&gt;
-        blogs = soup.body.find_all(attrs=&amp;#123;&#39;id&#39;:re.compile(r&#39;^M_&#39;)&amp;#125;, recursive=False)
+        blogs = soup.body.find_all(attrs=&#123;&#39;id&#39;:re.compile(r&#39;^M_&#39;)&#125;, recursive=False)
         num_blogs += len(blogs)
 
         imgurls = []
@@ -193,7 +199,7 @@ def _capture_images(uid, headers, path):
             imgurl = img[0].replace(img[1], &#39;large&#39;)
             num_imgs += 1
             try:
-                urllib.request.urlretrieve(imgurl, &#39;&amp;#123;&amp;#125;/&amp;#123;&amp;#125;.&amp;#123;&amp;#125;&#39;.format(path, num_imgs, img[2]))
+                urllib.request.urlretrieve(imgurl, &#39;&#123;&#125;/&#123;&#125;.&#123;&#125;&#39;.format(path, num_imgs, img[2]))
                 # display the raw url of images
                 print(&#39;\t%d\t%s&#39; % (num_imgs, imgurl))
             except Exception as e:
@@ -210,8 +216,8 @@ def main():
 
     # cookie is form the above url-&gt;network-&gt;request headers
     cookies = &#39;&#39;
-    headers = &amp;#123;&#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36&#39;,
-            &#39;Cookie&#39;: cookies&amp;#125;
+    headers = &#123;&#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36&#39;,
+            &#39;Cookie&#39;: cookies&#125;
 
     # capture imgs from sina
     _capture_images(uid, headers, path)
@@ -254,8 +260,8 @@ window.valine = new Valine({
   el:'#vcomment',
   notify:notify,
   verify:verify,
-  appId:'',
-  appKey:'',
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
   lang: 'zh-cn',
   placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
   avatar:'identicon',

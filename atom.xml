@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2020-12-15T11:36:47.795Z</updated>
+  <updated>2020-12-25T02:57:48.688Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -15,6 +15,153 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>lua 高级特性</title>
+    <link href="https://www.litreily.top/2020/12/25/lua-adv/"/>
+    <id>https://www.litreily.top/2020/12/25/lua-adv/</id>
+    <published>2020-12-25T02:08:01.000Z</published>
+    <updated>2020-12-25T02:57:48.688Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;这一篇来记录下 lua 的某些高级特性，以便在实际应用中得心应手。&lt;/p&gt;
+&lt;h2 id=&quot;模块和包&quot;&gt;&lt;a href=&quot;#模块和包&quot; class=&quot;headerlink&quot; title=&quot;模块和包&quot;&gt;&lt;/a&gt;模块和包&lt;/h2&gt;&lt;p&gt;为了方便代码复用和扩展，可以使用 table 实现模块 module，在模块中封装通用代码。把同类型的函数放在一个文件中，然后在其它脚本中调用。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lua&quot;&gt;module = &amp;#123;&amp;#125;
+
+module.version = &amp;quot;V0.1&amp;quot;
+module.author = &amp;quot;litreily&amp;quot;
+
+function module.func1 ()
+    function-body
+end
+
+function module.func2 ()
+    function-body
+end
+
+return module&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;然后在其它文件通过 require 导入。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lua&quot;&gt;require (&amp;quot;module&amp;quot;)
+-- or
+require &amp;quot;module&amp;quot;
+
+print(module.version)
+module.func1()
+
+-- or
+loca
+      
+    
+    </summary>
+    
+      <category term="Language" scheme="https://www.litreily.top/categories/Language/"/>
+    
+      <category term="Lua" scheme="https://www.litreily.top/categories/Language/Lua/"/>
+    
+    
+      <category term="lua" scheme="https://www.litreily.top/tags/lua/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>lua 基本语法</title>
+    <link href="https://www.litreily.top/2020/12/24/lua-basic/"/>
+    <id>https://www.litreily.top/2020/12/24/lua-basic/</id>
+    <published>2020-12-24T03:19:14.000Z</published>
+    <updated>2020-12-24T08:30:04.180Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;基本语法&quot;&gt;&lt;a href=&quot;#基本语法&quot; class=&quot;headerlink&quot; title=&quot;基本语法&quot;&gt;&lt;/a&gt;基本语法&lt;/h2&gt;&lt;h3 id=&quot;注释&quot;&gt;&lt;a href=&quot;#注释&quot; class=&quot;headerlink&quot; title=&quot;注释&quot;&gt;&lt;/a&gt;注释&lt;/h3&gt;&lt;pre&gt;&lt;code class=&quot;lua&quot;&gt;-- single line comment
+
+--[[
+    mutil line comments
+]]&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+      <category term="Language" scheme="https://www.litreily.top/categories/Language/"/>
+    
+      <category term="Lua" scheme="https://www.litreily.top/categories/Language/Lua/"/>
+    
+    
+      <category term="lua" scheme="https://www.litreily.top/tags/lua/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>lua 语言的基本使用</title>
+    <link href="https://www.litreily.top/2020/12/23/lua/"/>
+    <id>https://www.litreily.top/2020/12/23/lua/</id>
+    <published>2020-12-23T01:07:51.000Z</published>
+    <updated>2020-12-25T00:42:14.061Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;下载安装&quot;&gt;&lt;a href=&quot;#下载安装&quot; class=&quot;headerlink&quot; title=&quot;下载安装&quot;&gt;&lt;/a&gt;下载安装&lt;/h2&gt;&lt;p&gt;在联网状态下，Ubuntu可以直接apt安装。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;sudo apt install lua&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;如果是不直接联网的服务器，并且没有root权限的情况下，需要先在联网PC上下载后导入，再编译安装。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;wget http://www.lua.org/ftp/lua-5.1.5.tar.gz
+# copy lua-5.1.5.tar.gz to server by scp or ftp
+tar -xvf lua-5.1.5.tar.gz
+cd lua-5.1.5
+sed -i &amp;#39;s/\/usr\/local/~\/bin\/local/&amp;#39; Makefile
+make generic
+make install&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;默认安装目录是&lt;code&gt;/usr/local&lt;/code&gt;, 如果没有root权限，需要修改Makefile，将其改为指定目录(~/bin/local)，上面通过sed修改。&lt;/p&gt;
+&lt;p&gt;值得注意的是，Lua 如果按 make linux 编译，
+      
+    
+    </summary>
+    
+      <category term="Language" scheme="https://www.litreily.top/categories/Language/"/>
+    
+      <category term="Lua" scheme="https://www.litreily.top/categories/Language/Lua/"/>
+    
+    
+      <category term="lua" scheme="https://www.litreily.top/tags/lua/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用 gdb 解析 ppp driver crash log</title>
+    <link href="https://www.litreily.top/2020/12/17/gdb-kernel/"/>
+    <id>https://www.litreily.top/2020/12/17/gdb-kernel/</id>
+    <published>2020-12-17T06:04:28.000Z</published>
+    <updated>2020-12-23T03:00:39.657Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;由于项目整合，经过一次大版本升级后的项目，继承了大家族中许多新的特性，然而在正常功能测试中崩溃了，而且还是kernel crash, 会导致reboot的那种。本文就此问题重现、调试分析过程予以归纳总结。&lt;/p&gt;
+&lt;h2 id=&quot;问题描述&quot;&gt;&lt;a href=&quot;#问题描述&quot; class=&quot;headerlink&quot; title=&quot;问题描述&quot;&gt;&lt;/a&gt;问题描述&lt;/h2&gt;&lt;p&gt;PPTP 拨号上网模式下，Router 在添加特定静态路由后crash. 添加路由的原因在本文讨论内容中不重要，因此略过。&lt;/p&gt;
+&lt;h2 id=&quot;问题再现&quot;&gt;&lt;a href=&quot;#问题再现&quot; class=&quot;headerlink&quot; title=&quot;问题再现&quot;&gt;&lt;/a&gt;问题再现&lt;/h2&gt;&lt;p&gt;实际测试过程中寻找重现方法耗时较长，经过大量实验后简化如下：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;连接 WAN Port&lt;/li&gt;
+&lt;li&gt;PPTP 拨号上网&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;拨号成功后，查看 &lt;code&gt;WAN&lt;/code&gt; 口及 &lt;code&gt;ppp0&lt;/code&gt; 的 IP.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;root@model:$ ifconfig brwan
+brwan     Link encap:Ethernet  HWaddr 00:13:2F:34:42:59
+          inet
+      
+    
+    </summary>
+    
+      <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
+    
+    
+      <category term="openwrt" scheme="https://www.litreily.top/tags/openwrt/"/>
+    
+      <category term="gdb" scheme="https://www.litreily.top/tags/gdb/"/>
+    
+  </entry>
   
   <entry>
     <title>Setup PPTP and DNS server</title>
@@ -75,7 +222,7 @@
     <link href="https://www.litreily.top/2020/08/13/python-pdf/"/>
     <id>https://www.litreily.top/2020/08/13/python-pdf/</id>
     <published>2020-08-13T08:56:37.000Z</published>
-    <updated>2020-09-17T05:55:45.785Z</updated>
+    <updated>2020-12-23T01:27:40.767Z</updated>
     
     <summary type="html">
     
@@ -90,7 +237,9 @@
     
     </summary>
     
-      <category term="Python" scheme="https://www.litreily.top/categories/Python/"/>
+      <category term="Language" scheme="https://www.litreily.top/categories/Language/"/>
+    
+      <category term="Python" scheme="https://www.litreily.top/categories/Language/Python/"/>
     
     
       <category term="pdf" scheme="https://www.litreily.top/tags/pdf/"/>
@@ -102,7 +251,7 @@
     <link href="https://www.litreily.top/2020/08/09/netbian/"/>
     <id>https://www.litreily.top/2020/08/09/netbian/</id>
     <published>2020-08-09T02:54:47.000Z</published>
-    <updated>2020-08-11T07:01:19.955Z</updated>
+    <updated>2020-12-23T01:27:11.640Z</updated>
     
     <summary type="html">
     
@@ -131,7 +280,9 @@
     
     </summary>
     
-      <category term="Python" scheme="https://www.litreily.top/categories/Python/"/>
+      <category term="Language" scheme="https://www.litreily.top/categories/Language/"/>
+    
+      <category term="Python" scheme="https://www.litreily.top/categories/Language/Python/"/>
     
     
       <category term="spider" scheme="https://www.litreily.top/tags/spider/"/>
@@ -242,7 +393,7 @@ Pas
     <link href="https://www.litreily.top/2020/05/03/md2bm/"/>
     <id>https://www.litreily.top/2020/05/03/md2bm/</id>
     <published>2020-05-03T08:49:25.000Z</published>
-    <updated>2020-06-16T01:04:32.735Z</updated>
+    <updated>2020-12-23T01:27:40.767Z</updated>
     
     <summary type="html">
     
@@ -262,7 +413,9 @@ Pas
     
     </summary>
     
-      <category term="Python" scheme="https://www.litreily.top/categories/Python/"/>
+      <category term="Language" scheme="https://www.litreily.top/categories/Language/"/>
+    
+      <category term="Python" scheme="https://www.litreily.top/categories/Language/Python/"/>
     
     
       <category term="markdown" scheme="https://www.litreily.top/tags/markdown/"/>
@@ -350,14 +503,14 @@ lftp username@1.2.3.4:~&amp;gt; ls
 &lt;pre&gt;&lt;code class=&quot;zsh&quot;&gt;#!/bin/zsh
 # install to ~/bin/burnImage
 
-[ &amp;quot;x$1&amp;quot; = &amp;quot;x&amp;quot;  ] &amp;amp;&amp;amp; echo &amp;quot;usage: $&amp;amp;#123;0##*/&amp;amp;#125; &amp;lt;imagefile&amp;gt;&amp;quot; &amp;amp;&amp;amp; exit 1
+[ &amp;quot;x$1&amp;quot; = &amp;quot;x&amp;quot;  ] &amp;amp;&amp;amp; echo &amp;quot;usage: $&amp;#123;0##*/&amp;#125; &amp;lt;imagefile&amp;gt;&amp;quot; &amp;amp;&amp;amp; exit 1
 
 tftp 192.168.1.1 &amp;lt;&amp;lt;-EOF &amp;gt; /dev/null
     binary
     put $1
 EOF&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;脚本使用&lt;code&gt;tftp&lt;/code&gt;连接tftp server 192.168.1.1, 然后进入&lt;code&gt;binary&lt;/code&gt;模式，最后将image文件&lt;code&gt;$1&lt;/code&gt;传输至server端。&lt;/p&gt;
-&lt;p&gt;使用方法很简单，保证该文件&lt;code&gt;burnImage&lt;/code&gt;所在目录
+&lt;p&gt;使用方法很简单，保证该文件&lt;code&gt;burnImage&lt;/code&gt;所在目录在环境变量&lt;co
       
     
     </summary>
@@ -673,7 +826,7 @@ CPU: 2 PID: 9465 Comm: swconfig Tainted: P        W    3.14.77 #1
     <link href="https://www.litreily.top/2019/10/09/fabiaoqing/"/>
     <id>https://www.litreily.top/2019/10/09/fabiaoqing/</id>
     <published>2019-10-09T12:22:30.000Z</published>
-    <updated>2020-08-11T07:01:19.945Z</updated>
+    <updated>2020-12-23T01:27:11.640Z</updated>
     
     <summary type="html">
     
@@ -691,7 +844,9 @@ CPU: 2 PID: 9465 Comm: swconfig Tainted: P        W    3.14.77 #1
     
     </summary>
     
-      <category term="Python" scheme="https://www.litreily.top/categories/Python/"/>
+      <category term="Language" scheme="https://www.litreily.top/categories/Language/"/>
+    
+      <category term="Python" scheme="https://www.litreily.top/categories/Language/Python/"/>
     
     
       <category term="spider" scheme="https://www.litreily.top/tags/spider/"/>
@@ -753,7 +908,7 @@ CPU: 2 PID: 9465 Comm: swconfig Tainted: P        W    3.14.77 #1
     <link href="https://www.litreily.top/2019/08/09/vmgirls/"/>
     <id>https://www.litreily.top/2019/08/09/vmgirls/</id>
     <published>2019-08-09T12:09:10.000Z</published>
-    <updated>2020-06-16T01:04:32.673Z</updated>
+    <updated>2020-12-23T01:27:11.639Z</updated>
     
     <summary type="html">
     
@@ -762,7 +917,9 @@ CPU: 2 PID: 9465 Comm: swconfig Tainted: P        W    3.14.77 #1
     
     </summary>
     
-      <category term="Python" scheme="https://www.litreily.top/categories/Python/"/>
+      <category term="Language" scheme="https://www.litreily.top/categories/Language/"/>
+    
+      <category term="Python" scheme="https://www.litreily.top/categories/Language/Python/"/>
     
     
       <category term="spider" scheme="https://www.litreily.top/tags/spider/"/>
@@ -820,11 +977,11 @@ CPU: 2 PID: 9465 Comm: swconfig Tainted: P        W    3.14.77 #1
 
 #define DATA_PATH &amp;quot;data.txt&amp;quot;
 
-struct linklist &amp;amp;#123;
+struct linklist &amp;#123;
     char key[KEY_SIZE];
     char val[VALUE_SIZE];
     struct linklist *next;
-&amp;amp;#125;;
+&amp;#125;;
 struct linklist *hashtbl[TABLE_SIZE];&lt;/code&gt;&lt;/pre&gt;
     
     </summary>
@@ -837,109 +994,6 @@ struct linklist *hashtbl[TABLE_SIZE];&lt;/code&gt;&lt;/pre&gt;
       <category term="linux" scheme="https://www.litreily.top/tags/linux/"/>
     
       <category term="hash" scheme="https://www.litreily.top/tags/hash/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>git commit 工具 - commitizen</title>
-    <link href="https://www.litreily.top/2019/03/12/commitizen/"/>
-    <id>https://www.litreily.top/2019/03/12/commitizen/</id>
-    <published>2019-03-12T13:39:10.000Z</published>
-    <updated>2020-06-16T01:04:32.657Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;为了规范代码提交，最近学习了一下如何使用&lt;code&gt;commitizen&lt;/code&gt;进行commit提交，其实也很简单，这里简单做个介绍。&lt;/p&gt;
-&lt;h2 id=&quot;commitizen-安装&quot;&gt;&lt;a href=&quot;#commitizen-安装&quot; class=&quot;headerlink&quot; title=&quot;commitizen 安装&quot;&gt;&lt;/a&gt;commitizen 安装&lt;/h2&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;npm install -g commitizen&lt;/code&gt;&lt;/pre&gt;
-    
-    </summary>
-    
-      <category term="Tools" scheme="https://www.litreily.top/categories/Tools/"/>
-    
-    
-      <category term="git" scheme="https://www.litreily.top/tags/git/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Python网络爬虫5 - 爬取QQ空间相册</title>
-    <link href="https://www.litreily.top/2019/03/03/qqzone/"/>
-    <id>https://www.litreily.top/2019/03/03/qqzone/</id>
-    <published>2019-03-03T10:34:20.000Z</published>
-    <updated>2020-06-16T01:04:32.642Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;自毕业后，就再也没有用过QQ，QQ空间里记录的是些并不精彩的青葱岁月，但好歹也是份回忆，近日想着学以致用，用&lt;code&gt;Python&lt;/code&gt;把QQ空间相册的所有照片爬取下来，以作备份。&lt;/p&gt;
-&lt;h2 id=&quot;分析QQ空间&quot;&gt;&lt;a href=&quot;#分析QQ空间&quot; class=&quot;headerlink&quot; title=&quot;分析QQ空间&quot;&gt;&lt;/a&gt;分析QQ空间&lt;/h2&gt;&lt;h3 id=&quot;登录QQ空间&quot;&gt;&lt;a href=&quot;#登录QQ空间&quot; class=&quot;headerlink&quot; title=&quot;登录QQ空间&quot;&gt;&lt;/a&gt;登录QQ空间&lt;/h3&gt;&lt;p&gt;爬取第一步，分析站点，首先需要知道如何登录QQ空间。最初想法是用&lt;code&gt;requests&lt;/code&gt;库配置登录请求，模拟登录，但是不久便放弃了这一思路，请看下图↓&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/assets/qqzone/login.png&quot; alt=&quot;login&quot;&gt;&lt;/p&gt;
-&lt;p&gt;根据登录按钮绑定的监听事件可以追踪到该按钮的点击事件如下：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/assets/qqzone/login_func.png&quot; alt=&quot;login function&quot;&gt;&lt;/p&gt;
-&lt;p&gt;账号加密是必然的，但这一堆堆的代码真心不好解析，有耐心的勇士尽情一试！&lt;/p&gt;
-&lt;p&gt;在排除这种登录方法后，选择&lt;code&gt;selenium&lt;/c
-      
-    
-    </summary>
-    
-      <category term="Python" scheme="https://www.litreily.top/categories/Python/"/>
-    
-    
-      <category term="spider" scheme="https://www.litreily.top/tags/spider/"/>
-    
-      <category term="qqzone" scheme="https://www.litreily.top/tags/qqzone/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>记一次Client无法获取IPv6地址问题的分析过程</title>
-    <link href="https://www.litreily.top/2019/02/27/ipv6/"/>
-    <id>https://www.litreily.top/2019/02/27/ipv6/</id>
-    <published>2019-02-27T05:47:30.000Z</published>
-    <updated>2020-06-16T01:04:32.642Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;近日SQA报了一个bug，对路由器经过6天左右的压力测试后，无论是有线设备还是无线设备都拿不到&lt;code&gt;IPv6&lt;/code&gt;地址了。经过层层分析发现可能是&lt;code&gt;kernel&lt;/code&gt;内存泄漏。本文便记录这一问题的分析过程。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
-    
-    
-      <category term="IPv6" scheme="https://www.litreily.top/tags/IPv6/"/>
-    
-      <category term="router" scheme="https://www.litreily.top/tags/router/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Ubuntu开机自动挂载Windows系统中的磁盘分区</title>
-    <link href="https://www.litreily.top/2019/02/17/mount/"/>
-    <id>https://www.litreily.top/2019/02/17/mount/</id>
-    <published>2019-02-17T12:39:57.000Z</published>
-    <updated>2020-06-16T01:04:32.642Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;本人电脑装有&lt;code&gt;ubuntu&lt;/code&gt;和&lt;code&gt;windows&lt;/code&gt;双系统，有时候需要在&lt;code&gt;ubuntu&lt;/code&gt;下使用&lt;code&gt;windows&lt;/code&gt;系统下的文件，每次手动挂载的话很麻烦，所以想让它开机自动挂载常用的&lt;code&gt;windows&lt;/code&gt;磁盘分区。&lt;/p&gt;
-&lt;h2 id=&quot;查看分区&quot;&gt;&lt;a href=&quot;#查看分区&quot; class=&quot;headerlink&quot; title=&quot;查看分区&quot;&gt;&lt;/a&gt;查看分区&lt;/h2&gt;&lt;p&gt;在挂载windows磁盘前，需要知道每个磁盘的路径或&lt;code&gt;UUID&lt;/code&gt;，此时主要依靠&lt;code&gt;fdisk&lt;/code&gt;和&lt;code&gt;blkid&lt;/code&gt;两个指令，前一个指令获取分区信息，后一个指令获取&lt;code&gt;Block device&lt;/code&gt;块设备的属性。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;sh&quot;&gt;$ sudo blkid
-/dev/sda1: LABEL=&amp;quot;Win10&amp;quot; UUID=&amp;quot;C4A0E65EA0E65708&amp;quot; TYPE=&amp;quot;ntfs&amp;quot; PARTUUID=&amp;quot;6190c592-01&amp;quot;
-/dev/sda2: UUID=&amp;quot;AE3C137D3C133FAF&amp;quot; TYPE=&amp;
-      
-    
-    </summary>
-    
-      <category term="Linux" scheme="https://www.litreily.top/categories/Linux/"/>
-    
-    
-      <category term="ubuntu" scheme="https://www.litreily.top/tags/ubuntu/"/>
-    
-      <category term="mount" scheme="https://www.litreily.top/tags/mount/"/>
     
   </entry>
   

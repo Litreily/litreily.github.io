@@ -1,4 +1,10 @@
-<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification"><title>哈希表的实现与常见操作 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><meta name="generator" content="Hexo 5.0.2"></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">哈希表的实现与常见操作</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2019/05/24/hash-table/">2019-05-24</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Embedded/">Embedded</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>前段时间基于数组和单链表以拉链法写了个哈希表，实现了基本的增删改查（<code>CRUD</code>），以键值对的形式存储一些配置参数，便以此文记录一下。</p>
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>哈希表的实现与常见操作 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script><meta name="generator" content="Hexo 5.3.0"></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">哈希表的实现与常见操作</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2019/05/24/hash-table/">2019-05-24</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Embedded/">Embedded</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>前段时间基于数组和单链表以拉链法写了个哈希表，实现了基本的增删改查（<code>CRUD</code>），以键值对的形式存储一些配置参数，便以此文记录一下。</p>
 <h2 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h2><pre><code class="c">#define TABLE_SIZE 101
 #define KEY_SIZE 32
 #define VALUE_SIZE 128
@@ -6,11 +12,11 @@
 
 #define DATA_PATH &quot;data.txt&quot;
 
-struct linklist &amp;#123;
+struct linklist &#123;
     char key[KEY_SIZE];
     char val[VALUE_SIZE];
     struct linklist *next;
-&amp;#125;;
+&#125;;
 struct linklist *hashtbl[TABLE_SIZE];</code></pre>
 <a id="more"></a>
 
@@ -20,7 +26,7 @@ struct linklist *hashtbl[TABLE_SIZE];</code></pre>
 <pre><code class="java">hash = (R * hash + s.charAt(i)) % M;</code></pre>
 <p>其中，R是一个素数，只要其足够小，就能保证hash在（0～M-1）之内。这里设R为31，M即哈希表的长度，下面就是根据以上算法实现的一个字符串哈希函数。</p>
 <pre><code class="c">/* calc hash code of string */
-uint32_t hash(char *key) &amp;#123;
+uint32_t hash(char *key) &#123;
     int len = strlen(key);
     int i;
     uint32_t ret = 0;
@@ -28,12 +34,12 @@ uint32_t hash(char *key) &amp;#123;
     if(!len)
         return -1;
 
-    for(i=0; i &lt; len; i++) &amp;#123;
+    for(i=0; i &lt; len; i++) &#123;
         ret = (ret * 31 + (uint32_t)key[i]) % TABLE_SIZE;
-    &amp;#125;
+    &#125;
 
     return ret;
-&amp;#125;</code></pre>
+&#125;</code></pre>
 <p>字符串的哈希函数还有很多，具体可以参考<a target="_blank" rel="noopener" href="https://www.cnblogs.com/uvsjoh/archive/2012/03/27/2420120.html">字符串哈希函数</a></p>
 <h2 id="增删改查"><a href="#增删改查" class="headerlink" title="增删改查"></a>增删改查</h2><p>上面定义好了哈希表的存储方式，以及字符串的哈希函数，下面便可以逐个实现对哈希表的增删改查。</p>
 <h3 id="set"><a href="#set" class="headerlink" title="set"></a>set</h3><p>首先实现哈希表元素的增添或更改:</p>
@@ -45,7 +51,7 @@ uint32_t hash(char *key) &amp;#123;
 <p>插入新键时使用<code>malloc</code>分配内存，同时更新所在链表的表头</p>
 <p><img src="/assets/hash/set_new_key.jpg" alt="set new key"></p>
 <pre><code class="c">/* set or update value of key to hash table */
-int set(char *key, char *val) &amp;#123;
+int set(char *key, char *val) &#123;
     uint32_t i;
     struct linklist *l, *n;
 
@@ -58,7 +64,7 @@ int set(char *key, char *val) &amp;#123;
 
     if(l)
         strcpy(l-&gt;val, val);
-    else &amp;#123;
+    else &#123;
         n = malloc(sizeof(struct linklist));
         if(!n)
             return -1;
@@ -69,15 +75,15 @@ int set(char *key, char *val) &amp;#123;
         /* insert new key to the head of linklist */
         n-&gt;next = hashtbl[i];
         hashtbl[i] = n;
-    &amp;#125;
+    &#125;
 
     return 0;
-&amp;#125;</code></pre>
+&#125;</code></pre>
 <h3 id="unset"><a href="#unset" class="headerlink" title="unset"></a>unset</h3><p>对键的删除其实就是对一块内存的释放，先计算哈希值，遍历链表找到待删除的键，最后<code>free</code>即可。</p>
 <p><img src="/assets/hash/unset_key.jpg" alt="unset key"></p>
 <p>这里需要考虑的一个问题是如果待删除键值对<code>l</code>是表头后第一个节点，需要将链表表头指针直接指向<code>l-&gt;next</code>。</p>
 <pre><code class="c">/* remove key from hash table */
-int unset(char *key) &amp;#123;
+int unset(char *key) &#123;
     uint32_t i;
     struct linklist *l, *prev;
 
@@ -88,19 +94,19 @@ int unset(char *key) &amp;#123;
 
     for(prev = hashtbl[i], l = prev; l &amp;&amp; strcmp(key, l-&gt;key); prev = l, l = l-&gt;next);
 
-    if(l) &amp;#123;
+    if(l) &#123;
         if (l == prev)
             hashtbl[i] = l-&gt;next;
         else
             prev-&gt;next = l-&gt;next;
         free(l);
-    &amp;#125;
+    &#125;
 
     return 0;
-&amp;#125;</code></pre>
+&#125;</code></pre>
 <h3 id="get"><a href="#get" class="headerlink" title="get"></a>get</h3><p>获取键值就非常简单了，计算哈希值后直接遍历链表即可。</p>
 <pre><code class="c">/* get value of key from hash table */
-char* get(char *key) &amp;#123;
+char* get(char *key) &#123;
     uint32_t i;
     struct linklist * l;
 
@@ -112,10 +118,10 @@ char* get(char *key) &amp;#123;
     for(l = hashtbl[i]; l &amp;&amp; strcmp(key, l-&gt;key); l = l-&gt;next);
 
     return l ? l-&gt;val : NULL;
-&amp;#125;</code></pre>
+&#125;</code></pre>
 <h2 id="其它操作"><a href="#其它操作" class="headerlink" title="其它操作"></a>其它操作</h2><h3 id="show"><a href="#show" class="headerlink" title="show"></a>show</h3><p><code>show</code>函数用于显示哈希表当前存储的所有数据，实现方法即循环遍历哈希表，然后打印出每个链表节点存储的键值对。每行打印一组键值对，并且键值对之前会打印出当前键对应的哈希函数计算结果。</p>
 <pre><code class="c">/* show all the keys &amp; values of hash table */
-void show() &amp;#123;
+void show() &#123;
     int i;
     struct linklist *l;
 
@@ -124,10 +130,10 @@ void show() &amp;#123;
         for(l = hashtbl[i]; l != NULL; l = l-&gt;next)
             __nprintf(&quot;%d\t%s=\&quot;%s\&quot;&quot;, hash(l-&gt;key), l-&gt;key, l-&gt;val);
     __nprintf(&quot;---------------------------------------&quot;);
-&amp;#125;</code></pre>
+&#125;</code></pre>
 <p>函数中用到的<code>__nprintf</code>函数如下，是通过向终端<code>/dev/tty</code>写入数据完成对数据的终端显示，注意不同操作系统的终端设备路径可能不太一样，例如嵌入式Linux系统可能使用的是<code>dev/console</code>.</p>
 <pre><code class="c">/* use this &#39;__nprintf&#39; to print message */
-void __nprintf(const char *fmt, ...) &amp;#123;
+void __nprintf(const char *fmt, ...) &#123;
     va_list ap;
     static FILE *filp;
 
@@ -138,10 +144,10 @@ void __nprintf(const char *fmt, ...) &amp;#123;
     vfprintf(filp, fmt, ap);
     fputs(&quot;\n&quot;, filp);
     va_end(ap);
-&amp;#125;</code></pre>
+&#125;</code></pre>
 <h3 id="commit"><a href="#commit" class="headerlink" title="commit"></a>commit</h3><p>除了将数据显示在终端外，还可以通过下面的<code>commit</code>函数将数据存入文件当中，该文件就可以充当最简易的数据库。</p>
 <pre><code class="c">/* save all keys &amp; values from memory to local file */
-int commit() &amp;#123;
+int commit() &#123;
     int i;
     struct linklist *l;
     char buf[BUF_SIZE];
@@ -152,22 +158,22 @@ int commit() &amp;#123;
     if(!fp)
         return -1;
 
-    for(i = 0; i &lt; TABLE_SIZE; i++) &amp;#123;
-        for(l = hashtbl[i]; l != NULL; l = l-&gt;next) &amp;#123;
+    for(i = 0; i &lt; TABLE_SIZE; i++) &#123;
+        for(l = hashtbl[i]; l != NULL; l = l-&gt;next) &#123;
             snprintf(buf, BUF_SIZE, &quot;%s=\&quot;%s\&quot;\n&quot;, l-&gt;key, l-&gt;val);
             fputs(buf, fp);
-        &amp;#125;
-    &amp;#125;
+        &#125;
+    &#125;
 
     fclose(fp);
     return 0;
-&amp;#125;</code></pre>
+&#125;</code></pre>
 <h3 id="load"><a href="#load" class="headerlink" title="load"></a>load</h3><p>既然上面提到了数据存储，那自然就少不了数据读取，将存入文件的数据加载到内存当中，作为进程启动的首个任务，这便是<code>load</code>函数所完成的工作。</p>
 <pre><code class="c">/* load keys &amp; values from local file to memory */
-int load() &amp;#123;
+int load() &#123;
     int i;
     struct linklist *l;
-    char buf[BUF_SIZE]=&amp;#123;0&amp;#125;;
+    char buf[BUF_SIZE]=&#123;0&#125;;
     char *key, *val;
     FILE *fp;
 
@@ -176,15 +182,15 @@ int load() &amp;#123;
     if(!fp)
         return -1;
 
-    while(fgets(buf, BUF_SIZE, fp)) &amp;#123;
+    while(fgets(buf, BUF_SIZE, fp)) &#123;
         key = strtok(buf, &quot;=&quot;);
         val = strtok(NULL, &quot;\&quot;\n&quot;);
         set(key, val);
-    &amp;#125;
+    &#125;
 
     fclose(fp);
     return 0;
-&amp;#125;</code></pre>
+&#125;</code></pre>
 <p>至此，与哈希表的基本操作函数都已实现，下面将使用这些基本函数实现对哈希表的一些常见操作↓</p>
 <h2 id="应用实例"><a href="#应用实例" class="headerlink" title="应用实例"></a>应用实例</h2><h3 id="hash"><a href="#hash" class="headerlink" title="hash"></a>hash</h3><p>下面实现一个<code>hash</code>程序，对哈希表进行交互式操作，程序主要内容如下：</p>
 <ol>
@@ -193,7 +199,7 @@ int load() &amp;#123;
 </ol>
 <pre><code class="c">#include &quot;hash.h&quot;
 
-static void help() &amp;#123;
+static void help() &#123;
     __nprintf(&quot;  help \t\t--show this infomation\n&quot; \
           &quot;  set key val \t--set or update value of key\n&quot; \
           &quot;  unset key \t--remove key from hash table\n&quot; \
@@ -202,14 +208,14 @@ static void help() &amp;#123;
           &quot;  commit \t--write all keys &amp; values to local file\n&quot; \
           &quot;  exit \t\t--exit current session&quot;
           );
-&amp;#125;
+&#125;
 
-int main(int argc, char *argv[]) &amp;#123;
-    char cmd[128]=&amp;#123;0&amp;#125;;
+int main(int argc, char *argv[]) &#123;
+    char cmd[128]=&#123;0&#125;;
     char *action, *key, *val;
 
     load();
-    while(1) &amp;#123;
+    while(1) &#123;
         printf(&quot;CMD&gt; &quot;);
         gets(cmd);
 
@@ -220,37 +226,37 @@ int main(int argc, char *argv[]) &amp;#123;
         if(!action)
             continue;
 
-        if(!strcmp(action, &quot;set&quot;)) &amp;#123;
+        if(!strcmp(action, &quot;set&quot;)) &#123;
             key = strtok(NULL, &quot; &quot;);
             val = strtok(NULL, &quot;\n&quot;);
             set(key, val);
-        &amp;#125;
-               else if (!strcmp(action, &quot;unset&quot;)) &amp;#123;
+        &#125;
+               else if (!strcmp(action, &quot;unset&quot;)) &#123;
             key = strtok(NULL, &quot; &quot;);
             unset(key);
-        &amp;#125;
-        else if (!strcmp(action, &quot;get&quot;)) &amp;#123;
+        &#125;
+        else if (!strcmp(action, &quot;get&quot;)) &#123;
             key = strtok(NULL, &quot; &quot;);
             val = get(key);
             if(val)
                 __nprintf(&quot;%s=\&quot;%s\&quot;&quot;, key, val);
-        &amp;#125;
+        &#125;
         else if (!strcmp(action, &quot;show&quot;))
             show();
         else if (!strcmp(action, &quot;commit&quot;))
             commit();
         else if (!strcmp(action, &quot;help&quot;))
             help();
-        else if (!strcmp(action, &quot;exit&quot;)) &amp;#123;
+        else if (!strcmp(action, &quot;exit&quot;)) &#123;
             commit();
             break;
-        &amp;#125;
-        else &amp;#123;
+        &#125;
+        else &#123;
             __nprintf(&quot;unknown cmd, try help!&quot;);
             continue;
-        &amp;#125;
-    &amp;#125;
-&amp;#125;</code></pre>
+        &#125;
+    &#125;
+&#125;</code></pre>
 <p>编译后应用示例如下：</p>
 <pre><code class="bash">➜  hash git:(master) ./hash
 CMD&gt; help
@@ -294,11 +300,11 @@ CMD&gt; exit
 static const char * key_pool = &quot;abcdefghijklmnopqrstuvwxyz_&quot;;
 static const char * val_pool = &quot;abcdefghijklmnopqrstuvwxyz_0123456789 .&quot;;
 
-void set_rand_key() &amp;#123;
+void set_rand_key() &#123;
     int key_maxlen = strlen(key_pool);
     int val_maxlen = strlen(val_pool);
-    char key[32] = &amp;#123;0&amp;#125;;
-    char val[128] = &amp;#123;0&amp;#125;;
+    char key[32] = &#123;0&#125;;
+    char val[128] = &#123;0&#125;;
     int key_len, val_len, i;
 
     key_len = 1 + rand() % 16;
@@ -311,9 +317,9 @@ void set_rand_key() &amp;#123;
         val[i] = val_pool[rand() % val_maxlen];
 
     set(key, val);
-&amp;#125;
+&#125;
 
-int main(int argc, char *argv[]) &amp;#123;
+int main(int argc, char *argv[]) &#123;
     int i;
     int test_times = argc &gt; 1? atoi(argv[1]) : MAX_KEYS;
 
@@ -325,7 +331,7 @@ int main(int argc, char *argv[]) &amp;#123;
     show();
 
     return 0;
-&amp;#125;</code></pre>
+&#125;</code></pre>
 <p>该测试用例也可以大致用来测试哈希函数的可靠性，只要看数据中每个键值对前面的哈希值是否均匀分布即可，实践证明是均匀分布的，这里不再给出测试过程。</p>
 <h3 id="libhash-so"><a href="#libhash-so" class="headerlink" title="libhash.so"></a>libhash.so</h3><p>在复习哈希函数的同时，顺便复习了下动态链接库的生成和使用，要把<code>hash.c</code>编译成链接库<code>libhash.so</code>，可以使用以下编译语句</p>
 <pre><code class="bash">gcc -fPIC -c hash.c
@@ -350,13 +356,13 @@ extern int commit();
 extern int load();
 extern void show();
 
-int main(int argc, char *argv[]) &amp;#123;
+int main(int argc, char *argv[]) &#123;
     __nprintf(&quot;start&quot;);
     load();
     show();
     __nprintf(&quot;end&quot;);
     return 0;
-&amp;#125;</code></pre>
+&#125;</code></pre>
 <p>代码很简单，就是完成哈希表的导入与显示，编译语句如下：</p>
 <pre><code class="bash">gcc -fPIC demo.c -o demo -L. -lhash</code></pre>
 <p>其中，<code>-L.</code>代表从当前目录寻找链接库，<code>-lhash</code>代表链接到库<code>libhash.so</code>,注意前缀<code>lib</code>及后缀<code>.so</code>是自动添加的，编译语句中无需添加。</p>
@@ -411,8 +417,8 @@ window.valine = new Valine({
   el:'#vcomment',
   notify:notify,
   verify:verify,
-  appId:'',
-  appKey:'',
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
   lang: 'zh-cn',
   placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
   avatar:'identicon',

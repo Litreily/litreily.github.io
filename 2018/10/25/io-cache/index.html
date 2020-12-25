@@ -1,4 +1,10 @@
-<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification"><title>Linux中的文件I/O缓冲 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><meta name="generator" content="Hexo 5.0.2"></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">Linux中的文件I/O缓冲</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2018/10/25/io-cache/">2018-10-25</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Linux/">Linux</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>近日阅读《Linux/UNIX系统编程手册》第13章 - 文件I/O缓冲，有些收获，是以此文以记之。以往只知道Linux的I/O操作有缓冲机制，但始终不知道具体的缓冲流程及使用方法。读完本章节后方才有种恍然大悟的感觉，久违的因读书而觉得舒爽的感觉。</p>
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>Linux中的文件I/O缓冲 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script><meta name="generator" content="Hexo 5.3.0"></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">Linux中的文件I/O缓冲</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2018/10/25/io-cache/">2018-10-25</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Linux/">Linux</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>近日阅读《Linux/UNIX系统编程手册》第13章 - 文件I/O缓冲，有些收获，是以此文以记之。以往只知道Linux的I/O操作有缓冲机制，但始终不知道具体的缓冲流程及使用方法。读完本章节后方才有种恍然大悟的感觉，久违的因读书而觉得舒爽的感觉。</p>
 <p>好了，进入正题，下图摘自原文(13.4-I/O缓冲小结)，此图概括了<code>stdio</code>库及内核针对输出文件所用的缓冲以及各类缓冲的控制机制。本文依据此图逐步揭开文件I/O缓冲的面纱。</p>
 <p><img src="/assets/linux/io_buffer.jpg" alt="I/O缓冲"></p>
 <a id="more"></a>
@@ -64,18 +70,18 @@ if(setvbuf(fp, buf, _IOFBF, BUF_SIZE) !=0 )
     exit(EXIT_FAILURE);</code></pre>
 <p>从下面的<code>uClibc</code>源码可以看出，<code>setbuffer</code>, <code>setbuf</code>仅仅是对<code>setvbuf</code>的简单封装。但要注意的是，<code>SUSv3</code>标准并未对<code>setbuffer</code>函数加以定义，在使用时需要加上宏定义<code>_BSD_SOURCE</code>。</p>
 <pre><code class="c">void setbuffer(FILE * __restrict stream, register char * __restrict buf, size_t size)
-&amp;#123;
+&#123;
 #ifdef __STDIO_BUFFERS
     setvbuf(stream, buf, (buf ? _IOFBF : _IONBF), size);
 #endif
-&amp;#125;
+&#125;
 
 void setbuf(FILE * __restrict stream, register char * __restrict buf)
-&amp;#123;
+&#123;
 #ifdef __STDIO_BUFFERS
     setvbuf(stream, buf, ((buf != NULL) ? _IOFBF : _IONBF), BUFSIZ);
 #endif
-&amp;#125;</code></pre>
+&#125;</code></pre>
 <p>如果想要禁用缓冲，通常可以使用<code>setbuf(stream, NULL)</code>实现。但通常不推荐这么做，应该合理组织代码，在特定情况使用<code>fflush</code>刷新数据，这样可以在有效利用用户空间缓冲作用的同时，减少系统调用，适宜的存储数据至内核缓冲区。</p>
 <h3 id="控制文件I-O的内核缓冲"><a href="#控制文件I-O的内核缓冲" class="headerlink" title="控制文件I/O的内核缓冲"></a>控制文件I/O的内核缓冲</h3><p>在某些情况下，我们可能需要强制将内核缓冲区内的数据刷新至磁盘，而不必等待内核线程等待特定时间后才写入。此时主要有两种选择</p>
 <ol>
@@ -126,8 +132,8 @@ window.valine = new Valine({
   el:'#vcomment',
   notify:notify,
   verify:verify,
-  appId:'',
-  appKey:'',
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
   lang: 'zh-cn',
   placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
   avatar:'identicon',

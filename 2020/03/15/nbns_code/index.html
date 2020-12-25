@@ -1,4 +1,10 @@
-<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification"><title>NBNS客户端的C语言实现 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><meta name="generator" content="Hexo 5.0.2"></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">NBNS客户端的C语言实现</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2020/03/15/nbns_code/">2020-03-15</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Embedded/">Embedded</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>接上一篇<a href="/2020/02/28/nbns/">【网络协议详解1 - NBNS】</a>对NBNS的介绍，这一篇将要讲述使用C语言如何实现一个NBNS客户端，用于向局域网内其它设备发送NBNS NODE STATUS QUERY，并将接收到的RESPONSE信息打印出来。其实也就是一个UDP socket的实例。</p>
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>NBNS客户端的C语言实现 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script><meta name="generator" content="Hexo 5.3.0"></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">NBNS客户端的C语言实现</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2020/03/15/nbns_code/">2020-03-15</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Embedded/">Embedded</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>接上一篇<a href="/2020/02/28/nbns/">【网络协议详解1 - NBNS】</a>对NBNS的介绍，这一篇将要讲述使用C语言如何实现一个NBNS客户端，用于向局域网内其它设备发送NBNS NODE STATUS QUERY，并将接收到的RESPONSE信息打印出来。其实也就是一个UDP socket的实例。</p>
 <p><img src="/assets/network/udp-socket.png" alt="UDP socket flowchart"></p>
 <p>编写一个客户端，首先要清楚它要完成什么任务，进而确定完成任务的方法和步骤。其任务很简单，就是NBNS数据包的发送和接收，也就是一个简单的socket收发进程。实现主要分以下几步：</p>
 <ol>
@@ -28,31 +34,31 @@
 typedef unsigned short uint16;
 typedef unsigned char uint8;
 
-struct nbns_header &amp;#123;
+struct nbns_header &#123;
     uint16 tid; /* Transaction ID */
     uint16 flags;
     uint16 question;
     uint16 answer;
     uint16 authority;
     uint16 additional;
-&amp;#125; __attribute__ ((packed));
+&#125; __attribute__ ((packed));
 
 // NBNS NODE STATUS QUERY FORMAT
-struct nbns_request &amp;#123;
+struct nbns_request &#123;
     struct nbns_header header;
 
     char qname[34];
     uint16 qtype;
     uint16 qclass;
-&amp;#125; __attribute__ ((packed));
+&#125; __attribute__ ((packed));
 
-struct nbns_name &amp;#123;
+struct nbns_name &#123;
     char name[16];
     uint16 flags;
-&amp;#125; __attribute__ ((packed));
+&#125; __attribute__ ((packed));
 
 // NBNS NODE STATUS RESPONSE FORMAT
-struct nbns_response_header &amp;#123;
+struct nbns_response_header &#123;
     struct nbns_header header;
 
     char rname[34];
@@ -62,13 +68,13 @@ struct nbns_response_header &amp;#123;
     uint32 ttl;
     uint16 length;
     uint8 num_of_names;
-&amp;#125; __attribute__ ((packed));</code></pre>
+&#125; __attribute__ ((packed));</code></pre>
 <p>注意每个结构体后的<code>__attribute__ ((packed))</code>，这是为了告诉编译器不要对其进行对齐优化，保持数据的紧凑性，以防数据解析出错。</p>
 <h2 id="名称编解码"><a href="#名称编解码" class="headerlink" title="名称编解码"></a>名称编解码</h2><p>在进入正题之前，我们先来看下NetBIOS名称的编解码，这在后续发送请求和解析响应中都会用到。从RFC1001可知，NBNS请求包中的Name是被编码的，在<a href="/2020/02/28/nbns/#NetBIOS-%E5%91%BD%E5%90%8D%E7%BC%96%E7%A0%81">上一篇</a>中已经讲述过了。</p>
 <h3 id="编码"><a href="#编码" class="headerlink" title="编码"></a>编码</h3><p>对于NODE STATUS QUERY, 通常将NBNS name设为<code>*</code>, 就是一个通配符，使用下面的函数可以对其编码。</p>
 <pre><code class="c">// encode &quot;*&quot; to &quot;CKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&quot;
 void encode_name(char *name)
-&amp;#123;
+&#123;
     int i;
 
     name[0] = 0x20; /* length of name */
@@ -79,10 +85,10 @@ void encode_name(char *name)
         name[i] = &#39;A&#39;;
 
     name[i] = &#39;\0&#39;; /* end of name */
-&amp;#125;</code></pre>
+&#125;</code></pre>
 <h3 id="解码"><a href="#解码" class="headerlink" title="解码"></a>解码</h3><p>解码也很简单，就是编码的逆过程。上面的编码函数只针对<code>*</code>，但这里的解码函数却是针对所有满足格式要求的字符串。</p>
 <pre><code class="c">void decode_name(char *name, char *dst)
-&amp;#123;
+&#123;
     int i;
 
     if (name[0] != 0x20)
@@ -90,7 +96,7 @@ void encode_name(char *name)
     for (i = 1; i &lt; 0x20; i+=2)
         dst[i/2] = (((name[i]-&#39;A&#39;) &lt;&lt; 4) &amp; 0xF0) + ((name[i+1]-&#39;A&#39;) &amp; 0x0F);  
     dst[i/2] = &#39;\0&#39;;
-&amp;#125;</code></pre>
+&#125;</code></pre>
 <h2 id="create-socket"><a href="#create-socket" class="headerlink" title="create socket"></a>create socket</h2><h3 id="socket"><a href="#socket" class="headerlink" title="socket"></a>socket</h3><p>好了，进入正题。在执行数据收发之前需要创建UDP socket, 这里会用到socket函数。</p>
 <pre><code class="c">#include &lt;sys/socket.h&gt;
 
@@ -110,7 +116,7 @@ RETURN VALUE
 </ul>
 <h3 id="创建socket"><a href="#创建socket" class="headerlink" title="创建socket"></a>创建socket</h3><p>下面来实现一个open_socket函数，用于打开一个socket，可以把它当做一个信封，等待后面写好信件放进去。</p>
 <pre><code class="c">int open_socket(void)
-&amp;#123;
+&#123;
     int sock;
     struct sockaddr_in saddr;
 
@@ -127,7 +133,7 @@ RETURN VALUE
         handle_error(&quot;bind&quot;);
 
     return sock;
-&amp;#125;</code></pre>
+&#125;</code></pre>
 <p>这里要注意几点：</p>
 <ol>
 <li>网络字节序和主机字节序不一定一样，需要使用<code>htonl</code>, <code>htons</code>函数进行转换<ul>
@@ -152,7 +158,7 @@ RETURN VALUE
        On error, -1 is returned, and errno is set appropriately.</code></pre>
 <p>发送成功则返回真实的发送字节数，否则返回-1并更新errno.</p>
 <h3 id="发送数据"><a href="#发送数据" class="headerlink" title="发送数据"></a>发送数据</h3><pre><code class="c">int send_nbns_query(int sock, struct in_addr dest_ip)
-&amp;#123;
+&#123;
     struct sockaddr_in dest;
     struct nbns_request req;
 
@@ -173,7 +179,7 @@ RETURN VALUE
 
     return sendto(sock, (char *)&amp;req, sizeof(req), 0,
            (struct sockaddr *)&amp;dest, sizeof(dest));
-&amp;#125;</code></pre>
+&#125;</code></pre>
 <p>注意，除了0、单字节数据、单字节数组外，其余数据都需要使用<code>htons</code>或<code>htonl</code>进行转换，将主机字节序转换为网络字节序。</p>
 <h2 id="接收响应"><a href="#接收响应" class="headerlink" title="接收响应"></a>接收响应</h2><h3 id="recvfrom"><a href="#recvfrom" class="headerlink" title="recvfrom"></a>recvfrom</h3><p>发送请求后，便可以使用<code>recvfrom</code>函数接收响应数据了。</p>
 <pre><code class="c">#include &lt;sys/socket.h&gt;
@@ -188,13 +194,13 @@ RETURN VALUE
     When such a datagram is received, the return value is 0.</code></pre>
 <p>接收成功返回接收到的字节数，否则返回-1。当然如何接收字节为0则返回0.</p>
 <h3 id="接收数据"><a href="#接收数据" class="headerlink" title="接收数据"></a>接收数据</h3><pre><code class="c">void recv_nbns_response(int sock)
-&amp;#123;
+&#123;
     struct timeval tv;
     struct sockaddr_in src_addr;
     socklen_t src_len = sizeof(src_addr);
     ssize_t recv_len = 0;
     char res_buf[BUFFER_SIZE];
-    char src_ip[IP_SIZE] = &amp;#123;0&amp;#125;;
+    char src_ip[IP_SIZE] = &#123;0&#125;;
 
     tv.tv_sec = 5;
     tv.tv_usec = 0;
@@ -212,15 +218,15 @@ RETURN VALUE
         (char *)&amp;src_ip, IP_SIZE);
     printf(&quot;recv response from %s : %ld Bytes\n&quot;, src_ip, recv_len);
     show_nbns_response(res_buf);
-&amp;#125;</code></pre>
+&#125;</code></pre>
 <p>该函数通过<code>recvfrom</code>接收数据并存入字符数组<code>res_buf</code>中，同时可以保存发送方的地址信息并通过<code>inet_ntop</code>转换为点分十进制IP地址。最后通过调用函数<code>show_nbns_response</code>打印解析数据。</p>
 <p>接收过程中，要考虑到数据来源的一方不存在的情况，也就是永远收不到数据的情况，比如请求IP地址为<code>192.168.1.10</code>的设备，但此刻该设备关机了。为此，我们需要设置超时时间，通过<code>setsockopt</code>函数可以配置socket相关的可选项，当发生超时时，进行错误处理并退出。</p>
 <h3 id="打印输出"><a href="#打印输出" class="headerlink" title="打印输出"></a>打印输出</h3><p>接收数据后会调用<code>show_nbns_response</code>函数进行打印输出。</p>
 <pre><code class="c">void show_nbns_response(char *buf)
-&amp;#123;
+&#123;
     struct nbns_response_header *res;
     struct nbns_name *pname, *pend;
-    char rname[18] = &amp;#123;0&amp;#125;;
+    char rname[18] = &#123;0&#125;;
     char echar = &#39;\0&#39;;
 
     res = (struct nbns_response_header *)buf;
@@ -255,26 +261,26 @@ RETURN VALUE
     pname = (struct nbns_name *)&amp;buf[sizeof(struct nbns_response_header)];
     pend = pname + res-&gt;num_of_names;
     printf(&quot;---------------------------\n&quot;);
-    for (; pname &lt; pend; pname++ ) &amp;#123;
+    for (; pname &lt; pend; pname++ ) &#123;
         /* ignore the last byte of name*/
         echar = pname-&gt;name[15];
         pname-&gt;name[15] = &#39;\0&#39;;
         printf(&quot;Name: %s&lt;%02x&gt;\n&quot;, pname-&gt;name, echar);
         printf(&quot;Name flags: 0x%04x\n&quot;, ntohs(pname-&gt;flags));
         printf(&quot;---------------------------\n&quot;);
-    &amp;#125;
-&amp;#125;</code></pre>
+    &#125;
+&#125;</code></pre>
 <p>由于不清楚发送方究竟会发送多少组名称，所以先从缓存数组中读取头部信息，然后根据头部信息提供的num_of_names确定名称格式，再逐一打印出来。读取数据的过程就像是收件方接收到信件然后进行阅读一样。</p>
 <p>注意，这里有用到<code>ntohs</code>, <code>ntohl</code>进行字节序的转换，同时有用到decode_name进行名称的解码。</p>
 <h2 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h2><p>最后简单描述下异常处理函数<code>handle_error</code>, 其实很简单，就是在发生错误的情况下关闭资源，打印错误信息，最后退出程序。</p>
 <pre><code class="c">int nbns_sock; /* global value */
 static inline void handle_error(char *msg)
-&amp;#123;
+&#123;
     if (nbns_sock &gt;= 0)
         close(nbns_sock);
     perror(msg);
     exit(EXIT_FAILURE);
-&amp;#125;</code></pre>
+&#125;</code></pre>
 <h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>程序编写完成，使用<code>gcc</code>编译即可，下面给出测试用例↓</p>
 <pre><code class="bash">➜ nbnstat 192.168.1.1
 Send nbns query to 192.168.1.1
@@ -354,8 +360,8 @@ window.valine = new Valine({
   el:'#vcomment',
   notify:notify,
   verify:verify,
-  appId:'',
-  appKey:'',
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
   lang: 'zh-cn',
   placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
   avatar:'identicon',

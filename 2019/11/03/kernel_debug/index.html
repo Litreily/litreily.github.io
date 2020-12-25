@@ -1,4 +1,10 @@
-<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification"><title>watchdog bite导致系统重启问题的调试 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><meta name="generator" content="Hexo 5.0.2"></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">watchdog bite导致系统重启问题的调试</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2019/11/03/kernel_debug/">2019-11-03</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Embedded/">Embedded</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><h2 id="背景说明"><a href="#背景说明" class="headerlink" title="背景说明"></a>背景说明</h2><p>ST在做stress test过程中发现一个bug，DUT会在工作一段时间后重启，重启原因是<code>watchdog bite</code></p>
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>watchdog bite导致系统重启问题的调试 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script><meta name="generator" content="Hexo 5.3.0"></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">watchdog bite导致系统重启问题的调试</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2019/11/03/kernel_debug/">2019-11-03</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Embedded/">Embedded</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><h2 id="背景说明"><a href="#背景说明" class="headerlink" title="背景说明"></a>背景说明</h2><p>ST在做stress test过程中发现一个bug，DUT会在工作一段时间后重启，重启原因是<code>watchdog bite</code></p>
 <pre><code class="txt">[Thu Sep 26 09:21:59.734 2019] Watchdog bark! Now = 831425.568038
 [Thu Sep 26 09:21:59.734 2019] Causing a watchdog bite!
 [Thu Sep 26 09:21:59.734 2019] Configuring Watchdog Timer
@@ -207,14 +213,14 @@ $(eval $(call KernelPackage,dead))</code></pre>
 static DEFINE_SPINLOCK(test_lock);
 
 static int process_test(void *info)
-&amp;#123;
+&#123;
     spin_lock(&amp;test_lock);
     while(1);
     return 0;
-&amp;#125;
+&#125;
 
 static int __init init_3mb_alloc(void)
-&amp;#123;
+&#123;
     struct task_struct *p1, *p2, *p3, *p4;
     printk(&quot;MODULE\tINITIALIZED\n&quot;);
 
@@ -236,12 +242,12 @@ static int __init init_3mb_alloc(void)
     wake_up_process(p4);
 
     return 0;
-&amp;#125;
+&#125;
 
 static void __exit exit_3mb_alloc(void)
-&amp;#123;
+&#123;
     printk(&quot;MODULE\tTERMINATED\n&quot;);
-&amp;#125;
+&#125;
 
 module_init(init_3mb_alloc);
 module_exit(exit_3mb_alloc);
@@ -268,14 +274,14 @@ endif</code></pre>
 <h2 id="打印watchdog-ping相关log"><a href="#打印watchdog-ping相关log" class="headerlink" title="打印watchdog ping相关log"></a>打印watchdog ping相关log</h2><p>编辑以下文件，在watchdog执行ping操作时打印log</p>
 <p>build_dir/target-arm_cortex-a7_uClibc-1.0.14_eabi/linux-ipq806x/linux-3.14.77/drivers/watchdog/qcom-wdt.c</p>
 <pre><code class="c">static int qcom_wdt_ping(struct watchdog_device *wdd)
-&amp;#123;
+&#123;
     struct qcom_wdt *wdt = to_qcom_wdt(wdd);
 
     printk(&quot;********************qcom-wdt-ping1*****************\n&quot;);
     writel(1, wdt-&gt;wdt_reset);
     printk(&quot;********************qcom-wdt-ping2*****************\n&quot;);
     return 0;
-&amp;#125;</code></pre>
+&#125;</code></pre>
 <p>以上<code>printk</code>部分就是打印的log。据此可以生成kernel patch如下：</p>
 <blockquote>
 <p>待修改文件：linux-3.14.77/drivers/watchdog/qcom-wdt.c<br>路径：target/linux/ipq806x/patches_dni-3.14<br>patch：0101-print-watch-ping-log.patch</p>
@@ -283,14 +289,14 @@ endif</code></pre>
 <pre><code class="patch">--- linux-3.14.77.orig/drivers/watchdog/qcom-wdt.c 2019-11-01 10:0:18.332348721 +0800
 +++ linux-3.14.77/drivers/watchdog/qcom-wdt.c 2019-11-01 09:39:58.689575974 +0800
 @@ -253,7 +253,9 @@
- &amp;#123;
+ &#123;
      struct qcom_wdt *wdt = to_qcom_wdt(wdd);
 
 +    printk(&quot;********************qcom-wdt-ping1*****************\n&quot;);
      writel(1, wdt-&gt;wdt_reset);
 +    printk(&quot;********************qcom-wdt-ping2*****************\n&quot;);
      return 0;
- &amp;#125;</code></pre>
+ &#125;</code></pre>
 <h2 id="打开DTS-debug"><a href="#打开DTS-debug" class="headerlink" title="打开DTS debug"></a>打开DTS debug</h2><p>编辑dts（Device Tree Source）的配置文件，使能<code>init_debug</code></p>
 <blockquote>
 <p>待修改文件：linux-3.14.77/arch/arm/boot/dts/qcom-ipq40xx-ap.dj04.1.dtsi<br>路径：target/linux/ipq806x/patches_dni-3.14<br>patch：0102-add-init_debug=4-in-dts.patch</p>
@@ -298,14 +304,14 @@ endif</code></pre>
 <pre><code class="patch">--- linux-3.14.77.orig/arch/arm/boot/dts/qcom-ipq4xx-ap.dk04.1.dtsi 2019-11-01 16:07:53.063327477 +0800
 +++ linux-3.14.77/arch/arm/boot/dts/qcom-ipq4xx-ap.dk04.1.dtsi 2019-11-01 14:05:33.923495413 +0800
 @@ -50,7 +50,7 @@
-+       &amp;#125;;
++       &#125;;
 +
-+       chosen &amp;#123;
++       chosen &#123;
 +-              bootargs-append = &quot; clk_ignore_unused user_debug=0xff&quot;;
 ++              bootargs-append = &quot; clk_ignore_unused user_debug=0xff init_debug=4&quot;;
-+       &amp;#125;;
++       &#125;;
 +
-+ &amp;#125;;</code></pre>
++ &#125;;</code></pre>
 <p><code>init_debug</code>用于打开调试log，上面的patch对应修改的系统文件是<code>/proc/cmdline</code></p>
 <pre><code class="sh">$ cat /proc/cmdline
  rootwait clk_ignore_unused user_debug=0xff init_debug=4</code></pre>
@@ -326,27 +332,27 @@ CONFIG_DGC_FW_ROOTFS_SIZE=&quot;37486592&quot;
 CONFIG_DGC_FW_KERNEL_SIZE_CC=&quot;4456448&quot;
 CONFIG_DGC_FW_ROOTFS_SIZE_CC=&quot;37486592&quot;</code></pre>
 <h3 id="修改kernel-patch"><a href="#修改kernel-patch" class="headerlink" title="修改kernel patch"></a>修改kernel patch</h3><p>patch: kernel/patches_dni/0012-fix-issue-after-disable-usb-rootfs-checksum-error.patch</p>
-<pre><code class="patch">      &amp;#123; 0x0a600000, 0x02800000, &quot;firmware&quot; &amp;#125;,
- -    &amp;#123; 0x0a600000, 0x003c0000, &quot;kernel&quot; &amp;#125;,
- -    &amp;#123; 0x0a9c0000, 0x02440000, &quot;rootfs&quot; &amp;#125;,
--+    &amp;#123; 0x0a600000, 0x003c0000, &quot;kernel&quot; &amp;#125;,
--+    &amp;#123; 0x0a9c0000, 0x02440000, &quot;rootfs&quot; &amp;#125;,
-++    &amp;#123; 0x0a600000, 0x00440000, &quot;kernel&quot; &amp;#125;,
-++    &amp;#123; 0x0aa40000, 0x023c0000, &quot;rootfs&quot; &amp;#125;,
-      &amp;#123; 0x0ce00000, 0x03200000, &quot;reserved&quot; &amp;#125;,</code></pre>
+<pre><code class="patch">      &#123; 0x0a600000, 0x02800000, &quot;firmware&quot; &#125;,
+ -    &#123; 0x0a600000, 0x003c0000, &quot;kernel&quot; &#125;,
+ -    &#123; 0x0a9c0000, 0x02440000, &quot;rootfs&quot; &#125;,
+-+    &#123; 0x0a600000, 0x003c0000, &quot;kernel&quot; &#125;,
+-+    &#123; 0x0a9c0000, 0x02440000, &quot;rootfs&quot; &#125;,
+++    &#123; 0x0a600000, 0x00440000, &quot;kernel&quot; &#125;,
+++    &#123; 0x0aa40000, 0x023c0000, &quot;rootfs&quot; &#125;,
+      &#123; 0x0ce00000, 0x03200000, &quot;reserved&quot; &#125;,</code></pre>
 <h2 id="watchdog相关指令"><a href="#watchdog相关指令" class="headerlink" title="watchdog相关指令"></a>watchdog相关指令</h2><h3 id="禁用watchdog的硬件重启功能"><a href="#禁用watchdog的硬件重启功能" class="headerlink" title="禁用watchdog的硬件重启功能"></a>禁用watchdog的硬件重启功能</h3><pre><code class="sh">devmem 0x0B017008 w 0x0</code></pre>
 <p>说明：禁用watchdog的硬件重启功能可以防止kernel crash后自动重启，配合ftrace及其它调试信息能方便分析问题。</p>
 <h3 id="watchdog软件控制指令"><a href="#watchdog软件控制指令" class="headerlink" title="watchdog软件控制指令"></a>watchdog软件控制指令</h3><pre><code class="sh"># To query watchdog status
 ubus call system watchdog
 
 # To stop watchdog
-ubus call system watchdog &#39;&amp;#123;&quot;stop&quot;: true&amp;#125;&#39;
+ubus call system watchdog &#39;&#123;&quot;stop&quot;: true&#125;&#39;
 
 # To start watchdog
-ubus call system watchdog &#39;&amp;#123;&quot;stop&quot;: false&amp;#125;&#39;
+ubus call system watchdog &#39;&#123;&quot;stop&quot;: false&#125;&#39;
 
 # To configure watchdog timeout as 20 seconds (default is 30 seconds)
-ubus call system watchdog &#39;&amp;#123;&quot;timeout&quot;: 20&amp;#125;&#39;</code></pre>
+ubus call system watchdog &#39;&#123;&quot;timeout&quot;: 20&#125;&#39;</code></pre>
 <p>说明：在没有禁用watchdog硬件功能时，如果使用<code>ubus</code>停止<code>watchdog</code>，系统会在设定的超时时间(默认30s)后自动重启。</p>
 <h2 id="测试脚本"><a href="#测试脚本" class="headerlink" title="测试脚本"></a>测试脚本</h2><p>启用<code>ftrace</code>调试功能除了需要修改配置文件外，还要对<code>/sys/kernel/debug/tracing/</code>目录的文件进行相关修改才能生效。下面是在测试trial FW时用到的测试脚本，用于获取必要的调试信息。</p>
 <pre><code class="sh">#!/bin/sh
@@ -362,9 +368,9 @@ devmem 0x0B017008 w 0x0
 ubus call system watchdog
 
 # other related commands
-#   ubus call system watchdog &#39;&amp;#123;&quot;stop&quot;: true&amp;#125;&#39;
-#   ubus call system watchdog &#39;&amp;#123;&quot;stop&quot;: false&amp;#125;&#39;
-#   ubus call system watchdog &#39;&amp;#123;&quot;timeout&quot;: 20&amp;#125;&#39;
+#   ubus call system watchdog &#39;&#123;&quot;stop&quot;: true&#125;&#39;
+#   ubus call system watchdog &#39;&#123;&quot;stop&quot;: false&#125;&#39;
+#   ubus call system watchdog &#39;&#123;&quot;timeout&quot;: 20&#125;&#39;
 
 #********************************************#
 # enable ftrace
@@ -439,7 +445,7 @@ Configuring Watchdog Timer</code></pre>
 ++void __nprintf(const char *fmt, ...);
 ++/* use this &#39;__nprintf&#39; to print message */
 ++void __nprintf(const char *fmt, ...)
-++&amp;#123;
+++&#123;
 ++    va_list ap;
 ++    static FILE *filp;
 ++
@@ -450,15 +456,15 @@ Configuring Watchdog Timer</code></pre>
 ++    vfprintf(filp, fmt, ap);
 ++    fputs(&quot;\n&quot;, filp);
 ++    va_end(ap);
-++&amp;#125;
+++&#125;
 ++
 + void watchdog_ping(void)
-+ &amp;#123;
++ &#123;
 +     DEBUG(4, &quot;Ping\n&quot;);
 ++    __nprintf(&quot;[%s:%d] Ping\n&quot;, __func__, __LINE__);
 +     if (wdt_fd &gt;= 0 &amp;&amp; write(wdt_fd, &quot;X&quot;, 1) &lt; 0)
 +         ERROR(&quot;WDT failed to write: %s\n&quot;, strerror(errno));
-+ &amp;#125;</code></pre>
++ &#125;</code></pre>
 <p>再次重现可以看到以下console log</p>
 <pre><code class="log">124809:[Mon Jan 13 18:12:48.754 2020] [watchdog_ping:54] Ping
 124810:[Mon Jan 13 18:12:48.754 2020] *************qcom-wdt-ping1*******************
@@ -474,7 +480,7 @@ Configuring Watchdog Timer</code></pre>
 <p>此时为了确定脚本执行过程中发生了什么异常，我加了许多log，然后定位到<code>ssmtp</code>执行时间过长，为此，到了接下来的最后一步。</p>
 <h4 id="strace-ssmtp"><a href="#strace-ssmtp" class="headerlink" title="strace ssmtp"></a>strace ssmtp</h4><p>修改脚本<code>send_email_alert</code>，在执行ssmtp前添加<code>strace</code>，追踪代码执行过程。</p>
 <pre><code class="log">[Tue Jan 14 16:08:44.046 2020] socket(PF_INET, SOCK_STREAM, IPPROTO_TCP) = 5
-[Tue Jan 14 16:08:44.046 2020] connect(5, &amp;#123;sa_family=AF_INET, sin_port=htons(25), sin_addr=inet_addr(&quot;139.175.54.240&quot;)&amp;#125;, 16</code></pre>
+[Tue Jan 14 16:08:44.046 2020] connect(5, &#123;sa_family=AF_INET, sin_port=htons(25), sin_addr=inet_addr(&quot;139.175.54.240&quot;)&#125;, 16</code></pre>
 <p>可以发现进程卡死在connect部分，最终分析出访问gmail时连接超时，导致procd hang住，无法正常发送watchdog ping，进而引发reboot。</p>
 <h3 id="Root-Cause"><a href="#Root-Cause" class="headerlink" title="Root Cause"></a>Root Cause</h3><p>在启用block site功能和send_email_alert功能后，访问一个被路由器block的网站，此时内核模块会向procd进程发送一个信号，procd接收信号后会后通过<code>system</code>函数执行一个发送邮件的指令，但是当发送的对象是gmail时，由于中国网络无法直接访问google，导致长时间无法连接，最终导致procd hang住，并且无法发送watchdog ping，最终导致watchdog等待超时进而重启设备。</p>
 <p>简言之：<strong>邮件发送超时导致procd hang住</strong></p>
@@ -514,8 +520,8 @@ window.valine = new Valine({
   el:'#vcomment',
   notify:notify,
   verify:verify,
-  appId:'',
-  appKey:'',
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
   lang: 'zh-cn',
   placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
   avatar:'identicon',

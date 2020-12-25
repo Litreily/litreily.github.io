@@ -1,4 +1,10 @@
-<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification"><title>Setup dhcpd/dhcpdv6 server | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><meta name="generator" content="Hexo 5.0.2"></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">Setup dhcpd/dhcpdv6 server</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2020/01/17/dhcpd_server/">2020-01-17</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Network/">Network</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>搭建DHCP server在许多网络应用中是非常必要的，尤其是测试IPv6相关的功能时，本文就来介绍下针对IPv4和IPv6该如何搭建DHCP server.</p>
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>Setup dhcpd/dhcpdv6 server | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script><meta name="generator" content="Hexo 5.3.0"></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">Setup dhcpd/dhcpdv6 server</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2020/01/17/dhcpd_server/">2020-01-17</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Network/">Network</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>搭建DHCP server在许多网络应用中是非常必要的，尤其是测试IPv6相关的功能时，本文就来介绍下针对IPv4和IPv6该如何搭建DHCP server.</p>
 <h2 id="Install-dhcpd-server"><a href="#Install-dhcpd-server" class="headerlink" title="Install dhcpd server"></a>Install dhcpd server</h2><p>首先通过<code>apt</code>安装<code>isc-dhcp-server</code></p>
 <pre><code class="bash">sudo apt install isc-dhcp-server</code></pre>
 <h2 id="Setup-dhcpd"><a href="#Setup-dhcpd" class="headerlink" title="Setup dhcpd"></a>Setup dhcpd</h2><h3 id="Config-interfaces"><a href="#Config-interfaces" class="headerlink" title="Config interfaces"></a>Config interfaces</h3><p>通过<code>ifconfig</code>获取以太网口的接口名称, 下面省略了loopback接口<code>lo</code>，后面也是一样默认省略。</p>
@@ -16,11 +22,11 @@ INTERFACESv4=&quot;enp4s0f0&quot;
 INTERFACESv6=&quot;enp4s0f0&quot;</code></pre>
 <h3 id="Config-dhcpd-server"><a href="#Config-dhcpd-server" class="headerlink" title="Config dhcpd server"></a>Config dhcpd server</h3><p>首先针对IPv4配置dhcpd server，配置文件为<code>/etc/dhcp/dhcpd.conf</code>, 配置内容包括网段，子网掩码，默认路由，默认DNS</p>
 <pre><code class="bash">$ tail -n 5 /etc/dhcp/dhcpd.conf
-subnet 10.0.0.0 netmask 255.255.255.0 &amp;#123;
+subnet 10.0.0.0 netmask 255.255.255.0 &#123;
     range 10.0.0.10 10.0.0.99;
     option routers 10.0.0.138;
     option domain-name-servers 10.0.0.138;
-&amp;#125;</code></pre>
+&#125;</code></pre>
 <h3 id="Add-static-ipv4"><a href="#Add-static-ipv4" class="headerlink" title="Add static ipv4"></a>Add static ipv4</h3><p>此时只要再给网口设置一个静态IP就可以了</p>
 <pre><code class="bash">sudo ifconfig enp4s0f0 10.0.0.138 netmask 255.255.255.0</code></pre>
 <h3 id="Start-isc-dhcp-server"><a href="#Start-isc-dhcp-server" class="headerlink" title="Start isc-dhcp-server"></a>Start isc-dhcp-server</h3><pre><code class="bash">sudo service isc-dhcp-server start
@@ -49,11 +55,11 @@ sudo service isc-dhcp-server status</code></pre>
 <h2 id="Setup-dhcpdv6"><a href="#Setup-dhcpdv6" class="headerlink" title="Setup dhcpdv6"></a>Setup dhcpdv6</h2><p>配置IPv6的dhcpd与IPv4类似，上面已经配置过<code>/etc/default/interfaces</code>，此处省略</p>
 <h3 id="config-dhcpdv6-server"><a href="#config-dhcpdv6-server" class="headerlink" title="config dhcpdv6 server"></a>config dhcpdv6 server</h3><p>配置文件<code>/etc/dhcp/dhcpd6.conf</code></p>
 <pre><code class="bash">$ tail -n 5 /etc/dhcp/dhcpd6.conf
-subnet6 2001:470:19:1316::/64 &amp;#123;
+subnet6 2001:470:19:1316::/64 &#123;
     range6 2001:470:19:1316::100 2001:470:19:1316::0fff;
     option dhcp6.name-servers fe80::226a:8aff:fe6c:0fda;
     prefix6 2001:470:19:1316:2:: 2001:470:19:1316:0fff:: /80;
-&amp;#125;</code></pre>
+&#125;</code></pre>
 <p>上面配置了IPv6的网段，分配范围，默认dns，以及IPv6前缀</p>
 <h3 id="Add-static-IPv6"><a href="#Add-static-IPv6" class="headerlink" title="Add static IPv6"></a>Add static IPv6</h3><p>对于IPv6，需要添加两个ip，一个以<code>fe80::</code>开头的本地ip，另外一个静态global ip</p>
 <pre><code class="bash">sudo ifconfig enp4s0f0 inet6 add 2001:470:19:1316::1/64
@@ -92,7 +98,7 @@ IPv4=10.0.0.138
 IPv6=2001:470:19:1316::1/64
 IPv6_local=fe80::226a:8aff:fe6c:fda/64
 
-stop_dhcp() &amp;#123;
+stop_dhcp() &#123;
     # stop services
     sudo service isc-dhcp-server stop
     sudo service isc-dhcp-server6 stop
@@ -107,9 +113,9 @@ stop_dhcp() &amp;#123;
         sudo ip addr delete $IPv6 dev enp4s0f0
         sudo ip addr delete $IPv6_local dev enp4s0f0
     fi
-&amp;#125;
+&#125;
 
-start_dhcp() &amp;#123;
+start_dhcp() &#123;
     # setup default ip
     if [ $IFCONFIG -eq 1 ]; then
         sudo ifconfig $INTERFACE $IPv4 netmask 255.255.255.0
@@ -126,7 +132,7 @@ start_dhcp() &amp;#123;
     [ $? -eq 0 ] &amp;&amp; echo &quot;start dhcpd success!&quot;
     sudo service isc-dhcp-server6 start
     [ $? -eq 0 ] &amp;&amp; echo &quot;start dhcpdv6 success!&quot;
-&amp;#125;
+&#125;
 
 case &quot;$1&quot; in
     &quot;stop&quot;)
@@ -162,8 +168,8 @@ window.valine = new Valine({
   el:'#vcomment',
   notify:notify,
   verify:verify,
-  appId:'',
-  appKey:'',
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
   lang: 'zh-cn',
   placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
   avatar:'identicon',

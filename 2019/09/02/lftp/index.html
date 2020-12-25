@@ -1,4 +1,10 @@
-<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification"><title>使用正则模糊匹配的ftp文件传输 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><meta name="generator" content="Hexo 5.0.2"></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">使用正则模糊匹配的ftp文件传输</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2019/09/02/lftp/">2019-09-02</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Linux/">Linux</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>通常而言，FTP传输过程中，客户端在完成账户认证后，需要指定具体的文件路径方能下载或删除服务器端的文件。但是在使用命令行指令去操作ftp数据时，如果每次都要输入完整的路径就太麻烦了，而且如果想要同时下载多个文件还需逐个执行下载指令，那有什么方法可以通过<strong>正则表达式</strong>去完成模糊匹配和批量下载呢？本文就来介绍一下FTP数据传输的常用操作及正则匹配的实现方法。</p>
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>使用正则模糊匹配的ftp文件传输 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script><meta name="generator" content="Hexo 5.3.0"></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">使用正则模糊匹配的ftp文件传输</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2019/09/02/lftp/">2019-09-02</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Linux/">Linux</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>通常而言，FTP传输过程中，客户端在完成账户认证后，需要指定具体的文件路径方能下载或删除服务器端的文件。但是在使用命令行指令去操作ftp数据时，如果每次都要输入完整的路径就太麻烦了，而且如果想要同时下载多个文件还需逐个执行下载指令，那有什么方法可以通过<strong>正则表达式</strong>去完成模糊匹配和批量下载呢？本文就来介绍一下FTP数据传输的常用操作及正则匹配的实现方法。</p>
 <p><img src="/assets/ftp/ftp.png" alt="ftp diagram"></p>
 <a id="more"></a>
 
@@ -58,12 +64,12 @@ lftp username@host:~&gt;</code></pre>
 <pre><code class="bash">lftp -u &quot;$ftp_user,$ftp_pass&quot;</code></pre>
 <p>如果将密码存储在某个文件<code>~/local/etc/ftp_pass</code>，那么可以在脚本中使用一个函数进行获取。</p>
 <pre><code class="bash"> get_ftp_pass()
- &amp;#123;
+ &#123;
      pass_file=$HOME/local/etc/ftp_pass
      [ -f $pass_file ] &amp;&amp; ftp_pass=$(cat $pass_file)
      test -z &quot;$ftp_pass&quot; \
          &amp;&amp; read -rs -p &quot;Please input password of your FTP user $ftp_user: &quot; ftp_pass
- &amp;#125;</code></pre>
+ &#125;</code></pre>
 <h2 id="通用操作"><a href="#通用操作" class="headerlink" title="通用操作"></a>通用操作</h2><p>如果完全使用<code>lftp</code>完成ftp传输的各个功能，那么可以在<code>shell</code>脚本中使用以下模板完成各个指令操作：</p>
 <pre><code class="bash">lftp -u &quot;$ftp_user,$ftp_pass&quot; $ftp_host &lt;&lt;-EOF
     COMMAND1 [Args1]
@@ -72,18 +78,18 @@ EOF</code></pre>
 <h2 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a>文件上传</h2><p>由于文件上传是将本地文件传输至ftp server，那么通常情况不需要正则匹配，本地文件选择通过shell的tab自动补全即可做到。</p>
 <p>使用<code>lftp</code>的<code>put $file -o $remotefile</code>可将本地文件<code>$file</code>传输至ftp server并重命名为<code>$remotefile</code>，<code>-o</code>参数用于指定server端的文件名。</p>
 <pre><code class="bash">ftp_put_file()
-&amp;#123;
+&#123;
     get_ftp_pass
 
     prefix=$(date &#39;+%Y%m%d%H%M%S-&#39;)
-    remotefile=$&amp;#123;prefix&amp;#125;$&amp;#123;file##*/&amp;#125;
+    remotefile=$&#123;prefix&#125;$&#123;file##*/&#125;
     subdir=$(date &#39;+%Y%m%d&#39;)
 
     lftp -u &quot;$ftp_user,$ftp_pass&quot; $ftp_host &lt;&lt;-EOF
              mkdir -p -f $subdir
-         cd $subdir &amp;&amp; put $&amp;#123;file##*/&amp;#125; -o $&amp;#123;remotefile&amp;#125;
+         cd $subdir &amp;&amp; put $&#123;file##*/&#125; -o $&#123;remotefile&#125;
      EOF
-&amp;#125;</code></pre>
+&#125;</code></pre>
 <p>如上代码所示，当我们想要<strong>将文件传输至服务端子目录</strong>时，需要通过<code>mkdir</code>和<code>cd</code>指令完成目录的创建和切换。在本例中，我们将每次上传的文件都放置在了以当天日期命名所在的文件夹，并给原有文件名加上了时间戳前缀。</p>
 <p>此处需要普及两个知识点：</p>
 <ul>
@@ -112,21 +118,21 @@ If the redirection operator is `&lt;&lt;-`, then all leading tab characters are 
 <p>简单点说，<code>&lt;&lt;-EOF</code>中的连接符<code>-</code>保证下面语句中的每行开头的<code>tab</code>分隔符会被忽略，但又可以保证代码的自然美观。如果下面语句中开头的<code>tab</code>键是空格替换的，那么有可能会报语法错误，这也是需要注意的。</p>
 <h2 id="文件下载"><a href="#文件下载" class="headerlink" title="文件下载"></a>文件下载</h2><p>文件下载是本文重点，因为我们将完成ftp服务器端文件的模糊匹配下载。在讲述模糊匹配下载之前，先讲讲使用<code>lftp</code>实现下载的方法。</p>
 <pre><code class="bash">ftp_get_file()
-&amp;#123;
+&#123;
     get_ftp_pass
 
-    if test &quot;$&amp;#123;file%/*&amp;#125;&quot; = &quot;$&amp;#123;file&amp;#125;&quot;; then
+    if test &quot;$&#123;file%/*&#125;&quot; = &quot;$&#123;file&#125;&quot;; then
         lftp -u &quot;$ftp_user,$ftp_pass&quot; $ftp_host &lt;&lt;-EOF
             set xfer:clobber on
-            get $&amp;#123;file&amp;#125;
+            get $&#123;file&#125;
         EOF
     else
         lftp -u &quot;$ftp_user,$ftp_pass&quot; $ftp_host &lt;&lt;-EOF
             set xfer:clobber on
-            cd $&amp;#123;file%/*&amp;#125; &amp;&amp; get $&amp;#123;file##*/&amp;#125;
+            cd $&#123;file%/*&#125; &amp;&amp; get $&#123;file##*/&#125;
         EOF
     fi
-&amp;#125;</code></pre>
+&#125;</code></pre>
 <p>以上实现中，分带有子目录和不带子目录两种情况，指令<code>set xfer:clobber on</code>是为了解决重复下载时提示文件已存在的问题。这种方法简单，但是每次只能下载一个确切名称的文件。</p>
 <p>好了，接下来介绍能够实现模糊匹配及批量下载的方法，思路其实很简单：</p>
 <ol>
@@ -137,37 +143,37 @@ If the redirection operator is `&lt;&lt;-`, then all leading tab characters are 
 </ol>
 <p>根据这个思路编写代码如下：</p>
 <pre><code class="bash">ftp_get_file()
-&amp;#123;
+&#123;
     get_ftp_pass
 
     # get subdir and regex pattern of filenames
     result=$(echo &quot;$file&quot; |grep &quot;/&quot;)
     if [ &quot;x$result&quot; != &quot;x&quot; ]; then
         # split file to directory and re pattern of files
-        subdir=$&amp;#123;file%/*&amp;#125;/
-        re_pattern=$&amp;#123;file##*/&amp;#125;
+        subdir=$&#123;file%/*&#125;/
+        re_pattern=$&#123;file##*/&#125;
     else
         subdir=&quot;/&quot;
         re_pattern=$file
     fi
 
     # 1. curl get file list
-    files=$(curl -s -u $&amp;#123;ftp_user&amp;#125;:$&amp;#123;ftp_pass&amp;#125; $&amp;#123;ftp_host&amp;#125;/$&amp;#123;subdir&amp;#125;)
+    files=$(curl -s -u $&#123;ftp_user&#125;:$&#123;ftp_pass&#125; $&#123;ftp_host&#125;/$&#123;subdir&#125;)
     [ $? -eq 67 ] &amp;&amp; echo &quot;curl: password error!&quot; &amp;&amp; exit 2
 
     # 2. grep with regex to get files which need download
-    files=$(echo &quot;$files&quot; |awk &#39;&amp;#123;print $4&amp;#125;&#39; |grep &quot;$&amp;#123;re_pattern&amp;#125;&quot;)
+    files=$(echo &quot;$files&quot; |awk &#39;&#123;print $4&#125;&#39; |grep &quot;$&#123;re_pattern&#125;&quot;)
     [ &quot;x$files&quot; = &quot;x&quot; ] &amp;&amp; echo &quot;Not Found Files&quot; &amp;&amp; exit 3
 
     file_nums=$(echo &quot;$files&quot; |wc -l)
-    [ ! $file_nums -eq 1 ] &amp;&amp; &amp;#123;
+    [ ! $file_nums -eq 1 ] &amp;&amp; &#123;
         files=$(echo &quot;$files&quot; |xargs)
-        files=&quot;&amp;#123;$&amp;#123;files//\ /,&amp;#125;&amp;#125;&quot;
-    &amp;#125;
+        files=&quot;&#123;$&#123;files//\ /,&#125;&#125;&quot;
+    &#125;
 
     # 3. wget files
-    eval wget --ftp-user=$&amp;#123;ftp_user&amp;#125; --ftp-password=$&amp;#123;ftp_pass&amp;#125; $&amp;#123;ftp_host&amp;#125;/$&amp;#123;subdir&amp;#125;$&amp;#123;files&amp;#125; -nv
-&amp;#125;</code></pre>
+    eval wget --ftp-user=$&#123;ftp_user&#125; --ftp-password=$&#123;ftp_pass&#125; $&#123;ftp_host&#125;/$&#123;subdir&#125;$&#123;files&#125; -nv
+&#125;</code></pre>
 <p>首先从带有模糊匹配的文件名中分隔出远程目录及文件名的正则表达式，然后根据预定的思路逐步完成文件匹配及下载。这里需要注意的几个问题有：</p>
 <ol>
 <li><code>curl</code>及<code>wget</code>有各自的认证参数：<ul>
@@ -185,123 +191,123 @@ If the redirection operator is `&lt;&lt;-`, then all leading tab characters are 
 </ol>
 <h2 id="文件删除"><a href="#文件删除" class="headerlink" title="文件删除"></a>文件删除</h2><p>对于文件删除，由于使用较少，所以没有对其实现模糊匹配，当然想要实现也是可以的。这里仅给出最基本的删除方式：</p>
 <pre><code class="bash">ftp_del_file()
-&amp;#123;
+&#123;
     get_ftp_pass
 
-    if test &quot;$&amp;#123;file%/*&amp;#125;&quot; = &quot;$&amp;#123;file&amp;#125;&quot;; then
+    if test &quot;$&#123;file%/*&#125;&quot; = &quot;$&#123;file&#125;&quot;; then
         lftp -u &quot;$ftp_user,$ftp_pass&quot; $ftp_host &lt;&lt;-EOF
-            rm -rf $&amp;#123;file&amp;#125;
+            rm -rf $&#123;file&#125;
         EOF
     else
         lftp -u &quot;$ftp_user,$ftp_pass&quot; $ftp_host &lt;&lt;-EOF
-            cd $&amp;#123;file%/*&amp;#125; &amp;&amp; rm -rf $&amp;#123;file##*/&amp;#125;
+            cd $&#123;file%/*&#125; &amp;&amp; rm -rf $&#123;file##*/&#125;
         EOF
     fi
-&amp;#125;</code></pre>
+&#125;</code></pre>
 <p>到此，常见的ftp操作都已经介绍完了。</p>
 <h2 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h2><p>完整代码<code>fctl</code>如下：</p>
 <pre><code class="bash">#!/bin/bash
 
-cmd=&quot;$&amp;#123;0##*/&amp;#125;&quot;
+cmd=&quot;$&#123;0##*/&#125;&quot;
 
 ftp_host=&quot;ftp://127.0.0.1&quot;
 
-test -z &quot;$ftp_user&quot; &amp;&amp; ftp_user=&quot;$&amp;#123;USER&amp;#125;&quot;
+test -z &quot;$ftp_user&quot; &amp;&amp; ftp_user=&quot;$&#123;USER&#125;&quot;
 
 #usage()
-#&amp;#123;
+#&#123;
 #  cat &lt;&lt;-EOF &gt;&amp;2
 #  Usage: fput &lt;file&gt;
 #         fget &lt;file/dir&gt;
 #         fdel &lt;file/dir&gt;
 #  EOF
-#&amp;#125;
+#&#125;
 
 get_ftp_pass()
-&amp;#123;
+&#123;
     pass_file=$HOME/local/etc/ftp_pass
     [ -f $pass_file ] &amp;&amp; ftp_pass=$(cat $pass_file)
 
     test -z &quot;$ftp_pass&quot; \
         &amp;&amp; read -rs -p &quot;Please input password of your FTP user $ftp_user: &quot; ftp_pass
-&amp;#125;
+&#125;
 
 ftp_put_file()
-&amp;#123;
+&#123;
     get_ftp_pass
 
     prefix=$(date &#39;+%Y%m%d%H%M%S-&#39;)
-    remotefile=$&amp;#123;prefix&amp;#125;$&amp;#123;file##*/&amp;#125;
+    remotefile=$&#123;prefix&#125;$&#123;file##*/&#125;
     subdir=$(date &#39;+%Y%m%d&#39;)
 
     if test -z &quot;$subdir&quot;; then
         lftp -u &quot;$ftp_user,$ftp_pass&quot; $ftp_host &lt;&lt;-EOF
-            put $&amp;#123;file##*/&amp;#125; -o $&amp;#123;remotefile&amp;#125;
+            put $&#123;file##*/&#125; -o $&#123;remotefile&#125;
         EOF
     else
         lftp -u &quot;$ftp_user,$ftp_pass&quot; $ftp_host &lt;&lt;-EOF
             mkdir -p -f $subdir
-            cd $subdir &amp;&amp; put $&amp;#123;file##*/&amp;#125; -o $&amp;#123;remotefile&amp;#125;
+            cd $subdir &amp;&amp; put $&#123;file##*/&#125; -o $&#123;remotefile&#125;
         EOF
     fi
-&amp;#125;
+&#125;
 
 ftp_get_file()
-&amp;#123;
+&#123;
     get_ftp_pass
 
     result=$(echo &quot;$file&quot; |grep &quot;/&quot;)
     if [ &quot;x$result&quot; != &quot;x&quot; ]; then
         # split file to directory and re pattern of files
-        subdir=$&amp;#123;file%/*&amp;#125;/
-        re_pattern=$&amp;#123;file##*/&amp;#125;
+        subdir=$&#123;file%/*&#125;/
+        re_pattern=$&#123;file##*/&#125;
     else
         subdir=&quot;/&quot;
         re_pattern=$file
     fi
 
     # 1. curl get file list
-    files=$(curl -s -u $&amp;#123;ftp_user&amp;#125;:$&amp;#123;ftp_pass&amp;#125; $&amp;#123;ftp_host&amp;#125;/$&amp;#123;subdir&amp;#125;)
+    files=$(curl -s -u $&#123;ftp_user&#125;:$&#123;ftp_pass&#125; $&#123;ftp_host&#125;/$&#123;subdir&#125;)
     [ $? -eq 67 ] &amp;&amp; echo &quot;curl: password error!&quot; &amp;&amp; exit 2
 
     # 2. grep with regex to get files which need download
-    files=$(echo &quot;$files&quot; |awk &#39;&amp;#123;print $4&amp;#125;&#39; |grep &quot;$&amp;#123;re_pattern&amp;#125;&quot;)
+    files=$(echo &quot;$files&quot; |awk &#39;&#123;print $4&#125;&#39; |grep &quot;$&#123;re_pattern&#125;&quot;)
     [ &quot;x$files&quot; = &quot;x&quot; ] &amp;&amp; echo &quot;Not Found Files&quot; &amp;&amp; exit 3
 
     file_nums=$(echo &quot;$files&quot; |wc -l)
-    [ ! $file_nums -eq 1 ] &amp;&amp; &amp;#123;
+    [ ! $file_nums -eq 1 ] &amp;&amp; &#123;
         files=$(echo &quot;$files&quot; |xargs)
-        files=&quot;&amp;#123;$&amp;#123;files//\ /,&amp;#125;&amp;#125;&quot;
-    &amp;#125;
+        files=&quot;&#123;$&#123;files//\ /,&#125;&#125;&quot;
+    &#125;
 
     # 3. wget files
-    eval wget --ftp-user=$&amp;#123;ftp_user&amp;#125; --ftp-password=$&amp;#123;ftp_pass&amp;#125; $&amp;#123;ftp_host&amp;#125;/$&amp;#123;subdir&amp;#125;$&amp;#123;files&amp;#125; -nv
-&amp;#125;
+    eval wget --ftp-user=$&#123;ftp_user&#125; --ftp-password=$&#123;ftp_pass&#125; $&#123;ftp_host&#125;/$&#123;subdir&#125;$&#123;files&#125; -nv
+&#125;
 
 ftp_del_file()
-&amp;#123;
+&#123;
     get_ftp_pass
 
-    if test &quot;$&amp;#123;file%/*&amp;#125;&quot; = &quot;$&amp;#123;file&amp;#125;&quot;; then
+    if test &quot;$&#123;file%/*&#125;&quot; = &quot;$&#123;file&#125;&quot;; then
         lftp -u &quot;$ftp_user,$ftp_pass&quot; $ftp_host &lt;&lt;-EOF
-            rm -rf $&amp;#123;file&amp;#125;
+            rm -rf $&#123;file&#125;
         EOF
     else
         lftp -u &quot;$ftp_user,$ftp_pass&quot; $ftp_host &lt;&lt;-EOF
-            cd $&amp;#123;file%/*&amp;#125; &amp;&amp; rm -rf $&amp;#123;file##*/&amp;#125;
+            cd $&#123;file%/*&#125; &amp;&amp; rm -rf $&#123;file##*/&#125;
         EOF
     fi
-&amp;#125;
+&#125;
 
 case &quot;$cmd&quot; in
     &quot;fput&quot;)
-        file=&quot;$&amp;#123;1:?missing arg 1 to specify file path!!!&amp;#125;&quot;
+        file=&quot;$&#123;1:?missing arg 1 to specify file path!!!&#125;&quot;
         cd &quot;$(dirname $(readlink -f $file))&quot; &amp;&amp; ftp_put_file ;;
     &quot;fget&quot;)
-        file=&quot;$&amp;#123;1:?missing arg 1 to specify file path!!!&amp;#125;&quot;
+        file=&quot;$&#123;1:?missing arg 1 to specify file path!!!&#125;&quot;
         ftp_get_file ;;
     &quot;fdel&quot;)
-        file=&quot;$&amp;#123;1:?missing arg 1 to specify file path!!!&amp;#125;&quot;
+        file=&quot;$&#123;1:?missing arg 1 to specify file path!!!&#125;&quot;
         ftp_del_file ;;
 esac</code></pre>
 <h2 id="使用示例"><a href="#使用示例" class="headerlink" title="使用示例"></a>使用示例</h2><p>使用<code>ln -s</code>创建<code>fput</code>,<code>fget</code>,<code>fdel</code>三个软链接，便可通过这三个别名完成对应的上传、下载和删除操作了。</p>
@@ -351,8 +357,8 @@ window.valine = new Valine({
   el:'#vcomment',
   notify:notify,
   verify:verify,
-  appId:'',
-  appKey:'',
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
   lang: 'zh-cn',
   placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
   avatar:'identicon',

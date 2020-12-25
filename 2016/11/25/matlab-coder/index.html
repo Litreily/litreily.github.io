@@ -1,4 +1,10 @@
-<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification"><title>Matlab - 经VS将.m文件转换为.dll文件 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><meta name="generator" content="Hexo 5.0.2"></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">Matlab - 经VS将.m文件转换为.dll文件</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2016/11/25/matlab-coder/">2016-11-25</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Matlab/">Matlab</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>在使用 LabVIEW 进行软件开发的过程中，有时需要使用 Matlab 强大的数据处理功能，以提高开发效率，此时可以通过 Matlab Coder 将 Matlab 中的函数转换为 C/C++ 源文件，然后通过 Visual Studio 将这些源文件封装为 .dll 文件，最后通过 LabVIEW 调用库函数实现对 Matlab 函数的调用。</p>
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>Matlab - 经VS将.m文件转换为.dll文件 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script><meta name="generator" content="Hexo 5.3.0"></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">Matlab - 经VS将.m文件转换为.dll文件</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2016/11/25/matlab-coder/">2016-11-25</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Language/">Language</a>&nbsp;&bull;&nbsp;<a href="/categories/Language/Matlab/">Matlab</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>在使用 LabVIEW 进行软件开发的过程中，有时需要使用 Matlab 强大的数据处理功能，以提高开发效率，此时可以通过 Matlab Coder 将 Matlab 中的函数转换为 C/C++ 源文件，然后通过 Visual Studio 将这些源文件封装为 .dll 文件，最后通过 LabVIEW 调用库函数实现对 Matlab 函数的调用。</p>
 <p>本文将通过一个实例讲述以上功能的实现过程，大体步骤如下：</p>
 <ol>
 <li>Matlab 编写代码<br> 1.1 编写 .m 函数<br> 1.2 使用 Coder 生成 C/C++ 文件</li>
@@ -61,7 +67,10 @@ end</code></pre>
 </ul>
 <ol>
 <li>对于大部分变量，数据长度为 1×1</li>
-<li>对于一维<strong>向量、数组</strong><br>2.1 固定长度的变量：直接设定具体值（如：一个星期每天的工作时间，可设为 1×7）<br>2.2 不定长度但有上限的变量：设定 1×:100 （假定上限值为 100）<br>2.3 不定长度上限不定的变量：设定 1×:inf （inf代表无限）</li>
+<li>对于一维<strong>向量、数组</strong></li>
+<li>1 固定长度的变量：直接设定具体值（如：一个星期每天的工作时间，可设为 1×7）</li>
+<li>2 不定长度但有上限的变量：设定 1×:100 （假定上限值为 100）</li>
+<li>3 不定长度上限不定的变量：设定 1×:inf （inf代表无限）</li>
 <li>二维数组设定规则与一维数组类似</li>
 </ol>
 <p><img src="/assets/matlab/coder3_2.png" alt="Input length"></p>
@@ -133,13 +142,13 @@ getFreq</code></pre>
 <pre><code class="C++">double getFreq(const emxArray_real_T *b_signal, double fs);</code></pre>
 <p>这是因为程序需要为不确定长度的数组动态分配内存，所以有效数据与其描述信息将被封装到结构体中，该结构体为 &quot;<strong>emxArray_real_T</strong>&quot;</p>
 <pre><code class="C++">struct emxArray_real_T
-&amp;#123;
+&#123;
   double *data;
   int *size;
   int allocatedSize;
   int numDimensions;
   boolean_T canFreeData;
-&amp;#125;;</code></pre>
+&#125;;</code></pre>
 <p>结构体中的 &quot;<strong>boolean_T</strong>&quot; 定义如下</p>
 <pre><code class="C++">typedef unsigned char boolean_T;</code></pre>
 <p>由于不定长数据会导致大量冗余代码，并且在 LabVIEW 中调用时非常麻烦，除非必须，否则不建议使用，本文后续所述也是定长数组。</p>
@@ -208,8 +217,8 @@ window.valine = new Valine({
   el:'#vcomment',
   notify:notify,
   verify:verify,
-  appId:'',
-  appKey:'',
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
   lang: 'zh-cn',
   placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
   avatar:'identicon',

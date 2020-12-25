@@ -1,4 +1,10 @@
-<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification"><title>stm32 - FreeRTOS系统移植 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><meta name="generator" content="Hexo 5.0.2"></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">stm32 - FreeRTOS系统移植</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2016/11/02/FreeRTOS/">2016-11-02</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Embedded/">Embedded</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>前段时间研究了一下 FreeRTOS 在 stm32 的系统移植，觉得有必要做个总结，记录这研发路上的点点滴滴。</p>
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>stm32 - FreeRTOS系统移植 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script><meta name="generator" content="Hexo 5.3.0"></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">stm32 - FreeRTOS系统移植</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2016/11/02/FreeRTOS/">2016-11-02</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Embedded/">Embedded</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>前段时间研究了一下 FreeRTOS 在 stm32 的系统移植，觉得有必要做个总结，记录这研发路上的点点滴滴。</p>
 <h2 id="FreeRTOS"><a href="#FreeRTOS" class="headerlink" title="FreeRTOS"></a>FreeRTOS</h2><p>从 <a target="_blank" rel="noopener" href="http://www.freertos.org/">FreeRTOS官网</a> 下载最新源码，我下载的是 <a target="_blank" rel="noopener" href="http://pan.baidu.com/s/1jIbOqDg">FreeRTOSv9.0.0</a> ，其文件结构如下，根目录主要包含 FreeRTOS 和 FreeRTOS-Plus 两个文件夹， Plus 版系统添加了 TCP/UDP 等网络通信功能。</p>
 <pre><code class="txt">D:\FREERTOSV9.0.0
 │  New - Direct to Task Notifications.html
@@ -848,35 +854,35 @@ D:\FREERTOSV9.0.0\FREERTOS\SOURCE
 volatile u32 TimingDelay;
 
 void delayInit(void)
-&amp;#123;
+&#123;
   /* SystemFrequency / 1000    1ms
    * SystemFrequency / 100000   10us
    * SystemFrequency / 1000000 1us
    */
   #define SYSCLK_FREQ_72MHz  72000000    // 系统主频
   if (SysTick_Config(SYSCLK_FREQ_72MHz / 1000000))
-  &amp;#123;
+  &#123;
   /* Capture error */
     while (1);
-  &amp;#125;
+  &#125;
   SysTick-&gt;CTRL &amp;= ~SysTick_CTRL_ENABLE_Msk;
-&amp;#125;
+&#125;
 
 // ms级延时函数
 void delay(__IO u32 nTime)
-&amp;#123;
+&#123;
   TimingDelay = nTime * 1000;
   SysTick-&gt;CTRL |= SysTick_CTRL_ENABLE_Msk;
   while(TimingDelay != 0);
-&amp;#125;
+&#125;
 
 // us级延时函数
 void delayMicroseconds(__IO u32 nTime)
-&amp;#123;
+&#123;
   TimingDelay = nTime;
   SysTick-&gt;CTRL |= SysTick_CTRL_ENABLE_Msk;
   while(TimingDelay != 0);
-&amp;#125;
+&#125;
 </code></pre>
 <p>delay.h</p>
 <pre><code class="C">#ifndef DELAY_H_
@@ -896,14 +902,14 @@ void delayMicroseconds(__IO u32 nTime);
 <pre><code class="C">#include &quot;led.h&quot;
 
 void ledGPIOConfiguration(void)
-&amp;#123;
+&#123;
   GPIO_InitTypeDef  GPIO_InitStructure;
 
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
   GPIO_Init(GPIOB, &amp;GPIO_InitStructure);
-&amp;#125;</code></pre>
+&#125;</code></pre>
 <p>led.h</p>
 <pre><code class="C">#ifndef LED_H
 #define LED_H
@@ -928,7 +934,7 @@ static bool Derive_UART2SendFlag, Derive_UART2TxIntState;
 //开串口 并执行初始化
 //8位数据位 无校验 1位起始位/1位停止位 允许收发中断  宏定义BAUDRATE设定波特率 低优先级中断
 void usart2Config(void)
-&amp;#123;
+&#123;
   //波特率设置
   #define   UART_BAUDDEF  9600
   GPIO_InitTypeDef    GPIO_InitStructure;
@@ -961,27 +967,27 @@ void usart2Config(void)
   USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
   //START
   USART_Cmd(USART2, ENABLE);
-&amp;#125;
+&#125;
 
 //从串口发送一个字节
 void UARTSendByByter(u16 Data)
-&amp;#123;
+&#123;
   //发送数据
   USART_SendData(USART2, (u8)Data);
 
   if(!Derive_UART2TxIntState)
-  &amp;#123;
+  &#123;
     Derive_UART2TxIntState = true;
     USART_ITConfig(USART2, USART_IT_TXE, ENABLE);
-  &amp;#125;
+  &#125;
   Derive_UART2SendFlag = true;
-&amp;#125;
+&#125;
 
 //串口收发中断处理函数
 void UART_TRxOver_Interrupt(void)
-&amp;#123;
+&#123;
   if(USART_GetITStatus(USART2, USART_IT_TXE) == SET)
-  &amp;#123;
+  &#123;
     //发送中断
     //清零标志
     USART_ClearITPendingBit(USART2, USART_IT_TXE);
@@ -989,19 +995,19 @@ void UART_TRxOver_Interrupt(void)
     //tx interrupt..
     //...
     if(!Derive_UART2SendFlag)
-    &amp;#123;
+    &#123;
         USART_ITConfig(USART2, USART_IT_TXE, DISABLE);
         Derive_UART2TxIntState = false;
-    &amp;#125;
-  &amp;#125;
+    &#125;
+  &#125;
   if(USART_GetITStatus(USART2, USART_IT_RXNE) == SET)
-  &amp;#123;
+  &#123;
     //接收中断
     //-------- 回传接收到的数据 --------
     UARTSendByByter(USART_ReceiveData(USART2));
     USART_ClearFlag(USART2,USART_FLAG_RXNE);
-  &amp;#125;
-&amp;#125;
+  &#125;
+&#125;
 </code></pre>
 <p>usart.h</p>
 <pre><code class="C">#ifndef USART_H
@@ -1026,75 +1032,75 @@ void UARTSendByByter(u16 Data);
 <p>stm32f10x_it.c</p>
 <pre><code class="C">#include &quot;stm32f10x_it.h&quot;
 void NMI_Handler(void)
-&amp;#123;
-&amp;#125;
+&#123;
+&#125;
 
 void HardFault_Handler(void)
-&amp;#123;
+&#123;
   /* Go to infinite loop when Hard Fault exception occurs */
   while (1)
-  &amp;#123;
-  &amp;#125;
-&amp;#125;
+  &#123;
+  &#125;
+&#125;
 
 void MemManage_Handler(void)
-&amp;#123;
+&#123;
   /* Go to infinite loop when Memory Manage exception occurs */
   while (1)
-  &amp;#123;
-  &amp;#125;
-&amp;#125;
+  &#123;
+  &#125;
+&#125;
 
 void BusFault_Handler(void)
-&amp;#123;
+&#123;
   /* Go to infinite loop when Bus Fault exception occurs */
   while (1)
-  &amp;#123;
-  &amp;#125;
-&amp;#125;
+  &#123;
+  &#125;
+&#125;
 
 void UsageFault_Handler(void)
-&amp;#123;
+&#123;
   /* Go to infinite loop when Usage Fault exception occurs */
   while (1)
-  &amp;#123;
-  &amp;#125;
-&amp;#125;
+  &#123;
+  &#125;
+&#125;
 
 #ifndef RTE_RTOS_RTX
 void SVC_Handler(void)
-&amp;#123;
-&amp;#125;
+&#123;
+&#125;
 #endif
 
 void DebugMon_Handler(void)
-&amp;#123;
-&amp;#125;
+&#123;
+&#125;
 
 #ifndef RTE_RTOS_RTX
 void PendSV_Handler(void)
-&amp;#123;
-&amp;#125;
+&#123;
+&#125;
 #endif
 
 extern volatile u32 TimingDelay;
-void SysTick_Handler(void) &amp;#123;
-  if (TimingDelay != 0x00) &amp;#123;
+void SysTick_Handler(void) &#123;
+  if (TimingDelay != 0x00) &#123;
     TimingDelay--;
-  &amp;#125;
-&amp;#125;
+  &#125;
+&#125;
 
 extern void UART_TRxOver_Interrupt(void);
 void USART2_IRQHandler(void)
-&amp;#123;
+&#123;
   UART_TRxOver_Interrupt();
-&amp;#125;</code></pre>
+&#125;</code></pre>
 <p>stm32f10x_it.h</p>
 <pre><code class="C">#ifndef __STM32F10x_IT_H
 #define __STM32F10x_IT_H
 
 #ifdef __cplusplus
- extern &quot;C&quot; &amp;#123;
+ extern &quot;C&quot; &#123;
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -1116,7 +1122,7 @@ void SysTick_Handler(void);
 void USART2_IRQHandler(void);
 
 #ifdef __cplusplus
-&amp;#125;
+&#125;
 #endif
 
 #endif /* __STM32F10x_IT_H */</code></pre>
@@ -1146,13 +1152,13 @@ static void prvSetupHardware(void);
 * Return         : None
 *******************************************************************************/
 int main(void)
-&amp;#123;
+&#123;
   prvSetupHardware();  // 设备初始化
 
   while(1)
-  &amp;#123;
-  &amp;#125;
-&amp;#125;
+  &#123;
+  &#125;
+&#125;
 
 /*******************************************************************************
 * Function Name  : prvSetupHardware
@@ -1161,12 +1167,12 @@ int main(void)
 * Return         : None
 *******************************************************************************/
 static void prvSetupHardware(void)
-&amp;#123;
+&#123;
   deviceInit();
   delayInit();    // SysTick滴答时钟初始化
   ledGPIOConfiguration();
   usart2Config();
-&amp;#125;
+&#125;
 
 
 /*******************************************************************************
@@ -1176,7 +1182,7 @@ static void prvSetupHardware(void)
 * Return         : None
 *******************************************************************************/
 static void deviceInit(void)
-&amp;#123;
+&#123;
   //--------------------------- CLK INIT, HSE PLL ----------------------------
   ErrorStatus HSEStartUpStatus;
   //RCC reset
@@ -1212,7 +1218,7 @@ static void deviceInit(void)
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
-&amp;#125;</code></pre>
+&#125;</code></pre>
 <p>main.h</p>
 <pre><code class="C">#ifndef MAIN_H
 #define MAIN_H
@@ -1361,7 +1367,7 @@ NVIC value of 255. */
 </ul>
 <pre><code class="C">// 定时亮灯任务
 static void vLEDOnTask(void *pvParameters)
-&amp;#123;
+&#123;
   TickType_t xLastWakeTime;
   const TickType_t xFrequency = 1000/portTICK_RATE_MS;
 
@@ -1370,55 +1376,55 @@ static void vLEDOnTask(void *pvParameters)
   xLastWakeTime = xTaskGetTickCount();
 
   while(1)
-  &amp;#123;
+  &#123;
     GPIO_ResetBits(GPIOB,LED_PORT);
     UARTSendByByter(&#39;1&#39;);
 
     vTaskDelayUntil(&amp;xLastWakeTime,xFrequency);
-  &amp;#125;
-&amp;#125;
+  &#125;
+&#125;
 
 // 定时灭灯任务
 static void vLEDOffTask(void *pvParameters)
-&amp;#123;
+&#123;
   while(1)
-  &amp;#123;
+  &#123;
         GPIO_SetBits(GPIOB,LED_PORT);
     UARTSendByByter(&#39;2&#39;);
 
       vTaskDelay(2000/portTICK_RATE_MS);
-  &amp;#125;
-&amp;#125;
+  &#125;
+&#125;
 
 // 定时串口发送任务
 static void vUasrtSendTask(void *pvParameters)
-&amp;#123;
+&#123;
   volatile unsigned char cnt=0;
   TaskHandle_t xTaskLedOffHandle = (TaskHandle_t)pvParameters;
 
   while(1)
-  &amp;#123;
+  &#123;
     UARTSendByByter(cnt++);
     if(xTaskLedOffHandle!=NULL)
-    &amp;#123;
+    &#123;
       if(cnt==50)
         vTaskSuspend(xTaskLedOffHandle);    // 挂起灭灯任务
       else if(cnt==100)
         vTaskResume(xTaskLedOffHandle);    // 唤醒灭灯任务
       else if(cnt==255)
-      &amp;#123;
+      &#123;
         vTaskDelete(xTaskLedOffHandle);    // 删除灭灯任务
         xTaskLedOffHandle=NULL;
-      &amp;#125;
-    &amp;#125;
+      &#125;
+    &#125;
     vTaskDelay(1500/portTICK_RATE_MS);
-  &amp;#125;
-&amp;#125;</code></pre>
+  &#125;
+&#125;</code></pre>
 <ul>
 <li>创建任务并启动调度器</li>
 </ul>
 <pre><code class="C">int main(void)
-&amp;#123;
+&#123;
   TaskHandle_t xTaskLedOffHandle;    /* 定义灭灯任务句柄 */
   prvSetupHardware();            /* 设备初始化 */
 
@@ -1437,7 +1443,7 @@ static void vUasrtSendTask(void *pvParameters)
   vTaskStartScheduler();
 
   return 0;
-&amp;#125;</code></pre>
+&#125;</code></pre>
 <ul>
 <li>功能测试</li>
 </ul>
@@ -1469,8 +1475,8 @@ window.valine = new Valine({
   el:'#vcomment',
   notify:notify,
   verify:verify,
-  appId:'',
-  appKey:'',
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
   lang: 'zh-cn',
   placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
   avatar:'identicon',
