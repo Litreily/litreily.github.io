@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2020-12-25T02:57:48.688Z</updated>
+  <updated>2020-12-29T07:41:58.035Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -15,6 +15,46 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>openwrt make defconfig 详解</title>
+    <link href="https://www.litreily.top/2020/12/29/make-oldconfig/"/>
+    <id>https://www.litreily.top/2020/12/29/make-oldconfig/</id>
+    <published>2020-12-29T01:47:32.000Z</published>
+    <updated>2020-12-29T07:41:58.035Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;对于 linux kernel，有几个常用 make 指令用于生成 .config 文件。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;make oldconfig&lt;/li&gt;
+&lt;li&gt;make menuconfig&lt;/li&gt;
+&lt;li&gt;make defconfig&lt;/li&gt;
+&lt;li&gt;make config&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;那么这些指令具体执行了什么操作呢，针对 openwrt 来看下吧。&lt;/p&gt;
+&lt;h2 id=&quot;主-Makefile&quot;&gt;&lt;a href=&quot;#主-Makefile&quot; class=&quot;headerlink&quot; title=&quot;主 Makefile&quot;&gt;&lt;/a&gt;主 Makefile&lt;/h2&gt;&lt;p&gt;在 buildroot 执行 make，首先会访问仓库根目录的主 &lt;a href=&quot;https://github.com/openwrt/openwrt/blob/master/Makefile&quot;&gt;Makefile&lt;/a&gt;，其中有个 ifneq 判断如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;makefile&quot;&gt;ifneq ($(OPENWRT_BUILD),1)
+  _SINGLE=export MAKEFLAGS=$(space);
+
+  override OPENWRT_BUILD=1
+  export OPENWRT_BUILD
+  GREP_OPTIONS=
+  expor
+      
+    
+    </summary>
+    
+      <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
+    
+    
+      <category term="makefile" scheme="https://www.litreily.top/tags/makefile/"/>
+    
+      <category term="openwrt" scheme="https://www.litreily.top/tags/openwrt/"/>
+    
+  </entry>
   
   <entry>
     <title>lua 高级特性</title>
@@ -525,34 +565,6 @@ EOF&lt;/code&gt;&lt;/pre&gt;
   </entry>
   
   <entry>
-    <title>使用油猴脚本批量下载canvas图片</title>
-    <link href="https://www.litreily.top/2020/03/15/canvas-dl/"/>
-    <id>https://www.litreily.top/2020/03/15/canvas-dl/</id>
-    <published>2020-03-15T09:01:33.000Z</published>
-    <updated>2020-06-16T01:04:32.735Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;女友最近在网上下载一些北大网盘的pdf&lt;a href=&quot;https://disk.pku.edu.cn/#/link/3A7748E0466521E3E68A0CBA4C24DE20?gns=AE26ACF837E24D51B1EC40E0A80A5D23%2F7F0E54D7D92343B1B62031B1C41F2280&quot;&gt;文档&lt;/a&gt;，结果发现没有下载接口，另存为也只能存储单张图片。找我帮忙，这时候发现程序员男票的好处了哈。&lt;/p&gt;
-&lt;h2 id=&quot;分析页面&quot;&gt;&lt;a href=&quot;#分析页面&quot; class=&quot;headerlink&quot; title=&quot;分析页面&quot;&gt;&lt;/a&gt;分析页面&lt;/h2&gt;&lt;p&gt;一开始想着使用Chrome调试工具看下pdf链接，发现这个网盘居然不是直接获取的pdf文件，而是使用js脚本动态渲染生成的，涨知识了。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/assets/canvas/pdf-js.png&quot; alt=&quot;pdf-combine js&quot;&gt;&lt;/p&gt;
-&lt;p&gt;那看看是否可以以图片形式批量下载呢，结果查看pdf单页的html结构发现，这居然是个canvas!!!还不是普通图片，而是画布。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/assets/canvas/canvas.png&quot; alt=&quot;cancvs&quot;&gt;&lt;/p&gt;
-&lt;h2 id=&quot;下载插件&quot;&gt;&lt;a href=&quot;#下载插件&quot;
-      
-    
-    </summary>
-    
-      <category term="Tools" scheme="https://www.litreily.top/categories/Tools/"/>
-    
-    
-      <category term="tampermonkey" scheme="https://www.litreily.top/tags/tampermonkey/"/>
-    
-  </entry>
-  
-  <entry>
     <title>NBNS客户端的C语言实现</title>
     <link href="https://www.litreily.top/2020/03/15/nbns_code/"/>
     <id>https://www.litreily.top/2020/03/15/nbns_code/</id>
@@ -580,6 +592,34 @@ EOF&lt;/code&gt;&lt;/pre&gt;
     
     
       <category term="C/C++" scheme="https://www.litreily.top/tags/C-C/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用油猴脚本批量下载canvas图片</title>
+    <link href="https://www.litreily.top/2020/03/15/canvas-dl/"/>
+    <id>https://www.litreily.top/2020/03/15/canvas-dl/</id>
+    <published>2020-03-15T09:01:33.000Z</published>
+    <updated>2020-06-16T01:04:32.735Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;女友最近在网上下载一些北大网盘的pdf&lt;a href=&quot;https://disk.pku.edu.cn/#/link/3A7748E0466521E3E68A0CBA4C24DE20?gns=AE26ACF837E24D51B1EC40E0A80A5D23%2F7F0E54D7D92343B1B62031B1C41F2280&quot;&gt;文档&lt;/a&gt;，结果发现没有下载接口，另存为也只能存储单张图片。找我帮忙，这时候发现程序员男票的好处了哈。&lt;/p&gt;
+&lt;h2 id=&quot;分析页面&quot;&gt;&lt;a href=&quot;#分析页面&quot; class=&quot;headerlink&quot; title=&quot;分析页面&quot;&gt;&lt;/a&gt;分析页面&lt;/h2&gt;&lt;p&gt;一开始想着使用Chrome调试工具看下pdf链接，发现这个网盘居然不是直接获取的pdf文件，而是使用js脚本动态渲染生成的，涨知识了。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/canvas/pdf-js.png&quot; alt=&quot;pdf-combine js&quot;&gt;&lt;/p&gt;
+&lt;p&gt;那看看是否可以以图片形式批量下载呢，结果查看pdf单页的html结构发现，这居然是个canvas!!!还不是普通图片，而是画布。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/canvas/canvas.png&quot; alt=&quot;cancvs&quot;&gt;&lt;/p&gt;
+&lt;h2 id=&quot;下载插件&quot;&gt;&lt;a href=&quot;#下载插件&quot;
+      
+    
+    </summary>
+    
+      <category term="Tools" scheme="https://www.litreily.top/categories/Tools/"/>
+    
+    
+      <category term="tampermonkey" scheme="https://www.litreily.top/tags/tampermonkey/"/>
     
   </entry>
   
@@ -957,43 +997,6 @@ CPU: 2 PID: 9465 Comm: swconfig Tainted: P        W    3.14.77 #1
       <category term="5W2H" scheme="https://www.litreily.top/tags/5W2H/"/>
     
       <category term="MECE" scheme="https://www.litreily.top/tags/MECE/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>哈希表的实现与常见操作</title>
-    <link href="https://www.litreily.top/2019/05/24/hash-table/"/>
-    <id>https://www.litreily.top/2019/05/24/hash-table/</id>
-    <published>2019-05-24T12:00:00.000Z</published>
-    <updated>2020-06-16T01:04:32.657Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;前段时间基于数组和单链表以拉链法写了个哈希表，实现了基本的增删改查（&lt;code&gt;CRUD&lt;/code&gt;），以键值对的形式存储一些配置参数，便以此文记录一下。&lt;/p&gt;
-&lt;h2 id=&quot;数据结构&quot;&gt;&lt;a href=&quot;#数据结构&quot; class=&quot;headerlink&quot; title=&quot;数据结构&quot;&gt;&lt;/a&gt;数据结构&lt;/h2&gt;&lt;pre&gt;&lt;code class=&quot;c&quot;&gt;#define TABLE_SIZE 101
-#define KEY_SIZE 32
-#define VALUE_SIZE 128
-#define BUF_SIZE 256
-
-#define DATA_PATH &amp;quot;data.txt&amp;quot;
-
-struct linklist &amp;#123;
-    char key[KEY_SIZE];
-    char val[VALUE_SIZE];
-    struct linklist *next;
-&amp;#125;;
-struct linklist *hashtbl[TABLE_SIZE];&lt;/code&gt;&lt;/pre&gt;
-    
-    </summary>
-    
-      <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
-    
-    
-      <category term="C/C++" scheme="https://www.litreily.top/tags/C-C/"/>
-    
-      <category term="linux" scheme="https://www.litreily.top/tags/linux/"/>
-    
-      <category term="hash" scheme="https://www.litreily.top/tags/hash/"/>
     
   </entry>
   

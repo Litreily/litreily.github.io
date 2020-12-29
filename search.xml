@@ -4,6 +4,931 @@
   
     
     <entry>
+      <title><![CDATA[openwrt make defconfig 详解]]></title>
+      <url>https://www.litreily.top/2020/12/29/make-oldconfig/</url>
+      <content type="html"><![CDATA[<p>对于 linux kernel，有几个常用 make 指令用于生成 .config 文件。</p>
+<ul>
+<li>make oldconfig</li>
+<li>make menuconfig</li>
+<li>make defconfig</li>
+<li>make config</li>
+</ul>
+<p>那么这些指令具体执行了什么操作呢，针对 openwrt 来看下吧。</p>
+<h2 id="主-Makefile"><a href="#主-Makefile" class="headerlink" title="主 Makefile"></a>主 Makefile</h2><p>在 buildroot 执行 make，首先会访问仓库根目录的主 <a href="https://github.com/openwrt/openwrt/blob/master/Makefile">Makefile</a>，其中有个 ifneq 判断如下：</p>
+<pre><code class="makefile">ifneq ($(OPENWRT_BUILD),1)
+  _SINGLE=export MAKEFLAGS=$(space);
+
+  override OPENWRT_BUILD=1
+  export OPENWRT_BUILD
+  GREP_OPTIONS=
+  export GREP_OPTIONS
+  CDPATH=
+  export CDPATH
+  include $(TOPDIR)/include/debug.mk
+  include $(TOPDIR)/include/depends.mk
+  include $(TOPDIR)/include/toplevel.mk
+else
+  include rules.mk
+  include $(INCLUDE_DIR)/depends.mk
+  include $(INCLUDE_DIR)/subdir.mk
+  include target/Makefile
+  include package/Makefile
+  include tools/Makefile
+  include toolchain/Makefile</code></pre>
+<p>make 时通常不会设置OPENWRT_BUILD，所以按照以上逻辑会 include 以下几个Makefile</p>
+<ol>
+<li>include/debug.mk</li>
+<li>include/depends.mk</li>
+<li>include/toplevel.mk</li>
+</ol>
+<p>前两个先不管，主要来看下toplevel.mk.</p>
+<h2 id="toplevel-mk"><a href="#toplevel-mk" class="headerlink" title="toplevel.mk"></a>toplevel.mk</h2><p>在这个顶层 <a href="https://github.com/openwrt/openwrt/blob/master/include/toplevel.mk">Makefile</a> 中，定义了许多常用指令，其中就包含了 defconfig, oldconfig, menuconfig 等</p>
+<pre><code class="makefile">config: scripts/config/conf prepare-tmpinfo FORCE
+    [ -L .config ] &amp;&amp; export KCONFIG_OVERWRITECONFIG=1; \
+        $&lt; $(KCONF_FLAGS) Config.in
+
+config-clean: FORCE
+    $(_SINGLE)$(NO_TRACE_MAKE) -C scripts/config clean
+
+defconfig: scripts/config/conf prepare-tmpinfo FORCE
+    touch .config
+    @if [ ! -s .config -a -e $(HOME)/.openwrt/defconfig ]; then cp $(HOME)/.openwrt/defconfig .config; fi
+    [ -L .config ] &amp;&amp; export KCONFIG_OVERWRITECONFIG=1; \
+        $&lt; $(KCONF_FLAGS) --defconfig=.config Config.in
+
+confdefault-y=allyes
+confdefault-m=allmod
+confdefault-n=allno
+confdefault:=$(confdefault-$(CONFDEFAULT))
+
+oldconfig: scripts/config/conf prepare-tmpinfo FORCE
+    [ -L .config ] &amp;&amp; export KCONFIG_OVERWRITECONFIG=1; \
+        $&lt; $(KCONF_FLAGS) --$(if $(confdefault),$(confdefault),old)config Config.in
+
+menuconfig: scripts/config/mconf prepare-tmpinfo FORCE
+    if [ \! -e .config -a -e $(HOME)/.openwrt/defconfig ]; then \
+        cp $(HOME)/.openwrt/defconfig .config; \
+    fi
+    [ -L .config ] &amp;&amp; export KCONFIG_OVERWRITECONFIG=1; \
+        $&lt; Config.in
+
+nconfig: scripts/config/nconf prepare-tmpinfo FORCE
+    if [ \! -e .config -a -e $(HOME)/.openwrt/defconfig ]; then \
+        cp $(HOME)/.openwrt/defconfig .config; \
+    fi
+    [ -L .config ] &amp;&amp; export KCONFIG_OVERWRITECONFIG=1; \
+        $&lt; Config.in
+
+xconfig: scripts/config/qconf prepare-tmpinfo FORCE
+    if [ \! -e .config -a -e $(HOME)/.openwrt/defconfig ]; then \
+        cp $(HOME)/.openwrt/defconfig .config; \
+    fi
+    $&lt; Config.in</code></pre>
+<p>其中的oldconfig如下：</p>
+<pre><code class="makefile">oldconfig: scripts/config/conf prepare-tmpinfo FORCE
+    [ -L .config ] &amp;&amp; export KCONFIG_OVERWRITECONFIG=1; \
+        $&lt; $(KCONF_FLAGS) --$(if $(confdefault),$(confdefault),old)config Config.in</code></pre>
+<p><code>KCONF_FLAGS</code> 默认为空，<code>confdefault</code> 也默认为空，所以以上指令实际上就是</p>
+<pre><code class="bash">scripts/config/conf --oldconfig Config.in</code></pre>
+<h2 id="make-oldconfig"><a href="#make-oldconfig" class="headerlink" title="make oldconfig"></a>make oldconfig</h2><p>接下来来验证下是否是这个指令。使用make的 <code>-n</code> 参数可以打印执行过程，但并不执行具体指令，非常方便于调试。</p>
+<pre><code class="bash">$ make -n oldconfig
+make -r -s staging_dir/host/.prereq-build OPENWRT_BUILD= QUIET=0
+mkdir -p tmp/info
+export MAKEFLAGS= ;make V=s -j1 -r -s -f include/scan.mk SCAN_TARGET=&quot;packageinfo&quot; SCAN_DIR=&quot;package&quot; SCAN_NAME=&quot;package&quot; SCAN_DEPTH=5 SCAN_EXTRA=&quot;&quot;
+export MAKEFLAGS= ;make V=s -j1 -r -s -f include/scan.mk SCAN_TARGET=&quot;targetinfo&quot; SCAN_DIR=&quot;target/linux&quot; SCAN_NAME=&quot;target&quot; SCAN_DEPTH=2 SCAN_EXTRA=&quot;&quot; SCAN_MAKEOPTS=&quot;TARGET_BUILD=1&quot;
+for type in package target; do \
+    f=tmp/.$&#123;type&#125;info; t=tmp/.config-$&#123;type&#125;.in; \
+    [ &quot;$t&quot; -nt &quot;$f&quot; ] || ./scripts/$&#123;type&#125;-metadata.pl  config &quot;$f&quot; &gt; &quot;$t&quot; || &#123; rm -f &quot;$t&quot;; echo &quot;Failed to build $t&quot;; false; break; &#125;; \
+done
+[ tmp/.config-feeds.in -nt tmp/.packageauxvars ] || ./scripts/feeds feed_config &gt; tmp/.config-feeds.in
+./scripts/package-metadata.pl mk tmp/.packageinfo &gt; tmp/.packagedeps || &#123; rm -f tmp/.packagedeps; false; &#125;
+./scripts/package-metadata.pl pkgaux tmp/.packageinfo &gt; tmp/.packageauxvars || &#123; rm -f tmp/.packageauxvars; false; &#125;
+./scripts/package-metadata.pl usergroup tmp/.packageinfo &gt; tmp/.packageusergroup || &#123; rm -f tmp/.packageusergroup; false; &#125;
+touch /home/litreily/openwrt/tmp/.build
+[ -L .config ] &amp;&amp; export KCONFIG_OVERWRITECONFIG=1; \
+    scripts/config/conf  --oldconfig Config.in</code></pre>
+<p>可以看到最后一行对应的就是我们推算出来的结果。同样可知其它相关config的指令是：</p>
+<ul>
+<li><code>make defconfig</code>: scripts/config/conf --defconfig=.config Config.in</li>
+<li><code>make oldconfig</code>: scripts/config/conf --oldconfig Config.in</li>
+<li><code>make menuconfig</code>: scripts/config/mconf Config.in</li>
+</ul>
+<p>也就是说，make xxxconfig 最终执行的是 scripts/config 目录下的conf, mconf 指令，这两个指令也是需要编译的。在执行make xxxconfig时，conf, mconf 作为依赖文件同样会被编译。</p>
+<h2 id="make-defconfig-详解"><a href="#make-defconfig-详解" class="headerlink" title="make defconfig 详解"></a>make defconfig 详解</h2><p>如果想要更加详细的 make 信息，可以使用 <code>-d</code> 参数，打印 debug 信息，根据 debug 信息可以看到编译过程中各种依赖嵌套的判断流程，对于学习 make 指令非常有用。</p>
+<p>以 <code>make defconfig</code> 为例，执行 <code>make -d V=s defconfig</code></p>
+<pre><code class="log">GNU Make 4.2.1
+Built for x86_64-pc-linux-gnu
+Copyright (C) 1988-2016 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt;
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+Reading makefiles...
+Reading makefile &#39;Makefile&#39;...
+Reading makefile &#39;/home/litreily/openwrt/include/debug.mk&#39; (search path) (no ~ expansion)...
+Reading makefile &#39;/home/litreily/openwrt/include/depends.mk&#39; (search path) (no ~ expansion)...
+Reading makefile &#39;/home/litreily/openwrt/include/toplevel.mk&#39; (search path) (no ~ expansion)...
+Reading makefile &#39;/home/litreily/openwrt/include/verbose.mk&#39; (search path) (no ~ expansion)...
+Updating makefiles....
+ Considering target file &#39;/home/litreily/openwrt/include/verbose.mk&#39;.
+  Looking for an implicit rule for &#39;/home/litreily/openwrt/include/verbose.mk&#39;.
+  Trying pattern rule with stem &#39;verbose.mk&#39;.
+  Found an implicit rule for &#39;/home/litreily/openwrt/include/verbose.mk&#39;.
+  Finished prerequisites of target file &#39;/home/litreily/openwrt/include/verbose.mk&#39;.
+ No need to remake target &#39;/home/litreily/openwrt/include/verbose.mk&#39;.
+ Considering target file &#39;/home/litreily/openwrt/include/toplevel.mk&#39;.
+  Looking for an implicit rule for &#39;/home/litreily/openwrt/include/toplevel.mk&#39;.
+  Trying pattern rule with stem &#39;toplevel.mk&#39;.
+  Found an implicit rule for &#39;/home/litreily/openwrt/include/toplevel.mk&#39;.
+  Finished prerequisites of target file &#39;/home/litreily/openwrt/include/toplevel.mk&#39;.
+ No need to remake target &#39;/home/litreily/openwrt/include/toplevel.mk&#39;.
+ Considering target file &#39;/home/litreily/openwrt/include/depends.mk&#39;.
+  Looking for an implicit rule for &#39;/home/litreily/openwrt/include/depends.mk&#39;.
+  Trying pattern rule with stem &#39;depends.mk&#39;.
+  Found an implicit rule for &#39;/home/litreily/openwrt/include/depends.mk&#39;.
+  Finished prerequisites of target file &#39;/home/litreily/openwrt/include/depends.mk&#39;.
+ No need to remake target &#39;/home/litreily/openwrt/include/depends.mk&#39;.
+ Considering target file &#39;/home/litreily/openwrt/include/debug.mk&#39;.
+  Looking for an implicit rule for &#39;/home/litreily/openwrt/include/debug.mk&#39;.
+  Trying pattern rule with stem &#39;debug.mk&#39;.
+  Found an implicit rule for &#39;/home/litreily/openwrt/include/debug.mk&#39;.
+  Finished prerequisites of target file &#39;/home/litreily/openwrt/include/debug.mk&#39;.
+ No need to remake target &#39;/home/litreily/openwrt/include/debug.mk&#39;.
+ Considering target file &#39;Makefile&#39;.
+  Looking for an implicit rule for &#39;Makefile&#39;.
+  Trying pattern rule with stem &#39;Makefile&#39;.
+  Found an implicit rule for &#39;Makefile&#39;.
+  Finished prerequisites of target file &#39;Makefile&#39;.
+ No need to remake target &#39;Makefile&#39;.
+Updating goal targets....
+Considering target file &#39;defconfig&#39;.
+ File &#39;defconfig&#39; does not exist.
+  Considering target file &#39;scripts/config/conf&#39;.
+   File &#39;scripts/config/conf&#39; does not exist.
+   Looking for an implicit rule for &#39;scripts/config/conf&#39;.
+   Trying pattern rule with stem &#39;c&#39;.
+   Found an implicit rule for &#39;scripts/config/conf&#39;.
+    Considering target file &#39;staging_dir/host/.prereq-build&#39;.
+     File &#39;staging_dir/host/.prereq-build&#39; does not exist.
+      Considering target file &#39;include/prereq-build.mk&#39;.
+       Looking for an implicit rule for &#39;include/prereq-build.mk&#39;.
+       Trying pattern rule with stem &#39;prereq-build.mk&#39;.
+       Found an implicit rule for &#39;include/prereq-build.mk&#39;.
+       Finished prerequisites of target file &#39;include/prereq-build.mk&#39;.
+      No need to remake target &#39;include/prereq-build.mk&#39;.
+     Finished prerequisites of target file &#39;staging_dir/host/.prereq-build&#39;.
+    Must remake target &#39;staging_dir/host/.prereq-build&#39;.
+Putting child 0x7fffcb0a1800 (staging_dir/host/.prereq-build) PID 15999 on the chain.
+Live child 0x7fffcb0a1800 (staging_dir/host/.prereq-build) PID 15999 
+Reaping winning child 0x7fffcb0a1800 PID 15999 
+Live child 0x7fffcb0a1800 (staging_dir/host/.prereq-build) PID 16000 
+Checking &#39;working-make&#39;... ok.
+Checking &#39;case-sensitive-fs&#39;... ok.
+Checking &#39;proper-umask&#39;... ok.
+Checking &#39;gcc&#39;... ok.
+Checking &#39;working-gcc&#39;... ok.
+Checking &#39;g++&#39;... ok.
+Checking &#39;working-g++&#39;... ok.
+Checking &#39;ncurses&#39;... ok.
+Checking &#39;perl-data-dumper&#39;... ok.
+Checking &#39;perl-thread-queue&#39;... ok.
+Checking &#39;tar&#39;... ok.
+Checking &#39;find&#39;... ok.
+Checking &#39;bash&#39;... ok.
+Checking &#39;xargs&#39;... ok.
+Checking &#39;patch&#39;... ok.
+Checking &#39;diff&#39;... ok.
+Checking &#39;cp&#39;... ok.
+Checking &#39;seq&#39;... ok.
+Checking &#39;awk&#39;... ok.
+Checking &#39;grep&#39;... ok.
+Checking &#39;egrep&#39;... ok.
+Checking &#39;getopt&#39;... ok.
+Checking &#39;stat&#39;... ok.
+Checking &#39;unzip&#39;... ok.
+Checking &#39;bzip2&#39;... ok.
+Checking &#39;wget&#39;... ok.
+Checking &#39;perl&#39;... ok.
+Checking &#39;python2-cleanup&#39;... ok.
+Checking &#39;python&#39;... ok.
+Checking &#39;python3&#39;... ok.
+Checking &#39;git&#39;... ok.
+Checking &#39;file&#39;... ok.
+Checking &#39;rsync&#39;... ok.
+Checking &#39;ldconfig-stub&#39;... ok.
+Reaping winning child 0x7fffcb0a1800 PID 16000 
+Live child 0x7fffcb0a1800 (staging_dir/host/.prereq-build) PID 16418 
+Reaping winning child 0x7fffcb0a1800 PID 16418 
+Removing child 0x7fffcb0a1800 PID 16418 from chain.
+    Successfully remade target file &#39;staging_dir/host/.prereq-build&#39;.
+   Finished prerequisites of target file &#39;scripts/config/conf&#39;.
+  Must remake target &#39;scripts/config/conf&#39;.
+Putting child 0x7fffcb0a1b70 (scripts/config/conf) PID 16422 on the chain.
+Live child 0x7fffcb0a1b70 (scripts/config/conf) PID 16422 
+make[1]: Entering directory &#39;/home/litreily/openwrt/scripts/config&#39;
+cc -O2   -c -o conf.o conf.c
+cc -O2   -c -o confdata.o confdata.c
+cc -O2   -c -o expr.o expr.c
+cc -O2 -I ./.   -c -o lexer.lex.o lexer.lex.c
+cc -O2 -I ./.   -c -o parser.tab.o parser.tab.c
+cc -O2   -c -o preprocess.o preprocess.c
+cc -O2   -c -o symbol.o symbol.c
+cc -O2   -c -o util.o util.c
+cc   conf.o confdata.o expr.o lexer.lex.o parser.tab.o preprocess.o symbol.o util.o   -o conf
+make[1]: Leaving directory &#39;/home/litreily/openwrt/scripts/config&#39;
+Reaping winning child 0x7fffcb0a1b70 PID 16422 
+Removing child 0x7fffcb0a1b70 PID 16422 from chain.
+  Successfully remade target file &#39;scripts/config/conf&#39;.
+  Considering target file &#39;prepare-tmpinfo&#39;.
+   File &#39;prepare-tmpinfo&#39; does not exist.
+    Considering target file &#39;FORCE&#39;.
+     File &#39;FORCE&#39; does not exist.
+     Finished prerequisites of target file &#39;FORCE&#39;.
+    Must remake target &#39;FORCE&#39;.
+    Successfully remade target file &#39;FORCE&#39;.
+   Finished prerequisites of target file &#39;prepare-tmpinfo&#39;.
+  Must remake target &#39;prepare-tmpinfo&#39;.
+Putting child 0x7fffcb0a2010 (prepare-tmpinfo) PID 16454 on the chain.
+Live child 0x7fffcb0a2010 (prepare-tmpinfo) PID 16454 
+GNU Make 4.2.1
+Built for x86_64-pc-linux-gnu
+Copyright (C) 1988-2016 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt;
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+Reading makefiles...
+Reading makefile &#39;Makefile&#39;...
+Reading makefile &#39;/home/litreily/openwrt/include/debug.mk&#39; (search path) (no ~ expansion)...
+Reading makefile &#39;/home/litreily/openwrt/include/depends.mk&#39; (search path) (no ~ expansion)...
+Reading makefile &#39;/home/litreily/openwrt/include/toplevel.mk&#39; (search path) (no ~ expansion)...
+Reading makefile &#39;/home/litreily/openwrt/include/verbose.mk&#39; (search path) (no ~ expansion)...
+Updating makefiles....
+ Considering target file &#39;/home/litreily/openwrt/include/verbose.mk&#39;.
+  Looking for an implicit rule for &#39;/home/litreily/openwrt/include/verbose.mk&#39;.
+  Trying pattern rule with stem &#39;verbose.mk&#39;.
+  Found an implicit rule for &#39;/home/litreily/openwrt/include/verbose.mk&#39;.
+  Finished prerequisites of target file &#39;/home/litreily/openwrt/include/verbose.mk&#39;.
+ No need to remake target &#39;/home/litreily/openwrt/include/verbose.mk&#39;.
+ Considering target file &#39;/home/litreily/openwrt/include/toplevel.mk&#39;.
+  Looking for an implicit rule for &#39;/home/litreily/openwrt/include/toplevel.mk&#39;.
+  Trying pattern rule with stem &#39;toplevel.mk&#39;.
+  Found an implicit rule for &#39;/home/litreily/openwrt/include/toplevel.mk&#39;.
+  Finished prerequisites of target file &#39;/home/litreily/openwrt/include/toplevel.mk&#39;.
+ No need to remake target &#39;/home/litreily/openwrt/include/toplevel.mk&#39;.
+ Considering target file &#39;/home/litreily/openwrt/include/depends.mk&#39;.
+  Looking for an implicit rule for &#39;/home/litreily/openwrt/include/depends.mk&#39;.
+  Trying pattern rule with stem &#39;depends.mk&#39;.
+  Found an implicit rule for &#39;/home/litreily/openwrt/include/depends.mk&#39;.
+  Finished prerequisites of target file &#39;/home/litreily/openwrt/include/depends.mk&#39;.
+ No need to remake target &#39;/home/litreily/openwrt/include/depends.mk&#39;.
+ Considering target file &#39;/home/litreily/openwrt/include/debug.mk&#39;.
+  Looking for an implicit rule for &#39;/home/litreily/openwrt/include/debug.mk&#39;.
+  Trying pattern rule with stem &#39;debug.mk&#39;.
+  Found an implicit rule for &#39;/home/litreily/openwrt/include/debug.mk&#39;.
+  Finished prerequisites of target file &#39;/home/litreily/openwrt/include/debug.mk&#39;.
+ No need to remake target &#39;/home/litreily/openwrt/include/debug.mk&#39;.
+ Considering target file &#39;Makefile&#39;.
+  Looking for an implicit rule for &#39;Makefile&#39;.
+  Trying pattern rule with stem &#39;Makefile&#39;.
+  Found an implicit rule for &#39;Makefile&#39;.
+  Finished prerequisites of target file &#39;Makefile&#39;.
+ No need to remake target &#39;Makefile&#39;.
+Updating goal targets....
+Considering target file &#39;staging_dir/host/.prereq-build&#39;.
+  Considering target file &#39;include/prereq-build.mk&#39;.
+   Looking for an implicit rule for &#39;include/prereq-build.mk&#39;.
+   Trying pattern rule with stem &#39;prereq-build.mk&#39;.
+   Found an implicit rule for &#39;include/prereq-build.mk&#39;.
+   Finished prerequisites of target file &#39;include/prereq-build.mk&#39;.
+  No need to remake target &#39;include/prereq-build.mk&#39;.
+ Finished prerequisites of target file &#39;staging_dir/host/.prereq-build&#39;.
+ Prerequisite &#39;include/prereq-build.mk&#39; is older than target &#39;staging_dir/host/.prereq-build&#39;.
+No need to remake target &#39;staging_dir/host/.prereq-build&#39;.
+Reaping winning child 0x7fffcb0a2010 PID 16454 
+Live child 0x7fffcb0a2010 (prepare-tmpinfo) PID 16505 
+Reaping winning child 0x7fffcb0a2010 PID 16505 
+Live child 0x7fffcb0a2010 (prepare-tmpinfo) PID 16506 
+
+Collecting package info: package/base-files
+Collecting package info: package/boot/arm-trusted-firmware-mvebu
+Collecting package info: package/boot/arm-trusted-firmware-rockchip
+Collecting package info: package/boot/arm-trusted-firmware-sunxi
+Collecting package info: package/boot/at91bootstrap
+Collecting package info: package/boot/fconfig
+Collecting package info: package/boot/grub2
+Collecting package info: package/boot/imx-bootlets
+Collecting package info: package/boot/kexec-tools
+Collecting package info: package/boot/kobs-ng
+Collecting package info: package/boot/mt7623n-preloader
+Collecting package info: package/boot/tfa-layerscape
+Collecting package info: package/boot/uboot-at91
+Collecting package info: package/boot/uboot-envtools
+Collecting package info: package/boot/uboot-fritz4040
+Collecting package info: package/boot/uboot-imx6
+Collecting package info: package/boot/uboot-kirkwood
+Collecting package info: package/boot/uboot-lantiq
+Collecting package info: package/boot/uboot-layerscape
+Collecting package info: package/boot/uboot-mediatek
+Collecting package info: package/boot/uboot-mvebu
+Collecting package info: package/boot/uboot-mxs
+Collecting package info: package/boot/uboot-omap
+Collecting package info: package/boot/uboot-oxnas
+Collecting package info: package/boot/uboot-ramips
+Collecting package info: package/boot/uboot-rockchip
+Collecting package info: package/boot/uboot-sunxi
+Collecting package info: package/boot/uboot-tegra
+Collecting package info: package/boot/uboot-zynq
+Collecting package info: package/devel/binutils
+Collecting package info: package/devel/gdb
+Collecting package info: package/devel/perf
+Collecting package info: package/devel/strace
+Collecting package info: package/devel/trace-cmd
+Collecting package info: package/devel/valgrind
+Collecting package info: package/firmware/amd64-microcode
+Collecting package info: package/firmware/ath10k-ct-firmware
+Collecting package info: package/firmware/b43legacy-firmware
+Collecting package info: package/firmware/cypress-firmware
+Collecting package info: package/firmware/cypress-nvram
+Collecting package info: package/firmware/intel-microcode
+Collecting package info: package/firmware/ipq-wifi
+Collecting package info: package/firmware/lantiq/dsl-vrx200-firmware-xdsl
+Collecting package info: package/firmware/layerscape/fman-ucode
+Collecting package info: package/firmware/layerscape/ls-dpl
+Collecting package info: package/firmware/layerscape/ls-mc
+Collecting package info: package/firmware/layerscape/ls-rcw
+Collecting package info: package/firmware/layerscape/ppfe-firmware
+Collecting package info: package/firmware/linux-firmware
+Collecting package info: package/firmware/prism54-firmware
+Collecting package info: package/firmware/wireless-regdb
+Collecting package info: package/kernel/acx-mac80211
+Collecting package info: package/kernel/ath10k-ct
+Collecting package info: package/kernel/bcm27xx-gpu-fw
+Collecting package info: package/kernel/bcm63xx-cfe
+Collecting package info: package/kernel/broadcom-wl
+Collecting package info: package/kernel/button-hotplug
+Collecting package info: package/kernel/cryptodev-linux
+Collecting package info: package/kernel/exfat
+Collecting package info: package/kernel/gpio-button-hotplug
+Collecting package info: package/kernel/gpio-nct5104d
+Collecting package info: package/kernel/hwmon-gsc
+Collecting package info: package/kernel/lantiq/ltq-adsl
+Collecting package info: package/kernel/lantiq/ltq-adsl-fw
+Collecting package info: package/kernel/lantiq/ltq-adsl-mei
+Collecting package info: package/kernel/lantiq/ltq-atm
+Collecting package info: package/kernel/lantiq/ltq-deu
+Collecting package info: package/kernel/lantiq/ltq-ifxos
+Collecting package info: package/kernel/lantiq/ltq-ptm
+Collecting package info: package/kernel/lantiq/ltq-tapi
+Collecting package info: package/kernel/lantiq/ltq-vdsl
+Collecting package info: package/kernel/lantiq/ltq-vdsl-fw
+Collecting package info: package/kernel/lantiq/ltq-vdsl-mei
+Collecting package info: package/kernel/lantiq/ltq-vmmc
+Collecting package info: package/kernel/linux
+Collecting package info: package/kernel/mac80211
+Collecting package info: package/kernel/mt76
+Collecting package info: package/kernel/mt7621-qtn-rgmii
+Collecting package info: package/kernel/mwlwifi
+Collecting package info: package/kernel/nat46
+Collecting package info: package/kernel/om-watchdog
+Collecting package info: package/kernel/rtc-rv5c386a
+Collecting package info: package/kernel/rtl8812au-ct
+Collecting package info: package/kernel/trelay
+Collecting package info: package/libs/argp-standalone
+Collecting package info: package/libs/elfutils
+Collecting package info: package/libs/gettext
+Collecting package info: package/libs/gettext-full
+Collecting package info: package/libs/gmp
+Collecting package info: package/libs/jansson
+Collecting package info: package/libs/libaudit
+Collecting package info: package/libs/libbsd
+Collecting package info: package/libs/libevent2
+Collecting package info: package/libs/libiconv
+Collecting package info: package/libs/libiconv-full
+Collecting package info: package/libs/libjson-c
+Collecting package info: package/libs/libmnl
+Collecting package info: package/libs/libnetfilter-conntrack
+Collecting package info: package/libs/libnfnetlink
+Collecting package info: package/libs/libnftnl
+Collecting package info: package/libs/libnl
+Collecting package info: package/libs/libnl-tiny
+Collecting package info: package/libs/libpcap
+Collecting package info: package/libs/libselinux
+Collecting package info: package/libs/libsemanage
+Collecting package info: package/libs/libsepol
+Collecting package info: package/libs/libtool
+Collecting package info: package/libs/libubox
+Collecting package info: package/libs/libunwind
+Collecting package info: package/libs/libusb
+Collecting package info: package/libs/mbedtls
+Collecting package info: package/libs/musl-fts
+Collecting package info: package/libs/ncurses
+Collecting package info: package/libs/nettle
+Collecting package info: package/libs/openssl
+Collecting package info: package/libs/pcre
+Collecting package info: package/libs/popt
+Collecting package info: package/libs/readline
+Collecting package info: package/libs/sysfsutils
+Collecting package info: package/libs/toolchain
+Collecting package info: package/libs/uclibc++
+Collecting package info: package/libs/uclient
+Collecting package info: package/libs/ustream-ssl
+Collecting package info: package/libs/wolfssl
+Collecting package info: package/libs/zlib
+Collecting package info: package/network/config/firewall
+Collecting package info: package/network/config/gre
+Collecting package info: package/network/config/ipip
+Collecting package info: package/network/config/ltq-adsl-app
+Collecting package info: package/network/config/ltq-vdsl-app
+Collecting package info: package/network/config/netifd
+Collecting package info: package/network/config/qos-scripts
+Collecting package info: package/network/config/soloscli
+Collecting package info: package/network/config/swconfig
+Collecting package info: package/network/config/vti
+Collecting package info: package/network/config/vxlan
+Collecting package info: package/network/config/xfrm
+Collecting package info: package/network/ipv6/464xlat
+Collecting package info: package/network/ipv6/6in4
+Collecting package info: package/network/ipv6/6rd
+Collecting package info: package/network/ipv6/6to4
+Collecting package info: package/network/ipv6/ds-lite
+Collecting package info: package/network/ipv6/map
+Collecting package info: package/network/ipv6/odhcp6c
+Collecting package info: package/network/ipv6/thc-ipv6
+Collecting package info: package/network/services/dnsmasq
+Collecting package info: package/network/services/dropbear
+Collecting package info: package/network/services/ead
+Collecting package info: package/network/services/hostapd
+Collecting package info: package/network/services/igmpproxy
+Collecting package info: package/network/services/ipset-dns
+Collecting package info: package/network/services/lldpd
+Collecting package info: package/network/services/odhcpd
+Collecting package info: package/network/services/omcproxy
+Collecting package info: package/network/services/ppp
+Collecting package info: package/network/services/relayd
+Collecting package info: package/network/services/uhttpd
+Collecting package info: package/network/services/umdns
+Collecting package info: package/network/services/wireguard
+Collecting package info: package/network/utils/adb-enablemodem
+Collecting package info: package/network/utils/arptables
+Collecting package info: package/network/utils/bpftools
+Collecting package info: package/network/utils/comgt
+Collecting package info: package/network/utils/dante
+Collecting package info: package/network/utils/ebtables
+Collecting package info: package/network/utils/ethtool
+Collecting package info: package/network/utils/iperf
+Collecting package info: package/network/utils/iperf3
+Collecting package info: package/network/utils/iproute2
+Collecting package info: package/network/utils/ipset
+Collecting package info: package/network/utils/iptables
+Collecting package info: package/network/utils/iw
+Collecting package info: package/network/utils/iwcap
+Collecting package info: package/network/utils/iwinfo
+Collecting package info: package/network/utils/layerscape/restool
+Collecting package info: package/network/utils/linux-atm
+Collecting package info: package/network/utils/ltq-dsl-base
+Collecting package info: package/network/utils/maccalc
+Collecting package info: package/network/utils/nftables
+Collecting package info: package/network/utils/owipcalc
+Collecting package info: package/network/utils/resolveip
+Collecting package info: package/network/utils/rssileds
+Collecting package info: package/network/utils/tcpdump
+Collecting package info: package/network/utils/umbim
+Collecting package info: package/network/utils/uqmi
+Collecting package info: package/network/utils/wireguard-tools
+Collecting package info: package/network/utils/wireless-tools
+Collecting package info: package/network/utils/wpan-tools
+Collecting package info: package/network/utils/wwan
+Collecting package info: package/system/ca-certificates
+Collecting package info: package/system/fstools
+Collecting package info: package/system/fwtool
+Collecting package info: package/system/iucode-tool
+Collecting package info: package/system/mtd
+Collecting package info: package/system/openwrt-keyring
+Collecting package info: package/system/opkg
+Collecting package info: package/system/procd
+Collecting package info: package/system/refpolicy
+Collecting package info: package/system/rpcd
+Collecting package info: package/system/selinux-policy
+Collecting package info: package/system/ubox
+Collecting package info: package/system/ubus
+Collecting package info: package/system/ucert
+Collecting package info: package/system/uci
+Collecting package info: package/system/urandom-seed
+Collecting package info: package/system/urngd
+Collecting package info: package/system/usign
+Collecting package info: package/system/zram-swap
+Collecting package info: package/utils/adb
+Collecting package info: package/utils/bcm27xx-userland
+Collecting package info: package/utils/bsdiff
+Collecting package info: package/utils/busybox
+Collecting package info: package/utils/bzip2
+Collecting package info: package/utils/checkpolicy
+Collecting package info: package/utils/ct-bugcheck
+Collecting package info: package/utils/e2fsprogs
+Collecting package info: package/utils/f2fs-tools
+Collecting package info: package/utils/fbtest
+Collecting package info: package/utils/fritz-tools
+Collecting package info: package/utils/jboot-tools
+Collecting package info: package/utils/jsonfilter
+Collecting package info: package/utils/lua
+Collecting package info: package/utils/lua5.3
+Collecting package info: package/utils/mdadm
+Collecting package info: package/utils/mtd-utils
+Collecting package info: package/utils/nvram
+Collecting package info: package/utils/osafeloader
+Collecting package info: package/utils/oseama
+Collecting package info: package/utils/otrx
+Collecting package info: package/utils/policycoreutils
+Collecting package info: package/utils/px5g-mbedtls
+Collecting package info: package/utils/px5g-wolfssl
+Collecting package info: package/utils/ravpower-mcu
+Collecting package info: package/utils/secilc
+Collecting package info: package/utils/spidev_test
+Collecting package info: package/utils/ugps
+Collecting package info: package/utils/usbmode
+Collecting package info: package/utils/usbreset
+Collecting package info: package/utils/usbutils
+Collecting package info: package/utils/util-linux
+Collecting package info: merging...
+Collecting package info: done
+Reaping winning child 0x7fffcb0a2010 PID 16506 
+Live child 0x7fffcb0a2010 (prepare-tmpinfo) PID 18058 
+
+Collecting target info: target/linux/apm821xx
+Collecting target info: target/linux/arc770
+Collecting target info: target/linux/archs38
+Collecting target info: target/linux/armvirt
+Collecting target info: target/linux/at91
+Collecting target info: target/linux/ath25
+Collecting target info: target/linux/ath79
+Collecting target info: target/linux/bcm27xx
+Collecting target info: target/linux/bcm47xx
+Collecting target info: target/linux/bcm53xx
+Collecting target info: target/linux/bcm63xx
+Collecting target info: target/linux/gemini
+Collecting target info: target/linux/imx6
+Collecting target info: target/linux/ipq40xx
+Collecting target info: target/linux/ipq806x
+Collecting target info: target/linux/ipq807x
+Collecting target info: target/linux/kirkwood
+Collecting target info: target/linux/lantiq
+Collecting target info: target/linux/layerscape
+Collecting target info: target/linux/malta
+Collecting target info: target/linux/mediatek
+Collecting target info: target/linux/mpc85xx
+Collecting target info: target/linux/mvebu
+Collecting target info: target/linux/mxs
+Collecting target info: target/linux/octeon
+Collecting target info: target/linux/octeontx
+Collecting target info: target/linux/omap
+Collecting target info: target/linux/oxnas
+Collecting target info: target/linux/pistachio
+Collecting target info: target/linux/ramips
+Collecting target info: target/linux/realtek
+Collecting target info: target/linux/rockchip
+Collecting target info: target/linux/sunxi
+Collecting target info: target/linux/tegra
+Collecting target info: target/linux/uml
+Collecting target info: target/linux/x86
+Collecting target info: target/linux/zynq
+Collecting target info: merging...
+Collecting target info: done
+Reaping winning child 0x7fffcb0a2010 PID 18058 
+Live child 0x7fffcb0a2010 (prepare-tmpinfo) PID 20209 
+Reaping winning child 0x7fffcb0a2010 PID 20209 
+Live child 0x7fffcb0a2010 (prepare-tmpinfo) PID 20212 
+Reaping winning child 0x7fffcb0a2010 PID 20212 
+Live child 0x7fffcb0a2010 (prepare-tmpinfo) PID 20217 
+WARNING: Makefile &#39;package/utils/busybox/Makefile&#39; has a dependency on &#39;libpam&#39;, which does not exist
+WARNING: Makefile &#39;package/utils/busybox/Makefile&#39; has a dependency on &#39;libpam&#39;, which does not exist
+WARNING: Makefile &#39;package/utils/busybox/Makefile&#39; has a build dependency on &#39;libpam&#39;, which does not exist
+WARNING: Makefile &#39;package/boot/kexec-tools/Makefile&#39; has a dependency on &#39;liblzma&#39;, which does not exist
+WARNING: Makefile &#39;package/network/services/lldpd/Makefile&#39; has a dependency on &#39;libnetsnmp&#39;, which does not exist
+WARNING: Makefile &#39;package/utils/policycoreutils/Makefile&#39; has a dependency on &#39;libpam&#39;, which does not exist
+WARNING: Makefile &#39;package/utils/policycoreutils/Makefile&#39; has a dependency on &#39;libpam&#39;, which does not exist
+WARNING: Makefile &#39;package/utils/policycoreutils/Makefile&#39; has a build dependency on &#39;libpam&#39;, which does not exist
+Reaping winning child 0x7fffcb0a2010 PID 20217 
+Live child 0x7fffcb0a2010 (prepare-tmpinfo) PID 20219 
+Reaping winning child 0x7fffcb0a2010 PID 20219 
+Live child 0x7fffcb0a2010 (prepare-tmpinfo) PID 20221 
+Reaping winning child 0x7fffcb0a2010 PID 20221 
+Live child 0x7fffcb0a2010 (prepare-tmpinfo) PID 20223 
+Reaping winning child 0x7fffcb0a2010 PID 20223 
+Removing child 0x7fffcb0a2010 PID 20223 from chain.
+  Successfully remade target file &#39;prepare-tmpinfo&#39;.
+  Pruning file &#39;FORCE&#39;.
+ Finished prerequisites of target file &#39;defconfig&#39;.
+Must remake target &#39;defconfig&#39;.
+touch .config
+Putting child 0x7fffcb096b50 (defconfig) PID 20227 on the chain.
+Live child 0x7fffcb096b50 (defconfig) PID 20227 
+Reaping winning child 0x7fffcb096b50 PID 20227 
+Live child 0x7fffcb096b50 (defconfig) PID 20228 
+Reaping winning child 0x7fffcb096b50 PID 20228 
+[ -L .config ] &amp;&amp; export KCONFIG_OVERWRITECONFIG=1; \
+    scripts/config/conf  --defconfig=.config Config.in
+Live child 0x7fffcb096b50 (defconfig) PID 20229 
+#
+# configuration written to .config
+#
+Reaping winning child 0x7fffcb096b50 PID 20229 
+Removing child 0x7fffcb096b50 PID 20229 from chain.
+Successfully remade target file &#39;defconfig&#39;.</code></pre>
+<p>从以上 log 信息中可以非常完整清楚的看到 make 指令的执行流程，其中包含了每个目标文件及其依赖文件的规则查找和执行。下面我们结合 log 以及 Makefile 来详细追踪一下 <code>make defconfig</code> 的执行流程。</p>
+<p>首先要知道 make 的目标文件是<code>defconfig</code>, 对应 toplevel.mk 中的</p>
+<pre><code class="makefile">defconfig: scripts/config/conf prepare-tmpinfo FORCE
+    touch .config
+    @if [ ! -s .config -a -e $(HOME)/.openwrt/defconfig ]; then cp $(HOME)/.openwrt/defconfig .config; fi
+    [ -L .config ] &amp;&amp; export KCONFIG_OVERWRITECONFIG=1; \
+        $&lt; $(KCONF_FLAGS) --defconfig=.config Config.in</code></pre>
+<p>可以知道其依赖项包含3个：</p>
+<ol>
+<li>scripts/config/conf</li>
+<li>prepare-tmpinfo</li>
+<li>FORCE</li>
+</ol>
+<h3 id="script-config-conf"><a href="#script-config-conf" class="headerlink" title="script/config/conf"></a>script/config/conf</h3><p>对于依赖文件 <code>scripts/config/conf</code> ，make 执行log如下：</p>
+<pre><code class="log">Considering target file &#39;defconfig&#39;.
+ File &#39;defconfig&#39; does not exist.
+  Considering target file &#39;scripts/config/conf&#39;.
+   File &#39;scripts/config/conf&#39; does not exist.
+   Looking for an implicit rule for &#39;scripts/config/conf&#39;.
+   Trying pattern rule with stem &#39;c&#39;.
+   Found an implicit rule for &#39;scripts/config/conf&#39;.
+    Considering target file &#39;staging_dir/host/.prereq-build&#39;.
+     File &#39;staging_dir/host/.prereq-build&#39; does not exist.
+      Considering target file &#39;include/prereq-build.mk&#39;.
+       Looking for an implicit rule for &#39;include/prereq-build.mk&#39;.
+       Trying pattern rule with stem &#39;prereq-build.mk&#39;.
+       Found an implicit rule for &#39;include/prereq-build.mk&#39;.
+       Finished prerequisites of target file &#39;include/prereq-build.mk&#39;.
+      No need to remake target &#39;include/prereq-build.mk&#39;.
+     Finished prerequisites of target file &#39;staging_dir/host/.prereq-build&#39;.
+    Must remake target &#39;staging_dir/host/.prereq-build&#39;.</code></pre>
+<p>make 首先查找 <code>defconfig</code> 是否需要更新，发现不存在，因为本身就不是文件。然后查找第一个依赖 <code>scripts/config/conf</code> ，发现也不存在，然后去查找生成这个文件的规则，在 <code>toplevel.mk</code> 可以找到其规则如下：</p>
+<pre><code class="makefile">ifeq ($(FORCE),)
+  .config scripts/config/conf scripts/config/mconf: staging_dir/host/.prereq-build
+endif</code></pre>
+<p>其中 <code>$(FORCE)</code> 变量默认是个空值，所以条件满足，make 发现 conf 又依赖于 <code>staging_dir/host/.prereq-build</code>. 于是把 <code>.prereq-build</code> 当做新的目标，查找其规则，在 toplevel.mk 中如下：</p>
+<pre><code class="makefile">staging_dir/host/.prereq-build: include/prereq-build.mk
+    mkdir -p tmp
+    @$(_SINGLE)$(NO_TRACE_MAKE) -j1 -r -s -f $(TOPDIR)/include/prereq-build.mk prereq 2&gt;/dev/null || &#123; \
+        echo &quot;Prerequisite check failed. Use FORCE=1 to override.&quot;; \
+        false; \
+    &#125;
+  ifneq ($(realpath $(TOPDIR)/include/prepare.mk),)
+    @$(_SINGLE)$(NO_TRACE_MAKE) -j1 -r -s -f $(TOPDIR)/include/prepare.mk prepare 2&gt;/dev/null || &#123; \
+        echo &quot;Preparation failed.&quot;; \
+        false; \
+    &#125;
+  endif
+    touch $@</code></pre>
+<p>这里发现需要依赖 <code>include/prereq-build.mk</code> ，于是将该文件导入，并结束了对 <code>.prereq-build</code> 的依赖查找，同时标记需要重新生成目标 <code>staging_dir/host/.prereq-build</code>.</p>
+<pre><code class="log">     Finished prerequisites of target file &#39;staging_dir/host/.prereq-build&#39;.
+    Must remake target &#39;staging_dir/host/.prereq-build&#39;.</code></pre>
+<p>生成目标时，根据 Makefile 中 <code>.prereq-build</code> 规则，会执行以下指令:</p>
+<pre><code class="makefile">    mkdir -p tmp
+    @$(_SINGLE)$(NO_TRACE_MAKE) -j1 -r -s -f $(TOPDIR)/include/prereq-build.mk prereq 2&gt;/dev/null || &#123; \
+        echo &quot;Prerequisite check failed. Use FORCE=1 to override.&quot;; \
+        false; \
+    &#125;
+    touch $@</code></pre>
+<blockquote>
+<p>include 目录不包含文件 <code>prepare.mk</code>, 所以原先的的判断可以忽略。</p>
+</blockquote>
+<p>使用 <code>make -n defconfig</code> 可以看到以上指令解析后是这样的</p>
+<pre><code class="bash">mkdir -p tmp
+export MAKEFLAGS= ;make V=s -j1 -r -s -f /home/litreily/openwrt/include/prereq-build.mk prereq 2&gt;/dev/null || &#123; \
+    echo &quot;Prerequisite check failed. Use FORCE=1 to override.&quot;; \
+    false; \
+&#125;
+touch staging_dir/host/.prereq-build</code></pre>
+<p>以上 make 指令会根据 <code>prereq-build.mk</code> 和 <code>prereq.mk</code> 两个 Makefile 安装一些依赖工具。</p>
+<pre><code class="makefile"># Required for the toolchain
+$(eval $(call TestHostCommand,working-make, \
+    Please install GNU make v3.82 or later. (This version has bugs), \
+    $(MAKE) -v | grep -E &#39;Make (3\.8[2-9]|3\.9[0-9]|[4-9]\.)&#39;))
+
+$(eval $(call TestHostCommand,case-sensitive-fs, \
+    OpenWrt can only be built on a case-sensitive filesystem, \
+    rm -f $(TMP_DIR)/test.*; touch $(TMP_DIR)/test.fs; \
+        test ! -f $(TMP_DIR)/test.FS))
+
+$(eval $(call TestHostCommand,proper-umask, \
+    Please build with umask 022 - other values produce broken packages, \
+    umask | grep -xE 0?0[012][012]))
+
+# ...</code></pre>
+<p>其中的 <code>TestHostCommand</code> 定义于 <code>prereq.mk</code>. 对应的log如下，完整log参考前文。</p>
+<pre><code class="log">Putting child 0x7fffcb0a1800 (staging_dir/host/.prereq-build) PID 15999 on the chain.
+Live child 0x7fffcb0a1800 (staging_dir/host/.prereq-build) PID 15999 
+Reaping winning child 0x7fffcb0a1800 PID 15999 
+Live child 0x7fffcb0a1800 (staging_dir/host/.prereq-build) PID 16000 
+Checking &#39;working-make&#39;... ok.
+Checking &#39;case-sensitive-fs&#39;... ok.
+Checking &#39;proper-umask&#39;... ok.
+Checking &#39;gcc&#39;... ok.
+Checking &#39;working-gcc&#39;... ok.
+Checking &#39;g++&#39;... ok.
+Checking &#39;working-g++&#39;... ok.
+...
+Checking &#39;file&#39;... ok.
+Checking &#39;rsync&#39;... ok.
+Checking &#39;ldconfig-stub&#39;... ok.
+Reaping winning child 0x7fffcb0a1800 PID 16000 
+Live child 0x7fffcb0a1800 (staging_dir/host/.prereq-build) PID 16418 
+Reaping winning child 0x7fffcb0a1800 PID 16418 
+Removing child 0x7fffcb0a1800 PID 16418 from chain.
+    Successfully remade target file &#39;staging_dir/host/.prereq-build&#39;.
+   Finished prerequisites of target file &#39;scripts/config/conf&#39;.
+  Must remake target &#39;scripts/config/conf&#39;.</code></pre>
+<p>执行完 <code>prereq-build.mk</code> 之后，就完成了 <code>scripts/config/conf</code> 依赖文件的编译生成，接下来就是正式编译 <code>conf</code> 文件了。</p>
+<pre><code class="log">Putting child 0x7fffcb0a1b70 (scripts/config/conf) PID 16422 on the chain.
+Live child 0x7fffcb0a1b70 (scripts/config/conf) PID 16422 
+make[1]: Entering directory &#39;/home/litreily/openwrt/scripts/config&#39;
+cc -O2   -c -o conf.o conf.c
+cc -O2   -c -o confdata.o confdata.c
+cc -O2   -c -o expr.o expr.c
+cc -O2 -I ./.   -c -o lexer.lex.o lexer.lex.c
+cc -O2 -I ./.   -c -o parser.tab.o parser.tab.c
+cc -O2   -c -o preprocess.o preprocess.c
+cc -O2   -c -o symbol.o symbol.c
+cc -O2   -c -o util.o util.c
+cc   conf.o confdata.o expr.o lexer.lex.o parser.tab.o preprocess.o symbol.o util.o   -o conf
+make[1]: Leaving directory &#39;/home/litreily/openwrt/scripts/config&#39;
+Reaping winning child 0x7fffcb0a1b70 PID 16422 
+Removing child 0x7fffcb0a1b70 PID 16422 from chain.</code></pre>
+<p>可以看出来，编译 <code>conf</code> 文件时，会在子进程中先进入对应的目录 <code>scripts/config</code> , 然后使用该目录的Makefile进行编译。编译结束后离开该目录并退出子进程。</p>
+<p>至此，<code>defconfig</code> 的依赖文件 <code>scripts/config/conf</code> 就编译完成了。流程简述如下：</p>
+<pre><code class="log">make defconfig
+    check prerequisites of defconfig : 
+        scripts/config/conf, prepare-tmpinfo, FORCE
+        check prerequisites of scripts/config/conf:
+            staging_dir/host/.prereq-build
+            check prerequisites of staging_dir/host/.prereq-build
+                include/prereq-build.mk
+            finished prerequisites of staging_dir/host/.prereq-build
+            running commands in include/prereq-build.mk
+        finished prerequisites of scripts/config/conf
+        compiling scripts/config/conf
+        finished compile scripts/config/conf
+        ...</code></pre>
+<h3 id="prepare-tmpinfo"><a href="#prepare-tmpinfo" class="headerlink" title="prepare-tmpinfo"></a>prepare-tmpinfo</h3><p><code>scripts/config/conf</code> 编译完成后，接下来就是<code>defconfig</code> 的第二个依赖 <code>prepare-tmpinfo</code> 了。</p>
+<pre><code class="log">  Successfully remade target file &#39;scripts/config/conf&#39;.
+  Considering target file &#39;prepare-tmpinfo&#39;.
+   File &#39;prepare-tmpinfo&#39; does not exist.
+    Considering target file &#39;FORCE&#39;.
+     File &#39;FORCE&#39; does not exist.
+     Finished prerequisites of target file &#39;FORCE&#39;.
+    Must remake target &#39;FORCE&#39;.
+    Successfully remade target file &#39;FORCE&#39;.
+   Finished prerequisites of target file &#39;prepare-tmpinfo&#39;.
+  Must remake target &#39;prepare-tmpinfo&#39;.</code></pre>
+<p>同样，查找 <code>prepare-tmpinfo</code> 目录不存在，查找其规则如下：</p>
+<pre><code class="makefile">prepare-tmpinfo: FORCE
+    @+$(MAKE) -r -s staging_dir/host/.prereq-build $(PREP_MK)
+    mkdir -p tmp/info
+    $(_SINGLE)$(NO_TRACE_MAKE) -j1 -r -s -f include/scan.mk SCAN_TARGET=&quot;packageinfo&quot; SCAN_DIR=&quot;package&quot; SCAN_NAME=&quot;package&quot; SCAN_DEPTH=5 SCAN_EXTRA=&quot;&quot;
+    $(_SINGLE)$(NO_TRACE_MAKE) -j1 -r -s -f include/scan.mk SCAN_TARGET=&quot;targetinfo&quot; SCAN_DIR=&quot;target/linux&quot; SCAN_NAME=&quot;target&quot; SCAN_DEPTH=2 SCAN_EXTRA=&quot;&quot; SCAN_MAKEOPTS=&quot;TARGET_BUILD=1&quot;
+    for type in package target; do \
+        f=tmp/.$$&#123;type&#125;info; t=tmp/.config-$$&#123;type&#125;.in; \
+        [ &quot;$$t&quot; -nt &quot;$$f&quot; ] || ./scripts/$$&#123;type&#125;-metadata.pl $(_ignore) config &quot;$$f&quot; &gt; &quot;$$t&quot; || &#123; rm -f &quot;$$t&quot;; echo &quot;Failed to build $$t&quot;; false; break; &#125;; \
+    done
+    [ tmp/.config-feeds.in -nt tmp/.packageauxvars ] || ./scripts/feeds feed_config &gt; tmp/.config-feeds.in
+    ./scripts/package-metadata.pl mk tmp/.packageinfo &gt; tmp/.packagedeps || &#123; rm -f tmp/.packagedeps; false; &#125;
+    ./scripts/package-metadata.pl pkgaux tmp/.packageinfo &gt; tmp/.packageauxvars || &#123; rm -f tmp/.packageauxvars; false; &#125;
+    ./scripts/package-metadata.pl usergroup tmp/.packageinfo &gt; tmp/.packageusergroup || &#123; rm -f tmp/.packageusergroup; false; &#125;
+    touch $(TOPDIR)/tmp/.build</code></pre>
+<p>其依赖 <code>FORCE</code> 不存在，log提示remade target file <code>FORCE</code>, 实际上应该啥也没做，我尝试 echo ${FORCE} 也是个空值。</p>
+<p>按照以上指令，同样，通过 <code>make -n defconfig</code> 可以知晓对应指令如下：</p>
+<pre><code class="bash">make -r -s staging_dir/host/.prereq-build OPENWRT_BUILD= QUIET=0
+mkdir -p tmp
+export MAKEFLAGS= ;make V=s -j1 -r -s -f /home/litreily/openwrt/include/prereq-build.mk prereq 2&gt;/dev/null || &#123; \
+        echo &quot;Prerequisite check failed. Use FORCE=1 to override.&quot;; \
+        false; \
+&#125;
+touch staging_dir/host/.prereq-build
+mkdir -p tmp/info
+export MAKEFLAGS= ;make V=s -j1 -r -s -f include/scan.mk SCAN_TARGET=&quot;packageinfo&quot; SCAN_DIR=&quot;package&quot; SCAN_NAME=&quot;package&quot; SCAN_DEPTH=5 SCAN_EXTRA=&quot;&quot;
+export MAKEFLAGS= ;make V=s -j1 -r -s -f include/scan.mk SCAN_TARGET=&quot;targetinfo&quot; SCAN_DIR=&quot;target/linux&quot; SCAN_NAME=&quot;target&quot; SCAN_DEPTH=2 SCAN_EXTRA=&quot;&quot; SCAN_MAKEOPTS=&quot;TARGET_BUILD=1&quot;
+for type in package target; do \
+    f=tmp/.$&#123;type&#125;info; t=tmp/.config-$&#123;type&#125;.in; \
+    [ &quot;$t&quot; -nt &quot;$f&quot; ] || ./scripts/$&#123;type&#125;-metadata.pl config &quot;$f&quot; &gt; &quot;$t&quot; || &#123; rm -f &quot;$t&quot;; echo &quot;Failed to build $t&quot;; false; break; &#125;; \
+done
+[ tmp/.config-feeds.in -nt tmp/.packageauxvars ] || ./scripts/feeds feed_config &gt; tmp/.config-feeds.in
+./scripts/package-metadata.pl mk tmp/.packageinfo &gt; tmp/.packagedeps || &#123; rm -f tmp/.packagedeps; false; &#125;
+./scripts/package-metadata.pl pkgaux tmp/.packageinfo &gt; tmp/.packageauxvars || &#123; rm -f tmp/.packageauxvars; false; &#125;
+./scripts/package-metadata.pl usergroup tmp/.packageinfo &gt; tmp/.packageusergroup || &#123; rm -f tmp/.packageusergroup; false; &#125;
+touch /home/litreily/openwrt/tmp/.build</code></pre>
+<p><code>prepare-tmpinfo</code>, 顾名思义，就是准备一些临时信息，包括</p>
+<ol>
+<li>package</li>
+<li>target/linux</li>
+</ol>
+<p>这两个部分，通过 <code>include/scan.mk</code> 扫描以上两个目录，将所有的 package 以及 target 信息存到临时目录 tmp 下, 然后通过对应的perl脚本 <code>scripts/$&#123;type&#125;-metadata.pl</code> 生成 <code>tmp/.config-$&#123;type&#125;.in</code> 文件。</p>
+<ol>
+<li><code>tmp/.packageinfo</code> : <code>tmp/.config-package.in</code></li>
+<li><code>tmp/.targetinfo</code> : <code>tmp/config-target.in</code></li>
+</ol>
+<p>此外，通过<code>scripts</code>的其它脚本生成feed, package 相关的信息文件并存放于 tmp 目录。</p>
+<p><code>prepare-tmpinfo</code> 生成过程对应的log如下：</p>
+<pre><code class="log">Considering target file &#39;staging_dir/host/.prereq-build&#39;.
+  Considering target file &#39;include/prereq-build.mk&#39;.
+   Looking for an implicit rule for &#39;include/prereq-build.mk&#39;.
+   Trying pattern rule with stem &#39;prereq-build.mk&#39;.
+   Found an implicit rule for &#39;include/prereq-build.mk&#39;.
+   Finished prerequisites of target file &#39;include/prereq-build.mk&#39;.
+  No need to remake target &#39;include/prereq-build.mk&#39;.
+ Finished prerequisites of target file &#39;staging_dir/host/.prereq-build&#39;.
+ Prerequisite &#39;include/prereq-build.mk&#39; is older than target &#39;staging_dir/host/.prereq-build&#39;.
+No need to remake target &#39;staging_dir/host/.prereq-build&#39;.
+Reaping winning child 0x7fffcb0a2010 PID 16454 
+Live child 0x7fffcb0a2010 (prepare-tmpinfo) PID 16505 
+Reaping winning child 0x7fffcb0a2010 PID 16505 
+Live child 0x7fffcb0a2010 (prepare-tmpinfo) PID 16506 
+
+Collecting package info: package/base-files
+Collecting package info: package/boot/arm-trusted-firmware-mvebu
+Collecting package info: package/boot/arm-trusted-firmware-rockchip
+...
+Collecting package info: package/utils/usbreset
+Collecting package info: package/utils/usbutils
+Collecting package info: package/utils/util-linux
+Collecting package info: merging...
+Collecting package info: done
+Reaping winning child 0x7fffcb0a2010 PID 16506 
+Live child 0x7fffcb0a2010 (prepare-tmpinfo) PID 18058 
+
+Collecting target info: target/linux/apm821xx
+Collecting target info: target/linux/arc770
+Collecting target info: target/linux/archs38
+...
+Collecting target info: target/linux/uml
+Collecting target info: target/linux/x86
+Collecting target info: target/linux/zynq
+Collecting target info: merging...
+Collecting target info: done
+Reaping winning child 0x7fffcb0a2010 PID 18058 
+...</code></pre>
+<p>以上所有搜集信息相关的log都是 scan.mk 打印的。还有值得注意的是，<code>prepare-tmpinfo</code> 首条指令</p>
+<pre><code class="bash">make -r -s staging_dir/host/.prereq-build OPENWRT_BUILD= QUIET=0</code></pre>
+<p>实际上在编译 <code>scripts/config/conf</code> 之前已经按照依赖规则执行过了，所以在这里会检测 <code>.prereq-build</code> 的依赖没有更新，所以不重新生成。</p>
+<pre><code class="log">No need to remake target &#39;staging_dir/host/.prereq-build&#39;.</code></pre>
+<p>ok, 到此为止，<code>defconfig</code> 的两个依赖项都已编译完毕。只剩下一个 <code>FORCE</code>.</p>
+<h3 id="defconfig"><a href="#defconfig" class="headerlink" title="defconfig"></a>defconfig</h3><p>由于 <code>FORCE</code> 变量没有定义，所以直接略过，然后执行 <code>defconfig</code> 相关指令。</p>
+<pre><code class="makefile">defconfig: scripts/config/conf prepare-tmpinfo FORCE
+    touch .config
+    @if [ ! -s .config -a -e $(HOME)/.openwrt/defconfig ]; then cp $(HOME)/.openwrt/defconfig .config; fi
+    [ -L .config ] &amp;&amp; export KCONFIG_OVERWRITECONFIG=1; \
+        $&lt; $(KCONF_FLAGS) --defconfig=.config Config.in</code></pre>
+<p>这个指令前面已经解析过了，主体部分就是 <code>scripts/config/conf --defconfig=.config Config.in</code>, 详细log如下：</p>
+<pre><code class="log">  Successfully remade target file &#39;prepare-tmpinfo&#39;.
+  Pruning file &#39;FORCE&#39;.
+ Finished prerequisites of target file &#39;defconfig&#39;.
+Must remake target &#39;defconfig&#39;.
+touch .config
+Putting child 0x7fffcb096b50 (defconfig) PID 20227 on the chain.
+Live child 0x7fffcb096b50 (defconfig) PID 20227 
+Reaping winning child 0x7fffcb096b50 PID 20227 
+Live child 0x7fffcb096b50 (defconfig) PID 20228 
+Reaping winning child 0x7fffcb096b50 PID 20228 
+[ -L .config ] &amp;&amp; export KCONFIG_OVERWRITECONFIG=1; \
+    scripts/config/conf  --defconfig=.config Config.in
+Live child 0x7fffcb096b50 (defconfig) PID 20229 
+#
+# configuration written to .config
+#
+Reaping winning child 0x7fffcb096b50 PID 20229 
+Removing child 0x7fffcb096b50 PID 20229 from chain.
+Successfully remade target file &#39;defconfig&#39;. </code></pre>
+<p>执行不带参数的 <code>make defconfig</code> 通常只会看到以下部分的log</p>
+<pre><code class="log">#
+# configuration written to .config
+#</code></pre>
+<p>到此，<code>make defconfig</code> 整个流程就结束了，中间会调用到很多其它 Makefile，比如 <code>scan.mk</code>, <code>verbose.mk</code> 等，这些就不细讲了。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>本文主要目的是熟悉 openwrt Makefile 的执行流程，以便日后需要修改或调试某些相关问题时能够得心应手。Makefile 框架是 openwrt 非常重要的一部分，本文只是讲述了 make config 系列流程，实际上主 Makefile 有个条件分支判断 <code>OPENWRT_BUILD</code>, 当编译 kernel 或者 firmware 时，会先执行第一条分支进行初始化，然后通过 <code>toplevel.mk</code> 重新执行 make, 第二次调用时会进入第二个分支。那又将是另外一番风景，这个以后再说啦。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://github.com/openwrt/openwrt">github openwrt</a></li>
+</ul>
+]]></content>
+      
+        <categories>
+            
+            <category> Embedded </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> makefile </tag>
+            
+            <tag> openwrt </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[lua 高级特性]]></title>
       <url>https://www.litreily.top/2020/12/25/lua-adv/</url>
       <content type="html"><![CDATA[<p>这一篇来记录下 lua 的某些高级特性，以便在实际应用中得心应手。</p>
@@ -3068,47 +3993,6 @@ EOF</code></pre>
     </entry>
     
     <entry>
-      <title><![CDATA[使用油猴脚本批量下载canvas图片]]></title>
-      <url>https://www.litreily.top/2020/03/15/canvas-dl/</url>
-      <content type="html"><![CDATA[<p>女友最近在网上下载一些北大网盘的pdf<a href="https://disk.pku.edu.cn/#/link/3A7748E0466521E3E68A0CBA4C24DE20?gns=AE26ACF837E24D51B1EC40E0A80A5D23%2F7F0E54D7D92343B1B62031B1C41F2280">文档</a>，结果发现没有下载接口，另存为也只能存储单张图片。找我帮忙，这时候发现程序员男票的好处了哈。</p>
-<h2 id="分析页面"><a href="#分析页面" class="headerlink" title="分析页面"></a>分析页面</h2><p>一开始想着使用Chrome调试工具看下pdf链接，发现这个网盘居然不是直接获取的pdf文件，而是使用js脚本动态渲染生成的，涨知识了。</p>
-<p><img src="/assets/canvas/pdf-js.png" alt="pdf-combine js"></p>
-<p>那看看是否可以以图片形式批量下载呢，结果查看pdf单页的html结构发现，这居然是个canvas!!!还不是普通图片，而是画布。</p>
-<p><img src="/assets/canvas/canvas.png" alt="cancvs"></p>
-<h2 id="下载插件"><a href="#下载插件" class="headerlink" title="下载插件"></a>下载插件</h2><p>没关系，canvas什么的也不是难事，万能的油猴插件总会有解决方案的，果不其然让我找到个专门用于下载svg, canvas的油猴插件↓</p>
-<ul>
-<li><a href="https://greasyfork.org/zh-CN/scripts/383101-%E7%BD%91%E7%AB%99%E5%9B%BE%E7%89%87-%E8%83%8C%E6%99%AF%E5%9B%BE-svg-canvas-%E6%8A%93%E5%8F%96%E9%A2%84%E8%A7%88%E4%B8%8B%E8%BD%BD">网站图片（背景图，svg，canvas）抓取预览下载</a></li>
-</ul>
-<h2 id="下载图片"><a href="#下载图片" class="headerlink" title="下载图片"></a>下载图片</h2><p>这正是我想要的，安装好后，使用起来非常简单，刷新要下载canvas图片的页面，在右下角有一个按钮<strong>自动获取图片</strong>。</p>
-<p><img src="/assets/canvas/check-tampermonkey.png" alt="js extension"></p>
-<p>点击之后开始扫描，注意下图中的数字并不代表实际的图片数量，不用理会。</p>
-<p><img src="/assets/canvas/scanning.png" alt="scanning"></p>
-<p>扫描完成后，可以限定图片大小，以滤除不符合要求的小图片，然后通过<strong>批量下载</strong>完成下载，对于数量较多的页面可能需要稍微等一小会，绝大部分情况是很快的。</p>
-<p><img src="/assets/canvas/download.png" alt="download"></p>
-<p>这样就下载完成啦。</p>
-<p><img src="/assets/canvas/downloaded.png" alt="downloaded"></p>
-<p>至于如何将批量转换为pdf，那方法就多啦，福昕pdf编辑器、ABBYY等等，这个留待下回再讲，哈哈。</p>
-<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>经评论区大佬@Axun提醒，本文所爬网站的PDF文件是可以直接提取的，刷新页面过滤<code>Access</code>即可得到下面的链接，右键在新页面打开即可保存，然后添加扩展名即可。</p>
-<p><img src="/assets/canvas/pdf-source-file.png" alt="PDF source file"></p>
-<p>当然啦，本文提及的canvas图片下载方法也适用于其它网站，欢迎食用。</p>
-]]></content>
-      
-        <categories>
-            
-            <category> Tools </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> tampermonkey </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
       <title><![CDATA[NBNS客户端的C语言实现]]></title>
       <url>https://www.litreily.top/2020/03/15/nbns_code/</url>
       <content type="html"><![CDATA[<p>接上一篇<a href="/2020/02/28/nbns/">【网络协议详解1 - NBNS】</a>对NBNS的介绍，这一篇将要讲述使用C语言如何实现一个NBNS客户端，用于向局域网内其它设备发送NBNS NODE STATUS QUERY，并将接收到的RESPONSE信息打印出来。其实也就是一个UDP socket的实例。</p>
@@ -3454,6 +4338,47 @@ Not in presentation format</code></pre>
         <tags>
             
             <tag> C/C++ </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[使用油猴脚本批量下载canvas图片]]></title>
+      <url>https://www.litreily.top/2020/03/15/canvas-dl/</url>
+      <content type="html"><![CDATA[<p>女友最近在网上下载一些北大网盘的pdf<a href="https://disk.pku.edu.cn/#/link/3A7748E0466521E3E68A0CBA4C24DE20?gns=AE26ACF837E24D51B1EC40E0A80A5D23%2F7F0E54D7D92343B1B62031B1C41F2280">文档</a>，结果发现没有下载接口，另存为也只能存储单张图片。找我帮忙，这时候发现程序员男票的好处了哈。</p>
+<h2 id="分析页面"><a href="#分析页面" class="headerlink" title="分析页面"></a>分析页面</h2><p>一开始想着使用Chrome调试工具看下pdf链接，发现这个网盘居然不是直接获取的pdf文件，而是使用js脚本动态渲染生成的，涨知识了。</p>
+<p><img src="/assets/canvas/pdf-js.png" alt="pdf-combine js"></p>
+<p>那看看是否可以以图片形式批量下载呢，结果查看pdf单页的html结构发现，这居然是个canvas!!!还不是普通图片，而是画布。</p>
+<p><img src="/assets/canvas/canvas.png" alt="cancvs"></p>
+<h2 id="下载插件"><a href="#下载插件" class="headerlink" title="下载插件"></a>下载插件</h2><p>没关系，canvas什么的也不是难事，万能的油猴插件总会有解决方案的，果不其然让我找到个专门用于下载svg, canvas的油猴插件↓</p>
+<ul>
+<li><a href="https://greasyfork.org/zh-CN/scripts/383101-%E7%BD%91%E7%AB%99%E5%9B%BE%E7%89%87-%E8%83%8C%E6%99%AF%E5%9B%BE-svg-canvas-%E6%8A%93%E5%8F%96%E9%A2%84%E8%A7%88%E4%B8%8B%E8%BD%BD">网站图片（背景图，svg，canvas）抓取预览下载</a></li>
+</ul>
+<h2 id="下载图片"><a href="#下载图片" class="headerlink" title="下载图片"></a>下载图片</h2><p>这正是我想要的，安装好后，使用起来非常简单，刷新要下载canvas图片的页面，在右下角有一个按钮<strong>自动获取图片</strong>。</p>
+<p><img src="/assets/canvas/check-tampermonkey.png" alt="js extension"></p>
+<p>点击之后开始扫描，注意下图中的数字并不代表实际的图片数量，不用理会。</p>
+<p><img src="/assets/canvas/scanning.png" alt="scanning"></p>
+<p>扫描完成后，可以限定图片大小，以滤除不符合要求的小图片，然后通过<strong>批量下载</strong>完成下载，对于数量较多的页面可能需要稍微等一小会，绝大部分情况是很快的。</p>
+<p><img src="/assets/canvas/download.png" alt="download"></p>
+<p>这样就下载完成啦。</p>
+<p><img src="/assets/canvas/downloaded.png" alt="downloaded"></p>
+<p>至于如何将批量转换为pdf，那方法就多啦，福昕pdf编辑器、ABBYY等等，这个留待下回再讲，哈哈。</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>经评论区大佬@Axun提醒，本文所爬网站的PDF文件是可以直接提取的，刷新页面过滤<code>Access</code>即可得到下面的链接，右键在新页面打开即可保存，然后添加扩展名即可。</p>
+<p><img src="/assets/canvas/pdf-source-file.png" alt="PDF source file"></p>
+<p>当然啦，本文提及的canvas图片下载方法也适用于其它网站，欢迎食用。</p>
+]]></content>
+      
+        <categories>
+            
+            <category> Tools </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> tampermonkey </tag>
             
         </tags>
         
@@ -15791,61 +16716,6 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
     </entry>
     
     <entry>
-      <title><![CDATA[Labview - 常用快捷键]]></title>
-      <url>https://www.litreily.top/2016/06/06/shrotcuts/</url>
-      <content type="html"><![CDATA[<p>作为一款功能强大的编程软件，自然少不了大量的快捷键支持。在开发过程中，熟练使用这些快捷键，可以高效完成编码调试过程，减少手动操作，提高工作效率。</p>
-<h2 id="菜单快捷键"><a href="#菜单快捷键" class="headerlink" title="菜单快捷键"></a>菜单快捷键</h2><p>打开LabVIEW中的&quot;选项&quot;界面，在&quot;菜单快捷键&quot;中可以看到所有可用的快捷键。当然，如果觉得不够用或是与其它软件有冲突，可以手动添加或修改新的快捷键。</p>
-<p><img src="/assets/labview/shortcuts/editPanel.png" alt="Labview editPanel"></p>
-<h2 id="常用快捷键"><a href="#常用快捷键" class="headerlink" title="常用快捷键"></a>常用快捷键</h2><p>快捷键虽多，但常用的却有限。我简单将其分为通用键、功能键和技巧键。</p>
-<h3 id="通用键"><a href="#通用键" class="headerlink" title="通用键"></a>通用键</h3><p>有些快捷键是大部分软件共有的，其功能也类似。</p>
-<ul>
-<li>Ctrl+N：新建</li>
-<li>Ctrl+A：全选</li>
-<li>Ctrl+C：复制</li>
-<li>Ctrl+V：粘贴</li>
-<li>Ctrl+S：保存</li>
-<li>Ctrl+Shift+S：保存全部</li>
-</ul>
-<h3 id="功能键"><a href="#功能键" class="headerlink" title="功能键"></a>功能键</h3><p>在代码编辑过程中经常会用到的功能性快捷键包括：</p>
-<ul>
-<li>Ctrl+R：运行程序</li>
-<li>Ctrl+E：在前面板和程序框图之间切换</li>
-<li>Ctrl+H：打开/关闭即时帮助</li>
-<li>Ctrl+B：删除断线</li>
-<li>Ctrl+I：查看当前VI属性</li>
-<li>Ctrl+T：左右两栏显示前面板和程序框图</li>
-<li>Ctrl+W：关闭当前界面或项目</li>
-<li>Ctrl+Q：退出LabVIEW</li>
-</ul>
-<h3 id="技巧键"><a href="#技巧键" class="headerlink" title="技巧键"></a>技巧键</h3><ul>
-<li>Ctrl+鼠标拖动：复制被选控件或函数</li>
-<li>Ctrl+鼠标滚轮：切换多层结构的当前结构帧</li>
-<li>Shift+控件：将鼠标改为选择指针，用于选中某个或多个控件</li>
-<li>双击鼠标左键：添加注释</li>
-<li>Ctrl+Shift+鼠标拖动：将鼠标改为手形指针，用于拖动程序框图</li>
-</ul>
-<h3 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h3><p>如果一个函数仅包含两个输入接口时，例如：加、减、乘、除。当我们要切换两个输入接口的连线时，例如减法的两个输入A和B，开始连接的时候是A-B，现在发现不对，要改成B-A。默认我们会去删除两条线然后重新连接，但使用快捷键<code>Ctrl+Click</code>可以直接完成切换。<br><img src="/assets/labview/shortcuts/exchange.gif" alt="Labview exchange"></p>
-<p><strong>使用方法：</strong>在点击Ctrl后移动鼠标至函数的任一输入端，鼠标指针会变为类似数字8的一个图标，此时点击鼠标左键即可完成切换。</p>
-]]></content>
-      
-        <categories>
-            
-            <category> Language </category>
-            
-            <category> LabVIEW </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> labview </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
       <title><![CDATA[Labview - 对话框程序模板]]></title>
       <url>https://www.litreily.top/2016/06/06/labview-dialog/</url>
       <content type="html"><![CDATA[<p>软件开发过程中，经常要使用对话框界面，例如各种参数设置界面等。为了减少重复性工作，我们可以创建一个对话框模板，往后就可以通过该模板直接新建对话框界面。</p>
@@ -15884,6 +16754,61 @@ atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
 <p><img src="/assets/labview/dialog/dialog_2.png" alt="Labview dialog"></p>
 <p>该模板比较简单，但是非常实用，大多数设置界面都可以使用该模板进行设计。当然也可以进一步完善。例如，很多设置界面都有<strong>应用</strong>按钮和<strong>退出</strong>按钮，那么，我们可以在模板中添加一个应用按钮和一个退出按钮，并添加对应的按钮点击事件，修改移位寄存器的值。</p>
 <h2 id="下载模板"><a href="#下载模板" class="headerlink" title="下载模板"></a>下载模板</h2><p>我将模板存至网盘便于下载：<a href="http://pan.baidu.com/s/1pKUe7Ib">下载链接</a>。</p>
+]]></content>
+      
+        <categories>
+            
+            <category> Language </category>
+            
+            <category> LabVIEW </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> labview </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Labview - 常用快捷键]]></title>
+      <url>https://www.litreily.top/2016/06/06/shrotcuts/</url>
+      <content type="html"><![CDATA[<p>作为一款功能强大的编程软件，自然少不了大量的快捷键支持。在开发过程中，熟练使用这些快捷键，可以高效完成编码调试过程，减少手动操作，提高工作效率。</p>
+<h2 id="菜单快捷键"><a href="#菜单快捷键" class="headerlink" title="菜单快捷键"></a>菜单快捷键</h2><p>打开LabVIEW中的&quot;选项&quot;界面，在&quot;菜单快捷键&quot;中可以看到所有可用的快捷键。当然，如果觉得不够用或是与其它软件有冲突，可以手动添加或修改新的快捷键。</p>
+<p><img src="/assets/labview/shortcuts/editPanel.png" alt="Labview editPanel"></p>
+<h2 id="常用快捷键"><a href="#常用快捷键" class="headerlink" title="常用快捷键"></a>常用快捷键</h2><p>快捷键虽多，但常用的却有限。我简单将其分为通用键、功能键和技巧键。</p>
+<h3 id="通用键"><a href="#通用键" class="headerlink" title="通用键"></a>通用键</h3><p>有些快捷键是大部分软件共有的，其功能也类似。</p>
+<ul>
+<li>Ctrl+N：新建</li>
+<li>Ctrl+A：全选</li>
+<li>Ctrl+C：复制</li>
+<li>Ctrl+V：粘贴</li>
+<li>Ctrl+S：保存</li>
+<li>Ctrl+Shift+S：保存全部</li>
+</ul>
+<h3 id="功能键"><a href="#功能键" class="headerlink" title="功能键"></a>功能键</h3><p>在代码编辑过程中经常会用到的功能性快捷键包括：</p>
+<ul>
+<li>Ctrl+R：运行程序</li>
+<li>Ctrl+E：在前面板和程序框图之间切换</li>
+<li>Ctrl+H：打开/关闭即时帮助</li>
+<li>Ctrl+B：删除断线</li>
+<li>Ctrl+I：查看当前VI属性</li>
+<li>Ctrl+T：左右两栏显示前面板和程序框图</li>
+<li>Ctrl+W：关闭当前界面或项目</li>
+<li>Ctrl+Q：退出LabVIEW</li>
+</ul>
+<h3 id="技巧键"><a href="#技巧键" class="headerlink" title="技巧键"></a>技巧键</h3><ul>
+<li>Ctrl+鼠标拖动：复制被选控件或函数</li>
+<li>Ctrl+鼠标滚轮：切换多层结构的当前结构帧</li>
+<li>Shift+控件：将鼠标改为选择指针，用于选中某个或多个控件</li>
+<li>双击鼠标左键：添加注释</li>
+<li>Ctrl+Shift+鼠标拖动：将鼠标改为手形指针，用于拖动程序框图</li>
+</ul>
+<h3 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h3><p>如果一个函数仅包含两个输入接口时，例如：加、减、乘、除。当我们要切换两个输入接口的连线时，例如减法的两个输入A和B，开始连接的时候是A-B，现在发现不对，要改成B-A。默认我们会去删除两条线然后重新连接，但使用快捷键<code>Ctrl+Click</code>可以直接完成切换。<br><img src="/assets/labview/shortcuts/exchange.gif" alt="Labview exchange"></p>
+<p><strong>使用方法：</strong>在点击Ctrl后移动鼠标至函数的任一输入端，鼠标指针会变为类似数字8的一个图标，此时点击鼠标左键即可完成切换。</p>
 ]]></content>
       
         <categories>
