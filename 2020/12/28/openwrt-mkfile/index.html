@@ -1,0 +1,161 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>openwrt Makefile 框架分析 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script><meta name="generator" content="Hexo 5.3.0"></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/plugins/prettify/prettify.js"></script><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">openwrt Makefile 框架分析</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2020/12/28/openwrt-mkfile/">2020-12-28</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Embedded/">Embedded</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>openwrt repo: <a target="_blank" rel="noopener" href="https://github.com/openwrt/openwrt">https://github.com/openwrt/openwrt</a></p>
+<h2 id="整体框架"><a href="#整体框架" class="headerlink" title="整体框架"></a>整体框架</h2><p><img src="/assets/openwrt/openwrt_arch.png" alt="openwrt arch"></p>
+<ul>
+<li>首行为buildroot默认目录<ul>
+<li>config: 配置文件</li>
+<li>include: openwrt 的 Makefile 文件</li>
+<li>package: 各个软件包的Makefile, patches等文件</li>
+<li>scripts: openwrt 包管理相关的 perl 脚本</li>
+<li>target: 用于编译 kernel 和 firmware 的相关文件</li>
+<li>toolchain: 包含用于获取 kernel headers, C lib, bin-utils, compiler, debugger 的指令</li>
+<li>tools: 包含编译时所需的一些工具，如automake, autoconf, sed, cmake...</li>
+</ul>
+</li>
+<li>第二行为编译后新增目录<ul>
+<li>bin: 存放编译后的firmware和ipk文件</li>
+<li>build_dir: 编译目录，软件包解压存放路径</li>
+<li>dl: 软件包下载路径</li>
+<li>feeds:</li>
+<li>staging_dir: 存放编译后的交叉编译工具等</li>
+<li>tmp: 存放个别临时文件</li>
+</ul>
+</li>
+</ul>
+<h2 id="主Makefile"><a href="#主Makefile" class="headerlink" title="主Makefile"></a>主Makefile</h2><p>主 Makefile 位于 buildroot 的根目录，是执行 make 执行时访问的首个 Makefile.</p>
+<h3 id="全局变量"><a href="#全局变量" class="headerlink" title="全局变量"></a>全局变量</h3><pre><code class="makefile">TOPDIR:=$&#123;CURDIR&#125;
+LC_ALL:=C
+LANG:=C
+TZ:=UTC
+export TOPDIR LC_ALL LANG TZ
+
+empty:=
+space:= $(empty) $(empty)
+$(if $(findstring $(space),$(TOPDIR)),$(error ERROR: The path to the OpenWrt directory must not include any spaces))</code></pre>
+<p><code>$&#123;CURDIR&#125;</code> 是 make 指令的内嵌变量，在执行 make 指令时，获取当前 Makefile 所在目录设为其值。相当于</p>
+<pre><code class="bash">CURDIR=$(pwd)</code></pre>
+<p><code>$&#123;TOPDIR&#125;</code> 就是 buildroot 根目录，export 之后在其它 Makefile中也可以 使用。</p>
+<p><code>empty</code> 是个空值，用于设置默认值，<code>space</code>是个空格，通常也用于设置初始值、或者判断空格。</p>
+<pre><code class="makefile">$(if $(findstring $(space),$(TOPDIR)),$(error ERROR: The path to the OpenWrt directory must not include any spaces))</code></pre>
+<p>以上语句用于判断 buildroot 根目录是否包含空格，如果包含空格将会提示错误。</p>
+<h2 id="makefile-语法"><a href="#makefile-语法" class="headerlink" title="makefile 语法"></a>makefile 语法</h2><h3 id="make-指令参数"><a href="#make-指令参数" class="headerlink" title="make 指令参数"></a>make 指令参数</h3><ul>
+<li><code>-n</code> : 只打印编译过程，不执行指令，方便调试查看编译过程</li>
+<li><code>-w</code> : 在编译是打印 <code>Entering directory ...</code> 信息，方便查看当前执行路径</li>
+<li><code>-j</code> : 指定多核编译，加快编译速度</li>
+<li><code>-t</code> : touch，更新明白文件的时间，但不更改文件</li>
+<li><code>-I</code> : 指定一个搜索路径</li>
+<li><code>-d</code> : 打印debug信息，帮助分析调试</li>
+</ul>
+<h3 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h3><ul>
+<li><code>:=</code> : 变量赋值为新的值，<code>Foo:=bar</code></li>
+<li><code>?=</code> : 如果没有定义过则赋值新值，<code>Foo?=bar</code></li>
+<li><code>+=</code> : 追加变量值</li>
+<li><code>empty :=</code> : 空变量</li>
+<li><code>space := $(empty) $(empty)</code> : 空格变量</li>
+<li><code>$(foo:.o=.c)</code> : 变量替换，将 <code>*.o</code> 替换为 <code>*.c</code></li>
+<li><code>$(foo:%o=%c)</code> : 静态模式的变量替换，将 <code>%.o</code> 替换为 <code>%.c</code></li>
+<li><code>$($(x))</code> : 变量值作为新变量名</li>
+<li><code>y = $(subst a,b,$(x))</code> : 将变量x中的a替换为b，赋值给y</li>
+<li><code>override</code> : 重写make命令行传入的参数值</li>
+<li><code>define</code> : 定义多行变量</li>
+</ul>
+<p>自动化变量</p>
+<ul>
+<li><code>$@</code> : 目标文件集</li>
+<li><code>$%</code> : 目标成员名</li>
+<li><code>$&lt;</code> : 依赖目标中的首个目标名称</li>
+<li><code>$?</code> : 所有比目标新的依赖目标的集合</li>
+<li><code>$^</code> : 所有依赖目标的集合，自动去除重复目标</li>
+<li><code>$+</code> : 与 <code>$^</code> 类似，但不去除重复的依赖目标</li>
+<li><code>$*</code> : 目标模式中<code>%</code>与之前的部分</li>
+</ul>
+<h3 id="条件判断"><a href="#条件判断" class="headerlink" title="条件判断"></a>条件判断</h3><ul>
+<li><code>ifeq</code>, <code>ifneq</code> : 判断变量是否等于或不等于某值</li>
+<li><code>ifdef</code>, <code>ifndef</code> : 判断是否定义或未定义某变量</li>
+</ul>
+<h3 id="使用函数"><a href="#使用函数" class="headerlink" title="使用函数"></a>使用函数</h3><ul>
+<li><code>$(&lt;function&gt; &lt;args&gt;)</code> : 调用函数, 参数间逗号分隔</li>
+</ul>
+<p>字符串相关：</p>
+<ul>
+<li><code>subst</code> : 字符串替换</li>
+<li><code>patsubst</code> : 模式字符串替换</li>
+<li><code>strip</code> : 去除字符串首尾空字符</li>
+<li><code>findstring</code> : 查看字符串子串</li>
+<li><code>filter</code> : 过滤函数，模式匹配</li>
+<li><code>filter-out</code> : 反过滤函数，去除匹配到的参数</li>
+</ul>
+<p>单词相关：</p>
+<ul>
+<li><code>sort</code> ： 按单词排序</li>
+<li><code>word</code> : 取单词函数，指定字符串第n个单词</li>
+<li><code>wordlist</code> : 取单词串函数，指定起始位置和结束位置</li>
+<li><code>words</code> : 统计单词个数</li>
+<li><code>firstword</code> : 获取首个单词</li>
+</ul>
+<p>文件目录相关：</p>
+<ul>
+<li><code>dir</code> ：取目录路径</li>
+<li><code>notdir</code> : 取文件名</li>
+<li><code>suffix</code> : 取文件名后缀</li>
+<li><code>basename</code> : 取文件路径的前缀</li>
+<li><code>addsuffix</code> : 添加后缀</li>
+<li><code>addprefix</code>: 添加前缀</li>
+<li><code>join</code> : 连接字符串</li>
+</ul>
+<p>循环或函数调用相关：</p>
+<ul>
+<li><code>foreach</code> : 循环</li>
+<li><code>if</code> : 条件判断</li>
+<li><code>call</code> : 调用其它函数</li>
+<li><code>shell</code> : 执行 shell 指令</li>
+</ul>
+<p>make 执行控制相关：</p>
+<ul>
+<li><code>error</code> : 产生错误信息，停止编译</li>
+<li><code>warnning</code> : 产生警告信息，继续编译</li>
+</ul>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2020/12/28/openwrt-mkfile/">https://www.litreily.top/2020/12/28/openwrt-mkfile/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tag"></i><a href="/tags/openwrt/">openwrt</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B4%E4%BD%93%E6%A1%86%E6%9E%B6"><span class="toc-number">1.</span> <span class="toc-text">整体框架</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BBMakefile"><span class="toc-number">2.</span> <span class="toc-text">主Makefile</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F"><span class="toc-number">2.1.</span> <span class="toc-text">全局变量</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#makefile-%E8%AF%AD%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text">makefile 语法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#make-%E6%8C%87%E4%BB%A4%E5%8F%82%E6%95%B0"><span class="toc-number">3.1.</span> <span class="toc-text">make 指令参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%98%E9%87%8F"><span class="toc-number">3.2.</span> <span class="toc-text">变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%A1%E4%BB%B6%E5%88%A4%E6%96%AD"><span class="toc-number">3.3.</span> <span class="toc-text">条件判断</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%87%BD%E6%95%B0"><span class="toc-number">3.4.</span> <span class="toc-text">使用函数</span></a></li></ol></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2020/12/29/make-oldconfig/">&lt; openwrt make defconfig 详解</a><a class="next" href="/2020/12/25/lua-adv/">lua 高级特性 &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+.night .v[data-class=v] a:hover { color: #216C73 !important; }
+.night .v[data-class=v] li { list-style: inherit; }
+.night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
+.night .v[data-class=v] .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.night .v[data-class=v] .vbtn { border-radius: 0; background: none; }
+.night .v[data-class=v] .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.night .v[data-class=v] .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.night .v[data-class=v] .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre,.night .v[data-class=v] .vlist .vcard .vhead .vsys { background: #203240 !important; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre { color: #F0F0F0; font-size: 95%; }
+.v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
+</style><div id="vcomment"></div><script src="//cdn.bootcdn.net/ajax/libs/valine/1.4.14/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
+  lang: 'zh-cn',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></section><footer><p>Copyright © 2016 - 2020 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script></body></html>
