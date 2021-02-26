@@ -4,6 +4,3240 @@
   
     
     <entry>
+      <title><![CDATA[下载安装基于 openwrt 的 QSDK]]></title>
+      <url>https://www.litreily.top/2021/01/29/qsdk/</url>
+      <content type="html"><![CDATA[<p><code>QSDK</code> - QCA Software Development Kits, 基于 openwrt 加入了 QCA 相关的代码库，可以用于使用 qualcomm 芯片的路由器固件开发。本文讲述如何获取 QSDK.</p>
+<p>我们通常会使用 <code>git clone</code> 获取开源项目的代码，比如 github, gitlab, coding 等平台，但是 <code>QSDK</code> 并不存放于这些平台，而是有它自己的维护站点，并且需要通过 <code>repo</code> 和 <code>git</code> 共同完成仓库文件的 <code>clone</code>, 下面来看看吧。</p>
+<h2 id="install-repo"><a href="#install-repo" class="headerlink" title="install repo"></a>install repo</h2><p>首先来安装 <code>repo</code> 工具，这其实是个 <code>Python</code> 脚本.</p>
+<pre><code class="bash">curl https://storage.googleapis.com/git-repo-downloads/repo -o repo
+chmod +x repo
+mv repo ~/bin/
+</code></pre>
+<p>也可以手动下载：<a href="https://gerrit.googlesource.com/git-repo/" target="_blank" rel="noopener">https://gerrit.googlesource.com/git-repo/</a></p>
+<h2 id="install-qsdk"><a href="#install-qsdk" class="headerlink" title="install qsdk"></a>install qsdk</h2><p>下载完 <code>repo</code> 后，在 <code>git</code> 已经安装并配置好了基本的 <code>email</code>, <code>username</code> 的情况下就可以开始下载 <code>QSDK</code> 了。</p>
+<ul>
+<li><code>QSDK</code> 官方仓库： <a href="https://source.codeaurora.org/quic/cc-qrdk/releases/manifest/qstak/" target="_blank" rel="noopener">https://source.codeaurora.org/quic/cc-qrdk/releases/manifest/qstak/</a></li>
+<li><code>IPQ806x</code> 对应 <code>manifest</code>: caf_AU_LINUX_QSDK_NHSS.QSDK.11.0_TARGET_ALL.11.0.3821.3949.xml</li>
+</ul>
+<p>不同型号的芯片对应不同的 <code>manifest</code> 文件，这是一个 <code>xml</code> 文件，有点类似 <code>Android</code> 开发的 <code>mainfest.xml</code>.</p>
+<p>关于 <code>QSDK</code> 的 <code>manifest</code>, 可以参考下表，源自 <a href="https://wiki.codeaurora.org/xwiki/bin/viewrev/QSDK/WebHome?rev=13.1" target="_blank" rel="noopener">https://wiki.codeaurora.org/xwiki/bin/viewrev/QSDK/WebHome?rev=13.1</a></p>
+<table>
+<thead>
+<tr>
+<th>OpenWrt Version</th>
+<th>Kernel Version</th>
+<th>SoC&#39;s</th>
+<th>Latest Available  Release Branch Example Version</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>15.05</td>
+<td>3.14</td>
+<td>ipq806x,ipq40xx</td>
+<td>caf_AU_LINUX_QSDK_NHSS.QSDK.6.1.0.R1_TARGET_ALL.0.1.2028.020.xml</td>
+<td>with uClibc</td>
+</tr>
+<tr>
+<td>15.05</td>
+<td>4.4</td>
+<td>ipq806x, ipq40xx</td>
+<td>caf_AU_LINUX_QSDK_NHSS.QSDK.6.1.1.R1_TARGET_ALL.3.0.308.00.1591.020.xml</td>
+<td>with uClibc</td>
+</tr>
+<tr>
+<td>15.05</td>
+<td>4.4</td>
+<td>ipq806x, ipq40xx, ipq807x, ipq807x_64</td>
+<td>caf_AU_LINUX_QSDK_NHSS.QSDK.11.0_TARGET_ALL.11.0.3821.3949.xml</td>
+<td>with MuslWi-Fi not available</td>
+</tr>
+</tbody>
+</table>
+<p>使用 <code>repo</code> 尝试下载：</p>
+<pre><code class="bash">$ repo init -u git://source.codeaurora.org/quic/cc-qrdk/releases/manifest/qstak -b release -m caf_AU_LINUX_QSDK_NHSS.QSDK.11.0_TARGET_ALL.11.0.3821.3949.xml
+Downloading Repo source from https://gerrit.googlesource.com/git-repo
+fatal: Cannot get https://gerrit.googlesource.com/git-repo/clone.bundle
+fatal: error Tunnel connection failed: 502 Parent proxy unreacheable
+</code></pre>
+<p>fail 了，这是 Google 网络被墙的问题，为此我通过 <code>v2ray</code> + <code>proxychians4</code> 代理解决了。</p>
+<ul>
+<li><code>v2ray</code>: 订阅配置，需要梯子，可以网上自行搜索免费的，或者自行购买搭建。</li>
+<li><code>proxychains4</code>：可以方便配置 <code>socks5</code> 网络代理，配置说明参考 <a href="https://www.litreily.top/notes/network/proxychains4/">proxychains4</a>.</li>
+</ul>
+<p>在linux系统下，可以使用 <code>Qv2ray</code> 替代 <code>V2rayN</code>, 但是都需要安装 <code>v2ray-core</code> 的支持。关于 <code>Qv2ray</code> 可以参考</p>
+<ul>
+<li><a href="https://medium.com/@eleveninstrangerthings/%E5%9C%A8ubuntu%E4%B8%8A%E5%AE%89%E8%A3%85%E5%9B%BE%E5%BD%A2%E5%8C%96v2ray%E5%AE%A2%E6%88%B7%E7%AB%AFqv2ray-d0f690b7c519" target="_blank" rel="noopener">在Ubuntu上安装图形化v2Ray客户端Qv2Ray</a></li>
+</ul>
+<p>方便起见，可以在 <code>.zshrc</code> 或者 <code>.bashrc</code> 中添加一个 <code>proxychains4</code> 的 alias.</p>
+<pre><code class="bash">alias supro=&quot;sudo proxychains4&quot;
+</code></pre>
+<p>网络代理不是本文重点，其目的是保证可以正常访问谷歌网络。下面使用 <code>repo</code> 进行 <code>QSDK</code> 的下载。</p>
+<pre><code class="bash">supro ~/bin/repo init -u git://codeaurora.org/quic/qsdk/releases/manifest/qstak -b release -m caf_AU_LINUX_QSDK_NHSS.QSDK.11.0_TARGET_ALL.11.0.3821.3949.xml
+supro ~/bin/repo sync
+</code></pre>
+<p>下载速度依网络情况而定，毕竟用的代理，访问的是 <code>Google</code>， 所以速度你懂的。而且 <code>sync</code> 数据量非常大，所以下载时间会非常非常非常长。。。先去干别的吧。</p>
+<pre><code class="log">➜ supro ~/bin/repo sync
+[proxychains] config file found: /etc/proxychains4.conf
+[proxychains] preloading /usr/lib/x86_64-linux-gnu/libproxychains.so.4
+[proxychains] DLL init: proxychains-ng 4.14
+[proxychains] DLL init: proxychains-ng 4.14
+[proxychains] DLL init: proxychains-ng 4.14
+[proxychains] DLL init: proxychains-ng 4.14
+[proxychains] DLL init: proxychains-ng 4.14
+[proxychains] Strict chain  ...  127.0.0.1:1080  ...  codeaurora.org:9418  ...  OK
+[proxychains] DLL init: proxychains-ng 4.14
+[proxychains] DLL init: proxychains-ng 4.14
+[proxychains] DLL init: proxychains-ng 4.14
+[proxychains] DLL init: proxychains-ng 4.14
+[proxychains] Strict chain  ...  127.0.0.1:1080  ...  source.codeaurora.org:443  ...  OK
+[proxychains] DLL init: proxychains-ng 4.14
+[proxychains] DLL init: proxychains-ng 4.14
+Fetching projects:   1% (1/55) quic/qsdk/oss/tools/meta[proxychains] DLL init: proxychains-ng 4.14
+[proxychains] DLL init: proxychains-ng 4.14
+[proxychains] Strict chain  ...  127.0.0.1:1080  ...  source.codeaurora.org:443  ...  OK
+[proxychains] DLL init: proxychains-ng 4.14
+remote: Enumerating objects: 101, done.        
+remote: Counting objects: 100% (101/101), done.        
+remote: Compressing objects: 100% (60/60), done.        
+[proxychains] DLL init: proxychains-ng 4.14
+remote: Total 4239698 (delta 31), reused 98 (delta 31), pack-reused 4239597        
+Receiving objects: 100% (4239698/4239698), 1.04 GiB | 3.38 MiB/s, done.
+Resolving deltas: 100% (3317886/3317886), done.
+[proxychains] DLL init: proxychains-ng 4.14
+[proxychains] DLL init: proxychains-ng 4.14
+Fetching projects:   3% (2/55) quic/qsdk/oss/system/openwrt[proxychains] DLL init: proxychains-ng 4.14
+[proxychains] DLL init: proxychains-ng 4.14
+[proxychains] Strict chain  ...  127.0.0.1:1080  ...  source.codeaurora.org:443  ...  OK
+[proxychains] DLL init: proxychains-ng 4.14
+[proxychains] DLL init: proxychains-ng 4.14
+Fetching projects:   5% (3/55) quic/qsdk/oss/releases/configs/qca955x[proxychains] DLL init: proxychains-ng 4.14
+[proxychains] DLL init: proxychains-ng 4.14
+[proxychains] Strict chain  ...  127.0.0.1:1080  ...  source.codeaurora.org:443  ...  OK
+[proxychains] DLL init: proxychains-ng 4.14
+[proxychains] DLL init: proxychains-ng 4.14
+Fetching projects:   7% (4/55) quic/qsdk/oss/releases/configs/qsdk[proxychains] DLL init: proxychains-ng 4.14
+[proxychains] DLL init: proxychains-ng 4.14
+[proxychains] Strict chain  ...  127.0.0.1:1080  ...  source.codeaurora.org:443  ...  OK
+[proxychains] DLL init: proxychains-ng 4.14
+[proxychains] DLL init: proxychains-ng 4.14
+Fetching projects:   9% (5/55) quic/qsdk/oss/system/feeds/platform/bootloader[proxychains] DLL init: proxychains-ng 4.14
+[proxychains] DLL init: proxychains-ng 4.14
+[proxychains] Strict chain  ...  127.0.0.1:1080  ...  source.codeaurora.org:443  ...  OK
+[proxychains] DLL init: proxychains-ng 4.14
+[proxychains] DLL init: proxychains-ng 4.14
+#...
+Checking out projects:  89% (49/55) quic/qsdk/oss/lklm/shortcut-fe[proxychains] DLL init: proxychains-ng 4.14
+Updating files: 100% (11323/11323), done.
+Checking out projects:  90% (50/55) quic/qsdk/oss/boot/u-boot-2016[proxychains] DLL init: proxychains-ng 4.14
+Checking out projects:  92% (51/55) quic/qsdk/oss/wigig-utils[proxychains] DLL init: proxychains-ng 4.14
+Checking out projects:  94% (52/55) quic/qsdk/oss/wireshark[proxychains] DLL init: proxychains-ng 4.14
+Updating files: 100% (6135/6135), done.
+Checking out projects:  96% (53/55) quic/qsdk/oss/wireshark-github[proxychains] DLL init: proxychains-ng 4.14
+Checking out projects:  98% (54/55) quic/qsdk/oss/tools/skales[proxychains] DLL init: proxychains-ng 4.14
+Checking out projects: 100% (55/55), done.
+repo sync has finished successfully.
+</code></pre>
+<p>总算下载完了，来看看根目录有哪些东西。</p>
+<pre><code class="log">➜  tree -L 1
+.
+├── meta-scripts
+├── qsdk
+├── skales
+└── tools
+
+4 directories, 0 files
+➜  tree qsdk -L 1
+qsdk
+├── BSDmakefile
+├── config
+├── Config.in
+├── docs
+├── feeds.conf
+├── feeds.conf.default
+├── include
+├── LICENSE
+├── Makefile
+├── package
+├── qca
+├── README
+├── rules.mk
+├── scripts
+├── target
+├── toolchain
+├── tools
+├── wireshark-2.4.2-11ax-patches
+└── wireshark-github
+
+11 directories, 8 files
+➜  qsdk du -h -d2 
+496K    ./tools/ubi32-nssmconf
+500K    ./tools
+36K     ./skales/.git
+8.0K    ./skales/initrds
+12K     ./skales/atag-fix
+52K     ./skales/boards
+176K    ./skales
+36K     ./meta-scripts/yocto
+16K     ./meta-scripts/Parser
+40K     ./meta-scripts/.git
+56K     ./meta-scripts/ipq806x_deluxe
+48K     ./meta-scripts/ipq40xx_premium
+20K     ./meta-scripts/ipq806x_open
+60K     ./meta-scripts/ipq806x_standard
+16K     ./meta-scripts/ipq40xx_standard
+332K    ./meta-scripts
+516M    ./.repo/projects
+7.2M    ./.repo/repo
+11G     ./.repo/project-objects
+24M     ./.repo/manifests
+4.0M    ./.repo/manifests.git
+12G     ./.repo
+132K    ./qsdk/docs
+37M     ./qsdk/target
+2.8M    ./qsdk/tools
+840K    ./qsdk/.git
+1012K   ./qsdk/scripts
+225M    ./qsdk/wireshark-github
+1.1G    ./qsdk/qca
+152K    ./qsdk/wireshark-2.4.2-11ax-patches
+320K    ./qsdk/include
+48K     ./qsdk/config
+1.5M    ./qsdk/toolchain
+22M     ./qsdk/package
+1.4G    ./qsdk
+13G     .
+</code></pre>
+<p>没错，<code>13G</code>，下了快一天。<code>qsdk</code> 目录就是我们所需的了。</p>
+<pre><code class="log">➜  qsdk git:(35ebd114e275) ls -F
+BSDmakefile         include/   rules.mk      tools/
+config/             LICENSE    scripts/      wireshark-2.4.2-11ax-patches/
+Config.in           Makefile   staging_dir/  wireshark-github/
+docs/               package/   target/
+feeds.conf          qca/       tmp/
+feeds.conf.default  README     toolchain/
+</code></pre>
+<p>看起来确实和 <code>openwrt</code> 的目录结构挺像的。不过多了两个 <code>wireshark</code> 相关的目录。</p>
+<p>关于 <code>QSDK</code> 的下载就讲完了，这里再说明下编译需要一些依赖工具，比如下面这些。</p>
+<ul>
+<li><code>ocaml-nox</code>: Objective Caml compiler for GUI of <code>make menuconfig</code></li>
+<li><code>zlib1g-dev</code>: for <code>zlib</code></li>
+<li><code>libssl-dev</code>: for <code>openssl</code></li>
+<li><code>subversion</code>: for <code>svn</code></li>
+</ul>
+<p>具体编译相关的后续再说。</p>
+<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><ul>
+<li><a href="https://wiki.codeaurora.org/xwiki/bin/QSDK/" target="_blank" rel="noopener">QSDK wiki</a></li>
+<li><a href="https://blog.csdn.net/Q_lming/article/details/51870130" target="_blank" rel="noopener">repo下载QSDK代码全记录 - csdn</a></li>
+</ul>
+]]></content>
+      
+        <categories>
+            
+            <category> Embedded </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> openwrt </tag>
+            
+            <tag> qsdk </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[openwrt Makefile scan.mk 详解]]></title>
+      <url>https://www.litreily.top/2021/01/15/mk-scan/</url>
+      <content type="html"><![CDATA[<p><code>openwrt</code> 中的 <code>include/scan.mk</code> 用于扫描项目 <code>package</code>, <code>target</code> 目录信息，并将扫描结果存入 <code>tmp</code> 目录。这个扫描过程几乎是 openwrt 所有目标生成的前提。也就是说，无论使用 <code>make</code> 编译 <code>openwrt</code> 哪个部分的代码，都会通过 <code>scan.mk</code> 生成必要的临时文件，这是编译其它目录的大前提。</p>
+<p>举例说明，我们指定编译某个 <code>package</code> 时，如 <code>package/utils/demo</code>，<code>make</code> 根据层层 <code>Makefile</code> 会去寻找该 <code>package</code> 的路径，而这个路径信息就是通过 <code>scan.mk</code> 扫描后存入了 <code>tmp</code> 目录。这样有什么好处呢? 我完全可以手动执行 <code>make package/utils/demo/compile</code> 不是吗？</p>
+<p>的确如此，但是我们不可能每次都去写长串的路径，通过 <code>tmp</code> 目录的信息，不管 <code>package</code> 对应目录在哪， <code>package/demo</code> 也好， <code>package/utils/demo</code> 也罢， <code>package/utils/test/demo</code> 也无所谓，我们都可以执行 <code>make package/demo/compile</code> 进行编译，<code>make</code> 会根据 <code>tmp</code> 目录里保存的映射关系自动查找到对应目录，非常方便。</p>
+<p><code>openwrt</code> 的 <code>Makefile</code> 体系非常庞大，通过首次生成 <code>package</code>、<code>target</code> 信息到 <code>tmp</code> 目录，可以简化编译流程，节省编译时间。这篇文章就来详细讲述一下 <code>scan.mk</code> 的扫描过程。</p>
+<h2 id="prepare-tmpinfo"><a href="#prepare-tmpinfo" class="headerlink" title="prepare-tmpinfo"></a>prepare-tmpinfo</h2><p>在讲述 <code>scan.mk</code> 之前，我们需要知道 <code>scan.mk</code> 在哪里被调用到，答案是 <code>toplevel.mk</code> 的 <code>prepare-tmpinfo</code> 目标，这个目标几乎是 <code>toplevel.mk</code> 中其它目标都会包含的依赖项。<code>defconfig</code>, <code>oldconfig</code>, <code>menuconfig</code>, <code>prereq</code>, <code>config</code> 等都会依赖它。</p>
+<p>顾名思义，<code>prepare-tmpinfo</code> 就是用来准备 <code>tmp</code> 信息的，它没有依赖项，<code>FORCE</code> 代表强制执行其指令。在它的指令中就会调用到 <code>scan.mk</code> 了。</p>
+<pre><code class="makefile">prepare-tmpinfo: FORCE
+    @+$(MAKE) -r -s staging_dir/host/.prereq-build $(PREP_MK)
+    mkdir -p tmp/info
+    $(_SINGLE)$(NO_TRACE_MAKE) -j1 -r -s -f include/scan.mk SCAN_TARGET=&quot;packageinfo&quot; SCAN_DIR=&quot;package&quot; SCAN_NAME=&quot;package&quot; SCAN_DEPTH=5 SCAN_EXTRA=&quot;&quot;
+    $(_SINGLE)$(NO_TRACE_MAKE) -j1 -r -s -f include/scan.mk SCAN_TARGET=&quot;targetinfo&quot; SCAN_DIR=&quot;target/linux&quot; SCAN_NAME=&quot;target&quot; SCAN_DEPTH=2 SCAN_EXTRA=&quot;&quot; SCAN_MAKEOPTS=&quot;TARGET_BUILD=1&quot;
+    for type in package target; do \
+        f=tmp/.$${type}info; t=tmp/.config-$${type}.in; \
+        [ &quot;$$t&quot; -nt &quot;$$f&quot; ] || ./scripts/$${type}-metadata.pl $(_ignore) config &quot;$$f&quot; &gt; &quot;$$t&quot; || { rm -f &quot;$$t&quot;; echo &quot;Failed to build $$t&quot;; false; break; }; \
+    done
+    [ tmp/.config-feeds.in -nt tmp/.packageauxvars ] || ./scripts/feeds feed_config &gt; tmp/.config-feeds.in
+    ./scripts/package-metadata.pl mk tmp/.packageinfo &gt; tmp/.packagedeps || { rm -f tmp/.packagedeps; false; }
+    ./scripts/package-metadata.pl pkgaux tmp/.packageinfo &gt; tmp/.packageauxvars || { rm -f tmp/.packageauxvars; false; }
+    ./scripts/package-metadata.pl usergroup tmp/.packageinfo &gt; tmp/.packageusergroup || { rm -f tmp/.packageusergroup; false; }
+    touch $(TOPDIR)/tmp/.build
+</code></pre>
+<p>其中有两行调用了 <code>scan.mk</code>.</p>
+<pre><code class="makefile">    $(_SINGLE)$(NO_TRACE_MAKE) -j1 -r -s -f include/scan.mk SCAN_TARGET=&quot;packageinfo&quot; SCAN_DIR=&quot;package&quot; SCAN_NAME=&quot;package&quot; SCAN_DEPTH=5 SCAN_EXTRA=&quot;&quot;
+    $(_SINGLE)$(NO_TRACE_MAKE) -j1 -r -s -f include/scan.mk SCAN_TARGET=&quot;targetinfo&quot; SCAN_DIR=&quot;target/linux&quot; SCAN_NAME=&quot;target&quot; SCAN_DEPTH=2 SCAN_EXTRA=&quot;&quot; SCAN_MAKEOPTS=&quot;TARGET_BUILD=1&quot;
+</code></pre>
+<p>通过分析主 Makefile 和 include/verbose.mk 可以知道 <code>$(_SINGLE)$(NO_TRACE_MAKE)</code> 对应的是：</p>
+<pre><code class="bash">export MAKEFLAGS= ;make V=ss
+</code></pre>
+<p>那么以上指令解析后就是：</p>
+<pre><code class="bash">export MAKEFLAGS= ;make V=ss -j1 -r -s -f include/scan.mk SCAN_TARGET=&quot;packageinfo&quot; SCAN_DIR=&quot;package&quot; SCAN_NAME=&quot;package&quot; SCAN_DEPTH=5 SCAN_EXTRA=&quot;&quot;
+export MAKEFLAGS= ;make V=ss -j1 -r -s -f include/scan.mk SCAN_TARGET=&quot;targetinfo&quot; SCAN_DIR=&quot;target/linux&quot; SCAN_NAME=&quot;target&quot; SCAN_DEPTH=2 SCAN_EXTRA=&quot;&quot; SCAN_MAKEOPTS=&quot;TARGET_BUILD=1&quot;
+</code></pre>
+<blockquote>
+<p><strong>说明：</strong> make 的 <code>-s</code> 指令代表 silent， 会将所有输出都屏蔽掉，我们在分析的时候可以把 <code>-s</code> 去掉，并换成 <code>-d</code> ，这样可以看到更详细的 log.</p>
+</blockquote>
+<p>好啦，现在知道 scan.mk 的入口啦，就是 <code>prepare-tmpinfo</code> 的指令之一。那么我们怎么触发这两条指令呢？很简单，因为只要执行make就会调用这个依赖，我们可以通过 <code>make defconfig</code> 触发，为了获取更详细的信息，可以使用以下指令：</p>
+<pre><code class="bash">make -d V=s DEBUG=dtlrv defconfig &gt; log 2&gt;&amp;1
+</code></pre>
+<p>这样就将编译信息保存到文件 log 中了，方便分析执行过程。<a href="https://www.litreily.top/2020/12/29/make-defconfig/">make defconfig</a> 的主要流程在之前已有文章单独讲述过，不再赘述，本文主要来分析</p>
+<pre><code class="bash">make V=ss -j1 -r -s -f include/scan.mk SCAN_TARGET=&quot;packageinfo&quot; SCAN_DIR=&quot;package&quot; SCAN_NAME=&quot;package&quot; SCAN_DEPTH=5 SCAN_EXTRA=&quot;&quot;
+</code></pre>
+<p>这条指令的执行过程，以深入理解 openwrt scan.mk 的扫描过程。</p>
+<blockquote>
+<p>当然，我们也可以直接调用以上指令，而不用 <code>make defconfig</code>, 只不过需要添加两个全局变量<br>-- <code>SCAN_COOKIE=&quot;123456&quot;</code><br>-- <code>TOPDIR=&quot;/home/litreily/openwrt&quot;</code></p>
+</blockquote>
+<pre><code class="bash">make V=ss -j1 -r -d -f include/scan.mk SCAN_TARGET=&quot;packageinfo&quot; SCAN_DIR=&quot;package&quot; SCAN_NAME=&quot;package&quot; SCAN_DEPTH=5 SCAN_EXTRA=&quot;&quot; SCAN_COOKIE=&quot;123456&quot; TOPDIR=&quot;/home/litreily/openwrt&quot;
+</code></pre>
+<p><code>scan.mk</code> 编译过程与使用 <code>make defconfig</code> 是类似的。</p>
+<h2 id="scan-mk"><a href="#scan-mk" class="headerlink" title="scan.mk"></a>scan.mk</h2><p>进入正题，先附上完整的 <a href="https://github.com/openwrt/openwrt/blob/master/include/scan.mk" target="_blank" rel="noopener">scan.mk</a> , 源自 GitHub openwrt.</p>
+<pre><code class="ruby">include $(TOPDIR)/include/verbose.mk
+TMP_DIR:=$(TOPDIR)/tmp
+
+all: $(TMP_DIR)/.$(SCAN_TARGET)
+
+SCAN_TARGET ?= packageinfo
+SCAN_NAME ?= package
+SCAN_DIR ?= package
+TARGET_STAMP:=$(TMP_DIR)/info/.files-$(SCAN_TARGET).stamp
+FILELIST:=$(TMP_DIR)/info/.files-$(SCAN_TARGET)-$(SCAN_COOKIE)
+OVERRIDELIST:=$(TMP_DIR)/info/.overrides-$(SCAN_TARGET)-$(SCAN_COOKIE)
+
+export PATH:=$(TOPDIR)/staging_dir/host/bin:$(PATH)
+
+define feedname
+$(if $(patsubst feeds/%,,$(1)),,$(word 2,$(subst /, ,$(1))))
+endef
+
+ifeq ($(SCAN_NAME),target)
+  SCAN_DEPS=image/Makefile profiles/*.mk $(TOPDIR)/include/kernel*.mk $(TOPDIR)/include/target.mk image/*.mk
+else
+  SCAN_DEPS=$(TOPDIR)/include/package*.mk
+ifneq ($(call feedname,$(SCAN_DIR)),)
+  SCAN_DEPS += $(TOPDIR)/feeds/$(call feedname,$(SCAN_DIR))/*.mk
+endif
+endif
+
+ifeq ($(IS_TTY),1)
+  ifneq ($(strip $(NO_COLOR)),1)
+    define progress
+        printf &quot;\033[M\r$(1)&quot; &gt;&amp;2;
+    endef
+  else
+    define progress
+        printf &quot;\r$(1)&quot; &gt;&amp;2;
+    endef
+  endif
+else
+  define progress
+        :;
+  endef
+endif
+
+define PackageDir
+  $(TMP_DIR)/.$(SCAN_TARGET): $(TMP_DIR)/info/.$(SCAN_TARGET)-$(1)
+  $(TMP_DIR)/info/.$(SCAN_TARGET)-$(1): $(SCAN_DIR)/$(2)/Makefile $(foreach DEP,$(DEPS_$(SCAN_DIR)/$(2)/Makefile) $(SCAN_DEPS),$(wildcard $(if $(filter /%,$(DEP)),$(DEP),$(SCAN_DIR)/$(2)/$(DEP))))
+        { \
+                $$(call progress,Collecting $(SCAN_NAME) info: $(SCAN_DIR)/$(2)) \
+                echo Source-Makefile: $(SCAN_DIR)/$(2)/Makefile; \
+                $(if $(3),echo Override: $(3),true); \
+                $(NO_TRACE_MAKE) --no-print-dir -r DUMP=1 FEED=&quot;$(call feedname,$(2))&quot; -C $(SCAN_DIR)/$(2) $(SCAN_MAKEOPTS) 2&gt;/dev/null || { \
+                        mkdir -p &quot;$(TOPDIR)/logs/$(SCAN_DIR)/$(2)&quot;; \
+                        $(NO_TRACE_MAKE) --no-print-dir -r DUMP=1 FEED=&quot;$(call feedname,$(2))&quot; -C $(SCAN_DIR)/$(2) $(SCAN_MAKEOPTS) &gt; $(TOPDIR)/logs/$(SCAN_DIR)/$(2)/dump.txt 2&gt;&amp;1; \
+                        $$(call progress,ERROR: please fix $(SCAN_DIR)/$(2)/Makefile - see logs/$(SCAN_DIR)/$(2)/dump.txt for details\n) \
+                        rm -f $$@; \
+                }; \
+                echo; \
+        } &gt; $$@.tmp
+        mv $$@.tmp $$@
+endef
+
+$(OVERRIDELIST):
+        rm -f $(TMP_DIR)/info/.overrides-$(SCAN_TARGET)-*
+        touch $@
+
+ifeq ($(SCAN_NAME),target)
+  GREP_STRING=BuildTarget
+else
+  GREP_STRING=(Build/DefaultTargets|BuildPackage|KernelPackage)
+endif
+
+$(FILELIST): $(OVERRIDELIST)
+        rm -f $(TMP_DIR)/info/.files-$(SCAN_TARGET)-*
+        find -L $(SCAN_DIR) $(SCAN_EXTRA) -mindepth 1 $(if $(SCAN_DEPTH),-maxdepth $(SCAN_DEPTH)) -name Makefile | xargs grep -aHE &#39;call $(GREP_STRING)&#39; | sed -e &#39;s#^$(SCAN_DIR)/##&#39; -e &#39;s#/Makefile:.*##&#39; | uniq | awk -v of=$(OVERRIDELIST) -f include/scan.awk &gt; $@
+
+$(TMP_DIR)/info/.files-$(SCAN_TARGET).mk: $(FILELIST)
+        ( \
+                cat $&lt; | awk &#39;{print &quot;$(SCAN_DIR)/&quot; $$0 &quot;/Makefile&quot; }&#39; | xargs grep -HE &#39;^ *SCAN_DEPS *= *&#39; | awk -F: &#39;{ gsub(/^.*DEPS *= */, &quot;&quot;, $$2); print &quot;DEPS_&quot; $$1 &quot;=&quot; $$2 }&#39;; \
+                awk -F/ -v deps=&quot;$$DEPS&quot; -v of=&quot;$(OVERRIDELIST)&quot; &#39; \
+                BEGIN { \
+                        while (getline &lt; (of)) \
+                                override[$$NF]=$$0; \
+                        close(of) \
+                } \
+                { \
+                        info=$$0; \
+                        gsub(/\//, &quot;_&quot;, info); \
+                        dir=$$0; \
+                        pkg=&quot;&quot;; \
+                        if($$NF in override) \
+                                pkg=override[$$NF]; \
+                        print &quot;$$(eval $$(call PackageDir,&quot; info &quot;,&quot; dir &quot;,&quot; pkg &quot;))&quot;; \
+                } &#39; &lt; $&lt;; \
+                true; \
+        ) &gt; $@.tmp
+        mv $@.tmp $@
+
+-include $(TMP_DIR)/info/.files-$(SCAN_TARGET).mk
+
+$(TARGET_STAMP)::
+        +( \
+                $(NO_TRACE_MAKE) $(FILELIST); \
+                MD5SUM=$$(cat $(FILELIST) $(OVERRIDELIST) | mkhash md5 | awk &#39;{print $$1}&#39;); \
+                [ -f &quot;$@.$$MD5SUM&quot; ] || { \
+                        rm -f $@.*; \
+                        touch $@.$$MD5SUM; \
+                        touch $@; \
+                } \
+        )
+
+$(TMP_DIR)/.$(SCAN_TARGET): $(TARGET_STAMP)
+        $(call progress,Collecting $(SCAN_NAME) info: merging...)
+        -cat $(FILELIST) | awk &#39;{gsub(/\//, &quot;_&quot;, $$0);print &quot;$(TMP_DIR)/info/.$(SCAN_TARGET)-&quot; $$0}&#39; | xargs cat &gt; $@ 2&gt;/dev/null
+        $(call progress,Collecting $(SCAN_NAME) info: done)
+        echo
+
+FORCE:
+.PHONY: FORCE
+.NOTPARALLEL:
+</code></pre>
+<h3 id="global-value"><a href="#global-value" class="headerlink" title="global value"></a>global value</h3><p>在分析全局变量之前，先来看下默认目标 <code>all</code>.</p>
+<pre><code class="makefile">all: $(TMP_DIR)/.$(SCAN_TARGET)
+</code></pre>
+<p><code>$(TMP_DIR)</code> 对应根目录下的 tmp 目录，<code>SCAN_TARGET</code> 在调用 make 的时候有定义，此处为 <code>packageinfo</code>, 因此 <code>all</code> 为：</p>
+<pre><code class="makefile">all: /home/litreily/openwrt/tmp/.packageinfo
+</code></pre>
+<p>也就是说，扫描的目标文件是 tmp 目录的 <code>.packageinfo</code>. 但是在生成该目标之前，<code>make</code> 会先 <code>include</code> 其它文件，如果 <code>include</code> 的文件不存在，则会先生成该文件，此处具体指代的是后续讲述的 <code>.files-packageinfo.mk</code>.</p>
+<p>ok, 编译目标知道了，再来看看全局变量有哪些。</p>
+<pre><code class="makefile">TMP_DIR:=$(TOPDIR)/tmp
+
+all: $(TMP_DIR)/.$(SCAN_TARGET)
+
+SCAN_TARGET ?= packageinfo
+SCAN_NAME ?= package
+SCAN_DIR ?= package
+TARGET_STAMP:=$(TMP_DIR)/info/.files-$(SCAN_TARGET).stamp
+FILELIST:=$(TMP_DIR)/info/.files-$(SCAN_TARGET)-$(SCAN_COOKIE)
+OVERRIDELIST:=$(TMP_DIR)/info/.overrides-$(SCAN_TARGET)-$(SCAN_COOKIE)
+</code></pre>
+<p>其中 <code>SCAN_COOKIE</code> 是在 <code>toplevel.mk</code> 通过 <code>$(shell echo $$$$)</code> 得到的一个随机数，这里为 <code>2109133</code>. 其它变量可以根据传入的参数解析出来：</p>
+<pre><code class="makefile">TMP_DIR:=/home/litreily/openwrt/tmp
+
+all: /home/litreily/openwrt/tmp/.packageinfo
+
+SCAN_TARGET ?= packageinfo
+SCAN_NAME ?= package
+SCAN_DIR ?= package
+TARGET_STAMP:=/home/litreily/openwrt/tmp/info/.files-packageinfo.stamp
+FILELIST:=/home/litreily/openwrt/tmp/info/.files-packageinfo-2109133
+OVERRIDELIST:=/home/litreily/openwrt/tmp/info/.overrides-packageinfo-2109133
+</code></pre>
+<p>其中，后面三个变量定义的是一些中间目标文件，是生成 <code>all</code> 目标必不可少的中间依赖文件。</p>
+<h3 id="files-packageinfo-mk"><a href="#files-packageinfo-mk" class="headerlink" title=".files-packageinfo.mk"></a>.files-packageinfo.mk</h3><p>ok, 全局变量及目标已经确定了，那么 make 执行过程究竟是怎样的呢，在启用调试信息的情况下，可以通过 log 很清晰的看到执行流程。</p>
+<ol>
+<li>include <code>include/verbose.mk</code></li>
+<li>include <code>tmp/info/.files-packageinfo.mk</code></li>
+</ol>
+<p>在读取 <code>verbose.mk</code> 后，会根据 <code>scan.mk</code> 执行剩下的 <code>include</code> 指令</p>
+<pre><code class="makefile">-include $(TMP_DIR)/info/.files-$(SCAN_TARGET).mk
+</code></pre>
+<p>导入 <code>tmp/info/.file-packageinfo.mk</code> 文件，该文件默认不存在，所以前面有个 <code>-</code> 符号以确保文件不存在时能够正常执行。</p>
+<p>下一步就是将该文件作为目标文件，查找其依赖。</p>
+<pre><code class="makefile">$(TMP_DIR)/info/.files-$(SCAN_TARGET).mk: $(FILELIST)
+        ( \
+                cat $&lt; | awk &#39;{print &quot;$(SCAN_DIR)/&quot; $$0 &quot;/Makefile&quot; }&#39; | xargs grep -HE &#39;^ *SCAN_DEPS *= *&#39; | awk -F: &#39;{ gsub(/^.*DEPS *= */, &quot;&quot;, $$2); print &quot;DEPS_&quot; $$1 &quot;=&quot; $$2 }&#39;; \
+                awk -F/ -v deps=&quot;$$DEPS&quot; -v of=&quot;$(OVERRIDELIST)&quot; &#39; \
+                BEGIN { \
+                        while (getline &lt; (of)) \
+                                override[$$NF]=$$0; \
+                        close(of) \
+                } \
+                { \
+                        info=$$0; \
+                        gsub(/\//, &quot;_&quot;, info); \
+                        dir=$$0; \
+                        pkg=&quot;&quot;; \
+                        if($$NF in override) \
+                                pkg=override[$$NF]; \
+                        print &quot;$$(eval $$(call PackageDir,&quot; info &quot;,&quot; dir &quot;,&quot; pkg &quot;))&quot;; \
+                } &#39; &lt; $&lt;; \
+                true; \
+        ) &gt; $@.tmp
+        mv $@.tmp $@
+</code></pre>
+<p>其依赖是 <code>$(FILELIST)</code>, 也就是 <code>tmp/info/.files-packageinfo-2109133</code>. 那么接着来看 <code>$(FILELIST)</code> 的依赖及其指令。</p>
+<pre><code class="ruby">$(FILELIST): $(OVERRIDELIST)
+        rm -f $(TMP_DIR)/info/.files-$(SCAN_TARGET)-*
+        find -L $(SCAN_DIR) $(SCAN_EXTRA) -mindepth 1 $(if $(SCAN_DEPTH),-maxdepth $(SCAN_DEPTH)) -name Makefile | xargs grep -aHE &#39;call $(GREP_STRING)&#39; | sed -e &#39;s#^$(SCAN_DIR)/##&#39; -e &#39;s#/Makefile:.*##&#39; | uniq | awk -v of=$(OVERRIDELIST) -f include/scan.awk &gt; $@
+</code></pre>
+<p>可知其依赖文件是 <code>$(OVERRIDELIST)</code>, 也就是 <code>/home/litreily/openwrt/tmp/info/.overrides-packageinfo-2109133</code>. 而 <code>$(OVERRIDELIST)</code> 规则如下：</p>
+<pre><code class="makefile">$(OVERRIDELIST):
+        rm -f $(TMP_DIR)/info/.overrides-$(SCAN_TARGET)-*
+        touch $@
+</code></pre>
+<p>该规则很简单，也就是删除旧的 <code>tmp/info/.overrides-packageinfo-*</code> 文件，并 touch 新的文件 <code>tmp/info/.overrides-packageinfo-2109133</code>.</p>
+<p>那么执行完以上两条指令后，解析 <code>$(FILELIST)</code> 后的格式为：</p>
+<pre><code class="ruby">/home/litreily/openwrt/tmp/info/.files-packageinfo-2109133: /home/litreily/openwrt/tmp/info/.overrides-packageinfo-2109133
+        rm -f /home/litreily/openwrt/tmp/info/.files-packageinfo-*
+        find -L package  -mindepth 1 -maxdepth 5 -name Makefile | xargs grep -aHE &#39;call (Build/DefaultTargets|BuildPackage|KernelPackage)&#39; | sed -e &#39;s#^package/##&#39; -e &#39;s#/Makefile:.*##&#39; | uniq | awk -v of=/home/litreily/openwrt/tmp/info/.overrides-packageinfo-2109133 -f include/scan.awk &gt; /home/litreily/openwrt/tmp/info/.files-packageinfo-2109133
+</code></pre>
+<p>与 <code>$(OVERRIDELIST)</code> 类似，先把旧的 <code>tmp/info/.files-packageinfo-*</code> 删除，然后生成新的 <code>tmp/info/.files-packageinfo-2109133</code>. 生成文件用的就是上面的 <code>find</code> 指令了，该指令会查找 package 下 <code>1~5</code> 级目录内的所有 Makefile 文件</p>
+<pre><code class="bash">find -L package -mindepth 1 -maxdepth 5 -name Makefile
+</code></pre>
+<p>然后根据关键词正则过滤包含 <code>call (Build/DefaultTargets|BuildPackage|KernelPackage)</code> 信息的 Makefile, 并通过 uniq 去掉重复项，使用 awk 指令结合 awk 脚本 <code>scan.awk</code> 过滤 <code>feeds</code> 相关的 <code>Makefile</code>, 最终将过滤后的 packageinfo 存入 <code>tmp/info/.files-packageinfo-2109133</code>。</p>
+<pre><code class="makefile">base-files
+boot/arm-trusted-firmware-mvebu
+boot/arm-trusted-firmware-rockchip
+boot/arm-trusted-firmware-sunxi
+boot/at91bootstrap
+boot/fconfig
+#...
+utils/ugps 
+utils/usbmode
+utils/util-linux
+</code></pre>
+<p>至此，<code>$(FILELIST)</code> 编译完成，依赖它的目标 <code>tmp/info/.file-packageinfo.mk</code> 可以继续执行对应的指令。把所有变量替换为具体的值，可以得到以下规则。</p>
+<pre><code class="makefile">/home/litreily/openwrt/tmp/info/.file-packageinfo.mk: /home/litreily/openwrt/tmp/info/.files-packageinfo-2109133
+        ( \
+                cat /home/litreily/openwrt/tmp/info/.files-packageinfo-2109133 | awk &#39;{print &quot;package/&quot; $0 &quot;/Makefile&quot; }&#39; | xargs grep -HE &#39;^ *SCAN_DEPS *= *&#39; | awk -F: &#39;{ gsub(/^.*DEPS *= */, &quot;&quot;, $2); print &quot;DEPS_&quot; $1 &quot;=&quot; $2 }&#39;; \
+                awk -F/ -v deps=&quot;$DEPS&quot; -v of=&quot;/home/litreily/openwrt/tmp/info/.overrides-packageinfo-2109133&quot; &#39; \
+                BEGIN { \
+                        while (getline &lt; (of)) \
+                                override[$NF]=$0; \
+                        close(of) \
+                } \
+                { \
+                        info=$0; \
+                        gsub(/\//, &quot;_&quot;, info); \
+                        dir=$0; \
+                        pkg=&quot;&quot;; \
+                        if($NF in override) \
+                                pkg=override[$NF]; \
+                        print &quot;$(eval $(call PackageDir,&quot; info &quot;,&quot; dir &quot;,&quot; pkg &quot;))&quot;; \
+                } &#39; &lt; /home/litreily/openwrt/tmp/info/.files-packageinfo-2109133; \
+                true; \
+        ) &gt; /home/litreily/openwrt/tmp/info/.file-packageinfo.mk.tmp
+        mv /home/litreily/openwrt/tmp/info/.file-packageinfo.mk.tmp /home/litreily/openwrt/tmp/info/.file-packageinfo.mk
+</code></pre>
+<p>以上一堆操作的目的都是为了根据前面生成的 <code>$(FILELIST)</code> 去生成 <code>tmp/info/.file-packageinfo.mk</code>.</p>
+<pre><code class="bash">cat /home/litreily/openwrt/tmp/info/.files-packageinfo-2109133 | awk &#39;{print &quot;package/&quot; $0 &quot;/Makefile&quot; }&#39; | xargs grep -HE &#39;^ *SCAN_DEPS *= *&#39; | awk -F: &#39;{ gsub(/^.*DEPS *= */, &quot;&quot;, $2); print &quot;DEPS_&quot; $1 &quot;=&quot; $2 }&#39;;
+</code></pre>
+<p>这一段脚本生成了 <code>tmp/info/.file-packageinfo.mk</code> 的前几行信息。</p>
+<pre><code class="makefile">DEPS_package/firmware/linux-firmware/Makefile=*.mk
+DEPS_package/kernel/linux/Makefile=modules/*.mk $(TOPDIR)/target/linux/*/modules.mk $(TOPDIR)/include/netfilter.mk
+</code></pre>
+<pre><code class="bash">{ \
+        info=$0; \
+        gsub(/\//, &quot;_&quot;, info); \
+        dir=$0; \
+        pkg=&quot;&quot;; \
+        if($NF in override) \
+                pkg=override[$NF]; \
+        print &quot;$(eval $(call PackageDir,&quot; info &quot;,&quot; dir &quot;,&quot; pkg &quot;))&quot;; \
+} &#39; &lt; /home/litreily/openwrt/tmp/info/.files-packageinfo-2109133; 
+</code></pre>
+<p>以上这段脚本则是根据 package 列表生成 <code>PackageDir</code> 信息列表，以 <code>boot/fconfig</code> 为例。经过以上 awk 变换后变为：</p>
+<pre><code class="makefile">$(eval $(call PackageDir,boot_fconfig,boot/fconfig,))
+</code></pre>
+<p>最终生成的完成的 <code>tmp/info/.files-packageinfo.mk</code> 如下：</p>
+<pre><code class="makefile">DEPS_package/firmware/linux-firmware/Makefile=*.mk
+DEPS_package/kernel/linux/Makefile=modules/*.mk $(TOPDIR)/target/linux/*/modules.mk $(TOPDIR)/include/netfilter.mk
+$(eval $(call PackageDir,base-files,base-files,))
+$(eval $(call PackageDir,boot_arm-trusted-firmware-mvebu,boot/arm-trusted-firmware-mvebu,))
+$(eval $(call PackageDir,boot_arm-trusted-firmware-rockchip,boot/arm-trusted-firmware-rockchip,))
+$(eval $(call PackageDir,boot_arm-trusted-firmware-sunxi,boot/arm-trusted-firmware-sunxi,))
+$(eval $(call PackageDir,boot_at91bootstrap,boot/at91bootstrap,))
+$(eval $(call PackageDir,boot_fconfig,boot/fconfig,))
+#...
+$(eval $(call PackageDir,utils_ugps,utils/ugps,))
+$(eval $(call PackageDir,utils_usbmode,utils/usbmode,))
+$(eval $(call PackageDir,utils_util-linux,utils/util-linux,))
+</code></pre>
+<p>到此，<code>include $(TMP_DIR)/info/.files-$(SCAN_TARGET).mk</code> 就完成了. 该文件中每一项都调用了函数 <code>PackageDir</code>. 该函数是在 <code>scan.mk</code> 中定义的。</p>
+<h3 id="PackageDir"><a href="#PackageDir" class="headerlink" title="PackageDir"></a>PackageDir</h3><p><code>PackageDir</code> 是 scan.mk 文件中的核心函数之一，用来生成 package, target 相关的编译规则。</p>
+<pre><code class="makefile">define PackageDir
+  $(TMP_DIR)/.$(SCAN_TARGET): $(TMP_DIR)/info/.$(SCAN_TARGET)-$(1)
+  $(TMP_DIR)/info/.$(SCAN_TARGET)-$(1): $(SCAN_DIR)/$(2)/Makefile $(foreach DEP,$(DEPS_$(SCAN_DIR)/$(2)/Makefile) $(SCAN_DEPS),$(wildcard $(if $(filter /%,$(DEP)),$(DEP),$(SCAN_DIR)/$(2)/$(DEP))))
+        { \
+                $$(call progress,Collecting $(SCAN_NAME) info: $(SCAN_DIR)/$(2)) \
+                echo Source-Makefile: $(SCAN_DIR)/$(2)/Makefile; \
+                $(if $(3),echo Override: $(3),true); \
+                $(NO_TRACE_MAKE) --no-print-dir -r DUMP=1 FEED=&quot;$(call feedname,$(2))&quot; -C $(SCAN_DIR)/$(2) $(SCAN_MAKEOPTS) 2&gt;/dev/null || { \
+                        mkdir -p &quot;$(TOPDIR)/logs/$(SCAN_DIR)/$(2)&quot;; \
+                        $(NO_TRACE_MAKE) --no-print-dir -r DUMP=1 FEED=&quot;$(call feedname,$(2))&quot; -C $(SCAN_DIR)/$(2) $(SCAN_MAKEOPTS) &gt; $(TOPDIR)/logs/$(SCAN_DIR)/$(2)/dump.txt 2&gt;&amp;1; \
+                        $$(call progress,ERROR: please fix $(SCAN_DIR)/$(2)/Makefile - see logs/$(SCAN_DIR)/$(2)/dump.txt for details\n) \
+                        rm -f $$@; \
+                }; \
+                echo; \
+        } &gt; $$@.tmp
+        mv $$@.tmp $$@
+endef
+</code></pre>
+<p>举例说明，下面的语句中 <code>$(1)</code> 和 <code>$(2)</code> 都是 <code>base-files</code>, <code>$(3)</code> 为空。</p>
+<pre><code class="makefile">$(eval $(call PackageDir,base-files,base-files,))
+</code></pre>
+<p>将变量替换后得到 <code>PackageDir</code>:</p>
+<pre><code class="makefile">define PackageDir
+  /home/litreily/openwrt/tmp/.packageinfo: /home/litreily/openwrt/tmp/info/.packageinfo-base-files
+  /home/litreily/openwrt/tmp/info/.packageinfo-base-files: package/base-files/Makefile $(foreach DEP,$(DEPS_package/base-files/Makefile) /home/litreily/openwrt/include/package*.mk,$(wildcard $(if $(filter /%,$(DEP)),$(DEP),package/base-files/$(DEP))))
+        { \
+                $(call progress,Collecting base-files info: package/base-files) \
+                echo Source-Makefile: package/base-files/Makefile; \
+                $(if ,echo Override: ,true); \
+                $(NO_TRACE_MAKE) --no-print-dir -r DUMP=1 FEED=&quot;$(call feedname,base-files)&quot; -C package/base-files $(SCAN_MAKEOPTS) 2&gt;/dev/null || { \
+                        mkdir -p &quot;/home/litreily/openwrt/logs/package/base-files&quot;; \
+                        $(NO_TRACE_MAKE) --no-print-dir -r DUMP=1 FEED=&quot;$(call feedname,base-files)&quot; -C package/base-files $(SCAN_MAKEOPTS) &gt; /home/litreily/openwrt/logs/package/base-files/dump.txt 2&gt;&amp;1; \
+                        $(call progress,ERROR: please fix package/base-files/Makefile - see logs/package/base-files/dump.txt for details\n) \
+                        rm -f $@; \
+                }; \
+                echo; \
+        } &gt; $@.tmp
+        mv $@.tmp $@
+endef
+</code></pre>
+<p>注意到这里有定义两个目标。</p>
+<ol>
+<li>/home/litreily/openwrt/tmp/.packageinfo</li>
+<li>/home/litreily/openwrt/tmp/info/.packageinfo-base-files</li>
+</ol>
+<blockquote>
+<p><strong>注意</strong>: 其中第一个目标正好是 <code>all</code> 目标，并且其依赖是随之其后的 <code>.packageinfo-$(package)</code>. 所以目标 <code>all</code> 编译完成的前提之一就是所有 <code>.packageinfo-$(package)</code> 文件的生成。</p>
+</blockquote>
+<p>以 <code>base-files</code> 为例， 通过进一步解析简化，可以得到 <code>tmp/info/.packageinfo-base-files</code> 的规则如下：</p>
+<pre><code class="makefile">/home/litreily/openwrt/tmp/info/.packageinfo-base-files: package/base-files/Makefile /home/litreily/openwrt/include/package-*.mk
+      { \
+              $(call progress,Collecting base-files info: package/base-files) \
+              echo Source-Makefile: package/base-files/Makefile; \
+              make V=s --no-print-dir -r DUMP=1 FEED=&quot; -C package/base-files 2&gt;/dev/null \
+      } &gt; $@.tmp
+      mv $@.tmp $@
+</code></pre>
+<p>其中包括打印 <code>Collecting base-files info: package/base-files</code> 这种log，同时会执行 make 子进程</p>
+<pre><code class="bash">make V=s --no-print-dir -r DUMP=1 FEED=&quot; -C package/base-files 2&gt;/dev/null \
+</code></pre>
+<p>将信息写入 <code>tmp/info/.packageinfo-base-files</code>, 也就完成了目标的编译。</p>
+<blockquote>
+<p>这个 make 子进程的重点是 <code>DUMP=1</code> , <code>package/base-files/Makefile</code> 会根据该变量打印 <code>base-files</code> 相关信息到指定文件。具体要看该Makefile.</p>
+</blockquote>
+<p>针对 <code>base-files</code>, dump 出来的信息如下：</p>
+<pre><code class="log">Source-Makefile: package/base-files/Makefile
+Build-Depends: usign/host ucert/host
+
+Package: base-files
+Version: 246-
+Depends: +libc +USE_GLIBC:librt +USE_GLIBC:libpthread +netifd +jsonfilter +SIGNED_PACKAGES:usign +SIGNED_PACKAGES:openwrt-keyring +NAND_SUPPORT:ubi-utils +fstools +fwtool
+Conflicts: 
+Menu-Depends: 
+Provides: 
+Section: base
+Category: Base system
+Title: Base filesystem for OpenWrt
+Maintainer: 
+Source: 
+License: GPL-2.0
+Type: ipkg
+Description:  This package contains a base filesystem and system scripts for OpenWrt.
+http://openwrt.org/
+
+@@
+</code></pre>
+<p>说了这么多，<code>PackageDir</code> 函数何时调用呢？继续往后看。</p>
+<h3 id="make-all"><a href="#make-all" class="headerlink" title="make all"></a>make all</h3><p><code>include</code> 相关依赖准备好后，make 开始解析默认目标 <code>all</code> 对应的依赖和指令，也就是 <code>tmp/.packageinfo</code> 目标。</p>
+<pre><code class="makefile">$(TMP_DIR)/.$(SCAN_TARGET): $(TARGET_STAMP)
+        $(call progress,Collecting $(SCAN_NAME) info: merging...)
+        -cat $(FILELIST) | awk &#39;{gsub(/\//, &quot;_&quot;, $$0);print &quot;$(TMP_DIR)/info/.$(SCAN_TARGET)-&quot; $$0}&#39; | xargs cat &gt; $@ 2&gt;/dev/null
+        $(call progress,Collecting $(SCAN_NAME) info: done)
+        echo
+</code></pre>
+<p>其依赖为 <code>$(TARGET_STAMP)</code>. 当然它的依赖不止这一个，前面 <code>PackageDir</code> 定义的规则中包含的目标也都是它的依赖。下面先来看看 <code>$(TARGET_STAMP)</code>.</p>
+<h4 id="TARGET-STAMP"><a href="#TARGET-STAMP" class="headerlink" title="TARGET_STAMP"></a>TARGET_STAMP</h4><p><code>$(TARGET_STAMP)</code> 对应值为 <code>/home/litreily/openwrt/tmp/info/.files-packageinfo.stamp</code>, 其对应指令如下：</p>
+<pre><code class="makefile">$(TARGET_STAMP)::
+        +( \
+                $(NO_TRACE_MAKE) $(FILELIST); \
+                MD5SUM=$$(cat $(FILELIST) $(OVERRIDELIST) | mkhash md5 | awk &#39;{print $$1}&#39;); \
+                [ -f &quot;$@.$$MD5SUM&quot; ] || { \
+                        rm -f $@.*; \
+                        touch $@.$$MD5SUM; \
+                        touch $@; \
+                } \
+        )
+</code></pre>
+<p>变量替换后为：</p>
+<pre><code class="makefile">/home/litreily/openwrt/tmp/info/.files-packageinfo.stamp::
+        +( \
+                make V=ss /home/litreily/openwrt/tmp/info/.files-packageinfo-2109133; \
+                MD5SUM=$(cat /home/litreily/openwrt/tmp/info/.files-packageinfo-2109133 /home/litreily/openwrt/tmp/info/.overrides-packageinfo-2109133 | mkhash md5 | awk &#39;{print $1}&#39;); \
+                [ -f &quot;/home/litreily/openwrt/tmp/info/.files-packageinfo.stamp.$MD5SUM&quot; ] || { \
+                        rm -f /home/litreily/openwrt/tmp/info/.files-packageinfo.stamp.*; \
+                        touch /home/litreily/openwrt/tmp/info/.files-packageinfo.stamp.$MD5SUM; \
+                        touch /home/litreily/openwrt/tmp/info/.files-packageinfo.stamp; \
+                } \
+        )
+</code></pre>
+<p>其中 <code>make V=ss /home/litreily/openwrt/tmp/info/.files-packageinfo-2109133</code> 又会启动一个新的子进程。</p>
+<blockquote>
+<p><strong>说明：</strong> 该子进程和 <code>make V=s</code> 一样，也会调用主Makefile，并导入 <code>toplevel.mk</code> 等Makefile，也就是说，如果缺少基本的编译工具或者依赖 (如 prepare-tmpinfo, .config 等)，这个子进程同样会和 <code>make V=s</code> 一样把所需依赖都生成一遍。但是不会完整编译项目。</p>
+</blockquote>
+<p><code>TARGET_STAMP</code> 目标主要是生成依赖工具和一个MD5文件。该子进程执行结束后，会计算生成一个 package 列表文件对应的 MD5 文件，并生成目标文件 <code>/home/litreily/openwrt/tmp/info/.files-packageinfo.stamp</code>.</p>
+<h4 id="packageinfo-package"><a href="#packageinfo-package" class="headerlink" title=".packageinfo-$(package)"></a>.packageinfo-$(package)</h4><p><code>TARGET_STAMP</code> 生成结束后，就开始调用 <code>tmp/info/.files-packageinfo.mk</code> 逐个生成 <code>tmp/info/.packageinfo-$(package)</code> 文件。这里也就是调用上述 <code>PackageDir</code> 的地方。</p>
+<p>所有相关文件都存储在 <code>tmp/info/</code> 目录，文件名为 <code>.packageinfo-$(package)</code>, 每个文件保存的信息由各自目录的 Makefile 决定，前面已经给出了 <code>base-files</code> 目录 dump 出来的信息，主要是描述信息、DEPENDs信息等。</p>
+<p>收集这些信息的时候，每个package都会打印一条log。</p>
+<pre><code class="log">Collecting package info: package/base-files
+Collecting package info: package/boot/arm-trusted-firmware-mvebu
+Collecting package info: package/boot/arm-trusted-firmware-rockchip
+Collecting package info: package/boot/arm-trusted-firmware-sunxi
+#...
+</code></pre>
+<p>打印 log 使用的是 <code>progress</code> 函数，其定义如下：</p>
+<pre><code class="makefile">ifeq ($(IS_TTY),1)
+  ifneq ($(strip $(NO_COLOR)),1)
+    define progress
+    printf &quot;\033[M\r$(1)&quot; &gt;&amp;2;
+    endef
+  else
+    define progress
+    printf &quot;\r$(1)&quot; &gt;&amp;2;
+    endef
+  endif
+else
+  define progress
+    :;
+  endef
+endif
+</code></pre>
+<p>实际上就是将 log 打印到 <code>stderr</code>, 也就是终端屏幕上，由于使用了 <code>\r</code> ，所以打印信息时会在同一行刷新，把它去掉就可以逐行打印了。</p>
+<blockquote>
+<p><strong>说明：</strong> 为什么 <code>TARGET_STAMP</code> 之后是生成 <code>.packageinfo-$(package)</code>? 这是因为在执行 <code>.packageinfo</code> 相关指令前，<code>scan.mk</code> 通过 include 导入了 <code>tmp/info/.files-packageinfo.mk</code> 文件, 该 Makefile 在导入的时候通过 <code>$(eval $(call PackageDir,base-files,base-files,))</code> 系列语句定义了 <code>.packageinfo</code> 的大量依赖，其依赖也就是这里提到的 <code>.packageinfo-$(package)</code>，所以，作为 <code>.packageinfo</code> 的依赖文件，当然要在执行目标指令前先生成。</p>
+</blockquote>
+<h4 id="packageinfo"><a href="#packageinfo" class="headerlink" title=".packageinfo"></a>.packageinfo</h4><p>目标 <code>all: tmp/.packageinfo</code>  的依赖文件都准备好后，继续来看目标 <code>all</code> 的编译规则：</p>
+<pre><code class="makefile">/home/litreily/openwrt/tmp/.packageinfo: /home/litreily/openwrt/tmp/info/.files-packageinfo.stamp
+        $(call progress,Collecting package info: merging...)
+        -cat /home/litreily/openwrt/tmp/info/.files-packageinfo-2109133 | awk &#39;{gsub(/\//, &quot;_&quot;, $0);print &quot;/home/litreily/openwrt/tmp/info/.packageinfo-&quot; $0}&#39; | xargs cat &gt; /home/litreily/openwrt/tmp/.packageinfo 2&gt;/dev/null
+        $(call progress,Collecting package info: done)
+        echo
+</code></pre>
+<p>以上指令其实很简单，就是将前面生成的 package 信息文件根据特定格式全部写入到目标文件 <code>.packageinfo</code> 中。同时使用 <code>progress</code> 函数打印相关信息。</p>
+<pre><code class="log">Collecting package info: merging...
+Collecting package info: done
+</code></pre>
+<p>言归正传，目标 <code>all</code> 在生成文件 <code>tmp/.packageinfo</code> 后就结束了，同样 <code>scan.mk</code> 的任务也完成了。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>本文详细描述了 openwrt <code>scan.mk</code> 扫描过程，其目的是生成编译 package, target 所需的临时文件，将 package, target 相关的依赖信息、路径信息、描述信息存入文件，并保存在 tmp 目录。</p>
+<p><code>openwrt</code> 的 <code>Makefile</code> 非常复杂，许多复杂对象的依赖和指令可能相互嵌套和递归调用，所以无法完全讲述清楚，本文旨在根据 <code>Makefile</code> 梳理编译流程，某些细节可能无法避免被遗漏。</p>
+<p>学习过程中用到了以下的小技巧，也在此总结一下：</p>
+<ol>
+<li>某些嵌套的 <code>make</code> 指令隐藏了调试信息，可以修改该指令，替换或添加 <code>-d DEBUG=vltrd</code></li>
+<li><code>openwrt</code> 的 <code>make</code> 大多调用了 <code>NO_TRACE_MAKE</code>, 所以可以直接在该变量定义处添加调试参数</li>
+<li>使用 <code>$(warning info)</code> 打印调试信息可以帮助理解</li>
+<li>include 指令前添加的 <code>-</code> 符号代表如果该文件暂时不存在可以继续执行，不必报错</li>
+<li>有时候可以手动执行某些内嵌的 <code>make</code> 指令, 不过记得加上必要的全局变量，比如 <code>TOPDIR</code>, <code>SCAN_COOKIE</code> 等</li>
+</ol>
+]]></content>
+      
+        <categories>
+            
+            <category> Embedded </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> makefile </tag>
+            
+            <tag> openwrt </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[openwrt Makefile subdir.mk 详解]]></title>
+      <url>https://www.litreily.top/2021/01/13/mk-subdir/</url>
+      <content type="html"><![CDATA[<p>之前讲述了 openwrt Makefile 的<a href="https://www.litreily.top/2020/12/30/openwrt-mkfile/">整体框架</a>，主要包括主 Makefile 的描述，，最后简单描述了 <code>subdir.mk</code> , 本文就来详细剖析这个文件。</p>
+<p>但是在解析 <code>subdir.mk</code> 之前，先来看两个 Makefile, </p>
+<ul>
+<li><code>debug.mk</code>: 这也是主 Makefile 引入的第一个 .mk 文件，这里定义的调试函数在 <code>subdir.mk</code> 中被调用</li>
+<li><code>target/Makefile</code>: 这是调用到 <code>subdir.mk</code> 的首个 Makefile, 本文将以此为例进行说明</li>
+</ul>
+<h2 id="debug-mk"><a href="#debug-mk" class="headerlink" title="debug.mk"></a>debug.mk</h2><p><code>debug.mk</code> 定义了几个调试函数。</p>
+<ul>
+<li><code>debug</code></li>
+<li><code>warn</code></li>
+<li><code>debug_eval</code></li>
+<li><code>warn_eval</code></li>
+</ul>
+<pre><code class="makefile">define debug
+$$(findstring $(2),$$(if $$(DEBUG_SCOPE_DIR),$$(if $$(filter $$(DEBUG_SCOPE_DIR)%,$(1)),$(build_debug)),$(build_debug)))
+endef
+
+define warn
+$$(if $(call debug,$(1),$(2)),$$(warning $(3)))
+endef
+
+define debug_eval
+$$(if $(call debug,$(1),$(2)),$(3))
+endef
+
+define warn_eval
+$(call warn,$(1),$(2),$(3)        $(4))
+$(4)
+endef
+</code></pre>
+<p>其中：</p>
+<ul>
+<li><code>DEBUG_SCOPE_DIR</code>: 默认没有定义, 可以在执行 <code>make</code> 时指定</li>
+<li><code>build_debug</code>: 对应的是 <code>$(DEBUG)</code> 的值，是 &quot;dltvr&quot; 字符串的子集</li>
+</ul>
+<p>要使这几个函数生效，需要定义变量 <code>DEBUG</code>, 可以在执行 make 时定义.</p>
+<pre><code class="bash">make DEBUG=d V=s
+# debug flags:
+#
+# d: show subdirectory tree
+# t: show added targets
+# l: show legacy targets
+# r: show autorebuild messages
+# v: verbose (no .SILENCE for common targets)
+</code></pre>
+<p>默认情况下，<code>DEBUG</code> 是没有定义的，通常不需要管，之所以在这拎出来，是因为 <code>subdir.mk</code> 有调用以上提及的调试函数。</p>
+<h2 id="target-Makefile"><a href="#target-Makefile" class="headerlink" title="target/Makefile"></a>target/Makefile</h2><p><code>target/Makefile</code>  与 <code>tools</code>, <code>toolchain</code>, <code>package</code> 目录的 <code>Makefile</code> 使用的是相同的结构，通过调用 <code>subdir.mk</code> 内定义的两个函数 <code>stampfile</code>, <code>subdir</code> 动态生成编译目标规则。</p>
+<pre><code class="makefile">curdir:=target
+
+$(curdir)/subtargets:=install
+$(curdir)/builddirs:=linux sdk imagebuilder toolchain
+$(curdir)/builddirs-default:=linux
+$(curdir)/builddirs-install:=linux $(if $(CONFIG_SDK),sdk) $(if $(CONFIG_IB),imagebuilder) $(if $(CONFIG_MAKE_TOOLCHAIN),toolchain)
+
+$(curdir)/sdk/install:=$(curdir)/linux/install
+$(curdir)/imagebuilder/install:=$(curdir)/linux/install
+
+$(eval $(call stampfile,$(curdir),target,prereq,.config))
+$(eval $(call stampfile,$(curdir),target,compile,$(TMP_DIR)/.build))
+$(eval $(call stampfile,$(curdir),target,install,$(TMP_DIR)/.build))
+
+$($(curdir)/stamp-install): $($(curdir)/stamp-compile) 
+
+$(eval $(call subdir,$(curdir)))
+</code></pre>
+<p>其中 <code>curdir</code> 代表当前目录. 该 <code>Makefile</code> 前半部分定义了一些变量，这些变量在后续的 <code>stampfile</code>, <code>subdir</code> 函数中被调用。<code>target</code>, <code>package</code> 等目录的 <code>Makefile</code> 都是先调用 <code>stampfile</code> 生成特定目标的依赖和指令，然后再调用 <code>subdir</code> 生成各个子目录下目标的编译规则。至于具体怎么生成，继续往后看。</p>
+<h2 id="subdir-mk"><a href="#subdir-mk" class="headerlink" title="subdir.mk"></a>subdir.mk</h2><p>接下来看本文的主角 —— <code>subdir.mk</code>, 这是编译项目过程中 <strong>非常重要</strong> 的文件，它可以动态定义和生成编译子目录相关目标的规则，包括 <code>package</code>, <code>target</code>, <code>tools</code>, <code>toolchain</code> 等子目录相关目标的规则。 <code>subdir.mk</code> 也是编译生成 <code>world</code> 目标必不可少的文件，主 <code>Makefile</code> 在 <code>include subdir.mk</code> 之后会 <code>include</code> 以下 <code>Makefile</code>:</p>
+<ul>
+<li>target/Makefile</li>
+<li>package/Makefile</li>
+<li>tools/Makefile</li>
+<li>toolchain/Makefile</li>
+</ul>
+<p>这些子目录的 <code>Makefile</code> 会调用 <code>subdir.mk</code> 定义的以下两个函数：</p>
+<ul>
+<li>subdir</li>
+<li>stampfile</li>
+</ul>
+<p>这两个函数是配合起来一起用的，先通过 <code>stampfile</code> 生成 <code>stamp-$(target)</code> 相关规则，然后通过 <code>subddir</code> 生成各个子目录相关目标的规则（如 <code>target/linux/clean</code>）。</p>
+<h3 id="stampfile"><a href="#stampfile" class="headerlink" title="stampfile"></a>stampfile</h3><p>先来看 <code>stampfile</code>.</p>
+<pre><code class="makefile"># Parameters: &lt;subdir&gt; &lt;name&gt; &lt;target&gt; &lt;depends&gt; &lt;config options&gt; &lt;stampfile location&gt;
+define stampfile
+  $(1)/stamp-$(3):=$(if $(6),$(6),$(STAGING_DIR))/stamp/.$(2)_$(3)$(5)
+  $$($(1)/stamp-$(3)): $(TMP_DIR)/.build $(4)
+        @+$(SCRIPT_DIR)/timestamp.pl -n $$($(1)/stamp-$(3)) $(1) $(4) || \
+                $(MAKE) $(if $(QUIET),--no-print-directory) $$($(1)/flags-$(3)) $(1)/$(3)
+        @mkdir -p $$$$(dirname $$($(1)/stamp-$(3)))
+        @touch $$($(1)/stamp-$(3))
+
+  $$(if $(call debug,$(1),v),,.SILENT: $$($(1)/stamp-$(3)))
+
+  .PRECIOUS: $$($(1)/stamp-$(3)) # work around a make bug
+
+  $(1)//clean:=$(1)/stamp-$(3)/clean
+  $(1)/stamp-$(3)/clean: FORCE
+        @rm -f $$($(1)/stamp-$(3))
+
+endef
+</code></pre>
+<p>首行注释了 <code>stampfile</code> 的参数列表，以 <code>target/Makefile</code> 首个 <code>stampfile</code> 调用为例。</p>
+<pre><code class="makefile"># Parameters: &lt;subdir&gt; &lt;name&gt; &lt;target&gt; &lt;depends&gt; &lt;config options&gt; &lt;stampfile location&gt;
+$(eval $(call stampfile,$(curdir),target,prereq,.config))
+# subdir: $(curdir) - &quot;target&quot;
+# name: &quot;target&quot;
+# target: &quot;prereq&quot;
+# depends: &quot;.config&quot;
+# config options: &quot;&quot;
+# stampfile location: &quot;&quot;
+</code></pre>
+<p>为了方便调试，可以在该行前添加一行, 将 <code>eval</code> 改成 <code>warning</code>，这样就可以在编译 log 中看到解析后的编译规则啦。</p>
+<pre><code class="makefile"># add below function call to get the details of stampfile
+$(warning $(call stampfile,$(curdir),target,prereq,.config))
+$(eval $(call stampfile,$(curdir),target,prereq,.config))
+</code></pre>
+<p>ok, 接下来清除 <strong>所有</strong> 编译结果，然后重新编译 <code>defconfig</code>, 编译过程就会调用 <code>target/Makefile</code> 并执行以上语句。</p>
+<pre><code class="bash">make distclean
+make -d DEBUG=vltdr defconfig &gt; log 2&gt;&amp;1
+</code></pre>
+<p>截取 log 中打印以上 <code>warning</code> 信息的部分如下：</p>
+<pre><code class="makefile">target/stamp-prereq:=/home/litreily/openwrt/staging_dir/target-_/stamp/.target_prereq
+$(target/stamp-prereq): /home/litreily/openwrt/tmp/.build .config
+        @+/home/litreily/openwrt/scripts/timestamp.pl -n $(target/stamp-prereq) target .config || make  $(target/flags-prereq) target/prereq
+        @mkdir -p $$(dirname $(target/stamp-prereq))
+        @touch $(target/stamp-prereq)
+
+$(if $(findstring v,$(if $(DEBUG_SCOPE_DIR),$(if $(filter $(DEBUG_SCOPE_DIR)%,target),vltdr),vltdr)),,.SILENT: $(target/stamp-prereq))
+
+.PRECIOUS: $(target/stamp-prereq) # work around a make bug
+
+target//clean:=target/stamp-prereq/clean
+target/stamp-prereq/clean: FORCE
+        @rm -f $(target/stamp-prereq)
+</code></pre>
+<p>由于默认没有 <code>.config</code> 文件，所以解析出来的 <code>STAGING_DIR</code> 为 <code>target-_</code>, 如果是 <code>.config</code> 已存在的情况下，得到的结果更完整，当然这不是我们研究的重点。</p>
+<p>从以上解析结果可以看出，<code>stampfile</code> 会生成 4 个目标规则：</p>
+<ul>
+<li><code>$(target/stamp-prereq)</code> : 依赖 <code>tmp/.build</code>, <code>.config</code></li>
+<li><code>.SILENT</code>: 是在没有定义 DEBUG 参数时才会生成的目标，其依赖就是刚定义的 <code>$(target/stamp-prereq)</code>, 可以忽略</li>
+<li><code>.PRECIOUS</code>: 根据注释像是解决某个 bug 的 workaround, 可以忽略</li>
+<li><code>target/stamp-prereq/clean</code>: 用来删除目标 <code>$(target/stamp-prereq)</code> 的伪目标</li>
+</ul>
+<p>根据分析，以上结果可以进一步简化。</p>
+<pre><code class="makefile">target/stamp-prereq:=/home/litreily/openwrt/staging_dir/target-_/stamp/.target_prereq
+$(target/stamp-prereq): /home/litreily/openwrt/tmp/.build .config
+        @+/home/litreily/openwrt/scripts/timestamp.pl -n $(target/stamp-prereq) target .config || make  $(target/flags-prereq) target/prereq
+        @mkdir -p $$(dirname $(target/stamp-prereq))
+        @touch $(target/stamp-prereq)
+
+target//clean:=target/stamp-prereq/clean
+target/stamp-prereq/clean: FORCE
+        @rm -f $(target/stamp-prereq)
+</code></pre>
+<p>同理也可以分析 <code>target/Makefile</code> 中剩余两个 <code>stampfile</code> 调用。</p>
+<pre><code class="makefile">$(warning $(call stampfile,$(curdir),target,compile,$(TMP_DIR)/.build))
+$(eval $(call stampfile,$(curdir),target,compile,$(TMP_DIR)/.build))
+$(warning $(call stampfile,$(curdir),target,install,$(TMP_DIR)/.build))
+$(eval $(call stampfile,$(curdir),target,install,$(TMP_DIR)/.build))
+</code></pre>
+<p>同样进行简化，得到编译目标及其规则：</p>
+<pre><code class="makefile"># $(eval $(call stampfile,$(curdir),target,compile,$(TMP_DIR)/.build))
+target/stamp-compile:=/home/litreily/openwrt/staging_dir/target-mips_24kc_musl/stamp/.target_compile
+$(target/stamp-compile): /home/litreily/openwrt/tmp/.build /home/litreily/openwrt/tmp/.build
+        @+/home/litreily/openwrt/scripts/timestamp.pl -n $(target/stamp-compile) target /home/litreily/openwrt/tmp/.build || make  $(target/flags-compile) target/compile
+        @mkdir -p $$(dirname $(target/stamp-compile))
+        @touch $(target/stamp-compile)
+
+target//clean:=target/stamp-compile/clean
+target/stamp-compile/clean: FORCE
+        @rm -f $(target/stamp-compile)
+
+# $(eval $(call stampfile,$(curdir),target,install,$(TMP_DIR)/.build))
+target/stamp-install:=/home/litreily/openwrt/staging_dir/target-mips_24kc_musl/stamp/.target_install
+$(target/stamp-install): /home/litreily/openwrt/tmp/.build /home/litreily/openwrt/tmp/.build
+        @+/home/litreily/openwrt/scripts/timestamp.pl -n $(target/stamp-install) target /home/litreily/openwrt/tmp/.build || make  $(target/flags-install) target/install
+        @mkdir -p $$(dirname $(target/stamp-install))
+        @touch $(target/stamp-install)
+
+target//clean:=target/stamp-install/clean
+target/stamp-install/clean: FORCE
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong> <code>$(target/stamp-compile)</code> 和 <code>$(target/stamp-install)</code> 的依赖包含两个重复的 <code>tmp/.build</code>, 看起来像是冗余的，或许可以将 <code>target/Makefile</code> 优化下。</p>
+</blockquote>
+<p>分析到这一步，<code>stampfile</code> 对 target 目录生成的目标已经都解析出来了，就是下面这些.</p>
+<pre><code class="makefile">$(target/stamp-prereq):
+target/stamp-prereq/clean:
+$(target/stamp-compile):
+target/stamp-compile/clean:
+$(target/stamp-install):
+target/stamp-install/clean:
+</code></pre>
+<p>这些目标在主 Makefile 是作为其它目标的依赖，也是目标 <code>world</code> 编译过程中的中间依赖目标。</p>
+<blockquote>
+<p><strong>注意：</strong> 每个 <code>stampfile</code> 除了生成目标规则都，都定义了一个 <code>target//clean</code> 变量，这个在 <code>subdir</code> 中会调用到。</p>
+</blockquote>
+<p>ok, <code>stampfile</code> 分析完了，接下来看下 <code>subdir</code> 要完成哪些工作。</p>
+<h3 id="subdir"><a href="#subdir" class="headerlink" title="subdir"></a>subdir</h3><pre><code class="makefile"># Parameters: &lt;subdir&gt;
+define subdir
+  $(call warn,$(1),d,D $(1))
+  $(foreach bd,$($(1)/builddirs),
+    $(call warn,$(1),d,BD $(1)/$(bd))
+    $(foreach target,$(SUBTARGETS) $($(1)/subtargets),
+      $(foreach btype,$(buildtypes-$(bd)),
+        $(call warn_eval,$(1)/$(bd),t,T,$(1)/$(bd)/$(btype)/$(target): $(if $(NO_DEPS)$(QUILT),,$($(1)/$(bd)/$(btype)/$(target)) $(call $(1)//$(btype)/$(target),$(1)/$(bd)/$(btype))))
+                $(call log_make,$(1)/$(bd),$(target),$(btype),$(filter-out __default,$(variant))) \
+                        || $(call ERROR,$(2),   ERROR: $(1)/$(bd) [$(btype)] failed to build.,$(findstring $(bd),$($(1)/builddirs-ignore-$(btype)-$(target))))
+        $(if $(call diralias,$(bd)),$(call warn_eval,$(1)/$(bd),l,T,$(1)/$(call diralias,$(bd))/$(btype)/$(target): $(1)/$(bd)/$(btype)/$(target)))
+      )
+      $(call warn_eval,$(1)/$(bd),t,T,$(1)/$(bd)/$(target): $(if $(NO_DEPS)$(QUILT),,$($(1)/$(bd)/$(target)) $(call $(1)//$(target),$(1)/$(bd))))
+        $(foreach variant,$(if $(BUILD_VARIANT),$(BUILD_VARIANT),$(if $(strip $($(1)/$(bd)/variants)),$($(1)/$(bd)/variants),$(if $($(1)/$(bd)/default-variant),$($(1)/$(bd)/default-variant),__default))),
+                $(if $(BUILD_LOG),@mkdir -p $(BUILD_LOG_DIR)/$(1)/$(bd)/$(filter-out __default,$(variant)))
+                $(if $($(1)/autoremove),$(call rebuild_check,$(1)/$(bd),$(target),,$(filter-out __default,$(variant))))
+                $(call log_make,$(1)/$(bd),$(target),,$(filter-out __default,$(variant))) \
+                        || $(call ERROR,$(1),   ERROR: $(1)/$(bd) failed to build$(if $(filter-out __default,$(variant)), (build variant: $(variant))).,$(findstring $(bd),$($(1)/builddirs-ignore-$(target)))) 
+        )
+      $(if $(PREREQ_ONLY)$(DUMP_TARGET_DB),,
+        # aliases
+        $(if $(call diralias,$(bd)),$(call warn_eval,$(1)/$(bd),l,T,$(1)/$(call diralias,$(bd))/$(target): $(1)/$(bd)/$(target)))
+          )
+        )
+  )
+  $(foreach target,$(SUBTARGETS) $($(1)/subtargets),$(call subtarget,$(1),$(target)))
+endef
+</code></pre>
+<p>别看这么复杂，其中很大一部分是 debug 信息，只有在 <code>DEBUG</code> 值不为空的情况下才会打印，否则就是空值。在编译的时候加上 <code>DEBUG=vltdr</code>, 可以看到以下详细的调试信息，也能方便理解。</p>
+<pre><code class="log">target/Makefile:23: D target
+target/Makefile:23: BD target/linux
+target/Makefile:23: T    target/linux/clean:  target/stamp-install/clean
+target/Makefile:23: T    target/linux/download:  
+target/Makefile:23: T    target/linux/prepare:  
+target/Makefile:23: T    target/linux/compile:  
+target/Makefile:23: T    target/linux/update:  
+target/Makefile:23: T    target/linux/refresh:  
+target/Makefile:23: T    target/linux/prereq:  
+target/Makefile:23: T    target/linux/dist:  
+target/Makefile:23: T    target/linux/distcheck:  
+target/Makefile:23: T    target/linux/configure:  
+target/Makefile:23: T    target/linux/check:  
+target/Makefile:23: T    target/linux/check-depends:  
+target/Makefile:23: T    target/linux/install:  
+target/Makefile:23: BD target/sdk
+target/Makefile:23: T    target/sdk/clean:  target/stamp-install/clean
+target/Makefile:23: T    target/sdk/download:  
+target/Makefile:23: T    target/sdk/prepare:  
+target/Makefile:23: T    target/sdk/compile:  
+target/Makefile:23: T    target/sdk/update:  
+target/Makefile:23: T    target/sdk/refresh:  
+target/Makefile:23: T    target/sdk/prereq:  
+target/Makefile:23: T    target/sdk/dist:  
+target/Makefile:23: T    target/sdk/distcheck:  
+target/Makefile:23: T    target/sdk/configure:  
+target/Makefile:23: T    target/sdk/check:  
+target/Makefile:23: T    target/sdk/check-depends:  
+target/Makefile:23: T    target/sdk/install: target/linux/install 
+target/Makefile:23: BD target/imagebuilder
+target/Makefile:23: T    target/imagebuilder/clean:  target/stamp-install/clean
+target/Makefile:23: T    target/imagebuilder/download:  
+target/Makefile:23: T    target/imagebuilder/prepare:  
+target/Makefile:23: T    target/imagebuilder/compile:  
+target/Makefile:23: T    target/imagebuilder/update:  
+target/Makefile:23: T    target/imagebuilder/refresh:  
+target/Makefile:23: T    target/imagebuilder/prereq:  
+target/Makefile:23: T    target/imagebuilder/dist:  
+target/Makefile:23: T    target/imagebuilder/distcheck:  
+target/Makefile:23: T    target/imagebuilder/configure:  
+target/Makefile:23: T    target/imagebuilder/check:  
+target/Makefile:23: T    target/imagebuilder/check-depends:  
+target/Makefile:23: T    target/imagebuilder/install: target/linux/install 
+target/Makefile:23: BD target/toolchain
+target/Makefile:23: T    target/toolchain/clean:  target/stamp-install/clean
+target/Makefile:23: T    target/toolchain/download:  
+target/Makefile:23: T    target/toolchain/prepare:  
+target/Makefile:23: T    target/toolchain/compile:  
+target/Makefile:23: T    target/toolchain/update:  
+target/Makefile:23: T    target/toolchain/refresh:  
+target/Makefile:23: T    target/toolchain/prereq:  
+target/Makefile:23: T    target/toolchain/dist:  
+target/Makefile:23: T    target/toolchain/distcheck:  
+target/Makefile:23: T    target/toolchain/configure:  
+target/Makefile:23: T    target/toolchain/check:  
+target/Makefile:23: T    target/toolchain/check-depends:  
+target/Makefile:23: T    target/toolchain/install:  
+target/Makefile:23: T    target/clean:  target/linux/clean
+target/Makefile:23: T    target/download:  target/linux/download
+target/Makefile:23: T    target/prepare:  target/linux/prepare
+target/Makefile:23: T    target/compile:  target/linux/compile
+target/Makefile:23: T    target/update:  target/linux/update
+target/Makefile:23: T    target/refresh:  target/linux/refresh
+target/Makefile:23: T    target/prereq:  target/linux/prereq
+target/Makefile:23: T    target/dist:  target/linux/dist
+target/Makefile:23: T    target/distcheck:  target/linux/distcheck
+target/Makefile:23: T    target/configure:  target/linux/configure
+target/Makefile:23: T    target/check:  target/linux/check
+target/Makefile:23: T    target/check-depends:  target/linux/check-depends
+target/Makefile:23: T    target/install:  target/linux/install
+</code></pre>
+<p>其中：</p>
+<ul>
+<li><code>D</code> : Directory, 当前目录</li>
+<li><code>BD</code> : builddirs, 在 <code>target/Makefile</code> 中定义的 <code>builddirs</code> 变量</li>
+<li><code>T</code> : subtargets, 具体的目标</li>
+</ul>
+<p>结合以上调试信息可以更容易分析 <code>subdir</code> 的执行流程，函数内部主要通过 3 层 <code>foreach</code> 循环逐层遍历以下信息：</p>
+<pre><code class="makefile">$(call warn,$(1),d,D $(1))
+# 1. builddirs: linux sdk imagebuilder toolchain`
+$(foreach bd,$($(1)/builddirs),
+  $(call warn,$(1),d,BD $(1)/$(bd))
+  # 2. subtargets: clean download prepare compile update refresh prereq dist distcheck configure check check-depends install
+  $(foreach target,$(SUBTARGETS) $($(1)/subtargets),
+     # 3. buildtypes: &quot;&quot;
+     $(foreach btype,$(buildtypes-$(bd)),
+
+  $(call warn_eval,$(1)/$(bd),t,T,$(1)/$(bd)/$(target): $(if $(NO_DEPS)$(QUILT),,$($(1)/$(bd)/$(target)) $(call $(1)//$(target),$(1)/$(bd))))
+        # 3. variant: __default
+        $(foreach variant, ...
+#...
+$(foreach target,$(SUBTARGETS) $($(1)/subtargets),$(call subtarget,$(1),$(target)))
+</code></pre>
+<p>对其中的个别变量进行说明，<code>$(bd)</code> 对应 <code>target</code> 子目录 <code>linux</code>, <code>sdk</code> 等；<code>$(SUBTARGETS)</code> 是在 <code>rules.mk</code> 中定义的。</p>
+<pre><code class="makefile"># include/subdir.mk
+SUBTARGETS:=$(DEFAULT_SUBDIR_TARGETS)
+
+# rules.mk
+DEFAULT_SUBDIR_TARGETS:=clean download prepare compile update refresh prereq dist distcheck configure check check-depends
+</code></pre>
+<p>遍历 target 的语句是 <code>$(foreach target, $(SUBTARGETS) $(1)/subtargets)</code>, 就是说，除了上面的默认 targets 之外，还要加上 <code>$(1)/subtargets</code> 的值，对应 <code>target/Makefile</code> 中的值是 <code>install</code>. 这与上面展示的 log 是相对应的。</p>
+<p>整体结构清楚了，但是还是不好分析，那么先根据以下原则对 <code>subdir</code> 进行精简：</p>
+<ol>
+<li>忽略调试信息 <code>warn</code></li>
+<li>解析变量</li>
+<li>解析 <code>if</code> 条件判断，仅留下有效分支</li>
+</ol>
+<p>举例说明，</p>
+<ol>
+<li><code>subdir</code> 中的 <code>buildtypes-$(bd)</code> 为空，所以其对应 <code>foreach</code> 可以直接删除;</li>
+<li><code>BUILD_VARIANT</code> 未定义，对应 <code>if</code> 判断结果为 <code>__default</code>;</li>
+<li><code>$(BUILD_LOG)</code> 未定义，对应 <code>if</code> 分支删除。</li>
+<li><code>$($(1)/autoremove)</code> 未定义，对应 <code>if</code> 分支删除。</li>
+</ol>
+<p>根据这些规则后简化的 <code>subdir</code> 如下：</p>
+<pre><code class="makefile"># Parameters: &lt;subdir&gt;
+define subdir
+  $(foreach bd,$($(1)/builddirs),
+    $(foreach target,$(SUBTARGETS) $($(1)/subtargets),
+      $(call warn_eval,$(1)/$(bd),t,T,$(1)/$(bd)/$(target): $(call $(1)//$(target),$(1)/$(bd)))
+        $(foreach variant,__default,
+                $(call log_make,$(1)/$(bd),$(target),,$(filter-out __default,$(variant))) 
+        )
+        # aliases
+        $(if $(call diralias,$(bd)),$(call warn_eval,$(1)/$(bd),l,T,$(1)/$(call diralias,$(bd))/$(target): $(1)/$(bd)/$(target)))
+    )
+  )
+  $(foreach target,$(SUBTARGETS) $($(1)/subtargets),$(call subtarget,$(1),$(target)))
+endef
+</code></pre>
+<h3 id="example"><a href="#example" class="headerlink" title="example"></a>example</h3><p>以遍历 <code>$(bd)</code> 值为 <code>linux</code> 说明以上精简后的操作。</p>
+<pre><code class="makefile">      $(call warn_eval,$(1)/$(bd),t,T,$(1)/$(bd)/$(target): $(call $(1)//$(target),$(1)/$(bd)))
+</code></pre>
+<p>在定义了 <code>DEBUG=vltdr</code> 的情况下，以上指令会打印 target 相关信息。</p>
+<pre><code class="log">target/Makefile:23: T    target/linux/clean:  target/stamp-install/clean
+target/Makefile:23: T    target/linux/download:  
+target/Makefile:23: T    target/linux/prepare:  
+target/Makefile:23: T    target/linux/compile:  
+target/Makefile:23: T    target/linux/update:  
+target/Makefile:23: T    target/linux/refresh:  
+target/Makefile:23: T    target/linux/prereq:  
+target/Makefile:23: T    target/linux/dist:  
+target/Makefile:23: T    target/linux/distcheck:  
+target/Makefile:23: T    target/linux/configure:  
+target/Makefile:23: T    target/linux/check:  
+target/Makefile:23: T    target/linux/check-depends:  
+target/Makefile:23: T    target/linux/install:  
+</code></pre>
+<p>从前面 <code>warn_eval</code> 的定义可知，它除了打印 warning 信息外，还会将最后一个参数单独执行一遍。所以它包含两个功能，<code>warn</code> 和 <code>eval</code>, 且 <code>eval</code> 更重要。它实际上也定义了一组编译目标。也就是 <code>warn_eval</code> 的第4个参数:</p>
+<pre><code class="makefile">$(1)/$(bd)/$(target): $(call $(1)//$(target),$(1)/$(bd))
+</code></pre>
+<p>将变量依次替换得到：</p>
+<pre><code class="makefile">target/linux/clean: $(call target//clean,target/linux)
+</code></pre>
+<ul>
+<li><code>$(target/linux)</code> : 变量没有定义</li>
+<li><code>$(target//clean)</code> : 前面 <code>stampfile</code> 定义的变量，其值为 <code>target/stamp-install/clean</code></li>
+</ul>
+<p>最终解析出来如下：</p>
+<pre><code class="makefile">target/linux/clean: target/stamp-install/clean
+</code></pre>
+<p>该目标除了依赖之外，还有对应的指令，也就是紧随其后的 <code>foreach</code> 语句。</p>
+<pre><code class="makefile">        $(foreach variant,__default,
+                $(call log_make,$(1)/$(bd),$(target),,$(filter-out __default,$(variant))) 
+        )
+</code></pre>
+<p>看到这应该明了了，就是这个 <code>log_make</code> 调用，顺藤摸瓜，来看下这个函数的定义。</p>
+<pre><code class="makefile">subdir_make_opts = \
+        -r -C $(1) \
+                BUILD_SUBDIR=&quot;$(1)&quot; \
+                BUILD_VARIANT=&quot;$(4)&quot;
+
+# 1: subdir
+# 2: target
+# 3: build type
+# 4: build variant
+log_make = \
+        $(if $(call debug,$(1),v),,@)+ \
+        $(if $(BUILD_LOG), \
+                set -o pipefail; \
+                mkdir -p $(BUILD_LOG_DIR)/$(1)$(if $(4),/$(4));) \
+      $(SCRIPT_DIR)/time.pl &quot;time: $(1)$(if $(4),/$(4))/$(if $(3),$(3)-)$(2)&quot; \
+      $$(SUBMAKE) $(subdir_make_opts) $(if $(3),$(3)-)$(2) \
+                $(if $(BUILD_LOG),SILENT= 2&gt;&amp;1 | tee $(BUILD_LOG_DIR)/$(1)$(if $(4),/$(4))/$(if $(3),$(3)-)$(2).txt)
+
+
+</code></pre>
+<p>同样，先进行简化，<code>DEBUG</code>, <code>BUILD_LOG</code> 均未定义, 对应分支可删除；已知全局变量可以替换掉。</p>
+<pre><code class="makefile">log_make = \
+        @+ \
+        scripts/time.pl &quot;time: $(1)$(if $(4),/$(4))/$(if $(3),$(3)-)$(2)&quot; \
+        $$(SUBMAKE) -r -C $(1) BUILD_SUBDIR=&quot;$(1)&quot; BUILD_VARIANT=&quot;$(4)&quot; \
+        $(if $(3),$(3)-)$(2)
+</code></pre>
+<p>接着回到 <code>subdir</code> 中的 <code>log_make</code> 的调用处：</p>
+<pre><code class="makefile">$(call log_make,$(1)/$(bd),$(target),,$(filter-out __default,$(variant))) 
+</code></pre>
+<p>按照简化后的 <code>log_make</code> 代入参数解析以上指令。</p>
+<pre><code class="makefile">+ scripts/time.pl &quot;time: target/linux/clean&quot; make -w -r -C target/linux BUILD_SUBDIR=&quot;target/linux&quot; BUILD_VARIANT=&quot;&quot; clean
+</code></pre>
+<p>将目标、依赖及其指令组合起来就是这样的：</p>
+<pre><code class="makefile">target/linux/clean: target/stamp-install/clean
+        + scripts/time.pl &quot;time: target/linux/clean&quot; make -w -r -C target/linux BUILD_SUBDIR=&quot;target/linux&quot; BUILD_VARIANT=&quot;&quot; clean
+</code></pre>
+<p>看看这个目标定义，依赖项 <code>target/stamp-install/clean</code> 的规则在 <code>stampfile</code> 中定义好了；其指令是通过 perl 脚本 <code>time.pl</code> 执行 <code>make</code> 指令并记录时间信息。</p>
+<p>到此就完成了对 <code>subdir</code> 遍历 <code>subtargets</code> 之一 <code>target/linux/clean</code> 的解析，其它 <code>target</code> 也是类似的。</p>
+<pre><code class="makefile"># target/linux
+target/linux/clean: target/stamp-install/clean
+        + scripts/time.pl &quot;time: target/linux/clean&quot; make -w -r -C target/linux BUILD_SUBDIR=&quot;target/linux&quot; BUILD_VARIANT=&quot;&quot; clean
+target/linux/download: 
+        + scripts/time.pl &quot;time: target/linux/download&quot; make -w -r -C target/linux BUILD_SUBDIR=&quot;target/linux&quot; BUILD_VARIANT=&quot;&quot; download
+target/linux/prepare: 
+        + scripts/time.pl &quot;time: target/linux/download&quot; make -w -r -C target/linux BUILD_SUBDIR=&quot;target/linux&quot; BUILD_VARIANT=&quot;&quot; prepare
+#...
+target/linux/install: 
+        + scripts/time.pl &quot;time: target/linux/install&quot; make -w -r -C target/linux BUILD_SUBDIR=&quot;target/linux&quot; BUILD_VARIANT=&quot;&quot; install
+
+# target/sdk
+target/sdk/clean: target/stamp-install/clean
+        + scripts/time.pl &quot;time: target/sdk/clean&quot; make -w -r -C target/sdk BUILD_SUBDIR=&quot;target/sdk&quot; BUILD_VARIANT=&quot;&quot; clean
+target/sdk/download: 
+        + scripts/time.pl &quot;time: target/sdk/download&quot; make -w -r -C target/sdk BUILD_SUBDIR=&quot;target/sdk&quot; BUILD_VARIANT=&quot;&quot; download
+#...
+target/sdk/install: 
+        + scripts/time.pl &quot;time: target/sdk/install&quot; make -w -r -C target/sdk BUILD_SUBDIR=&quot;target/sdk&quot; BUILD_VARIANT=&quot;&quot; install
+
+# target/imagebuilder
+target/imagebuilder/clean: target/stamp-install/clean
+        + scripts/time.pl &quot;time: target/imagebuilder/clean&quot; make -w -r -C target/imagebuilder BUILD_SUBDIR=&quot;target/imagebuilder&quot; BUILD_VARIANT=&quot;&quot; clean
+target/imagebuilder/download: 
+        + scripts/time.pl &quot;time: target/imagebuilder/download&quot; make -w -r -C target/imagebuilder BUILD_SUBDIR=&quot;target/imagebuilder&quot; BUILD_VARIANT=&quot;&quot; download
+#...
+target/imagebuilder/install: 
+        + scripts/time.pl &quot;time: target/imagebuilder/install&quot; make -w -r -C target/imagebuilder BUILD_SUBDIR=&quot;target/imagebuilder&quot; BUILD_VARIANT=&quot;&quot; install
+
+# target/toolchain
+target/toolchain/clean: target/stamp-install/clean
+        + scripts/time.pl &quot;time: target/toolchain/clean&quot; make -w -r -C target/toolchain BUILD_SUBDIR=&quot;target/toolchain&quot; BUILD_VARIANT=&quot;&quot; clean
+target/toolchain/download: 
+        + scripts/time.pl &quot;time: target/toolchain/download&quot; make -w -r -C target/toolchain BUILD_SUBDIR=&quot;target/toolchain&quot; BUILD_VARIANT=&quot;&quot; download
+#...
+target/toolchain/install: 
+        + scripts/time.pl &quot;time: target/toolchain/install&quot; make -w -r -C target/toolchain BUILD_SUBDIR=&quot;target/toolchain&quot; BUILD_VARIANT=&quot;&quot; install
+</code></pre>
+<h3 id="in-the-end"><a href="#in-the-end" class="headerlink" title="in the end"></a>in the end</h3><p>最后，还有一个小尾巴没讲到。注意看前面给出 log 的最后一部分。</p>
+<pre><code class="log">target/Makefile:23: T    target/clean:  target/linux/clean
+target/Makefile:23: T    target/download:  target/linux/download
+target/Makefile:23: T    target/prepare:  target/linux/prepare
+target/Makefile:23: T    target/compile:  target/linux/compile
+target/Makefile:23: T    target/update:  target/linux/update
+target/Makefile:23: T    target/refresh:  target/linux/refresh
+target/Makefile:23: T    target/prereq:  target/linux/prereq
+target/Makefile:23: T    target/dist:  target/linux/dist
+target/Makefile:23: T    target/distcheck:  target/linux/distcheck
+target/Makefile:23: T    target/configure:  target/linux/configure
+target/Makefile:23: T    target/check:  target/linux/check
+target/Makefile:23: T    target/check-depends:  target/linux/check-depends
+target/Makefile:23: T    target/install:  target/linux/install
+</code></pre>
+<p>这里打印的信息是哪里来的呢？其实也是 <code>subdir</code> 函数，是该函数最后一个 <code>foreach</code> 循环遍历出来的。</p>
+<pre><code class="makefile">  $(foreach target,$(SUBTARGETS) $($(1)/subtargets),$(call subtarget,$(1),$(target)))
+</code></pre>
+<p>经过前面的推导，这部分简直是小 case, 无非是遍历所有 <code>target</code>, 然后使用函数 <code>subtarget</code> 去生成规则。</p>
+<pre><code class="makefile">subtarget-default = $(filter-out ., \
+        $(if $($(1)/builddirs-$(2)),$($(1)/builddirs-$(2)), \
+        $(if $($(1)/builddirs-default),$($(1)/builddirs-default), \
+        $($(1)/builddirs))))
+
+define subtarget
+  $(call warn_eval,$(1),t,T,$(1)/$(2): $($(1)/) $(foreach bd,$(call subtarget-default,$(1),$(2)),$(1)/$(bd)/$(2)))
+endef
+</code></pre>
+<p>同样对其进行简化。</p>
+<pre><code class="makefile"># $(1): target
+# $(2): $(target) -&gt; &quot;clean, download, ..., install&quot;
+# $(target/builddirs-clean): &quot;&quot;
+# $(target/builddirs-default): linux # defined in target/Makefile
+subtarget-default = $(filter-out ., $(if $($(1)/builddirs-$(2)),$($(1)/builddirs-$(2)), linux))
+
+define subtarget
+  $(1)/$(2): $($(1)/) $(foreach bd,$(call subtarget-default,$(1),$(2)),$(1)/$(bd)/$(2))
+endef
+</code></pre>
+<p>然后代入参数 <code>$(1): target</code>, <code>$(2): clean</code>, 得到：</p>
+<pre><code class="makefile">subtarget-default = linux
+
+define subtarget
+  target/clean: target/linux/clean
+endef
+</code></pre>
+<p>这与 log 中的一致，其它 <code>target</code> 的规则也是类似，这里最主要的就是一个默认编译规则，相当于在不指定具体 <code>target</code> 哪个子目录时，根据默认值进行编译，<code>target/Makefile</code> 定义的 <code>$(builddirs-default)</code> 就是 <code>linux</code>, 也就是说，执行 <code>make target/clean</code> 与 <code>make target/linux/clean</code> 是一样的。</p>
+<p>除 <code>target</code> 目录外，<code>package</code>, <code>tools</code>, <code>toolchain</code> 目录也是类似的。</p>
+<p>到这，最后的小尾巴也讲完啦。</p>
+<h2 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h2><p>使用 makefile 的 <code>warning</code> 函数打印信息可以快速梳理 Makefile 的执行流程。</p>
+<pre><code class="makefile">$(warning info)
+
+# Example
+# target/Makefile
+$(warning $(call subdir,$(curdir)))
+</code></pre>
+<p>配合 <code>make -n V=s</code> 能够打印指令信息, 如果加上 <code>DEBUG</code> 可以显示更加详细的调试信息。</p>
+<pre><code class="bash">make -d V=s DEBUG=dltvr
+# -n to print command only
+make -d -n V=s DEBUG=dltvr
+</code></pre>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a href="https://www.atfeng.com/post/2016/openwrt%E7%BC%96%E8%AF%91%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E4%B9%8Bsubdir%E5%87%BD%E6%95%B0%E7%9A%84%E7%94%A8%E6%B3%95/" target="_blank" rel="noopener">OpenWRT编译系统分析之subdir函数的用法</a></li>
+</ul>
+]]></content>
+      
+        <categories>
+            
+            <category> Embedded </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> makefile </tag>
+            
+            <tag> openwrt </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[openwrt Makefile 框架分析]]></title>
+      <url>https://www.litreily.top/2020/12/30/openwrt-mkfile/</url>
+      <content type="html"><![CDATA[<p>openwrt repo: <a href="https://github.com/openwrt/openwrt" target="_blank" rel="noopener">https://github.com/openwrt/openwrt</a></p>
+<h2 id="整体框架"><a href="#整体框架" class="headerlink" title="整体框架"></a>整体框架</h2><p><img src="/assets/openwrt/openwrt_arch.png" alt="openwrt arch"></p>
+<ul>
+<li>首行为buildroot默认目录<ul>
+<li>config: 配置文件</li>
+<li>include: openwrt 的 Makefile 文件</li>
+<li>package: 各个软件包的Makefile, patches等文件</li>
+<li>scripts: openwrt 包管理相关的 perl 脚本</li>
+<li>target: 用于编译 kernel 和 firmware 的相关文件</li>
+<li>toolchain: 包含用于获取 kernel headers, C lib, bin-utils, compiler, debugger 的指令</li>
+<li>tools: 包含编译时所需的一些工具，如automake, autoconf, sed, cmake...</li>
+</ul>
+</li>
+<li>第二行为编译后新增目录<ul>
+<li>bin: 存放编译后的firmware和ipk文件</li>
+<li>build_dir: 编译目录，软件包解压存放路径</li>
+<li>dl: 软件包下载路径</li>
+<li>feeds:</li>
+<li>staging_dir: 存放编译后的交叉编译工具等</li>
+<li>tmp: 存放临时文件, 如 Collecting package, target info</li>
+</ul>
+</li>
+</ul>
+<h2 id="常用变量"><a href="#常用变量" class="headerlink" title="常用变量"></a>常用变量</h2><p>在整个 Makefile 框架里，使用到了相当多的变量，其中常用的几个变量如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th>Makefile</th>
+<th>Variable</th>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>all</td>
+<td>CURDIR</td>
+<td>shell pwd</td>
+<td>当前编译目录</td>
+</tr>
+<tr>
+<td>all</td>
+<td>TOPDIR</td>
+<td>$(CURDIR)</td>
+<td>buildroot 根目录</td>
+</tr>
+<tr>
+<td>all</td>
+<td>TMP_DIR</td>
+<td>$(TOPDIR)/tmp</td>
+<td>tmp 目录</td>
+</tr>
+<tr>
+<td>all</td>
+<td>MAKE</td>
+<td>make</td>
+<td></td>
+</tr>
+<tr>
+<td>all</td>
+<td>_SINGLE</td>
+<td>export MAKEFLAGS=$(space);</td>
+<td></td>
+</tr>
+<tr>
+<td>all</td>
+<td>NO_TRACE_MAKE</td>
+<td>make V=s$(OPENWRT_VERBOSE)</td>
+<td></td>
+</tr>
+<tr>
+<td>include/image.mk</td>
+<td>MAKE</td>
+<td>$(_SINGLE)$(SUBMAKE)</td>
+<td></td>
+</tr>
+<tr>
+<td>include/image.mk</td>
+<td>NO_TRACE_MAKE</td>
+<td>$(_SINGLE)$(NO_TRACE_MAKE)</td>
+<td></td>
+</tr>
+<tr>
+<td>include/verbose.mk</td>
+<td>SUBMAKE</td>
+<td>make or cmd() {...} or make -w</td>
+<td></td>
+</tr>
+<tr>
+<td>include/toplevel.mk</td>
+<td>SUBMAKE</td>
+<td>umask 022; $(SUBMAKE)</td>
+<td></td>
+</tr>
+<tr>
+<td>include/package.mk</td>
+<td>SUBMAKE</td>
+<td>$(NO_TRACE_MAKE)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="主Makefile"><a href="#主Makefile" class="headerlink" title="主Makefile"></a>主Makefile</h2><p>主 Makefile 位于 buildroot 的根目录，是执行 make 时访问的首个 Makefile.</p>
+<h3 id="全局变量"><a href="#全局变量" class="headerlink" title="全局变量"></a>全局变量</h3><pre><code class="makefile">TOPDIR:=${CURDIR}
+LC_ALL:=C
+LANG:=C
+TZ:=UTC
+export TOPDIR LC_ALL LANG TZ
+
+empty:=
+space:= $(empty) $(empty)
+$(if $(findstring $(space),$(TOPDIR)),$(error ERROR: The path to the OpenWrt directory must not include any spaces))
+</code></pre>
+<p><code>${CURDIR}</code> 是 make 指令的内嵌变量，在执行 make 指令时，获取当前 Makefile 所在目录设为其值。相当于</p>
+<pre><code class="bash">CURDIR=$(pwd)
+</code></pre>
+<p><code>${TOPDIR}</code> 就是 buildroot 根目录，export 之后在其它 Makefile 中也可以使用。</p>
+<p><code>empty</code> 是个空值，用于设置默认值，<code>space</code>是个空格，通常也用于设置初始值、或者判断空格。</p>
+<pre><code class="makefile">$(if $(findstring $(space),$(TOPDIR)),$(error ERROR: The path to the OpenWrt directory must not include any spaces))
+</code></pre>
+<p>以上语句用于判断 buildroot 根目录是否包含空格，如果包含空格将会提示错误。</p>
+<h3 id="world-目标"><a href="#world-目标" class="headerlink" title="world 目标"></a>world 目标</h3><p>主 Makefile 的首个目标是 <code>world</code>, 所以执行 <code>make V=s</code> 的目标就是 <code>world</code>.</p>
+<p>但是在主 Makefile 中，一开始并没有给出依赖文件和执行指令。</p>
+<pre><code class="makefile">world:
+</code></pre>
+<p>注意看主 Makefile 的逻辑.</p>
+<pre><code class="makefile">world:
+
+DISTRO_PKG_CONFIG:=$(shell which -a pkg-config | grep -E &#39;\/usr&#39; | head -n 1)
+export PATH:=$(TOPDIR)/staging_dir/host/bin:$(PATH)
+
+ifneq ($(OPENWRT_BUILD),1)
+  _SINGLE=export MAKEFLAGS=$(space);
+
+  override OPENWRT_BUILD=1
+  export OPENWRT_BUILD
+  GREP_OPTIONS=
+  export GREP_OPTIONS
+  CDPATH=
+  export CDPATH
+  include $(TOPDIR)/include/debug.mk
+  include $(TOPDIR)/include/depends.mk
+  include $(TOPDIR)/include/toplevel.mk
+else
+  include rules.mk
+  include $(INCLUDE_DIR)/depends.mk
+  include $(INCLUDE_DIR)/subdir.mk
+  include target/Makefile
+  include package/Makefile
+  include tools/Makefile
+  include toolchain/Makefile
+
+$(toolchain/stamp-compile): $(tools/stamp-compile)
+$(target/stamp-compile): $(toolchain/stamp-compile) $(tools/stamp-compile) $(BUILD_DIR)/.prepared
+$(package/stamp-compile): $(target/stamp-compile) $(package/stamp-cleanup)
+$(package/stamp-install): $(package/stamp-compile)
+$(target/stamp-install): $(package/stamp-compile) $(package/stamp-install)
+check: $(tools/stamp-check) $(toolchain/stamp-check) $(package/stamp-check)
+#...
+endif
+</code></pre>
+<p>简化下：</p>
+<pre><code class="makefile">world:
+
+ifneq ($(OPENWRT_BUILD),1)
+  override OPENWRT_BUILD=1
+  export OPENWRT_BUILD
+# 第一条逻辑
+else
+# 第二条逻辑
+endif
+</code></pre>
+<p>那么 world 是怎么编译完成的呢？下面详细探讨下。</p>
+<h3 id="编译流程"><a href="#编译流程" class="headerlink" title="编译流程"></a>编译流程</h3><p>首次执行 make 时，进入第一条逻辑，并将第二条逻辑所需的变量 <code>OPENWRT_BUILD</code> 置为1, 所以在执行第二个make时，就会进入第二条逻辑。那么问题来了。</p>
+<ol>
+<li>通常我们只执行一条指令 <code>make V=s</code> , 那是如何进入第二条逻辑的？</li>
+<li>第二条逻辑一定会执行到吗？</li>
+<li>第二次执行 <code>make</code> 指令一定是进入第二条逻辑吗？</li>
+</ol>
+<p>ok, 针对这三个问题，首先我们要知道一点：</p>
+<blockquote>
+<p>执行 make 指令后，可以根据 Makefile 中某些目标指令执行新的 make 指令，也就是说，<strong>make 是可以嵌套的, Makefile是可以重入的</strong></p>
+</blockquote>
+<p>知道这个了，也就知道了 Makefile 文件是可以多次引用的，而且下一次引用可以携带之前的变量，如以上的 <code>OPENWRT_BUILD</code>。</p>
+<p>下面来解释第一个问题，执行 <code>make V=s</code> 如何进入第二条逻辑？首先make后进入第一条逻辑，并引入以下Makefile.</p>
+<pre><code class="makefile">  include $(TOPDIR)/include/debug.mk
+  include $(TOPDIR)/include/depends.mk
+  include $(TOPDIR)/include/toplevel.mk
+</code></pre>
+<p>在引入的 <code>toplevel.mk</code> 中，有对目标 <code>world</code> 重新执行 <code>make</code> 操作，就是下面的 <code>%::</code> ，这个双冒号目标就会对 <code>world</code> 目标进行重写，对于双冒号目标，如果没有依赖项，其所属指令必定会执行。</p>
+<pre><code class="makefile">%::
+  @+$(PREP_MK) $(NO_TRACE_MAKE) -r -s prereq
+  @( \
+    cp .config tmp/.config; \
+    ./scripts/config/conf $(KCONF_FLAGS) --defconfig=tmp/.config -w tmp/.config Config.in &gt; /dev/null 2&gt;&amp;1; \
+    if ./scripts/kconfig.pl &#39;&gt;&#39; .config tmp/.config | grep -q CONFIG; then \
+      printf &quot;$(_R)WARNING: your configuration is out of sync. Please run make menuconfig, oldconfig or defconfig!$(_N)\n&quot; &gt;&amp;2; \
+    fi \
+  )
+  @+$(ULIMIT_FIX) $(SUBMAKE) -r $@ $(if $(WARN_PARALLEL_ERROR), || { \
+    printf &quot;$(_R)Build failed - please re-run with -j1 to see the real error message$(_N)\n&quot; &gt;&amp;2; \
+    false; \
+  } )
+</code></pre>
+<p>以上新的指令中 <code>$@</code> 对应的就是 <code>world</code>, 通过打印 log 可以验证这一点。其中的 <code>SUBMAKE</code> 需要结合 verbose.mk, toplevel.mk 推导出来。当然最简单的是使用 <code>make V=s -n</code> 打印log。</p>
+<pre><code class="makefile"># verbose.mk
+SUBMAKE=$(MAKE) -w
+
+# toplevel.mk
+SUBMAKE:=umask 022; $(SUBMAKE)
+</code></pre>
+<p>推导出 <code>$(SUBMAKE)</code> 就是 <code>umask 022; make -w</code>, 然后根据 <code>%::</code> 指令推出详细指令为：</p>
+<pre><code class="bash">_limit=`ulimit -n`; [ &quot;$_limit&quot; = &quot;unlimited&quot; -o &quot;$_limit&quot; -ge 1024 ] || ulimit -n 1024; umask 022; make -w -r world
+</code></pre>
+<p>执行这里的 <code>make</code> 指令时，由于之前已经将 <code>OPENWRT_BUILD</code> 设为1了，所以会进入上面提及的第二条逻辑。这也就解释了第一个问题，执行 <code>make V=s</code> 后，在 <code>toplevel.mk</code> 中针对目标 world 重新执行 make 指令，进入了第二条逻辑。</p>
+<p>对于第二个问题，<strong>第二条逻辑一定会执行到吗？</strong> 答案是否定的，比如执行 <code>make oldconfig</code> 等指令时，在 toplevel.mk 就结束了，所以不会进入第二条逻辑。</p>
+<p>对于第三个问题，<strong>第二次执行 <code>make</code> 指令一定是进入第二条逻辑吗？</strong> 答案也是否定的，某些指令同样会嵌套执行 make 指令，但是并不会进入第二条逻辑，这是怎么做到的呢？其实很简单，就是重新将 <code>OPENWRT_BUILD</code> 赋值为空就行。以上出现的变量 <code>PREP_MK</code> 就是这个作用。</p>
+<pre><code class="makefile">PREP_MK= OPENWRT_BUILD= QUIET=0
+</code></pre>
+<p>小结下，<code>make V=s</code> 会将 world 作为编译目标，首次访问主 Makefile 时，没有对目标设定规则，而是先设置 <code>OPENWRT_BUILD=1</code>, 然后执行某些初始化检查，最后重新执行新的 make 指令，并重入主 Makefile，根据新的 <code>OPENWRT_BUILD</code> 进入第二条逻辑。</p>
+<h3 id="world-编译规则"><a href="#world-编译规则" class="headerlink" title="world 编译规则"></a>world 编译规则</h3><p>接下来看下第二条逻辑，这条逻辑中引入了新的 <code>.mk</code> 文件，并设置了 <code>world</code> 目标规则及其依赖项规则。</p>
+<pre><code class="makefile">  include rules.mk
+  include $(INCLUDE_DIR)/depends.mk
+  include $(INCLUDE_DIR)/subdir.mk
+  include target/Makefile
+  include package/Makefile
+  include tools/Makefile
+  include toolchain/Makefile
+
+$(toolchain/stamp-compile): $(tools/stamp-compile)
+$(target/stamp-compile): $(toolchain/stamp-compile) $(tools/stamp-compile) $(BUILD_DIR)/.prepared
+$(package/stamp-compile): $(target/stamp-compile) $(package/stamp-cleanup)
+$(package/stamp-install): $(package/stamp-compile)
+$(target/stamp-install): $(package/stamp-compile) $(package/stamp-install)
+check: $(tools/stamp-check) $(toolchain/stamp-check) $(package/stamp-check)
+
+#...
+
+prepare: $(target/stamp-compile)
+
+#...
+
+prepare: .config $(tools/stamp-compile) $(toolchain/stamp-compile)
+  $(_SINGLE)$(SUBMAKE) -r buildinfo 
+
+#...
+
+world: prepare $(target/stamp-compile) $(package/stamp-compile) $(package/stamp-install) $(target/stamp-install) FORCE
+  $(_SINGLE)$(SUBMAKE) -r package/index
+  $(_SINGLE)$(SUBMAKE) -r json_overview_image_info
+  $(_SINGLE)$(SUBMAKE) -r checksum
+ifneq ($(CONFIG_CCACHE),)
+  $(STAGING_DIR_HOST)/bin/ccache -s
+endif
+</code></pre>
+<p>从 <code>world</code> 的依赖中可以看到 target, package 相关的 compile, install 目标。每个依赖项都有其递归的目标编译规则和各自的依赖项，不同目标的依赖项可能会有重复。</p>
+<h2 id="subdir"><a href="#subdir" class="headerlink" title="subdir"></a>subdir</h2><p>注意到以上主 Makefile 定义了很多 <code>$(NAME):</code> 的目标，说明这些目标的实际名称需要通过具体的变量获得，以 <code>$(target/stamp-compile)</code> 为例，在主 Makefile 中声明了对应的依赖信息，</p>
+<pre><code class="makefile">$(target/stamp-compile): $(toolchain/stamp-compile) $(tools/stamp-compile) $(BUILD_DIR)/.prepared
+</code></pre>
+<p>而且其依赖信息也包含大量变量引用，那么这些变量的具体值在哪呢? 答案是 <code>include/subdir.mk</code> ，这个文件在定义以上目标之前就引入了，前面已有提及。而 <code>subdir.mk</code> 并不是直接定义好了每个变量名，而是通过函数 <code>stampfile</code> 动态生成，这个函数会在对应子目录中被调用。</p>
+<p>举例说明，<code>$(target/stamp-compile)</code> 通过 <code>target/Makefile</code> 中的以下指令生成。</p>
+<pre><code class="makefile">$(eval $(call stampfile,$(curdir),target,compile,$(TMP_DIR)/.build))
+</code></pre>
+<p><code>stampfile</code> 函数根据子目录名称 <code>target</code> 和目标 <code>compile</code> 生成 <code>target/stamp-compile</code> 的编译规则。</p>
+<pre><code class="makefile"># Parameters: &lt;subdir&gt; &lt;name&gt; &lt;target&gt; &lt;depends&gt; &lt;config options&gt; &lt;stampfile location&gt;
+define stampfile
+  $(1)/stamp-$(3):=$(if $(6),$(6),$(STAGING_DIR))/stamp/.$(2)_$(3)$(5)
+  $$($(1)/stamp-$(3)): $(TMP_DIR)/.build $(4)
+      @+$(SCRIPT_DIR)/timestamp.pl -n $$($(1)/stamp-$(3)) $(1) $(4) || \
+          $(MAKE) $(if $(QUIET),--no-print-directory) $$($(1)/flags-$(3)) $(1)/$(3)
+      @mkdir -p $$$$(dirname $$($(1)/stamp-$(3)))
+      @touch $$($(1)/stamp-$(3))
+
+  $$(if $(call debug,$(1),v),,.SILENT: $$($(1)/stamp-$(3)))
+
+  .PRECIOUS: $$($(1)/stamp-$(3)) # work around a make bug
+
+  $(1)//clean:=$(1)/stamp-$(3)/clean
+  $(1)/stamp-$(3)/clean: FORCE
+      @rm -f $$($(1)/stamp-$(3))
+
+endef
+</code></pre>
+<p>其中 <code>$(1)/stamp-$(3)</code> 对应的就是主 Makefile 声明的 <code>target/stamp-compile</code>, 而且紧随其后的就是对应该目标文件的依赖和指令。</p>
+<p>ok, 到此就比较明了了，主 Makefile 中类似变量都是通过这种方式定义的。关于 subdir.mk 更详细的内容将在下一篇介绍。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><ol>
+<li>openwrt 主 Makefile 导入了许多 include 目录和其它子目录的Makefile</li>
+<li>Makefile 的指令中可以包含 make 指令以实现嵌套编译</li>
+<li>同一个 Makefile 可以多次重入，但是环境变量可能会有所改变</li>
+<li>make 指令不指定目标时，其默认目标为 <code>world</code></li>
+<li><code>world</code> 目标依赖了大量子目录对应目标，且目标名称及其依赖、指令可以通过 subdir.mk 中的 stampfile 函数动态生成</li>
+<li>编译 <code>world</code> 时，至少会调用两次主 Makefile<ol>
+<li>首次通过 toplevel.mk 检查和编译必要的工具和文件，如scripts/config/conf, .config, tmp/* 等</li>
+<li>第二次通过 OPENWRT_BUILD=1 编译 world 目标</li>
+</ol>
+</li>
+<li>使用 make 指令的 <code>-n</code> 或 <code>-d</code> 参数可以更加清楚的打印编译信息，方便理解编译过程</li>
+</ol>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="http://c.biancheng.net/view/7129.html" target="_blank" rel="noopener">Makefile目标类型大汇总</a></li>
+</ul>
+]]></content>
+      
+        <categories>
+            
+            <category> Embedded </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> makefile </tag>
+            
+            <tag> openwrt </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[openwrt make defconfig 详解]]></title>
+      <url>https://www.litreily.top/2020/12/29/make-defconfig/</url>
+      <content type="html"><![CDATA[<p>对于 linux kernel，有几个常用 make 指令用于生成 .config 文件。</p>
+<ul>
+<li>make oldconfig</li>
+<li>make menuconfig</li>
+<li>make defconfig</li>
+<li>make config</li>
+</ul>
+<p>那么这些指令具体执行了什么操作呢，针对 openwrt 来看下吧。</p>
+<h2 id="主-Makefile"><a href="#主-Makefile" class="headerlink" title="主 Makefile"></a>主 Makefile</h2><p>在 buildroot 执行 make，首先会访问仓库根目录的主 <a href="https://github.com/openwrt/openwrt/blob/master/Makefile" target="_blank" rel="noopener">Makefile</a>，其中有个 ifneq 判断如下：</p>
+<pre><code class="makefile">ifneq ($(OPENWRT_BUILD),1)
+  _SINGLE=export MAKEFLAGS=$(space);
+
+  override OPENWRT_BUILD=1
+  export OPENWRT_BUILD
+  GREP_OPTIONS=
+  export GREP_OPTIONS
+  CDPATH=
+  export CDPATH
+  include $(TOPDIR)/include/debug.mk
+  include $(TOPDIR)/include/depends.mk
+  include $(TOPDIR)/include/toplevel.mk
+else
+  include rules.mk
+  include $(INCLUDE_DIR)/depends.mk
+  include $(INCLUDE_DIR)/subdir.mk
+  include target/Makefile
+  include package/Makefile
+  include tools/Makefile
+  include toolchain/Makefile
+</code></pre>
+<p>make 时通常不会设置OPENWRT_BUILD，所以按照以上逻辑会 include 以下几个Makefile</p>
+<ol>
+<li>include/debug.mk</li>
+<li>include/depends.mk</li>
+<li>include/toplevel.mk</li>
+</ol>
+<p>前两个先不管，主要来看下toplevel.mk.</p>
+<h2 id="toplevel-mk"><a href="#toplevel-mk" class="headerlink" title="toplevel.mk"></a>toplevel.mk</h2><p>在这个顶层 <a href="https://github.com/openwrt/openwrt/blob/master/include/toplevel.mk" target="_blank" rel="noopener">Makefile</a> 中，定义了许多常用指令，其中就包含了 defconfig, oldconfig, menuconfig 等</p>
+<pre><code class="makefile">config: scripts/config/conf prepare-tmpinfo FORCE
+    [ -L .config ] &amp;&amp; export KCONFIG_OVERWRITECONFIG=1; \
+        $&lt; $(KCONF_FLAGS) Config.in
+
+config-clean: FORCE
+    $(_SINGLE)$(NO_TRACE_MAKE) -C scripts/config clean
+
+defconfig: scripts/config/conf prepare-tmpinfo FORCE
+    touch .config
+    @if [ ! -s .config -a -e $(HOME)/.openwrt/defconfig ]; then cp $(HOME)/.openwrt/defconfig .config; fi
+    [ -L .config ] &amp;&amp; export KCONFIG_OVERWRITECONFIG=1; \
+        $&lt; $(KCONF_FLAGS) --defconfig=.config Config.in
+
+confdefault-y=allyes
+confdefault-m=allmod
+confdefault-n=allno
+confdefault:=$(confdefault-$(CONFDEFAULT))
+
+oldconfig: scripts/config/conf prepare-tmpinfo FORCE
+    [ -L .config ] &amp;&amp; export KCONFIG_OVERWRITECONFIG=1; \
+        $&lt; $(KCONF_FLAGS) --$(if $(confdefault),$(confdefault),old)config Config.in
+
+menuconfig: scripts/config/mconf prepare-tmpinfo FORCE
+    if [ \! -e .config -a -e $(HOME)/.openwrt/defconfig ]; then \
+        cp $(HOME)/.openwrt/defconfig .config; \
+    fi
+    [ -L .config ] &amp;&amp; export KCONFIG_OVERWRITECONFIG=1; \
+        $&lt; Config.in
+
+nconfig: scripts/config/nconf prepare-tmpinfo FORCE
+    if [ \! -e .config -a -e $(HOME)/.openwrt/defconfig ]; then \
+        cp $(HOME)/.openwrt/defconfig .config; \
+    fi
+    [ -L .config ] &amp;&amp; export KCONFIG_OVERWRITECONFIG=1; \
+        $&lt; Config.in
+
+xconfig: scripts/config/qconf prepare-tmpinfo FORCE
+    if [ \! -e .config -a -e $(HOME)/.openwrt/defconfig ]; then \
+        cp $(HOME)/.openwrt/defconfig .config; \
+    fi
+    $&lt; Config.in
+</code></pre>
+<p>其中的oldconfig如下：</p>
+<pre><code class="makefile">oldconfig: scripts/config/conf prepare-tmpinfo FORCE
+    [ -L .config ] &amp;&amp; export KCONFIG_OVERWRITECONFIG=1; \
+        $&lt; $(KCONF_FLAGS) --$(if $(confdefault),$(confdefault),old)config Config.in
+</code></pre>
+<p><code>KCONF_FLAGS</code> 默认为空，<code>confdefault</code> 也默认为空，所以以上指令实际上就是</p>
+<pre><code class="bash">scripts/config/conf --oldconfig Config.in
+</code></pre>
+<h2 id="make-oldconfig"><a href="#make-oldconfig" class="headerlink" title="make oldconfig"></a>make oldconfig</h2><p>接下来来验证下是否是这个指令。使用make的 <code>-n</code> 参数可以打印执行过程，但并不执行具体指令，非常方便于调试。</p>
+<pre><code class="bash">$ make -n oldconfig
+make -r -s staging_dir/host/.prereq-build OPENWRT_BUILD= QUIET=0
+mkdir -p tmp/info
+export MAKEFLAGS= ;make V=s -j1 -r -s -f include/scan.mk SCAN_TARGET=&quot;packageinfo&quot; SCAN_DIR=&quot;package&quot; SCAN_NAME=&quot;package&quot; SCAN_DEPTH=5 SCAN_EXTRA=&quot;&quot;
+export MAKEFLAGS= ;make V=s -j1 -r -s -f include/scan.mk SCAN_TARGET=&quot;targetinfo&quot; SCAN_DIR=&quot;target/linux&quot; SCAN_NAME=&quot;target&quot; SCAN_DEPTH=2 SCAN_EXTRA=&quot;&quot; SCAN_MAKEOPTS=&quot;TARGET_BUILD=1&quot;
+for type in package target; do \
+    f=tmp/.${type}info; t=tmp/.config-${type}.in; \
+    [ &quot;$t&quot; -nt &quot;$f&quot; ] || ./scripts/${type}-metadata.pl  config &quot;$f&quot; &gt; &quot;$t&quot; || { rm -f &quot;$t&quot;; echo &quot;Failed to build $t&quot;; false; break; }; \
+done
+[ tmp/.config-feeds.in -nt tmp/.packageauxvars ] || ./scripts/feeds feed_config &gt; tmp/.config-feeds.in
+./scripts/package-metadata.pl mk tmp/.packageinfo &gt; tmp/.packagedeps || { rm -f tmp/.packagedeps; false; }
+./scripts/package-metadata.pl pkgaux tmp/.packageinfo &gt; tmp/.packageauxvars || { rm -f tmp/.packageauxvars; false; }
+./scripts/package-metadata.pl usergroup tmp/.packageinfo &gt; tmp/.packageusergroup || { rm -f tmp/.packageusergroup; false; }
+touch /home/litreily/openwrt/tmp/.build
+[ -L .config ] &amp;&amp; export KCONFIG_OVERWRITECONFIG=1; \
+    scripts/config/conf  --oldconfig Config.in
+</code></pre>
+<p>可以看到最后一行对应的就是我们推算出来的结果。同样可知其它相关config的指令是：</p>
+<ul>
+<li><code>make defconfig</code>: scripts/config/conf --defconfig=.config Config.in</li>
+<li><code>make oldconfig</code>: scripts/config/conf --oldconfig Config.in</li>
+<li><code>make menuconfig</code>: scripts/config/mconf Config.in</li>
+</ul>
+<p>也就是说，make xxxconfig 最终执行的是 scripts/config 目录下的conf, mconf 指令，这两个指令也是需要编译的。在执行make xxxconfig时，conf, mconf 作为依赖文件同样会被编译。</p>
+<h2 id="make-defconfig-详解"><a href="#make-defconfig-详解" class="headerlink" title="make defconfig 详解"></a>make defconfig 详解</h2><p>如果想要更加详细的 make 信息，可以使用 <code>-d</code> 参数，打印 debug 信息，根据 debug 信息可以看到编译过程中各种依赖嵌套的判断流程，对于学习 make 指令非常有用。</p>
+<p>以 <code>make defconfig</code> 为例，执行 <code>make -d V=s defconfig</code></p>
+<pre><code class="log">GNU Make 4.2.1
+Built for x86_64-pc-linux-gnu
+Copyright (C) 1988-2016 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt;
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+Reading makefiles...
+Reading makefile &#39;Makefile&#39;...
+Reading makefile &#39;/home/litreily/openwrt/include/debug.mk&#39; (search path) (no ~ expansion)...
+Reading makefile &#39;/home/litreily/openwrt/include/depends.mk&#39; (search path) (no ~ expansion)...
+Reading makefile &#39;/home/litreily/openwrt/include/toplevel.mk&#39; (search path) (no ~ expansion)...
+Reading makefile &#39;/home/litreily/openwrt/include/verbose.mk&#39; (search path) (no ~ expansion)...
+Updating makefiles....
+ Considering target file &#39;/home/litreily/openwrt/include/verbose.mk&#39;.
+  Looking for an implicit rule for &#39;/home/litreily/openwrt/include/verbose.mk&#39;.
+  Trying pattern rule with stem &#39;verbose.mk&#39;.
+  Found an implicit rule for &#39;/home/litreily/openwrt/include/verbose.mk&#39;.
+  Finished prerequisites of target file &#39;/home/litreily/openwrt/include/verbose.mk&#39;.
+ No need to remake target &#39;/home/litreily/openwrt/include/verbose.mk&#39;.
+ Considering target file &#39;/home/litreily/openwrt/include/toplevel.mk&#39;.
+  Looking for an implicit rule for &#39;/home/litreily/openwrt/include/toplevel.mk&#39;.
+  Trying pattern rule with stem &#39;toplevel.mk&#39;.
+  Found an implicit rule for &#39;/home/litreily/openwrt/include/toplevel.mk&#39;.
+  Finished prerequisites of target file &#39;/home/litreily/openwrt/include/toplevel.mk&#39;.
+ No need to remake target &#39;/home/litreily/openwrt/include/toplevel.mk&#39;.
+ Considering target file &#39;/home/litreily/openwrt/include/depends.mk&#39;.
+  Looking for an implicit rule for &#39;/home/litreily/openwrt/include/depends.mk&#39;.
+  Trying pattern rule with stem &#39;depends.mk&#39;.
+  Found an implicit rule for &#39;/home/litreily/openwrt/include/depends.mk&#39;.
+  Finished prerequisites of target file &#39;/home/litreily/openwrt/include/depends.mk&#39;.
+ No need to remake target &#39;/home/litreily/openwrt/include/depends.mk&#39;.
+ Considering target file &#39;/home/litreily/openwrt/include/debug.mk&#39;.
+  Looking for an implicit rule for &#39;/home/litreily/openwrt/include/debug.mk&#39;.
+  Trying pattern rule with stem &#39;debug.mk&#39;.
+  Found an implicit rule for &#39;/home/litreily/openwrt/include/debug.mk&#39;.
+  Finished prerequisites of target file &#39;/home/litreily/openwrt/include/debug.mk&#39;.
+ No need to remake target &#39;/home/litreily/openwrt/include/debug.mk&#39;.
+ Considering target file &#39;Makefile&#39;.
+  Looking for an implicit rule for &#39;Makefile&#39;.
+  Trying pattern rule with stem &#39;Makefile&#39;.
+  Found an implicit rule for &#39;Makefile&#39;.
+  Finished prerequisites of target file &#39;Makefile&#39;.
+ No need to remake target &#39;Makefile&#39;.
+Updating goal targets....
+Considering target file &#39;defconfig&#39;.
+ File &#39;defconfig&#39; does not exist.
+  Considering target file &#39;scripts/config/conf&#39;.
+   File &#39;scripts/config/conf&#39; does not exist.
+   Looking for an implicit rule for &#39;scripts/config/conf&#39;.
+   Trying pattern rule with stem &#39;c&#39;.
+   Found an implicit rule for &#39;scripts/config/conf&#39;.
+    Considering target file &#39;staging_dir/host/.prereq-build&#39;.
+     File &#39;staging_dir/host/.prereq-build&#39; does not exist.
+      Considering target file &#39;include/prereq-build.mk&#39;.
+       Looking for an implicit rule for &#39;include/prereq-build.mk&#39;.
+       Trying pattern rule with stem &#39;prereq-build.mk&#39;.
+       Found an implicit rule for &#39;include/prereq-build.mk&#39;.
+       Finished prerequisites of target file &#39;include/prereq-build.mk&#39;.
+      No need to remake target &#39;include/prereq-build.mk&#39;.
+     Finished prerequisites of target file &#39;staging_dir/host/.prereq-build&#39;.
+    Must remake target &#39;staging_dir/host/.prereq-build&#39;.
+Putting child 0x7fffcb0a1800 (staging_dir/host/.prereq-build) PID 15999 on the chain.
+Live child 0x7fffcb0a1800 (staging_dir/host/.prereq-build) PID 15999 
+Reaping winning child 0x7fffcb0a1800 PID 15999 
+Live child 0x7fffcb0a1800 (staging_dir/host/.prereq-build) PID 16000 
+Checking &#39;working-make&#39;... ok.
+Checking &#39;case-sensitive-fs&#39;... ok.
+Checking &#39;proper-umask&#39;... ok.
+Checking &#39;gcc&#39;... ok.
+Checking &#39;working-gcc&#39;... ok.
+Checking &#39;g++&#39;... ok.
+Checking &#39;working-g++&#39;... ok.
+Checking &#39;ncurses&#39;... ok.
+Checking &#39;perl-data-dumper&#39;... ok.
+Checking &#39;perl-thread-queue&#39;... ok.
+Checking &#39;tar&#39;... ok.
+Checking &#39;find&#39;... ok.
+Checking &#39;bash&#39;... ok.
+Checking &#39;xargs&#39;... ok.
+Checking &#39;patch&#39;... ok.
+Checking &#39;diff&#39;... ok.
+Checking &#39;cp&#39;... ok.
+Checking &#39;seq&#39;... ok.
+Checking &#39;awk&#39;... ok.
+Checking &#39;grep&#39;... ok.
+Checking &#39;egrep&#39;... ok.
+Checking &#39;getopt&#39;... ok.
+Checking &#39;stat&#39;... ok.
+Checking &#39;unzip&#39;... ok.
+Checking &#39;bzip2&#39;... ok.
+Checking &#39;wget&#39;... ok.
+Checking &#39;perl&#39;... ok.
+Checking &#39;python2-cleanup&#39;... ok.
+Checking &#39;python&#39;... ok.
+Checking &#39;python3&#39;... ok.
+Checking &#39;git&#39;... ok.
+Checking &#39;file&#39;... ok.
+Checking &#39;rsync&#39;... ok.
+Checking &#39;ldconfig-stub&#39;... ok.
+Reaping winning child 0x7fffcb0a1800 PID 16000 
+Live child 0x7fffcb0a1800 (staging_dir/host/.prereq-build) PID 16418 
+Reaping winning child 0x7fffcb0a1800 PID 16418 
+Removing child 0x7fffcb0a1800 PID 16418 from chain.
+    Successfully remade target file &#39;staging_dir/host/.prereq-build&#39;.
+   Finished prerequisites of target file &#39;scripts/config/conf&#39;.
+  Must remake target &#39;scripts/config/conf&#39;.
+Putting child 0x7fffcb0a1b70 (scripts/config/conf) PID 16422 on the chain.
+Live child 0x7fffcb0a1b70 (scripts/config/conf) PID 16422 
+make[1]: Entering directory &#39;/home/litreily/openwrt/scripts/config&#39;
+cc -O2   -c -o conf.o conf.c
+cc -O2   -c -o confdata.o confdata.c
+cc -O2   -c -o expr.o expr.c
+cc -O2 -I ./.   -c -o lexer.lex.o lexer.lex.c
+cc -O2 -I ./.   -c -o parser.tab.o parser.tab.c
+cc -O2   -c -o preprocess.o preprocess.c
+cc -O2   -c -o symbol.o symbol.c
+cc -O2   -c -o util.o util.c
+cc   conf.o confdata.o expr.o lexer.lex.o parser.tab.o preprocess.o symbol.o util.o   -o conf
+make[1]: Leaving directory &#39;/home/litreily/openwrt/scripts/config&#39;
+Reaping winning child 0x7fffcb0a1b70 PID 16422 
+Removing child 0x7fffcb0a1b70 PID 16422 from chain.
+  Successfully remade target file &#39;scripts/config/conf&#39;.
+  Considering target file &#39;prepare-tmpinfo&#39;.
+   File &#39;prepare-tmpinfo&#39; does not exist.
+    Considering target file &#39;FORCE&#39;.
+     File &#39;FORCE&#39; does not exist.
+     Finished prerequisites of target file &#39;FORCE&#39;.
+    Must remake target &#39;FORCE&#39;.
+    Successfully remade target file &#39;FORCE&#39;.
+   Finished prerequisites of target file &#39;prepare-tmpinfo&#39;.
+  Must remake target &#39;prepare-tmpinfo&#39;.
+Putting child 0x7fffcb0a2010 (prepare-tmpinfo) PID 16454 on the chain.
+Live child 0x7fffcb0a2010 (prepare-tmpinfo) PID 16454 
+GNU Make 4.2.1
+Built for x86_64-pc-linux-gnu
+Copyright (C) 1988-2016 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt;
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+Reading makefiles...
+Reading makefile &#39;Makefile&#39;...
+Reading makefile &#39;/home/litreily/openwrt/include/debug.mk&#39; (search path) (no ~ expansion)...
+Reading makefile &#39;/home/litreily/openwrt/include/depends.mk&#39; (search path) (no ~ expansion)...
+Reading makefile &#39;/home/litreily/openwrt/include/toplevel.mk&#39; (search path) (no ~ expansion)...
+Reading makefile &#39;/home/litreily/openwrt/include/verbose.mk&#39; (search path) (no ~ expansion)...
+Updating makefiles....
+ Considering target file &#39;/home/litreily/openwrt/include/verbose.mk&#39;.
+  Looking for an implicit rule for &#39;/home/litreily/openwrt/include/verbose.mk&#39;.
+  Trying pattern rule with stem &#39;verbose.mk&#39;.
+  Found an implicit rule for &#39;/home/litreily/openwrt/include/verbose.mk&#39;.
+  Finished prerequisites of target file &#39;/home/litreily/openwrt/include/verbose.mk&#39;.
+ No need to remake target &#39;/home/litreily/openwrt/include/verbose.mk&#39;.
+ Considering target file &#39;/home/litreily/openwrt/include/toplevel.mk&#39;.
+  Looking for an implicit rule for &#39;/home/litreily/openwrt/include/toplevel.mk&#39;.
+  Trying pattern rule with stem &#39;toplevel.mk&#39;.
+  Found an implicit rule for &#39;/home/litreily/openwrt/include/toplevel.mk&#39;.
+  Finished prerequisites of target file &#39;/home/litreily/openwrt/include/toplevel.mk&#39;.
+ No need to remake target &#39;/home/litreily/openwrt/include/toplevel.mk&#39;.
+ Considering target file &#39;/home/litreily/openwrt/include/depends.mk&#39;.
+  Looking for an implicit rule for &#39;/home/litreily/openwrt/include/depends.mk&#39;.
+  Trying pattern rule with stem &#39;depends.mk&#39;.
+  Found an implicit rule for &#39;/home/litreily/openwrt/include/depends.mk&#39;.
+  Finished prerequisites of target file &#39;/home/litreily/openwrt/include/depends.mk&#39;.
+ No need to remake target &#39;/home/litreily/openwrt/include/depends.mk&#39;.
+ Considering target file &#39;/home/litreily/openwrt/include/debug.mk&#39;.
+  Looking for an implicit rule for &#39;/home/litreily/openwrt/include/debug.mk&#39;.
+  Trying pattern rule with stem &#39;debug.mk&#39;.
+  Found an implicit rule for &#39;/home/litreily/openwrt/include/debug.mk&#39;.
+  Finished prerequisites of target file &#39;/home/litreily/openwrt/include/debug.mk&#39;.
+ No need to remake target &#39;/home/litreily/openwrt/include/debug.mk&#39;.
+ Considering target file &#39;Makefile&#39;.
+  Looking for an implicit rule for &#39;Makefile&#39;.
+  Trying pattern rule with stem &#39;Makefile&#39;.
+  Found an implicit rule for &#39;Makefile&#39;.
+  Finished prerequisites of target file &#39;Makefile&#39;.
+ No need to remake target &#39;Makefile&#39;.
+Updating goal targets....
+Considering target file &#39;staging_dir/host/.prereq-build&#39;.
+  Considering target file &#39;include/prereq-build.mk&#39;.
+   Looking for an implicit rule for &#39;include/prereq-build.mk&#39;.
+   Trying pattern rule with stem &#39;prereq-build.mk&#39;.
+   Found an implicit rule for &#39;include/prereq-build.mk&#39;.
+   Finished prerequisites of target file &#39;include/prereq-build.mk&#39;.
+  No need to remake target &#39;include/prereq-build.mk&#39;.
+ Finished prerequisites of target file &#39;staging_dir/host/.prereq-build&#39;.
+ Prerequisite &#39;include/prereq-build.mk&#39; is older than target &#39;staging_dir/host/.prereq-build&#39;.
+No need to remake target &#39;staging_dir/host/.prereq-build&#39;.
+Reaping winning child 0x7fffcb0a2010 PID 16454 
+Live child 0x7fffcb0a2010 (prepare-tmpinfo) PID 16505 
+Reaping winning child 0x7fffcb0a2010 PID 16505 
+Live child 0x7fffcb0a2010 (prepare-tmpinfo) PID 16506 
+
+Collecting package info: package/base-files
+Collecting package info: package/boot/arm-trusted-firmware-mvebu
+Collecting package info: package/boot/arm-trusted-firmware-rockchip
+Collecting package info: package/boot/arm-trusted-firmware-sunxi
+Collecting package info: package/boot/at91bootstrap
+Collecting package info: package/boot/fconfig
+Collecting package info: package/boot/grub2
+Collecting package info: package/boot/imx-bootlets
+Collecting package info: package/boot/kexec-tools
+Collecting package info: package/boot/kobs-ng
+Collecting package info: package/boot/mt7623n-preloader
+Collecting package info: package/boot/tfa-layerscape
+Collecting package info: package/boot/uboot-at91
+Collecting package info: package/boot/uboot-envtools
+Collecting package info: package/boot/uboot-fritz4040
+Collecting package info: package/boot/uboot-imx6
+Collecting package info: package/boot/uboot-kirkwood
+Collecting package info: package/boot/uboot-lantiq
+Collecting package info: package/boot/uboot-layerscape
+Collecting package info: package/boot/uboot-mediatek
+Collecting package info: package/boot/uboot-mvebu
+Collecting package info: package/boot/uboot-mxs
+Collecting package info: package/boot/uboot-omap
+Collecting package info: package/boot/uboot-oxnas
+Collecting package info: package/boot/uboot-ramips
+Collecting package info: package/boot/uboot-rockchip
+Collecting package info: package/boot/uboot-sunxi
+Collecting package info: package/boot/uboot-tegra
+Collecting package info: package/boot/uboot-zynq
+Collecting package info: package/devel/binutils
+Collecting package info: package/devel/gdb
+Collecting package info: package/devel/perf
+Collecting package info: package/devel/strace
+Collecting package info: package/devel/trace-cmd
+Collecting package info: package/devel/valgrind
+Collecting package info: package/firmware/amd64-microcode
+Collecting package info: package/firmware/ath10k-ct-firmware
+Collecting package info: package/firmware/b43legacy-firmware
+Collecting package info: package/firmware/cypress-firmware
+Collecting package info: package/firmware/cypress-nvram
+Collecting package info: package/firmware/intel-microcode
+Collecting package info: package/firmware/ipq-wifi
+Collecting package info: package/firmware/lantiq/dsl-vrx200-firmware-xdsl
+Collecting package info: package/firmware/layerscape/fman-ucode
+Collecting package info: package/firmware/layerscape/ls-dpl
+Collecting package info: package/firmware/layerscape/ls-mc
+Collecting package info: package/firmware/layerscape/ls-rcw
+Collecting package info: package/firmware/layerscape/ppfe-firmware
+Collecting package info: package/firmware/linux-firmware
+Collecting package info: package/firmware/prism54-firmware
+Collecting package info: package/firmware/wireless-regdb
+Collecting package info: package/kernel/acx-mac80211
+Collecting package info: package/kernel/ath10k-ct
+Collecting package info: package/kernel/bcm27xx-gpu-fw
+Collecting package info: package/kernel/bcm63xx-cfe
+Collecting package info: package/kernel/broadcom-wl
+Collecting package info: package/kernel/button-hotplug
+Collecting package info: package/kernel/cryptodev-linux
+Collecting package info: package/kernel/exfat
+Collecting package info: package/kernel/gpio-button-hotplug
+Collecting package info: package/kernel/gpio-nct5104d
+Collecting package info: package/kernel/hwmon-gsc
+Collecting package info: package/kernel/lantiq/ltq-adsl
+Collecting package info: package/kernel/lantiq/ltq-adsl-fw
+Collecting package info: package/kernel/lantiq/ltq-adsl-mei
+Collecting package info: package/kernel/lantiq/ltq-atm
+Collecting package info: package/kernel/lantiq/ltq-deu
+Collecting package info: package/kernel/lantiq/ltq-ifxos
+Collecting package info: package/kernel/lantiq/ltq-ptm
+Collecting package info: package/kernel/lantiq/ltq-tapi
+Collecting package info: package/kernel/lantiq/ltq-vdsl
+Collecting package info: package/kernel/lantiq/ltq-vdsl-fw
+Collecting package info: package/kernel/lantiq/ltq-vdsl-mei
+Collecting package info: package/kernel/lantiq/ltq-vmmc
+Collecting package info: package/kernel/linux
+Collecting package info: package/kernel/mac80211
+Collecting package info: package/kernel/mt76
+Collecting package info: package/kernel/mt7621-qtn-rgmii
+Collecting package info: package/kernel/mwlwifi
+Collecting package info: package/kernel/nat46
+Collecting package info: package/kernel/om-watchdog
+Collecting package info: package/kernel/rtc-rv5c386a
+Collecting package info: package/kernel/rtl8812au-ct
+Collecting package info: package/kernel/trelay
+Collecting package info: package/libs/argp-standalone
+Collecting package info: package/libs/elfutils
+Collecting package info: package/libs/gettext
+Collecting package info: package/libs/gettext-full
+Collecting package info: package/libs/gmp
+Collecting package info: package/libs/jansson
+Collecting package info: package/libs/libaudit
+Collecting package info: package/libs/libbsd
+Collecting package info: package/libs/libevent2
+Collecting package info: package/libs/libiconv
+Collecting package info: package/libs/libiconv-full
+Collecting package info: package/libs/libjson-c
+Collecting package info: package/libs/libmnl
+Collecting package info: package/libs/libnetfilter-conntrack
+Collecting package info: package/libs/libnfnetlink
+Collecting package info: package/libs/libnftnl
+Collecting package info: package/libs/libnl
+Collecting package info: package/libs/libnl-tiny
+Collecting package info: package/libs/libpcap
+Collecting package info: package/libs/libselinux
+Collecting package info: package/libs/libsemanage
+Collecting package info: package/libs/libsepol
+Collecting package info: package/libs/libtool
+Collecting package info: package/libs/libubox
+Collecting package info: package/libs/libunwind
+Collecting package info: package/libs/libusb
+Collecting package info: package/libs/mbedtls
+Collecting package info: package/libs/musl-fts
+Collecting package info: package/libs/ncurses
+Collecting package info: package/libs/nettle
+Collecting package info: package/libs/openssl
+Collecting package info: package/libs/pcre
+Collecting package info: package/libs/popt
+Collecting package info: package/libs/readline
+Collecting package info: package/libs/sysfsutils
+Collecting package info: package/libs/toolchain
+Collecting package info: package/libs/uclibc++
+Collecting package info: package/libs/uclient
+Collecting package info: package/libs/ustream-ssl
+Collecting package info: package/libs/wolfssl
+Collecting package info: package/libs/zlib
+Collecting package info: package/network/config/firewall
+Collecting package info: package/network/config/gre
+Collecting package info: package/network/config/ipip
+Collecting package info: package/network/config/ltq-adsl-app
+Collecting package info: package/network/config/ltq-vdsl-app
+Collecting package info: package/network/config/netifd
+Collecting package info: package/network/config/qos-scripts
+Collecting package info: package/network/config/soloscli
+Collecting package info: package/network/config/swconfig
+Collecting package info: package/network/config/vti
+Collecting package info: package/network/config/vxlan
+Collecting package info: package/network/config/xfrm
+Collecting package info: package/network/ipv6/464xlat
+Collecting package info: package/network/ipv6/6in4
+Collecting package info: package/network/ipv6/6rd
+Collecting package info: package/network/ipv6/6to4
+Collecting package info: package/network/ipv6/ds-lite
+Collecting package info: package/network/ipv6/map
+Collecting package info: package/network/ipv6/odhcp6c
+Collecting package info: package/network/ipv6/thc-ipv6
+Collecting package info: package/network/services/dnsmasq
+Collecting package info: package/network/services/dropbear
+Collecting package info: package/network/services/ead
+Collecting package info: package/network/services/hostapd
+Collecting package info: package/network/services/igmpproxy
+Collecting package info: package/network/services/ipset-dns
+Collecting package info: package/network/services/lldpd
+Collecting package info: package/network/services/odhcpd
+Collecting package info: package/network/services/omcproxy
+Collecting package info: package/network/services/ppp
+Collecting package info: package/network/services/relayd
+Collecting package info: package/network/services/uhttpd
+Collecting package info: package/network/services/umdns
+Collecting package info: package/network/services/wireguard
+Collecting package info: package/network/utils/adb-enablemodem
+Collecting package info: package/network/utils/arptables
+Collecting package info: package/network/utils/bpftools
+Collecting package info: package/network/utils/comgt
+Collecting package info: package/network/utils/dante
+Collecting package info: package/network/utils/ebtables
+Collecting package info: package/network/utils/ethtool
+Collecting package info: package/network/utils/iperf
+Collecting package info: package/network/utils/iperf3
+Collecting package info: package/network/utils/iproute2
+Collecting package info: package/network/utils/ipset
+Collecting package info: package/network/utils/iptables
+Collecting package info: package/network/utils/iw
+Collecting package info: package/network/utils/iwcap
+Collecting package info: package/network/utils/iwinfo
+Collecting package info: package/network/utils/layerscape/restool
+Collecting package info: package/network/utils/linux-atm
+Collecting package info: package/network/utils/ltq-dsl-base
+Collecting package info: package/network/utils/maccalc
+Collecting package info: package/network/utils/nftables
+Collecting package info: package/network/utils/owipcalc
+Collecting package info: package/network/utils/resolveip
+Collecting package info: package/network/utils/rssileds
+Collecting package info: package/network/utils/tcpdump
+Collecting package info: package/network/utils/umbim
+Collecting package info: package/network/utils/uqmi
+Collecting package info: package/network/utils/wireguard-tools
+Collecting package info: package/network/utils/wireless-tools
+Collecting package info: package/network/utils/wpan-tools
+Collecting package info: package/network/utils/wwan
+Collecting package info: package/system/ca-certificates
+Collecting package info: package/system/fstools
+Collecting package info: package/system/fwtool
+Collecting package info: package/system/iucode-tool
+Collecting package info: package/system/mtd
+Collecting package info: package/system/openwrt-keyring
+Collecting package info: package/system/opkg
+Collecting package info: package/system/procd
+Collecting package info: package/system/refpolicy
+Collecting package info: package/system/rpcd
+Collecting package info: package/system/selinux-policy
+Collecting package info: package/system/ubox
+Collecting package info: package/system/ubus
+Collecting package info: package/system/ucert
+Collecting package info: package/system/uci
+Collecting package info: package/system/urandom-seed
+Collecting package info: package/system/urngd
+Collecting package info: package/system/usign
+Collecting package info: package/system/zram-swap
+Collecting package info: package/utils/adb
+Collecting package info: package/utils/bcm27xx-userland
+Collecting package info: package/utils/bsdiff
+Collecting package info: package/utils/busybox
+Collecting package info: package/utils/bzip2
+Collecting package info: package/utils/checkpolicy
+Collecting package info: package/utils/ct-bugcheck
+Collecting package info: package/utils/e2fsprogs
+Collecting package info: package/utils/f2fs-tools
+Collecting package info: package/utils/fbtest
+Collecting package info: package/utils/fritz-tools
+Collecting package info: package/utils/jboot-tools
+Collecting package info: package/utils/jsonfilter
+Collecting package info: package/utils/lua
+Collecting package info: package/utils/lua5.3
+Collecting package info: package/utils/mdadm
+Collecting package info: package/utils/mtd-utils
+Collecting package info: package/utils/nvram
+Collecting package info: package/utils/osafeloader
+Collecting package info: package/utils/oseama
+Collecting package info: package/utils/otrx
+Collecting package info: package/utils/policycoreutils
+Collecting package info: package/utils/px5g-mbedtls
+Collecting package info: package/utils/px5g-wolfssl
+Collecting package info: package/utils/ravpower-mcu
+Collecting package info: package/utils/secilc
+Collecting package info: package/utils/spidev_test
+Collecting package info: package/utils/ugps
+Collecting package info: package/utils/usbmode
+Collecting package info: package/utils/usbreset
+Collecting package info: package/utils/usbutils
+Collecting package info: package/utils/util-linux
+Collecting package info: merging...
+Collecting package info: done
+Reaping winning child 0x7fffcb0a2010 PID 16506 
+Live child 0x7fffcb0a2010 (prepare-tmpinfo) PID 18058 
+
+Collecting target info: target/linux/apm821xx
+Collecting target info: target/linux/arc770
+Collecting target info: target/linux/archs38
+Collecting target info: target/linux/armvirt
+Collecting target info: target/linux/at91
+Collecting target info: target/linux/ath25
+Collecting target info: target/linux/ath79
+Collecting target info: target/linux/bcm27xx
+Collecting target info: target/linux/bcm47xx
+Collecting target info: target/linux/bcm53xx
+Collecting target info: target/linux/bcm63xx
+Collecting target info: target/linux/gemini
+Collecting target info: target/linux/imx6
+Collecting target info: target/linux/ipq40xx
+Collecting target info: target/linux/ipq806x
+Collecting target info: target/linux/ipq807x
+Collecting target info: target/linux/kirkwood
+Collecting target info: target/linux/lantiq
+Collecting target info: target/linux/layerscape
+Collecting target info: target/linux/malta
+Collecting target info: target/linux/mediatek
+Collecting target info: target/linux/mpc85xx
+Collecting target info: target/linux/mvebu
+Collecting target info: target/linux/mxs
+Collecting target info: target/linux/octeon
+Collecting target info: target/linux/octeontx
+Collecting target info: target/linux/omap
+Collecting target info: target/linux/oxnas
+Collecting target info: target/linux/pistachio
+Collecting target info: target/linux/ramips
+Collecting target info: target/linux/realtek
+Collecting target info: target/linux/rockchip
+Collecting target info: target/linux/sunxi
+Collecting target info: target/linux/tegra
+Collecting target info: target/linux/uml
+Collecting target info: target/linux/x86
+Collecting target info: target/linux/zynq
+Collecting target info: merging...
+Collecting target info: done
+Reaping winning child 0x7fffcb0a2010 PID 18058 
+Live child 0x7fffcb0a2010 (prepare-tmpinfo) PID 20209 
+Reaping winning child 0x7fffcb0a2010 PID 20209 
+Live child 0x7fffcb0a2010 (prepare-tmpinfo) PID 20212 
+Reaping winning child 0x7fffcb0a2010 PID 20212 
+Live child 0x7fffcb0a2010 (prepare-tmpinfo) PID 20217 
+WARNING: Makefile &#39;package/utils/busybox/Makefile&#39; has a dependency on &#39;libpam&#39;, which does not exist
+WARNING: Makefile &#39;package/utils/busybox/Makefile&#39; has a dependency on &#39;libpam&#39;, which does not exist
+WARNING: Makefile &#39;package/utils/busybox/Makefile&#39; has a build dependency on &#39;libpam&#39;, which does not exist
+WARNING: Makefile &#39;package/boot/kexec-tools/Makefile&#39; has a dependency on &#39;liblzma&#39;, which does not exist
+WARNING: Makefile &#39;package/network/services/lldpd/Makefile&#39; has a dependency on &#39;libnetsnmp&#39;, which does not exist
+WARNING: Makefile &#39;package/utils/policycoreutils/Makefile&#39; has a dependency on &#39;libpam&#39;, which does not exist
+WARNING: Makefile &#39;package/utils/policycoreutils/Makefile&#39; has a dependency on &#39;libpam&#39;, which does not exist
+WARNING: Makefile &#39;package/utils/policycoreutils/Makefile&#39; has a build dependency on &#39;libpam&#39;, which does not exist
+Reaping winning child 0x7fffcb0a2010 PID 20217 
+Live child 0x7fffcb0a2010 (prepare-tmpinfo) PID 20219 
+Reaping winning child 0x7fffcb0a2010 PID 20219 
+Live child 0x7fffcb0a2010 (prepare-tmpinfo) PID 20221 
+Reaping winning child 0x7fffcb0a2010 PID 20221 
+Live child 0x7fffcb0a2010 (prepare-tmpinfo) PID 20223 
+Reaping winning child 0x7fffcb0a2010 PID 20223 
+Removing child 0x7fffcb0a2010 PID 20223 from chain.
+  Successfully remade target file &#39;prepare-tmpinfo&#39;.
+  Pruning file &#39;FORCE&#39;.
+ Finished prerequisites of target file &#39;defconfig&#39;.
+Must remake target &#39;defconfig&#39;.
+touch .config
+Putting child 0x7fffcb096b50 (defconfig) PID 20227 on the chain.
+Live child 0x7fffcb096b50 (defconfig) PID 20227 
+Reaping winning child 0x7fffcb096b50 PID 20227 
+Live child 0x7fffcb096b50 (defconfig) PID 20228 
+Reaping winning child 0x7fffcb096b50 PID 20228 
+[ -L .config ] &amp;&amp; export KCONFIG_OVERWRITECONFIG=1; \
+    scripts/config/conf  --defconfig=.config Config.in
+Live child 0x7fffcb096b50 (defconfig) PID 20229 
+#
+# configuration written to .config
+#
+Reaping winning child 0x7fffcb096b50 PID 20229 
+Removing child 0x7fffcb096b50 PID 20229 from chain.
+Successfully remade target file &#39;defconfig&#39;.
+</code></pre>
+<p>从以上 log 信息中可以非常完整清楚的看到 make 指令的执行流程，其中包含了每个目标文件及其依赖文件的规则查找和执行。下面我们结合 log 以及 Makefile 来详细追踪一下 <code>make defconfig</code> 的执行流程。</p>
+<p>首先要知道 make 的目标文件是<code>defconfig</code>, 对应 toplevel.mk 中的</p>
+<pre><code class="makefile">defconfig: scripts/config/conf prepare-tmpinfo FORCE
+    touch .config
+    @if [ ! -s .config -a -e $(HOME)/.openwrt/defconfig ]; then cp $(HOME)/.openwrt/defconfig .config; fi
+    [ -L .config ] &amp;&amp; export KCONFIG_OVERWRITECONFIG=1; \
+        $&lt; $(KCONF_FLAGS) --defconfig=.config Config.in
+</code></pre>
+<p>可以知道其依赖项包含3个：</p>
+<ol>
+<li>scripts/config/conf</li>
+<li>prepare-tmpinfo</li>
+<li>FORCE</li>
+</ol>
+<h3 id="script-config-conf"><a href="#script-config-conf" class="headerlink" title="script/config/conf"></a>script/config/conf</h3><p>对于依赖文件 <code>scripts/config/conf</code> ，make 执行log如下：</p>
+<pre><code class="log">Considering target file &#39;defconfig&#39;.
+ File &#39;defconfig&#39; does not exist.
+  Considering target file &#39;scripts/config/conf&#39;.
+   File &#39;scripts/config/conf&#39; does not exist.
+   Looking for an implicit rule for &#39;scripts/config/conf&#39;.
+   Trying pattern rule with stem &#39;c&#39;.
+   Found an implicit rule for &#39;scripts/config/conf&#39;.
+    Considering target file &#39;staging_dir/host/.prereq-build&#39;.
+     File &#39;staging_dir/host/.prereq-build&#39; does not exist.
+      Considering target file &#39;include/prereq-build.mk&#39;.
+       Looking for an implicit rule for &#39;include/prereq-build.mk&#39;.
+       Trying pattern rule with stem &#39;prereq-build.mk&#39;.
+       Found an implicit rule for &#39;include/prereq-build.mk&#39;.
+       Finished prerequisites of target file &#39;include/prereq-build.mk&#39;.
+      No need to remake target &#39;include/prereq-build.mk&#39;.
+     Finished prerequisites of target file &#39;staging_dir/host/.prereq-build&#39;.
+    Must remake target &#39;staging_dir/host/.prereq-build&#39;.
+</code></pre>
+<p>make 首先查找 <code>defconfig</code> 是否需要更新，发现不存在，因为本身就不是文件。然后查找第一个依赖 <code>scripts/config/conf</code> ，发现也不存在，然后去查找生成这个文件的规则，在 <code>toplevel.mk</code> 可以找到其规则如下：</p>
+<pre><code class="makefile">ifeq ($(FORCE),)
+  .config scripts/config/conf scripts/config/mconf: staging_dir/host/.prereq-build
+endif
+</code></pre>
+<p>其中 <code>$(FORCE)</code> 变量默认是个空值，所以条件满足，make 发现 conf 又依赖于 <code>staging_dir/host/.prereq-build</code>. 于是把 <code>.prereq-build</code> 当做新的目标，查找其规则，在 toplevel.mk 中如下：</p>
+<pre><code class="makefile">staging_dir/host/.prereq-build: include/prereq-build.mk
+    mkdir -p tmp
+    @$(_SINGLE)$(NO_TRACE_MAKE) -j1 -r -s -f $(TOPDIR)/include/prereq-build.mk prereq 2&gt;/dev/null || { \
+        echo &quot;Prerequisite check failed. Use FORCE=1 to override.&quot;; \
+        false; \
+    }
+  ifneq ($(realpath $(TOPDIR)/include/prepare.mk),)
+    @$(_SINGLE)$(NO_TRACE_MAKE) -j1 -r -s -f $(TOPDIR)/include/prepare.mk prepare 2&gt;/dev/null || { \
+        echo &quot;Preparation failed.&quot;; \
+        false; \
+    }
+  endif
+    touch $@
+</code></pre>
+<p>这里发现需要依赖 <code>include/prereq-build.mk</code> ，于是将该文件导入，并结束了对 <code>.prereq-build</code> 的依赖查找，同时标记需要重新生成目标 <code>staging_dir/host/.prereq-build</code>.</p>
+<pre><code class="log">     Finished prerequisites of target file &#39;staging_dir/host/.prereq-build&#39;.
+    Must remake target &#39;staging_dir/host/.prereq-build&#39;.
+</code></pre>
+<p>生成目标时，根据 Makefile 中 <code>.prereq-build</code> 规则，会执行以下指令:</p>
+<pre><code class="makefile">    mkdir -p tmp
+    @$(_SINGLE)$(NO_TRACE_MAKE) -j1 -r -s -f $(TOPDIR)/include/prereq-build.mk prereq 2&gt;/dev/null || { \
+        echo &quot;Prerequisite check failed. Use FORCE=1 to override.&quot;; \
+        false; \
+    }
+    touch $@
+</code></pre>
+<blockquote>
+<p>include 目录不包含文件 <code>prepare.mk</code>, 所以原先的的判断可以忽略。</p>
+</blockquote>
+<p>使用 <code>make -n defconfig</code> 可以看到以上指令解析后是这样的</p>
+<pre><code class="bash">mkdir -p tmp
+export MAKEFLAGS= ;make V=s -j1 -r -s -f /home/litreily/openwrt/include/prereq-build.mk prereq 2&gt;/dev/null || { \
+    echo &quot;Prerequisite check failed. Use FORCE=1 to override.&quot;; \
+    false; \
+}
+touch staging_dir/host/.prereq-build
+</code></pre>
+<p>以上 make 指令会根据 <code>prereq-build.mk</code> 和 <code>prereq.mk</code> 两个 Makefile 安装一些依赖工具。</p>
+<pre><code class="makefile"># Required for the toolchain
+$(eval $(call TestHostCommand,working-make, \
+    Please install GNU make v3.82 or later. (This version has bugs), \
+    $(MAKE) -v | grep -E &#39;Make (3\.8[2-9]|3\.9[0-9]|[4-9]\.)&#39;))
+
+$(eval $(call TestHostCommand,case-sensitive-fs, \
+    OpenWrt can only be built on a case-sensitive filesystem, \
+    rm -f $(TMP_DIR)/test.*; touch $(TMP_DIR)/test.fs; \
+        test ! -f $(TMP_DIR)/test.FS))
+
+$(eval $(call TestHostCommand,proper-umask, \
+    Please build with umask 022 - other values produce broken packages, \
+    umask | grep -xE 0?0[012][012]))
+
+# ...
+</code></pre>
+<p>其中的 <code>TestHostCommand</code> 定义于 <code>prereq.mk</code>. 对应的log如下，完整log参考前文。</p>
+<pre><code class="log">Putting child 0x7fffcb0a1800 (staging_dir/host/.prereq-build) PID 15999 on the chain.
+Live child 0x7fffcb0a1800 (staging_dir/host/.prereq-build) PID 15999 
+Reaping winning child 0x7fffcb0a1800 PID 15999 
+Live child 0x7fffcb0a1800 (staging_dir/host/.prereq-build) PID 16000 
+Checking &#39;working-make&#39;... ok.
+Checking &#39;case-sensitive-fs&#39;... ok.
+Checking &#39;proper-umask&#39;... ok.
+Checking &#39;gcc&#39;... ok.
+Checking &#39;working-gcc&#39;... ok.
+Checking &#39;g++&#39;... ok.
+Checking &#39;working-g++&#39;... ok.
+...
+Checking &#39;file&#39;... ok.
+Checking &#39;rsync&#39;... ok.
+Checking &#39;ldconfig-stub&#39;... ok.
+Reaping winning child 0x7fffcb0a1800 PID 16000 
+Live child 0x7fffcb0a1800 (staging_dir/host/.prereq-build) PID 16418 
+Reaping winning child 0x7fffcb0a1800 PID 16418 
+Removing child 0x7fffcb0a1800 PID 16418 from chain.
+    Successfully remade target file &#39;staging_dir/host/.prereq-build&#39;.
+   Finished prerequisites of target file &#39;scripts/config/conf&#39;.
+  Must remake target &#39;scripts/config/conf&#39;.
+</code></pre>
+<p>执行完 <code>prereq-build.mk</code> 之后，就完成了 <code>scripts/config/conf</code> 依赖文件的编译生成，接下来就是正式编译 <code>conf</code> 文件了。</p>
+<pre><code class="log">Putting child 0x7fffcb0a1b70 (scripts/config/conf) PID 16422 on the chain.
+Live child 0x7fffcb0a1b70 (scripts/config/conf) PID 16422 
+make[1]: Entering directory &#39;/home/litreily/openwrt/scripts/config&#39;
+cc -O2   -c -o conf.o conf.c
+cc -O2   -c -o confdata.o confdata.c
+cc -O2   -c -o expr.o expr.c
+cc -O2 -I ./.   -c -o lexer.lex.o lexer.lex.c
+cc -O2 -I ./.   -c -o parser.tab.o parser.tab.c
+cc -O2   -c -o preprocess.o preprocess.c
+cc -O2   -c -o symbol.o symbol.c
+cc -O2   -c -o util.o util.c
+cc   conf.o confdata.o expr.o lexer.lex.o parser.tab.o preprocess.o symbol.o util.o   -o conf
+make[1]: Leaving directory &#39;/home/litreily/openwrt/scripts/config&#39;
+Reaping winning child 0x7fffcb0a1b70 PID 16422 
+Removing child 0x7fffcb0a1b70 PID 16422 from chain.
+</code></pre>
+<p>可以看出来，编译 <code>conf</code> 文件时，会在子进程中先进入对应的目录 <code>scripts/config</code> , 然后使用该目录的Makefile进行编译。编译结束后离开该目录并退出子进程。</p>
+<p>至此，<code>defconfig</code> 的依赖文件 <code>scripts/config/conf</code> 就编译完成了。流程简述如下：</p>
+<pre><code class="log">make defconfig
+    check prerequisites of defconfig : 
+        scripts/config/conf, prepare-tmpinfo, FORCE
+        check prerequisites of scripts/config/conf:
+            staging_dir/host/.prereq-build
+            check prerequisites of staging_dir/host/.prereq-build
+                include/prereq-build.mk
+            finished prerequisites of staging_dir/host/.prereq-build
+            running commands in include/prereq-build.mk
+        finished prerequisites of scripts/config/conf
+        compiling scripts/config/conf
+        finished compile scripts/config/conf
+        ...
+</code></pre>
+<h3 id="prepare-tmpinfo"><a href="#prepare-tmpinfo" class="headerlink" title="prepare-tmpinfo"></a>prepare-tmpinfo</h3><p><code>scripts/config/conf</code> 编译完成后，接下来就是<code>defconfig</code> 的第二个依赖 <code>prepare-tmpinfo</code> 了。</p>
+<pre><code class="log">  Successfully remade target file &#39;scripts/config/conf&#39;.
+  Considering target file &#39;prepare-tmpinfo&#39;.
+   File &#39;prepare-tmpinfo&#39; does not exist.
+    Considering target file &#39;FORCE&#39;.
+     File &#39;FORCE&#39; does not exist.
+     Finished prerequisites of target file &#39;FORCE&#39;.
+    Must remake target &#39;FORCE&#39;.
+    Successfully remade target file &#39;FORCE&#39;.
+   Finished prerequisites of target file &#39;prepare-tmpinfo&#39;.
+  Must remake target &#39;prepare-tmpinfo&#39;.
+</code></pre>
+<p>同样，查找 <code>prepare-tmpinfo</code> 目录不存在，查找其规则如下：</p>
+<pre><code class="makefile">prepare-tmpinfo: FORCE
+    @+$(MAKE) -r -s staging_dir/host/.prereq-build $(PREP_MK)
+    mkdir -p tmp/info
+    $(_SINGLE)$(NO_TRACE_MAKE) -j1 -r -s -f include/scan.mk SCAN_TARGET=&quot;packageinfo&quot; SCAN_DIR=&quot;package&quot; SCAN_NAME=&quot;package&quot; SCAN_DEPTH=5 SCAN_EXTRA=&quot;&quot;
+    $(_SINGLE)$(NO_TRACE_MAKE) -j1 -r -s -f include/scan.mk SCAN_TARGET=&quot;targetinfo&quot; SCAN_DIR=&quot;target/linux&quot; SCAN_NAME=&quot;target&quot; SCAN_DEPTH=2 SCAN_EXTRA=&quot;&quot; SCAN_MAKEOPTS=&quot;TARGET_BUILD=1&quot;
+    for type in package target; do \
+        f=tmp/.$${type}info; t=tmp/.config-$${type}.in; \
+        [ &quot;$$t&quot; -nt &quot;$$f&quot; ] || ./scripts/$${type}-metadata.pl $(_ignore) config &quot;$$f&quot; &gt; &quot;$$t&quot; || { rm -f &quot;$$t&quot;; echo &quot;Failed to build $$t&quot;; false; break; }; \
+    done
+    [ tmp/.config-feeds.in -nt tmp/.packageauxvars ] || ./scripts/feeds feed_config &gt; tmp/.config-feeds.in
+    ./scripts/package-metadata.pl mk tmp/.packageinfo &gt; tmp/.packagedeps || { rm -f tmp/.packagedeps; false; }
+    ./scripts/package-metadata.pl pkgaux tmp/.packageinfo &gt; tmp/.packageauxvars || { rm -f tmp/.packageauxvars; false; }
+    ./scripts/package-metadata.pl usergroup tmp/.packageinfo &gt; tmp/.packageusergroup || { rm -f tmp/.packageusergroup; false; }
+    touch $(TOPDIR)/tmp/.build
+</code></pre>
+<p>其依赖 <code>FORCE</code> 不存在，log提示remade target file <code>FORCE</code>, 实际上应该啥也没做，我尝试 echo ${FORCE} 也是个空值。</p>
+<p>按照以上指令，同样，通过 <code>make -n defconfig</code> 可以知晓对应指令如下：</p>
+<pre><code class="bash">make -r -s staging_dir/host/.prereq-build OPENWRT_BUILD= QUIET=0
+mkdir -p tmp
+export MAKEFLAGS= ;make V=s -j1 -r -s -f /home/litreily/openwrt/include/prereq-build.mk prereq 2&gt;/dev/null || { \
+        echo &quot;Prerequisite check failed. Use FORCE=1 to override.&quot;; \
+        false; \
+}
+touch staging_dir/host/.prereq-build
+mkdir -p tmp/info
+export MAKEFLAGS= ;make V=s -j1 -r -s -f include/scan.mk SCAN_TARGET=&quot;packageinfo&quot; SCAN_DIR=&quot;package&quot; SCAN_NAME=&quot;package&quot; SCAN_DEPTH=5 SCAN_EXTRA=&quot;&quot;
+export MAKEFLAGS= ;make V=s -j1 -r -s -f include/scan.mk SCAN_TARGET=&quot;targetinfo&quot; SCAN_DIR=&quot;target/linux&quot; SCAN_NAME=&quot;target&quot; SCAN_DEPTH=2 SCAN_EXTRA=&quot;&quot; SCAN_MAKEOPTS=&quot;TARGET_BUILD=1&quot;
+for type in package target; do \
+    f=tmp/.${type}info; t=tmp/.config-${type}.in; \
+    [ &quot;$t&quot; -nt &quot;$f&quot; ] || ./scripts/${type}-metadata.pl config &quot;$f&quot; &gt; &quot;$t&quot; || { rm -f &quot;$t&quot;; echo &quot;Failed to build $t&quot;; false; break; }; \
+done
+[ tmp/.config-feeds.in -nt tmp/.packageauxvars ] || ./scripts/feeds feed_config &gt; tmp/.config-feeds.in
+./scripts/package-metadata.pl mk tmp/.packageinfo &gt; tmp/.packagedeps || { rm -f tmp/.packagedeps; false; }
+./scripts/package-metadata.pl pkgaux tmp/.packageinfo &gt; tmp/.packageauxvars || { rm -f tmp/.packageauxvars; false; }
+./scripts/package-metadata.pl usergroup tmp/.packageinfo &gt; tmp/.packageusergroup || { rm -f tmp/.packageusergroup; false; }
+touch /home/litreily/openwrt/tmp/.build
+</code></pre>
+<p><code>prepare-tmpinfo</code>, 顾名思义，就是准备一些临时信息，包括</p>
+<ol>
+<li>package</li>
+<li>target/linux</li>
+</ol>
+<p>这两个部分，通过 <code>include/scan.mk</code> 扫描以上两个目录，将所有的 package 以及 target 信息存到临时目录 tmp 下, 然后通过对应的perl脚本 <code>scripts/${type}-metadata.pl</code> 生成 <code>tmp/.config-${type}.in</code> 文件。</p>
+<ol>
+<li><code>tmp/.packageinfo</code> : <code>tmp/.config-package.in</code></li>
+<li><code>tmp/.targetinfo</code> : <code>tmp/config-target.in</code></li>
+</ol>
+<p>此外，通过<code>scripts</code>的其它脚本生成feed, package 相关的信息文件并存放于 tmp 目录。</p>
+<p><code>prepare-tmpinfo</code> 生成过程对应的log如下：</p>
+<pre><code class="log">Considering target file &#39;staging_dir/host/.prereq-build&#39;.
+  Considering target file &#39;include/prereq-build.mk&#39;.
+   Looking for an implicit rule for &#39;include/prereq-build.mk&#39;.
+   Trying pattern rule with stem &#39;prereq-build.mk&#39;.
+   Found an implicit rule for &#39;include/prereq-build.mk&#39;.
+   Finished prerequisites of target file &#39;include/prereq-build.mk&#39;.
+  No need to remake target &#39;include/prereq-build.mk&#39;.
+ Finished prerequisites of target file &#39;staging_dir/host/.prereq-build&#39;.
+ Prerequisite &#39;include/prereq-build.mk&#39; is older than target &#39;staging_dir/host/.prereq-build&#39;.
+No need to remake target &#39;staging_dir/host/.prereq-build&#39;.
+Reaping winning child 0x7fffcb0a2010 PID 16454 
+Live child 0x7fffcb0a2010 (prepare-tmpinfo) PID 16505 
+Reaping winning child 0x7fffcb0a2010 PID 16505 
+Live child 0x7fffcb0a2010 (prepare-tmpinfo) PID 16506 
+
+Collecting package info: package/base-files
+Collecting package info: package/boot/arm-trusted-firmware-mvebu
+Collecting package info: package/boot/arm-trusted-firmware-rockchip
+...
+Collecting package info: package/utils/usbreset
+Collecting package info: package/utils/usbutils
+Collecting package info: package/utils/util-linux
+Collecting package info: merging...
+Collecting package info: done
+Reaping winning child 0x7fffcb0a2010 PID 16506 
+Live child 0x7fffcb0a2010 (prepare-tmpinfo) PID 18058 
+
+Collecting target info: target/linux/apm821xx
+Collecting target info: target/linux/arc770
+Collecting target info: target/linux/archs38
+...
+Collecting target info: target/linux/uml
+Collecting target info: target/linux/x86
+Collecting target info: target/linux/zynq
+Collecting target info: merging...
+Collecting target info: done
+Reaping winning child 0x7fffcb0a2010 PID 18058 
+...
+</code></pre>
+<p>以上所有搜集信息相关的log都是 scan.mk 打印的。还有值得注意的是，<code>prepare-tmpinfo</code> 首条指令</p>
+<pre><code class="bash">make -r -s staging_dir/host/.prereq-build OPENWRT_BUILD= QUIET=0
+</code></pre>
+<p>实际上在编译 <code>scripts/config/conf</code> 之前已经按照依赖规则执行过了，所以在这里会检测 <code>.prereq-build</code> 的依赖没有更新，所以不重新生成。</p>
+<pre><code class="log">No need to remake target &#39;staging_dir/host/.prereq-build&#39;.
+</code></pre>
+<p>ok, 到此为止，<code>defconfig</code> 的两个依赖项都已编译完毕。只剩下一个 <code>FORCE</code>.</p>
+<h3 id="defconfig"><a href="#defconfig" class="headerlink" title="defconfig"></a>defconfig</h3><p><code>FORCE</code> 实际上是个伪目标，其作用是强制执行依赖它的目标指令，这里对应的是执行 <code>defconfig</code> 相关指令。</p>
+<pre><code class="makefile">defconfig: scripts/config/conf prepare-tmpinfo FORCE
+    touch .config
+    @if [ ! -s .config -a -e $(HOME)/.openwrt/defconfig ]; then cp $(HOME)/.openwrt/defconfig .config; fi
+    [ -L .config ] &amp;&amp; export KCONFIG_OVERWRITECONFIG=1; \
+        $&lt; $(KCONF_FLAGS) --defconfig=.config Config.in
+</code></pre>
+<p>这个指令前面已经解析过了，主体部分就是 <code>scripts/config/conf --defconfig=.config Config.in</code>, 详细log如下：</p>
+<pre><code class="log">  Successfully remade target file &#39;prepare-tmpinfo&#39;.
+  Pruning file &#39;FORCE&#39;.
+ Finished prerequisites of target file &#39;defconfig&#39;.
+Must remake target &#39;defconfig&#39;.
+touch .config
+Putting child 0x7fffcb096b50 (defconfig) PID 20227 on the chain.
+Live child 0x7fffcb096b50 (defconfig) PID 20227 
+Reaping winning child 0x7fffcb096b50 PID 20227 
+Live child 0x7fffcb096b50 (defconfig) PID 20228 
+Reaping winning child 0x7fffcb096b50 PID 20228 
+[ -L .config ] &amp;&amp; export KCONFIG_OVERWRITECONFIG=1; \
+    scripts/config/conf  --defconfig=.config Config.in
+Live child 0x7fffcb096b50 (defconfig) PID 20229 
+#
+# configuration written to .config
+#
+Reaping winning child 0x7fffcb096b50 PID 20229 
+Removing child 0x7fffcb096b50 PID 20229 from chain.
+Successfully remade target file &#39;defconfig&#39;. 
+</code></pre>
+<p>执行不带参数的 <code>make defconfig</code> 通常只会看到以下部分的log</p>
+<pre><code class="log">#
+# configuration written to .config
+#
+</code></pre>
+<p>到此，<code>make defconfig</code> 整个流程就结束了，中间会调用到很多其它 Makefile，比如 <code>scan.mk</code>, <code>verbose.mk</code> 等，这些就不细讲了。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>本文主要目的是熟悉 openwrt Makefile 的执行流程，以便日后需要修改或调试某些相关问题时能够得心应手。Makefile 框架是 openwrt 非常重要的一部分，本文只是讲述了 make config 系列流程，实际上主 Makefile 有个条件分支判断 <code>OPENWRT_BUILD</code>, 当编译 kernel 或者 firmware 时，会先执行第一条分支进行初始化，然后通过 <code>toplevel.mk</code> 重新执行 make, 第二次调用时会进入第二个分支。那又将是另外一番风景，这个以后再说啦。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://github.com/openwrt/openwrt" target="_blank" rel="noopener">github openwrt</a></li>
+</ul>
+]]></content>
+      
+        <categories>
+            
+            <category> Embedded </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> makefile </tag>
+            
+            <tag> openwrt </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[lua 高级特性]]></title>
+      <url>https://www.litreily.top/2020/12/25/lua-adv/</url>
+      <content type="html"><![CDATA[<p>这一篇来记录下 lua 的某些高级特性，以便在实际应用中得心应手。</p>
+<h2 id="模块和包"><a href="#模块和包" class="headerlink" title="模块和包"></a>模块和包</h2><p>为了方便代码复用和扩展，可以使用 table 实现模块 module，在模块中封装通用代码。把同类型的函数放在一个文件中，然后在其它脚本中调用。</p>
+<pre><code class="lua">module = {}
+
+module.version = &quot;V0.1&quot;
+module.author = &quot;litreily&quot;
+
+function module.func1 ()
+    function-body
+end
+
+function module.func2 ()
+    function-body
+end
+
+return module
+</code></pre>
+<p>然后在其它文件通过 require 导入。</p>
+<pre><code class="lua">require (&quot;module&quot;)
+-- or
+require &quot;module&quot;
+
+print(module.version)
+module.func1()
+
+-- or
+local m = require (&quot;module&quot;)
+
+print(m.version)
+m.func1()
+</code></pre>
+<p>举例说明，为了复用一些通用方法比如文件读写，异常处理等功能，可以将其放在一起。</p>
+<pre><code class="lua">-- utils functions
+utils = {}
+
+function utils.errorhandler (err)
+    print(&quot;ERROR: &quot;, err)
+end
+
+function utils.xpcall (statements)
+    return xpcall (function () return statements end, utils.errorhandler)
+end
+
+-- cat file
+function utils.catfile (file)
+    local f = assert(io.open(file, &quot;r&quot;))
+    local content = f:read(&quot;*all&quot;)
+    f:close()
+    return content
+end
+
+-- @mode: w a r+ w+ a+ b
+-- @content: strings
+function utils.savefile (file, mode, content)
+    local f = assert(io.open(file, mode))
+    f:write(content)
+    f:close()
+end
+
+return utils
+</code></pre>
+<p>上面对文件读写函数以及异常处理函数进行了封装，在其它文件中就可以通过 require 调用了。</p>
+<pre><code class="lua">require &quot;utils&quot;
+
+-- cat demo.lua and write into test.txt
+utils.savefile(&quot;test.txt&quot;, &quot;w&quot;, utils.catfile(&quot;demo.lua&quot;))
+
+xpcall(function () print(utils.catfile(&quot;utils.lua&quot;)) end, utils.errorhandler)
+print(utils.xpcall(os.execute(&quot;ls /&quot;)))
+</code></pre>
+<h2 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h2><h3 id="function-变量"><a href="#function-变量" class="headerlink" title="function 变量"></a>function 变量</h3><p>首先要知道的是，在 Lua 中，<code>function</code> 本身就是基本的数据类型之一，也可以和普通的变量一样定义和赋值。</p>
+<pre><code class="lua">function foo(x)
+    print(x)
+end
+</code></pre>
+<p>与</p>
+<pre><code class="lua">foo = function (x) print(x) end
+</code></pre>
+<p>是等价的。因此，函数也可以当做普通变量一样被返回、被赋值。下面再来看闭包。</p>
+<h3 id="闭包概念"><a href="#闭包概念" class="headerlink" title="闭包概念"></a>闭包概念</h3><p><strong>闭包</strong> (Closure) 的概念并不是 Lua 特有的，许多其它语言也有，比如java, js等。在 Lua 中，闭包表现为匿名函数或者函数嵌套，是由一个函数和一个非局部变量(upvalue)组成的。看个例子就清楚了。</p>
+<pre><code class="lua">function foo(x)
+    local function func1()
+        print(x)
+    end
+    return func1
+end
+
+func = foo(&quot;hello&quot;)
+func()
+</code></pre>
+<p>内部函数也可以不定义函数名，直接return。</p>
+<pre><code class="lua">function foo(x)
+    return function ()
+        print(x)
+    end
+end
+
+func = foo(&quot;hello&quot;)
+func()
+</code></pre>
+<p>以上的func就是创建的闭包。通过闭包函数，可以实现多个内部函数之间的资源共享。</p>
+<pre><code class="lua">function Produce(n)
+   local function func1()
+      print(n)
+   end
+   local function func2()
+      n = n + 1
+   end
+   return func1, func2
+end
+
+f1, f2 = Produce(2020)
+f1() -- /* print 2020 */
+
+f2()
+f1() -- /* print 2021 */
+
+f2()
+f1() -- /* print 2022 */
+</code></pre>
+<p>上面两个闭包 f1, f2 通过 n 实现资源共享。</p>
+<h3 id="闭包应用"><a href="#闭包应用" class="headerlink" title="闭包应用"></a>闭包应用</h3><ol>
+<li>闭包作为高阶函数的参数</li>
+<li>回调函数</li>
+<li>创建安全的运行环境，类似沙盒</li>
+<li>迭代器</li>
+</ol>
+<h3 id="迭代器"><a href="#迭代器" class="headerlink" title="迭代器"></a>迭代器</h3><p>Lua 中的迭代器就可以通过闭包实现的。以下代码就是迭代函数 <code>ipairs</code> 的实现方式。</p>
+<pre><code class="lua">function iter (a, i)
+    i = i + 1
+    local v = a[i]
+    if v then
+       return i, v
+    end
+end
+
+function ipairs (a)
+    return iter, a, 0
+end
+</code></pre>
+<p><code>ipairs</code> 的应用如下：</p>
+<pre><code class="lua">data = {&quot;hello&quot;, &quot;world&quot;, &quot;!&quot;}
+for i, v in ipairs(data)
+do
+    print(i, v)
+end
+</code></pre>
+<h2 id="面向对象"><a href="#面向对象" class="headerlink" title="面向对象"></a>面向对象</h2><p>Lua 是使用C语言编写的，但其不仅支持面向过程，同时也支持面向对象。而面向对象也是通过万能的 table 实现的。</p>
+<h3 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h3><pre><code class="lua">Animal = {name = &quot;&quot;, height = 0, weight = 0}
+-- The constructor function
+function Animal:new (object, name, height, weight)
+    object = object or {}
+    setmetatable(object, self)
+    self.__index = self
+    self.name = name or &quot;&quot;
+    self.height = height or 0
+    self.weight = weight or 0
+    return object
+end
+
+-- The member function
+function Animal:printHeight()
+    print(&quot;the height of &quot; .. self.name .. &quot; is &quot; .. self.height)
+end
+</code></pre>
+<h3 id="创建对象"><a href="#创建对象" class="headerlink" title="创建对象"></a>创建对象</h3><pre><code class="lua">a = Animal:new(nil, &quot;cat&quot;, 0.2, 15)
+</code></pre>
+<h3 id="访问属性"><a href="#访问属性" class="headerlink" title="访问属性"></a>访问属性</h3><pre><code class="lua">print(a.name)
+</code></pre>
+<h3 id="访问成员函数"><a href="#访问成员函数" class="headerlink" title="访问成员函数"></a>访问成员函数</h3><pre><code class="lua">a:printHeight()
+</code></pre>
+<h3 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h3><p>在Animal类的基础上继承，派生出人类 human.</p>
+<pre><code class="lua">Human = Animal:new(&quot;human&quot;, 0, 0)
+function Human:new (object, name, height, weight, sex)
+    object = object or Animal:new(&quot;name&quot;, height, weight)
+    setmetatable(object, self)
+    self.__index = self
+    self.sex = sex or &quot;male&quot;
+    return object
+end
+
+function Human:printSex()
+    print(&quot;the sex of &quot; .. self.name .. &quot; is &quot; .. self.sex)
+end
+
+boy = Hunman:new(&quot;mike&quot;, 1.7, 65, &quot;male&quot;)
+print(boy.name)
+boy:printSex()
+</code></pre>
+<h2 id="错误处理"><a href="#错误处理" class="headerlink" title="错误处理"></a>错误处理</h2><h3 id="assert-and-error"><a href="#assert-and-error" class="headerlink" title="assert and error"></a>assert and error</h3><p>assert 是很多语言都会用到的处理函数，在Python、C++等大部分高级语言中都会集成。通过它可以预先判断是否会有错误产生，如果有则直接处理，而不用等待真正执行到错误处才报错。比如下面的类型检查，可以规避输入参数不合法导致的错误问题，提前退出。</p>
+<pre><code class="lua">local function add(a,b)
+   assert(type(a) == &quot;number&quot;, &quot;a is not a number&quot;)
+   assert(type(b) == &quot;number&quot;, &quot;b is not a number&quot;)
+   return a+b
+end
+add(10)
+</code></pre>
+<p>执行会有错误提示</p>
+<pre><code class="log">lua: test.lua:3: b is not a number
+stack traceback:
+    [C]: in function &#39;assert&#39;
+    test.lua:3: in local &#39;add&#39;
+    test.lua:6: in main chunk
+    [C]: in ?
+</code></pre>
+<p><code>error</code> 函数可以用来打印log， 而且可以指定level，控制输出包含哪些信息。</p>
+<pre><code class="lua">error (messag [, level])
+</code></pre>
+<ul>
+<li>level=1 (default) : 输出调用error位置（文件，行号）</li>
+<li>level=2 : 指出调用 error 的函数</li>
+<li>level=0 : 不添加位置信息</li>
+</ul>
+<h3 id="pcall-and-xpcall"><a href="#pcall-and-xpcall" class="headerlink" title="pcall and xpcall"></a>pcall and xpcall</h3><p>pcall (protected call) 有点类似 Python中的 try...catch, 尝试捕获错误，不过其 <strong>接收的是一个函数，而不是表达式</strong> .</p>
+<pre><code class="lua">if pcall(function_name, ….) then
+-- no error
+else
+-- some error
+end
+</code></pre>
+<p>举例如下：</p>
+<pre><code class="lua">&gt; =pcall(function(i) print(i) end, 10)
+10
+true
+
+&gt; =pcall(function(i) print(i) error(&#39;error message&#39;) end, 10)
+10
+false        stdin:1: error message
+</code></pre>
+<p>当然第二个例子中error是人为故意添加的，倒不是说真的有错误。</p>
+<p>理论上pcall 可以捕获函数执行过程的任意错误，但是它主要是返回错误的位置，把部分调用栈信息丢失了。此时就是 xpcall 的出场时刻了。</p>
+<p><code>xpcall</code> 第二个参数是一个错误处理函数 errorhandler, 可以将发生错误时的栈信息打印出来。本文头部讲述模块的时候已经用到了。</p>
+<pre><code class="lua">function foo (n)
+   n = n/nil
+end
+
+function errorhandler( err )
+   print( &quot;ERROR:&quot;, err )
+end
+
+status = xpcall(foo, errorhandler, 10)
+print(status)
+</code></pre>
+<p>执行后输出以下错误。</p>
+<pre><code class="log">ERROR:  stdin:1: attempt to perform arithmetic on local &#39;n&#39; (a nil value)
+</code></pre>
+<h2 id="C-与-Lua-相互调用"><a href="#C-与-Lua-相互调用" class="headerlink" title="C 与 Lua 相互调用"></a>C 与 Lua 相互调用</h2><p>在C与Lua之间相互调用，需要安装有lua库，通常在编译安装时就会生成所需的头文件和库文件</p>
+<ul>
+<li>lua.h</li>
+<li>lualib.h</li>
+<li>lauxlib.h</li>
+<li>liblua.so or liblua.a</li>
+</ul>
+<h3 id="C-调用-Lua-脚本"><a href="#C-调用-Lua-脚本" class="headerlink" title="C 调用 Lua 脚本"></a>C 调用 Lua 脚本</h3><p>如果单单只是要执行 Lua 脚本，非常简单。直接在C代码中通过 system 调用即可。</p>
+<pre><code class="c">system(&quot;lua demo.lua&quot;);
+</code></pre>
+<p>但是对于嵌入式设备而言，可能没有将lua编译到设备中，此时可以通过lua的库函数 <code>luaL_dofile</code> 执行脚本。</p>
+<pre><code class="c">#include  &lt;stdio.h&gt;
+#include  &lt;lua.h&gt;
+#include  &lt;lualib.h&gt;
+#include  &lt;lauxlib.h&gt;
+
+int main(int argc, char *argv[])
+{
+    lua_State* L;
+
+    L = luaL_newstate(); /* 创建lua状态机 */
+    luaL_openlibs(L); /* 打开Lua状态机中所有Lua标准库 */
+    luaL_dofile(L, &quot;demo.lua&quot;); /*加载lua脚本*/
+    lua_close(L); /*清除Lua*/
+    return 0;
+}
+</code></pre>
+<h3 id="C-调用-Lua-函数"><a href="#C-调用-Lua-函数" class="headerlink" title="C 调用 Lua 函数"></a>C 调用 Lua 函数</h3><p>如果要在C代码中调用Lua脚本中定义的函数，以最简单的加法为例，在lua中写一个 add 函数，然后在 C 代码中调用。</p>
+<pre><code class="lua">-- add.lua
+function add(x,y)
+    return x+y
+end
+</code></pre>
+<p>在 C 代码中调用 lua 相关库函数。</p>
+<pre><code class="c">#include  &lt;stdio.h&gt;
+#include  &lt;lua.h&gt;
+#include  &lt;lualib.h&gt;
+#include  &lt;lauxlib.h&gt;
+
+lua_State* L;
+
+int luaadd(int x, int y)
+{
+    int sum;
+
+    lua_getglobal(L,&quot;add&quot;);/*函数名*/
+    lua_pushnumber(L, x); /*参数入栈*/
+    lua_pushnumber(L, y); /*参数入栈*/
+    lua_call(L, 2, 1); /*开始调用函数，有2个参数，1个返回值*/
+    sum = (int)lua_tonumber(L, -1); /*取出返回值*/
+    lua_pop(L,1); /*清除返回值的栈*/
+
+    return sum;
+}
+
+int main(int argc, char *argv[])
+{
+    int sum;
+
+    L = luaL_newstate(); /* 创建lua状态机 */
+    luaL_openlibs(L); /* 打开Lua状态机中所有Lua标准库 */
+    luaL_dofile(L, &quot;add.lua&quot;); /*加载lua脚本*/
+
+    sum = luaadd(1000, 24); /*调用C函数，这个里面会调用lua函数*/
+    printf(&quot;The sum is %d \n&quot;,sum);
+
+    lua_close(L); /*清除Lua*/
+    return 0;
+}
+</code></pre>
+<p>注意包含头文件，并确保头文件所在目录包含在环境变量 <code>$PATH</code> 中，否则编译会出错。</p>
+<p>下面进行编译，编译的时候一定要链接好对应的库，否则同样会编译出错。</p>
+<ul>
+<li>liblua.a (对应安装lua时安装的 liblua.a 静态库)。</li>
+<li>libm.so</li>
+<li>libdl.so</li>
+</ul>
+<pre><code class="bash">$ gcc test.c -o test -llua -lm -ldl
+$ ./test
+The sum is 1024
+</code></pre>
+<p>如果不添加 <code>-llua</code>, 会提示以下错误。</p>
+<pre><code class="bash">/usr/bin/ld: /tmp/ccQVKqF9.o: in function `luaadd&#39;:
+test.c:(.text+0x24): undefined reference to `lua_getglobal&#39;
+/usr/bin/ld: test.c:(.text+0x38): undefined reference to `lua_pushnumber&#39;
+/usr/bin/ld: test.c:(.text+0x4c): undefined reference to `lua_pushnumber&#39;
+/usr/bin/ld: test.c:(.text+0x70): undefined reference to `lua_callk&#39;
+/usr/bin/ld: test.c:(.text+0x89): undefined reference to `lua_tonumberx&#39;
+/usr/bin/ld: test.c:(.text+0xa4): undefined reference to `lua_settop&#39;
+/usr/bin/ld: /tmp/ccQVKqF9.o: in function `main&#39;:
+test.c:(.text+0xc1): undefined reference to `luaL_newstate&#39;
+/usr/bin/ld: test.c:(.text+0xd7): undefined reference to `luaL_openlibs&#39;
+/usr/bin/ld: test.c:(.text+0xf2): undefined reference to `luaL_loadfilex&#39;
+/usr/bin/ld: test.c:(.text+0x120): undefined reference to `lua_pcallk&#39;
+/usr/bin/ld: test.c:(.text+0x159): undefined reference to `lua_close&#39;
+collect2: error: ld returned 1 exit status
+</code></pre>
+<p>如果不添加 <code>-lm</code>, 会提示以下错误。</p>
+<pre><code class="bash">/usr/bin/ld: /usr/local/lib/liblua.a(lobject.o): in function `numarith.isra.0&#39;:
+lobject.c:(.text+0x1fb): undefined reference to `fmod&#39;
+/usr/bin/ld: lobject.c:(.text+0x221): undefined reference to `pow&#39;
+/usr/bin/ld: /usr/local/lib/liblua.a(lvm.o): in function `luaV_execute&#39;:
+lvm.c:(.text+0x2145): undefined reference to `pow&#39;
+/usr/bin/ld: lvm.c:(.text+0x24e0): undefined reference to `fmod&#39;
+/usr/bin/ld: /usr/local/lib/liblua.a(lmathlib.o): in function `math_log10&#39;:
+lmathlib.c:(.text+0xa3): undefined reference to `log10&#39;
+/usr/bin/ld: /usr/local/lib/liblua.a(lmathlib.o): in function `math_pow&#39;:
+lmathlib.c:(.text+0x1b8): undefined reference to `pow&#39;
+/usr/bin/ld: /usr/local/lib/liblua.a(lmathlib.o): in function `math_tanh&#39;:
+lmathlib.c:(.text+0x1e3): undefined reference to `tanh&#39;
+/usr/bin/ld: /usr/local/lib/liblua.a(lmathlib.o): in function `math_sinh&#39;:
+lmathlib.c:(.text+0x213): undefined reference to `sinh&#39;
+/usr/bin/ld: /usr/local/lib/liblua.a(lmathlib.o): in function `math_cosh&#39;:
+lmathlib.c:(.text+0x243): undefined reference to `cosh&#39;
+/usr/bin/ld: /usr/local/lib/liblua.a(lmathlib.o): in function `math_tan&#39;:
+lmathlib.c:(.text+0x273): undefined reference to `tan&#39;
+/usr/bin/ld: /usr/local/lib/liblua.a(lmathlib.o): in function `math_sqrt&#39;:
+lmathlib.c:(.text+0x2d6): undefined reference to `sqrt&#39;
+/usr/bin/ld: /usr/local/lib/liblua.a(lmathlib.o): in function `math_sin&#39;:
+lmathlib.c:(.text+0x303): undefined reference to `sin&#39;
+/usr/bin/ld: /usr/local/lib/liblua.a(lmathlib.o): in function `math_log&#39;:
+lmathlib.c:(.text+0x649): undefined reference to `log10&#39;
+/usr/bin/ld: lmathlib.c:(.text+0x656): undefined reference to `log&#39;
+/usr/bin/ld: lmathlib.c:(.text+0x678): undefined reference to `log2&#39;
+/usr/bin/ld: lmathlib.c:(.text+0x68c): undefined reference to `log&#39;
+/usr/bin/ld: lmathlib.c:(.text+0x6a0): undefined reference to `log&#39;
+/usr/bin/ld: /usr/local/lib/liblua.a(lmathlib.o): in function `math_exp&#39;:
+lmathlib.c:(.text+0x723): undefined reference to `exp&#39;
+/usr/bin/ld: /usr/local/lib/liblua.a(lmathlib.o): in function `math_cos&#39;:
+lmathlib.c:(.text+0x753): undefined reference to `cos&#39;
+/usr/bin/ld: /usr/local/lib/liblua.a(lmathlib.o): in function `math_atan&#39;:
+lmathlib.c:(.text+0x7b0): undefined reference to `atan2&#39;
+/usr/bin/ld: /usr/local/lib/liblua.a(lmathlib.o): in function `math_asin&#39;:
+lmathlib.c:(.text+0x7e3): undefined reference to `asin&#39;
+/usr/bin/ld: /usr/local/lib/liblua.a(lmathlib.o): in function `math_acos&#39;:
+lmathlib.c:(.text+0x813): undefined reference to `acos&#39;
+/usr/bin/ld: /usr/local/lib/liblua.a(lmathlib.o): in function `math_fmod&#39;:
+lmathlib.c:(.text+0xca3): undefined reference to `fmod&#39;
+collect2: error: ld returned 1 exit status
+</code></pre>
+<p>如果不添加 <code>-ldl</code>, 会提示以下错误。</p>
+<pre><code class="bash">/usr/bin/ld: /usr/local/lib/liblua.a(loadlib.o): in function `lookforfunc&#39;:
+loadlib.c:(.text+0x565): undefined reference to `dlsym&#39;
+/usr/bin/ld: loadlib.c:(.text+0x5c6): undefined reference to `dlopen&#39;
+/usr/bin/ld: loadlib.c:(.text+0x649): undefined reference to `dlerror&#39;
+/usr/bin/ld: loadlib.c:(.text+0x671): undefined reference to `dlerror&#39;
+/usr/bin/ld: /usr/local/lib/liblua.a(loadlib.o): in function `gctm&#39;:
+loadlib.c:(.text+0x831): undefined reference to `dlclose&#39;
+collect2: error: ld returned 1 exit status
+</code></pre>
+<p>所以编译时要根据错误提示添加指定的库。</p>
+<h3 id="Lua-调用-C-函数"><a href="#Lua-调用-C-函数" class="headerlink" title="Lua 调用 C 函数"></a>Lua 调用 C 函数</h3><p>要在 Lua 中调用 C 函数，主要有以下两种方式。</p>
+<ol>
+<li>C 中注册函数给 Lua</li>
+<li>C 编译出动态链接库，在 Lua 中使用 require</li>
+</ol>
+<p>先来看看注册函数的方式。</p>
+<pre><code class="c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &lt;lua.h&gt;
+#include &lt;lualib.h&gt;
+#include &lt;lauxlib.h&gt;
+
+static int lua_SayHello(lua_State *L)
+{
+    const char *d = luaL_checkstring(L, 1); /* 获取参数，字符串类型 */
+    char str[100] = &quot;hello &quot;;
+
+    strcat(str, d);
+    lua_pushstring(L, str); /* 返回给lua的值压栈 */
+
+    return 1; /* 返回值个数 */
+}
+
+int main(int argc, char *argv[])
+{
+    lua_State *L = luaL_newstate(); /* 创建lua状态机 */
+    luaL_openlibs(L); 
+
+    lua_register(L, &quot;SayHello&quot;, lua_SayHello); /*注册C函数到lua */
+
+    const char* testfunc = &quot;print(SayHello(&#39;world&#39;))&quot;; /*lua中调用c函数 */
+    if(luaL_dostring(L, testfunc)) /* 执行Lua命令。*/
+        printf(&quot;Failed to invoke.\n&quot;);
+
+    lua_close(L); /*清除Lua*/
+    return 0;
+}
+</code></pre>
+<p>这里虽然没有看到脚本，但实际上也是用lua的语法写的指令 <code>print(SayHello(&#39;world&#39;))</code>, 然后通过 <code>luaL_dostring</code>函数执行 lua 指令。</p>
+<blockquote>
+<p>需要注意的是，注册的函数 <code>l_SayHello</code> return 的是返回值个数，这里1代表只有一个返回值，也就是压栈的字符串。</p>
+</blockquote>
+<p>接下来看另外一种，通过动态链接库的方式调用C函数。</p>
+<pre><code class="bash">/* mylualib.c
+ * use to compile mylualib.so */
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &lt;lua.h&gt;
+#include &lt;lauxlib.h&gt;
+#include &lt;lualib.h&gt;
+
+static int add(lua_State* L) 
+{
+    double op1 = luaL_checknumber(L,1);
+    double op2 = luaL_checknumber(L,2);
+    lua_pushnumber(L,op1 + op2);
+    return 1;
+}
+
+static int sub(lua_State* L)
+{
+    double op1 = luaL_checknumber(L,1);
+    double op2 = luaL_checknumber(L,2);
+    lua_pushnumber(L,op1 - op2);
+    return 1;
+}
+
+/* 第一个字段用于Lua调用，第二个字段为C的函数指针
+ * 结构体数组中的最后一个元素的两个字段均为NULL，用于提示Lua注册函数已经到达数组的末尾。*/
+static const struct luaL_Reg mylibs[] = { 
+    {&quot;add&quot;, add},
+    {&quot;sub&quot;, sub},
+    {NULL, NULL} 
+}; 
+
+/* 函数名必须为luaopen_xxx，xxx表示lib名称。Lua代码 require &quot;xxx&quot;需要与之对应。*/
+extern int luaopen_mylualib(lua_State* L) 
+{
+    luaL_newlib(L, mylibs);
+    return 1;
+}
+</code></pre>
+<p>以上注册了简单加法运算函数，编写后编译成动态链接库。</p>
+<pre><code class="bash">gcc mylualib.c -shared -fPIC -o mylualib.so
+</code></pre>
+<blockquote>
+<p>这里要注意的是，编译以上动态链接库需要 <code>liblua.so</code> , 但是默认编译安装lua的时候只会生成静态库 liblua.a, 并不会生成这个文件，所以需要修改lua的 Makefile，添加 liblua.so 相关配置，最后重新编译安装lua。</p>
+</blockquote>
+<p>然后写个简单的lua脚本 <code>my.lua</code>.</p>
+<pre><code class="lua">-- my.lua
+local mylib = require &quot;mylualib&quot;
+
+print(mylib.add(12,33))
+print(mylib.sub(33,22))
+</code></pre>
+<p>执行下看看效果。</p>
+<pre><code class="bash">$ lua my.lua
+45.0
+11.0
+</code></pre>
+<p>完美执行。</p>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><p>最后来看个Lua的示例程序。</p>
+<h3 id="getopt"><a href="#getopt" class="headerlink" title="getopt"></a>getopt</h3><p>Lua 没有官方的getopt库，但是 GitHub 上有很多库用于替代它的自定义库。比如下面这个，是相对更符合shell习惯的。</p>
+<pre><code class="lua">--- /*@from: https://github.com/skeeto/getopt-lua
+--- getopt(3)-like functionality for Lua 5.1 and later
+-- This is free and unencumbered software released into the public domain.
+
+--- getopt(argv, optstring [, nonoptions])
+--
+-- Returns a closure suitable for &quot;for ... in&quot; loops. On each call the
+-- closure returns the next (option, optarg). For unknown options, it
+-- returns (&#39;?&#39;, option). When a required optarg is missing, it returns
+-- (&#39;:&#39;, option). It is reasonable to continue parsing after errors.
+-- Returns nil when done.
+--
+-- The optstring follows the same format as POSIX getopt(3). However,
+-- this function will never print output on its own.
+--
+-- Non-option arguments are accumulated, in order, in the optional
+-- &quot;nonoptions&quot; table. If a &quot;--&quot; argument is encountered, appends the
+-- remaining arguments to the nonoptions table and returns nil.
+--
+-- The input argv table is left unmodified.*/
+
+local function getopt(argv, optstring, nonoptions)
+    local optind = 1
+    local optpos = 2
+    nonoptions = nonoptions or {}
+    return function()
+        while true do
+            local arg = argv[optind]
+            if arg == nil then
+                return nil
+            elseif arg == &#39;--&#39; then
+                for i = optind + 1, #argv do
+                    table.insert(nonoptions, argv[i])
+                end
+                return nil
+            elseif arg:sub(1, 1) == &#39;-&#39; then
+                local opt = arg:sub(optpos, optpos)
+                local start, stop = optstring:find(opt .. &#39;:?&#39;)
+                if not start then
+                    optind = optind + 1
+                    optpos = 2
+                    return &#39;?&#39;, opt
+                elseif stop &gt; start and #arg &gt; optpos then
+                    local optarg = arg:sub(optpos + 1)
+                    optind = optind + 1
+                    optpos = 2
+                    return opt, optarg
+                elseif stop &gt; start then
+                    local optarg = argv[optind + 1]
+                    optind = optind + 2
+                    optpos = 2
+                    if optarg == nil then
+                        return &#39;:&#39;, opt
+                    end
+                    return opt, optarg
+                else
+                    optpos = optpos + 1
+                    if optpos &gt; #arg then
+                        optind = optind + 1
+                        optpos = 2
+                    end
+                    return opt, nil
+                end
+            else
+                optind = optind + 1
+                table.insert(nonoptions, arg)
+            end
+        end
+    end
+end
+
+return getopt
+
+--[[ /*Examples:
+getopt = require(&#39;getopt&#39;)
+
+local append = false
+local binary = false
+local color = &#39;white&#39;
+local nonoptions = {}
+local infile = io.input()
+
+for opt, arg in getopt(arg, &#39;abc:h&#39;, nonoptions) do
+    if opt == &#39;a&#39; then
+        append = true
+    elseif opt == &#39;b&#39; then
+        binary = true
+    elseif opt == &#39;c&#39; then
+        color = arg
+    elseif opt == &#39;h&#39; then
+        usage()
+        os.exit(0)
+    elseif opt == &#39;?&#39; then
+        print(&#39;error: unknown option: &#39; .. arg)
+        os.exit(1)
+    elseif opt == &#39;:&#39; then
+        print(&#39;error: missing argument: &#39; .. arg)
+        os.exit(1)
+    end
+end
+
+if #nonoptions == 1 then
+    infile = io.open(nonoptions[1], &#39;r&#39;)
+elseif #nonoptions &gt; 1 then
+    print(&#39;error: wrong number of arguments: &#39; .. #nonoptions)
+    os.exit(1)
+end
+*/]]
+</code></pre>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://blog.csdn.net/maximuszhou/article/details/44280109" target="_blank" rel="noopener">深入理解Lua的闭包一：概念、应用和实现原理</a></li>
+<li><a href="https://www.runoob.com/lua/lua-iterators.html" target="_blank" rel="noopener">Lua 迭代器</a></li>
+<li><a href="https://www.runoob.com/lua/lua-error-handling.html" target="_blank" rel="noopener">Lua 错误处理</a></li>
+<li><a href="https://www.jb51.net/article/132851.htm" target="_blank" rel="noopener">C语言与Lua之间的相互调用详解</a></li>
+<li><a href="https://www.cnblogs.com/sifenkesi/p/3876745.html" target="_blank" rel="noopener">Lua中调用C函数</a></li>
+</ul>
+]]></content>
+      
+        <categories>
+            
+            <category> Language </category>
+            
+            <category> Lua </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> lua </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[lua 基本语法]]></title>
       <url>https://www.litreily.top/2020/12/24/lua-basic/</url>
       <content type="html"><![CDATA[<h2 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h2><h3 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h3><pre><code class="lua">-- single line comment
@@ -320,6 +3554,9 @@ make generic
 make install
 </code></pre>
 <p>默认安装目录是<code>/usr/local</code>, 如果没有root权限，需要修改Makefile，将其改为指定目录(~/bin/local)，上面通过sed修改。</p>
+<p>值得注意的是，Lua 如果按 make linux 编译，会要求支持readline，所以需要先安装依赖 <code>libreadline-dev</code></p>
+<pre><code class="bash">sudo apt-get install libreadline-dev
+</code></pre>
 <h2 id="执行"><a href="#执行" class="headerlink" title="执行"></a>执行</h2><p>lua与Python类似，也是脚本型语言，同时也可以直接在shell中边解释边执行。</p>
 <pre><code class="lua">$ lua
 &gt; print(&quot;hello world!&quot;)
@@ -4214,8 +7451,7 @@ CPU: 2 PID: 9465 Comm: swconfig Tainted: P        W    3.14.77 #1
 <pre><code class="txt">[Thu Sep 26 09:21:59.734 2019] Watchdog bark! Now = 831425.568038
 [Thu Sep 26 09:21:59.734 2019] Causing a watchdog bite!
 [Thu Sep 26 09:21:59.734 2019] Configuring Watchdog Timer
-[Thu Sep 26 09:21:59.734 2019] Wa
-</code></pre>
+[Thu Sep 26 09:21:59.734 2019] Wa</code></pre>
 <p>但是无法确定根本原因是什么，是什么导致的死锁，让watchdog没办法在规定时间内bark。为此，我们需要启用相关的内核调试手段去获取相关信息，然后深入分析crashdump和console log。</p>
 <h2 id="内核裁剪"><a href="#内核裁剪" class="headerlink" title="内核裁剪"></a>内核裁剪</h2><h3 id="启用ftrace"><a href="#启用ftrace" class="headerlink" title="启用ftrace"></a>启用ftrace</h3><blockquote>
 <p><strong>Ftrace</strong> is an internal tracer designed to help out developers and designers of systems to find what is going on inside the kernel. It can be used for debugging or analyzing latencies and performance issues that take place outside of user-space.</p>
@@ -4252,8 +7488,7 @@ CPU: 2 PID: 9465 Comm: swconfig Tainted: P        W    3.14.77 #1
 +# CONFIG_KERNEL_FUNCTION_PROFILER is not set
  # CONFIG_KERNEL_IRQSOFF_TRACER is not set
  # CONFIG_KERNEL_PREEMPT_TRACER is not set
- CONFIG_KERNEL_DEBUG_KERNEL=y
-</code></pre>
+ CONFIG_KERNEL_DEBUG_KERNEL=y</code></pre>
 <p>但是在<code>openWrt</code>中使用<code>make kernel_menuconfig</code>会打乱原有的配置选项，所以需要手动修改配置文件</p>
 <pre><code class="patch">@@ -3301,8 +3304,26 @@ CONFIG_HAVE_FTRACE_MCOUNT_RECORD=y
  CONFIG_HAVE_SYSCALL_TRACEPOINTS=y
@@ -4283,8 +7518,7 @@ CPU: 2 PID: 9465 Comm: swconfig Tainted: P        W    3.14.77 #1
 +#
  #
  # Runtime Testing
- #
-</code></pre>
+ #</code></pre>
 <p>对应的图形化配置如下：</p>
 <p><img src="/assets/kernel/kernel_menuconfig_ftrace.png" alt="kernel_menuconfig ftrace"></p>
 <h3 id="启用lockup-debug"><a href="#启用lockup-debug" class="headerlink" title="启用lockup debug"></a>启用lockup debug</h3><p>为了打印出现死锁后的相关信息，需要打开相应的配置参数</p>
@@ -4338,8 +7572,7 @@ CPU: 2 PID: 9465 Comm: swconfig Tainted: P        W    3.14.77 #1
  # CONFIG_DEBUG_NOTIFIERS is not set
  # CONFIG_DEBUG_CREDENTIALS is not set
 +CONFIG_DEBUG_LOCKDEP=y
-+# CONFIG_PROVE_RCU is not set
-</code></pre>
++# CONFIG_PROVE_RCU is not set</code></pre>
 <p>其中有些看似不相干的config（如<code>CONFIG_PROVE_RCU</code>）被设置成了<code>is not set</code>，这是和某些lockup配置相关的依赖关系决定的，如果没有显式设置的话，每次编译都会让你手动选择是否启用。如果使用下面的图形化界面配置就不需要手动添加了，因为它会自动处理各种依赖关系。</p>
 <p><img src="/assets/kernel/kernel_menuconfig_lockup.png" alt="kernel_menuconfig lockup"></p>
 <h3 id="移除未使用的内核模块"><a href="#移除未使用的内核模块" class="headerlink" title="移除未使用的内核模块"></a>移除未使用的内核模块</h3><p>由于启用了大量的调试信息，开机启动无线模块时会提示内存不足的情况，从而导致无线模块无法工作。</p>
@@ -4358,8 +7591,7 @@ ath_spectral: driver unloaded
 ath_dfs: driver unloaded
 phy for wifi device wifi0 not found
 wifi0(qcawifi): enable failed
-qcawifi: enable radio wifi1
-</code></pre>
+qcawifi: enable radio wifi1</code></pre>
 <p>为此可以将部分未使用的内核模块移除。</p>
 <ol>
 <li>Bluetooth driver</li>
@@ -4375,8 +7607,7 @@ qcawifi: enable radio wifi1
 └── src
     ├── dead.c
     ├── Kconfig
-    └── Makefile
-</code></pre>
+    └── Makefile</code></pre>
 <h3 id="Makefile"><a href="#Makefile" class="headerlink" title="Makefile"></a>Makefile</h3><p>模块根目录的Makefile仿其它内核模块(<code>kmod-urlblock</code>)编写</p>
 <pre><code class="Makefile">include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
@@ -4414,8 +7645,7 @@ define KernelPackage/dead/install
     $(INSTALL_DIR) $(1)/lib/network/
 endef
 
-$(eval $(call KernelPackage,dead))
-</code></pre>
+$(eval $(call KernelPackage,dead))</code></pre>
 <p>Makefile中将<code>AUTOLOAD</code>所在行注释掉是为了禁止模块自动加载，导致系统刚刚启动就crash，然后无限重启。</p>
 <h3 id="src-dead-c"><a href="#src-dead-c" class="headerlink" title="src/dead.c"></a>src/dead.c</h3><pre><code class="c">#include &lt;linux/kernel.h&gt;
 #include &lt;linux/init.h&gt;
@@ -4426,14 +7656,14 @@ $(eval $(call KernelPackage,dead))
 static DEFINE_SPINLOCK(test_lock);
 
 static int process_test(void *info)
-{
+&amp;#123;
     spin_lock(&amp;test_lock);
     while(1);
     return 0;
-}
+&amp;#125;
 
 static int __init init_3mb_alloc(void)
-{
+&amp;#123;
     struct task_struct *p1, *p2, *p3, *p4;
     printk(&quot;MODULE\tINITIALIZED\n&quot;);
 
@@ -4455,19 +7685,18 @@ static int __init init_3mb_alloc(void)
     wake_up_process(p4);
 
     return 0;
-}
+&amp;#125;
 
 static void __exit exit_3mb_alloc(void)
-{
+&amp;#123;
     printk(&quot;MODULE\tTERMINATED\n&quot;);
-}
+&amp;#125;
 
 module_init(init_3mb_alloc);
 module_exit(exit_3mb_alloc);
 
 MODULE_LICENSE(&quot;GPL&quot;);
-MODULE_AUTHOR(&quot;QUALCOMM&quot;);
-</code></pre>
+MODULE_AUTHOR(&quot;QUALCOMM&quot;);</code></pre>
 <h3 id="src-Makefile"><a href="#src-Makefile" class="headerlink" title="src/Makefile"></a>src/Makefile</h3><pre><code class="Makefile"># This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version
@@ -4478,27 +7707,24 @@ obj-m := dead.o
 ifeq ($(MAKING_MODULES),1)
 
 -include $(TOPDIR)/Rules.make
-endif
-</code></pre>
+endif</code></pre>
 <h3 id="src-Kconfig"><a href="#src-Kconfig" class="headerlink" title="src/Kconfig"></a>src/Kconfig</h3><pre><code class="yml">config DEAD
     tristate &quot;This is a Module_DEAD&quot;
     default y
     help
         This is a dead module, for debugging kernel crash.
-        If unsure, say N.
-</code></pre>
+        If unsure, say N.</code></pre>
 <h2 id="打印watchdog-ping相关log"><a href="#打印watchdog-ping相关log" class="headerlink" title="打印watchdog ping相关log"></a>打印watchdog ping相关log</h2><p>编辑以下文件，在watchdog执行ping操作时打印log</p>
 <p>build_dir/target-arm_cortex-a7_uClibc-1.0.14_eabi/linux-ipq806x/linux-3.14.77/drivers/watchdog/qcom-wdt.c</p>
 <pre><code class="c">static int qcom_wdt_ping(struct watchdog_device *wdd)
-{
+&amp;#123;
     struct qcom_wdt *wdt = to_qcom_wdt(wdd);
 
     printk(&quot;********************qcom-wdt-ping1*****************\n&quot;);
     writel(1, wdt-&gt;wdt_reset);
     printk(&quot;********************qcom-wdt-ping2*****************\n&quot;);
     return 0;
-}
-</code></pre>
+&amp;#125;</code></pre>
 <p>以上<code>printk</code>部分就是打印的log。据此可以生成kernel patch如下：</p>
 <blockquote>
 <p>待修改文件：linux-3.14.77/drivers/watchdog/qcom-wdt.c<br>路径：target/linux/ipq806x/patches_dni-3.14<br>patch：0101-print-watch-ping-log.patch</p>
@@ -4506,15 +7732,14 @@ endif
 <pre><code class="patch">--- linux-3.14.77.orig/drivers/watchdog/qcom-wdt.c 2019-11-01 10:0:18.332348721 +0800
 +++ linux-3.14.77/drivers/watchdog/qcom-wdt.c 2019-11-01 09:39:58.689575974 +0800
 @@ -253,7 +253,9 @@
- {
+ &amp;#123;
      struct qcom_wdt *wdt = to_qcom_wdt(wdd);
 
 +    printk(&quot;********************qcom-wdt-ping1*****************\n&quot;);
      writel(1, wdt-&gt;wdt_reset);
 +    printk(&quot;********************qcom-wdt-ping2*****************\n&quot;);
      return 0;
- }
-</code></pre>
+ &amp;#125;</code></pre>
 <h2 id="打开DTS-debug"><a href="#打开DTS-debug" class="headerlink" title="打开DTS debug"></a>打开DTS debug</h2><p>编辑dts（Device Tree Source）的配置文件，使能<code>init_debug</code></p>
 <blockquote>
 <p>待修改文件：linux-3.14.77/arch/arm/boot/dts/qcom-ipq40xx-ap.dj04.1.dtsi<br>路径：target/linux/ipq806x/patches_dni-3.14<br>patch：0102-add-init_debug=4-in-dts.patch</p>
@@ -4522,24 +7747,21 @@ endif
 <pre><code class="patch">--- linux-3.14.77.orig/arch/arm/boot/dts/qcom-ipq4xx-ap.dk04.1.dtsi 2019-11-01 16:07:53.063327477 +0800
 +++ linux-3.14.77/arch/arm/boot/dts/qcom-ipq4xx-ap.dk04.1.dtsi 2019-11-01 14:05:33.923495413 +0800
 @@ -50,7 +50,7 @@
-+       };
++       &amp;#125;;
 +
-+       chosen {
++       chosen &amp;#123;
 +-              bootargs-append = &quot; clk_ignore_unused user_debug=0xff&quot;;
 ++              bootargs-append = &quot; clk_ignore_unused user_debug=0xff init_debug=4&quot;;
-+       };
++       &amp;#125;;
 +
-+ };
-</code></pre>
++ &amp;#125;;</code></pre>
 <p><code>init_debug</code>用于打开调试log，上面的patch对应修改的系统文件是<code>/proc/cmdline</code></p>
 <pre><code class="sh">$ cat /proc/cmdline
- rootwait clk_ignore_unused user_debug=0xff init_debug=4
-</code></pre>
+ rootwait clk_ignore_unused user_debug=0xff init_debug=4</code></pre>
 <h2 id="修改kernel-size-amp-rootfs-size"><a href="#修改kernel-size-amp-rootfs-size" class="headerlink" title="修改kernel_size &amp; rootfs_size"></a>修改kernel_size &amp; rootfs_size</h2><p>使能大量debug信息会导致kernel size增大，所以需要修正kernel size.</p>
 <h3 id="计算"><a href="#计算" class="headerlink" title="计算"></a>计算</h3><p>kernel的大小可以从以下文件获取。</p>
 <pre><code class="sh">$ ls -l bin/ipq806x/openwrt-ipq806x-qcom-ipq40xx-ap.dkxx-fit-uImage.itb
--rw-r--r-- 1 guangtao.wu guangtao.wu 4364244 Oct 31 16:06 bin/ipq806x/openwrt-ipq806x-qcom-ipq40xx-ap.dkxx-fit-uImage.itb
-</code></pre>
+-rw-r--r-- 1 guangtao.wu guangtao.wu 4364244 Oct 31 16:06 bin/ipq806x/openwrt-ipq806x-qcom-ipq40xx-ap.dkxx-fit-uImage.itb</code></pre>
 <p>由于flash需要128k对齐，所以<code>kernel size</code>需要通过以上文件大小<code>4364244</code>除以128k再取整后重新计算</p>
 <pre><code class="c">4364244 / ( 128 * 1024 ) = 33.2965
 
@@ -4547,38 +7769,33 @@ endif
 34 * 128 * 1024 = 4456448 = 0x440000
 
 # rootfs size
-0x2800000 - 0x440000 = 0x23c0000
-</code></pre>
+0x2800000 - 0x440000 = 0x23c0000</code></pre>
 <h3 id="修改dni-home-config-defconfig-orbi"><a href="#修改dni-home-config-defconfig-orbi" class="headerlink" title="修改dni_home config/defconfig-orbi"></a>修改dni_home config/defconfig-orbi</h3><pre><code class="txt">CONFIG_DGC_FW_KERNEL_SIZE=&quot;4456448&quot;
 CONFIG_DGC_FW_ROOTFS_SIZE=&quot;37486592&quot;
 CONFIG_DGC_FW_KERNEL_SIZE_CC=&quot;4456448&quot;
-CONFIG_DGC_FW_ROOTFS_SIZE_CC=&quot;37486592&quot;
-</code></pre>
+CONFIG_DGC_FW_ROOTFS_SIZE_CC=&quot;37486592&quot;</code></pre>
 <h3 id="修改kernel-patch"><a href="#修改kernel-patch" class="headerlink" title="修改kernel patch"></a>修改kernel patch</h3><p>patch: kernel/patches_dni/0012-fix-issue-after-disable-usb-rootfs-checksum-error.patch</p>
-<pre><code class="patch">      { 0x0a600000, 0x02800000, &quot;firmware&quot; },
- -    { 0x0a600000, 0x003c0000, &quot;kernel&quot; },
- -    { 0x0a9c0000, 0x02440000, &quot;rootfs&quot; },
--+    { 0x0a600000, 0x003c0000, &quot;kernel&quot; },
--+    { 0x0a9c0000, 0x02440000, &quot;rootfs&quot; },
-++    { 0x0a600000, 0x00440000, &quot;kernel&quot; },
-++    { 0x0aa40000, 0x023c0000, &quot;rootfs&quot; },
-      { 0x0ce00000, 0x03200000, &quot;reserved&quot; },
-</code></pre>
-<h2 id="watchdog相关指令"><a href="#watchdog相关指令" class="headerlink" title="watchdog相关指令"></a>watchdog相关指令</h2><h3 id="禁用watchdog的硬件重启功能"><a href="#禁用watchdog的硬件重启功能" class="headerlink" title="禁用watchdog的硬件重启功能"></a>禁用watchdog的硬件重启功能</h3><pre><code class="sh">devmem 0x0B017008 w 0x0
-</code></pre>
+<pre><code class="patch">      &amp;#123; 0x0a600000, 0x02800000, &quot;firmware&quot; &amp;#125;,
+ -    &amp;#123; 0x0a600000, 0x003c0000, &quot;kernel&quot; &amp;#125;,
+ -    &amp;#123; 0x0a9c0000, 0x02440000, &quot;rootfs&quot; &amp;#125;,
+-+    &amp;#123; 0x0a600000, 0x003c0000, &quot;kernel&quot; &amp;#125;,
+-+    &amp;#123; 0x0a9c0000, 0x02440000, &quot;rootfs&quot; &amp;#125;,
+++    &amp;#123; 0x0a600000, 0x00440000, &quot;kernel&quot; &amp;#125;,
+++    &amp;#123; 0x0aa40000, 0x023c0000, &quot;rootfs&quot; &amp;#125;,
+      &amp;#123; 0x0ce00000, 0x03200000, &quot;reserved&quot; &amp;#125;,</code></pre>
+<h2 id="watchdog相关指令"><a href="#watchdog相关指令" class="headerlink" title="watchdog相关指令"></a>watchdog相关指令</h2><h3 id="禁用watchdog的硬件重启功能"><a href="#禁用watchdog的硬件重启功能" class="headerlink" title="禁用watchdog的硬件重启功能"></a>禁用watchdog的硬件重启功能</h3><pre><code class="sh">devmem 0x0B017008 w 0x0</code></pre>
 <p>说明：禁用watchdog的硬件重启功能可以防止kernel crash后自动重启，配合ftrace及其它调试信息能方便分析问题。</p>
 <h3 id="watchdog软件控制指令"><a href="#watchdog软件控制指令" class="headerlink" title="watchdog软件控制指令"></a>watchdog软件控制指令</h3><pre><code class="sh"># To query watchdog status
 ubus call system watchdog
 
 # To stop watchdog
-ubus call system watchdog &#39;{&quot;stop&quot;: true}&#39;
+ubus call system watchdog &#39;&amp;#123;&quot;stop&quot;: true&amp;#125;&#39;
 
 # To start watchdog
-ubus call system watchdog &#39;{&quot;stop&quot;: false}&#39;
+ubus call system watchdog &#39;&amp;#123;&quot;stop&quot;: false&amp;#125;&#39;
 
 # To configure watchdog timeout as 20 seconds (default is 30 seconds)
-ubus call system watchdog &#39;{&quot;timeout&quot;: 20}&#39;
-</code></pre>
+ubus call system watchdog &#39;&amp;#123;&quot;timeout&quot;: 20&amp;#125;&#39;</code></pre>
 <p>说明：在没有禁用watchdog硬件功能时，如果使用<code>ubus</code>停止<code>watchdog</code>，系统会在设定的超时时间(默认30s)后自动重启。</p>
 <h2 id="测试脚本"><a href="#测试脚本" class="headerlink" title="测试脚本"></a>测试脚本</h2><p>启用<code>ftrace</code>调试功能除了需要修改配置文件外，还要对<code>/sys/kernel/debug/tracing/</code>目录的文件进行相关修改才能生效。下面是在测试trial FW时用到的测试脚本，用于获取必要的调试信息。</p>
 <pre><code class="sh">#!/bin/sh
@@ -4594,9 +7811,9 @@ devmem 0x0B017008 w 0x0
 ubus call system watchdog
 
 # other related commands
-#   ubus call system watchdog &#39;{&quot;stop&quot;: true}&#39;
-#   ubus call system watchdog &#39;{&quot;stop&quot;: false}&#39;
-#   ubus call system watchdog &#39;{&quot;timeout&quot;: 20}&#39;
+#   ubus call system watchdog &#39;&amp;#123;&quot;stop&quot;: true&amp;#125;&#39;
+#   ubus call system watchdog &#39;&amp;#123;&quot;stop&quot;: false&amp;#125;&#39;
+#   ubus call system watchdog &#39;&amp;#123;&quot;timeout&quot;: 20&amp;#125;&#39;
 
 #********************************************#
 # enable ftrace
@@ -4641,10 +7858,9 @@ do
     cat /proc/slabinfo
     ubus call system watchdog
     sleep 300
-done
-</code></pre>
+done</code></pre>
 <h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul>
-<li><a href="https://www.kernel.org/doc/Documentation/trace/ftrace.txt" target="_blank" rel="noopener">ftrace - Function Tracer</a></li>
+<li><a href="https://www.kernel.org/doc/Documentation/trace/ftrace.txt">ftrace - Function Tracer</a></li>
 </ul>
 <h2 id="2020-01-14-更新"><a href="#2020-01-14-更新" class="headerlink" title="2020.01.14 更新"></a>2020.01.14 更新</h2><p>在一个新项目中又出现了watchdog bite导致系统重启的问题，而且重现概率很高，所以又开始了新一轮的debug</p>
 <h3 id="重现步骤"><a href="#重现步骤" class="headerlink" title="重现步骤"></a>重现步骤</h3><p>根据SQA提供的重现步骤，经过多次测试后简化如下，按此步骤可以100%重现问题</p>
@@ -4658,11 +7874,10 @@ done
 <p>除了第一次重现时需要执行<code>step1~4</code>外，之后重新烧录FW都只需执行第5步</p>
 <h3 id="debug"><a href="#debug" class="headerlink" title="debug"></a>debug</h3><h4 id="enable-lockup"><a href="#enable-lockup" class="headerlink" title="enable lockup"></a>enable lockup</h4><p>在情况并不明朗的情况下，仅仅根据以下两行log根本无法判断问题所在</p>
 <pre><code class="log">Causing a watchdog bite!
-Configuring Watchdog Timer
-</code></pre>
+Configuring Watchdog Timer</code></pre>
 <p>所以先假设可能是某些进程死锁导致的，启用内核的<code>lockup debugging</code>功能，启用方式与上述一致</p>
 <p>启用后，除了boot阶段打印了大量log外，watchdog问题出现时并无任何lockup log出现，所以进入下一步</p>
-<h3 id="print-watchdog-ping-log"><a href="#print-watchdog-ping-log" class="headerlink" title="print watchdog ping log"></a>print watchdog ping log</h3><p>watchdog的工作流程大致是：procd定时发送一个ping包给内核，内核的watchdog驱动接收到ping后喂给硬件watchdog</p>
+<h4 id="print-watchdog-ping-log"><a href="#print-watchdog-ping-log" class="headerlink" title="print watchdog ping log"></a>print watchdog ping log</h4><p>watchdog的工作流程大致是：procd定时发送一个ping包给内核，内核的watchdog驱动接收到ping后喂给硬件watchdog</p>
 <p>为了确认是user space的问题还是kernel space的问题，我们需要print两个space的ping信息，相关patch也和上述的一致，只不过在procd中需要另外添加一个patch</p>
 <pre><code class="patch">+--- procd.old/watchdog.c    2020-01-13 16:03:08.671893208 +0800
 ++++ procd/watchdog.c    2020-01-13 16:06:32.966771640 +0800
@@ -4673,7 +7888,7 @@ Configuring Watchdog Timer
 ++void __nprintf(const char *fmt, ...);
 ++/* use this &#39;__nprintf&#39; to print message */
 ++void __nprintf(const char *fmt, ...)
-++{
+++&amp;#123;
 ++    va_list ap;
 ++    static FILE *filp;
 ++
@@ -4684,16 +7899,15 @@ Configuring Watchdog Timer
 ++    vfprintf(filp, fmt, ap);
 ++    fputs(&quot;\n&quot;, filp);
 ++    va_end(ap);
-++}
+++&amp;#125;
 ++
 + void watchdog_ping(void)
-+ {
++ &amp;#123;
 +     DEBUG(4, &quot;Ping\n&quot;);
 ++    __nprintf(&quot;[%s:%d] Ping\n&quot;, __func__, __LINE__);
 +     if (wdt_fd &gt;= 0 &amp;&amp; write(wdt_fd, &quot;X&quot;, 1) &lt; 0)
 +         ERROR(&quot;WDT failed to write: %s\n&quot;, strerror(errno));
-+ }
-</code></pre>
++ &amp;#125;</code></pre>
 <p>再次重现可以看到以下console log</p>
 <pre><code class="log">124809:[Mon Jan 13 18:12:48.754 2020] [watchdog_ping:54] Ping
 124810:[Mon Jan 13 18:12:48.754 2020] *************qcom-wdt-ping1*******************
@@ -4703,22 +7917,19 @@ Configuring Watchdog Timer
 124816:[Mon Jan 13 18:12:53.766 2020] **************qcom-wdt-ping2*******************
 124820:[Mon Jan 13 18:12:55.021 2020] cat: can&#39;t open &#39;/tmp/gl_task_name&#39;: No such file or directory
 124821:[Mon Jan 13 18:12:55.021 2020] cat: can&#39;t open &#39;/var/log/block-site-messages&#39;: No such file or directory
-124880:[Mon Jan 13 18:13:53.391 2020] Causing a watchdog bite!
-</code></pre>
+124880:[Mon Jan 13 18:13:53.391 2020] Causing a watchdog bite!</code></pre>
 <p>可以看出，在刷新block site页面后，console不再打印watchdog log，可以判断是user space出了问题，也就是<code>procd</code>。</p>
 <p>在刷新block site页面时，内核模块会发送信号告知<code>procd</code>（这个是组长告知的，重要信息！），结合log中显示的两个不存在的文件，可以找到相应的执行脚本<code>send_email_alert</code>。procd在接收信号后会通过<code>system</code>函数调用脚本，进而通过ssmtp发送邮件。</p>
 <p>此时为了确定脚本执行过程中发生了什么异常，我加了许多log，然后定位到<code>ssmtp</code>执行时间过长，为此，到了接下来的最后一步。</p>
 <h4 id="strace-ssmtp"><a href="#strace-ssmtp" class="headerlink" title="strace ssmtp"></a>strace ssmtp</h4><p>修改脚本<code>send_email_alert</code>，在执行ssmtp前添加<code>strace</code>，追踪代码执行过程。</p>
 <pre><code class="log">[Tue Jan 14 16:08:44.046 2020] socket(PF_INET, SOCK_STREAM, IPPROTO_TCP) = 5
-[Tue Jan 14 16:08:44.046 2020] connect(5, {sa_family=AF_INET, sin_port=htons(25), sin_addr=inet_addr(&quot;139.175.54.240&quot;)}, 16
-</code></pre>
+[Tue Jan 14 16:08:44.046 2020] connect(5, &amp;#123;sa_family=AF_INET, sin_port=htons(25), sin_addr=inet_addr(&quot;139.175.54.240&quot;)&amp;#125;, 16</code></pre>
 <p>可以发现进程卡死在connect部分，最终分析出访问gmail时连接超时，导致procd hang住，无法正常发送watchdog ping，进而引发reboot。</p>
 <h3 id="Root-Cause"><a href="#Root-Cause" class="headerlink" title="Root Cause"></a>Root Cause</h3><p>在启用block site功能和send_email_alert功能后，访问一个被路由器block的网站，此时内核模块会向procd进程发送一个信号，procd接收信号后会后通过<code>system</code>函数执行一个发送邮件的指令，但是当发送的对象是gmail时，由于中国网络无法直接访问google，导致长时间无法连接，最终导致procd hang住，并且无法发送watchdog ping，最终导致watchdog等待超时进而重启设备。</p>
 <p>简言之：<strong>邮件发送超时导致procd hang住</strong></p>
 <h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>最简单的方法是，在调用<code>system</code>函数时，让指令在后台执行↓</p>
 <pre><code class="patch">-   system(&quot;/etc/email/send_email_alert&quot;);
-+   system(&quot;/etc/email/send_email_alert &amp;&quot;);
-</code></pre>
++   system(&quot;/etc/email/send_email_alert &amp;&quot;);</code></pre>
 <p>当然，或许有其它更好的解决方案，比如不要让内核模块直接发信号给procd，毕竟procd作为pid为1的特殊进程，不适合处理太多琐碎的事务。可以让内核模块给email相关的daemon进程单独发信号，但改动会多很多。就目前而言，使用后台执行指令的方法是简单而有效的。</p>
 <p>OK，这个问题总算完结了，撒花✿✿ヽ(°▽°)ノ✿~</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
@@ -12953,9 +16164,9 @@ n(u) = n(u)+1;
         
         <tags>
             
-            <tag> signal </tag>
-            
             <tag> matlab </tag>
+            
+            <tag> signal </tag>
             
             <tag> algorithm </tag>
             
@@ -13360,9 +16571,9 @@ unsigned char canFreeData : 布尔变量，确定能否释放数据内存
         
         <tags>
             
-            <tag> labview </tag>
-            
             <tag> matlab </tag>
+            
+            <tag> labview </tag>
             
             <tag> VS </tag>
             
@@ -13456,9 +16667,9 @@ end
         
         <tags>
             
-            <tag> signal </tag>
-            
             <tag> matlab </tag>
+            
+            <tag> signal </tag>
             
         </tags>
         
@@ -15344,11 +18555,11 @@ Categories=Development;IDE;Java;
         
         <tags>
             
-            <tag> atom </tag>
-            
             <tag> ubuntu </tag>
             
             <tag> linux </tag>
+            
+            <tag> atom </tag>
             
         </tags>
         

@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2020-12-23T10:29:10.979Z</updated>
+  <updated>2021-02-04T12:24:50.834Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -17,11 +17,225 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>下载安装基于 openwrt 的 QSDK</title>
+    <link href="https://www.litreily.top/2021/01/29/qsdk/"/>
+    <id>https://www.litreily.top/2021/01/29/qsdk/</id>
+    <published>2021-01-29T09:29:56.000Z</published>
+    <updated>2021-02-04T12:24:50.834Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;&lt;code&gt;QSDK&lt;/code&gt; - QCA Software Development Kits, 基于 openwrt 加入了 QCA 相关的代码库，可以用于使用 qualcomm 芯片的路由器固件开发。本文讲述如何获取 QSDK.&lt;/p&gt;
+&lt;p&gt;我们通常会使用 &lt;code&gt;git clone&lt;/code&gt; 获取开源项目的代码，比如 github, gitlab, coding 等平台，但是 &lt;code&gt;QSDK&lt;/code&gt; 并不存放于这些平台，而是有它自己的维护站点，并且需要通过 &lt;code&gt;repo&lt;/code&gt; 和 &lt;code&gt;git&lt;/code&gt; 共同完成仓库文件的 &lt;code&gt;clone&lt;/code&gt;, 下面来看看吧。&lt;/p&gt;
+&lt;h2 id=&quot;install-repo&quot;&gt;&lt;a href=&quot;#install-repo&quot; class=&quot;headerlink&quot; title=&quot;install repo&quot;&gt;&lt;/a&gt;install repo&lt;/h2&gt;&lt;p&gt;首先来安装 &lt;code&gt;repo&lt;/code&gt; 工具，这其实是个 &lt;code&gt;Python&lt;/code&gt; 脚本.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;curl https://storage.googleapis.com/git-repo-downloads/repo -o repo
+chmod +x
+      
+    
+    </summary>
+    
+      <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
+    
+    
+      <category term="openwrt" scheme="https://www.litreily.top/tags/openwrt/"/>
+    
+      <category term="qsdk" scheme="https://www.litreily.top/tags/qsdk/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>openwrt Makefile scan.mk 详解</title>
+    <link href="https://www.litreily.top/2021/01/15/mk-scan/"/>
+    <id>https://www.litreily.top/2021/01/15/mk-scan/</id>
+    <published>2021-01-15T08:22:51.000Z</published>
+    <updated>2021-02-04T12:24:50.829Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;&lt;code&gt;openwrt&lt;/code&gt; 中的 &lt;code&gt;include/scan.mk&lt;/code&gt; 用于扫描项目 &lt;code&gt;package&lt;/code&gt;, &lt;code&gt;target&lt;/code&gt; 目录信息，并将扫描结果存入 &lt;code&gt;tmp&lt;/code&gt; 目录。这个扫描过程几乎是 openwrt 所有目标生成的前提。也就是说，无论使用 &lt;code&gt;make&lt;/code&gt; 编译 &lt;code&gt;openwrt&lt;/code&gt; 哪个部分的代码，都会通过 &lt;code&gt;scan.mk&lt;/code&gt; 生成必要的临时文件，这是编译其它目录的大前提。&lt;/p&gt;
+&lt;p&gt;举例说明，我们指定编译某个 &lt;code&gt;package&lt;/code&gt; 时，如 &lt;code&gt;package/utils/demo&lt;/code&gt;，&lt;code&gt;make&lt;/code&gt; 根据层层 &lt;code&gt;Makefile&lt;/code&gt; 会去寻找该 &lt;code&gt;package&lt;/code&gt; 的路径，而这个路径信息就是通过 &lt;code&gt;scan.mk&lt;/code&gt; 扫描后存入了 &lt;code&gt;tmp&lt;/code&gt; 目录。这样有什么好处呢? 我完全可以手动执行 &lt;code&gt;make package/utils/demo/compile&lt;/code&gt; 不是吗？&lt;/p&gt;
+&lt;p&gt;的确如此，但是我们不可能每次都去写长串的路径，通过 &lt;code&gt;
+      
+    
+    </summary>
+    
+      <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
+    
+    
+      <category term="makefile" scheme="https://www.litreily.top/tags/makefile/"/>
+    
+      <category term="openwrt" scheme="https://www.litreily.top/tags/openwrt/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>openwrt Makefile subdir.mk 详解</title>
+    <link href="https://www.litreily.top/2021/01/13/mk-subdir/"/>
+    <id>https://www.litreily.top/2021/01/13/mk-subdir/</id>
+    <published>2021-01-13T08:25:37.000Z</published>
+    <updated>2021-02-04T12:24:50.828Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;之前讲述了 openwrt Makefile 的&lt;a href=&quot;https://www.litreily.top/2020/12/30/openwrt-mkfile/&quot;&gt;整体框架&lt;/a&gt;，主要包括主 Makefile 的描述，，最后简单描述了 &lt;code&gt;subdir.mk&lt;/code&gt; , 本文就来详细剖析这个文件。&lt;/p&gt;
+&lt;p&gt;但是在解析 &lt;code&gt;subdir.mk&lt;/code&gt; 之前，先来看两个 Makefile, &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;debug.mk&lt;/code&gt;: 这也是主 Makefile 引入的第一个 .mk 文件，这里定义的调试函数在 &lt;code&gt;subdir.mk&lt;/code&gt; 中被调用&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;target/Makefile&lt;/code&gt;: 这是调用到 &lt;code&gt;subdir.mk&lt;/code&gt; 的首个 Makefile, 本文将以此为例进行说明&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;debug-mk&quot;&gt;&lt;a href=&quot;#debug-mk&quot; class=&quot;headerlink&quot; title=&quot;debug.mk&quot;&gt;&lt;/a&gt;debug.mk&lt;/h2&gt;&lt;p&gt;&lt;code&gt;debug.mk&lt;/code&gt; 定义了几个调试函数。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;debug&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;co
+      
+    
+    </summary>
+    
+      <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
+    
+    
+      <category term="makefile" scheme="https://www.litreily.top/tags/makefile/"/>
+    
+      <category term="openwrt" scheme="https://www.litreily.top/tags/openwrt/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>openwrt Makefile 框架分析</title>
+    <link href="https://www.litreily.top/2020/12/30/openwrt-mkfile/"/>
+    <id>https://www.litreily.top/2020/12/30/openwrt-mkfile/</id>
+    <published>2020-12-30T00:49:20.000Z</published>
+    <updated>2021-02-04T12:24:50.827Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;openwrt repo: &lt;a href=&quot;https://github.com/openwrt/openwrt&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/openwrt/openwrt&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;整体框架&quot;&gt;&lt;a href=&quot;#整体框架&quot; class=&quot;headerlink&quot; title=&quot;整体框架&quot;&gt;&lt;/a&gt;整体框架&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;/assets/openwrt/openwrt_arch.png&quot; alt=&quot;openwrt arch&quot;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;首行为buildroot默认目录&lt;ul&gt;
+&lt;li&gt;config: 配置文件&lt;/li&gt;
+&lt;li&gt;include: openwrt 的 Makefile 文件&lt;/li&gt;
+&lt;li&gt;package: 各个软件包的Makefile, patches等文件&lt;/li&gt;
+&lt;li&gt;scripts: openwrt 包管理相关的 perl 脚本&lt;/li&gt;
+&lt;li&gt;target: 用于编译 kernel 和 firmware 的相关文件&lt;/li&gt;
+&lt;li&gt;toolchain: 包含用于获取 kernel headers, C lib, bin-utils, compiler, debugger 的指令&lt;/li&gt;
+&lt;li&gt;tools:
+      
+    
+    </summary>
+    
+      <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
+    
+    
+      <category term="makefile" scheme="https://www.litreily.top/tags/makefile/"/>
+    
+      <category term="openwrt" scheme="https://www.litreily.top/tags/openwrt/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>openwrt make defconfig 详解</title>
+    <link href="https://www.litreily.top/2020/12/29/make-defconfig/"/>
+    <id>https://www.litreily.top/2020/12/29/make-defconfig/</id>
+    <published>2020-12-29T01:47:32.000Z</published>
+    <updated>2021-02-04T12:24:50.826Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;对于 linux kernel，有几个常用 make 指令用于生成 .config 文件。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;make oldconfig&lt;/li&gt;
+&lt;li&gt;make menuconfig&lt;/li&gt;
+&lt;li&gt;make defconfig&lt;/li&gt;
+&lt;li&gt;make config&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;那么这些指令具体执行了什么操作呢，针对 openwrt 来看下吧。&lt;/p&gt;
+&lt;h2 id=&quot;主-Makefile&quot;&gt;&lt;a href=&quot;#主-Makefile&quot; class=&quot;headerlink&quot; title=&quot;主 Makefile&quot;&gt;&lt;/a&gt;主 Makefile&lt;/h2&gt;&lt;p&gt;在 buildroot 执行 make，首先会访问仓库根目录的主 &lt;a href=&quot;https://github.com/openwrt/openwrt/blob/master/Makefile&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Makefile&lt;/a&gt;，其中有个 ifneq 判断如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;makefile&quot;&gt;ifneq ($(OPENWRT_BUILD),1)
+  _SINGLE=export MAKEFLAGS=$(space);
+
+  override OPENWRT_BUILD=1
+  export OPENWR
+      
+    
+    </summary>
+    
+      <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
+    
+    
+      <category term="makefile" scheme="https://www.litreily.top/tags/makefile/"/>
+    
+      <category term="openwrt" scheme="https://www.litreily.top/tags/openwrt/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>lua 高级特性</title>
+    <link href="https://www.litreily.top/2020/12/25/lua-adv/"/>
+    <id>https://www.litreily.top/2020/12/25/lua-adv/</id>
+    <published>2020-12-25T02:08:01.000Z</published>
+    <updated>2021-02-04T12:24:50.825Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;这一篇来记录下 lua 的某些高级特性，以便在实际应用中得心应手。&lt;/p&gt;
+&lt;h2 id=&quot;模块和包&quot;&gt;&lt;a href=&quot;#模块和包&quot; class=&quot;headerlink&quot; title=&quot;模块和包&quot;&gt;&lt;/a&gt;模块和包&lt;/h2&gt;&lt;p&gt;为了方便代码复用和扩展，可以使用 table 实现模块 module，在模块中封装通用代码。把同类型的函数放在一个文件中，然后在其它脚本中调用。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lua&quot;&gt;module = {}
+
+module.version = &amp;quot;V0.1&amp;quot;
+module.author = &amp;quot;litreily&amp;quot;
+
+function module.func1 ()
+    function-body
+end
+
+function module.func2 ()
+    function-body
+end
+
+return module
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;然后在其它文件通过 require 导入。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lua&quot;&gt;require (&amp;quot;module&amp;quot;)
+-- or
+require &amp;quot;module&amp;quot;
+
+print(module.version)
+module.func1()
+
+-- or
+local m = req
+      
+    
+    </summary>
+    
+      <category term="Language" scheme="https://www.litreily.top/categories/Language/"/>
+    
+      <category term="Lua" scheme="https://www.litreily.top/categories/Language/Lua/"/>
+    
+    
+      <category term="lua" scheme="https://www.litreily.top/tags/lua/"/>
+    
+  </entry>
+  
+  <entry>
     <title>lua 基本语法</title>
     <link href="https://www.litreily.top/2020/12/24/lua-basic/"/>
     <id>https://www.litreily.top/2020/12/24/lua-basic/</id>
     <published>2020-12-24T03:19:14.000Z</published>
-    <updated>2020-12-23T10:29:10.979Z</updated>
+    <updated>2021-02-04T12:27:19.837Z</updated>
     
     <summary type="html">
     
@@ -48,7 +262,7 @@
     <link href="https://www.litreily.top/2020/12/23/lua/"/>
     <id>https://www.litreily.top/2020/12/23/lua/</id>
     <published>2020-12-23T01:07:51.000Z</published>
-    <updated>2020-12-23T10:17:18.833Z</updated>
+    <updated>2021-02-04T12:24:50.818Z</updated>
     
     <summary type="html">
     
@@ -67,7 +281,7 @@ make generic
 make install
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;默认安装目录是&lt;code&gt;/usr/local&lt;/code&gt;, 如果没有root权限，需要修改Makefile，将其改为指定目录(~/bin/local)，上面通过sed修改。&lt;/p&gt;
-&lt;h2 id=&quot;执行&quot;&gt;&lt;a href=&quot;#执行&quot; clas
+&lt;p&gt;值得注意的是，Lua 如果按 make linux 编
       
     
     </summary>
@@ -760,10 +974,9 @@ CPU: 2 PID: 9465 Comm: swconfig Tainted: P        W    3.14.77 #1
 &lt;pre&gt;&lt;code class=&quot;txt&quot;&gt;[Thu Sep 26 09:21:59.734 2019] Watchdog bark! Now = 831425.568038
 [Thu Sep 26 09:21:59.734 2019] Causing a watchdog bite!
 [Thu Sep 26 09:21:59.734 2019] Configuring Watchdog Timer
-[Thu Sep 26 09:21:59.734 2019] Wa
-&lt;/code&gt;&lt;/pre&gt;
+[Thu Sep 26 09:21:59.734 2019] Wa&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;但是无法确定根本原因是什么，是什么导致的死锁，让watchdog没办法在规定时间内bark。为此，我们需要启用相关的内核调试手段去获取相关信息，然后深入分析crashdump和console log。&lt;/p&gt;
-&lt;h2 id=&quot;内核裁剪&quot;&gt;&lt;a href=&quot;#内核裁剪&quot; class=&quot;headerlink&quot; title=&quot;内核裁剪&quot;&gt;&lt;/a&gt;内核裁剪&lt;/h2&gt;&lt;h3 id=&quot;启用f
+&lt;h2 id=&quot;内核裁剪&quot;&gt;&lt;a href=&quot;#内核裁剪&quot; class=&quot;headerlink&quot; title=&quot;内核裁剪&quot;&gt;&lt;/a&gt;内核裁剪&lt;/h2&gt;&lt;h3 id=&quot;启用ft
       
     
     </summary>
@@ -805,175 +1018,6 @@ CPU: 2 PID: 9465 Comm: swconfig Tainted: P        W    3.14.77 #1
     
     
       <category term="spider" scheme="https://www.litreily.top/tags/spider/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>嵌入式设备在无法使用网络和USB的情况下如何进行文件传输</title>
-    <link href="https://www.litreily.top/2019/09/12/minicom/"/>
-    <id>https://www.litreily.top/2019/09/12/minicom/</id>
-    <published>2019-09-12T06:22:30.000Z</published>
-    <updated>2020-02-26T13:11:56.220Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;问题背景&quot;&gt;&lt;a href=&quot;#问题背景&quot; class=&quot;headerlink&quot; title=&quot;问题背景&quot;&gt;&lt;/a&gt;问题背景&lt;/h2&gt;&lt;p&gt;ST 测试时出现一个问题，路由器（采用&lt;a href=&quot;https://openwrt.org&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Openwrt&lt;/a&gt;系统）的console无法正常显示shell提示符，正常情况下是&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;root@DeviceName:/#
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;这样的，出问题时是下面这样的，用户名不见了，设备名变成了none.&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;@(none):/#
-&lt;/code&gt;&lt;/pre&gt;
-    
-    </summary>
-    
-      <category term="Linux" scheme="https://www.litreily.top/categories/Linux/"/>
-    
-    
-      <category term="shell" scheme="https://www.litreily.top/tags/shell/"/>
-    
-      <category term="tftp" scheme="https://www.litreily.top/tags/tftp/"/>
-    
-      <category term="nand" scheme="https://www.litreily.top/tags/nand/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>使用正则模糊匹配的ftp文件传输</title>
-    <link href="https://www.litreily.top/2019/09/02/lftp/"/>
-    <id>https://www.litreily.top/2019/09/02/lftp/</id>
-    <published>2019-09-02T02:51:20.000Z</published>
-    <updated>2020-06-14T03:49:36.006Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;通常而言，FTP传输过程中，客户端在完成账户认证后，需要指定具体的文件路径方能下载或删除服务器端的文件。但是在使用命令行指令去操作ftp数据时，如果每次都要输入完整的路径就太麻烦了，而且如果想要同时下载多个文件还需逐个执行下载指令，那有什么方法可以通过&lt;strong&gt;正则表达式&lt;/strong&gt;去完成模糊匹配和批量下载呢？本文就来介绍一下FTP数据传输的常用操作及正则匹配的实现方法。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/assets/ftp/ftp.png&quot; alt=&quot;ftp diagram&quot;&gt;&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="Linux" scheme="https://www.litreily.top/categories/Linux/"/>
-    
-    
-      <category term="shell" scheme="https://www.litreily.top/tags/shell/"/>
-    
-      <category term="ftp" scheme="https://www.litreily.top/tags/ftp/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Python网络爬虫6 - Scrapy爬取vmgirls</title>
-    <link href="https://www.litreily.top/2019/08/09/vmgirls/"/>
-    <id>https://www.litreily.top/2019/08/09/vmgirls/</id>
-    <published>2019-08-09T12:09:10.000Z</published>
-    <updated>2020-12-23T10:17:18.790Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;今天介绍一个妹子站点图片的爬取过程，站点&lt;a href=&quot;https://www.vmgirls.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;唯美女生&lt;/a&gt;。站点结构非常简单，单独用&lt;code&gt;requests&lt;/code&gt;库或者&lt;code&gt;scrapy&lt;/code&gt;框架都可以。本文介绍的是使用&lt;code&gt;scrapy&lt;/code&gt;框架爬取。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/assets/vmgirls/vmgirls.png&quot; alt=&quot;vmgirls&quot;&gt;&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="Language" scheme="https://www.litreily.top/categories/Language/"/>
-    
-      <category term="Python" scheme="https://www.litreily.top/categories/Language/Python/"/>
-    
-    
-      <category term="spider" scheme="https://www.litreily.top/tags/spider/"/>
-    
-      <category term="girls" scheme="https://www.litreily.top/tags/girls/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>高效思维导图应用训练</title>
-    <link href="https://www.litreily.top/2019/06/11/mind-map/"/>
-    <id>https://www.litreily.top/2019/06/11/mind-map/</id>
-    <published>2019-06-11T12:23:34.000Z</published>
-    <updated>2020-06-14T02:10:14.495Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;上周在公司进行了一天的思维导图培训，感觉收获颇丰，有必要总结一下。&lt;/p&gt;
-&lt;h2 id=&quot;思维导图概述&quot;&gt;&lt;a href=&quot;#思维导图概述&quot; class=&quot;headerlink&quot; title=&quot;思维导图概述&quot;&gt;&lt;/a&gt;思维导图概述&lt;/h2&gt;&lt;h3 id=&quot;定义&quot;&gt;&lt;a href=&quot;#定义&quot; class=&quot;headerlink&quot; title=&quot;定义&quot;&gt;&lt;/a&gt;定义&lt;/h3&gt;&lt;p&gt;思维导图主要用于解决以下三个问题：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;记不住&lt;/li&gt;
-&lt;li&gt;理不清&lt;/li&gt;
-&lt;li&gt;想不出&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;这三个也是工作效能低下的主要原因。那究竟什么是思维导图呢？&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;思维导图&lt;/strong&gt;是表达&lt;strong&gt;放射性思维&lt;/strong&gt;的图形思维工具。用&lt;strong&gt;图文&lt;/strong&gt;技巧，把各级主题关系用层级图表现，将关键词与图像、颜色等建立思维链接。用&lt;strong&gt;全脑机能&lt;/strong&gt;，使在科学与艺术、逻辑与想象间平衡，开启大脑潜能。&lt;/p&gt;
-&lt;/blockquote&gt;
-    
-    </summary>
-    
-      <category term="Tools" scheme="https://www.litreily.top/categories/Tools/"/>
-    
-    
-      <category term="5W2H" scheme="https://www.litreily.top/tags/5W2H/"/>
-    
-      <category term="MECE" scheme="https://www.litreily.top/tags/MECE/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>哈希表的实现与常见操作</title>
-    <link href="https://www.litreily.top/2019/05/24/hash-table/"/>
-    <id>https://www.litreily.top/2019/05/24/hash-table/</id>
-    <published>2019-05-24T12:00:00.000Z</published>
-    <updated>2020-06-14T02:11:04.810Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;前段时间基于数组和单链表以拉链法写了个哈希表，实现了基本的增删改查（&lt;code&gt;CRUD&lt;/code&gt;），以键值对的形式存储一些配置参数，便以此文记录一下。&lt;/p&gt;
-&lt;h2 id=&quot;数据结构&quot;&gt;&lt;a href=&quot;#数据结构&quot; class=&quot;headerlink&quot; title=&quot;数据结构&quot;&gt;&lt;/a&gt;数据结构&lt;/h2&gt;&lt;pre&gt;&lt;code class=&quot;c&quot;&gt;#define TABLE_SIZE 101
-#define KEY_SIZE 32
-#define VALUE_SIZE 128
-#define BUF_SIZE 256
-
-#define DATA_PATH &amp;quot;data.txt&amp;quot;
-
-struct linklist {
-    char key[KEY_SIZE];
-    char val[VALUE_SIZE];
-    struct linklist *next;
-};
-struct linklist *hashtbl[TABLE_SIZE];
-&lt;/code&gt;&lt;/pre&gt;
-    
-    </summary>
-    
-      <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
-    
-    
-      <category term="C/C++" scheme="https://www.litreily.top/tags/C-C/"/>
-    
-      <category term="linux" scheme="https://www.litreily.top/tags/linux/"/>
-    
-      <category term="hash" scheme="https://www.litreily.top/tags/hash/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>git commit 工具 - commitizen</title>
-    <link href="https://www.litreily.top/2019/03/12/commitizen/"/>
-    <id>https://www.litreily.top/2019/03/12/commitizen/</id>
-    <published>2019-03-12T13:39:10.000Z</published>
-    <updated>2020-06-14T02:11:21.056Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;为了规范代码提交，最近学习了一下如何使用&lt;code&gt;commitizen&lt;/code&gt;进行commit提交，其实也很简单，这里简单做个介绍。&lt;/p&gt;
-&lt;h2 id=&quot;commitizen-安装&quot;&gt;&lt;a href=&quot;#commitizen-安装&quot; class=&quot;headerlink&quot; title=&quot;commitizen 安装&quot;&gt;&lt;/a&gt;commitizen 安装&lt;/h2&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;npm install -g commitizen
-&lt;/code&gt;&lt;/pre&gt;
-    
-    </summary>
-    
-      <category term="Tools" scheme="https://www.litreily.top/categories/Tools/"/>
-    
-    
-      <category term="git" scheme="https://www.litreily.top/tags/git/"/>
     
   </entry>
   
