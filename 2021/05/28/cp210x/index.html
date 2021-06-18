@@ -1,0 +1,121 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>解决Ubuntu 18.04 minicom 不支持 1500000 波特率的问题 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
+</head><link rel="stylesheet" type="text/css" href="/plugins/highlight/atom-one-dark.min.css"><script type="text/javascript" src="/plugins/highlight/highlight.min.js"></script><script>hljs.initHighlightingOnLoad();
+</script><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">解决Ubuntu 18.04 minicom 不支持 1500000 波特率的问题</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2021/05/28/cp210x/">2021-05-28</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Embedded/">Embedded</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>最近使用 <code>Ubuntu 18.04</code> 作为台式机的办公系统，需要使用串口调试功能，于是安装了 <code>minicom</code>, 但是配置波特率的时候发现无法配置高于 <code>1000000</code> 以上波特率。</p>
+<pre><code class="bash">$ sudo stty -F /dev/ttyUSB0 1500000
+stty: /dev/ttyUSB0: unable to perform all requested operations
+</code></pre>
+<span id="more"></span>
+
+<p>谷歌了许久也没找到方法，只能自己探索下了。</p>
+<h2 id="问题排查"><a href="#问题排查" class="headerlink" title="问题排查"></a>问题排查</h2><p>为此，我测试了以下几种情况：</p>
+<ol>
+<li>在笔记本 win10 上可以正常配置，排除串口线和串口工具问题</li>
+<li>在笔记本 ubuntu 16.04 上可以正常配置</li>
+<li>在台式机的 win10 系统上可以，排查台式机USB接口问题</li>
+<li>在台式机的 ubuntu 16.04 虚拟机上正常配置，说明与 ubuntu 18.04 系统有关</li>
+<li>在台式机的 ubuntu 18.04 上使用ch341驱动，可以正常配置，说明是 <code>cp210x</code> 驱动问题</li>
+</ol>
+<p>最终确定是 <code>ubuntu 18.04</code> 的 <code>cp210x</code> 驱动不支持高波特率的配置，这里涉及到两个因素：</p>
+<ol>
+<li>ubuntu 版本号 <code>18.04</code></li>
+<li><code>cp210x</code> 驱动</li>
+</ol>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>那么怎么解决呢，总不可能重装个 <code>ubuntu 16.04</code> 的系统吧，所以我首先想到的是替换驱动。把 <code>ubuntu 18.04</code> 的驱动替换为 <code>16.04</code> 的驱动，但是失败了。</p>
+<pre><code class="bash">$ sudo insmod cp210x.ko
+insmod: ERROR: could not insert module cp210x.ko: Invalid module format
+</code></pre>
+<p>提示格式无效，搜索发现 <code>insmod</code> 会比对内核模块的版本号。所以直接替换是不可行的，那就只能重新编译新的 <code>.ko</code> 文件。</p>
+<p>先把 <code>ubuntu 16.04</code> 所在内核版本的 <code>cp210x.c</code> 源码下载下来，可以从 <a target="_blank" rel="noopener" href="https://elixir.bootlin.com/linux/v4.15/source/drivers/usb/serial/cp210x.c">这里</a> 下载。</p>
+<p>然后编写Makefile, 与 <code>cp210x.c</code> 放在同一个目录。</p>
+<pre><code class="bash">serial
+├── cp210x.c
+└── Makefile
+</code></pre>
+<pre><code class="Makefile">obj-m += cp210x.o
+
+KDIR := /lib/modules/`uname -r`/build
+PWD:=`pwd`
+all:
+        make -C $(KDIR) M=$(PWD) modules
+clean:
+        rm -f *.ko *.o *.symvers *.cmd *.cmd.o
+</code></pre>
+<p>执行 <code>make</code> 就编译好了。</p>
+<pre><code class="bash">$ make
+make -C /lib/modules/`uname -r`/build M=`pwd` modules
+make[1]: Entering directory &#39;/usr/src/linux-headers-5.4.0-73-generic&#39;
+  CC [M]  /home/litreily/workspace/serial/cp210x.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/litreily/workspace/serial/cp210x.mod.o
+  LD [M]  /home/litreily/workspace/serial/cp210x.ko
+make[1]: Leaving directory &#39;/usr/src/linux-headers-5.4.0-73-generic&#39;
+$ ls
+cp210x.c  cp210x.ko  cp210x.mod     cp210x.mod.c   cp210x.mod.o  
+cp210x.o  Makefile   modules.order  Module.symvers
+</code></pre>
+<p>然后替换掉原有的 <code>.ko</code> 文件，最好把旧的备份下， 以防万一。</p>
+<pre><code class="bash">sudo cp /lib/modules/`uname -r`/kernel/drivers/usb/serial/cp210x.ko cp210x.ko.backup
+sudo cp cp210x.ko /lib/modules/`uname -r`/kernel/drivers/usb/serial/cp210x.ko
+</code></pre>
+<p>最后，重新加载 <code>cp210x.ko</code>, 执行前先拔掉所以串口线。</p>
+<pre><code class="bash">sudo rmmod cp210x
+sudo insmod cp210x
+</code></pre>
+<p>正常加载完成就说明成功了。</p>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>最后来测试下，修改波特率为1500000.</p>
+<pre><code class="bash">$ sudo stty -F /dev/ttyUSB0 1500000
+$ sudo stty -F /dev/ttyUSB1 
+speed 1500000 baud; line = 0;
+-brkint -imaxbel
+</code></pre>
+<p>大功告成！有兴趣的可以去对比下驱动源码，看看为啥 <code>5.4.0</code> 的内核为啥不支持高波特率的配置。</p>
+<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.huaweicloud.com/articles/c485d53fc9d703af400d5ad6215c06d8.html">https://www.huaweicloud.com/articles/c485d53fc9d703af400d5ad6215c06d8.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://elixir.bootlin.com/linux/v4.15/source/drivers/usb/serial/cp210x.c">linux 4.15 cp210x.c</a></li>
+</ul>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2021/05/28/cp210x/">https://www.litreily.top/2021/05/28/cp210x/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tags"></i><a href="/tags/ubuntu/">ubuntu</a><a href="/tags/usb/">usb</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5"><span class="toc-number">1.</span> <span class="toc-text">问题排查</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-number">2.</span> <span class="toc-text">解决方案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95"><span class="toc-number">3.</span> <span class="toc-text">测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#reference"><span class="toc-number">4.</span> <span class="toc-text">reference</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2021/06/18/dual-lcd/">&lt; RK3288 android 6.0 实现 lvds + edp 双屏异显</a><a class="next" href="/2021/02/07/qsdk-compile/">基于 IPQ807x 编译 QSDK &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+.night .v[data-class=v] a:hover { color: #216C73 !important; }
+.night .v[data-class=v] li { list-style: inherit; }
+.night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
+.night .v[data-class=v] .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.night .v[data-class=v] .vbtn { border-radius: 0; background: none; }
+.night .v[data-class=v] .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.night .v[data-class=v] .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.night .v[data-class=v] .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre,.night .v[data-class=v] .vlist .vcard .vhead .vsys { background: #203240 !important; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre { color: #F0F0F0; font-size: 95%; }
+.v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
+</style><div id="vcomment"></div><script src="//cdn.bootcdn.net/ajax/libs/valine/1.4.14/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
+  lang: 'zh-cn',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></section><footer><p>Copyright © 2016 - 2021 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script></body></html>

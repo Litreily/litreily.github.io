@@ -1,0 +1,131 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>结构体中长度为0的字符数组 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
+</head><link rel="stylesheet" type="text/css" href="/plugins/highlight/atom-one-dark.min.css"><script type="text/javascript" src="/plugins/highlight/highlight.min.js"></script><script>hljs.initHighlightingOnLoad();
+</script><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">结构体中长度为0的字符数组</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2018/01/02/len0-charArray/">2018-01-02</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Embedded/">Embedded</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>在C语言的结构体中，有一种特殊用法，在结构体的末尾放置一个长度为0的字符数组，结构体倒数第二个位置放置一个整型变量<code>len</code>。其典型样例如下：</p>
+<pre><code class="c">typedef struct dynamic_value &#123;
+  int flag;
+  int len;
+  char val[0];
+&#125;s_flv;
+</code></pre>
+<p>本文针对其特征，用法及适用场合予以简单介绍。</p>
+<h2 id="特征"><a href="#特征" class="headerlink" title="特征"></a>特征</h2><ul>
+<li>最后的字符数组<code>val</code>长度为0，不占用额外的内存空间</li>
+<li>倒数第二个元素为一整型变量，用于存储字符数组的真实长度</li>
+<li><code>val</code>实际指向的是结构体<code>s_flv</code>之后的内存空间</li>
+<li>字符数组的大小可以在定义结构体变量时动态指定<code>s_flv.len</code></li>
+<li>结构体元素个数不限，样例为典型模式，其中的<code>flag</code>作为标签用以标识不同的数据</li>
+</ul>
+<h2 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h2><ul>
+<li>按<code>s_flv</code>格式写入数据到文件</li>
+</ul>
+<pre><code class="c">#include &lt;stdio.h&gt;
+
+static void write_flv(FILE *fp, int flag, char *val)
+&#123;
+    int len = 0;
+    if(val == NULL)
+        val = &quot;&quot;;
+    else
+        len = strlen(val);
+
+    fwrite(&amp;flag, sizeof(flag), 1, fp); // 写入标识
+    fwrite(&amp;len, sizeof(len), 1, fp);   // 写入字符数组长度
+    fwrite(val, len, 1, fp);    // 写入长度为len的字符串
+&#125;
+</code></pre>
+<ul>
+<li>读取文件</li>
+</ul>
+<pre><code class="c">#include &lt;stdio.h&gt;
+
+static int read_flv(char *file, char *val)
+&#123;
+    char buf[32];   // 假定字符数组长度小等于32
+    char *p = buf;
+
+    FILE *fp = fopen(file, &quot;r&quot;);
+    if(!fp)
+        return -1;
+
+    if(fread(buf, 2*sizeof(int), 1, fp) &lt;= 0)   // 读取前两个整型数据，获取字符数组长度
+        return -1;
+
+    s_flv *flv = (s_flv *)p;        // 定义s_flv结构体，存储数据
+    fread(val, flv-&gt;len, 1, fp);    // 读取字符数组
+    flose(fp);
+    return 0;
+&#125;
+</code></pre>
+<ul>
+<li><strong>说明</strong><ul>
+<li>每执行一次<code>fread</code>或<code>fwrite</code>函数，文件指针就往后偏移相应的读取长度或写入长度</li>
+<li><code>read_flv</code>定义<code>flv</code>时，从<code>buf</code>中可以获取到数组长度，然后使用<code>fread</code>读取相应长度的数据即可取出字符数组的内容。</li>
+<li>使用以上方法生成的文件内容是二进制文件，许多字符是不可打印字符，所以使用<code>cat</code>指令无法正常显示文件内容</li>
+</ul>
+</li>
+</ul>
+<p>上面描述的方法是将<code>s_flv</code>类型的数据存入文件，但如果不想存入文件，那么该如何为其分配内存呢，下面来看一下：</p>
+<pre><code class="c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+// 定义s_flv指针变量
+int size = 10;
+s_flv *flv = (s_flv *)malloc(sizeof(s_flv) + size);
+flv-&gt;len = size;
+flv-&gt;val = flv + sizeof(s_flv);
+
+// 释放指针
+free(flv);
+</code></pre>
+<h2 id="适用场合"><a href="#适用场合" class="headerlink" title="适用场合"></a>适用场合</h2><ul>
+<li><code>json</code>文件的读写</li>
+<li>不定长度字符串的读写</li>
+</ul>
+<h2 id="扩展阅读"><a href="#扩展阅读" class="headerlink" title="扩展阅读"></a>扩展阅读</h2><ul>
+<li><a target="_blank" rel="noopener" href="http://www.cnblogs.com/felove2013/articles/4050226.html">浅析长度为0的数组</a></li>
+</ul>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2018/01/02/len0-charArray/">https://www.litreily.top/2018/01/02/len0-charArray/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tag"></i><a href="/tags/C-C/">C/C++</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%B9%E5%BE%81"><span class="toc-number">1.</span> <span class="toc-text">特征</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8%E6%B3%95"><span class="toc-number">2.</span> <span class="toc-text">用法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%82%E7%94%A8%E5%9C%BA%E5%90%88"><span class="toc-number">3.</span> <span class="toc-text">适用场合</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%89%A9%E5%B1%95%E9%98%85%E8%AF%BB"><span class="toc-number">4.</span> <span class="toc-text">扩展阅读</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2018/02/08/mysql-basic/">&lt; mySQL基本语法</a><a class="next" href="/2017/09/07/ss-config/">VPS+SS翻越GFW &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+.night .v[data-class=v] a:hover { color: #216C73 !important; }
+.night .v[data-class=v] li { list-style: inherit; }
+.night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
+.night .v[data-class=v] .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.night .v[data-class=v] .vbtn { border-radius: 0; background: none; }
+.night .v[data-class=v] .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.night .v[data-class=v] .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.night .v[data-class=v] .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre,.night .v[data-class=v] .vlist .vcard .vhead .vsys { background: #203240 !important; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre { color: #F0F0F0; font-size: 95%; }
+.v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
+</style><div id="vcomment"></div><script src="//cdn.bootcdn.net/ajax/libs/valine/1.4.14/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
+  lang: 'zh-cn',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></section><footer><p>Copyright © 2016 - 2021 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script></body></html>

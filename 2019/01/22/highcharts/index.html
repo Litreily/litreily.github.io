@@ -1,0 +1,267 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>Python之MongoDB数据分析及其Highcharts可视化 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
+</head><link rel="stylesheet" type="text/css" href="/plugins/highlight/atom-one-dark.min.css"><script type="text/javascript" src="/plugins/highlight/highlight.min.js"></script><script>hljs.initHighlightingOnLoad();
+</script><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">Python之MongoDB数据分析及其Highcharts可视化</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2019/01/22/highcharts/">2019-01-22</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Language/">Language</a>&nbsp;&bull;&nbsp;<a href="/categories/Language/Python/">Python</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>近期使用<code>requests</code>把内部<code>bugziila</code>上的<code>bug</code>数据爬取了一遍，并存入了本地的<code>MongoDB</code>数据库，想着对数据做些简单的可视化处理，将所有产品的bug数做一个统计和可视化，于是便有了这篇简短的文章。</p>
+<span id="more"></span>
+
+<h2 id="MongoDB中的数据存储格式"><a href="#MongoDB中的数据存储格式" class="headerlink" title="MongoDB中的数据存储格式"></a>MongoDB中的数据存储格式</h2><p>之前爬取数据后，存入<code>MongoDB</code>的数据格式如下，而我要分析的仅仅是其中的<code>metadata.Product</code></p>
+<pre><code class="json">&#123;
+    &quot;_id&quot; : ObjectId(&quot;5c3ea1d3fbf7884588041acc&quot;),
+    &quot;id&quot; : 1,
+    &quot;title&quot; : &quot;\&quot;Show interface dot11radio advanced\&quot; command doesn&#39;t work&quot;,
+    &quot;metadata&quot; : &#123;
+        &quot;Status&quot; : &quot;已解決 (RESOLVED) 已修復 (FIXED)&quot;,
+        &quot;Product&quot; : &quot;AP54GTSW&quot;,
+        &quot;Component&quot; : &quot;Baseline&quot;,
+        &quot;Version&quot; : &quot;0.1&quot;,
+        &quot;Platform&quot; : &quot;PC Linux&quot;,
+        &quot;Importance&quot; : &quot;P2 normal&quot;,
+        &quot;Assigned&quot; : &quot;Wallace Peng&quot;,
+        &quot;Reported_author&quot; : &quot;happy Hu&quot;,
+        &quot;Reported&quot; : &quot;2004-05-11 20:32 CST&quot;,
+        &quot;Modified&quot; : &quot;2010-08-27 15:42 CST&quot;
+    &#125;,
+    &quot;comments&quot; : &#123;
+        &quot;描述&quot; : &#123;
+            &quot;user&quot; : &quot;happy Hu&quot;,
+            &quot;time&quot; : &quot;2004-05-11 20:32:24 CST&quot;,
+            &quot;text&quot; : &quot;\&quot;Show interface dot11radio advanced\&quot; command doesn&#39;t work -- Happy&quot;
+        &#125;,
+        &quot;意見1&quot; : &#123;
+            &quot;user&quot; : &quot;Wallace Peng&quot;,
+            &quot;time&quot; : &quot;2004-05-12 21:01:56 CST&quot;,
+            &quot;text&quot; : &quot;image 0.1rc8 fixed this bug. -- Wallace&quot;
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<h2 id="读取MongoDB数据"><a href="#读取MongoDB数据" class="headerlink" title="读取MongoDB数据"></a>读取MongoDB数据</h2><h3 id="获取所有产品名称"><a href="#获取所有产品名称" class="headerlink" title="获取所有产品名称"></a>获取所有产品名称</h3><p>首先获取所有产品名称，可以通过<code>pymongo</code>库的find函数获取<code>metadata.Product</code>段数据。</p>
+<pre><code class="python">from pymongo import MongoClient
+import os
+
+MONGOSERVER = &#39;localhost:27017&#39;
+DATABASE = &#39;bugzilla&#39;
+COLLECTION = &#39;bugs&#39;
+
+class Analysis(object):
+    def __init__(self):
+        client = MongoClient(MONGOSERVER)
+        db = client[DATABASE]
+        self.col = db[COLLECTION]
+
+    def getAllProductsName(self):
+        records = self.col.find(&#123;&#125;, &#123;&#39;metadata.Product&#39;:1, &#39;_id&#39;:0&#125;)
+        prdoucts = [ record[&#39;metadata&#39;][&#39;Product&#39;] for record in records ]
+        prdoucts = list(set(prdoucts))
+        prdoucts = sorted(prdoucts, key=lambda s: s.lower())
+        return prdoucts
+</code></pre>
+<p><code>MongoClient</code>用来打开一个client去连接数据库，通过指定<code>database</code>和<code>collection</code>可以定位到数据源，再用<code>find</code>函数检索出产品名称信息。以上的<code>getAllProductsName</code>后面通过<code>set</code>集合的方式去重，最后通过<code>sorted</code>进行排序，即可获得有序的产品名称<code>products</code>。</p>
+<h3 id="获取产品bug数"><a href="#获取产品bug数" class="headerlink" title="获取产品bug数"></a>获取产品bug数</h3><p>当然，我们想要的其实是产品bug数量，对于单个产品，可以通过<code>pymongo</code>库的<code>count_documents</code>函数获得该指定产品bug数。</p>
+<pre><code class="py">    def countOneProduct(self, product):
+        return self.col.count_documents(&#123;&#39;metadata.Product&#39;:product&#125;)  
+</code></pre>
+<p>想要获取所有的产品bug数，简单的想法当然是循环调用<code>countOneProduct</code>函数，但这样会需要大量的时间，9万多条数据量需24s左右的时间。为什么这么久，因为每次执行<code>count_documents</code>都需要重新遍历一遍数据库，这显然是不合适的。更好的方法是只遍历一遍数据库，然后对不同产品的bug数进行区分统计。</p>
+<pre><code class="py">    def countAllProducts(self):
+        counts = &#123;&#125;
+        records = self.col.find(&#123;&#125;, &#123;&#39;metadata.Product&#39;:1, &#39;_id&#39;:0&#125;)
+        prdoucts = [ record[&#39;metadata&#39;][&#39;Product&#39;] for record in records ]
+        for product in prdoucts:
+            if product in counts:
+                counts[product] += 1
+            else:
+                counts[product] = 1
+        counts = sorted(counts.items(), key=lambda item: item[0].lower())
+        return counts
+</code></pre>
+<p>以上代码段首先找出数据库每条记录的<code>metadata.Product</code>信息，然后循环判别<code>product</code>名称，对不同产品的出现次数进行计数，然后存入相应的字典记录<code>counts[product]</code>中，总耗时约1s。</p>
+<h3 id="保存数据至json文件"><a href="#保存数据至json文件" class="headerlink" title="保存数据至json文件"></a>保存数据至json文件</h3><pre><code class="py">    def saveProductsIssues(self, path):
+        counts = self.countAllProducts()
+        with open(path, &#39;w&#39;, encoding=&#39;utf-8&#39;) as f:
+            f.write(&#39;&#123;\n&#39;)
+            f.write(&#39;,\n&#39;.join([&#39;&quot;&#123;&#125;&quot;:&#123;&#125;&#39;.format(key, val) for key,val in counts]))
+            f.write(&#39;\n&#125;&#39;)
+</code></pre>
+<p>保存数据时，需要使用<code>utf-8</code>格式，否则可能出现后续可视化时的中文乱码问题。</p>
+<h2 id="Highcharts数据可视化"><a href="#Highcharts数据可视化" class="headerlink" title="Highcharts数据可视化"></a>Highcharts数据可视化</h2><p><a target="_blank" rel="noopener" href="https://www.highcharts.com/">Highcharts</a>是一款超级棒的用于<code>web</code>端数据可视化的<code>js</code>库，图表样式及其丰富，使用简单，强烈推荐！！！</p>
+<p>我们要做的就是把<code>highcharts</code>的js库文件下载到本地，然后拷贝一个例程，最后修改一下数据来源即可，下面是针对<code>bug</code>数选择的一个图表样式对应的<code>html</code>文件</p>
+<pre><code class="html">&lt;!DOCTYPE HTML&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=utf-8&quot;&gt;
+        &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+        &lt;title&gt;Highcharts Example&lt;/title&gt;
+
+        &lt;style type=&quot;text/css&quot;&gt;
+
+        &lt;/style&gt;
+    &lt;/head&gt;
+&lt;body&gt;
+&lt;!-- 下面是需要引入的库，包含JQuery及highcharts库 --&gt;
+&lt;script src=&quot;https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;./code/highcharts.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;./code/modules/exporting.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;./code/modules/export-data.js&quot;&gt;&lt;/script&gt;
+
+&lt;!-- 根据数据量大小修改下方的显示范围 --&gt;
+&lt;div id=&quot;container&quot; style=&quot;min-width: 310px; max-width: 800px; height: 600px; margin: 0 auto&quot;&gt;&lt;/div&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+// 使用$.ajax导入数据，并配置Highcharts参数
+$.ajax(&#123;
+    url: &#39;products.json&#39;,
+    dataType: &#39;json&#39;,
+    contentType: &#39;application/json; charset=utf-8&#39;,
+    success: function (src) &#123;
+        var categories = new Array();
+        var data = new Array();
+        for (item in src)&#123;
+            categories.push(item)
+            data.push(src[item])
+        &#125;
+
+        Highcharts.chart(&#39;container&#39;, &#123;
+            chart: &#123;
+                type: &#39;bar&#39;
+            &#125;,
+            title: &#123;
+                text: &#39;All products issues number on bugzilla&#39;
+            &#125;,
+            subtitle: &#123;
+                text: &#39;Source: bugzilla&#39;
+            &#125;,
+            xAxis: &#123;
+                // 更改分类
+                categories: categories,
+                title: &#123;
+                    text: null
+                &#125;
+            &#125;,
+            yAxis: &#123;
+                min: 0,
+                title: &#123;
+                    text: &#39;Issues&#39;,
+                    align: &#39;high&#39;
+                &#125;,
+                labels: &#123;
+                    overflow: &#39;justify&#39;
+                &#125;
+            &#125;,
+            tooltip: &#123;
+                valueSuffix: &#39;&#39;
+            &#125;,
+            plotOptions: &#123;
+                bar: &#123;
+                    dataLabels: &#123;
+                        enabled: true
+                    &#125;
+                &#125;
+            &#125;,
+            legend: &#123;
+                layout: &#39;vertical&#39;,
+                align: &#39;right&#39;,
+                verticalAlign: &#39;top&#39;,
+                x: -40,
+                y: 80,
+                floating: true,
+                borderWidth: 1,
+                backgroundColor: ((Highcharts.theme &amp;&amp; Highcharts.theme.legendBackgroundColor) || &#39;#FFFFFF&#39;),
+                shadow: true
+            &#125;,
+            credits: &#123;
+                enabled: false
+            &#125;,
+            series: [&#123;
+                name: &#39;Issues Number&#39;,
+                // 更改数据来源
+                data: data
+            &#125;]
+        &#125;);
+    &#125;
+&#125;
+)
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>以上最主要的一段代码如下，通过JQuery的ajax读取web server中的json文件，同时将json数据的key和value分离至<code>categories</code>和<code>data</code></p>
+<pre><code class="js">$.ajax(&#123;
+    url: &#39;products.json&#39;,
+    dataType: &#39;json&#39;,
+    contentType: &#39;application/json; charset=utf-8&#39;,
+    success: function (src) &#123;
+        var categories = new Array();
+        var data = new Array();
+        for (item in src)&#123;
+            categories.push(item)
+            data.push(src[item])
+        &#125;
+</code></pre>
+<h3 id="可视化效果展示"><a href="#可视化效果展示" class="headerlink" title="可视化效果展示"></a>可视化效果展示</h3><p>为了方便展示，我仅仅截取了一段数据，<code>product</code>名称做了随机替换处理，毕竟主要还是看可视化效果嘛。</p>
+<p><img src="/assets/highcharts/all-products-issues.svg" alt="Product bugs"></p>
+<h2 id="随机替换字符串"><a href="#随机替换字符串" class="headerlink" title="随机替换字符串"></a>随机替换字符串</h2><p>上面提到对<code>product</code>名称进行随机替换处理，其代码如下：</p>
+<pre><code class="py">import json
+import secrets
+import string
+import numpy as np
+
+with open(&#39;products.json&#39;,&#39;r&#39;,encoding=&#39;utf-8&#39;) as f:
+    data = json.load(f)
+
+new = &#123;&#125;
+for key, val in data.items():
+    N = np.random.randint(5,20)
+    key = &#39;&#39;.join(secrets.choice(string.ascii_uppercase + string.digits) for _ in range(N))
+    new[key] = val
+
+with open(&#39;products_new.json&#39;,&#39;w&#39;,encoding=&#39;utf-8&#39;) as f:
+    json.dump(new, f, indent=4)
+</code></pre>
+<p>该替换方法参考以下文章:</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://codeday.me/bug/20180821/225180.html">在Python 3中生成随机长度的随机类字符串的最快方法</a></li>
+</ul>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>本文介绍了如何检索<code>MongoDB</code>中的数据，如何将数据存入json文件，以及如何使用<code>highcharts</code>实现数据可视化，最后给出了随机替换字符串的一种实现方法。</p>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2019/01/22/highcharts/">https://www.litreily.top/2019/01/22/highcharts/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tags"></i><a href="/tags/visualization/">visualization</a><a href="/tags/MongoDB/">MongoDB</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#MongoDB%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E6%A0%BC%E5%BC%8F"><span class="toc-number">1.</span> <span class="toc-text">MongoDB中的数据存储格式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%BB%E5%8F%96MongoDB%E6%95%B0%E6%8D%AE"><span class="toc-number">2.</span> <span class="toc-text">读取MongoDB数据</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E6%89%80%E6%9C%89%E4%BA%A7%E5%93%81%E5%90%8D%E7%A7%B0"><span class="toc-number">2.1.</span> <span class="toc-text">获取所有产品名称</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E4%BA%A7%E5%93%81bug%E6%95%B0"><span class="toc-number">2.2.</span> <span class="toc-text">获取产品bug数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%9D%E5%AD%98%E6%95%B0%E6%8D%AE%E8%87%B3json%E6%96%87%E4%BB%B6"><span class="toc-number">2.3.</span> <span class="toc-text">保存数据至json文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Highcharts%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96"><span class="toc-number">3.</span> <span class="toc-text">Highcharts数据可视化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AF%E8%A7%86%E5%8C%96%E6%95%88%E6%9E%9C%E5%B1%95%E7%A4%BA"><span class="toc-number">3.1.</span> <span class="toc-text">可视化效果展示</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9A%8F%E6%9C%BA%E6%9B%BF%E6%8D%A2%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">4.</span> <span class="toc-text">随机替换字符串</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-number">5.</span> <span class="toc-text">小结</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2019/02/14/XSS/">&lt; XSS跨站脚本攻击</a><a class="next" href="/2018/12/31/pypcap-install/">Python之pypcap库的安装及简单抓包工具的实现 &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+.night .v[data-class=v] a:hover { color: #216C73 !important; }
+.night .v[data-class=v] li { list-style: inherit; }
+.night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
+.night .v[data-class=v] .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.night .v[data-class=v] .vbtn { border-radius: 0; background: none; }
+.night .v[data-class=v] .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.night .v[data-class=v] .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.night .v[data-class=v] .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre,.night .v[data-class=v] .vlist .vcard .vhead .vsys { background: #203240 !important; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre { color: #F0F0F0; font-size: 95%; }
+.v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
+</style><div id="vcomment"></div><script src="//cdn.bootcdn.net/ajax/libs/valine/1.4.14/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
+  lang: 'zh-cn',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></section><footer><p>Copyright © 2016 - 2021 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script></body></html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>Matlab - 设计滤波器截止频率 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
+</head><link rel="stylesheet" type="text/css" href="/plugins/highlight/atom-one-dark.min.css"><script type="text/javascript" src="/plugins/highlight/highlight.min.js"></script><script>hljs.initHighlightingOnLoad();
+</script><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">Matlab - 设计滤波器截止频率</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2016/11/14/signal-Process/">2016-11-14</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Language/">Language</a>&nbsp;&bull;&nbsp;<a href="/categories/Language/Matlab/">Matlab</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><h2 id="截止频率"><a href="#截止频率" class="headerlink" title="截止频率"></a>截止频率</h2><p>通常，我们将信号幅值衰减3dB处的频率作为截止频率，这是为何？</p>
+<p>首先，明确以下两点：</p>
+<ol>
+<li>幅值的平方为功率</li>
+<li>信号功率衰减一半时的频率被称为<strong>截止频率</strong></li>
+</ol>
+<p>当信号功率衰减一半 (1/2) 时，幅值衰减 sqrt(1/2) ，那么其对应的 dB 值为：</p>
+<pre><code class="bash">20*log10(sqrt(2)/2) ≈ -3dB
+</code></pre>
+<h2 id="举例说明"><a href="#举例说明" class="headerlink" title="举例说明"></a>举例说明</h2><h3 id="滤波器设计"><a href="#滤波器设计" class="headerlink" title="滤波器设计"></a>滤波器设计</h3><p>设计一个 butterworth 低通滤波器，采样频率 100Hz ，截止频率 20Hz ，阶次为 4 。</p>
+<pre><code class="matlab">clc
+fs = 100;           % 采样频率
+tLen = 2;           % 时间长度
+pointNum = fs*2;    % 采样点数
+fpass = 20;         % 通带频率
+
+wp = fpass/(fs/2);      % 计算归一化角频率
+[b,a] = butter(4,wp);   % 设计滤波器
+
+% 获取频率特性
+[H,F] = freqz(b,a,pointNum,fs);
+H = 20*log10(abs(H));
+
+hold off
+plot(F,H);grid on;hold on
+
+fcAmp = H(fpass*2*pointNum/fs+1);
+stem(fpass,fcAmp,&#39;linewidth&#39;,2);
+text(fpass+2,fcAmp-1,num2str(fcAmp));
+
+setPlot(&#39;滤波器幅频特性&#39;,&#39;frequency(Hz)&#39;,&#39;amptitude(dB)&#39;,[F(1) F(end)],[-50,10]);
+</code></pre>
+<h3 id="setPlot"><a href="#setPlot" class="headerlink" title="setPlot"></a>setPlot</h3><p>程序中用到的 setPlot 函数用于设置图形的 title , xlabel , ylabel , xlim , ylim.</p>
+<pre><code class="matlab">function [  ] = setPlot( varargin )
+% setPlot()
+% setPlot(title)
+% setPlot(title,xlabel)
+% setPlot(title,xlable,ylabel)
+% setPlot(title,xlabel,ylabel,xlim)
+% setPlot(title,xlable,ylabel,xlim,ylim)
+
+narginchk(0,5);     % 判断输入参数是否足够
+
+grid on;
+axis tight;
+
+if nargin&gt;=1
+    title(varargin&#123;1&#125;);
+end
+
+if nargin&gt;=2
+    xlabel(varargin&#123;2&#125;);
+end
+
+if nargin&gt;=3
+    ylabel(varargin&#123;3&#125;);
+end
+
+if nargin&gt;=4
+    xlim(varargin&#123;4&#125;);
+end
+
+if nargin&gt;=5
+    ylim(varargin&#123;5&#125;);
+end
+
+end
+</code></pre>
+<h3 id="滤波器幅频特性"><a href="#滤波器幅频特性" class="headerlink" title="滤波器幅频特性"></a>滤波器幅频特性</h3><p><img src="/assets/matlab/fc20Hz.png" alt="截止频率"></p>
+<p>从图中可以看出，按照要求设计得到的滤波器，截止频率 20Hz 对应的幅值衰减为 -3.0103dB ,约为 -3dB ，与理论所述相吻合。</p>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2016/11/14/signal-Process/">https://www.litreily.top/2016/11/14/signal-Process/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tags"></i><a href="/tags/matlab/">matlab</a><a href="/tags/signal/">signal</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%88%AA%E6%AD%A2%E9%A2%91%E7%8E%87"><span class="toc-number">1.</span> <span class="toc-text">截止频率</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BE%E4%BE%8B%E8%AF%B4%E6%98%8E"><span class="toc-number">2.</span> <span class="toc-text">举例说明</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BB%A4%E6%B3%A2%E5%99%A8%E8%AE%BE%E8%AE%A1"><span class="toc-number">2.1.</span> <span class="toc-text">滤波器设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setPlot"><span class="toc-number">2.2.</span> <span class="toc-text">setPlot</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BB%A4%E6%B3%A2%E5%99%A8%E5%B9%85%E9%A2%91%E7%89%B9%E6%80%A7"><span class="toc-number">2.3.</span> <span class="toc-text">滤波器幅频特性</span></a></li></ol></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2016/11/25/matlab-coder/">&lt; Matlab - 经VS将.m文件转换为.dll文件</a><a class="next" href="/2016/11/02/FreeRTOS/">stm32 - FreeRTOS系统移植 &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+.night .v[data-class=v] a:hover { color: #216C73 !important; }
+.night .v[data-class=v] li { list-style: inherit; }
+.night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
+.night .v[data-class=v] .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.night .v[data-class=v] .vbtn { border-radius: 0; background: none; }
+.night .v[data-class=v] .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.night .v[data-class=v] .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.night .v[data-class=v] .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre,.night .v[data-class=v] .vlist .vcard .vhead .vsys { background: #203240 !important; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre { color: #F0F0F0; font-size: 95%; }
+.v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
+</style><div id="vcomment"></div><script src="//cdn.bootcdn.net/ajax/libs/valine/1.4.14/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
+  lang: 'zh-cn',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></section><footer><p>Copyright © 2016 - 2021 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script></body></html>

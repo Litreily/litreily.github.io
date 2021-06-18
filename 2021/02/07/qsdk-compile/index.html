@@ -1,0 +1,549 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>基于 IPQ807x 编译 QSDK | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
+</head><link rel="stylesheet" type="text/css" href="/plugins/highlight/atom-one-dark.min.css"><script type="text/javascript" src="/plugins/highlight/highlight.min.js"></script><script>hljs.initHighlightingOnLoad();
+</script><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">基于 IPQ807x 编译 QSDK</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2021/02/07/qsdk-compile/">2021-02-07</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Embedded/">Embedded</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>接上一篇 <a href="https://www.litreily.top/2021/01/29/qsdk/">下载安装基于 openwrt 的 QSDK</a>,  这一篇来讲下编译 <code>QSDK</code> 的步骤以及遇到的问题及其处理方法。</p>
+<p>正常步骤，是下面这样的，根据设备类型选择 config 文件，生成 .config, 然后完整编译。</p>
+<pre><code class="bash">cp qca/configs/qsdk/ipq_open.config .config
+echo  CONFIG_TARGET_ipq_ipq807x_64=y  &gt;&gt; .config
+echo CONFIG_TARGET_ipq_ipq807x_64_QSDK_Open=y  &gt;&gt; .config
+
+make package/symlinks
+make defconfig
+make V=s
+</code></pre>
+<p><code>make V=s</code> 之前的指令都能正常通过，但是编译过程中就可能出现各种情况，比如缺少编译工具等。</p>
+<h2 id="依赖工具"><a href="#依赖工具" class="headerlink" title="依赖工具"></a>依赖工具</h2><p>每个人的编译环境可能都不一样，所以缺少的依赖也不同，这里给出我的环境（ubuntu 20.04）缺少的工具</p>
+<ul>
+<li><code>ocaml-nox</code>: Objective Caml compiler for GUI of <code>make menuconfig</code></li>
+<li><code>zlib1g-dev</code>: for <code>zlib</code></li>
+<li><code>libssl-dev</code>: for <code>openssl</code></li>
+<li><code>subversion</code>: for <code>svn</code></li>
+</ul>
+<p>安装如下：</p>
+<pre><code class="bash">sudo apt install ocaml-nox
+sudo apt install zlib1g-dev
+sudo apt install libssl-dev
+sudo apt install subversion
+</code></pre>
+<h2 id="编译错误"><a href="#编译错误" class="headerlink" title="编译错误"></a>编译错误</h2><h3 id="m4"><a href="#m4" class="headerlink" title="m4"></a>m4</h3><p>在编译过程中，m4 编译失败，报错信息如下：</p>
+<pre><code class="log">gcc  -I.   -I/home/litreily/qsdk/qsdk/staging_dir/host/include -I/home/litreily/qsdk/qsdk/staging_dir/host/usr/include  -O2 -I/home/litreily/qsdk/qsdk/staging_dir/host/include -I/home/litreily/qsdk/qsdk/staging_dir/host/usr/include -MT freadahead.o -MD -MP -MF $depbase.Tpo -c -o freadahead.o freadahead.c &amp;&amp;\
+mv -f $depbase.Tpo $depbase.Po
+freadahead.c: In function &#39;freadahead&#39;:
+freadahead.c:91:3: error: #error &quot;Please port gnulib freadahead.c to your platform! Look at the definition of fflush, fread, ungetc on your system, then report this to bug-gnulib.&quot;
+   91 |  #error &quot;Please port gnulib freadahead.c to your platform! Look at the definition of fflush, fread, ungetc on your system, then report this to bug-gnulib.&quot;
+      |   ^~~~~
+make[6]: *** [Makefile:1837: freadahead.o] Error 1
+make[6]: Leaving directory &#39;/home/litreily/qsdk/qsdk/build_dir/host/m4-1.4.17/lib&#39;
+make[5]: *** [Makefile:1602: all] Error 2
+</code></pre>
+<p>关键信息是 <code>#error &quot;Please port gnulib freadahead.c to your platform&quot;</code>.</p>
+<p>解决方案是打补丁，参考 <a target="_blank" rel="noopener" href="https://www.reddit.com/r/archlinux/comments/97gsb1/glibc_update_breaks_buildroot/">glibc update breaks buildroot</a> 给出的方案，从 GitHub 寻找到了 <a target="_blank" rel="noopener" href="https://github.com/coreutils/gnulib/commit/4af4a4a71827c0bc5e0ec67af23edef4f15cee8e">patch</a>.</p>
+<blockquote>
+<p>从 <code>GitHub</code> 上下载指定 <code>commit</code> 对应的 patch 时，只需要在 commit url 后面添加 <code>.patch</code> 后缀即可。</p>
+</blockquote>
+<p>下载后放到目录 <code>tools/m4/patches/</code>. 然后重新执行 <code>make V=s</code>, 或者 <code>make tools/m4/compile V=s</code>, 你会发现，之前的错误信息不见了，但是会出现其它错误，指示我们新加入的 <code>patch</code> 添加失败。这是为什么呢？因为 GitHub 的 patch 对应的 m4 的版本和 <code>QSDK</code> 中的不一样，所以需要对patch稍加修改，把不存在的文件部分删除即可。</p>
+<p>裁剪后的 patch 如下：</p>
+<pre><code class="patch">diff --git a/lib/fflush.c b/lib/fflush.c
+index 983ade0ff..a6edfa105 100644
+--- a/lib/fflush.c
++++ b/lib/fflush.c
+@@ -33,7 +33,7 @@
+ #undef fflush
+
+
+-#if defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
++#if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+
+ /* Clear the stream&#39;s ungetc buffer, preserving the value of ftello (fp).  */
+ static void
+@@ -72,7 +72,7 @@ clear_ungetc_buffer (FILE *fp)
+
+ #endif
+
+-#if ! (defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */)
++#if ! (defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */)
+
+ # if (defined __sferror || defined __DragonFly__ || defined __ANDROID__) &amp;&amp; defined __SNPT
+ /* FreeBSD, NetBSD, OpenBSD, DragonFly, Mac OS X, Cygwin, Minix 3, Android */
+@@ -148,7 +148,7 @@ rpl_fflush (FILE *stream)
+   if (stream == NULL || ! freading (stream))
+     return fflush (stream);
+
+-#if defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
++#if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+
+   clear_ungetc_buffer_preserving_position (stream);
+
+diff --git a/lib/fpurge.c b/lib/fpurge.c
+index b1d417c7a..3aedcc373 100644
+--- a/lib/fpurge.c
++++ b/lib/fpurge.c
+@@ -62,7 +62,7 @@ fpurge (FILE *fp)
+   /* Most systems provide FILE as a struct and the necessary bitmask in
+      &lt;stdio.h&gt;, because they need it for implementing getc() and putc() as
+      fast macros.  */
+-# if defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
++# if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+   fp-&gt;_IO_read_end = fp-&gt;_IO_read_ptr;
+   fp-&gt;_IO_write_ptr = fp-&gt;_IO_write_base;
+   /* Avoid memory leak when there is an active ungetc buffer.  */
+diff --git a/lib/freadahead.c b/lib/freadahead.c
+index c2ecb5b28..23ec76ee5 100644
+--- a/lib/freadahead.c
++++ b/lib/freadahead.c
+@@ -30,7 +30,7 @@ extern size_t __sreadahead (FILE *);
+ size_t
+ freadahead (FILE *fp)
+ &#123;
+-#if defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
++#if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+   if (fp-&gt;_IO_write_ptr &gt; fp-&gt;_IO_write_base)
+     return 0;
+   return (fp-&gt;_IO_read_end - fp-&gt;_IO_read_ptr)
+diff --git a/lib/freading.c b/lib/freading.c
+index 73c28acdd..c24d0c88a 100644
+--- a/lib/freading.c
++++ b/lib/freading.c
+@@ -31,7 +31,7 @@ freading (FILE *fp)
+   /* Most systems provide FILE as a struct and the necessary bitmask in
+      &lt;stdio.h&gt;, because they need it for implementing getc() and putc() as
+      fast macros.  */
+-# if defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
++# if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+   return ((fp-&gt;_flags &amp; _IO_NO_WRITES) != 0
+           || ((fp-&gt;_flags &amp; (_IO_NO_READS | _IO_CURRENTLY_PUTTING)) == 0
+               &amp;&amp; fp-&gt;_IO_read_base != NULL));
+diff --git a/lib/fseeko.c b/lib/fseeko.c
+index 0101ab55f..193f4e8ce 100644
+--- a/lib/fseeko.c
++++ b/lib/fseeko.c
+@@ -47,7 +47,7 @@ fseeko (FILE *fp, off_t offset, int whence)
+ #endif
+
+   /* These tests are based on fpurge.c.  */
+-#if defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
++#if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+   if (fp-&gt;_IO_read_end == fp-&gt;_IO_read_ptr
+       &amp;&amp; fp-&gt;_IO_write_ptr == fp-&gt;_IO_write_base
+       &amp;&amp; fp-&gt;_IO_save_base == NULL)
+@@ -123,7 +123,7 @@ fseeko (FILE *fp, off_t offset, int whence)
+           return -1;
+         &#125;
+ 
+-#if defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
++#if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+       fp-&gt;_flags &amp;= ~_IO_EOF_SEEN;
+       fp-&gt;_offset = pos;
+ #elif defined __sferror || defined __DragonFly__ || defined __ANDROID__
+--- a/lib/stdio-impl.h
++++ b/lib/stdio-impl.h
+@@ -18,6 +18,12 @@
+    the same implementation of stdio extension API, except that some fields
+    have different naming conventions, or their access requires some casts.  */ 
+  
++/* Glibc 2.28 made _IO_IN_BACKUP private.  For now, work around this
++   problem by defining it ourselves.  FIXME: Do not rely on glibc
++   internals.  */
++#if !defined _IO_IN_BACKUP &amp;&amp; defined _IO_EOF_SEEN
++# define _IO_IN_BACKUP 0x100
++#endif
+  
+ /* BSD stdio derived implementations.  */
+ 
+</code></pre>
+<p>这个 patch 最主要的修改就是将 <code>_IO_ftrylockfile</code> 改成了 <code>_IO_EOF_SEEN</code>, 具体原因没有深究，有知道的可以留言分享下~</p>
+<p>ok, 将这个patch加入后，<code>m4</code> 就能正常编译过去了。接着 <code>make V=s</code> 编译整个项目吧。</p>
+<h3 id="make-ext4fs"><a href="#make-ext4fs" class="headerlink" title="make-ext4fs"></a>make-ext4fs</h3><p><code>make-ext4fs</code> 编译失败的信息如下：</p>
+<pre><code class="log">cc -o make_ext4fs allocate.o canned_fs_config.o contents.o crc16.o ext4fixup.o ext4_sb.o ext4_utils.o extent.o indirect.o make_ext4fs_main.o make_ext4fs.o sha1.o uuid.o wipe.o libsparse/libsparse.a -lz
+/usr/bin/ld: contents.o: in function `make_special&#39;:
+contents.c:(.text+0xbf7): undefined reference to `major&#39;
+/usr/bin/ld: contents.c:(.text+0xc17): undefined reference to `minor&#39;
+collect2: error: ld returned 1 exit status
+make[3]: *** [Makefile:24: make_ext4fs] Error 1
+</code></pre>
+<p>参考 <a target="_blank" rel="noopener" href="https://github.com/hishamhm/htop/issues/663">github issue</a> 可知，这是缺少头文件 <code>&lt;sys/sysmacros.h&gt;</code> 导致的。</p>
+<p>加如 patch 0001-fix-undefined-reference-major-minor.patch，放到目录 <code>tools/make-ext4fs/patches/</code>。</p>
+<pre><code class="patch">--- a/contents.c        2021-02-07 15:37:31.463251930 +0800
++++ b/contents.c        2021-02-07 15:37:03.022743240 +0800
+@@ -15,6 +15,7 @@
+  */
+ 
+ #include &lt;sys/stat.h&gt;
++#include &lt;sys/sysmacros.h&gt;
+ #include &lt;string.h&gt;
+ #include &lt;stdio.h&gt;
+ 
+</code></pre>
+<p><code>make tools/make-ext4fs/&#123;clean,compile&#125; V=s</code> 编译成功！</p>
+<h3 id="e2fsprogs"><a href="#e2fsprogs" class="headerlink" title="e2fsprogs"></a>e2fsprogs</h3><p><code>e2fsprogs</code> 的编译错误与 <code>make-ext4fs</code> 类似，其错误信息如下：</p>
+<pre><code class="log">/usr/bin/ld: ../lib/libblkid.a(devname.o): in function `probe_all&#39;:
+devname.c:(.text+0x888): undefined reference to `makedev&#39;
+/usr/bin/ld: devname.c:(.text+0xb7e): undefined reference to `makedev&#39;
+/usr/bin/ld: devname.c:(.text+0xc5b): undefined reference to `makedev&#39;
+collect2: error: ld returned 1 exit status
+make[6]: *** [Makefile:391: e2fsck] Error 1
+make[6]: Leaving directory &#39;/home/litreily/qsdk/qsdk/build_dir/host/e2fsprogs-1.42.8/e2fsck&#39;
+make[5]: *** [Makefile:355: all-progs-recursive] Error 1
+</code></pre>
+<p><code>makedev</code> 也属于头文件 <code>&lt;sys/sysmacros.h&gt;</code>, 添加 patch 到目录 <code>tools/e2fsprogs/patches</code>：</p>
+<pre><code class="patch">--- a/lib/blkid/devname.c 2021-02-07 16:04:24.190214251 +0800
++++ b/lib/blkid/devname.c 2021-02-07 16:03:53.869128549 +0800
+@@ -37,6 +37,7 @@
+ #include &lt;sys/mkdev.h&gt;
+ #endif
+ #include &lt;time.h&gt;
++#include &lt;sys/sysmacros.h&gt;
+ 
+ #include &quot;blkidP.h&quot;
+</code></pre>
+<p><code>make tools/e2fsprogs/&#123;clean,compile&#125; V=s</code> 编译成功!</p>
+<h3 id="mtd-utils"><a href="#mtd-utils" class="headerlink" title="mtd-utils"></a>mtd-utils</h3><p>与 <code>make-ext4fs</code>, <code>e2fsprogs</code> 类似，也是缺少 <code>sysmacros.h</code></p>
+<pre><code class="log">/usr/bin/ld: /home/litreily/qsdk/qsdk/build_dir/host/mtd-utils-1.5.1/mkfs.jffs2.o: in function `write_special_file&#39;:
+/home/litreily/qsdk/qsdk/build_dir/host/mtd-utils-1.5.1/mkfs.jffs2.c:944: undefined reference to `major&#39;
+/usr/bin/ld: /home/litreily/qsdk/qsdk/build_dir/host/mtd-utils-1.5.1/mkfs.jffs2.c:944: undefined reference to `minor&#39;
+/usr/bin/ld: /home/litreily/qsdk/qsdk/build_dir/host/mtd-utils-1.5.1/mkfs.jffs2.o: in function `recursive_populate_directory&#39;:
+/home/litreily/qsdk/qsdk/build_dir/host/mtd-utils-1.5.1/mkfs.jffs2.c:1273: undefined reference to `minor&#39;
+/usr/bin/ld: /home/litreily/qsdk/qsdk/build_dir/host/mtd-utils-1.5.1/mkfs.jffs2.c:1273: undefined reference to `major&#39;
+/usr/bin/ld: /home/litreily/qsdk/qsdk/build_dir/host/mtd-utils-1.5.1/mkfs.jffs2.c:1263: undefined reference to `minor&#39;
+/usr/bin/ld: /home/litreily/qsdk/qsdk/build_dir/host/mtd-utils-1.5.1/mkfs.jffs2.c:1263: undefined reference to `major&#39;
+/usr/bin/ld: /home/litreily/qsdk/qsdk/build_dir/host/mtd-utils-1.5.1/mkfs.jffs2.o: in function `interpret_table_entry&#39;:
+/home/litreily/qsdk/qsdk/build_dir/host/mtd-utils-1.5.1/mkfs.jffs2.c:467: undefined reference to `makedev&#39;
+/usr/bin/ld: /home/litreily/qsdk/qsdk/build_dir/host/mtd-utils-1.5.1/mkfs.jffs2.c:503: undefined reference to `makedev&#39;
+/usr/bin/ld: /home/litreily/qsdk/qsdk/build_dir/host/mtd-utils-1.5.1/mkfs.jffs2.c:510: undefined reference to `makedev&#39;
+collect2: error: ld returned 1 exit status
+make[4]: *** [common.mk:71: /home/litreily/qsdk/qsdk/build_dir/host/mtd-utils-1.5.1/mkfs.jffs2] Error 1
+</code></pre>
+<p>添加 patch 到目录 <code>tools/mtd-utils/patches</code>.</p>
+<pre><code class="patch">--- a/include/common.h  2021-02-07 16:25:50.643801767 +0800
++++ b/include/common.h  2021-02-07 16:25:41.139803836 +0800
+@@ -19,6 +19,7 @@
+ #ifndef __MTD_UTILS_COMMON_H__
+ #define __MTD_UTILS_COMMON_H__
+ 
++#include &lt;sys/sysmacros.h&gt;
+ #include &lt;stdbool.h&gt;
+ #include &lt;stdio.h&gt;
+ #include &lt;stdlib.h&gt;
+</code></pre>
+<p><code>make tools/mtd-utils/&#123;clean,compile&#125; V=s</code> 编译成功！</p>
+<blockquote>
+<p>这里注意下，如果在 <code>mkfs.jffs2.c</code> 中添加这个头文件的话，还会有其它文件报错，也是缺少头文件，所以方便起见，将该头文件放入共有的共用的 <code>common.h</code></p>
+</blockquote>
+<h3 id="u-boot"><a href="#u-boot" class="headerlink" title="u-boot"></a>u-boot</h3><p><code>u-boot</code> 编译失败。</p>
+<pre><code class="log">/home/litreily/qsdk/qsdk/build_dir/host/u-boot-2014.10/lib/rsa/rsa-sign.c: In function &#39;rsa_get_exponent&#39;:
+/home/litreily/qsdk/qsdk/build_dir/host/u-boot-2014.10/lib/rsa/rsa-sign.c:279:21: error: dereferencing pointer to incomplete type &#39;RSA&#39; &#123;aka &#39;struct rsa_st&#39;&#125;
+  279 |  if (BN_num_bits(key-&gt;e) &gt; 64)
+      |                     ^~
+make[5]: *** [scripts/Makefile.host:134: tools/lib/rsa/rsa-sign.o] Error 1
+</code></pre>
+<p>根据 <a target="_blank" rel="noopener" href="https://github.com/freifunk-gluon/gluon/issues/973">github issue</a> 讨论，这是需要安装 <code>libssl1.0-dev</code>, 但是之前安装的是默认的 <code>libssl1.1</code>, 所以需要重新安装 1.0 版本。</p>
+<p>但是 <code>ubuntu</code> 默认源并不包含 1.0 版本，参考 <a target="_blank" rel="noopener" href="https://github.com/rvm/rvm/issues/4764">github - cannot install on Debian stable (libssl1.0-dev)</a>, 需要手动修改：</p>
+<pre><code class="bash">sudo echo &quot;deb http://security.ubuntu.com/ubuntu bionic-security main&quot; &gt;&gt; /etc/apt/sources.list
+sudo apt update
+sudo apt-cache policy libssl1.0-dev
+sudo apt install libssl1.0-dev
+</code></pre>
+<p>安装成功后，重新编译就正常了。</p>
+<h3 id="findutils"><a href="#findutils" class="headerlink" title="findutils"></a>findutils</h3><p>编译错误与 <code>m4</code> 一致。</p>
+<pre><code class="log">freadahead.c: In function &#39;freadahead&#39;:
+freadahead.c:64:3: error: #error &quot;Please port gnulib freadahead.c to your platform! Look at the definition of fflush, fread on your system, then report this to bug-gnulib.&quot;
+   64 |  #error &quot;Please port gnulib freadahead.c to your platform! Look at the definition of fflush, fread on your system, then report this to bug-gnulib.&quot;
+      |   ^~~~~
+make[8]: *** [Makefile:890: freadahead.o] Error 1
+</code></pre>
+<p>需要注意的是，虽然报错信息一样，但 patch 却和 <code>m4</code> 并不通用，因为其所用的 gnulib 库版本不一致。这种情况下，有两种选择</p>
+<ol>
+<li>单独 fix 编译错误</li>
+<li>升级 findutils, 4.4.2 -&gt; 4.6.0</li>
+</ol>
+<p>为了保持版本不变，选择第一种方式，先看下报错 log 对应 code：</p>
+<pre><code class="c">size_t
+freadahead (FILE *fp)
+&#123;
+#if defined _IO_ferror_unlocked     /* GNU libc, BeOS */
+  if (fp-&gt;_IO_write_ptr &gt; fp-&gt;_IO_write_base)
+    return 0;
+  return fp-&gt;_IO_read_end - fp-&gt;_IO_read_ptr;
+#elif defined __sferror             /* FreeBSD, NetBSD, OpenBSD, MacOS X, Cygwin */
+  if ((fp-&gt;_flags &amp; __SWR) != 0 || fp-&gt;_r &lt; 0)
+    return 0;
+  return fp-&gt;_r;
+#elif defined _IOERR                /* AIX, HP-UX, IRIX, OSF/1, Solaris, mingw */
+# if defined __sun &amp;&amp; defined _LP64 /* Solaris/&#123;SPARC,AMD64&#125; 64-bit */
+#  define fp_ ((struct &#123; unsigned char *_ptr; \
+                         unsigned char *_base; \
+                         unsigned char *_end; \
+                         long _cnt; \
+                         int _file; \
+                         unsigned int _flag; \
+                       &#125; *) fp)
+  if ((fp_-&gt;_flag &amp; _IOWRT) != 0)
+    return 0;
+  return fp_-&gt;_cnt;
+# else
+  if ((fp-&gt;_flag &amp; _IOWRT) != 0)
+    return 0;
+  return fp-&gt;_cnt;
+# endif
+#elif defined __UCLIBC__            /* uClibc */
+# ifdef __STDIO_BUFFERS
+  if (fp-&gt;__modeflags &amp; __FLAG_WRITING)
+    return 0;
+  return fp-&gt;__bufread - fp-&gt;__bufpos;
+# else
+  return 0;
+# endif
+#elif defined __QNX__               /* QNX */
+  if ((fp-&gt;_Mode &amp; 0x2000 /* _MWRITE */) != 0)
+    return 0;
+  /* fp-&gt;_Buf &lt;= fp-&gt;_Next &lt;= fp-&gt;_Rend */
+  return fp-&gt;_Rend - fp-&gt;_Next;
+#else
+ #error &quot;Please port gnulib freadahead.c to your platform! Look at the definition of fflush, fread on your system, then report this to bug-gnulib.&quot;
+#endif
+&#125;
+</code></pre>
+<p>可以看出报错的原因是某些宏定义没有定义。与此类似的文件有：</p>
+<ul>
+<li>fseeko.c</li>
+<li>fpurge.c</li>
+<li>freading.c</li>
+<li>freadahead.c</li>
+</ul>
+<p>统一处理下，把最后的 <code>#else</code> 分支内容注释掉，然后添加相应的 <code>return 0</code>.</p>
+<pre><code class="patch">--- a/gnulib/lib/freadahead.c   2021-02-08 09:11:12.009710455 +0800                                                                                           
++++ b/gnulib/lib/freadahead.c   2021-02-08 09:06:20.140641585 +0800                                                                                           
+@@ -61,6 +61,7 @@                                                                                                                                             
+   /* fp-&gt;_Buf &lt;= fp-&gt;_Next &lt;= fp-&gt;_Rend */                                                                                                                   
+   return fp-&gt;_Rend - fp-&gt;_Next;                                                                                                                              
+ #else
+- #error &quot;Please port gnulib freadahead.c to your platform! Look at the definition of fflush, fread on your system, then report this to bug-gnulib.&quot;
++ //#error &quot;Please port gnulib freadahead.c to your platform! Look at the definition of fflush, fread on your system, then report this to bug-gnulib.&quot;
++ return 0;
+ #endif
+ &#125;
+--- a/gnulib/lib/freading.c     2021-02-08 09:11:12.009710455 +0800
++++ b/gnulib/lib/freading.c     2021-02-08 09:06:20.140641585 +0800
+@@ -43,7 +43,8 @@
+   return ((fp-&gt;_Mode &amp; 0x2 /* _MOPENW */) == 0
+          || (fp-&gt;_Mode &amp; 0x1000 /* _MREAD */) != 0);
+ #else
+- #error &quot;Please port gnulib freading.c to your platform!&quot;
++ //#error &quot;Please port gnulib freading.c to your platform!&quot;
++ return 0;
+ #endif
+ &#125;
+  
+--- a/gnulib/lib/fpurge.c       2021-02-08 09:11:12.009710455 +0800
++++ b/gnulib/lib/fpurge.c       2021-02-08 09:06:20.140641585 +0800
+@@ -114,7 +114,8 @@
+     fp-&gt;_Rend = fp-&gt;_Next;
+   return 0;
+ # else
+- #error &quot;Please port gnulib fpurge.c to your platform! Look at the definitions of fflush, setvbuf and ungetc on your system, then report this to bug-gnulib.&quot;
++ //#error &quot;Please port gnulib fpurge.c to your platform! Look at the definitions of fflush, setvbuf and ungetc on your system, then report this to bug-gnulib.&quot;
++ return 0;
+ # endif
+  
+ #endif
+--- a/gnulib/lib/fseeko.c       2021-02-08 09:11:12.009710455 +0800
++++ b/gnulib/lib/fseeko.c       2021-02-08 09:06:20.140641585 +0800
+@@ -95,7 +95,7 @@
+       &amp;&amp; fp-&gt;_Rback == fp-&gt;_Back + sizeof (fp-&gt;_Back)
+       &amp;&amp; fp-&gt;_Rsave == NULL)
+ #else
+-  #error &quot;Please port gnulib fseeko.c to your platform! Look at the code in fpurge.c, then report this to bug-gnulib.&quot;
++  //#error &quot;Please port gnulib fseeko.c to your platform! Look at the code in fpurge.c, then report this to bug-gnulib.&quot;
+ #endif
+     &#123;
+       off_t pos = lseek (fileno (fp), offset, whence);
+</code></pre>
+<p><code>make tools/findutils/&#123;clean,compile&#125; V=s</code> 编译成功！</p>
+<h3 id="squashfs4"><a href="#squashfs4" class="headerlink" title="squashfs4"></a>squashfs4</h3><p><code>squashfs4</code> 的错误信息与 <code>make-ext4fs</code> 等类似，也是缺少头文件 <code>&lt;sys/sysmacros.h&gt;</code>.</p>
+<pre><code class="log">mksquashfs.c: In function &#39;create_inode&#39;:
+mksquashfs.c:1372:24: error: called object &#39;major&#39; is not a function or function pointer
+ 1372 |   unsigned int major = major(buf-&gt;st_rdev);
+      |                        ^~~~~
+</code></pre>
+<p>把头文件加上就好了。</p>
+<pre><code class="patch">--- a/squashfs-tools/mksquashfs.c       2021-02-08 10:08:42.135709202 +0800
++++ b/squashfs-tools/mksquashfs.c       2021-02-08 10:09:03.263649419 +0800
+@@ -52,6 +52,7 @@
+ #include &lt;regex.h&gt;
+ #include &lt;fnmatch.h&gt;
+ #include &lt;sys/wait.h&gt;
++#include &lt;sys/sysmacros.h&gt;
+ 
+ #ifndef linux
+ #ifndef __CYGWIN__
+--- a/squashfs-tools/unsquashfs.c       2021-02-08 10:08:48.335691509 +0800
++++ b/squashfs-tools/unsquashfs.c       2021-02-08 10:09:24.919589603 +0800
+@@ -30,6 +30,7 @@
+ #include &quot;xattr.h&quot;
+ 
+ #include &lt;sys/types.h&gt;
++#include &lt;sys/sysmacros.h&gt;
+ 
+ struct cache *fragment_cache, *data_cache;
+ struct queue *to_reader, *to_deflate, *to_writer, *from_writer;
+</code></pre>
+<p><code>make tools/squashfs4/&#123;clean,compile&#125; V=s</code> 编译成功！</p>
+<h3 id="coccinelle"><a href="#coccinelle" class="headerlink" title="coccinelle"></a>coccinelle</h3><p><code>coccinelle</code> 依赖 <code>ocaml</code>, 而且版本不一样会编译出错，当前 <code>QSDK</code> 所用的<code>ocaml</code>版本较低，为 <code>4.02.3</code>, 但是本机默认安装的却是 <code>4.08.1</code>, 所以需要重新降级安装，参考 <a target="_blank" rel="noopener" href="https://www.izheteng.site/2020/04/03/2020-04-03-Ubuntu18-04%E4%B8%8B%E7%BC%96%E8%AF%91OpenWRT15-05%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/#7-%E7%BC%96%E8%AF%91coccinelle-1-0-0-rc24c%E5%87%BA%E9%94%99">这里</a> 给出的解决方案。</p>
+<pre><code class="bash"># install opam
+sudo add-apt-repository ppa:avsm/ppa # 或许可以省略
+sudo apt update
+sudo apt install opam
+
+# environment setup
+opam init
+eval `opam env`
+# install given version of the compiler
+opam switch create 4.02.3
+eval `opam env`
+# check you got what you want
+which ocaml
+ocaml -version
+</code></pre>
+<p>然后重新编译 <code>coccinelle</code>, 发现会提示找不到 <code>ocamlfind</code> ，这时再用刚刚安装的 <code>opam</code> 安装一下就好了。</p>
+<pre><code class="bash">opam install ocamlfind
+</code></pre>
+<blockquote>
+<p>下载和使用 <code>opam</code> 过程中会通过 <code>curl</code> 指令从网络下载数据，所以可能比较慢，需要耐心等待。</p>
+</blockquote>
+<p>之后重新编译 <code>coccinelle</code> 就成功啦。</p>
+<h3 id="bazel"><a href="#bazel" class="headerlink" title="bazel"></a>bazel</h3><p><code>Bazel</code> 依赖一些第三方库，比如 <code>grpc.git</code> ，由于 Glibc 版本原因，<code>grpc</code> 定义的 <code>gettid</code> 函数与库函数产生了冲突。</p>
+<pre><code class="log">Execution platform: @bazel_tools//platforms:host_platform
+third_party/grpc/src/core/support/log_linux.c:57:13: error: conflicting types for &#39;gettid&#39;
+   57 | static long gettid(void) &#123; return syscall(__NR_gettid); &#125;
+      |             ^~~~~~
+In file included from /usr/include/unistd.h:1170,
+                 from third_party/grpc/src/core/support/log_linux.c:55:
+/usr/include/x86_64-linux-gnu/bits/unistd_ext.h:34:16: note: previous declaration of &#39;gettid&#39; was here
+   34 | extern __pid_t gettid (void) __THROW;
+      |                ^~~~~~
+Target //src:bazel_nojdk failed to build
+INFO: Elapsed time: 43.689s, Critical Path: 0.74s
+INFO: 22 processes: 22 local.
+FAILED: Build did NOT complete successfully
+</code></pre>
+<p>参考 <code>grpc</code> 官方 <a target="_blank" rel="noopener" href="https://github.com/grpc/grpc/pull/18950/commits/57586a1ca7f17b1916aed3dea4ff8de872dbf853">fix solution</a> , 需要将 <code>log_linux.c</code> 中的 <code>gettid</code> 改为 <code>sys_gettid</code>.</p>
+<pre><code class="patch">diff --git a/tools/bazel/Makefile b/tools/bazel/Makefile
+index 971270fadb33..74ba38be40d0 100644
+--- a/tools/bazel/Makefile
++++ b/tools/bazel/Makefile
+@@ -14,6 +14,7 @@ include $(INCLUDE_DIR)/host-build.mk
+ 
+ export JAVA_HOME=$(STAGING_DIR_HOST)/bin/openjdk-1.8-native
+ define Host/Compile
++       sed -i &#39;s/gettid/sys_gettid/&#39;  $(HOST_BUILD_DIR)/../third_party/grpc/src/core/support/log_linux.c
+        $(HOST_BUILD_DIR)/../compile.sh
+ endef
+</code></pre>
+<p>这里需要说明的是，为什么这里不在 <code>tools/bazel/patches</code> 添加补丁，而是在 Makefile 里直接修改文件。这是因为 <code>bazel</code> 本身包含大量的第三方库，这些库的所在目录与 <code>bazel</code> 本身编译目录并不相同。</p>
+<pre><code class="log"># bazel 编译目录
+build_dir/host/bazel-0.23.2-dist/bazel-0.23.2/
+
+# third parth
+build_dir/host/bazel-0.23.2-dist/third_party/
+</code></pre>
+<p>我尝试在 patches 添加补丁，并以相对路径 <code>../third_party</code> 访问第三方库，但是在 apply patch 的时候会报错，提示找不到文件，我猜测应该是补丁文件不支持相对路径。尝试多次无果，最终决定通过修改 Makefile 实现对第三方库文件的修改。事实证明，以上修改完美解决了问题。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>纵观以上所有的编译问题，大致分为以下几类：</p>
+<ol>
+<li>缺少宏定义<ol>
+<li><code>m4</code>: <code>_IO_ftrylockfile</code> -&gt; <code>_IO_EOF_SEEN</code></li>
+<li><code>findutils</code></li>
+</ol>
+</li>
+<li>缺少头文件 <code>&lt;sys/sysmacros.h&gt;</code><ol>
+<li><code>make-ext4fs</code></li>
+<li><code>e2fsprogs</code></li>
+<li><code>mtd-utils</code></li>
+<li><code>squashfs4</code></li>
+</ol>
+</li>
+<li>依赖工具版本不兼容<ol>
+<li><code>u-boot</code>: 依赖 <code>libssl1.0-dev</code></li>
+<li><code>coccinelle</code>: 依赖 <code>ocaml 4.02.3</code></li>
+</ol>
+</li>
+<li>第三方库冲突<ol>
+<li><code>bazel</code>: 依赖的 <code>grpc</code> 定义的函数 <code>gettid</code> 与 GLIBC 库函数冲突</li>
+</ol>
+</li>
+</ol>
+<p>实际上大部分问题还是与编译环境有关，编译环境是 Ubuntu 20.04, 所用的工具版本较新，与 <code>QSDK</code> 所需的旧版本不完全兼容，所以导致了各种编译错误。这时候感觉使用 <code>docker</code> 搭建编译环境或许更方便。</p>
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><p>为了方便编译过程的正常进行，可以修改某些文件或者添加脚本简化编译过程。</p>
+<h3 id="修改-distclean"><a href="#修改-distclean" class="headerlink" title="修改 distclean"></a>修改 distclean</h3><p>有时候我们会使用 <code>make distclean</code> 清除整个编译信息，但是这个指令会将 <code>dl</code> 中的下载数据和 <code>.config</code> 文件一同删除，这是我们不希望的。所以可以修改 <code>distclean</code> 对应的指令。这个指令在 <code>include/toplevel.mk</code>. 修改如下：</p>
+<pre><code class="patch">diff --git a/include/toplevel.mk b/include/toplevel.mk
+index 3738dbb89eec..508e67e3384f 100644
+--- a/include/toplevel.mk
++++ b/include/toplevel.mk
+@@ -222,7 +222,7 @@ docs/clean: FORCE
+        @$(_SINGLE)$(SUBMAKE) -C docs clean
+ 
+ distclean: clean_kernel
+-       rm -rf tmp build_dir staging_dir dl .config* feeds package/feeds package/openwrt-packages bin
++       rm -rf tmp build_dir staging_dir feeds package/feeds package/openwrt-packages bin
+        @$(_SINGLE)$(SUBMAKE) -C scripts/config clean
+ 
+ ifeq ($(findstring v,$(DEBUG)),)
+</code></pre>
+<h3 id="添加-build-sh"><a href="#添加-build-sh" class="headerlink" title="添加 build.sh"></a>添加 build.sh</h3><p>为了方便编译，可以在 <code>scripts</code> 目录添加脚本 <code>build.sh</code></p>
+<pre><code class="bash">#!/bin/bash
+cp qca/configs/qsdk/ipq_open.config .config
+echo CONFIG_TARGET_ipq_ipq807x_64=y &gt;&gt; .config
+echo CONFIG_TARGET_ipq_ipq807x_64_QSDK_Open=y &gt;&gt; .config
+
+make package/symlinks
+make defconfig
+make V=s
+</code></pre>
+<p>将编译相关的指令都放一起，然后执行 <code>scripts/build.sh</code> 就好了。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://sites.uclouvain.be/SystInfo/usr/include/sys/sysmacros.h.html">sys/sysmacros.h</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.izheteng.site/2020/04/03/2020-04-03-Ubuntu18-04%E4%B8%8B%E7%BC%96%E8%AF%91OpenWRT15-05%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">Ubuntu18.04下编译OpenWRT15.05遇到的问题和解决方案</a></li>
+</ul>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2021/02/07/qsdk-compile/">https://www.litreily.top/2021/02/07/qsdk-compile/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tags"></i><a href="/tags/openwrt/">openwrt</a><a href="/tags/qsdk/">qsdk</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BE%9D%E8%B5%96%E5%B7%A5%E5%85%B7"><span class="toc-number">1.</span> <span class="toc-text">依赖工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E8%AF%91%E9%94%99%E8%AF%AF"><span class="toc-number">2.</span> <span class="toc-text">编译错误</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#m4"><span class="toc-number">2.1.</span> <span class="toc-text">m4</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#make-ext4fs"><span class="toc-number">2.2.</span> <span class="toc-text">make-ext4fs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#e2fsprogs"><span class="toc-number">2.3.</span> <span class="toc-text">e2fsprogs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mtd-utils"><span class="toc-number">2.4.</span> <span class="toc-text">mtd-utils</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u-boot"><span class="toc-number">2.5.</span> <span class="toc-text">u-boot</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#findutils"><span class="toc-number">2.6.</span> <span class="toc-text">findutils</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#squashfs4"><span class="toc-number">2.7.</span> <span class="toc-text">squashfs4</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#coccinelle"><span class="toc-number">2.8.</span> <span class="toc-text">coccinelle</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#bazel"><span class="toc-number">2.9.</span> <span class="toc-text">bazel</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-number">3.</span> <span class="toc-text">小结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">4.</span> <span class="toc-text">注意事项</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9-distclean"><span class="toc-number">4.1.</span> <span class="toc-text">修改 distclean</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0-build-sh"><span class="toc-number">4.2.</span> <span class="toc-text">添加 build.sh</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2021/05/28/cp210x/">&lt; 解决Ubuntu 18.04 minicom 不支持 1500000 波特率的问题</a><a class="next" href="/2021/01/29/qsdk/">下载安装基于 openwrt 的 QSDK &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+.night .v[data-class=v] a:hover { color: #216C73 !important; }
+.night .v[data-class=v] li { list-style: inherit; }
+.night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
+.night .v[data-class=v] .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.night .v[data-class=v] .vbtn { border-radius: 0; background: none; }
+.night .v[data-class=v] .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.night .v[data-class=v] .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.night .v[data-class=v] .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre,.night .v[data-class=v] .vlist .vcard .vhead .vsys { background: #203240 !important; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre { color: #F0F0F0; font-size: 95%; }
+.v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
+</style><div id="vcomment"></div><script src="//cdn.bootcdn.net/ajax/libs/valine/1.4.14/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
+  lang: 'zh-cn',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></section><footer><p>Copyright © 2016 - 2021 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script></body></html>

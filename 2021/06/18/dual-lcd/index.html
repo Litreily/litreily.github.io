@@ -1,0 +1,1191 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>RK3288 android 6.0 实现 lvds + edp 双屏异显 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
+</head><link rel="stylesheet" type="text/css" href="/plugins/highlight/atom-one-dark.min.css"><script type="text/javascript" src="/plugins/highlight/highlight.min.js"></script><script>hljs.initHighlightingOnLoad();
+</script><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">RK3288 android 6.0 实现 lvds + edp 双屏异显</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2021/06/18/dual-lcd/">2021-06-18</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Embedded/">Embedded</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p><code>rk3288</code> 默认支持 edp+hdmi 双屏显示，或者 lvds + hdmi, 但不支持 <code>lvds</code> + <code>edp</code> 双屏异显。业务要求，需要使用RK3288 Android 6.0 系统，支持 <code>lvds</code>, <code>edp</code> 两种接口的双屏异显。本文介绍具体的实现方法。</p>
+<ul>
+<li>平台: RK3288</li>
+<li>系统: Android 6.0</li>
+<li>屏幕: LVDS(7 inch 1024x600), edp(11 inch 1920x1080)</li>
+<li>需求: LVDS (Primary) + edp (EXTEND) 双屏异显</li>
+</ul>
+<blockquote>
+<p> 主屏副屏的切换只要修改dts相关参数即可，<code>lvds</code> <code>edp</code> 主副互换比较简单。</p>
+</blockquote>
+<h2 id="kernel"><a href="#kernel" class="headerlink" title="kernel"></a>kernel</h2><p>首先修改 <code>kernel</code>, 这里参考了博客<a target="_blank" rel="noopener" href="https://blog.csdn.net/kris_fei/article/details/78646966">[RK3288][Android6.0] 调试笔记 --- 双屏显示内核Patch</a> , 具体细节会有差异。</p>
+<h3 id="dts"><a href="#dts" class="headerlink" title="dts"></a>dts</h3><p>首先配置dts , 两个屏幕的参数分别放置在一个 <code>dtsi</code> 文件中。</p>
+<h4 id="lvds-dts"><a href="#lvds-dts" class="headerlink" title="lvds dts"></a>lvds dts</h4><ul>
+<li><code>arch/arm/boot/dts/lcd-lvds-1024x600_dual.dtsi</code></li>
+</ul>
+<pre><code class="c">display-timings &#123;
+    native-mode = &lt;&amp;timing0&gt;;
+    // 7&quot; 1024x600 LVDS panel
+    timing0: timing0 &#123;
+        screen-type = &lt;SCREEN_LVDS&gt;;
+        lvds-format = &lt;LVDS_8BIT_1&gt;;
+        out-face    = &lt;OUT_D888_P666&gt;;
+        color-mode = &lt;COLOR_RGB&gt;;
+        clock-frequency = &lt;52000000&gt;;
+        hactive = &lt;1024&gt;;
+        vactive = &lt;600&gt;;
+        hback-porch = &lt;150&gt;;
+        hfront-porch = &lt;160&gt;;
+        vback-porch = &lt;22&gt;;
+        vfront-porch = &lt;12&gt;;
+        hsync-len = &lt;10&gt;;
+        vsync-len = &lt;1&gt;;
+        hsync-active = &lt;0&gt;;
+        vsync-active = &lt;0&gt;;
+        de-active = &lt;0&gt;;
+        pixelclk-active = &lt;1&gt;;
+        swap-rb = &lt;0&gt;;
+        swap-rg = &lt;0&gt;;
+        swap-gb = &lt;0&gt;;
+    &#125;;
+&#125;;
+</code></pre>
+<h4 id="edp-dts"><a href="#edp-dts" class="headerlink" title="edp dts"></a>edp dts</h4><ul>
+<li><code>arch/arm/boot/dts/lcd-1920x1080_dual.dtsi</code></li>
+</ul>
+<pre><code class="c">disp_timings: display-timings &#123;
+    native-mode = &lt;&amp;timing2&gt;;
+    // 11.6&quot; 1920x1080 eDP panel
+    timing2: timing2 &#123;
+        screen-type = &lt;SCREEN_EDP&gt;;
+        out-face    = &lt;OUT_P888&gt;;
+        clock-frequency = &lt;138700000&gt;;
+        hactive = &lt;1920&gt;;
+        vactive = &lt;1080&gt;;
+        hback-porch = &lt;35&gt;;
+        hfront-porch = &lt;120&gt;;
+        vback-porch = &lt;10&gt;;
+        vfront-porch = &lt;20&gt;;
+        hsync-len = &lt;5&gt;;
+        vsync-len = &lt;2&gt;;
+        hsync-active = &lt;0&gt;;
+        vsync-active = &lt;0&gt;;
+        de-active = &lt;0&gt;;
+        pixelclk-active = &lt;1&gt;;
+        swap-rb = &lt;0&gt;;
+        swap-rg = &lt;0&gt;;
+        swap-gb = &lt;0&gt;;
+    &#125;;
+&#125;;
+</code></pre>
+<h4 id="lcd-b116xan-dtsi"><a href="#lcd-b116xan-dtsi" class="headerlink" title="lcd-b116xan.dtsi"></a>lcd-b116xan.dtsi</h4><p>上面定义好了 <code>disp_timings</code>, 原有的 <code>lcd-b116xan.dtsi</code> 中的定义就不需要了。</p>
+<pre><code class="c">diff --git a/arch/arm/boot/dts/lcd-b116xan.dtsi b/arch/arm/boot/dts/lcd-b116xan.dtsi
+index 271364e..4b5ee39 100644
+--- a/arch/arm/boot/dts/lcd-b116xan.dtsi
++++ b/arch/arm/boot/dts/lcd-b116xan.dtsi
+@@ -23,7 +23,7 @@
+         enable-gpios = &lt;&amp;gpio7 GPIO_A2 GPIO_ACTIVE_HIGH&gt;;
+     &#125;;
+ 
+-    disp_timings: display-timings &#123;
++/*    disp_timings: display-timings &#123;
+         //native-mode = &lt;&amp;timing0&gt;;
+         // 7&quot; 1024x600 LVDS panel
+         timing0: timing0 &#123;
+@@ -138,6 +138,6 @@
+             swap-rg = &lt;0&gt;;
+             swap-gb = &lt;0&gt;;
+         &#125;;
+-    &#125;;
++    &#125;; */
+ &#125;;
+ 
+</code></pre>
+<h4 id="rk3288-tb-8846-dts"><a href="#rk3288-tb-8846-dts" class="headerlink" title="rk3288-tb_8846.dts"></a>rk3288-tb_8846.dts</h4><p>接下来是重头，就是 <code>rk3288</code> 的dts，添加了两个屏幕的配置，禁用了 <code>hdmi</code>, 配置 lvds 和 edp，并将 <code>lvds</code> 设为主屏。</p>
+<pre><code class="c">diff --git a/arch/arm/boot/dts/rk3288-tb_8846.dts b/arch/arm/boot/dts/rk3288-tb_8846.dts
+index 8ed4044..6cac1c9 100644
+--- a/arch/arm/boot/dts/rk3288-tb_8846.dts
++++ b/arch/arm/boot/dts/rk3288-tb_8846.dts
+@@ -518,7 +518,7 @@
+     &#125;;
+ 
+     goodix_ts@5d &#123;
+-        status = &quot;disabled&quot;;
++        //status = &quot;disabled&quot;;
+         compatible = &quot;goodix,gt1x&quot;, &quot;goodix,gt9xx&quot;;        // gt5688, gt911
+         reg = &lt;0x5d&gt;;
+         goodix,rst-gpio = &lt;&amp;gpio7 GPIO_A5 GPIO_ACTIVE_LOW&gt;;
+@@ -532,17 +532,62 @@
+ &#125;;
+ 
+ &amp;fb &#123;
+-    rockchip,disp-mode = &lt;DUAL&gt;;
+-    rockchip,uboot-logo-on = &lt;1&gt;;
++    rockchip,disp-mode = &lt;DUAL_LCD&gt;;
++    rockchip,uboot-logo-on = &lt;0&gt;;
+     rockchip,disp-policy = &lt;DISPLAY_POLICY_BOX&gt;;
+ &#125;;
+ 
+-&amp;disp_timings &#123;
+-    native-mode = &lt;&amp;timing2&gt;;    // timing0:7&quot;LVDS1024x600; timing1:11.6&quot;LVDS1366x768; timing2:11.6&quot;eDP1920x1080; timing4:10.1&quot;LVDS1280x800
+-&#125;;
++//&amp;disp_timings &#123;
++//    native-mode = &lt;&amp;timing2&gt;;    // timing0:7&quot;LVDS1024x600; timing1:11.6&quot;LVDS1366x768; timing2:11.6&quot;eDP1920x1080; timing4:10.1&quot;LVDS1280x800
++//&#125;;
+ 
+ &amp;rk_screen &#123;
+-     display-timings = &lt;&amp;disp_timings&gt;;
++    //display-timings = &lt;&amp;disp_timings&gt;;
++    status = &quot;okay&quot;;
++    screen0 &#123;
++        screen_prop = &lt;EXTEND&gt;;
++        native-mode = &lt;DEFAULT_MODE&gt;;
++        power_ctr &#123;
++            lcd_en &#123;
++                rockchip,power_type = &lt;GPIO&gt;;
++                gpios = &lt;&amp;gpio7 GPIO_A3 GPIO_ACTIVE_HIGH&gt;;
++                rockchip,delay = &lt;10&gt;;
++            &#125;;
++            /*lcd_cs &#123;
++                rockchip,power_type = &lt;GPIO&gt;;
++                gpios = &lt;&amp;gpio7 GPIO_A4 GPIO_ACTIVE_HIGH&gt;;
++                rockchip,delay = &lt;10&gt;;
++            &#125;; */
++        &#125;;
++        #include &quot;lcd-edp-1920x1080_dual.dtsi&quot;
++    &#125;;
++    screen1 &#123;
++        screen_prop = &lt;PRMRY&gt;;
++        native-mode = &lt;DEFAULT_MODE&gt;;
++        power_ctr &#123;
++            lcd_en &#123;
++                rockchip,power_type = &lt;GPIO&gt;;
++                gpios = &lt;&amp;gpio7 GPIO_A3 GPIO_ACTIVE_HIGH&gt;;
++                rockchip,delay = &lt;10&gt;;
++            &#125;;
++            /*lcd_cs &#123;
++                rockchip,power_type = &lt;GPIO&gt;;
++                gpios = &lt;&amp;gpio7 GPIO_A4 GPIO_ACTIVE_HIGH&gt;;
++                rockchip,delay = &lt;10&gt;;
++            &#125;; */
++        &#125;;
++        #include &quot;lcd-lvds-1024x600.dtsi&quot;
++    &#125;;
++&#125;;
++
++&amp;lvds &#123;
++    status = &quot;okay&quot;;
++    prop = &lt;PRMRY&gt;;
++&#125;;
++
++&amp;edp &#123;
++    status = &quot;okay&quot;;
++    prop = &lt;EXTEND&gt;;
+ &#125;;
+ 
+ /*lcdc0 as PRMRY(LCD),lcdc1 as EXTEND(HDMI)*/
+@@ -553,11 +598,11 @@
+     power_ctr: power_ctr &#123;
+         rockchip,debug = &lt;0&gt;;
+ 
+-        lcd_en:lcd_en &#123;
++        /* lcd_en:lcd_en &#123;
+             rockchip,power_type = &lt;GPIO&gt;;
+             gpios = &lt;&amp;gpio7 GPIO_A3 GPIO_ACTIVE_HIGH&gt;;
+             rockchip,delay = &lt;10&gt;;
+-        &#125;;
++        &#125;; */
+     &#125;;
+ &#125;;
+ 
+@@ -568,7 +613,7 @@
+ &#125;;
+ 
+ &amp;hdmi &#123;
+-    status = &quot;okay&quot;;
++    status = &quot;disabled&quot;;
+     rockchip,cec_enable = &lt;0&gt;;
+     rockchip,hdcp_enable = &lt;0&gt;;
+     rockchip,hdmi_audio_source = &lt;1&gt;;
+</code></pre>
+<blockquote>
+<p>这里将 <code>rockchip,uboot-logo-on</code> 设为0，是禁用 uboot  logo的意思，不禁用的话会导致开机异常，具体原因暂不清楚。</p>
+</blockquote>
+<h3 id="driver"><a href="#driver" class="headerlink" title="driver"></a>driver</h3><p><code>dts</code> 修改完了，接下来是驱动部分，这部分修改甚多，一定要注意。其实下面这个全局 <code>CONFIG_SMART_DUAL_LCD</code> 不是必须的，可以直接将宏定义的判断部分改为直接替换。</p>
+<pre><code class="c">diff --git a/arch/arm/boot/dts/include/dt-bindings/rkfb/rk_fb.h b/arch/arm/boot/dts/include/dt-bindings/rkfb/rk_fb.h
+index 6d75770..8b2ac5b 100755
+--- a/arch/arm/boot/dts/include/dt-bindings/rkfb/rk_fb.h
++++ b/arch/arm/boot/dts/include/dt-bindings/rkfb/rk_fb.h
+@@ -12,6 +12,9 @@
+ #define NO_DUAL        0
+ #define ONE_DUAL    1
+ #define DUAL        2
++#define DUAL_LCD    3
++#define DEFAULT_MODE    0
++
+ /********************************************************************
+ **          display output interface supported by rockchip       **
+ ********************************************************************/
+diff --git a/arch/arm/configs/rockchip_defconfig b/arch/arm/configs/rockchip_defconfig
+index 3a48555..2481bd0 100644
+--- a/arch/arm/configs/rockchip_defconfig
++++ b/arch/arm/configs/rockchip_defconfig
+@@ -394,6 +394,7 @@ CONFIG_RK_TRSM=y
+ CONFIG_RK32_LVDS=y
+ CONFIG_RK32_DP=y
+ # CONFIG_RK_VGA is not set
++CONFIG_SMART_DUAL_LCD=y
+ CONFIG_RK_HDMI=y
+ CONFIG_ROCKCHIP_RGA=y
+ CONFIG_ROCKCHIP_RGA2=y
+diff --git a/drivers/video/rockchip/Kconfig b/drivers/video/rockchip/Kconfig
+index 6034139..39543bc 100755
+--- a/drivers/video/rockchip/Kconfig
++++ b/drivers/video/rockchip/Kconfig
+@@ -58,6 +58,9 @@ config THREE_FB_BUFFER
+         help
+            select y if android support three buffer,like Jelly Bean
+ 
++config SMART_DUAL_LCD
++    bool&quot;smart dual lcd support&quot;
++    default n
+ 
+ source &quot;drivers/video/rockchip/lcdc/Kconfig&quot;
+ source &quot;drivers/video/rockchip/screen/Kconfig&quot;
+diff --git a/drivers/video/rockchip/rk_fb.c b/drivers/video/rockchip/rk_fb.c
+index c45387c..af30098 100755
+--- a/drivers/video/rockchip/rk_fb.c
++++ b/drivers/video/rockchip/rk_fb.c
+@@ -71,9 +71,16 @@ EXPORT_SYMBOL(video_data_to_mirroring);
+ extern phys_addr_t uboot_logo_base;
+ extern phys_addr_t uboot_logo_size;
+ extern phys_addr_t uboot_logo_offset;
++
++#ifndef CONFIG_SMART_DUAL_LCD
+ static struct rk_fb_trsm_ops *trsm_lvds_ops;
+ static struct rk_fb_trsm_ops *trsm_edp_ops;
+ static struct rk_fb_trsm_ops *trsm_mipi_ops;
++#else
++static struct rk_fb_trsm_ops *trsm_prmry_ops;
++static struct rk_fb_trsm_ops *trsm_extend_ops;
++#endif
++
+ static int uboot_logo_on;
+ 
+ static int rk_fb_debug_lvl;
+@@ -107,6 +114,7 @@ int rk_fb_get_display_policy(void)
+ 
+ int rk_fb_trsm_ops_register(struct rk_fb_trsm_ops *ops, int type)
+ &#123;
++#ifndef CONFIG_SMART_DUAL_LCD
+     switch (type) &#123;
+     case SCREEN_RGB:
+     case SCREEN_LVDS:
+@@ -127,6 +135,15 @@ int rk_fb_trsm_ops_register(struct rk_fb_trsm_ops *ops, int type)
+             __func__, type);
+         break;
+     &#125;
++#else
++    if (type == PRMRY)
++        trsm_prmry_ops = ops;
++    else if (type == EXTEND)
++        trsm_extend_ops = ops;
++    else
++        pr_err(&quot;%s, type:%d\n&quot;, __func__, type);
++#endif
++
+     return 0;
+ &#125;
+ 
+@@ -134,6 +151,7 @@ struct rk_fb_trsm_ops *rk_fb_trsm_ops_get(int type)
+ &#123;
+     struct rk_fb_trsm_ops *ops;
+ 
++#ifndef CONFIG_SMART_DUAL_LCD
+     switch (type) &#123;
+     case SCREEN_RGB:
+     case SCREEN_LVDS:
+@@ -155,6 +173,15 @@ struct rk_fb_trsm_ops *rk_fb_trsm_ops_get(int type)
+             __func__, type);
+         break;
+     &#125;
++#else
++    if (type == PRMRY)
++        ops = trsm_prmry_ops;
++    else if (type == EXTEND)
++        ops = trsm_extend_ops;
++    else
++        pr_err(&quot;%s, type:%d\n&quot;, __func__, type);
++#endif
++
+     return ops;
+ &#125;
+ 
+@@ -309,10 +336,19 @@ static int rk_fb_data_fmt(int data_format, int bits_per_pixel)
+ /*
+  * rk display power control parse from dts
+  */
++#ifndef CONFIG_SMART_DUAL_LCD
+ int rk_disp_pwr_ctr_parse_dt(struct rk_lcdc_driver *dev_drv)
++#else
++int rk_disp_pwr_ctr_parse_dt(struct device_node *np, struct rk_screen *rk_screen)
++#endif
+ &#123;
++#ifndef CONFIG_SMART_DUAL_LCD
+     struct device_node *root = of_get_child_by_name(dev_drv-&gt;dev-&gt;of_node,
+                             &quot;power_ctr&quot;);
++#else
++    struct device_node *root = of_get_child_by_name(np, &quot;power_ctr&quot;);
++#endif
++
+     struct device_node *child;
+     struct rk_disp_pwr_ctr_list *pwr_ctr;
+     struct list_head *pos;
+@@ -321,10 +357,20 @@ int rk_disp_pwr_ctr_parse_dt(struct rk_lcdc_driver *dev_drv)
+     u32 debug = 0;
+     int ret;
+ 
++#ifndef CONFIG_SMART_DUAL_LCD
+     INIT_LIST_HEAD(&amp;dev_drv-&gt;pwrlist_head);
++#else
++    INIT_LIST_HEAD(rk_screen-&gt;pwrlist_head);
++#endif
++
+     if (!root) &#123;
++#ifndef CONFIG_SMART_DUAL_LCD
+         dev_err(dev_drv-&gt;dev, &quot;can&#39;t find power_ctr node for lcdc%d\n&quot;,
+             dev_drv-&gt;id);
++#else
++        dev_err(rk_screen-&gt;dev, &quot;can&#39;t find power_ctr node for lcdc%d\n&quot;,
++                rk_screen-&gt;lcdc_id);
++#endif
+         return -ENODEV;
+     &#125;
+ 
+@@ -337,17 +383,29 @@ int rk_disp_pwr_ctr_parse_dt(struct rk_lcdc_driver *dev_drv)
+                 pwr_ctr-&gt;pwr_ctr.type = GPIO;
+                 pwr_ctr-&gt;pwr_ctr.gpio = of_get_gpio_flags(child, 0, &amp;flags);
+                 if (!gpio_is_valid(pwr_ctr-&gt;pwr_ctr.gpio)) &#123;
++#ifndef CONFIG_SMART_DUAL_LCD
+                     dev_err(dev_drv-&gt;dev, &quot;%s ivalid gpio\n&quot;,
+                         child-&gt;name);
++#else
++                    dev_err(rk_screen-&gt;dev, &quot;%s ivalid gpio\n&quot;,
++                        child-&gt;name);
++#endif
++
+                     return -EINVAL;
+                 &#125;
+                 pwr_ctr-&gt;pwr_ctr.atv_val = !(flags &amp; OF_GPIO_ACTIVE_LOW);
+                 ret = gpio_request(pwr_ctr-&gt;pwr_ctr.gpio,
+                            child-&gt;name);
+                 if (ret) &#123;
++#ifndef CONFIG_SMART_DUAL_LCD
+                     dev_err(dev_drv-&gt;dev,
+                         &quot;request %s gpio fail:%d\n&quot;,
+                         child-&gt;name, ret);
++#else
++                    dev_err(rk_screen-&gt;dev,
++                        &quot;request %s gpio fail:%d\n&quot;,
++                        child-&gt;name, ret);
++#endif
+                 &#125;
+ 
+             &#125; else &#123;
+@@ -356,7 +414,11 @@ int rk_disp_pwr_ctr_parse_dt(struct rk_lcdc_driver *dev_drv)
+                 ret = of_property_read_string(child, &quot;rockchip,regulator_name&quot;,
+                                   &amp;(pwr_ctr-&gt;pwr_ctr.rgl_name));
+                 if (ret || IS_ERR_OR_NULL(pwr_ctr-&gt;pwr_ctr.rgl_name))
++#ifndef CONFIG_SMART_DUAL_LCD
+                     dev_err(dev_drv-&gt;dev, &quot;get regulator name failed!\n&quot;);
++#else
++                    dev_err(rk_screen-&gt;dev, &quot;get regulator name failed!\n&quot;);
++#endif
+                 if (!of_property_read_u32(child, &quot;rockchip,regulator_voltage&quot;, &amp;val))
+                     pwr_ctr-&gt;pwr_ctr.volt = val;
+                 else
+@@ -368,13 +430,21 @@ int rk_disp_pwr_ctr_parse_dt(struct rk_lcdc_driver *dev_drv)
+             pwr_ctr-&gt;pwr_ctr.delay = val;
+         else
+             pwr_ctr-&gt;pwr_ctr.delay = 0;
++#ifndef CONFIG_SMART_DUAL_LCD
+         list_add_tail(&amp;pwr_ctr-&gt;list, &amp;dev_drv-&gt;pwrlist_head);
++#else
++       list_add_tail(&amp;pwr_ctr-&gt;list, rk_screen-&gt;pwrlist_head);
++#endif
+     &#125;
+ 
+     of_property_read_u32(root, &quot;rockchip,debug&quot;, &amp;debug);
+ 
+     if (debug) &#123;
++#ifndef CONFIG_SMART_DUAL_LCD
+         list_for_each(pos, &amp;dev_drv-&gt;pwrlist_head) &#123;
++#else
++       list_for_each(pos, rk_screen-&gt;pwrlist_head) &#123;
++#endif
+             pwr_ctr = list_entry(pos, struct rk_disp_pwr_ctr_list,
+                          list);
+             pr_info(&quot;pwr_ctr_name:%s\n&quot;
+@@ -401,9 +471,25 @@ int rk_disp_pwr_enable(struct rk_lcdc_driver *dev_drv)
+     struct regulator *regulator_lcd = NULL;
+     int count = 10;
+ 
++#ifndef CONFIG_SMART_DUAL_LCD
+     if (list_empty(&amp;dev_drv-&gt;pwrlist_head))
+         return 0;
+-    list_for_each(pos, &amp;dev_drv-&gt;pwrlist_head) &#123;
++#else
++   if (!dev_drv-&gt;cur_screen-&gt;pwrlist_head) &#123;
++       pr_info(&quot;error:  %s, lcdc%d screen pwrlist null\n&quot;,
++           __func__, dev_drv-&gt;id);
++       return 0;
++   &#125;
++   if (list_empty(dev_drv-&gt;cur_screen-&gt;pwrlist_head))
++       return 0;
++#endif
++
++#ifndef CONFIG_SMART_DUAL_LCD
++   list_for_each(pos, &amp;dev_drv-&gt;pwrlist_head) 
++#else
++   list_for_each(pos, dev_drv-&gt;cur_screen-&gt;pwrlist_head) 
++#endif
++   &#123;
+         pwr_ctr_list = list_entry(pos, struct rk_disp_pwr_ctr_list,
+                       list);
+         pwr_ctr = &amp;pwr_ctr_list-&gt;pwr_ctr;
+@@ -446,9 +532,25 @@ int rk_disp_pwr_disable(struct rk_lcdc_driver *dev_drv)
+     struct regulator *regulator_lcd = NULL;
+     int count = 10;
+ 
++#ifndef CONFIG_SMART_DUAL_LCD
+     if (list_empty(&amp;dev_drv-&gt;pwrlist_head))
+         return 0;
+-    list_for_each(pos, &amp;dev_drv-&gt;pwrlist_head) &#123;
++#else
++   if (!dev_drv-&gt;cur_screen-&gt;pwrlist_head) &#123;
++       pr_info(&quot;error:  %s, lcdc%d screen pwrlist null\n&quot;,
++           __func__, dev_drv-&gt;id);
++       return 0;
++   &#125;
++   if (list_empty(dev_drv-&gt;cur_screen-&gt;pwrlist_head))
++       return 0;
++#endif
++
++#ifndef CONFIG_SMART_DUAL_LCD
++   list_for_each(pos, &amp;dev_drv-&gt;pwrlist_head) 
++#else
++   list_for_each(pos, dev_drv-&gt;cur_screen-&gt;pwrlist_head) 
++#endif
++   &#123;
+         pwr_ctr_list = list_entry(pos, struct rk_disp_pwr_ctr_list,
+                       list);
+         pwr_ctr = &amp;pwr_ctr_list-&gt;pwr_ctr;
+@@ -533,7 +635,11 @@ int rk_fb_prase_timing_dt(struct device_node *np, struct rk_screen *screen)
+         pr_err(&quot;parse display timing err\n&quot;);
+         return -EINVAL;
+     &#125;
++#ifndef CONFIG_SMART_DUAL_LCD
+     dt = display_timings_get(disp_timing, disp_timing-&gt;native_mode);
++#else
++   dt = display_timings_get(disp_timing, screen-&gt;native_mode);
++#endif
+     rk_fb_video_mode_from_timing(dt, screen);
+ 
+     return 0;
+@@ -1657,8 +1763,14 @@ static void rk_fb_update_win(struct rk_lcdc_driver *dev_drv,
+                     reg_win_data-&gt;reg_area_data[i].ion_handle;
+                 win-&gt;area[i].smem_start =
+                     reg_win_data-&gt;reg_area_data[i].smem_start;
++#ifndef CONFIG_SMART_DUAL_LCD
++               if (inf-&gt;disp_mode == DUAL ||
++                   inf-&gt;disp_mode == NO_DUAL) &#123;
++#else
+                 if (inf-&gt;disp_mode == DUAL ||
++                    inf-&gt;disp_mode == DUAL_LCD ||
+                     inf-&gt;disp_mode == NO_DUAL) &#123;
++#endif
+                     win-&gt;area[i].xpos =
+                         reg_win_data-&gt;reg_area_data[i].xpos;
+                     win-&gt;area[i].ypos =
+@@ -3884,7 +3996,12 @@ static int rk_fb_alloc_buffer(struct fb_info *fbi)
+         win = dev_drv-&gt;win[win_id];
+ 
+     if (!strcmp(fbi-&gt;fix.id, &quot;fb0&quot;)) &#123;
++#ifndef CONFIG_SMART_DUAL_LCD
+         fb_mem_size = get_fb_size(dev_drv-&gt;reserved_fb);
++#else
++        fb_mem_size = get_fb_size(dev_drv-&gt;reserved_fb, dev_drv-&gt;cur_screen);
++#endif
++
+ #if defined(CONFIG_ION_ROCKCHIP)
+         if (rk_fb_alloc_buffer_by_ion(fbi, win, fb_mem_size) &lt; 0)
+             return -ENOMEM;
+@@ -3906,7 +4023,12 @@ static int rk_fb_alloc_buffer(struct fb_info *fbi)
+             struct rk_lcdc_driver *dev_drv_prmry;
+             int win_id_prmry;
+ 
++#ifndef CONFIG_SMART_DUAL_LCD
+             fb_mem_size = get_fb_size(dev_drv-&gt;reserved_fb);
++#else
++            fb_mem_size = get_fb_size(dev_drv-&gt;reserved_fb, dev_drv-&gt;cur_screen);
++#endif
++
+ #if defined(CONFIG_ION_ROCKCHIP)
+             dev_drv_prmry = rk_get_prmry_lcdc_drv();
+             if (dev_drv_prmry == NULL)
+@@ -4071,6 +4193,7 @@ static int init_lcdc_device_driver(struct rk_fb *rk_fb,
+         dev_drv-&gt;area_support[i] = 1;
+     if (dev_drv-&gt;ops-&gt;area_support_num)
+         dev_drv-&gt;ops-&gt;area_support_num(dev_drv, dev_drv-&gt;area_support);
++#ifndef CONFIG_SMART_DUAL_LCD
+     rk_disp_pwr_ctr_parse_dt(dev_drv);
+     if (dev_drv-&gt;prop == PRMRY) &#123;
+         rk_fb_set_prmry_screen(screen);
+@@ -4079,6 +4202,11 @@ static int init_lcdc_device_driver(struct rk_fb *rk_fb,
+     dev_drv-&gt;trsm_ops = rk_fb_trsm_ops_get(screen-&gt;type);
+     if (dev_drv-&gt;prop != PRMRY)
+         rk_fb_get_extern_screen(screen);
++#else
++   rk_fb_set_screen(screen, dev_drv-&gt;prop);
++   rk_fb_get_screen(screen, dev_drv-&gt;prop);
++   dev_drv-&gt;trsm_ops = rk_fb_trsm_ops_get(dev_drv-&gt;prop);
++#endif
+     dev_drv-&gt;output_color = screen-&gt;color_mode;
+ 
+     return 0;
+@@ -4419,13 +4547,28 @@ int rk_fb_register(struct rk_lcdc_driver *dev_drv,
+         struct fb_info *extend_fbi = rk_fb-&gt;fb[dev_drv-&gt;fb_index_base];
+ 
+         extend_fbi-&gt;var.pixclock = rk_fb-&gt;fb[0]-&gt;var.pixclock;
++#ifdef CONFIG_SMART_DUAL_LCD
++        extend_fbi-&gt;var.xres_virtual = rk_fb-&gt;fb[0]-&gt;var.xres_virtual;
++        extend_fbi-&gt;var.yres_virtual = rk_fb-&gt;fb[0]-&gt;var.yres_virtual;
++#endif
+         extend_fbi-&gt;fbops-&gt;fb_open(extend_fbi, 1);
+         if (dev_drv-&gt;iommu_enabled) &#123;
+             if (dev_drv-&gt;mmu_dev)
+                 rockchip_iovmm_set_fault_handler(dev_drv-&gt;dev,
+                                  rk_fb_sysmmu_fault_handler);
++#ifdef CONFIG_SMART_DUAL_LCD
++           if (dev_drv-&gt;ops-&gt;mmu_en)
++               dev_drv-&gt;ops-&gt;mmu_en(dev_drv);
++#endif
+         &#125;
++
+         rk_fb_alloc_buffer(extend_fbi);
++#ifdef CONFIG_SMART_DUAL_LCD
++       if (rk_fb-&gt;disp_mode == DUAL_LCD) &#123;
++           extend_fbi-&gt;fbops-&gt;fb_set_par(extend_fbi);
++           extend_fbi-&gt;fbops-&gt;fb_pan_display(&amp;extend_fbi-&gt;var, extend_fbi);
++       &#125;
++#endif
+     &#125;
+ #endif
+     return 0;
+diff --git a/drivers/video/rockchip/screen/rk_screen.c b/drivers/video/rockchip/screen/rk_screen.c
+index 11ff587..9b1ebc5 100755
+--- a/drivers/video/rockchip/screen/rk_screen.c
++++ b/drivers/video/rockchip/screen/rk_screen.c
+@@ -4,14 +4,33 @@
+ #include &quot;lcd.h&quot;
+ #include &quot;../hdmi/rockchip-hdmi.h&quot;
+ 
++#ifndef CONFIG_SMART_DUAL_LCD
+ static struct rk_screen *rk_screen;
++#else
++static struct rk_screen *prmry_screen;
++static struct rk_screen *extend_screen;
++
++static void rk_screen_info_error(struct rk_screen *screen, int prop)
++&#123;
++    pr_err(&quot;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;error&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;\n&quot;);
++    pr_err(&quot;&gt;&gt;please init %s screen info in dtsi file&lt;&lt;\n&quot;,
++            (prop == PRMRY) ? &quot;prmry&quot; : &quot;extend&quot;);
++    pr_err(&quot;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;error&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;\n&quot;);
++&#125;
++#endif
+ 
+ int rk_fb_get_extern_screen(struct rk_screen *screen)
+ &#123;
++#ifndef CONFIG_SMART_DUAL_LCD
+     if (unlikely(!rk_screen) || unlikely(!screen))
+         return -1;
+-
+     memcpy(screen, rk_screen, sizeof(struct rk_screen));
++#else
++   if (unlikely(!extend_screen) || unlikely(!screen))
++       return -1;
++   memcpy(screen, extend_screen, sizeof(struct rk_screen));
++#endif
++   
+     screen-&gt;dsp_lut = NULL;
+     screen-&gt;cabc_lut = NULL;
+     screen-&gt;type = SCREEN_NULL;
+@@ -21,13 +40,21 @@ int rk_fb_get_extern_screen(struct rk_screen *screen)
+ 
+ int  rk_fb_get_prmry_screen(struct rk_screen *screen)
+ &#123;
++#ifndef CONFIG_SMART_DUAL_LCD
+     if (unlikely(!rk_screen) || unlikely(!screen))
+         return -1;
+ 
+     memcpy(screen, rk_screen, sizeof(struct rk_screen));
++#else
++   if (unlikely(!prmry_screen) || unlikely(!screen))
++       return -1;
++   memcpy(screen, prmry_screen, sizeof(struct rk_screen));
++
++#endif
+     return 0;
+ &#125;
+ 
++#ifndef CONFIG_SMART_DUAL_LCD
+ int rk_fb_set_prmry_screen(struct rk_screen *screen)
+ &#123;
+     if (unlikely(!rk_screen) || unlikely(!screen))
+@@ -43,19 +70,87 @@ int rk_fb_set_prmry_screen(struct rk_screen *screen)
+     rk_screen-&gt;overscan.bottom = screen-&gt;overscan.left;
+     return 0;
+ &#125;
++#else
++int rk_fb_get_screen(struct rk_screen *screen, int prop)
++&#123;
++   struct rk_screen *cur_screen = NULL;
++   
++   if (unlikely(!screen))
++       return -1;
++   if (prop == PRMRY) &#123;
++       if (unlikely(!prmry_screen)) &#123;
++           rk_screen_info_error(screen, prop);
++           return -1;
++       &#125;
++       cur_screen = prmry_screen;
++   &#125; else &#123;
++       if (unlikely(!extend_screen)) &#123;
++           rk_screen_info_error(screen, prop);
++           return -1;
++       &#125;
++       cur_screen = extend_screen;
++   &#125;
++
++   memcpy(screen, cur_screen, sizeof(struct rk_screen));
++
++   return 0;
++
++&#125;
++int rk_fb_set_screen(struct rk_screen *screen, int prop)
++&#123;
++    struct rk_screen *cur_screen = NULL;
++
++    if (unlikely(!screen))
++        return -1;
++    if (prop == PRMRY) &#123;
++        if (unlikely(!prmry_screen)) &#123;
++            rk_screen_info_error(screen, prop);
++            return -1;
++        &#125;
++        cur_screen = prmry_screen;
++    &#125; else &#123;
++        if (unlikely(!extend_screen)) &#123;
++            rk_screen_info_error(screen, prop);
++            return -1;
++        &#125;
++        cur_screen = extend_screen;
++    &#125;
++
++    cur_screen-&gt;lcdc_id = screen-&gt;lcdc_id;
++    cur_screen-&gt;screen_id = screen-&gt;screen_id;
++    cur_screen-&gt;x_mirror = screen-&gt;x_mirror;
++    cur_screen-&gt;y_mirror = screen-&gt;y_mirror;
++    cur_screen-&gt;overscan.left = screen-&gt;overscan.left;
++    cur_screen-&gt;overscan.top = screen-&gt;overscan.left;
++    cur_screen-&gt;overscan.right = screen-&gt;overscan.left;
++    cur_screen-&gt;overscan.bottom = screen-&gt;overscan.left;
++
++    return 0;
++&#125;
+ 
++#endif
++
++#ifndef CONFIG_SMART_DUAL_LCD
+ size_t get_fb_size(u8 reserved_fb)
++#else
++size_t get_fb_size(u8 reserved_fb, struct rk_screen *screen)
++#endif
+ &#123;
+     size_t size = 0;
+     u32 xres = 0;
+     u32 yres = 0;
+ 
++#ifndef CONFIG_SMART_DUAL_LCD
+     if (unlikely(!rk_screen))
+         return 0;
+-
+     xres = rk_screen-&gt;mode.xres;
+     yres = rk_screen-&gt;mode.yres;
+-
++#else
++   if (unlikely(!screen))
++       return 0;
++   xres = screen-&gt;mode.xres;
++   yres = screen-&gt;mode.yres;
++#endif
+     /* align as 64 bytes(16*4) in an odd number of times */
+     xres = ALIGN_64BYTE_ODD_TIMES(xres, ALIGN_PIXEL_64BYTE_RGB8888);
+     if (reserved_fb == ONE_FB_BUFFER)
+@@ -75,12 +170,19 @@ size_t get_fb_size(u8 reserved_fb)
+ static int rk_screen_probe(struct platform_device *pdev)
+ &#123;
+     struct device_node *np = pdev-&gt;dev.of_node;
+-    int ret;
+ 
++#ifndef CONFIG_SMART_DUAL_LCD
++   int ret;
++#else
++   struct device_node *screen_np;
++   struct rk_screen *rk_screen;
++   int ret, screen_prop;
++#endif
+     if (!np) &#123;
+         dev_err(&amp;pdev-&gt;dev, &quot;Missing device tree node.\n&quot;);
+         return -EINVAL;
+     &#125;
++#ifndef CONFIG_SMART_DUAL_LCD
+     rk_screen = devm_kzalloc(&amp;pdev-&gt;dev,
+             sizeof(struct rk_screen), GFP_KERNEL);
+     if (!rk_screen) &#123;
+@@ -91,6 +193,43 @@ static int rk_screen_probe(struct platform_device *pdev)
+     dev_info(&amp;pdev-&gt;dev, &quot;rockchip screen probe %s\n&quot;,
+                 ret ? &quot;failed&quot; : &quot;success&quot;);
+     return ret;
++#else
++   for_each_child_of_node(np, screen_np) &#123;
++       rk_screen = devm_kzalloc(&amp;pdev-&gt;dev,
++                    sizeof(struct rk_screen), GFP_KERNEL);
++       if (!rk_screen) &#123;
++           dev_err(&amp;pdev-&gt;dev, &quot;kmalloc for rk screen fail!&quot;);
++           return  -ENOMEM;
++       &#125;
++       rk_screen-&gt;pwrlist_head = devm_kzalloc(&amp;pdev-&gt;dev,
++               sizeof(struct list_head), GFP_KERNEL);
++       if (!rk_screen-&gt;pwrlist_head) &#123;
++           dev_err(&amp;pdev-&gt;dev, &quot;kmalloc for rk_screen pwrlist_head fail!&quot;);
++           return  -ENOMEM;
++       &#125;
++       of_property_read_u32(screen_np, &quot;screen_prop&quot;, &amp;screen_prop);
++       if (screen_prop == PRMRY)
++           prmry_screen = rk_screen;
++       else if (screen_prop == EXTEND)
++           extend_screen = rk_screen;
++       else
++           dev_err(&amp;pdev-&gt;dev, &quot;unknow screen prop: %d\n&quot;,
++               screen_prop);
++       rk_screen-&gt;prop = screen_prop;
++       of_property_read_u32(screen_np, &quot;native-mode&quot;, &amp;rk_screen-&gt;native_mode);
++       rk_screen-&gt;dev = &amp;pdev-&gt;dev;
++       ret = rk_fb_prase_timing_dt(screen_np, rk_screen);
++       pr_info(&quot;%s screen timing parse %s\n&quot;,
++           (screen_prop == PRMRY) ? &quot;prmry&quot; : &quot;extend&quot;,
++           ret ? &quot;failed&quot; : &quot;success&quot;);
++       ret = rk_disp_pwr_ctr_parse_dt(screen_np, rk_screen);
++       pr_info(&quot;%s screen power ctrl parse %s\n&quot;,
++           (screen_prop == PRMRY) ? &quot;prmry&quot; : &quot;extend&quot;,
++           ret ? &quot;failed&quot; : &quot;success&quot;);
++   &#125;
++   dev_info(&amp;pdev-&gt;dev, &quot;rockchip screen probe success\n&quot;);
++   return 0;
++#endif
+ &#125;
+ 
+ static const struct of_device_id rk_screen_dt_ids[] = &#123;
+diff --git a/drivers/video/rockchip/transmitter/rk32_dp.c b/drivers/video/rockchip/transmitter/rk32_dp.c
+index 2b3457c..9ae99cc 100755
+--- a/drivers/video/rockchip/transmitter/rk32_dp.c
++++ b/drivers/video/rockchip/transmitter/rk32_dp.c
+@@ -119,7 +119,11 @@ static int rk32_edp_init_edp(struct rk32_edp *edp)
+     struct rk_screen *screen = &amp;edp-&gt;screen;
+     u32 val = 0;
+ 
++#ifndef CONFIG_SMART_DUAL_LCD
+     rk_fb_get_prmry_screen(screen);
++#else
++   rk_fb_get_screen(screen, edp-&gt;prop);
++#endif
+ 
+     if (cpu_is_rk3288()) &#123;
+         if (screen-&gt;lcdc_id == 1)  /*select lcdc*/
+@@ -1712,17 +1716,25 @@ static int rk32_edp_probe(struct platform_device *pdev)
+     struct resource *res;
+     struct device_node *np = pdev-&gt;dev.of_node;
+     int ret;
+-
++#ifdef CONFIG_SMART_DUAL_LCD
++   int prop;
++#endif
+     if (!np) &#123;
+         dev_err(&amp;pdev-&gt;dev, &quot;Missing device tree node.\n&quot;);
+         return -EINVAL;
+     &#125;
+-
++#ifdef CONFIG_SMART_DUAL_LCD
++   of_property_read_u32(np, &quot;prop&quot;, &amp;prop);
++   pr_info(&quot;Use EDP as %s screen\n&quot;, (prop == PRMRY) ? &quot;primary&quot; : &quot;extend&quot;);
++#endif
+     edp = devm_kzalloc(&amp;pdev-&gt;dev, sizeof(struct rk32_edp), GFP_KERNEL);
+     if (!edp) &#123;
+         dev_err(&amp;pdev-&gt;dev, &quot;no memory for state\n&quot;);
+         return -ENOMEM;
+     &#125;
++#ifdef CONFIG_SMART_DUAL_LCD
++    edp-&gt;prop = prop;
++#endif
+     edp-&gt;dev = &amp;pdev-&gt;dev;
+     edp-&gt;video_info.h_sync_polarity    = 0;
+     edp-&gt;video_info.v_sync_polarity    = 0;
+@@ -1734,7 +1746,11 @@ static int rk32_edp_probe(struct platform_device *pdev)
+ 
+     edp-&gt;video_info.link_rate    = LINK_RATE_1_62GBPS;
+     edp-&gt;video_info.lane_count    = LANE_CNT4;
++#ifndef CONFIG_SMART_DUAL_LCD
+     rk_fb_get_prmry_screen(&amp;edp-&gt;screen);
++#else
++    rk_fb_get_screen(&amp;edp-&gt;screen, prop);
++#endif
+     if (edp-&gt;screen.type != SCREEN_EDP) &#123;
+         dev_err(&amp;pdev-&gt;dev, &quot;screen is not edp!\n&quot;);
+         return -EINVAL;
+@@ -1809,7 +1825,11 @@ static int rk32_edp_probe(struct platform_device *pdev)
+     if (!support_uboot_display())
+         rk32_edp_clk_disable(edp);
+     rk32_edp = edp;
++#ifndef CONFIG_SMART_DUAL_LCD
+     rk_fb_trsm_ops_register(&amp;trsm_edp_ops, SCREEN_EDP);
++#else
++    rk_fb_trsm_ops_register(&amp;trsm_edp_ops, prop);
++#endif
+ #if defined(CONFIG_DEBUG_FS)
+     edp-&gt;debugfs_dir = debugfs_create_dir(&quot;edp&quot;, NULL);
+     if (IS_ERR(edp-&gt;debugfs_dir)) &#123;
+diff --git a/drivers/video/rockchip/transmitter/rk32_dp.h b/drivers/video/rockchip/transmitter/rk32_dp.h
+index 08347b5..cd1b3d9 100755
+--- a/drivers/video/rockchip/transmitter/rk32_dp.h
++++ b/drivers/video/rockchip/transmitter/rk32_dp.h
+@@ -566,6 +566,9 @@ struct rk32_edp &#123;
+     bool clk_on;
+     bool edp_en;
+     struct dentry *debugfs_dir;
++#ifdef CONFIG_SMART_DUAL_LCD
++    int prop;
++#endif
+ &#125;;
+ 
+ 
+@@ -663,4 +666,4 @@ int rk32_edp_wait_hw_lt_done(struct rk32_edp *edp);
+ enum dp_irq_type rk32_edp_get_irq_type(struct rk32_edp *edp);
+ void rk32_edp_clear_hotplug_interrupts(struct rk32_edp *edp);
+ 
+-#endif
+\ No newline at end of file
++#endif
+diff --git a/drivers/video/rockchip/transmitter/rk32_lvds.c b/drivers/video/rockchip/transmitter/rk32_lvds.c
+index d0a8b7a..433b858 100644
+--- a/drivers/video/rockchip/transmitter/rk32_lvds.c
++++ b/drivers/video/rockchip/transmitter/rk32_lvds.c
+@@ -59,8 +59,11 @@ static int rk32_lvds_en(void)
+     u32 h_bp = 0;
+     u32 val = 0;
+ 
++#ifndef CONFIG_SMART_DUAL_LCD
+     rk_fb_get_prmry_screen(screen);
+-
++#else
++    rk_fb_get_screen(screen, lvds-&gt;prop);
++#endif
+     /* enable clk */
+     rk32_lvds_clk_enable(lvds);
+ 
+@@ -141,18 +144,29 @@ static int rk32_lvds_probe(struct platform_device *pdev)
+     struct resource *res;
+     struct device_node *np = pdev-&gt;dev.of_node;
+ 
++#ifdef CONFIG_SMART_DUAL_LCD
++   int prop;
++#endif
+     if (!np) &#123;
+         dev_err(&amp;pdev-&gt;dev, &quot;Missing device tree node.\n&quot;);
+         return -EINVAL;
+     &#125;
+ 
++#ifdef CONFIG_SMART_DUAL_LCD
++   of_property_read_u32(np, &quot;prop&quot;, &amp;prop);
++   pr_info(&quot;Use LVDS as %s screen\n&quot;, (prop == PRMRY) ? &quot;prmry&quot;:&quot;extend&quot;);
++#endif
+     lvds = devm_kzalloc(&amp;pdev-&gt;dev, sizeof(struct rk32_lvds), GFP_KERNEL);
+     if (!lvds) &#123;
+         dev_err(&amp;pdev-&gt;dev, &quot;no memory for state\n&quot;);
+         return -ENOMEM;
+     &#125;
+     lvds-&gt;dev = &amp;pdev-&gt;dev;
++#ifndef CONFIG_SMART_DUAL_LCD
+     rk_fb_get_prmry_screen(&amp;lvds-&gt;screen);
++#else
++   rk_fb_get_screen(&amp;lvds-&gt;screen, prop);
++#endif
+     if ((lvds-&gt;screen.type != SCREEN_RGB) &amp;&amp; 
+         (lvds-&gt;screen.type != SCREEN_LVDS) &amp;&amp;
+         (lvds-&gt;screen.type != SCREEN_DUAL_LVDS) &amp;&amp;
+@@ -185,7 +199,12 @@ static int rk32_lvds_probe(struct platform_device *pdev)
+     &#125;
+ 
+     rk32_lvds = lvds;
++#ifndef CONFIG_SMART_DUAL_LCD
+     rk_fb_trsm_ops_register(&amp;trsm_lvds_ops,SCREEN_LVDS);
++#else
++   lvds-&gt;prop = prop;
++   rk_fb_trsm_ops_register(&amp;trsm_lvds_ops, prop);
++#endif
+     dev_info(&amp;pdev-&gt;dev, &quot;rk32 lvds driver probe success\n&quot;);
+ 
+     return 0;
+diff --git a/drivers/video/rockchip/transmitter/rk32_lvds.h b/drivers/video/rockchip/transmitter/rk32_lvds.h
+index ca424a7..6dec093 100755
+--- a/drivers/video/rockchip/transmitter/rk32_lvds.h
++++ b/drivers/video/rockchip/transmitter/rk32_lvds.h
+@@ -34,6 +34,9 @@ struct rk32_lvds &#123;
+     struct clk              *pd;
+     struct rk_screen    screen;
+     bool            clk_on;
++#ifdef CONFIG_SMART_DUAL_LCD
++   int prop;
++#endif
+ &#125;;
+ 
+ static int inline lvds_writel(struct rk32_lvds *lvds, u32 offset, u32 val)
+diff --git a/include/dt-bindings/rkfb/rk_fb.h b/include/dt-bindings/rkfb/rk_fb.h
+index 6d75770..8b2ac5b 100755
+--- a/include/dt-bindings/rkfb/rk_fb.h
++++ b/include/dt-bindings/rkfb/rk_fb.h
+@@ -12,6 +12,9 @@
+ #define NO_DUAL        0
+ #define ONE_DUAL    1
+ #define DUAL        2
++#define DUAL_LCD    3
++#define DEFAULT_MODE    0
++
+ /********************************************************************
+ **          display output interface supported by rockchip       **
+ ********************************************************************/
+diff --git a/include/linux/rk_fb.h b/include/linux/rk_fb.h
+index 62647a9..386cd14 100755
+--- a/include/linux/rk_fb.h
++++ b/include/linux/rk_fb.h
+@@ -808,11 +808,25 @@ extern int rk_fb_register(struct rk_lcdc_driver *dev_drv,
+                 struct rk_lcdc_win *win, int id);
+ extern int rk_fb_unregister(struct rk_lcdc_driver *dev_drv);
+ extern struct rk_lcdc_driver *rk_get_lcdc_drv(char *name);
++#ifndef CONFIG_SMART_DUAL_LCD
+ extern int rk_fb_get_extern_screen(struct rk_screen *screen);
++#endif
+ extern int rk_fb_get_prmry_screen( struct rk_screen *screen);
++#ifndef CONFIG_SMART_DUAL_LCD
+ extern int rk_fb_set_prmry_screen(struct rk_screen *screen);
++#endif
++
++#ifdef CONFIG_SMART_DUAL_LCD
++extern int rk_fb_get_screen(struct rk_screen *screen, int prop);
++extern int rk_fb_set_screen(struct rk_screen *screen, int prop);
++#endif
++
+ extern u32 rk_fb_get_prmry_screen_pixclock(void);
++#ifndef CONFIG_SMART_DUAL_LCD
+ extern int rk_disp_pwr_ctr_parse_dt(struct rk_lcdc_driver *dev_drv);
++#else
++extern int rk_disp_pwr_ctr_parse_dt(struct device_node *np, struct rk_screen *rk_screen);
++#endif
+ extern int rk_disp_pwr_enable(struct rk_lcdc_driver *dev_drv);
+ extern int rk_disp_pwr_disable(struct rk_lcdc_driver *dev_drv);
+ extern bool is_prmry_rk_lcdc_registered(void);
+diff --git a/include/linux/rk_screen.h b/include/linux/rk_screen.h
+index af0ffe7..a78f3ae 100644
+--- a/include/linux/rk_screen.h
++++ b/include/linux/rk_screen.h
+@@ -61,6 +61,13 @@ struct overscan &#123;
+ *ft: the time need to display one frame time
+ */
+ struct rk_screen &#123;
++#ifdef CONFIG_SMART_DUAL_LCD
++   struct device   *dev;
++   int prop;
++   struct list_head *pwrlist_head;
++   int native_mode;
++#endif
++
+     u16 type;
+     u16 lvds_format; 
+     u16 face;
+@@ -144,8 +151,12 @@ struct rk29fb_info &#123;
+ &#125;;
+ 
+ extern void set_lcd_info(struct rk_screen *screen, struct rk29lcd_info *lcd_info);
++#ifndef CONFIG_SMART_DUAL_LCD
+ extern size_t get_fb_size(u8 reserved_fb);
+-
++#else
++extern size_t get_fb_size(u8 reserved_fb, struct rk_screen *screen);
++extern size_t get_rotate_fb_size(struct rk_screen *screen);
++#endif
+ extern void set_tv_info(struct rk_screen *screen);
+ extern void set_hdmi_info(struct rk_screen *screen);
+ 
+</code></pre>
+<p>驱rk3288-ubuntu1404-backup-20210618-rootfs.img动部分花费时间最长，调试许久才成功，驱动调好后，两个屏幕就可以同时显示了，主屏一切正常，但是副屏会花屏。</p>
+<h2 id="android-system"><a href="#android-system" class="headerlink" title="android system"></a>android system</h2><p>为了解决花屏的问题，继续探索，然后看到这篇文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/lialong1st/p/9149213.html">RK3288 增加双屏异显 eDP+LVDS</a></p>
+<p>这篇文章是在 <code>android 5.1</code> 基础上支持双屏异显，可以参考下，最后发现 <code>5.1 </code> 和 <code>6.0</code> 的 framework 部分差异较大，无法使用文章中的 <code>patch</code>, 索性不加了，但是其它部分改动不大，引入后重新编译系统，居然可以正常启动了，花屏问题也不存在了。下面给出Android系统层面的改动。</p>
+<h3 id="device-hwcomposer"><a href="#device-hwcomposer" class="headerlink" title="device hwcomposer"></a>device hwcomposer</h3><ul>
+<li><code>hardware/rockchip/hwcomposer</code></li>
+</ul>
+<pre><code class="c">diff --git a/rk_hwcomposer.cpp b/rk_hwcomposer.cpp
+index d36b4b8..2266fcb 100755
+--- a/rk_hwcomposer.cpp
++++ b/rk_hwcomposer.cpp
+@@ -79,6 +79,7 @@ static int  hwc_free_buffer(buffer_handle_t hnd);
+ 
+ int         hwc_sprite_replace(hwcContext * Context, hwc_display_contents_1_t * list);
+ void*       hwc_control_3dmode_thread(void *arg);
++int         hwc_parse_screen_info(int *outX, int *outY);
+ 
+ void*   hotplug_try_register(void *arg);
+ void    hotplug_get_resolution(int* w,int* h);
+@@ -11917,6 +11918,10 @@ int hotplug_get_config(int flag)&#123;
+     int outX = 0;
+     int outY = 0;
+     hotplug_parse_mode(&amp;outX, &amp;outY);
++    if (hwc_get_int_property(&quot;ro.htg.force&quot;, &quot;0&quot;))
++        hwc_parse_screen_info(&amp;outX, &amp;outY);
++    else
++        hotplug_parse_mode(&amp;outX, &amp;outY);
+     info.xres = outX;
+     info.yres = outY;
+     info.yres_virtual = info.yres * 3;
+@@ -12242,6 +12247,29 @@ OnError:
+ 
+ &#125;
+ 
++int hwc_parse_screen_info(int *outX, int *outY)
++&#123;
++    char buf[100];
++    int width = 0;
++    int height = 0;
++    int fdExternal = -1;
++    fdExternal = open(&quot;/sys/class/graphics/fb4/screen_info&quot;, O_RDONLY);
++    if(fdExternal &lt; 0)&#123;
++        ALOGE(&quot;hotplug_get_config:open fb screen_info error,cvbsfd=%d&quot;,fdExternal);
++        return -errno;
++    &#125;
++    if(read(fdExternal,buf,sizeof(buf)) &lt; 0)&#123;
++        ALOGE(&quot;error reading fb screen_info: %s&quot;, strerror(errno));
++        return -1;
++    &#125;
++    close(fdExternal);
++    sscanf(buf,&quot;xres:%d yres:%d&quot;,&amp;width,&amp;height);
++    ALOGD(&quot;hotplug_get_config:width=%d,height=%d&quot;,width,height);
++    *outX = width;
++    *outY = height;
++    return 0;
++&#125;
++
+ int hotplug_parse_mode(int *outX, int *outY)
+ &#123;
+    int fd = open(&quot;/sys/class/display/HDMI/mode&quot;, O_RDONLY);
+@@ -12428,7 +12456,12 @@ void *hotplug_try_register(void *arg)
+     if(getHdmiMode() == 1)&#123;
+         handle_hotplug_event(1, 6);
+         ALOGI(&quot;hotplug_try_register at line = %d&quot;,__LINE__);
+-    &#125;else&#123;
++    &#125; else if (hwc_get_int_property(&quot;ro.htg.force&quot;, &quot;0&quot;)) &#123;
++        hotplug_free_dimbuffer();
++        hotplug_get_config(0);
++        handle_hotplug_event(1, 6);
++        ALOGI(&quot;hotplug_try_register at line = %d&quot;,__LINE__);
++    &#125; else &#123;
+ #if (defined(RK3368_BOX) || defined(RK3288_BOX) || defined(RK3399_BOX))
+ #if RK3288_BOX
+         if(context-&gt;mLcdcNum == 1)&#123;
+</code></pre>
+<p><code>/sys/class/graphics/fb0</code> 对应主屏， <code>/sys/class/graphics/fb4</code> 对应副屏。</p>
+<h3 id="system-prop"><a href="#system-prop" class="headerlink" title="system.prop"></a>system.prop</h3><ul>
+<li><code>device/rockchip/rk3288/system.prop</code></li>
+</ul>
+<pre><code class="c">diff --git a/system.prop b/system.prop
+index d3534f3..0938841 100644
+--- a/system.prop
++++ b/system.prop
+@@ -12,6 +12,7 @@ wifi.interface=wlan0
+ #rild.libargs=-d /dev/ttyACM0
+ persist.tegra.nvmmlite = 1
+ ro.audio.monitorOrientation=true
++ro.htg.force=1
+ 
+ #NFC
+ debug.nfc.fw_download=false
+</code></pre>
+<h2 id="Notes"><a href="#Notes" class="headerlink" title="Notes"></a>Notes</h2><h3 id="scrcpy"><a href="#scrcpy" class="headerlink" title="scrcpy"></a>scrcpy</h3><p>安装 <code>scrcpy</code> 方便在电脑上操作Android 设备. </p>
+<pre><code class="bash">snap install scrcpy
+</code></pre>
+<h3 id="issues"><a href="#issues" class="headerlink" title="issues"></a>issues</h3><p>当 dts 中的显示器参数设置不当时，会出现以下异常。</p>
+<pre><code class="bash">root@rk3288:/ # dmesg |grep -i edp                                             
+[    0.871339] Use EDP as primary screen
+[    0.871461] rk32-edp rk32-edp: failed to get reset
+[    0.871474] rk32-edp rk32-edp: failed to get reset
+[    0.871615] rk32-edp rk32-edp: rk32 edp driver probe success
+[    0.894143] rk32-edp rk32-edp: edp pll locked
+[    0.951750] rk32-edp rk32-edp: max link rate:0.0Gps max number of lanes:0
+[    0.951765] rk32-edp rk32-edp: Rx Mx Link Rate is abnormal:0!default link rate:1.62Gps
+[    0.951777] rk32-edp rk32-edp: Rx Max Lane count is abnormal :0 !use default lanes:4
+[    0.957711] rk32-edp rk32-edp: hw lt err:1
+[    0.957722] rk32-edp rk32-edp: link train failed!
+</code></pre>
+<p>这是 <code>GPIO</code> 接口配置错误情况下会出现的，当然是在排除硬件故障情况下。    </p>
+<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.t-firefly.com/doc/case/348.html">firefly Android双屏异显</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/MrDongShiYi/article/details/90903796">RK3288[android 7.1]调试笔记 ----双屏异显（edp屏做主屏，lvds做副屏）</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/kris_fei/article/details/78646966">[RK3288][Android6.0] 调试笔记 --- 双屏显示内核Patch</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/lialong1st/p/9149213.html">RK3288 增加双屏异显 eDP+LVDS</a></li>
+</ul>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2021/06/18/dual-lcd/">https://www.litreily.top/2021/06/18/dual-lcd/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tags"></i><a href="/tags/android/">android</a><a href="/tags/rk3288/">rk3288</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#kernel"><span class="toc-number">1.</span> <span class="toc-text">kernel</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#dts"><span class="toc-number">1.1.</span> <span class="toc-text">dts</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#lvds-dts"><span class="toc-number">1.1.1.</span> <span class="toc-text">lvds dts</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#edp-dts"><span class="toc-number">1.1.2.</span> <span class="toc-text">edp dts</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#lcd-b116xan-dtsi"><span class="toc-number">1.1.3.</span> <span class="toc-text">lcd-b116xan.dtsi</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#rk3288-tb-8846-dts"><span class="toc-number">1.1.4.</span> <span class="toc-text">rk3288-tb_8846.dts</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#driver"><span class="toc-number">1.2.</span> <span class="toc-text">driver</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#android-system"><span class="toc-number">2.</span> <span class="toc-text">android system</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#device-hwcomposer"><span class="toc-number">2.1.</span> <span class="toc-text">device hwcomposer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#system-prop"><span class="toc-number">2.2.</span> <span class="toc-text">system.prop</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Notes"><span class="toc-number">3.</span> <span class="toc-text">Notes</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#scrcpy"><span class="toc-number">3.1.</span> <span class="toc-text">scrcpy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#issues"><span class="toc-number">3.2.</span> <span class="toc-text">issues</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#reference"><span class="toc-number">4.</span> <span class="toc-text">reference</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="next" href="/2021/05/28/cp210x/">解决Ubuntu 18.04 minicom 不支持 1500000 波特率的问题 &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+.night .v[data-class=v] a:hover { color: #216C73 !important; }
+.night .v[data-class=v] li { list-style: inherit; }
+.night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
+.night .v[data-class=v] .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.night .v[data-class=v] .vbtn { border-radius: 0; background: none; }
+.night .v[data-class=v] .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.night .v[data-class=v] .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.night .v[data-class=v] .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre,.night .v[data-class=v] .vlist .vcard .vhead .vsys { background: #203240 !important; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre { color: #F0F0F0; font-size: 95%; }
+.v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
+</style><div id="vcomment"></div><script src="//cdn.bootcdn.net/ajax/libs/valine/1.4.14/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
+  lang: 'zh-cn',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></section><footer><p>Copyright © 2016 - 2021 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script></body></html>

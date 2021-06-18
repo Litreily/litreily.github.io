@@ -1,0 +1,1510 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>stm32 - FreeRTOS系统移植 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
+</head><link rel="stylesheet" type="text/css" href="/plugins/highlight/atom-one-dark.min.css"><script type="text/javascript" src="/plugins/highlight/highlight.min.js"></script><script>hljs.initHighlightingOnLoad();
+</script><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">stm32 - FreeRTOS系统移植</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2016/11/02/FreeRTOS/">2016-11-02</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Embedded/">Embedded</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>前段时间研究了一下 FreeRTOS 在 stm32 的系统移植，觉得有必要做个总结，记录这研发路上的点点滴滴。</p>
+<h2 id="FreeRTOS"><a href="#FreeRTOS" class="headerlink" title="FreeRTOS"></a>FreeRTOS</h2><p>从 <a target="_blank" rel="noopener" href="http://www.freertos.org/">FreeRTOS官网</a> 下载最新源码，我下载的是 <a target="_blank" rel="noopener" href="http://pan.baidu.com/s/1jIbOqDg">FreeRTOSv9.0.0</a> ，其文件结构如下，根目录主要包含 FreeRTOS 和 FreeRTOS-Plus 两个文件夹， Plus 版系统添加了 TCP/UDP 等网络通信功能。</p>
+<pre><code class="txt">D:\FREERTOSV9.0.0
+│  New - Direct to Task Notifications.html
+│  New - FreeRTOS+TCP.html
+│  Quick_Start_Guide.html
+│  Upgrading-to-FreeRTOS-9.html
+│  readme.txt
+│
+├─FreeRTOS
+│   │  links_to_doc_pages_for_the_demo_projects.html
+│   │  readme.txt
+│   │
+│   ├─Demo
+│   ├─License
+│   └─Source
+│
+└─FreeRTOS-Plus
+    │  readme.txt
+    │
+    ├─Demo
+    └─Source
+</code></pre>
+<p>暂且不考虑plus版，打开FreeRTOS文件夹，其中包含3个文件夹：</p>
+<ol>
+<li>Demo：不同处理器的FreeRTOS系统移植例程</li>
+<li>License：许可证，对FreeRTOS使用范围进行授权</li>
+<li>Source：FreeRTOS源码</li>
+</ol>
+<h3 id="Demo"><a href="#Demo" class="headerlink" title="Demo"></a>Demo</h3><p>Demo 包含了官方提供的所有已适配处理器的移植例程，我们可以根据自己所用芯片和开发环境选择合适的例程进行学习。</p>
+<pre><code class="txt">ARM7_AT91FR40008_GCC
+ARM7_AT91SAM7S64_IAR
+ARM7_AT91SAM7X256_Eclipse
+ARM7_LPC2106_GCC
+ARM7_LPC2129_IAR
+ARM7_LPC2129_Keil_RVDS
+ARM7_LPC2138_Rowley
+ARM7_LPC2368_Eclipse
+ARM7_LPC2368_Rowley
+ARM7_STR71x_IAR
+ARM7_STR75x_GCC
+ARM7_STR75x_IAR
+ARM9_AT91SAM9XE_IAR
+ARM9_STR91X_IAR
+AVR32_UC3
+AVR_ATMega323_IAR
+AVR_ATMega323_WinAVR
+ColdFire_MCF51CN128_CodeWarrior
+ColdFire_MCF52221_CodeWarrior
+ColdFire_MCF52233_Eclipse
+ColdFire_MCF52259_CodeWarrior
+ColdFire_MCF5282_Eclipse
+Common
+CORTEX_A2F200_IAR_and_Keil
+CORTEX_A2F200_SoftConsole
+CORTEX_A53_64-bit_UltraScale_MPSoC
+CORTEX_A5_SAMA5D2x_Xplained_IAR
+CORTEX_A5_SAMA5D3x_Xplained_IAR
+CORTEX_A5_SAMA5D4x_EK_IAR
+CORTEX_A9_Cyclone_V_SoC_DK
+CORTEX_A9_RZ_R7S72100_IAR_DS-5
+CORTEX_A9_Zynq_ZC702
+CORTEX_AT91SAM3U256_IAR
+CORTEX_ATSAM3S-EK2_Atmel_Studio
+CORTEX_ATSAM3X_Atmel_Studio
+CORTEX_CY8C5588_PSoC_Creator_GCC
+CORTEX_CY8C5588_PSoC_Creator_Keil
+CORTEX_CY8C5588_PSoC_Creator_RVDS
+CORTEX_EFM32_Giant_Gecko_Simplicity_Studio
+CORTEX_EFM32_Pearl_Gecko_Simplicity_Studio
+CORTEX_EFMG890F128_IAR
+CORTEX_Kinetis_K60_Tower_IAR
+CORTEX_LM3S102_GCC
+CORTEX_LM3S102_Rowley
+CORTEX_LM3S316_IAR
+CORTEX_LM3S811_GCC
+CORTEX_LM3S811_IAR
+CORTEX_LM3S811_KEIL
+CORTEX_LM3Sxxxx_Eclipse
+CORTEX_LM3Sxxxx_IAR_Keil
+CORTEX_LM3Sxxxx_Rowley
+CORTEX_LPC1768_GCC_RedSuite
+CORTEX_LPC1768_GCC_Rowley
+CORTEX_LPC1768_IAR
+CORTEX_M0+_Atmel_SAMD20_XPlained
+CORTEX_M0_Infineon_XMC1000_IAR_Keil_GCC
+CORTEX_M0_LPC1114_LPCXpresso
+CORTEX_M0_STM32F0518_IAR
+CORTEX_M4F_ATSAM4E_Atmel_Studio
+CORTEX_M4F_CEC1302_Keil_GCC
+CORTEX_M4F_CEC1302_MikroC
+CORTEX_M4F_Infineon_XMC4000_GCC_Dave
+CORTEX_M4F_Infineon_XMC4000_IAR
+CORTEX_M4F_Infineon_XMC4000_Keil
+CORTEX_M4F_Infineon_XMC4000_Tasking
+CORTEX_M4F_Infineon_XMC4500_GCC_Atollic
+CORTEX_M4F_M0_LPC43xx_Keil
+CORTEX_M4F_MSP432_LaunchPad_IAR_CCS_Keil
+CORTEX_M4F_STM32F407ZG-SK
+CORTEX_M4_ATSAM4L_Atmel_Studio
+CORTEX_M4_ATSAM4S_Atmel_Studio
+CORTEX_M7_SAME70_Xplained_AtmelStudio
+CORTEX_M7_SAMV71_Xplained_AtmelStudio
+CORTEX_M7_SAMV71_Xplained_IAR_Keil
+CORTEX_M7_STM32F7_STM32756G-EVAL_IAR_Keil
+CORTEX_MB9A310_IAR_Keil
+CORTEX_MB9B500_IAR_Keil
+CORTEX_MPU_LM3Sxxxx_Rowley
+CORTEX_MPU_LPC1768_GCC_RedSuite
+CORTEX_MPU_Simulator_Keil_GCC
+CORTEX_R4F_RZ_T_GCC_IAR
+CORTEX_R4_RM48_TMS570_CCS5
+CORTEX_R5_UltraScale_MPSoC
+CORTEX_SmartFusion2_M2S050_SoftConsole
+CORTEX_STM32F100_Atollic
+CORTEX_STM32F103_GCC_Rowley
+CORTEX_STM32F103_IAR
+CORTEX_STM32F103_Keil
+CORTEX_STM32F103_Primer_GCC
+CORTEX_STM32F107_GCC_Rowley
+CORTEX_STM32L152_Discovery_IAR
+CORTEX_STM32L152_IAR
+CORTUS_APS3_GCC
+Cygnal
+dsPIC_MPLAB
+Flshlite
+H8S
+HCS12_CodeWarrior_banked
+HCS12_CodeWarrior_small
+HCS12_GCC_banked
+IA32_flat_GCC_Galileo_Gen_2
+lwIP_AVR32_UC3
+lwIP_Demo_Rowley_ARM7
+lwIP_MCF5235_GCC
+MB91460_Softune
+MB96340_Softune
+MB96350_Softune_Dice_Kit
+MCF5235_GCC
+MicroBlaze_Kintex7_EthernetLite
+MicroBlaze_Spartan-6_EthernetLite
+MSP430X_MSP430F5438_CCS
+MSP430X_MSP430F5438_IAR
+MSP430X_MSP430FR5969_LaunchPad_IAR_CCS
+msp430_CrossWorks
+msp430_GCC
+msp430_IAR
+NEC_78K0R_IAR
+NEC_V850ES_IAR
+NiosII_CycloneIII_DBC3C40_GCC
+PC
+PIC18_MPLAB
+PIC18_WizC
+PIC24_MPLAB
+PIC32MEC14xx_MPLAB
+PIC32MX_MPLAB
+PIC32MZ_MPLAB
+PPC405_FPU_Xilinx_Virtex4_GCC
+PPC405_Xilinx_Virtex4_GCC
+PPC440_DP_FPU_Xilinx_Virtex5_GCC
+PPC440_SP_FPU_Xilinx_Virtex5_GCC
+PPC440_Xilinx_Virtex5_GCC
+RL78_multiple_IAR
+RL78_RL78G13_Promo_Board_IAR
+RX100-RSK_GCC_e2studio
+RX100-RSK_IAR
+RX100-RSK_Renesas_e2studio
+RX100_RX113-RSK_GCC_e2studio_IAR
+RX100_RX113-RSK_Renesas_e2studio
+RX200_RX210-RSK_Renesas
+RX200_RX231-RSK_GCC_e2studio_IAR
+RX200_RX231-RSK_Renesas_e2studio
+RX600_RX62N-RDK_GNURX
+RX600_RX62N-RDK_IAR
+RX600_RX62N-RDK_Renesas
+RX600_RX62N-RSK_GNURX
+RX600_RX62N-RSK_IAR
+RX600_RX62N-RSK_Renesas
+RX600_RX630-RSK_Renesas
+RX600_RX63N-RDK_Renesas
+RX600_RX64M_RSK_GCC_e2studio
+RX600_RX64M_RSK_Renesas_e2studio
+RX700_RX71M_RSK_GCC_e2studio_IAR
+RX700_RX71M_RSK_Renesas_e2studio
+SuperH_SH7216_Renesas
+TriCore_TC1782_TriBoard_GCC
+uIP_Demo_IAR_ARM7
+uIP_Demo_Rowley_ARM7
+Unsupported_Demos
+WIN32-MingW
+WIN32-MSVC
+WIN32-MSVC-Static-Allocation-Only
+WizNET_DEMO_GCC_ARM7
+WizNET_DEMO_TERN_186
+Xilinx_FreeRTOS_BSP
+</code></pre>
+<h3 id="Source"><a href="#Source" class="headerlink" title="Source"></a>Source</h3><p>Source 是 FreeRTOS 的核心，包含了系统内核及各类处理器系统移植所需的源码。</p>
+<pre><code class="txt">
+D:\FREERTOSV9.0.0\FREERTOS\SOURCE
+│  croutine.c
+│  event_groups.c
+│  list.c
+│  queue.c
+│  readme.txt
+│  tasks.c
+│  timers.c
+│
+├─include
+│      croutine.h
+│      deprecated_definitions.h
+│      event_groups.h
+│      FreeRTOS.h
+│      list.h
+│      mpu_prototypes.h
+│      mpu_wrappers.h
+│      portable.h
+│      projdefs.h
+│      queue.h
+│      semphr.h
+│      StackMacros.h
+│      stdint.readme
+│      task.h
+│      timers.h
+│
+└─portable
+    │  readme.txt
+    │
+    ├─BCC
+    │  └─16BitDOS
+    │      ├─common
+    │      │      portasm.h
+    │      │      portcomn.c
+    │      │
+    │      ├─Flsh186
+    │      │      port.c
+    │      │      prtmacro.h
+    │      │
+    │      └─PC
+    │              port.c
+    │              prtmacro.h
+    │
+    ├─CCS
+    │  ├─ARM_CM4F
+    │  │      port.c
+    │  │      portasm.asm
+    │  │      portmacro.h
+    │  │
+    │  ├─ARM_Cortex-R4
+    │  │      port.c
+    │  │      portASM.asm
+    │  │      portmacro.h
+    │  │
+    │  └─MSP430X
+    │          data_model.h
+    │          port.c
+    │          portext.asm
+    │          portmacro.h
+    │
+    ├─CodeWarrior
+    │  ├─ColdFire_V1
+    │  │      port.c
+    │  │      portasm.S
+    │  │      portmacro.h
+    │  │
+    │  ├─ColdFire_V2
+    │  │      port.c
+    │  │      portasm.S
+    │  │      portmacro.h
+    │  │
+    │  └─HCS12
+    │          port.c
+    │          portmacro.h
+    │
+    ├─Common
+    │      mpu_wrappers.c
+    │
+    ├─GCC
+    │  ├─ARM7_AT91FR40008
+    │  │      port.c
+    │  │      portISR.c
+    │  │      portmacro.h
+    │  │
+    │  ├─ARM7_AT91SAM7S
+    │  │      AT91SAM7X256.h
+    │  │      ioat91sam7x256.h
+    │  │      lib_AT91SAM7X256.c
+    │  │      lib_AT91SAM7X256.h
+    │  │      port.c
+    │  │      portISR.c
+    │  │      portmacro.h
+    │  │
+    │  ├─ARM7_LPC2000
+    │  │      port.c
+    │  │      portISR.c
+    │  │      portmacro.h
+    │  │
+    │  ├─ARM7_LPC23xx
+    │  │      port.c
+    │  │      portISR.c
+    │  │      portmacro.h
+    │  │
+    │  ├─ARM_CA53_64_BIT
+    │  │      port.c
+    │  │      portASM.S
+    │  │      portmacro.h
+    │  │
+    │  ├─ARM_CA9
+    │  │      port.c
+    │  │      portASM.S
+    │  │      portmacro.h
+    │  │
+    │  ├─ARM_CM0
+    │  │      port.c
+    │  │      portmacro.h
+    │  │
+    │  ├─ARM_CM3
+    │  │      port.c
+    │  │      portmacro.h
+    │  │
+    │  ├─ARM_CM3_MPU
+    │  │      port.c
+    │  │      portmacro.h
+    │  │
+    │  ├─ARM_CM4F
+    │  │      port.c
+    │  │      portmacro.h
+    │  │
+    │  ├─ARM_CM4_MPU
+    │  │      port.c
+    │  │      portmacro.h
+    │  │
+    │  ├─ARM_CM7
+    │  │  │  ReadMe.txt
+    │  │  │
+    │  │  └─r0p1
+    │  │          port.c
+    │  │          portmacro.h
+    │  │
+    │  ├─ARM_CR5
+    │  │      port.c
+    │  │      portASM.S
+    │  │      portmacro.h
+    │  │
+    │  ├─ARM_CRx_No_GIC
+    │  │      port.c
+    │  │      portASM.S
+    │  │      portmacro.h
+    │  │
+    │  ├─ATMega323
+    │  │      port.c
+    │  │      portmacro.h
+    │  │
+    │  ├─AVR32_UC3
+    │  │      exception.S
+    │  │      port.c
+    │  │      portmacro.h
+    │  │
+    │  ├─ColdFire_V2
+    │  │      port.c
+    │  │      portasm.S
+    │  │      portmacro.h
+    │  │
+    │  ├─CORTUS_APS3
+    │  │      port.c
+    │  │      portmacro.h
+    │  │
+    │  ├─H8S2329
+    │  │      port.c
+    │  │      portmacro.h
+    │  │
+    │  ├─HCS12
+    │  │      port.c
+    │  │      portmacro.h
+    │  │
+    │  ├─IA32_flat
+    │  │      ISR_Support.h
+    │  │      port.c
+    │  │      portASM.S
+    │  │      portmacro.h
+    │  │
+    │  ├─MCF5235
+    │  │      port.c
+    │  │      portmacro.h
+    │  │
+    │  ├─MicroBlaze
+    │  │      port.c
+    │  │      portasm.s
+    │  │      portmacro.h
+    │  │
+    │  ├─MicroBlazeV8
+    │  │      port.c
+    │  │      portasm.S
+    │  │      portmacro.h
+    │  │      port_exceptions.c
+    │  │
+    │  ├─MicroBlazeV9
+    │  │      port.c
+    │  │      portasm.S
+    │  │      portmacro.h
+    │  │      port_exceptions.c
+    │  │
+    │  ├─MSP430F449
+    │  │      port.c
+    │  │      portmacro.h
+    │  │
+    │  ├─NiosII
+    │  │      port.c
+    │  │      portmacro.h
+    │  │      port_asm.S
+    │  │
+    │  ├─PPC405_Xilinx
+    │  │      FPU_Macros.h
+    │  │      port.c
+    │  │      portasm.S
+    │  │      portmacro.h
+    │  │
+    │  ├─PPC440_Xilinx
+    │  │      FPU_Macros.h
+    │  │      port.c
+    │  │      portasm.S
+    │  │      portmacro.h
+    │  │
+    │  ├─RL78
+    │  │      isr_support.h
+    │  │      port.c
+    │  │      portasm.S
+    │  │      portmacro.h
+    │  │
+    │  ├─RX100
+    │  │      port.c
+    │  │      portmacro.h
+    │  │
+    │  ├─RX600
+    │  │      port.c
+    │  │      portmacro.h
+    │  │
+    │  ├─RX600v2
+    │  │      port.c
+    │  │      portmacro.h
+    │  │
+    │  ├─STR75x
+    │  │      port.c
+    │  │      portISR.c
+    │  │      portmacro.h
+    │  │
+    │  └─TriCore_1782
+    │          port.c
+    │          portmacro.h
+    │          porttrap.c
+    │
+    ├─IAR
+    │  ├─78K0R
+    │  │      ISR_Support.h
+    │  │      port.c
+    │  │      portasm.s26
+    │  │      portmacro.h
+    │  │
+    │  ├─ARM_CA5_No_GIC
+    │  │      port.c
+    │  │      portASM.h
+    │  │      portASM.s
+    │  │      portmacro.h
+    │  │
+    │  ├─ARM_CA9
+    │  │      port.c
+    │  │      portASM.h
+    │  │      portASM.s
+    │  │      portmacro.h
+    │  │
+    │  ├─ARM_CM0
+    │  │      port.c
+    │  │      portasm.s
+    │  │      portmacro.h
+    │  │
+    │  ├─ARM_CM3
+    │  │      port.c
+    │  │      portasm.s
+    │  │      portmacro.h
+    │  │
+    │  ├─ARM_CM4F
+    │  │      port.c
+    │  │      portasm.s
+    │  │      portmacro.h
+    │  │
+    │  ├─ARM_CM7
+    │  │  │  ReadMe.txt
+    │  │  │
+    │  │  └─r0p1
+    │  │          port.c
+    │  │          portasm.s
+    │  │          portmacro.h
+    │  │
+    │  ├─ARM_CRx_No_GIC
+    │  │      port.c
+    │  │      portASM.s
+    │  │      portmacro.h
+    │  │
+    │  ├─ATMega323
+    │  │      port.c
+    │  │      portmacro.h
+    │  │      portmacro.s90
+    │  │
+    │  ├─AtmelSAM7S64
+    │  │      AT91SAM7S64.h
+    │  │      AT91SAM7S64_inc.h
+    │  │      AT91SAM7X128.h
+    │  │      AT91SAM7X128_inc.h
+    │  │      AT91SAM7X256.h
+    │  │      AT91SAM7X256_inc.h
+    │  │      ISR_Support.h
+    │  │      lib_AT91SAM7S64.h
+    │  │      lib_AT91SAM7X128.h
+    │  │      lib_AT91SAM7X256.h
+    │  │      port.c
+    │  │      portasm.s79
+    │  │      portmacro.h
+    │  │
+    │  ├─AtmelSAM9XE
+    │  │      ISR_Support.h
+    │  │      port.c
+    │  │      portasm.s79
+    │  │      portmacro.h
+    │  │
+    │  ├─AVR32_UC3
+    │  │      exception.s82
+    │  │      port.c
+    │  │      portmacro.h
+    │  │      read.c
+    │  │      write.c
+    │  │
+    │  ├─LPC2000
+    │  │      ISR_Support.h
+    │  │      port.c
+    │  │      portasm.s79
+    │  │      portmacro.h
+    │  │
+    │  ├─MSP430
+    │  │      port.c
+    │  │      portasm.h
+    │  │      portext.s43
+    │  │      portmacro.h
+    │  │
+    │  ├─MSP430X
+    │  │      data_model.h
+    │  │      port.c
+    │  │      portext.s43
+    │  │      portmacro.h
+    │  │
+    │  ├─RL78
+    │  │      ISR_Support.h
+    │  │      port.c
+    │  │      portasm.s87
+    │  │      portmacro.h
+    │  │
+    │  ├─RX100
+    │  │      port.c
+    │  │      portmacro.h
+    │  │      port_asm.s
+    │  │
+    │  ├─RX600
+    │  │      port.c
+    │  │      portmacro.h
+    │  │      port_asm.s
+    │  │
+    │  ├─RXv2
+    │  │      port.c
+    │  │      portmacro.h
+    │  │      port_asm.s
+    │  │
+    │  ├─STR71x
+    │  │      ISR_Support.h
+    │  │      port.c
+    │  │      portasm.s79
+    │  │      portmacro.h
+    │  │
+    │  ├─STR75x
+    │  │      ISR_Support.h
+    │  │      port.c
+    │  │      portasm.s79
+    │  │      portmacro.h
+    │  │
+    │  ├─STR91x
+    │  │      ISR_Support.h
+    │  │      port.c
+    │  │      portasm.s79
+    │  │      portmacro.h
+    │  │
+    │  └─V850ES
+    │          ISR_Support.h
+    │          port.c
+    │          portasm.s85
+    │          portasm_Fx3.s85
+    │          portasm_Hx2.s85
+    │          portmacro.h
+    │
+    ├─Keil
+    │      See-also-the-RVDS-directory.txt
+    │
+    ├─MemMang
+    │      heap_1.c
+    │      heap_2.c
+    │      heap_3.c
+    │      heap_4.c
+    │      heap_5.c
+    │      ReadMe.url
+    │
+    ├─MikroC
+    │  └─ARM_CM4F
+    │          port.c
+    │          portmacro.h
+    │
+    ├─MPLAB
+    │  ├─PIC18F
+    │  │      port.c
+    │  │      portmacro.h
+    │  │      stdio.h
+    │  │
+    │  ├─PIC24_dsPIC
+    │  │      port.c
+    │  │      portasm_dsPIC.S
+    │  │      portasm_PIC24.S
+    │  │      portmacro.h
+    │  │
+    │  ├─PIC32MEC14xx
+    │  │      ISR_Support.h
+    │  │      port.c
+    │  │      portmacro.h
+    │  │      port_asm.S
+    │  │
+    │  ├─PIC32MX
+    │  │      ISR_Support.h
+    │  │      port.c
+    │  │      portmacro.h
+    │  │      port_asm.S
+    │  │
+    │  └─PIC32MZ
+    │          ISR_Support.h
+    │          port.c
+    │          portmacro.h
+    │          port_asm.S
+    │
+    ├─MSVC-MingW
+    │      port.c
+    │      portmacro.h
+    │
+    ├─oWatcom
+    │  └─16BitDOS
+    │      ├─common
+    │      │      portasm.h
+    │      │      portcomn.c
+    │      │
+    │      ├─Flsh186
+    │      │      port.c
+    │      │      portmacro.h
+    │      │
+    │      └─PC
+    │              port.c
+    │              portmacro.h
+    │
+    ├─Paradigm
+    │  └─Tern_EE
+    │      ├─large_untested
+    │      │      port.c
+    │      │      portasm.h
+    │      │      portmacro.h
+    │      │
+    │      └─small
+    │              port.c
+    │              portasm.h
+    │              portmacro.h
+    │
+    ├─Renesas
+    │  ├─RX100
+    │  │      port.c
+    │  │      portmacro.h
+    │  │      port_asm.src
+    │  │
+    │  ├─RX200
+    │  │      port.c
+    │  │      portmacro.h
+    │  │      port_asm.src
+    │  │
+    │  ├─RX600
+    │  │      port.c
+    │  │      portmacro.h
+    │  │      port_asm.src
+    │  │
+    │  ├─RX600v2
+    │  │      port.c
+    │  │      portmacro.h
+    │  │      port_asm.src
+    │  │
+    │  └─SH2A_FPU
+    │          ISR_Support.inc
+    │          port.c
+    │          portasm.src
+    │          portmacro.h
+    │
+    ├─Rowley
+    │  ├─ARM7
+    │  │      readme.txt
+    │  │
+    │  └─MSP430F449
+    │          port.c
+    │          portasm.h
+    │          portext.asm
+    │          portmacro.h
+    │
+    ├─RVDS
+    │  ├─ARM7_LPC21xx
+    │  │      port.c
+    │  │      portASM.s
+    │  │      portmacro.h
+    │  │      portmacro.inc
+    │  │
+    │  ├─ARM_CA9
+    │  │      port.c
+    │  │      portASM.s
+    │  │      portmacro.h
+    │  │      portmacro.inc
+    │  │
+    │  ├─ARM_CM0
+    │  │      port.c
+    │  │      portmacro.h
+    │  │
+    │  ├─ARM_CM3
+    │  │      port.c
+    │  │      portmacro.h
+    │  │
+    │  ├─ARM_CM4F
+    │  │      port.c
+    │  │      portmacro.h
+    │  │
+    │  ├─ARM_CM4_MPU
+    │  │      port.c
+    │  │      portmacro.h
+    │  │
+    │  └─ARM_CM7
+    │      │  ReadMe.txt
+    │      │
+    │      └─r0p1
+    │              port.c
+    │              portmacro.h
+    │
+    ├─SDCC
+    │  └─Cygnal
+    │          port.c
+    │          portmacro.h
+    │
+    ├─Softune
+    │  ├─MB91460
+    │  │      port.c
+    │  │      portmacro.h
+    │  │      __STD_LIB_sbrk.c
+    │  │
+    │  └─MB96340
+    │          port.c
+    │          portmacro.h
+    │          __STD_LIB_sbrk.c
+    │
+    ├─Tasking
+    │  └─ARM_CM4F
+    │          port.c
+    │          portmacro.h
+    │          port_asm.asm
+    │
+    └─WizC
+        └─PIC18
+            │  addFreeRTOS.h
+            │  Install.bat
+            │  port.c
+            │  portmacro.h
+            │
+            └─Drivers
+                └─Tick
+                        isrTick.c
+                        Tick.c
+</code></pre>
+<h2 id="系统移植"><a href="#系统移植" class="headerlink" title="系统移植"></a>系统移植</h2><p>以 stm32f103RCT6 为例，选择 Keil MDK v5.21.1.0 作为开发平台进行系统移植。</p>
+<h3 id="功能描述"><a href="#功能描述" class="headerlink" title="功能描述"></a>功能描述</h3><ol>
+<li>PB10 作为输出口，控制 LED 的亮灭；</li>
+<li>编写延时函数 delay ，以毫秒为单位；</li>
+<li>使用 USART2 循环发送数据，波特率9600，8位数据位，1位停止位，无校验，无硬件控制流；</li>
+<li>系统移植，添加 3 个 task：vLEDOnTask，vLEDOffTask，vUasrtSendTask</li>
+</ol>
+<h3 id="创建项目-BrightLed"><a href="#创建项目-BrightLed" class="headerlink" title="创建项目 (BrightLed)"></a>创建项目 (BrightLed)</h3><ul>
+<li>选择芯片 (stm32f103RCT6)</li>
+</ul>
+<p><img src="/assets/stm32/selectChip.png" alt="选择芯片"></p>
+<ul>
+<li>选择外设</li>
+</ul>
+<p>自从 Keil MDK 更新至 v5.0 以后，软件安装完成便可使用 &quot;Pack installer&quot; 让其自动下载所需的软件包；新建项目也变得更加简单方便，可以使用 &quot;manager run-time environment&quot; 选择所需的片内外设。</p>
+<pre><code class="txt">Software Compoent
+├─CMSIS
+│    │  CORE
+│    │
+└─Device
+     │  GPIO
+     │  Startup
+     │
+     └─stdPeriph Drivers
+         │  Framework
+         │  GPIO
+         │  RCC
+         │  USARTs
+</code></pre>
+<p>外设说明：</p>
+<ol>
+<li><strong>CORE</strong>(必选)： 提供与 Cortex-M0、<strong>Cortex-M3</strong>、Cortex-M4、SC000 和 SC300 处理器与外围寄存器之间的接口</li>
+<li><strong>Framework</strong>(必选)： 标准外设驱动框架(Standard Peripheral Drivers Framework)</li>
+<li><strong>RCC</strong>(必选)： 提供与系统时钟相关的库函数</li>
+<li><strong>GPIO</strong>： 提供与通用IO接口相关的库函数</li>
+<li><strong>USART</strong>： 提供与UART/USART相关的库函数</li>
+</ol>
+<p><img src="/assets/stm32/selectDevice.png" alt="选择外设"></p>
+<ul>
+<li>设置参数</li>
+</ul>
+<p>打开 <code>Options for target</code>，依次设置下列参数：</p>
+<ol>
+<li>Target &gt; Xtal(MHz)): 8.0</li>
+<li>C/C++  &gt; Define: USE_STDPERIPH_DRIVER,STM32F10X_MD</li>
+<li>Debug  &gt; Use: ST-Link Debugger<br> 3.1 Settings &gt; Debug &gt; Debug Adapter: ST-LINK/V2; Port:SW; Max: 1.8MHz<br> 3.2 Settings &gt; Flash Download &gt; Reset and Run:[√]<br> 3.3 Settings &gt; Flash Download &gt; Programming Algorithm: STM32f10x Med-density Flash</li>
+</ol>
+<p>所有参数均设置完成后，项目创建过程就结束了。</p>
+<p><img src="/assets/stm32/setSymbols.png" alt="设置Processing Symbols"></p>
+<p><img src="/assets/stm32/selectFlash.png" alt="选择flash大小"></p>
+<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><p>创建项目后，需要编写代码以实现对系统时钟及所需外设的初始化。</p>
+<ul>
+<li>初始化流程</li>
+</ul>
+<ol>
+<li>首先，将默认组名称改为 <code>USER</code> ，并在本地项目目录下添加文件夹，命名为 &quot;USER&quot; 。</li>
+<li>其次，新建并保存以下文件至 &quot;USER&quot; 文件夹，同时添加其中的 .c 文件到项目组 <code>USER</code>中。<br> 2.1 主程序：main.c / main.h<br> 2.2 中断程序：stm32f10x_it.c / stm32f10x_it.h<br> 2.3 延时模块: delay.c / delay.h<br> 2.4 led控制模块：led.c / led.h<br> 2.5 串口通信模块：usart.c / usart.h</li>
+<li>最后，对各个文件进行编码，完成各项初始化任务</li>
+</ol>
+<ul>
+<li>项目文件结构</li>
+</ul>
+<p><img src="/assets/stm32/projectFile.png" alt="项目目录"></p>
+<ul>
+<li>初始化程序设计</li>
+</ul>
+<blockquote>
+<p><strong>delay.c / delay.h</strong></p>
+</blockquote>
+<p>delay.c</p>
+<pre><code class="C">#include &quot;delay.h&quot;
+
+volatile u32 TimingDelay;
+
+void delayInit(void)
+&#123;
+  /* SystemFrequency / 1000    1ms
+   * SystemFrequency / 100000   10us
+   * SystemFrequency / 1000000 1us
+   */
+  #define SYSCLK_FREQ_72MHz  72000000    // 系统主频
+  if (SysTick_Config(SYSCLK_FREQ_72MHz / 1000000))
+  &#123;
+  /* Capture error */
+    while (1);
+  &#125;
+  SysTick-&gt;CTRL &amp;= ~SysTick_CTRL_ENABLE_Msk;
+&#125;
+
+// ms级延时函数
+void delay(__IO u32 nTime)
+&#123;
+  TimingDelay = nTime * 1000;
+  SysTick-&gt;CTRL |= SysTick_CTRL_ENABLE_Msk;
+  while(TimingDelay != 0);
+&#125;
+
+// us级延时函数
+void delayMicroseconds(__IO u32 nTime)
+&#123;
+  TimingDelay = nTime;
+  SysTick-&gt;CTRL |= SysTick_CTRL_ENABLE_Msk;
+  while(TimingDelay != 0);
+&#125;
+</code></pre>
+<p>delay.h</p>
+<pre><code class="C">#ifndef DELAY_H_
+#define DELAY_H_
+
+#include &quot;stm32f10x.h&quot;
+
+void delayInit(void);
+void delay(__IO u32 nTime);
+void delayMicroseconds(__IO u32 nTime);
+
+#endif /* DELAY_H_ */
+</code></pre>
+<blockquote>
+<p><strong>led.c / led.h</strong></p>
+</blockquote>
+<p>led.c</p>
+<pre><code class="C">#include &quot;led.h&quot;
+
+void ledGPIOConfiguration(void)
+&#123;
+  GPIO_InitTypeDef  GPIO_InitStructure;
+
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+  GPIO_Init(GPIOB, &amp;GPIO_InitStructure);
+&#125;
+</code></pre>
+<p>led.h</p>
+<pre><code class="C">#ifndef LED_H
+#define LED_H
+
+#include &quot;stm32f10x.h&quot;
+
+#define LED_PORT (GPIO_Pin_10)
+
+void ledGPIOConfiguration(void);
+
+#endif /* LED_H */
+</code></pre>
+<blockquote>
+<p><strong>usart.c / usart.h</strong></p>
+</blockquote>
+<p>usart.c</p>
+<pre><code class="C">#include &quot;usart.h&quot;
+
+//串口驱动应用标志
+
+static bool Derive_UART2SendFlag, Derive_UART2TxIntState;
+
+//开串口 并执行初始化
+//8位数据位 无校验 1位起始位/1位停止位 允许收发中断  宏定义BAUDRATE设定波特率 低优先级中断
+void usart2Config(void)
+&#123;
+  //波特率设置
+  #define   UART_BAUDDEF  9600
+  GPIO_InitTypeDef    GPIO_InitStructure;
+  USART_InitTypeDef   USART_InitStructure;
+  NVIC_InitTypeDef NVIC_InitStructure;
+  RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
+  //管脚配置
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_Init(GPIOA, &amp;GPIO_InitStructure);      /* TXIO */
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+  GPIO_Init(GPIOA, &amp;GPIO_InitStructure);       /* RXIO */
+  //串口工作模式配置
+  USART_InitStructure.USART_BaudRate = UART_BAUDDEF;
+  USART_InitStructure.USART_WordLength = USART_WordLength_8b;
+  USART_InitStructure.USART_StopBits = USART_StopBits_1;
+  USART_InitStructure.USART_Parity = USART_Parity_No ;
+  USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+  USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
+  USART_Init(USART2, &amp;USART_InitStructure);
+  //中断设置
+  NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;       //低优先级别的中断
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;        //响应中断等级为0
+  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+  NVIC_Init(&amp;NVIC_InitStructure);
+  Derive_UART2TxIntState = false;
+  USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
+  //START
+  USART_Cmd(USART2, ENABLE);
+&#125;
+
+//从串口发送一个字节
+void UARTSendByByter(u16 Data)
+&#123;
+  //发送数据
+  USART_SendData(USART2, (u8)Data);
+
+  if(!Derive_UART2TxIntState)
+  &#123;
+    Derive_UART2TxIntState = true;
+    USART_ITConfig(USART2, USART_IT_TXE, ENABLE);
+  &#125;
+  Derive_UART2SendFlag = true;
+&#125;
+
+//串口收发中断处理函数
+void UART_TRxOver_Interrupt(void)
+&#123;
+  if(USART_GetITStatus(USART2, USART_IT_TXE) == SET)
+  &#123;
+    //发送中断
+    //清零标志
+    USART_ClearITPendingBit(USART2, USART_IT_TXE);
+    Derive_UART2SendFlag = false;
+    //tx interrupt..
+    //...
+    if(!Derive_UART2SendFlag)
+    &#123;
+        USART_ITConfig(USART2, USART_IT_TXE, DISABLE);
+        Derive_UART2TxIntState = false;
+    &#125;
+  &#125;
+  if(USART_GetITStatus(USART2, USART_IT_RXNE) == SET)
+  &#123;
+    //接收中断
+    //-------- 回传接收到的数据 --------
+    UARTSendByByter(USART_ReceiveData(USART2));
+    USART_ClearFlag(USART2,USART_FLAG_RXNE);
+  &#125;
+&#125;
+</code></pre>
+<p>usart.h</p>
+<pre><code class="C">#ifndef USART_H
+#define USART_H
+
+#include &quot;stm32f10x.h&quot;
+#include &quot;stm32f10x_rcc.h&quot;
+#include &quot;stm32f10x_gpio.h&quot;
+#include &quot;stm32f10x_usart.h&quot;
+
+#define false 0
+#define true 1
+typedef unsigned char bool;
+
+void usart2Config(void);
+void UARTSendByByter(u16 Data);
+
+#endif  /* USART_H */
+</code></pre>
+<blockquote>
+<p><strong>stm32f10x_it.c / stm32f10x_it.h</strong></p>
+</blockquote>
+<p>stm32f10x_it.c</p>
+<pre><code class="C">#include &quot;stm32f10x_it.h&quot;
+void NMI_Handler(void)
+&#123;
+&#125;
+
+void HardFault_Handler(void)
+&#123;
+  /* Go to infinite loop when Hard Fault exception occurs */
+  while (1)
+  &#123;
+  &#125;
+&#125;
+
+void MemManage_Handler(void)
+&#123;
+  /* Go to infinite loop when Memory Manage exception occurs */
+  while (1)
+  &#123;
+  &#125;
+&#125;
+
+void BusFault_Handler(void)
+&#123;
+  /* Go to infinite loop when Bus Fault exception occurs */
+  while (1)
+  &#123;
+  &#125;
+&#125;
+
+void UsageFault_Handler(void)
+&#123;
+  /* Go to infinite loop when Usage Fault exception occurs */
+  while (1)
+  &#123;
+  &#125;
+&#125;
+
+#ifndef RTE_RTOS_RTX
+void SVC_Handler(void)
+&#123;
+&#125;
+#endif
+
+void DebugMon_Handler(void)
+&#123;
+&#125;
+
+#ifndef RTE_RTOS_RTX
+void PendSV_Handler(void)
+&#123;
+&#125;
+#endif
+
+extern volatile u32 TimingDelay;
+void SysTick_Handler(void) &#123;
+  if (TimingDelay != 0x00) &#123;
+    TimingDelay--;
+  &#125;
+&#125;
+
+extern void UART_TRxOver_Interrupt(void);
+void USART2_IRQHandler(void)
+&#123;
+  UART_TRxOver_Interrupt();
+&#125;
+</code></pre>
+<p>stm32f10x_it.h</p>
+<pre><code class="C">#ifndef __STM32F10x_IT_H
+#define __STM32F10x_IT_H
+
+#ifdef __cplusplus
+ extern &quot;C&quot; &#123;
+#endif
+
+/* Includes ------------------------------------------------------------------*/
+#include &quot;stm32f10x.h&quot;
+/* Exported types ------------------------------------------------------------*/
+/* Exported constants --------------------------------------------------------*/
+/* Exported macro ------------------------------------------------------------*/
+/* Exported functions --------------------------------------------------------*/
+
+void NMI_Handler(void);
+void HardFault_Handler(void);
+void MemManage_Handler(void);
+void BusFault_Handler(void);
+void UsageFault_Handler(void);
+void SVC_Handler(void);
+void DebugMon_Handler(void);
+void PendSV_Handler(void);
+void SysTick_Handler(void);
+void USART2_IRQHandler(void);
+
+#ifdef __cplusplus
+&#125;
+#endif
+
+#endif /* __STM32F10x_IT_H */
+</code></pre>
+<blockquote>
+<p><strong>main.c / main.h</strong></p>
+</blockquote>
+<p>main.c</p>
+<pre><code class="C">/*******************************************************************************
+ * Header       : Learning FreeRTOS
+ * File Name    : main.c
+ * Author       : wgt
+ * Date         : 2016.11.2
+ * Description  :
+ *******************************************************************************/
+#include &quot;main.h&quot;
+
+/* ENABLE the clk of GPIO */
+static void deviceInit(void);
+
+/* setup the hardware of system */
+static void prvSetupHardware(void);
+
+/*******************************************************************************
+* Function Name  : main
+* Description    : main function,the interface of system
+* Input          : None
+* Return         : None
+*******************************************************************************/
+int main(void)
+&#123;
+  prvSetupHardware();  // 设备初始化
+
+  while(1)
+  &#123;
+  &#125;
+&#125;
+
+/*******************************************************************************
+* Function Name  : prvSetupHardware
+* Description    : initial hardwares
+* Input          : None
+* Return         : None
+*******************************************************************************/
+static void prvSetupHardware(void)
+&#123;
+  deviceInit();
+  delayInit();    // SysTick滴答时钟初始化
+  ledGPIOConfiguration();
+  usart2Config();
+&#125;
+
+
+/*******************************************************************************
+* Function Name  : deviceInit
+* Description    : ENABLE the clk of GPIO
+* Input          : None
+* Return         : None
+*******************************************************************************/
+static void deviceInit(void)
+&#123;
+  //--------------------------- CLK INIT, HSE PLL ----------------------------
+  ErrorStatus HSEStartUpStatus;
+  //RCC reset
+  RCC_DeInit();
+  //开启外部时钟 并执行初始化
+  RCC_HSEConfig(RCC_HSE_ON);
+  //等待外部时钟准备好
+  HSEStartUpStatus = RCC_WaitForHSEStartUp();
+  //启动失败 在这里等待
+  while(HSEStartUpStatus == ERROR);
+  //设置内部总线时钟
+  RCC_HCLKConfig(RCC_SYSCLK_Div1);
+  RCC_PCLK1Config(RCC_HCLK_Div1);
+  RCC_PCLK2Config(RCC_HCLK_Div1);
+  //外部时钟为8M 这里倍频到72M
+  RCC_PLLConfig(RCC_PLLSource_HSE_Div1, RCC_PLLMul_9);
+  RCC_PLLCmd(ENABLE);
+  while(RCC_GetFlagStatus(RCC_FLAG_PLLRDY) == RESET);
+  RCC_SYSCLKConfig(RCC_SYSCLKSource_PLLCLK);
+  while(RCC_GetSYSCLKSource() != 0x08);
+
+  //----------------------------- CLOSE HSI ---------------------------
+  //关闭内部时钟HSI
+  RCC_HSICmd(DISABLE);
+
+  //中断配置 2-level interrupt
+  NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
+
+  //开总中断
+  __enable_irq();
+  /******************   OPEN GPIO CLK   **************/
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
+&#125;
+</code></pre>
+<p>main.h</p>
+<pre><code class="C">#ifndef MAIN_H
+#define MAIN_H
+
+#include &quot;stm32f10x.h&quot;
+#include &quot;delay.h&quot;
+#include &quot;usart.h&quot;
+#include &quot;led.h&quot;
+
+#endif  /* MAIN_H */
+</code></pre>
+<p>至此，系统时钟及外设的初始化程序已经完成。以上程序，除去 led.c/led.h, usart.c/usart.h 外，可作为无需操作系统的stm32项目模板。</p>
+<h3 id="内核移植"><a href="#内核移植" class="headerlink" title="内核移植"></a>内核移植</h3><ul>
+<li>新建组<ul>
+<li>在项目中添加一个组，命名为 <strong>FreeRTOS</strong> ；</li>
+<li>在本地目录新建文件夹，同样命名为 FreeRTOS ，用于存放系统内核的源文件；</li>
+<li>在 FreeRTOS 文件夹下新建子文件夹 include ，用于存放系统内核的头文件。</li>
+</ul>
+</li>
+<li>复制文件<ul>
+<li>从系统 FreeRTOSv9.0.0 的源码 <code>FreeRTOS\Source</code> 中找到以下源文件，并将其复制至 FreeRTOS 文件夹；<ul>
+<li><code>Source</code> 中的 <strong>list.c</strong>, <strong>queue.c</strong>, <strong>tasks.c</strong></li>
+<li><code>Source\portable\RVDS\ARM_CM3</code> 中的 <strong>port.c</strong></li>
+<li><code>Source\portable\MemMang</code> 中的 <strong>heap_2.c</strong></li>
+</ul>
+</li>
+<li>从系统 FreeRTOSv9.0.0 的源码 <code>FreeRTOS</code> 中找到以下头文件，并将其复制至 FreeRTOS/include 文件夹；<ul>
+<li><code>Source\include</code> 中的所有头文件，包括其中的 stdint.readme 文件</li>
+<li><code>Source\portable\RVDS\ARM_CM3</code> 中的 <strong>portmacro.h</strong></li>
+<li><code>Demo\CORTEX_STM32F103_Keil</code> 中的 <strong>FreeRTOSConfig.h</strong></li>
+</ul>
+</li>
+<li>在项目组 FreeRTOS 中添加以上已复制好的源文件</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><strong>说明</strong>：FreeRTOS可以在很多不同编译器中编译，其中的一些编译器比同类有更高级特性。因为这个原因，FreeRTOS不使用任何非C语言标准的特性或语法。一个例外情况是头文件stdint.h。在文件夹FreeRTOS/Source/include下包含一个叫做stdint.readme的文件，如果你的编译器不提供stdint类型定义，可以将stdint.readme文件重命名为stdint.h。</p>
+</blockquote>
+<p>参考：<a target="_blank" rel="noopener" href="http://blog.csdn.net/zhzht19861011/article/details/50057531">FreeRTOS编码标准及风格指南</a></p>
+<p>完成以上步骤后，文件结构应该如下各图所示：<br>File - FreeRTOS</p>
+<p><img src="/assets/stm32/folderfreeRTOS.png" alt="本地文件中的FreeRTOS文件夹"></p>
+<p>File - FreeRTOS\include</p>
+<p><img src="/assets/stm32/folderfreeRTOSInclude.png" alt="本地文件中的include文件夹"></p>
+<p>MDK - FreeRTOS</p>
+<p><img src="/assets/stm32/groupfreeRTOS.png" alt="MDK中的FreeRTOS组"></p>
+<ul>
+<li>添加路径</li>
+</ul>
+<p>再次打开 <code>Options for target</code>&gt;&gt;<code>C/C++</code>，在 Include Paths 中添加:</p>
+<ol>
+<li>.\USER</li>
+<li>.\FreeRTOS</li>
+<li>.\FreeRTOS\include</li>
+</ol>
+<p><img src="/assets/stm32/addPath.png" alt="添加路径"></p>
+<ul>
+<li>修改启动文件</li>
+</ul>
+<p>打开文件 &quot;startup_stm32f10x_md.s&quot;，在 50 行附近找到以下代码段：</p>
+<p>文件修改前</p>
+<p><img src="/assets/stm32/beforeAddExport.png" alt="添加Export之前的启动文件"></p>
+<p>修改方式如下：</p>
+<p>在 &quot;__heap_limit&quot;后添加：</p>
+<pre><code class="yml">IMPORT xPortPendSVHandler
+IMPORT xPortSysTickHandler
+IMPORT vPortSVCHandler
+</code></pre>
+<p>将 75 行左右的</p>
+<pre><code class="yml">DCD     SVC_Handler
+DCD     PendSV_Handler
+DCD     SysTick_Handler
+</code></pre>
+<p>依次修改为：</p>
+<pre><code class="yml">DCD     vPortSVCHandler
+DCD     xPortPendSVHandler
+DCD     xPortSysTickHandler
+</code></pre>
+<p>文件修改后</p>
+<p><img src="/assets/stm32/afterAddExport.png" alt="添加Export之前的启动文件"></p>
+<h3 id="内核裁剪文件"><a href="#内核裁剪文件" class="headerlink" title="内核裁剪文件"></a>内核裁剪文件</h3><p>前面添加的头文件 &quot;FreeRTOSConfig.h&quot; 是系统内核配置文件，通过修改文件中的宏定义，可以对内核进行裁剪，保留所需功能。从例程中得到的该文件源码如下，更加详细的设置方法和各变量用途将在后续应用中介绍。</p>
+<pre><code class="C">#ifndef FREERTOS_CONFIG_H
+#define FREERTOS_CONFIG_H
+
+/*-----------------------------------------------------------
+ * Application specific definitions.
+ *
+ * These definitions should be adjusted for your particular hardware and
+ * application requirements.
+ *
+ * THESE PARAMETERS ARE DESCRIBED WITHIN THE &#39;CONFIGURATION&#39; SECTION OF THE
+ * FreeRTOS API DOCUMENTATION AVAILABLE ON THE FreeRTOS.org WEB SITE.
+ *
+ * See http://www.freertos.org/a00110.html.
+ *----------------------------------------------------------*/
+
+#define configUSE_PREEMPTION    1
+#define configUSE_IDLE_HOOK      0
+#define configUSE_TICK_HOOK      0
+#define configCPU_CLOCK_HZ      ( ( unsigned long ) 72000000 )
+#define configTICK_RATE_HZ      ( ( TickType_t ) 1000 )
+#define configMAX_PRIORITIES    ( 5 )
+#define configMINIMAL_STACK_SIZE  ( ( unsigned short ) 128 )
+#define configTOTAL_HEAP_SIZE    ( ( size_t ) ( 17 * 1024 ) )
+#define configMAX_TASK_NAME_LEN    ( 16 )
+#define configUSE_TRACE_FACILITY  0
+#define configUSE_16_BIT_TICKS    0
+#define configIDLE_SHOULD_YIELD    1
+
+/* Co-routine definitions. */
+#define configUSE_CO_ROUTINES     0
+#define configMAX_CO_ROUTINE_PRIORITIES ( 2 )
+
+/* Set the following definitions to 1 to include the API function, or zero
+to exclude the API function. */
+
+#define INCLUDE_vTaskPrioritySet    1
+#define INCLUDE_uxTaskPriorityGet    1
+#define INCLUDE_vTaskDelete        1
+#define INCLUDE_vTaskCleanUpResources  0
+#define INCLUDE_vTaskSuspend      1
+#define INCLUDE_vTaskDelayUntil      1
+#define INCLUDE_vTaskDelay        1
+
+/* This is the raw value as per the Cortex-M3 NVIC.  Values can be 255
+(lowest) to 0 (1?) (highest). */
+#define configKERNEL_INTERRUPT_PRIORITY     255
+/* !!!! configMAX_SYSCALL_INTERRUPT_PRIORITY must not be set to zero !!!!
+See http://www.FreeRTOS.org/RTOS-Cortex-M3-M4.html. */
+#define configMAX_SYSCALL_INTERRUPT_PRIORITY   191 /* equivalent to 0xb0, or priority 11. */
+
+
+/* This is the value being used as per the ST library which permits 16
+priority values, 0 to 15.  This must correspond to the
+configKERNEL_INTERRUPT_PRIORITY setting.  Here 15 corresponds to the lowest
+NVIC value of 255. */
+#define configLIBRARY_KERNEL_INTERRUPT_PRIORITY  15
+
+#endif /* FREERTOS_CONFIG_H */
+</code></pre>
+<h3 id="功能实现"><a href="#功能实现" class="headerlink" title="功能实现"></a>功能实现</h3><p>经过以上步骤，系统移植工作已经完成，现在便可以创建多个任务，并启动任务调度器进行任务调度。</p>
+<ul>
+<li>在 &quot;main.h&quot; 添加 FreeRTOS 相关的头文件</li>
+</ul>
+<pre><code class="txt">#include &quot;FreeRTOS.h&quot;
+#include &quot;task.h&quot;
+#include &quot;queue.h&quot;
+#include &quot;list.h&quot;
+</code></pre>
+<ul>
+<li>编写任务</li>
+</ul>
+<pre><code class="C">// 定时亮灯任务
+static void vLEDOnTask(void *pvParameters)
+&#123;
+  TickType_t xLastWakeTime;
+  const TickType_t xFrequency = 1000/portTICK_RATE_MS;
+
+  /* xLastWakeTime需要被初始化为当前心跳计数值，此次赋值过后，
+  该变量将在vTaskDelayUntil函数中自动更新 */
+  xLastWakeTime = xTaskGetTickCount();
+
+  while(1)
+  &#123;
+    GPIO_ResetBits(GPIOB,LED_PORT);
+    UARTSendByByter(&#39;1&#39;);
+
+    vTaskDelayUntil(&amp;xLastWakeTime,xFrequency);
+  &#125;
+&#125;
+
+// 定时灭灯任务
+static void vLEDOffTask(void *pvParameters)
+&#123;
+  while(1)
+  &#123;
+        GPIO_SetBits(GPIOB,LED_PORT);
+    UARTSendByByter(&#39;2&#39;);
+
+      vTaskDelay(2000/portTICK_RATE_MS);
+  &#125;
+&#125;
+
+// 定时串口发送任务
+static void vUasrtSendTask(void *pvParameters)
+&#123;
+  volatile unsigned char cnt=0;
+  TaskHandle_t xTaskLedOffHandle = (TaskHandle_t)pvParameters;
+
+  while(1)
+  &#123;
+    UARTSendByByter(cnt++);
+    if(xTaskLedOffHandle!=NULL)
+    &#123;
+      if(cnt==50)
+        vTaskSuspend(xTaskLedOffHandle);    // 挂起灭灯任务
+      else if(cnt==100)
+        vTaskResume(xTaskLedOffHandle);    // 唤醒灭灯任务
+      else if(cnt==255)
+      &#123;
+        vTaskDelete(xTaskLedOffHandle);    // 删除灭灯任务
+        xTaskLedOffHandle=NULL;
+      &#125;
+    &#125;
+    vTaskDelay(1500/portTICK_RATE_MS);
+  &#125;
+&#125;
+</code></pre>
+<ul>
+<li>创建任务并启动调度器</li>
+</ul>
+<pre><code class="C">int main(void)
+&#123;
+  TaskHandle_t xTaskLedOffHandle;    /* 定义灭灯任务句柄 */
+  prvSetupHardware();            /* 设备初始化 */
+
+  xTaskCreate(vLEDOffTask,           /* 指向任务函数的指针 */
+      &quot;vLEDOffTask&quot;,           /* 任务的文本名字，只在调试中用到 */
+      configMINIMAL_STACK_SIZE,   /* 分配的栈空间大小 */
+      NULL,                 /* 没有给当前任务提供参数 */
+      tskIDLE_PRIORITY+1,        /* 设置任务优先级 */
+      &amp;xTaskLedOffHandle        /* 获取任务句柄，存入xTaskLedOffHandle */
+      );
+  xTaskCreate(vLEDOnTask, &quot;vLEDOnTask&quot;, configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY+2, NULL);
+  xTaskCreate(vUasrtSendTask, &quot;vUasrtSendTask&quot;, configMINIMAL_STACK_SIZE,
+              (TaskHandle_t)(xTaskLedOffHandle), tskIDLE_PRIORITY+3, NULL);
+
+  /* 启动任务调度器 */
+  vTaskStartScheduler();
+
+  return 0;
+&#125;
+</code></pre>
+<ul>
+<li>功能测试</li>
+</ul>
+<p><img src="/assets/stm32/tasksTest.png" alt="任务测试结果"></p>
+<p>从图中可以看出，16 进制数据 0x31, 0x32 交替出现，同时有一变量(假设为 y )从 0x01 逐一增至 0xff 后返回 0x01 继续增加，在 y 处于 0x32(50) 与 0x64(100) 之间时，0x32 暂停出现，后重新出现，直到 y 增至 0xff 后永不再现。此外，硬件部分，PB10 外接的 LED 也随着任务进行亮灭交替变换，最后保持在灯亮状态。</p>
+<p><img src="/assets/stm32/ledOn.jpg" alt="LedOn"><br><img src="/assets/stm32/ledOff.jpg" alt="LedOff"></p>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2016/11/02/FreeRTOS/">https://www.litreily.top/2016/11/02/FreeRTOS/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tags"></i><a href="/tags/C-C/">C/C++</a><a href="/tags/stm32/">stm32</a><a href="/tags/FreeRTOS/">FreeRTOS</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#FreeRTOS"><span class="toc-number">1.</span> <span class="toc-text">FreeRTOS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Demo"><span class="toc-number">1.1.</span> <span class="toc-text">Demo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Source"><span class="toc-number">1.2.</span> <span class="toc-text">Source</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E7%A7%BB%E6%A4%8D"><span class="toc-number">2.</span> <span class="toc-text">系统移植</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%9F%E8%83%BD%E6%8F%8F%E8%BF%B0"><span class="toc-number">2.1.</span> <span class="toc-text">功能描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE-BrightLed"><span class="toc-number">2.2.</span> <span class="toc-text">创建项目 (BrightLed)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">2.3.</span> <span class="toc-text">初始化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E6%A0%B8%E7%A7%BB%E6%A4%8D"><span class="toc-number">2.4.</span> <span class="toc-text">内核移植</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E6%A0%B8%E8%A3%81%E5%89%AA%E6%96%87%E4%BB%B6"><span class="toc-number">2.5.</span> <span class="toc-text">内核裁剪文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.6.</span> <span class="toc-text">功能实现</span></a></li></ol></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2016/11/14/signal-Process/">&lt; Matlab - 设计滤波器截止频率</a><a class="next" href="/2016/10/28/add-Music/">在博客中添加音乐 &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+.night .v[data-class=v] a:hover { color: #216C73 !important; }
+.night .v[data-class=v] li { list-style: inherit; }
+.night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
+.night .v[data-class=v] .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.night .v[data-class=v] .vbtn { border-radius: 0; background: none; }
+.night .v[data-class=v] .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.night .v[data-class=v] .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.night .v[data-class=v] .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre,.night .v[data-class=v] .vlist .vcard .vhead .vsys { background: #203240 !important; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre { color: #F0F0F0; font-size: 95%; }
+.v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
+</style><div id="vcomment"></div><script src="//cdn.bootcdn.net/ajax/libs/valine/1.4.14/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
+  lang: 'zh-cn',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></section><footer><p>Copyright © 2016 - 2021 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script></body></html>
