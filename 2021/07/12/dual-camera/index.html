@@ -1,0 +1,338 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>RK3288 android 6.0 同时打开两个摄像头 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
+</head><link rel="stylesheet" type="text/css" href="/plugins/highlight/atom-one-dark.min.css"><script type="text/javascript" src="/plugins/highlight/highlight.min.js"></script><script>hljs.initHighlightingOnLoad();
+</script><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">RK3288 android 6.0 同时打开两个摄像头</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2021/07/12/dual-camera/">2021-07-12</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Embedded/">Embedded</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><ul>
+<li>平台: RK3288</li>
+<li>系统: Android 6.0</li>
+<li>需求: 同时打开两个摄像头</li>
+</ul>
+<p>业务需求，要支持同时打开多个摄像头，期间遇到一些问题，在这里记录下。</p>
+<h2 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h2><h3 id="支持多摄像头"><a href="#支持多摄像头" class="headerlink" title="支持多摄像头"></a>支持多摄像头</h3><p>首先，Android系统默认只支持同时打开一个摄像头，并且最大只识别两个摄像头。所以，为了支持多摄像头，需要修改摄像头相关的 <code>HAL</code> 层。</p>
+<p>这个我参考 <a target="_blank" rel="noopener" href="https://www.programmersought.com/article/12481783276/">[AndroidO] [RK3399] Support 4 way camera preview</a> 解决了。patch 如下：</p>
+<pre><code class="c">diff --git a/device/rockchip/common/ueventd.rockchip.rc b/device/rockchip/common/ueventd.rockchip.rc
+index 7316ebf..e73da8d 100755
+--- a/device/rockchip/common/ueventd.rockchip.rc
++++ b/device/rockchip/common/ueventd.rockchip.rc
+@@ -19,6 +19,23 @@
+ /dev/video1               0660   media      camera
+ /dev/video2               0660   media      camera
+ /dev/video3               0660   media      camera
++/dev/video4               0660   media      camera
++/dev/video5               0660   media      camera
++/dev/video6               0660   media      camera
++/dev/video7               0660   media      camera
++/dev/video8               0660   media      camera
++/dev/video9               0660   media      camera
++/dev/video10              0660   media      camera
++/dev/video11              0660   media      camera
++/dev/video12              0660   media      camera
++/dev/video13              0660   media      camera
++/dev/video14              0660   media      camera
++/dev/video15              0660   media      camera
++/dev/video16              0660   media      camera
++/dev/video17              0660   media      camera
++/dev/video18              0660   media      camera
++/dev/video19              0660   media      camera
++/dev/video20              0660   media      camera
+ /dev/pmem_cam             0660   system     camera
+ /dev/vpu                  0660   system     system
+ /dev/vpu_service          0666   media      media
+diff --git a/hardware/rockchip/camera/CameraHal/CameraHal_Module.cpp b/hardware/rockchip/camera/CameraHal/CameraHal_Module.cpp
+index 3365339..012d14e 100755
+--- a/hardware/rockchip/camera/CameraHal/CameraHal_Module.cpp
++++ b/hardware/rockchip/camera/CameraHal/CameraHal_Module.cpp
+@@ -712,9 +712,10 @@ int usb_camera_hotplug(void)
+                      (strcmp(usbcameraPlug, &quot;remove&quot;) == 0);
+     return plugstate;
+ &#125;
+-
++//modify by fujianyong for [Supporting multiple cameras] start
+ int camera_get_number_of_cameras(void)
+ &#123;
++    char cam_sys[40];
+     char cam_path[20];
+     char cam_num[3],i;
+     int cam_cnt=0,fd=-1,rk29_cam[CAMERAS_SUPPORT_MAX];
+@@ -770,9 +771,11 @@ int camera_get_number_of_cameras(void)
+         delete camEngVerItf;
+ 
+     &#125;
+-    
+-    memset(&amp;camInfoTmp[0],0x00,sizeof(rk_cam_info_t));
+-    memset(&amp;camInfoTmp[1],0x00,sizeof(rk_cam_info_t));
++    for(int i=0;i&lt;CAMERAS_SUPPORT_MAX;i++)&#123;
++        memset(&amp;camInfoTmp[i],0x00,sizeof(rk_cam_info_t));
++    &#125;
++    //memset(&amp;camInfoTmp[0],0x00,sizeof(rk_cam_info_t));
++    //memset(&amp;camInfoTmp[1],0x00,sizeof(rk_cam_info_t));
+ 
+     profiles = camera_board_profiles::getInstance();
+     nCamDev = profiles-&gt;mDevieVector.size();
+@@ -787,18 +790,18 @@ int camera_get_number_of_cameras(void)
+             if(profiles-&gt;mDevieVector[i]-&gt;mIsConnect==1)&#123;
+                 rk_sensor_info *pSensorInfo = &amp;(profiles-&gt;mDevieVector[i]-&gt;mHardInfo.mSensorInfo);
+                 
+-                camInfoTmp[cam_cnt&amp;0x01].pcam_total_info = profiles-&gt;mDevieVector[i];     
+-                strncpy(camInfoTmp[cam_cnt&amp;0x01].device_path, pSensorInfo-&gt;mCamsysDevPath, sizeof(camInfoTmp[cam_cnt&amp;0x01].device_path));
+-                strncpy(camInfoTmp[cam_cnt&amp;0x01].driver, pSensorInfo-&gt;mSensorDriver, sizeof(camInfoTmp[cam_cnt&amp;0x01].driver));
++                camInfoTmp[cam_cnt].pcam_total_info = profiles-&gt;mDevieVector[i];
++                strncpy(camInfoTmp[cam_cnt].device_path, pSensorInfo-&gt;mCamsysDevPath, sizeof(camInfoTmp[cam_cnt].device_path));
++                strncpy(camInfoTmp[cam_cnt].driver, pSensorInfo-&gt;mSensorDriver, sizeof(camInfoTmp[cam_cnt].driver));
+                 unsigned int SensorDrvVersion = profiles-&gt;mDevieVector[i]-&gt;mLoadSensorInfo.mpI2cInfo-&gt;sensor_drv_version;
+                 memset(version,0x00,sizeof(version));
+                 sprintf(version,&quot;%d.%d.%d&quot;,((SensorDrvVersion&amp;0xff0000)&gt;&gt;16),
+                         ((SensorDrvVersion&amp;0xff00)&gt;&gt;8),SensorDrvVersion&amp;0xff);
+                          
+                 if(pSensorInfo-&gt;mFacing == RK_CAM_FACING_FRONT)&#123;     
+-                    camInfoTmp[cam_cnt&amp;0x01].facing_info.facing = CAMERA_FACING_FRONT;                    
++                    camInfoTmp[cam_cnt].facing_info.facing = CAMERA_FACING_FRONT;
+                 &#125; else &#123;
+-                    camInfoTmp[cam_cnt&amp;0x01].facing_info.facing = CAMERA_FACING_BACK;
++                    camInfoTmp[cam_cnt].facing_info.facing = CAMERA_FACING_BACK;
+                 &#125; 
+ 
+                 memset(sensor_ver,0x00,sizeof(sensor_ver));
+@@ -808,7 +811,7 @@ int camera_get_number_of_cameras(void)
+                     sprintf(sensor_ver,&quot;%s&quot;,pSensorInfo-&gt;mSensorName);                
+                 property_set(sensor_ver, version);    
+                 
+-                camInfoTmp[cam_cnt&amp;0x01].facing_info.orientation = pSensorInfo-&gt;mOrientation;
++                camInfoTmp[cam_cnt].facing_info.orientation = pSensorInfo-&gt;mOrientation;
+                 cam_cnt++;
+ 
+                 unsigned int CamsysDrvVersion = profiles-&gt;mDevieVector[i]-&gt;mCamsysVersion.drv_ver;
+@@ -833,13 +836,34 @@ int camera_get_number_of_cameras(void)
+             i++;
+         &#125;
+         
+-        for (i=0; i&lt;10; i++) &#123;
++        for (i=0; i&lt;20; i++) &#123;
+             cam_path[0] = 0x00;
+-            unsigned int pix_format_tmp = V4L2_PIX_FMT_NV12;
+-            strcat(cam_path, CAMERA_DEVICE_NAME);
++            //unsigned int pix_format_tmp = V4L2_PIX_FMT_NV12;
++            //strcat(cam_path, CAMERA_DEVICE_NAME);
++            cam_sys[0] = 0x00;
++            strcat(cam_sys, CAM_SYS_NAME);
+             sprintf(cam_num, &quot;%d&quot;, i);
++            strcat(cam_sys,cam_num);
++            strcat(cam_sys,&quot;/index&quot;);
++            FILE* ifp;
++            ifp = fopen(cam_sys, &quot;r&quot;);
++            if (ifp == NULL)&#123;
++                LOGD(&quot;fail to open sys file:%s&quot;,cam_sys);
++                continue;
++            &#125;
++            unsigned char index;
++            fread(&amp;index, sizeof(char),1, ifp);
++            fclose(ifp);
++            LOGD(&quot;open %s index %x&quot;,cam_sys,index);
++            if(index == 0x31)&#123;
++                LOGD(&quot;%s wrong index continue&quot;,cam_sys);
++                continue;
++            &#125;
++            strcat(cam_path, CAMERA_DEVICE_NAME);
++
+             strcat(cam_path,cam_num);
+             fd = open(cam_path, O_RDONLY);
++            unsigned int pix_format_tmp = V4L2_PIX_FMT_NV12;
+             if (fd &lt; 0) &#123;
+                 LOGE(&quot;Open %s failed! strr: %s&quot;,cam_path,strerror(errno));
+                 break;
+@@ -856,31 +880,31 @@ int camera_get_number_of_cameras(void)
+                 LOGD(&quot;Video device(%s): video capture not supported.\n&quot;,cam_path);
+             &#125; else &#123;
+                 rk_cam_total_info* pNewCamInfo = new rk_cam_total_info();
+-                memset(camInfoTmp[cam_cnt&amp;0x01].device_path,0x00, sizeof(camInfoTmp[cam_cnt&amp;0x01].device_path));
+-                strcat(camInfoTmp[cam_cnt&amp;0x01].device_path,cam_path);
+-                memset(camInfoTmp[cam_cnt&amp;0x01].fival_list,0x00, sizeof(camInfoTmp[cam_cnt&amp;0x01].fival_list));
+-                memcpy(camInfoTmp[cam_cnt&amp;0x01].driver,capability.driver, sizeof(camInfoTmp[cam_cnt&amp;0x01].driver));
+-                camInfoTmp[cam_cnt&amp;0x01].version = capability.version;
++                memset(camInfoTmp[cam_cnt].device_path,0x00, sizeof(camInfoTmp[cam_cnt].device_path));
++                strcat(camInfoTmp[cam_cnt].device_path,cam_path);
++                memset(camInfoTmp[cam_cnt].fival_list,0x00, sizeof(camInfoTmp[cam_cnt].fival_list));
++                memcpy(camInfoTmp[cam_cnt].driver,capability.driver, sizeof(camInfoTmp[cam_cnt].driver));
++                camInfoTmp[cam_cnt].version = capability.version;
+                 if (strstr((char*)&amp;capability.card[0], &quot;front&quot;) != NULL) &#123;
+-                    camInfoTmp[cam_cnt&amp;0x01].facing_info.facing = CAMERA_FACING_FRONT;
++                    camInfoTmp[cam_cnt].facing_info.facing = CAMERA_FACING_FRONT;
+ #ifdef LAPTOP
+                 &#125; else if (strstr((char*)&amp;capability.card[0], &quot;HP HD&quot;) != NULL
+                     || strstr((char*)&amp;capability.card[0], &quot;HP IR&quot;)) &#123;
+-                    camInfoTmp[cam_cnt&amp;0x01].facing_info.facing = CAMERA_FACING_FRONT;
++                    camInfoTmp[cam_cnt].facing_info.facing = CAMERA_FACING_FRONT;
+                     if (strstr((char*)&amp;capability.card[0], &quot;HP IR&quot;))
+                         gCamerasUnavailabled++;
+-                    gUsbCameraNames[cam_cnt&amp;0x01] = String8((char*)&amp;capability.card[0]);
+-                    LOGD(&quot;Camera %d name: %s&quot;, (cam_cnt&amp;0x01), gUsbCameraNames[cam_cnt&amp;0x01].string());
++                    gUsbCameraNames[cam_cnt] = String8((char*)&amp;capability.card[0]);
++                    LOGD(&quot;Camera %d name: %s&quot;, (cam_cnt), gUsbCameraNames[cam_cnt].string());
+ #endif
+                 &#125; else &#123;
+-                    camInfoTmp[cam_cnt&amp;0x01].facing_info.facing = CAMERA_FACING_BACK;
++                    camInfoTmp[cam_cnt].facing_info.facing = CAMERA_FACING_BACK;
+                 &#125;  
+                 ptr = strstr((char*)&amp;capability.card[0],&quot;-&quot;);
+                 if (ptr != NULL) &#123;
+                     ptr++;
+-                    camInfoTmp[cam_cnt&amp;0x01].facing_info.orientation = atoi(ptr);
++                    camInfoTmp[cam_cnt].facing_info.orientation = atoi(ptr);
+                 &#125; else &#123;
+-                    camInfoTmp[cam_cnt&amp;0x01].facing_info.orientation = 0;
++                    camInfoTmp[cam_cnt].facing_info.orientation = 0;
+                 &#125;
+ 
+                 memset(version,0x00,sizeof(version));
+@@ -1168,7 +1192,7 @@ int camera_get_number_of_cameras(void)
+                 camInfoTmp[cam_cnt].pcam_total_info = pNewCamInfo;
+                 cam_cnt++;
+                 if (cam_cnt &gt;= CAMERAS_SUPPORT_MAX)
+-                    i = 10;
++                    i = 20;
+             &#125;
+     loop_continue:
+             if (fd &gt; 0) &#123;
+@@ -1215,8 +1239,11 @@ int camera_get_number_of_cameras(void)
+     &#125;
+     #endif
+     
+-    memcpy(&amp;gCamInfos[0], &amp;camInfoTmp[0], sizeof(rk_cam_info_t));
+-    memcpy(&amp;gCamInfos[1], &amp;camInfoTmp[1], sizeof(rk_cam_info_t));
++    //memcpy(&amp;gCamInfos[0], &amp;camInfoTmp[0], sizeof(rk_cam_info_t));
++    //memcpy(&amp;gCamInfos[1], &amp;camInfoTmp[1], sizeof(rk_cam_info_t));
++    for(int i=0;i&lt;CAMERAS_SUPPORT_MAX;i++)&#123;
++        memcpy(&amp;gCamInfos[i], &amp;camInfoTmp[i], sizeof(rk_cam_info_t));
++    &#125;
+ 
+ 
+     property_get(&quot;ro.sf.hwrotation&quot;, property, &quot;0&quot;);
+@@ -1240,7 +1267,7 @@ camera_get_number_of_cameras_end:
+ #else
+     return gCamerasNumber;
+ #endif
+-&#125;
++&#125;//modify by fujianyong for [Supporting multiple cameras] end
+ 
+ #if 0
+ int camera_get_number_of_cameras(void)
+diff --git a/hardware/rockchip/camera/CameraHal/CameraHal_Module.h b/hardware/rockchip/camera/CameraHal/CameraHal_Module.h
+index 45c81ec..3927ddf 100755
+--- a/hardware/rockchip/camera/CameraHal/CameraHal_Module.h
++++ b/hardware/rockchip/camera/CameraHal/CameraHal_Module.h
+@@ -11,13 +11,14 @@ using namespace android;
+ #define CAMERA_DEFAULT_PREVIEW_FPS_MIN    8000        //8 fps
+ #define CAMERA_DEFAULT_PREVIEW_FPS_MAX    15000
+ #endif
+-#define CAMERAS_SUPPORT_MAX             2
++#define CAMERAS_SUPPORT_MAX             4
+ #if defined(TARGET_RK3399)
+-    #define CAMERAS_SUPPORTED_SIMUL_MAX     2
++    #define CAMERAS_SUPPORTED_SIMUL_MAX     4
+ #else
+     #define CAMERAS_SUPPORTED_SIMUL_MAX     1
+ #endif
+ #define CAMERA_DEVICE_NAME              &quot;/dev/video&quot;
++#define CAM_SYS_NAME                    &quot;/sys/class/video4linux/video&quot;
+ #define CAMERA_MODULE_NAME              &quot;RK29_ICS_CameraHal_Module&quot;
+ 
+ typedef struct rk_cam_info_s &#123;
+</code></pre>
+<p>通过该 <code>patch</code> 就支持了4个摄像头。</p>
+<h3 id="带宽不足"><a href="#带宽不足" class="headerlink" title="带宽不足"></a>带宽不足</h3><p>加入以上patch后，确实可以同时识别多个摄像头，但是同时预览不一定成功，我测试了多组摄像头，不同组合结果不一样，有成功的，也有失败的。</p>
+<p>失败的时候，会报以下错误。</p>
+<pre><code class="bash">uvcvideo: Failed to submit URB 0 (-28).
+</code></pre>
+<p>错误码 <code>28</code> 说明空间不足，这个可以从头文件 <code>errno.h</code> 中查找到其定义。搜索发现与 USB 带宽分配相关。使用 <code>lsusb</code> 可以看到</p>
+<pre><code class="bash">Bus 001 Device 002: ID 1a40:0101
+Bus 003 Device 002: ID 0bda:0179
+Bus 001 Device 001: ID 1d6b:0002
+Bus 002 Device 001: ID 1d6b:0002
+Bus 003 Device 001: ID 1d6b:0002
+Bus 001 Device 003: ID 058f:5608
+Bus 001 Device 004: ID 058f:5608
+</code></pre>
+<p>最后两个对应摄像头，使用的是同一个usb bus，对应同一个usb控制器。</p>
+<blockquote>
+<p>usb 2.0 速率为480Mbps，一个摄像头占用带宽可以粗略估算：<code>长(640)*宽(480)*帧率(30)*像素点数据长度(24) + 协议头部</code></p>
+</blockquote>
+<p>调试许久，最后通过添加kernel调试代码，打印带宽信息，对比成功和失败的案例，最终确定是出错摄像头默认配置带宽过高导致的，解决方案如下：</p>
+<pre><code class="c">diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
+index 669d81c..b1b381e 100644
+--- a/drivers/media/usb/uvc/uvc_video.c
++++ b/drivers/media/usb/uvc/uvc_video.c
+@@ -1684,6 +1684,11 @@ static int uvc_init_video(struct uvc_streaming *stream, gfp_t gfp_flags)
+                /* Isochronous endpoint, select the alternate setting. */
+                bandwidth = stream-&gt;ctrl.dwMaxPayloadTransferSize;
+ 
++               if (bandwidth &gt; UVC_LIMITED_BANDWIDTH) &#123;
++                       printk(KERN_ERR &quot;UVC_DBG: limit bandwidth from %d to %d \n&quot;,
++                              bandwidth, UVC_LIMITED_BANDWIDTH);
++                       bandwidth = UVC_LIMITED_BANDWIDTH;
++               &#125;
+                if (bandwidth == 0) &#123;
+                        uvc_trace(UVC_TRACE_VIDEO, &quot;Device requested null &quot;
+                                &quot;bandwidth, defaulting to lowest.\n&quot;);
+diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+index 033c775..86d11f4 100644
+--- a/drivers/media/usb/uvc/uvcvideo.h
++++ b/drivers/media/usb/uvc/uvcvideo.h
+@@ -142,6 +142,9 @@
+ #define UVC_FMT_FLAG_COMPRESSED                0x00000001
+ #define UVC_FMT_FLAG_STREAM            0x00000002
+ 
++/* Limit bandwith */
++#define UVC_LIMITED_BANDWIDTH   800
++
+ /* ------------------------------------------------------------------------
+  * Structures.
+  */
+</code></pre>
+<p>以上 <code>bandwidth</code> 在出错情况下为 <code>3072</code>, 不出错的摄像头对应 <code>800</code>, 因此我将其限制在 <code>800</code>, 重新编译后解决问题。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://www.programmersought.com/article/12481783276/">[AndroidO] [RK3399] Support 4 way camera preview</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_41944449/article/details/80600428">uvc camera在usb带宽不足的情况下，如何正常出图</a></li>
+</ol>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2021/07/12/dual-camera/">https://www.litreily.top/2021/07/12/dual-camera/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tags"></i><a href="/tags/android/">android</a><a href="/tags/rk3288/">rk3288</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">问题描述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%90"><span class="toc-number">2.</span> <span class="toc-text">问题分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%AF%E6%8C%81%E5%A4%9A%E6%91%84%E5%83%8F%E5%A4%B4"><span class="toc-number">2.1.</span> <span class="toc-text">支持多摄像头</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%A6%E5%AE%BD%E4%B8%8D%E8%B6%B3"><span class="toc-number">2.2.</span> <span class="toc-text">带宽不足</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">3.</span> <span class="toc-text">参考</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="next" href="/2021/06/18/dual-lcd/">RK3288 android 6.0 实现 lvds + edp 双屏异显 &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+.night .v[data-class=v] a:hover { color: #216C73 !important; }
+.night .v[data-class=v] li { list-style: inherit; }
+.night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
+.night .v[data-class=v] .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.night .v[data-class=v] .vbtn { border-radius: 0; background: none; }
+.night .v[data-class=v] .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.night .v[data-class=v] .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.night .v[data-class=v] .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre,.night .v[data-class=v] .vlist .vcard .vhead .vsys { background: #203240 !important; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre { color: #F0F0F0; font-size: 95%; }
+.v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
+</style><div id="vcomment"></div><script src="//cdn.bootcdn.net/ajax/libs/valine/1.4.14/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
+  lang: 'zh-cn',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></section><footer><p>Copyright © 2016 - 2021 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script></body></html>

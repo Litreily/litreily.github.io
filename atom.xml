@@ -6,7 +6,7 @@
   <link href="https://www.litreily.top/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2021-06-18T08:51:19.610Z</updated>
+  <updated>2021-07-12T10:32:17.355Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -15,6 +15,38 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>RK3288 android 6.0 同时打开两个摄像头</title>
+    <link href="https://www.litreily.top/2021/07/12/dual-camera/"/>
+    <id>https://www.litreily.top/2021/07/12/dual-camera/</id>
+    <published>2021-07-12T10:02:15.000Z</published>
+    <updated>2021-07-12T10:32:17.355Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;问题描述&quot;&gt;&lt;a href=&quot;#问题描述&quot; class=&quot;headerlink&quot; title=&quot;问题描述&quot;&gt;&lt;/a&gt;问题描述&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;平台: RK3288&lt;/li&gt;
+&lt;li&gt;系统: Android 6.0&lt;/li&gt;
+&lt;li&gt;需求: 同时打开两个摄像头&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;业务需求，要支持同时打开多个摄像头，期间遇到一些问题，在这里记录下。&lt;/p&gt;
+&lt;h2 id=&quot;问题分析&quot;&gt;&lt;a href=&quot;#问题分析&quot; class=&quot;headerlink&quot; title=&quot;问题分析&quot;&gt;&lt;/a&gt;问题分析&lt;/h2&gt;&lt;h3 id=&quot;支持多摄像头&quot;&gt;&lt;a href=&quot;#支持多摄像头&quot; class=&quot;headerlink&quot; title=&quot;支持多摄像头&quot;&gt;&lt;/a&gt;支持多摄像头&lt;/h3&gt;&lt;p&gt;首先，Android系统默认只支持同时打开一个摄像头，并且最大只识别两个摄像头。所以，为了支持多摄像头，需要修改摄像头相关的 &lt;code&gt;HAL&lt;/code&gt; 层。&lt;/p&gt;
+&lt;p&gt;这个我参考 &lt;a href=&quot;https://www.programmersought.com/article/12481783276/&quot;&gt;[AndroidO] [RK3399] Support 4 way camera preview&lt;/a&gt; 解决了。patch 如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code c</summary>
+      
+    
+    
+    
+    <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
+    
+    
+    <category term="android" scheme="https://www.litreily.top/tags/android/"/>
+    
+    <category term="rk3288" scheme="https://www.litreily.top/tags/rk3288/"/>
+    
+  </entry>
   
   <entry>
     <title>RK3288 android 6.0 实现 lvds + edp 双屏异显</title>
@@ -968,36 +1000,6 @@ tcp        0      0 192.168.1.1:23          192.168.1.10:10381      ESTABLISHED 
     <category term="shell" scheme="https://www.litreily.top/tags/shell/"/>
     
     <category term="awk" scheme="https://www.litreily.top/tags/awk/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>insmod内核模块提示Unknown Symbol问题处理</title>
-    <link href="https://www.litreily.top/2019/11/07/unknown_symbol/"/>
-    <id>https://www.litreily.top/2019/11/07/unknown_symbol/</id>
-    <published>2019-11-07T02:19:26.000Z</published>
-    <updated>2021-05-28T03:12:11.503Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;问题描述&quot;&gt;&lt;a href=&quot;#问题描述&quot; class=&quot;headerlink&quot; title=&quot;问题描述&quot;&gt;&lt;/a&gt;问题描述&lt;/h2&gt;&lt;p&gt;在调试内核crash问题时打开了&lt;code&gt;lockup&lt;/code&gt;相关的kernel CONFIG，重新编译FW后发现有个内核模块insmod失败&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;log&quot;&gt;[Wed Nov 06 15:51:57.384 2019] ip6t_CONE: Unknown symbol rcu_bh_lock_map (err 0)
-[Wed Nov 06 15:51:57.384 2019] ip6t_CONE: Unknown symbol lock_acquire (err 0)
-[Wed Nov 06 15:51:57.384 2019] ip6t_CONE: Unknown symbol lock_release (err 0)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;手动使用&lt;code&gt;insmod&lt;/code&gt;重新加载也是提示相同的错误。&lt;/p&gt;
-&lt;h2 id=&quot;问题分析&quot;&gt;&lt;a href=&quot;#问题分析&quot; class=&quot;headerlink&quot; title=&quot;问题分析&quot;&gt;&lt;/a&gt;问题分析&lt;/h2&gt;&lt;p&gt;原本这个问题是不存在的，出现的原因必然和启用的CONFIG相关，对比前后两个FW的&lt;cod</summary>
-      
-    
-    
-    
-    <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
-    
-    
-    <category term="IPv6" scheme="https://www.litreily.top/tags/IPv6/"/>
-    
-    <category term="kernel" scheme="https://www.litreily.top/tags/kernel/"/>
     
   </entry>
   
