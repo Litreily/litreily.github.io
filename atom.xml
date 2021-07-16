@@ -6,7 +6,7 @@
   <link href="https://www.litreily.top/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2021-07-12T10:32:17.355Z</updated>
+  <updated>2021-07-16T05:53:18.906Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -15,6 +15,48 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>RK3288 android 6.0 移植 gt9xx 驱动</title>
+    <link href="https://www.litreily.top/2021/07/16/gt9xx-drvier/"/>
+    <id>https://www.litreily.top/2021/07/16/gt9xx-drvier/</id>
+    <published>2021-07-16T05:49:36.000Z</published>
+    <updated>2021-07-16T05:53:18.906Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;问题描述&quot;&gt;&lt;a href=&quot;#问题描述&quot; class=&quot;headerlink&quot; title=&quot;问题描述&quot;&gt;&lt;/a&gt;问题描述&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;平台：RK3288&lt;/li&gt;
+&lt;li&gt;系统：Android 6.0&lt;/li&gt;
+&lt;li&gt;需求：触摸屏驱动移植&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;驱动移植&quot;&gt;&lt;a href=&quot;#驱动移植&quot; class=&quot;headerlink&quot; title=&quot;驱动移植&quot;&gt;&lt;/a&gt;驱动移植&lt;/h2&gt;&lt;p&gt;先从厂商获取驱动程序 gt9xx_v2.8.0.2.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;gt9xx_v2.8.0.2
+├── dtsi
+│   ├── gt9xx_dts.txt
+│   ├── pinctrl_mtk.txt
+│   └── pinctrl_qcom.txt
+├── goodix_tool.c
+├── gt9xx.c
+├── gt9xx.h
+├── gt9xx_update.c
+├── Kconfig
+└── Makefile
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;新建目录 &lt;code&gt;drivers/input/touchscreen/gt9xx_v2.8.0.2/&lt;/code&gt; ,将以上 &lt;code&gt;.c&lt;/code&gt;, &lt;code&gt;.h&lt;/code&gt;, 及 &lt;code&gt;Makefile&lt;/cod</summary>
+      
+    
+    
+    
+    <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
+    
+    
+    <category term="android" scheme="https://www.litreily.top/tags/android/"/>
+    
+    <category term="rk3288" scheme="https://www.litreily.top/tags/rk3288/"/>
+    
+  </entry>
   
   <entry>
     <title>RK3288 android 6.0 同时打开两个摄像头</title>
@@ -967,39 +1009,6 @@ tcp        0      0 192.168.1.1:23          192.168.1.10:10381      ESTABLISHED 
     
     
     <category term="socket" scheme="https://www.litreily.top/tags/socket/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>awk &#39;!a[$0]++&#39;去重小技巧</title>
-    <link href="https://www.litreily.top/2020/01/09/awk_dedup/"/>
-    <id>https://www.litreily.top/2020/01/09/awk_dedup/</id>
-    <published>2020-01-09T13:04:16.000Z</published>
-    <updated>2021-05-28T03:12:11.503Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;今天碰到一个关于awk的去重用法，觉得挺有意思的，记录一下&lt;/p&gt;
-&lt;h2 id=&quot;awk-按行去重&quot;&gt;&lt;a href=&quot;#awk-按行去重&quot; class=&quot;headerlink&quot; title=&quot;awk 按行去重&quot;&gt;&lt;/a&gt;awk 按行去重&lt;/h2&gt;&lt;p&gt;&lt;code&gt;awk &amp;#39;!a[$0]++&amp;#39; file&lt;/code&gt; 是个神奇的用法，通过它可以实现文件内容去重&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;$0&lt;/code&gt;: 代表整行&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;a[]&lt;/code&gt;: 代表数组a,名称随意,首次调用时为空&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;++&lt;/code&gt;:　与&lt;code&gt;C/C++&lt;/code&gt;中的&lt;code&gt;++&lt;/code&gt;一个含义，&lt;code&gt;i++&lt;/code&gt;先使用i后i自增1，&lt;code&gt;++i&lt;/code&gt;代表i先自增1然后被使用&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;!&lt;/code&gt;: 代表取反&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;所以&lt;code&gt;a[$0]&lt;/code&gt;代表对当前行构建一个名为a的数组，首次构建后其值为0&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;a[$0]++&lt;/code&gt;代表先使用&lt;code&gt;a[$0]&lt;/code&gt;的值，然后&lt;code&gt;a[$0]&lt;/code&gt;的值自增1。首次调用自然就是0,下次遇到重复的行就变为1，所以不加&lt;code&gt;</summary>
-      
-    
-    
-    
-    <category term="Linux" scheme="https://www.litreily.top/categories/Linux/"/>
-    
-    
-    <category term="shell" scheme="https://www.litreily.top/tags/shell/"/>
-    
-    <category term="awk" scheme="https://www.litreily.top/tags/awk/"/>
     
   </entry>
   
