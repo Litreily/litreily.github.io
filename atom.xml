@@ -6,7 +6,7 @@
   <link href="https://www.litreily.top/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2021-07-16T05:53:18.906Z</updated>
+  <updated>2021-07-31T06:18:36.245Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>解压并更新 ramdisk.img 或 initrd.img</title>
+    <link href="https://www.litreily.top/2021/07/31/ramdisk/"/>
+    <id>https://www.litreily.top/2021/07/31/ramdisk/</id>
+    <published>2021-07-31T06:03:20.000Z</published>
+    <updated>2021-07-31T06:18:36.245Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;&lt;code&gt;ramdisk.img&lt;/code&gt; 或者 &lt;code&gt;initrd.img&lt;/code&gt; 是类似的，都是一个小型的文件系统。在系统启动过程中起到引导的作用，内核通过它来启动真正的根文件系统。&lt;/p&gt;
+&lt;p&gt;有时候需要修改并更新这个文件，下面以&lt;code&gt;ramdisk.img&lt;/code&gt; 为例进行说明。&lt;/p&gt;
+&lt;h2 id=&quot;解压-ramdisk-img&quot;&gt;&lt;a href=&quot;#解压-ramdisk-img&quot; class=&quot;headerlink&quot; title=&quot;解压 ramdisk.img&quot;&gt;&lt;/a&gt;解压 ramdisk.img&lt;/h2&gt;&lt;p&gt;&lt;code&gt;ramdisk.img&lt;/code&gt; 其实是一个&lt;code&gt;gz&lt;/code&gt;格式的压缩包，可以通过 &lt;code&gt;gzip -d&lt;/code&gt; 或者 &lt;code&gt;gunzip&lt;/code&gt; 解压，不过需要注意的是 &lt;code&gt;gzip&lt;/code&gt;, &lt;code&gt;gunzip&lt;/code&gt; 会检查文件名后缀，所以需要先将后缀更新为 &lt;code&gt;.gz&lt;/code&gt;. 下面将其解压至新建的 &lt;code&gt;root&lt;/code&gt; 目录。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;$ cp ramdisk.img ramdisk.gz
+$ gzip -d ramdisk.gz
+$ mkdir root
+</summary>
+      
+    
+    
+    
+    <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
+    
+    
+    <category term="linux" scheme="https://www.litreily.top/tags/linux/"/>
+    
+  </entry>
   
   <entry>
     <title>RK3288 android 6.0 移植 gt9xx 驱动</title>
@@ -978,37 +1006,6 @@ EOF
     <category term="dhcp" scheme="https://www.litreily.top/tags/dhcp/"/>
     
     <category term="ipv6" scheme="https://www.litreily.top/tags/ipv6/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>根据socket端口号查看进程信息</title>
-    <link href="https://www.litreily.top/2020/01/15/socket_fd/"/>
-    <id>https://www.litreily.top/2020/01/15/socket_fd/</id>
-    <published>2020-01-15T11:28:56.000Z</published>
-    <updated>2021-05-28T03:12:11.503Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;根据已知的一个端口号，以telnet默认端口号23为例，去查找系统中监听该端口号的进程，主要可以通过下面3种方式。&lt;/p&gt;
-&lt;h2 id=&quot;netstat&quot;&gt;&lt;a href=&quot;#netstat&quot; class=&quot;headerlink&quot; title=&quot;netstat&quot;&gt;&lt;/a&gt;netstat&lt;/h2&gt;&lt;p&gt;使用&lt;code&gt;netstat&lt;/code&gt;可以查看系统网络状态，&lt;code&gt;-p&lt;/code&gt;参数可以显示对应的进程信息&lt;code&gt;pid/process&lt;/code&gt;&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;$ netstat -anp |grep &amp;quot;:23&amp;quot;
-tcp        0      0 192.168.1.1:23          0.0.0.0:*               LISTEN      3698/utelnetd
-tcp        0      0 192.168.1.1:23          192.168.1.10:10381      ESTABLISHED 3698/utelnetd
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;从上面的信息中可以看到两条信息：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;监听23端口的进程是pid为&lt;code&gt;3698&lt;/code&gt;的&lt;code&gt;utelnetd&lt;/code&gt;&lt;/li&gt;
-</summary>
-      
-    
-    
-    
-    <category term="Linux" scheme="https://www.litreily.top/categories/Linux/"/>
-    
-    
-    <category term="socket" scheme="https://www.litreily.top/tags/socket/"/>
     
   </entry>
   

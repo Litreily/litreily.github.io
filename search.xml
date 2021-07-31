@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>解压并更新 ramdisk.img 或 initrd.img</title>
+      <link href="2021/07/31/ramdisk/"/>
+      <url>2021/07/31/ramdisk/</url>
+      
+        <content type="html"><![CDATA[<p><code>ramdisk.img</code> 或者 <code>initrd.img</code> 是类似的，都是一个小型的文件系统。在系统启动过程中起到引导的作用，内核通过它来启动真正的根文件系统。</p><p>有时候需要修改并更新这个文件，下面以<code>ramdisk.img</code> 为例进行说明。</p><h2 id="解压-ramdisk-img"><a href="#解压-ramdisk-img" class="headerlink" title="解压 ramdisk.img"></a>解压 ramdisk.img</h2><p><code>ramdisk.img</code> 其实是一个<code>gz</code>格式的压缩包，可以通过 <code>gzip -d</code> 或者 <code>gunzip</code> 解压，不过需要注意的是 <code>gzip</code>, <code>gunzip</code> 会检查文件名后缀，所以需要先将后缀更新为 <code>.gz</code>. 下面将其解压至新建的 <code>root</code> 目录。</p><pre><code class="bash">$ cp ramdisk.img ramdisk.gz$ gzip -d ramdisk.gz$ mkdir root$ mv ramdisk root$ cd root$ cpio -i -F ramdisk$ rm ramdisk$ ls -Fbin/  conf/  etc/  init*  lib/  run/  sbin/  scripts/  usr/  var/</code></pre><p>之后只需要在 root 目录更新即可，增添、删除、修改均可。</p><h2 id="更新-ramdisk-img"><a href="#更新-ramdisk-img" class="headerlink" title="更新 ramdisk.img"></a>更新 ramdisk.img</h2><p>修改完成后需要重新生成 <code>ramdisk.img</code> ，步骤如下。</p><pre><code class="bash">find . |cpio -o -H newc -O ../ramdiskcd ..gzip -v9 ramdiskmv ramdisk.gz ramdisk.img</code></pre><p>这样就完成了。</p><h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p>嵌入式系统下的 <code>ramdisk</code> 有其特定的文件格式，比如 <code>arm</code> 平台，还分 <code>armhf</code> 和 <code>aarch64</code> 两个版本，需要添加相同架构的文件才能正确执行。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Embedded </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> linux </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>RK3288 android 6.0 移植 gt9xx 驱动</title>
       <link href="2021/07/16/gt9xx-drvier/"/>
       <url>2021/07/16/gt9xx-drvier/</url>
