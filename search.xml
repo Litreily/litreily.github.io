@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>RK3288 android 6.0 内置系统应用</title>
+      <link href="2021/10/27/system-app/"/>
+      <url>2021/10/27/system-app/</url>
+      
+        <content type="html"><![CDATA[<p>安卓系统的内置应用可分为以下两大类：</p><ol><li>可卸载的普通应用</li><li>不可卸载的系统应用，可以在首次烧录后自启动</li></ol><h2 id="可卸载应用"><a href="#可卸载应用" class="headerlink" title="可卸载应用"></a>可卸载应用</h2><p>对于可卸载应用，其内置很简单，只需要将apk文件放置在指定目录即可。</p><pre><code class="bash">cp My_application.apk device/rockchip/rk3288/preinstall_del/</code></pre><h2 id="不可卸载应用"><a href="#不可卸载应用" class="headerlink" title="不可卸载应用"></a>不可卸载应用</h2><p>针对不可卸载的系统应用，复杂一些，需要放置在 <code>packages/apps</code> 目录，具体操作如下：</p><pre><code class="bash">apk_file=My_application.apkinstall_dir=packages/apps/$&#123;apk_file&#125;mkdir $&#123;install_dir&#125;cp $&#123;apk_file&#125; $&#123;install_dir&#125;# 解压出lib文件cd $&#123;install_dir&#125;unzip $&#123;apk_file&#125; -d tmpmv tmp/lib .rm -rf tmpcd -# vi Android.mk</code></pre><h3 id="新建-Android-mk"><a href="#新建-Android-mk" class="headerlink" title="新建 Android.mk"></a>新建 Android.mk</h3><p>注意修改以下 <code>Android.mk</code> 文件中的 <code>LOCAL_MODULE</code> 文件 <code>apk</code> 文件名前缀。</p><pre><code class="makefile">LOCAL_PATH := $(call my-dir)include $(CLEAR_VARS)LOCAL_MODULE := My_applicationLOCAL_MODULE_CLASS := APPSLOCAL_MODULE_TAGS := optionalLOCAL_BUILT_MODULE_STEM := package.apkLOCAL_SRC_FILES := $(LOCAL_MODULE).apk$(shell mkdir -p $(PRODUCT_OUT)/system/lib)$(shell cp -rf $(LOCAL_PATH)/lib/armeabi/*  $(PRODUCT_OUT)/system/lib)LOCAL_MODULE_SUFFIX := $(COMMON_ANDROID_PACKAGE_SUFFIX)LOCAL_PRIVILEGED_MODULE := falseLOCAL_CERTIFICATE := PRESIGNEDinclude $(BUILD_PREBUILT)</code></pre><h3 id="更新-device-mk"><a href="#更新-device-mk" class="headerlink" title="更新 device.mk"></a>更新 device.mk</h3><p>在文件 <code>device/rockchip/common/device.mk</code> 中添加以下内容，这样才能将应用编译至系统固件。</p><pre><code class="bash">PRODUCT_PACKAGES += My_application</code></pre><p>最后重新编译系统固件即可。</p><h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><ol><li>普通应用将安装在 <code>/data/</code> 目录</li><li>系统应用分以下两种情况<ol><li><code>Android.mk</code> 中 <code>LOCAL_PRIVILEGED_MODULE</code> 为false，则安装在 <code>/system/app</code> 目录</li><li><code>Android.mk</code> 中 <code>LOCAL_PRIVILEGED_MODULE</code> 为true，则安装在 <code>/system/priv-app</code> 目录</li></ol></li></ol>]]></content>
+      
+      
+      <categories>
+          
+          <category> Embedded </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> linux </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>解压并更新 ramdisk.img 或 initrd.img</title>
       <link href="2021/07/31/ramdisk/"/>
       <url>2021/07/31/ramdisk/</url>

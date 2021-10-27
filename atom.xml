@@ -6,7 +6,7 @@
   <link href="https://www.litreily.top/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2021-07-31T06:18:36.245Z</updated>
+  <updated>2021-10-27T11:29:45.567Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -15,6 +15,40 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>RK3288 android 6.0 内置系统应用</title>
+    <link href="https://www.litreily.top/2021/10/27/system-app/"/>
+    <id>https://www.litreily.top/2021/10/27/system-app/</id>
+    <published>2021-10-27T11:02:51.000Z</published>
+    <updated>2021-10-27T11:29:45.567Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;安卓系统的内置应用可分为以下两大类：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;可卸载的普通应用&lt;/li&gt;
+&lt;li&gt;不可卸载的系统应用，可以在首次烧录后自启动&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;可卸载应用&quot;&gt;&lt;a href=&quot;#可卸载应用&quot; class=&quot;headerlink&quot; title=&quot;可卸载应用&quot;&gt;&lt;/a&gt;可卸载应用&lt;/h2&gt;&lt;p&gt;对于可卸载应用，其内置很简单，只需要将apk文件放置在指定目录即可。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;cp My_application.apk device/rockchip/rk3288/preinstall_del/
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;不可卸载应用&quot;&gt;&lt;a href=&quot;#不可卸载应用&quot; class=&quot;headerlink&quot; title=&quot;不可卸载应用&quot;&gt;&lt;/a&gt;不可卸载应用&lt;/h2&gt;&lt;p&gt;针对不可卸载的系统应用，复杂一些，需要放置在 &lt;code&gt;packages/apps&lt;/code&gt; 目录，具体操作如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;apk_file=My_application.apk
+install_dir=packages/apps/$&amp;#123;apk_file&amp;#125;
+mkdir $&amp;#123;install_dir&amp;#125;
+cp $&amp;#123;ap</summary>
+      
+    
+    
+    
+    <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
+    
+    
+    <category term="linux" scheme="https://www.litreily.top/tags/linux/"/>
+    
+  </entry>
   
   <entry>
     <title>解压并更新 ramdisk.img 或 initrd.img</title>
@@ -49,7 +83,7 @@ $ mkdir root
     <link href="https://www.litreily.top/2021/07/16/gt9xx-drvier/"/>
     <id>https://www.litreily.top/2021/07/16/gt9xx-drvier/</id>
     <published>2021-07-16T05:49:36.000Z</published>
-    <updated>2021-07-16T05:53:18.906Z</updated>
+    <updated>2021-07-31T06:02:19.453Z</updated>
     
     
       
@@ -976,36 +1010,6 @@ EOF
     
     
     <category term="wireshark" scheme="https://www.litreily.top/tags/wireshark/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Setup dhcpd/dhcpdv6 server</title>
-    <link href="https://www.litreily.top/2020/01/17/dhcpd_server/"/>
-    <id>https://www.litreily.top/2020/01/17/dhcpd_server/</id>
-    <published>2020-01-17T13:36:16.000Z</published>
-    <updated>2021-05-28T03:12:11.503Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;搭建DHCP server在许多网络应用中是非常必要的，尤其是测试IPv6相关的功能时，本文就来介绍下针对IPv4和IPv6该如何搭建DHCP server.&lt;/p&gt;
-&lt;h2 id=&quot;Install-dhcpd-server&quot;&gt;&lt;a href=&quot;#Install-dhcpd-server&quot; class=&quot;headerlink&quot; title=&quot;Install dhcpd server&quot;&gt;&lt;/a&gt;Install dhcpd server&lt;/h2&gt;&lt;p&gt;首先通过&lt;code&gt;apt&lt;/code&gt;安装&lt;code&gt;isc-dhcp-server&lt;/code&gt;&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;sudo apt install isc-dhcp-server
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;Setup-dhcpd&quot;&gt;&lt;a href=&quot;#Setup-dhcpd&quot; class=&quot;headerlink&quot; title=&quot;Setup dhcpd&quot;&gt;&lt;/a&gt;Setup dhcpd&lt;/h2&gt;&lt;h3 id=&quot;Config-interfaces&quot;&gt;&lt;a href=&quot;#Config-interfaces&quot; class=&quot;headerlink&quot; title=&quot;Config interfaces&quot;&gt;&lt;/a&gt;Config interfaces&lt;/h3&gt;&lt;p&gt;通过&lt;code&gt;ifco</summary>
-      
-    
-    
-    
-    <category term="Network" scheme="https://www.litreily.top/categories/Network/"/>
-    
-    
-    <category term="ubuntu" scheme="https://www.litreily.top/tags/ubuntu/"/>
-    
-    <category term="dhcp" scheme="https://www.litreily.top/tags/dhcp/"/>
-    
-    <category term="ipv6" scheme="https://www.litreily.top/tags/ipv6/"/>
     
   </entry>
   
