@@ -6,7 +6,7 @@
   <link href="https://www.litreily.top/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2021-10-27T11:29:45.567Z</updated>
+  <updated>2021-12-21T06:13:50.773Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -15,6 +15,71 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>RK3399 新设计工控机配置指南</title>
+    <link href="https://www.litreily.top/2021/12/20/rk3399-dts/"/>
+    <id>https://www.litreily.top/2021/12/20/rk3399-dts/</id>
+    <published>2021-12-20T06:20:20.000Z</published>
+    <updated>2021-12-21T06:13:50.773Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;用时两周，总算将新的 RK3399 工控机配置好了，期间遇到各种坑，在此记录一二。&lt;/p&gt;
+&lt;h2 id=&quot;RK3399-工控机硬件配置&quot;&gt;&lt;a href=&quot;#RK3399-工控机硬件配置&quot; class=&quot;headerlink&quot; title=&quot;RK3399 工控机硬件配置&quot;&gt;&lt;/a&gt;RK3399 工控机硬件配置&lt;/h2&gt;&lt;p&gt;首先看下硬件配置。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;接口&lt;/th&gt;
+&lt;th&gt;数量&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;
+&lt;td&gt;TypeC&lt;/td&gt;
+&lt;td&gt;1个&lt;/td&gt;
+&lt;td&gt;OTG 口，可用于烧录固件&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;USB3.0&lt;/td&gt;
+&lt;td&gt;4个&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;USB2.0&lt;/td&gt;
+&lt;td&gt;2个&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;RTC芯片 hym8563&lt;/td&gt;
+&lt;td&gt;1个&lt;/td&gt;
+&lt;td&gt;用于RTC时钟存储&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;SD&lt;/td&gt;
+&lt;td&gt;1个&lt;/td&gt;
+&lt;td&gt;可插入SD/TF 卡&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;HDMI&lt;/td&gt;
+&lt;td&gt;1个&lt;/td&gt;
+&lt;td&gt;可接显示器&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;</summary>
+      
+    
+    
+    
+    <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
+    
+    
+    <category term="linux" scheme="https://www.litreily.top/tags/linux/"/>
+    
+    <category term="rk3399" scheme="https://www.litreily.top/tags/rk3399/"/>
+    
+  </entry>
   
   <entry>
     <title>RK3288 android 6.0 内置系统应用</title>
@@ -959,57 +1024,6 @@ EOF
     
     
     <category term="tampermonkey" scheme="https://www.litreily.top/tags/tampermonkey/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>网络协议详解1 - NBNS</title>
-    <link href="https://www.litreily.top/2020/02/28/nbns/"/>
-    <id>https://www.litreily.top/2020/02/28/nbns/</id>
-    <published>2020-02-28T01:48:26.000Z</published>
-    <updated>2021-05-28T03:12:11.503Z</updated>
-    
-    
-    <summary type="html">&lt;h2 id=&quot;NetBIOS-简介&quot;&gt;&lt;a href=&quot;#NetBIOS-简介&quot; class=&quot;headerlink&quot; title=&quot;NetBIOS 简介&quot;&gt;&lt;/a&gt;NetBIOS 简介&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;NetBIOS&lt;/strong&gt;，Network Basic Input/Output System的缩写，一般指用于&lt;strong&gt;局域网&lt;/strong&gt;通信的一套API，相关RFC文档包括 &lt;a href=&quot;https://tools.ietf.org/html/rfc1001&quot;&gt;RFC 1001&lt;/a&gt;, &lt;a href=&quot;https://tools.ietf.org/html/rfc1002&quot;&gt;RFC 1002&lt;/a&gt;. RFC 1001主要对NetBIOS及相关协议和服务进行解释说明，RFC 1002给出了相关协议和服务的数据组包格式。&lt;/p&gt;
-&lt;p&gt;NetBIOS提供三种软件服务：&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;Service Name&lt;/th&gt;
-&lt;th&gt;Port&lt;/th&gt;
-&lt;th&gt;Protocol&lt;/th&gt;
-&lt;th&gt;Short Name&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;&lt;tr&gt;
-&lt;td&gt;NetBIOS Name service&lt;/td&gt;
-&lt;td&gt;137&lt;/td&gt;
-&lt;td&gt;UDP/TCP&lt;/td&gt;
-&lt;td&gt;NBNS&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;NetBIOS Datagram&lt;/td&gt;
-&lt;td&gt;138&lt;/td&gt;
-&lt;td&gt;UDP&lt;/td&gt;
-&lt;td&gt;NBND&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;NetBIOS Session service&lt;/td&gt;
-&lt;td&gt;139&lt;/td&gt;
-&lt;td&gt;TCP&lt;/td&gt;
-&lt;td&gt;NBSS&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;&lt;/table&gt;
-&lt;p&gt;本文主要描述最常见的&lt;code&gt;NBNS&lt;/code&gt;.&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="Network" scheme="https://www.litreily.top/categories/Network/"/>
-    
-    <category term="Protocol" scheme="https://www.litreily.top/categories/Network/Protocol/"/>
-    
-    
-    <category term="wireshark" scheme="https://www.litreily.top/tags/wireshark/"/>
     
   </entry>
   
