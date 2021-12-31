@@ -1,0 +1,432 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>RK3288 android 6.0 user release 相关问题处理 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
+</head><link rel="stylesheet" type="text/css" href="/plugins/highlight/atom-one-dark.min.css"><script type="text/javascript" src="/plugins/highlight/highlight.min.js"></script><script>hljs.initHighlightingOnLoad();
+</script><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">RK3288 android 6.0 user release 相关问题处理</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2021/12/31/rk3288-security/">2021-12-31</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Embedded/">Embedded</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>之前一直用的 <code>userdebug</code> 版本，默认 <code>adb root</code> 或者使用 <code>su</code> 即可获取 root 权限。目前基于安全考虑，固件发布需要使用 <code>user</code> 版本配置，很多功能都需要重新测试，下面对 <code>RK3288</code> <code>user</code> 发布版本遇到的问题进行总结。</p>
+<h2 id="编译固件"><a href="#编译固件" class="headerlink" title="编译固件"></a>编译固件</h2><p>首先是编译固件，将原先的 <code>rk3288-userdebug</code> 改为 <code>rk3288-user</code>.</p>
+<pre><code class="bash">./FFTools/make.sh -d rk3288-tb_8846 -j16 -l rk3288-user
+./FFTools/mkupdate/mkupdate.sh -l rk3288-user
+</code></pre>
+<p>下面是 firefly 官方 wiki 文档对 <code>user</code>, <code>userdebug</code>, <code>eng</code> 版本的对比。</p>
+<blockquote>
+<h3 id="构建变体说明"><a href="#构建变体说明" class="headerlink" title="构建变体说明"></a>构建变体说明</h3><p>默认的目标构建变体(TARGET_BUILD_VARIANT)为 userdebug。常用变体有三种，分别是用户(user)、用户调试(userdebug)和工程模式(eng)，其区别如下：</p>
+<ul>
+<li>user<ul>
+<li>仅安装标签为 user 的模块</li>
+<li>设定属性 ro.secure=1，打开安全检查功能</li>
+<li>设定属性 ro.debuggable=0，关闭应用调试功能</li>
+<li>默认关闭 adb 功能</li>
+<li>打开 Proguard 混淆器</li>
+<li>打开 DEXPREOPT 预先编译优化</li>
+</ul>
+</li>
+<li>userdebug<ul>
+<li>安装标签为 user、debug 的模块</li>
+<li>设定属性 ro.secure=1，打开安全检查功能</li>
+<li>设定属性 ro.debuggable=1，启用应用调试功能</li>
+<li>默认打开 adb 功能</li>
+<li>打开 Proguard 混淆器</li>
+<li>打开 DEXPREOPT 预先编译优化</li>
+</ul>
+</li>
+<li>eng<ul>
+<li>安装标签为 user、debug、eng 的模块</li>
+<li>设定属性 ro.secure=0，关闭安全检查功能</li>
+<li>设定属性 ro.debuggable=1，启用应用调试功能</li>
+<li>设定属性 ro.kernel.android.checkjni=1，启用 JNI 调用检查</li>
+<li>默认打开 adb 功能</li>
+<li>关闭 Proguard 混淆器</li>
+<li>关闭 DEXPREOPT 预先编译优化</li>
+</ul>
+</li>
+</ul>
+<p>如果目标构建变体为 user，则 adb 无法获取 root 权限。</p>
+</blockquote>
+<p>从以上说明可知，<code>user</code> 版本无法通过 <code>adb</code> 获取 root 权限，这个先不管，下面来看看我遇到了哪些问题。</p>
+<h2 id="adb-shell-fail"><a href="#adb-shell-fail" class="headerlink" title="adb shell fail"></a>adb shell fail</h2><p>首先遇到的是 <code>adb shell</code> 失败，windows 和 ubuntu系统都测试失败。</p>
+<ul>
+<li> ubuntu 执行 <code>adb shell</code></li>
+</ul>
+<pre><code class="bash">$ adb shell
+error: device unauthorized.
+This adb server&#39;s $ADB_VENDOR_KEYS is not set
+Try &#39;adb kill-server&#39; if that seems wrong.
+Otherwise check for a confirmation dialog on your device.
+</code></pre>
+<ul>
+<li>windows 执行 <code>adb shell</code></li>
+</ul>
+<pre><code class="bash">C:\Users\EDY&gt;adb shell
+error: device unauthorized. Please check the confirmation dialog on your device.
+</code></pre>
+<p>提示信息类似，都是未认证，对比正常情况，手机插入电脑，然后打开调试功能是会弹出秘钥认证的，而 <code>rk3288</code> 系统没有弹框提示秘钥相关信息。最后排查发现是 <code>ro.adb.secure</code> 默认配置为0了，这个是 <code>userdebug</code> 版本中添加的，代表不需要通过认证，可以直接访问系统，但是这个在 <code>user</code> 版本是行不通的，所以需要把它改成1.</p>
+<h3 id="solution"><a href="#solution" class="headerlink" title="solution"></a>solution</h3><p>修改  <code>build/core/main.mk</code>, 启用debug和adb认证功能。</p>
+<pre><code class="bash">diff --git a/core/main.mk b/core/main.mk
+index aa617c3..a0b783d 100644
+--- a/core/main.mk
++++ b/core/main.mk
+@@ -361,9 +361,11 @@ ifeq (true,$(strip $(enable_target_debugging)))
+   INCLUDE_TEST_OTA_KEYS := true
+ else # !enable_target_debugging
+   # Target is less debuggable and adbd is off by default
+-  ADDITIONAL_DEFAULT_PROPERTIES += ro.debuggable=0
++  ADDITIONAL_DEFAULT_PROPERTIES += ro.debuggable=1
+ endif # !enable_target_debugging
+ 
++ADDITIONAL_DEFAULT_PROPERTIES += ro.adb.secure=1
++
+ ## eng ##
+ 
+ ifeq ($(TARGET_BUILD_VARIANT),eng)
+</code></pre>
+<p>对于 <code>ro.adb.secure</code> , 也可以通过修改 <code>device/rockchip/rk3288/system.prop</code> 实现。</p>
+<pre><code class="bash">ro.adb.secure=1
+</code></pre>
+<h2 id="fw-version"><a href="#fw-version" class="headerlink" title="fw version"></a>fw version</h2><p>release 版本的版本号显示如下，对应 <code>ro.build.display.id</code> ，为了和之前的版本号保持一致，需要更新。</p>
+<pre><code class="bash">MXC89K release-keys
+</code></pre>
+<h3 id="solution-1"><a href="#solution-1" class="headerlink" title="solution"></a>solution</h3><p>更新方式也简单，之前 <code>userdebug</code> 使用的是 <code>$(build_desc)</code>, 所以在 user 版本的编译配置参数中也改为 <code>$(build_desc)</code>.</p>
+<pre><code class="bash">--- a/core/Makefile
++++ b/core/Makefile
+@@ -165,7 +165,7 @@ ifeq ($(TARGET_BUILD_VARIANT),user)
+   ifeq &quot;true&quot; &quot;$(DISPLAY_BUILD_NUMBER)&quot;
+     BUILD_DISPLAY_ID := $(BUILD_ID).$(BUILD_NUMBER) $(BUILD_KEYS)
+   else
+-    BUILD_DISPLAY_ID := $(BUILD_ID) $(BUILD_KEYS)
++    BUILD_DISPLAY_ID := $(build_desc)
+   endif
+ else
+   # Non-user builds should show detailed build information
+</code></pre>
+<h2 id="change-usb-mode-fail"><a href="#change-usb-mode-fail" class="headerlink" title="change usb mode fail"></a>change usb mode fail</h2><p>使用 user release 版本后，USB 模式无法修改了，一直保持在 Device 模式。修改触发的错误信息如下：</p>
+<pre><code class="bash">[   54.422452] type=1400 audit(1640315085.300:22): avc: denied &#123; write &#125; for pid=601 comm=&quot;ndroid.systemui&quot; name=&quot;force_usb_mode&quot; dev=&quot;sysfs&quot; ino=12816 scontext=u:r:platform_app:s0:c512,c768 tcontext=u:object_r:sysfs:s0 tclass=file permissive=0
+[   54.466011] init: avc:  denied  &#123; set &#125; for property=persist.usb.mode scontext=u:r:system_app:s0 tcontext=u:object_r:default_prop:s0 tclass=property_service
+[   54.466052] init: sys_prop: permission denied uid:1000  name:persist.usb.mode
+
+
+[   57.748360] type=1400 audit(1640315088.680:23): avc: denied &#123; write &#125; for pid=601 comm=&quot;ndroid.systemui&quot; name=&quot;force_usb_mode&quot; dev=&quot;sysfs&quot; ino=12816 scontext=u:r:platform_app:s0:c512,c768 tcontext=u:object_r:sysfs:s0 tclass=file permissive=0
+[   57.750643] init: avc:  denied  &#123; set &#125; for property=persist.usb.mode scontext=u:r:system_app:s0 tcontext=u:object_r:default_prop:s0 tclass=property_service
+[   57.750696] init: sys_prop: permission denied uid:1000  name:persist.usb.mode
+</code></pre>
+<ul>
+<li>与USB模式修改相关的文件</li>
+</ul>
+<pre><code class="bash">system/displayd/OtgManager.cpp
+device/rockchip/common/init.rk30board.rc
+device/rockchip/common/sepolicy/property_contexts
+external/sepolicy/platform_app.te
+external/sepolicy/app.te
+</code></pre>
+<ul>
+<li>与USB模式修改相关的配置</li>
+</ul>
+<pre><code class="bash">ro.adb.secure=1
+ro.debuggable
+persist.usb.mode
+</code></pre>
+<p>参考博客 <a target="_blank" rel="noopener" href="https://blog.csdn.net/tung214/article/details/72734086">Android SELinux avc dennied权限问题解决方法</a> , 分析错误log</p>
+<pre><code class="bash">[   54.422452] type=1400 audit(1640315085.300:22): avc: denied &#123; write &#125; for pid=601 comm=&quot;ndroid.systemui&quot; name=&quot;force_usb_mode&quot; dev=&quot;sysfs&quot; ino=12816 scontext=u:r:platform_app:s0:c512,c768 tcontext=u:object_r:sysfs:s0 tclass=file permissive=0
+</code></pre>
+<ul>
+<li>缺失权限：denied { <code>write</code> }</li>
+<li>缺失权限的进程：scontext=u:r:<code>platform_app</code></li>
+<li>访问的文件：tcontext=u:object_r:<code>sysfs</code>:s0</li>
+<li>访问的文件类型：tclass=<code>file</code></li>
+</ul>
+<p>所以需要在 <code>external/sepolicy/platform_app.te</code>中或者 <code>device/rockchip/common/sepolicy/platform_app.te</code> 中添加</p>
+<pre><code class="bash">allow platform_app sysfs:file write;
+</code></pre>
+<p>或者</p>
+<pre><code class="bash">allow platform_app sysfs:file rwx_file_perms;
+</code></pre>
+<p>但是添加后<strong>编译失败</strong>，因为这个权限是默认不允许 (<code>neverallow</code>) 的，log如下：</p>
+<pre><code class="bash">libsepol.report_failure: neverallow on line 353 of external/sepolicy/app.te (or line 7601 of policy.conf) violated by allow platform_app sysfs:file &#123; write &#125;;
+libsepol.check_assertions: 1 neverallow failures occurred
+Error while expanding policy
+external/sepolicy/Android.mk:69: recipe for target &#39;out/target/product/rk3288/obj/ETC/sepolicy_intermediates/sepolicy&#39; failed
+make: *** [out/target/product/rk3288/obj/ETC/sepolicy_intermediates/sepolicy] Error 1
+make: *** Waiting for unfinished jobs....
+</code></pre>
+<p>根据log提示，打开文件 <code>external/sepolicy/app.te</code> <code>353</code> 行，将 <code>neverallow</code> 的部分注释掉，或者取消 <code>platform_app</code> 的限制，再次编译就可以了。</p>
+<h3 id="solution-2"><a href="#solution-2" class="headerlink" title="solution"></a>solution</h3><p>根据以上分析结果，添加权限。</p>
+<pre><code class="bash">diff --git a/app.te b/app.te
+index 40de074..68ec6dd 100755
+--- a/app.te
++++ b/app.te
+@@ -349,7 +349,7 @@ neverallow appdomain efs_file:dir_file_class_set write;
+ neverallow &#123; appdomain -shell &#125; efs_file:dir_file_class_set read;
+
+ # Write to various pseudo file systems.
+-neverallow &#123; appdomain -bluetooth -nfc &#125;
++neverallow &#123; appdomain -bluetooth -nfc -platform_app &#125;
+     sysfs:dir_file_class_set write;
+ neverallow appdomain
+     proc:dir_file_class_set write;
+diff --git a/platform_app.te b/platform_app.te
+index 2afe4d8..c523de3 100644
+--- a/platform_app.te
++++ b/platform_app.te
+@@ -41,3 +41,4 @@ allow platform_app radio_service:service_manager find;
+ allow platform_app surfaceflinger_service:service_manager find;
+ allow platform_app app_api_service:service_manager find;
+ allow platform_app system_api_service:service_manager find;
++allow platform_app sysfs:file write;
+</code></pre>
+<h2 id="set-persist-usb-mode-fail"><a href="#set-persist-usb-mode-fail" class="headerlink" title="set persist.usb.mode fail"></a>set persist.usb.mode fail</h2><p>以上解决了 platform_app 的权限问题，下面还有一个权限问题。</p>
+<pre><code class="bash">[   54.466011] init: avc:  denied  &#123; set &#125; for property=persist.usb.mode scontext=u:r:system_app:s0 tcontext=u:object_r:default_prop:s0 tclass=property_service
+[   54.466052] init: sys_prop: permission denied uid:1000  name:persist.usb.mode
+</code></pre>
+<h3 id="solution-3"><a href="#solution-3" class="headerlink" title="solution"></a>solution</h3><p>属性 <code>persist.usb.mode</code> 无法被 <code>set</code>, 这个不一定要修改 <code>system_app.te</code>, 可以在 <code>sepolicy/property_contexts</code> 中添加以下信息：</p>
+<pre><code class="bash">diff --git a/sepolicy/property_contexts b/sepolicy/property_contexts
+index 8593ab2..7e113f1 100755
+--- a/sepolicy/property_contexts
++++ b/sepolicy/property_contexts
+@@ -3,3 +3,4 @@ sys_graphic.            u:object_r:graphic_prop:s0
+ #ro.serialno             u:object_r:serialno_prop:s0
+ drm.                    u:object_r:drm_prop:s0
+ media.                  u:object_r:media_prop:s0
++persist.usb.            u:object_r:system_prop:s0
+</code></pre>
+<h2 id="user-service-sh-Permission-denied"><a href="#user-service-sh-Permission-denied" class="headerlink" title="user_service.sh Permission denied"></a>user_service.sh Permission denied</h2><p><code>user_service.sh</code> 是我们添加的一个开机启动脚本，开机log中提示 <code>user_service.sh</code> 不能执行，没有权限。</p>
+<pre><code class="bash">[   90.229367] init: cannot execve(&#39;/system/bin/user_service.sh&#39;): Permission denied
+[   90.229966] type=1400 audit(1640583793.920:23): avc: denied &#123; entrypoint &#125; for pid=1166 comm=&quot;init&quot; path=&quot;/system/bin/user_service.sh&quot; dev=&quot;mmcblk0p10&quot; ino=462 scontext=u:r:shell:s0 tcontext=u:object_r:system_file:s0 tclass=file permissive=0
+</code></pre>
+<h3 id="solution-4"><a href="#solution-4" class="headerlink" title="solution"></a>solution</h3><p>修改 <code>external/sepolicy/&#123;domain.te,shell.te&#125;</code>, 启用 <code>shell</code> 的 <code>entrypoint</code> 权限。</p>
+<pre><code class="bash">diff --git a/domain.te b/domain.te
+index 2b30bd7..25b5ffb 100755
+--- a/domain.te
++++ b/domain.te
+@@ -251,7 +251,7 @@ neverallow &#123; domain -init &#125; kernel:security setsecparam;
+ neverallow &#123; domain -init -system_server -ueventd &#125; hw_random_device:chr_file *;
+ # Ensure that all entrypoint executables are in exec_type.
+-neverallow domain &#123; file_type -exec_type &#125;:file entrypoint;
++neverallow &#123; domain -shell &#125; &#123; file_type -exec_type &#125;:file entrypoint;
+
+ # Ensure that nothing in userspace can access /dev/mem or /dev/kmem
+ neverallow &#123; domain -kernel -ueventd -init &#125; kmem_device:chr_file *;
+diff --git a/shell.te b/shell.te
+index 4b4093d..0350b7a 100644
+--- a/shell.te
++++ b/shell.te
+@@ -37,7 +37,7 @@ allow shell tty_device:chr_file rw_file_perms;
+ allow shell console_device:chr_file rw_file_perms;
+ allow shell input_device:dir r_dir_perms;
+ allow shell input_device:chr_file rw_file_perms;
+-allow shell system_file:file x_file_perms;
++allow shell system_file:file &#123; entrypoint x_file_perms &#125;;
+ allow shell shell_exec:file rx_file_perms;
+ allow shell zygote_exec:file rx_file_perms;
+</code></pre>
+<h2 id="ping-fail-after-4G-wifi-network-enabled"><a href="#ping-fail-after-4G-wifi-network-enabled" class="headerlink" title="ping fail after 4G/wifi network enabled"></a>ping fail after 4G/wifi network enabled</h2><p><code>user_service.sh</code> 在后台监听网络状态，状态修改后会自动添加路由，更新iptables等，但是 <code>user</code> 版本很多指令执行失败了，导致与本地连接的算法板之间的网络不通。而且切换网络（如关闭、打开wifi）时会打印以下权限问题。</p>
+<pre><code class="bash">$ [  423.709562] type=1400 audit(1640656107.794:490): avc: denied &#123; write &#125; for pid=3901 comm=&quot;pppd&quot; name=&quot;ppp&quot; dev=&quot;mmcblk0p13&quot; ino=342742 scontext=u:r:rild:s0 tcontext=u:object_r:system_data_file:s0 tclass=dir permissive=0
+[  426.563145] type=1400 audit(1640656110.694:491): avc: denied &#123; write &#125; for pid=3901 comm=&quot;pppd&quot; name=&quot;ppp&quot; dev=&quot;mmcblk0p13&quot; ino=342742 scontext=u:r:rild:s0 tcontext=u:object_r:system_data_file:s0 tclass=dir permissive=0
+[  426.620393] init: avc:  denied  &#123; set &#125; for property=net.interfaces.defaultroute scontext=u:r:rild:s0 tcontext=u:object_r:system_prop:s0 tclass=property_service
+[  426.620467] init: sys_prop: permission denied uid:0  name:net.interfaces.defaultroute
+[  426.641853] init: avc:  granted  &#123; set &#125; for property=net.ppp0.dns1 scontext=u:r:rild:s0 tcontext=u:object_r:net_radio_prop:s0 tclass=property_service
+[  426.660313] init: avc:  granted  &#123; set &#125; for property=net.ppp0.dns2 scontext=u:r:rild:s0 tcontext=u:object_r:net_radio_prop:s0 tclass=property_service
+[  426.676997] init: avc:  granted  &#123; set &#125; for property=net.ppp0.local-ip scontext=u:r:rild:s0 tcontext=u:object_r:net_radio_prop:s0 tclass=property_service
+[  426.693011] init: avc:  granted  &#123; set &#125; for property=net.ppp0.remote-ip scontext=u:r:rild:s0 tcontext=u:object_r:net_radio_prop:s0 tclass=property_service
+[  426.704633] init: avc:  granted  &#123; set &#125; for property=net.ppp0.gw scontext=u:r:rild:s0 tcontext=u:object_r:net_radio_prop:s0 tclass=property_service
+[  427.055027] init: avc:  denied  &#123; set &#125; for property=persist.telephony.test.singleDc scontext=u:r:rild:s0 tcontext=u:object_r:default_prop:s0 tclass=property_service
+[  427.055347] init: sys_prop: permission denied uid:0  name:persist.telephony.test.singleDc
+[  606.939187] ==&gt; rtl8188e_iol_efuse_patch
+[  607.175605] RTL871X: nolinked power save leave
+[  608.502840] RTL871X: nolinked power save enter
+</code></pre>
+<h3 id="solution-5"><a href="#solution-5" class="headerlink" title="solution"></a>solution</h3><p>这个问题非常麻烦，因为是 <code>user</code> 版本，没有root权限调试，绝大部分指令都无法使用，根本无法调试，所以我花费了一定时间将su集成进 user版本，详情见另一篇专门说明如何在 <code>user</code> 版本添加 <code>su</code> 的 <a href="https://www.litreily.top/:4000/2021/12/30/rk3288-su/">文档</a> 。</p>
+<p>集成 <code>su</code> 后，发现能够进入 root 状态了，但是 <code>android 6.0</code> root用户也不是无所不能的，由于 <code>sepolicy</code> 的导入，导致很多权限都没有，于是只能一个个的查看log，然后修改 <code>.te</code> 文件，修改的文件主要包含以下几个。</p>
+<pre><code class="bash">device/rockchip/common/sepolicy/shell.te
+device/rockchip/common/sepolicy/rild.te
+device/rockchip/common/sepolicy/property_contexts
+external/sepolicy/shell.te
+external/sepolicy/domain.te
+external/sepolicy/app.te
+</code></pre>
+<p>补丁如下</p>
+<ul>
+<li><code>external/sepolicy</code></li>
+</ul>
+<pre><code class="bash">diff --git a/app.te b/app.te
+index 5f8f648..419ecce 100755
+--- a/app.te
++++ b/app.te
+@@ -213,7 +213,7 @@ selinux_check_context(appdomain)
+ 
+ # Superuser capabilities.
+ # bluetooth requires net_admin and wake_alarm.
+-neverallow &#123; appdomain -bluetooth &#125; self:capability *;
++neverallow &#123; appdomain -bluetooth -shell &#125; self:capability *;
+ neverallow &#123; appdomain -bluetooth &#125; self:capability2 *;
+ 
+ # Block device access.
+@@ -349,7 +349,7 @@ neverallow appdomain efs_file:dir_file_class_set write;
+ neverallow &#123; appdomain -shell &#125; efs_file:dir_file_class_set read;
+ 
+ # Write to various pseudo file systems.
+-neverallow &#123; appdomain -bluetooth -nfc -platform_app &#125;
++neverallow &#123; appdomain -shell -bluetooth -nfc -platform_app &#125;
+     sysfs:dir_file_class_set write;
+ neverallow appdomain
+     proc:dir_file_class_set write;
+diff --git a/domain.te b/domain.te
+index 25b5ffb..ad765e7 100755
+--- a/domain.te
++++ b/domain.te
+@@ -338,7 +338,7 @@ neverallow domain default_android_service:service_manager add;
+ 
+ # Require that domains explicitly label unknown properties, and do not allow
+ # anyone but init to modify unknown properties.
+-neverallow &#123; domain -init &#125; default_prop:property_service set;
++neverallow &#123; domain -init -rild &#125; default_prop:property_service set;
+ 
+ neverallow &#123; domain -init -recovery -system_server &#125; frp_block_device:blk_file rw_file_perms;
+ 
+@@ -398,7 +398,7 @@ neverallow domain &#123; file_type fs_type dev_type &#125;:&#123; lnk_file fifo_file sock_file
+ # Nobody should be able to execute su on user builds.
+ # On userdebug/eng builds, only dumpstate, shell, and
+ # su itself execute su.
+-neverallow &#123; domain userdebug_or_eng(`-dumpstate -shell -su&#39;) &#125; su_exec:file no_x_file_perms;
++# neverallow &#123; domain userdebug_or_eng(`-dumpstate -shell -su&#39;) &#125; su_exec:file no_x_file_perms;
+ 
+ # Do not allow the introduction of new execmod rules. Text relocations
+ # and modification of executable pages are unsafe.
+diff --git a/shell.te b/shell.te
+index 0350b7a..836f9fd 100644
+--- a/shell.te
++++ b/shell.te
+@@ -40,6 +40,8 @@ allow shell input_device:chr_file rw_file_perms;
+ allow shell system_file:file &#123; entrypoint x_file_perms &#125;;
+ allow shell shell_exec:file rx_file_perms;
+ allow shell zygote_exec:file rx_file_perms;
++allow shell su_exec:file rx_file_perms;
++allow shell shell:capability &#123; net_admin net_raw dac_override setgid setuid &#125;;
+</code></pre>
+<ul>
+<li><code>device/rockchip/common</code></li>
+</ul>
+<pre><code class="bash">diff --git a/sepolicy/property_contexts b/sepolicy/property_contexts
+index 7e113f1..530d8aa 100755
+--- a/sepolicy/property_contexts
++++ b/sepolicy/property_contexts
+@@ -4,3 +4,4 @@ sys_graphic.            u:object_r:graphic_prop:s0
+ drm.                    u:object_r:drm_prop:s0
+ media.                  u:object_r:media_prop:s0
+ persist.usb.            u:object_r:system_prop:s0
++net.interfaces.         u:object_r:system_prop:s0
+diff --git a/sepolicy/rild.te b/sepolicy/rild.te
+index a798f14..9cfb015 100644
+--- a/sepolicy/rild.te
++++ b/sepolicy/rild.te
+@@ -16,6 +16,8 @@ unix_socket_connect(rild, rpc_reg, rpc);
+ # ppp for 3G dongle 
+ allow rild ppp_device:chr_file rw_file_perms;
+ allow rild net_radio_prop:property_service set;
++allow rild default_prop:property_service set;
++allow rild system_prop:property_service set;
+ allow rild ppp_exec:file &#123;execute execute_no_trans open&#125;;
+ allow rild ppp_exec:file getattr;
+ allow rild ppp_exec:file &#123; read &#125;;
+@@ -25,3 +27,4 @@ allow rild toolbox_exec:file &#123;getattr execute_no_trans execute read open&#125;;
+ #allow rild system_data_file:dir &#123;write add_name&#125;;
+ #allow rild system_data_file:file &#123;create write&#125;;
+ allow rild self:capability &#123; sys_admin &#125;;
++allow rild system_data_file:dir create_dir_perms;
+diff --git a/sepolicy/shell.te b/sepolicy/shell.te
+index 7d1999c..8c2aeb1 100755
+--- a/sepolicy/shell.te
++++ b/sepolicy/shell.te
+@@ -1,3 +1,4 @@
++permissive shell;
+ # Additional rules for shell
+ allow shell toolbox_exec:file &#123; read getattr open execute execute_no_trans &#125;;
+ allow shell gpsd_exec:file &#123; getattr execute read open execute_no_trans &#125;;
+@@ -7,3 +8,9 @@ allow shell serial_device:chr_file rw_file_perms;
+ allow shell proc_cpuinfo:file mounton;
+ allow shell surfaceflinger:fifo_file rw_file_perms;
+ allow shell bootanim_exec:file getattr;
++allow shell proc_net:file rw_file_perms;
++allow shell self:udp_socket ioctl;
++allow shell self:netlink_route_socket nlmsg_write;
++allow shell net_data_file:dir search;
++allow shell net_data_file:file rw_file_perms;
++allow shell sysfs:file rw_file_perms
+</code></pre>
+<p>权限问题解决后，发现启用 wifi、4G 网络后还是无法ping通算法板，于是开始慢慢调试路。</p>
+<p>使用 <code>iptables</code> <code>ip rule</code> 等指令排查网络问题，发现wifi，4G网络启用后，ping 算法板会默认使用 <code>wifi</code> 或 <code>4G</code> 网络对应的链路，这说明路由出问题了。</p>
+<p>然后我用 <code>ip rule</code> 去查策略路由，对比 <code>userdebug</code> 版本，发现少了一个 <code>table 1</code>, 这个table是用来添加算法板的默认路由的，而且优先级比较高，现在没有了。接着我找到了添加 <code>table 1</code> 的脚本，是 <code>user_service.sh</code> 中的函数 <code>add_route_table</code>。</p>
+<pre><code class="bash">add_route_table() &#123;                                                                                                           
+    PREF=$(ip rule list | busybox head -n 2 | busybox tail -n 1 | busybox awk &#39;&#123;print $1&#125;&#39; | busybox sed &#39;s/://g&#39;)
+    let PREF--                                                                                                           
+    ip rule add from all table 1 pref $&#123;PREF&#125;
+&#125;
+</code></pre>
+<p>我在shell中执行了以上指令，发现 <code>busybox</code> 找不到！好吧， <code>user</code> 版本没有编译 <code>busybox</code>, 那就把它去掉，逐个测试 <code>head</code>, <code>tail</code>, <code>awk</code>, <code>sed</code> 指令，发现 <code>awk</code> 指令也无法执行。</p>
+<p>为了解决这个问题，我先根据指令去解析其意图，发现这条指令是为了获取 <code>ip rule list</code> 中第二行的前缀，也就是优先级对应的数值 <code>10000</code>。</p>
+<pre><code class="bash">0:      from all lookup local
+10000:  from all fwmark 0xc0000/0xd0000 lookup legacy_system
+13000:  from all fwmark 0x10063/0x1ffff lookup local_network
+15000:  from all fwmark 0x0/0x10000 lookup legacy_system
+16000:  from all fwmark 0x0/0x10000 lookup legacy_network
+17000:  from all fwmark 0x0/0x10000 lookup local_network
+23000:  from all fwmark 0x0/0xffff uidrange 0-0 lookup main
+32000:  from all unreachable
+</code></pre>
+<p>既如此，解决方案就简单了，根本不需要 <code>awk</code>, <code>sed</code>, 直接用 <code>cut</code> 就好了，patch如下。</p>
+<pre><code class="bash"> add_route_table() &#123;                                                                                                           
+-    PREF=$(ip rule list | busybox head -n 2 | busybox tail -n 1 | busybox awk &#39;&#123;print $1&#125;&#39; | busybox sed &#39;s/://g&#39;)
++    PREF=$(ip rule list | head -n 2 | tail -n 1 | cut -d &#39;:&#39; -f1)
+     let PREF--                                                                                                           
+     ip rule add from all table 1 pref $&#123;PREF&#125;
+ &#125;
+</code></pre>
+<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://wiki.t-firefly.com/zh_CN/AIO-3288J/compile_android_firmware.html">AIO RK3288J 编译 Android 5.1 固件</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/tung214/article/details/72734086">Android SELinux avc dennied权限问题解决方法</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_25815655/article/details/85339415">system.prop添加自己的字段 SystemProperties.get权限问题</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/inkhearts/p/10478981.html">MTK(android init.rc) 写一个开机启动的服务</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/blogs-of-lxl/p/7515023.html">Android : SELinux 简析&amp;修改</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/ai_knight/article/details/67634920">init: Warning! Service preinstall needs a SELinux domain defined; please fix!</a></li>
+</ul>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2021/12/31/rk3288-security/">https://www.litreily.top/2021/12/31/rk3288-security/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tags"></i><a href="/tags/android/">android</a><a href="/tags/rk3288/">rk3288</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E8%AF%91%E5%9B%BA%E4%BB%B6"><span class="toc-number">1.</span> <span class="toc-text">编译固件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%84%E5%BB%BA%E5%8F%98%E4%BD%93%E8%AF%B4%E6%98%8E"><span class="toc-number">1.1.</span> <span class="toc-text">构建变体说明</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#adb-shell-fail"><span class="toc-number">2.</span> <span class="toc-text">adb shell fail</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#solution"><span class="toc-number">2.1.</span> <span class="toc-text">solution</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#fw-version"><span class="toc-number">3.</span> <span class="toc-text">fw version</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#solution-1"><span class="toc-number">3.1.</span> <span class="toc-text">solution</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#change-usb-mode-fail"><span class="toc-number">4.</span> <span class="toc-text">change usb mode fail</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#solution-2"><span class="toc-number">4.1.</span> <span class="toc-text">solution</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#set-persist-usb-mode-fail"><span class="toc-number">5.</span> <span class="toc-text">set persist.usb.mode fail</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#solution-3"><span class="toc-number">5.1.</span> <span class="toc-text">solution</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#user-service-sh-Permission-denied"><span class="toc-number">6.</span> <span class="toc-text">user_service.sh Permission denied</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#solution-4"><span class="toc-number">6.1.</span> <span class="toc-text">solution</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ping-fail-after-4G-wifi-network-enabled"><span class="toc-number">7.</span> <span class="toc-text">ping fail after 4G&#x2F;wifi network enabled</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#solution-5"><span class="toc-number">7.1.</span> <span class="toc-text">solution</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#reference"><span class="toc-number">8.</span> <span class="toc-text">reference</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="next" href="/2021/12/30/rk3288-su/">RK3288 android 6.0 user release 获取 root 权限 &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+.night .v[data-class=v] a:hover { color: #216C73 !important; }
+.night .v[data-class=v] li { list-style: inherit; }
+.night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
+.night .v[data-class=v] .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.night .v[data-class=v] .vbtn { border-radius: 0; background: none; }
+.night .v[data-class=v] .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.night .v[data-class=v] .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.night .v[data-class=v] .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre,.night .v[data-class=v] .vlist .vcard .vhead .vsys { background: #203240 !important; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre { color: #F0F0F0; font-size: 95%; }
+.v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
+</style><div id="vcomment"></div><script src="//cdn.bootcdn.net/ajax/libs/valine/1.4.14/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
+  lang: 'zh-cn',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></section><footer><p>Copyright © 2016 - 2021 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script></body></html>

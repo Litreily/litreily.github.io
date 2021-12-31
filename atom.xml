@@ -6,7 +6,7 @@
   <link href="https://www.litreily.top/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2021-12-21T06:13:50.773Z</updated>
+  <updated>2021-12-31T03:45:28.968Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -15,6 +15,65 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>RK3288 android 6.0 user release 相关问题处理</title>
+    <link href="https://www.litreily.top/2021/12/31/rk3288-security/"/>
+    <id>https://www.litreily.top/2021/12/31/rk3288-security/</id>
+    <published>2021-12-31T02:58:22.000Z</published>
+    <updated>2021-12-31T03:45:28.968Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;之前一直用的 &lt;code&gt;userdebug&lt;/code&gt; 版本，默认 &lt;code&gt;adb root&lt;/code&gt; 或者使用 &lt;code&gt;su&lt;/code&gt; 即可获取 root 权限。目前基于安全考虑，固件发布需要使用 &lt;code&gt;user&lt;/code&gt; 版本配置，很多功能都需要重新测试，下面对 &lt;code&gt;RK3288&lt;/code&gt; &lt;code&gt;user&lt;/code&gt; 发布版本遇到的问题进行总结。&lt;/p&gt;
+&lt;h2 id=&quot;编译固件&quot;&gt;&lt;a href=&quot;#编译固件&quot; class=&quot;headerlink&quot; title=&quot;编译固件&quot;&gt;&lt;/a&gt;编译固件&lt;/h2&gt;&lt;p&gt;首先是编译固件，将原先的 &lt;code&gt;rk3288-userdebug&lt;/code&gt; 改为 &lt;code&gt;rk3288-user&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;./FFTools/make.sh -d rk3288-tb_8846 -j16 -l rk3288-user
+./FFTools/mkupdate/mkupdate.sh -l rk3288-user
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;下面是 firefly 官方 wiki 文档对 &lt;code&gt;user&lt;/code&gt;, &lt;code&gt;userdebug&lt;/code&gt;, &lt;code&gt;eng&lt;/code&gt; 版本的对比。&lt;/p&gt;</summary>
+      
+    
+    
+    
+    <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
+    
+    
+    <category term="android" scheme="https://www.litreily.top/tags/android/"/>
+    
+    <category term="rk3288" scheme="https://www.litreily.top/tags/rk3288/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>RK3288 android 6.0 user release 获取 root 权限</title>
+    <link href="https://www.litreily.top/2021/12/30/rk3288-su/"/>
+    <id>https://www.litreily.top/2021/12/30/rk3288-su/</id>
+    <published>2021-12-30T02:22:18.000Z</published>
+    <updated>2021-12-31T03:01:24.994Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;编译 RK3288 &lt;code&gt;user&lt;/code&gt; 版本后，固件不会安装su，也就无法使用root权限，导致很多功能无法调试，非常不便。&lt;/p&gt;
+&lt;p&gt;为此，我想办法把 su 重新加到系统里了。&lt;/p&gt;
+&lt;h2 id=&quot;准备su&quot;&gt;&lt;a href=&quot;#准备su&quot; class=&quot;headerlink&quot; title=&quot;准备su&quot;&gt;&lt;/a&gt;准备su&lt;/h2&gt;&lt;p&gt;先使用 &lt;code&gt;userdebug&lt;/code&gt; 模式编译系统，将 &lt;code&gt;out/target/product/rk3288/system/xbin/su&lt;/code&gt; 保存到别的地方，因为改用 &lt;code&gt;user&lt;/code&gt; 模式编译后会覆盖掉。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;mkdir ~/backup
+cp out/target/product/rk3288/system/xbin/su ~/backup/
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;删除-su-Android-mk&quot;&gt;&lt;a href=&quot;#删除-su-Android-mk&quot; class=&quot;headerlink&quot; title=&quot;删除 su Android.mk&quot;&gt;&lt;/a&gt;删除 su Android.mk&lt;/h2&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;rm system/extras/su/Andro</summary>
+      
+    
+    
+    
+    <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
+    
+    
+    <category term="android" scheme="https://www.litreily.top/tags/android/"/>
+    
+    <category term="rk3288" scheme="https://www.litreily.top/tags/rk3288/"/>
+    
+  </entry>
   
   <entry>
     <title>RK3399 新设计工控机配置指南</title>
@@ -967,63 +1026,6 @@ EOF
     <category term="shell" scheme="https://www.litreily.top/tags/shell/"/>
     
     <category term="tftp" scheme="https://www.litreily.top/tags/tftp/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>NBNS客户端的C语言实现</title>
-    <link href="https://www.litreily.top/2020/03/15/nbns_code/"/>
-    <id>https://www.litreily.top/2020/03/15/nbns_code/</id>
-    <published>2020-03-15T09:01:33.000Z</published>
-    <updated>2021-05-28T03:12:11.503Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;接上一篇&lt;a href=&quot;/2020/02/28/nbns/&quot;&gt;【网络协议详解1 - NBNS】&lt;/a&gt;对NBNS的介绍，这一篇将要讲述使用C语言如何实现一个NBNS客户端，用于向局域网内其它设备发送NBNS NODE STATUS QUERY，并将接收到的RESPONSE信息打印出来。其实也就是一个UDP socket的实例。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/assets/network/udp-socket.png&quot; alt=&quot;UDP socket flowchart&quot;&gt;&lt;/p&gt;
-&lt;p&gt;编写一个客户端，首先要清楚它要完成什么任务，进而确定完成任务的方法和步骤。其任务很简单，就是NBNS数据包的发送和接收，也就是一个简单的socket收发进程。实现主要分以下几步：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;strong&gt;组包&lt;/strong&gt;得到NBNS NODE STATUS QUERY&lt;/li&gt;
-&lt;li&gt;发送NBNS NODE STATUS QUERY&lt;/li&gt;
-&lt;li&gt;接收RESPONSE并解析&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h2 id=&quot;include-amp-define&quot;&gt;&lt;a href=&quot;#include-amp-define&quot; class=&quot;headerlink&quot; title=&quot;include &amp;amp; define&quot;&gt;&lt;/a&gt;include &amp;amp; define&lt;/</summary>
-      
-    
-    
-    
-    <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
-    
-    
-    <category term="C/C++" scheme="https://www.litreily.top/tags/C-C/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>使用油猴脚本批量下载canvas图片</title>
-    <link href="https://www.litreily.top/2020/03/15/canvas-dl/"/>
-    <id>https://www.litreily.top/2020/03/15/canvas-dl/</id>
-    <published>2020-03-15T09:01:33.000Z</published>
-    <updated>2021-05-28T03:12:11.503Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;女友最近在网上下载一些北大网盘的pdf&lt;a href=&quot;https://disk.pku.edu.cn/#/link/3A7748E0466521E3E68A0CBA4C24DE20?gns=AE26ACF837E24D51B1EC40E0A80A5D23%2F7F0E54D7D92343B1B62031B1C41F2280&quot;&gt;文档&lt;/a&gt;，结果发现没有下载接口，另存为也只能存储单张图片。找我帮忙，这时候发现程序员男票的好处了哈。&lt;/p&gt;
-&lt;h2 id=&quot;分析页面&quot;&gt;&lt;a href=&quot;#分析页面&quot; class=&quot;headerlink&quot; title=&quot;分析页面&quot;&gt;&lt;/a&gt;分析页面&lt;/h2&gt;&lt;p&gt;一开始想着使用Chrome调试工具看下pdf链接，发现这个网盘居然不是直接获取的pdf文件，而是使用js脚本动态渲染生成的，涨知识了。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/assets/canvas/pdf-js.png&quot; alt=&quot;pdf-combine js&quot;&gt;&lt;/p&gt;
-&lt;p&gt;那看看是否可以以图片形式批量下载呢，结果查看pdf单页的html结构发现，这居然是个canvas!!!还不是普通图片，而是画布。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/assets/canvas/canvas.png&quot; alt=&quot;cancvs&quot;&gt;&lt;/p&gt;
-&lt;h2 id=&quot;下载插件&quot;&gt;&lt;a href=&quot;#下载插件&quot;</summary>
-      
-    
-    
-    
-    <category term="Tools" scheme="https://www.litreily.top/categories/Tools/"/>
-    
-    
-    <category term="tampermonkey" scheme="https://www.litreily.top/tags/tampermonkey/"/>
     
   </entry>
   
