@@ -1,0 +1,262 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>RK3288 android 6.0 卡死在开机logo画面问题处理 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
+</head><link rel="stylesheet" type="text/css" href="/plugins/highlight/atom-one-dark.min.css"><script type="text/javascript" src="/plugins/highlight/highlight.min.js"></script><script>hljs.initHighlightingOnLoad();
+</script><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">RK3288 android 6.0 卡死在开机logo画面问题处理</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2022/01/11/rk3288-hang/">2022-01-11</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Embedded/">Embedded</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><h2 id="Description"><a href="#Description" class="headerlink" title="Description"></a>Description</h2><p>烧录固件后，会概率性出现卡死在开机画面无法启动的问题，但是烧录新固件后会恢复正常。对比不同机型，发现只有带<strong>摄像头功能</strong>的机型会有这个问题。</p>
+<h2 id="Root-cause"><a href="#Root-cause" class="headerlink" title="Root cause"></a>Root cause</h2><p>经过大量测试和排查，发现卡死问题源自一个文件,  <code>/data/camera/media_profiles.xml</code> , 这是一个空文件，删除后系统就正常启动了。</p>
+<p>通过使用 <code>logcat</code> 结合系统源码发现，该文件是摄像头配置文件，如果为空会导致系统循环检测该文件，并尝试从中获取摄像头配置，但是由于文件为空，导致一直获取失败，最后陷入死循环。</p>
+<pre><code class="bash">$ cd /data/camera
+$ ls
+media_profiles.xml
+</code></pre>
+<p>经过排查源码，发现系统在检查到有摄像头接入后，会将默认配置文件 <code>/etc/media_profiles_default.xml</code> 拷贝至 <code>/data/camera/media_profiles_tmp.xml</code>, 然后根据实际情况修改该tmp文件，并最终写入到 <code>/data/camera/media_profiles.xml</code> 文件中。相关函数 <code>ProduceNewXml</code>如下:</p>
+<pre><code class="c">// hardware/rockchip/camera/CameraHal/CameraHal_board_xml_parse.cpp
+int camera_board_profiles::ProduceNewXml(camera_board_profiles* profiles)
+&#123;
+     char temp_dst_file[50];
+     char dst_file[50];
+     char default_file[50];
+     int err=0;
+     int res=0;
+
+     //CheckSensorSupportDV
+     AddConnectSensorToVector(profiles);
+     size_t nCamNum =profiles-&gt;mDevideConnectVector.size();
+
+     //verrify media_xml_device is supported by board xml
+     for(int i=0; (i&lt;profiles-&gt;xml_device_count &amp;&amp; i&lt;2); i++)
+     &#123;
+         res |= ConnectDevHaveDev(profiles, (profiles-&gt;mXmlDevInfo + i));
+     &#125;
+
+     if(res == RK_RET_SUCCESS &amp;&amp; profiles-&gt;xml_device_count==(int)nCamNum)&#123;
+         return RK_RET_SUCCESS;
+     &#125;
+
+     int fileexit = access(RK_DST_MEDIA_PROFILES_XML_PATH, 0);
+     ALOGD(&quot;judge the media profile xml fileexit = %d\n&quot;, fileexit);
+     //if((int)nCamNum&gt;=1)&#123;
+     if((int)nCamNum&gt;=1 &amp;&amp; fileexit == -1)&#123;
+         LOG1(&quot;enter produce new xml\n&quot;);
+         //new xml file name
+         strlcpy(default_file, RK_DEFAULT_MEDIA_PROFILES_XML_PATH, sizeof(default_file));
+         strlcpy(dst_file, RK_DST_MEDIA_PROFILES_XML_PATH, sizeof(dst_file));
+         strlcpy(temp_dst_file, RK_TMP_MEDIA_PROFILES_XML_PATH, sizeof(temp_dst_file));
+
+         for(int i=0; i&lt;(int)nCamNum; i++)&#123;
+             CheckSensorSupportDV(profiles-&gt;mDevideConnectVector[i]);
+         &#125;
+
+         //write name to xml
+         err = WriteDevNameTOXML(profiles, default_file, temp_dst_file);
+         if(err)&#123;
+             ALOGE(&quot;write dev name to xml failed\n&quot;);
+             goto end;
+         &#125;
+
+         //modify xml
+         err = ModifyMediaProfileXML( profiles, temp_dst_file, dst_file);
+         if(err)&#123;
+             ALOGE(&quot;modify xml failed\n&quot;);
+             goto end;
+         &#125;
+
+         LOG1(&quot;exit produce new xml\n&quot;);
+         &#125;
+
+ end:
+     return err;
+
+&#125;
+</code></pre>
+<p>其中使用了宏定义变量，定义如下：</p>
+<pre><code class="c">//  hardware/rockchip/camera/CameraHal/CameraHal_board_xml_parse.h
+#define RK_DEFAULT_MEDIA_PROFILES_XML_PATH &quot;/etc/media_profiles_default.xml&quot;
+#if defined(ANDROID_5_X)
+#define RK_DST_MEDIA_PROFILES_XML_PATH &quot;/data/camera/media_profiles.xml&quot;
+#define RK_TMP_MEDIA_PROFILES_XML_PATH &quot;/data/camera/media_profiles_tmp.xml&quot;
+#else
+#define RK_DST_MEDIA_PROFILES_XML_PATH &quot;/data/media_profiles.xml&quot;
+#define RK_TMP_MEDIA_PROFILES_XML_PATH &quot;/data/media_profiles_tmp.xml&quot;
+#endif
+</code></pre>
+<p>至于为何会出现该空文件，有可能是在写入过程中掉电导致的，但是目前没有重现。</p>
+<h2 id="reproduce"><a href="#reproduce" class="headerlink" title="reproduce"></a>reproduce</h2><p>手动重现的方法比较简单，就是新建一个空文件 <code>data/camera/media_profiles.xml</code>, 新建后无论什么机型都会卡死在logo界面，这个bug应该是系统原生就有的。</p>
+<pre><code class="bash">cd /data/camera/
+touch media_profiles.xml
+</code></pre>
+<h2 id="related"><a href="#related" class="headerlink" title="related"></a>related</h2><h3 id="files"><a href="#files" class="headerlink" title="files"></a>files</h3><p>相关文件如下：</p>
+<pre><code class="bash"># line 676 MediaProfiles::getInstance
+frameworks/av/media/libmedia/MediaProfiles.cpp
+
+hardware/rockchip/camera/CameraHal/*
+hardware/rockchip/camera/CameraHal/CameraHal_board_xml_parse.h
+hardware/rockchip/camera/CameraHal/CameraHal_MediaProfile.cpp
+
+# int camera_board_profiles::LoadSensor(camera_board_profiles* profiles)
+# 01-10 16:08:27.266   205   205 D CameraHal: read cam name from xml(/data/camera/media_profiles.xml)
+hardware/rockchip/camera/CameraHal/CameraHal_board_xml_parse.cpp
+</code></pre>
+<pre><code class="bash">$ cd /media/hdd1/wugt/rk3288-android6.0-sdk/out/target/product/rk3288  
+$ grep -rn media_profiles.xml
+Binary file obj/lib/camera.rk30board.so matches
+Binary file obj/lib/libmedia.so matches
+Binary file obj/PACKAGING/systemimage_intermediates/system.img matches
+Binary file obj/SHARED_LIBRARIES/camera.rk30board_intermediates/LINKED/camera.rk30board.so matches
+Binary file obj/SHARED_LIBRARIES/camera.rk30board_intermediates/PACKED/camera.rk30board.so matches
+Binary file obj/SHARED_LIBRARIES/camera.rk30board_intermediates/CameraHal_board_xml_parse.o matches
+Binary file obj/SHARED_LIBRARIES/camera.rk30board_intermediates/CameraHal_Module.o matches
+Binary file obj/SHARED_LIBRARIES/libmedia_intermediates/LINKED/libmedia.so matches
+Binary file obj/SHARED_LIBRARIES/libmedia_intermediates/PACKED/libmedia.so matches
+Binary file obj/SHARED_LIBRARIES/libmedia_intermediates/MediaProfiles.o matches
+Binary file system.img matches
+Binary file system/lib/hw/camera.rk30board.so matches
+Binary file system/lib/libmedia.so matches
+Binary file symbols/system/lib/hw/camera.rk30board.so matches
+Binary file symbols/system/lib/libmedia.so matches
+</code></pre>
+<h3 id="logs"><a href="#logs" class="headerlink" title="logs"></a>logs</h3><p>相关log如下：</p>
+<pre><code class="bash">130|root@rk3288:/ # logcat  |grep profile &amp;
+[1] 1070 1071
+root@rk3288:/ # 01-07 11:08:57.330   205   205 E CameraHal: camera_get_number_of_cameras(695): board profiles cam num 7
+01-07 11:08:57.330   205   205 D CameraHal: read cam name from xml(/data/camera/media_profiles.xml)
+01-07 11:08:57.352   205   205 D CameraHal: camera_get_number_of_cameras(1146): meida_profiles_xml_control time (43839)us
+01-07 11:08:59.981   171   171 D MediaProfiles: CameraGroupFound(618): media_profiles_id: 0x0
+01-07 11:08:59.982   171   171 D MediaProfiles: getInstance(713): Create instance from /data/camera/media_profiles.xml
+01-07 11:09:01.087   543   543 D MediaProfiles: CameraGroupFound(618): media_profiles_id: 0x0
+01-07 11:09:01.088   543   543 D MediaProfiles: getInstance(713): Create instance from /data/camera/media_profiles.xml
+01-07 11:09:06.287   558   558 D MediaProfiles: CameraGroupFound(618): media_profiles_id: 0x0
+01-07 11:09:06.287   558   558 D MediaProfiles: getInstance(713): Create instance from /data/camera/media_profiles.xml
+01-07 11:09:11.466   584   584 D MediaProfiles: CameraGroupFound(618): media_profiles_id: 0x0
+01-07 11:09:11.466   584   584 D MediaProfiles: getInstance(713): Create instance from /data/camera/media_profiles.xml
+01-07 11:09:15.695   610   610 D MediaProfiles: CameraGroupFound(618): media_profiles_id: 0x0
+01-07 11:09:15.695   610   610 D MediaProfiles: getInstance(713): Create instance from /data/camera/media_profiles.xml
+01-07 11:09:20.920   636   636 D MediaProfiles: CameraGroupFound(618): media_profiles_id: 0x0
+01-07 11:09:20.920   636   636 D MediaProfiles: getInstance(713): Create instance from /data/camera/media_profiles.xml
+01-07 11:09:26.222   671   671 D MediaProfiles: CameraGroupFound(618): media_profiles_id: 0x0
+01-07 11:09:26.222   671   671 D MediaProfiles: getInstance(713): Create instance from /data/camera/media_profiles.xml
+01-07 11:09:31.403   696   696 D MediaProfiles: CameraGroupFound(618): media_profiles_id: 0x0
+01-07 11:09:31.403   696   696 D MediaProfiles: getInstance(713): Create instance from /data/camera/media_profiles.xml
+01-07 11:09:35.640   725   725 D MediaProfiles: CameraGroupFound(618): media_profiles_id: 0x0
+01-07 11:09:35.640   725   725 D MediaProfiles: getInstance(713): Create instance from /data/camera/media_profiles.xml
+01-07 11:09:40.841   748   748 D MediaProfiles: CameraGroupFound(618): media_profiles_id: 0x0
+01-07 11:09:40.841   748   748 D MediaProfiles: getInstance(713): Create instance from /data/camera/media_profiles.xml
+01-07 11:09:46.009   770   770 D MediaProfiles: CameraGroupFound(618): media_profiles_id: 0x0
+01-07 11:09:46.009   770   770 D MediaProfiles: getInstance(713): Create instance from /data/camera/media_profiles.xml
+01-07 11:09:51.775   797   797 E CameraHal: camera_get_number_of_cameras(695): board profiles cam num 7
+01-07 11:09:51.775   797   797 D CameraHal: read cam name from xml(/data/camera/media_profiles.xml)
+01-07 11:09:51.782   797   797 D CameraHal: camera_get_number_of_cameras(1146): meida_profiles_xml_control time (21590)us
+
+root@rk3288:/ #
+root@rk3288:/ #
+root@rk3288:/ # cd /data/camera/
+root@rk3288:/data/camera #
+root@rk3288:/data/camera # 01-07 11:10:18.581   794   794 D MediaProfiles: CameraGroupFound(618): media_profiles_id: 0x0
+01-07 11:10:18.581   794   794 D MediaProfiles: getInstance(713): Create instance from /data/camera/media_profiles.xml
+[   85.094068] init: couldn&#39;t write 0 to /dev/cpuset/foreground/tasks: No such file or directory
+01-07 11:10:19.342  1079  1079 E CameraHal: camera_get_number_of_cameras(695): board profiles cam num 7
+01-07 11:10:19.342  1079  1079 D CameraHal: read cam name from xml(/data/camera/media_profiles.xml)
+01-07 11:10:19.350  1079  1079 D CameraHal: camera_get_number_of_cameras(1146): meida_profiles_xml_control time (21315)us
+
+root@rk3288:/data/camera # 01-07 11:10:19.861  1077  1077 D MediaProfiles: CameraGroupFound(618): media_profiles_id: 0x0
+01-07 11:10:19.861  1077  1077 D MediaProfiles: getInstance(713): Create instance from /data/camera/media_profiles.xml
+
+root@rk3288:/data/camera #
+root@rk3288:/data/camera # [   90.250059] init: couldn&#39;t write 0 to /dev/cpuset/foreground/tasks: No such file or directory
+01-07 11:10:24.556  1207  1207 D CameraHal: camera_get_number_of_cameras(1146): meida_profiles_xml_control time (20242)us
+01-07 11:10:25.081  1208  1208 D MediaProfiles: CameraGroupFound(618): media_profiles_id: 0x0
+01-07 11:10:25.081  1208  1208 D MediaProfiles: getInstance(713): Create instance from /data/camera/media_profiles.xml
+root@rk3288:/data/camera #
+root@rk3288:/data/camera #
+root@rk3288:/data/camera # rm media_profiles.xml
+root@rk3288:/data/camera # [   95.425765] init: couldn&#39;t write 0 to /dev/cpuset/foreground/tasks: No such file or directory
+01-07 11:10:29.853  1343  1343 E CameraHal: camera_get_number_of_cameras(695): board profiles cam num 7
+01-07 11:10:29.853  1343  1343 D CameraHal: read cam name from xml(/data/camera/media_profiles.xml)
+01-07 11:10:29.860  1343  1343 D CameraHal: camera_get_number_of_cameras(1146): meida_profiles_xml_control time (22146)us
+01-07 11:10:30.372  1344  1344 D MediaProfiles: CameraGroupFound(618): media_profiles_id: 0x0
+01-07 11:10:30.372  1344  1344 E MediaProfiles: WARNING!!!! getInstance(689): cameraHal version(1.65.1) after(0.3.0x33),but don&#39;t have file(/data/camera/media_profiles.xml)
+[  116.602227] healthd: battery l=100 v=0 t=42.4 h=2 st=2 chg=a 2022-01-07 03:10:50.769561638 UTC
+[  116.814715] lowmemorykiller: lowmem_shrink: convert oom_adj to oom_score_adj:
+[  116.814743] lowmemorykiller: oom_adj 0 =&gt; oom_score_adj 0
+[  116.814754] lowmemorykiller: oom_adj 1 =&gt; oom_score_adj 58
+[  116.814764] lowmemorykiller: oom_adj 2 =&gt; oom_score_adj 117
+[  116.814773] lowmemorykiller: oom_adj 3 =&gt; oom_score_adj 176
+[  116.814803] lowmemorykiller: oom_adj 9 =&gt; oom_score_adj 529
+[  116.814813] lowmemorykiller: oom_adj 15 =&gt; oom_score_adj 1000
+</code></pre>
+<h2 id="workaround"><a href="#workaround" class="headerlink" title="workaround"></a>workaround</h2><p>临时解决方案：在出现问题后通过 <code>adb</code>指令删除文件 <code>/data/camera/media_profiles.xml</code>, 或者使用默认配置文件覆盖它。</p>
+<pre><code class="bash">cd /data/camera
+rm media_profiles.xml
+
+# or
+
+cp /etc/media_profiles_default.xml /data/camera/
+</code></pre>
+<h2 id="solution"><a href="#solution" class="headerlink" title="solution"></a>solution</h2><p>最终解决方案，就是在检查到 <code>/data/camera/media_profiles.xml</code> 后，查看文件大小，如果为空或者小于某个值，则认为该文件异常，将其删除。</p>
+<pre><code class="c">diff --git a/media/libmedia/MediaProfiles.cpp b/media/libmedia/MediaProfiles.cpp
+index fe0126a..3258b71 100755
+--- a/media/libmedia/MediaProfiles.cpp
++++ b/media/libmedia/MediaProfiles.cpp
+@@ -688,6 +688,17 @@ MediaProfiles::getInstance()
+                             ALOGE(&quot;WARNING!!!! %s(%d): cameraHal version(%s) after(0.3.0x33),but don&#39;t have file(%s)&quot;,
+                                      __FUNCTION__,__LINE__,camerahal_value,defaultXmlFile);
+                         &#125;
++                        else &#123;
++                            fseek(fp, 0L, SEEK_END);
++                            int size = ftell(fp);
++
++                            if (size &lt; 1000) &#123;
++                                ALOGE(&quot;WARNING!!!! %s(%d): file(%s) size(%d) is too small, delete it&quot;,
++                                       __FUNCTION__,__LINE__,defaultXmlFile,size);
++                                fp = NULL;
++                                remove(defaultXmlFile);
++                            &#125;
++                        &#125;
+                     &#125; else &#123;
+                         if (fp == NULL)
+                             ALOGD(&quot;THIS IS RIGHT: %s(%d): cameraHal version(%s) before(0.3.33),so don&#39;t have file(%s)&quot;,
+</code></pre>
+<p>删除后，系统能够正常启动，并且在下次启动后，会自动生成新文件。</p>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2022/01/11/rk3288-hang/">https://www.litreily.top/2022/01/11/rk3288-hang/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tags"></i><a href="/tags/android/">android</a><a href="/tags/rk3288/">rk3288</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Description"><span class="toc-number">1.</span> <span class="toc-text">Description</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Root-cause"><span class="toc-number">2.</span> <span class="toc-text">Root cause</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#reproduce"><span class="toc-number">3.</span> <span class="toc-text">reproduce</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#related"><span class="toc-number">4.</span> <span class="toc-text">related</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#files"><span class="toc-number">4.1.</span> <span class="toc-text">files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#logs"><span class="toc-number">4.2.</span> <span class="toc-text">logs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#workaround"><span class="toc-number">5.</span> <span class="toc-text">workaround</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#solution"><span class="toc-number">6.</span> <span class="toc-text">solution</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="next" href="/2021/12/31/rk3288-security/">RK3288 android 6.0 user release 相关问题处理 &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+.night .v[data-class=v] a:hover { color: #216C73 !important; }
+.night .v[data-class=v] li { list-style: inherit; }
+.night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
+.night .v[data-class=v] .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.night .v[data-class=v] .vbtn { border-radius: 0; background: none; }
+.night .v[data-class=v] .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.night .v[data-class=v] .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.night .v[data-class=v] .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre,.night .v[data-class=v] .vlist .vcard .vhead .vsys { background: #203240 !important; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre { color: #F0F0F0; font-size: 95%; }
+.v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
+</style><div id="vcomment"></div><script src="//cdn.bootcdn.net/ajax/libs/valine/1.4.14/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
+  lang: 'zh-cn',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></section><footer><p>Copyright © 2016 - 2022 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script></body></html>

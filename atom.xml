@@ -6,7 +6,7 @@
   <link href="https://www.litreily.top/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2021-12-31T03:45:28.968Z</updated>
+  <updated>2022-01-11T04:31:07.119Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -15,6 +15,37 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>RK3288 android 6.0 卡死在开机logo画面问题处理</title>
+    <link href="https://www.litreily.top/2022/01/11/rk3288-hang/"/>
+    <id>https://www.litreily.top/2022/01/11/rk3288-hang/</id>
+    <published>2022-01-11T03:49:02.000Z</published>
+    <updated>2022-01-11T04:31:07.119Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;Description&quot;&gt;&lt;a href=&quot;#Description&quot; class=&quot;headerlink&quot; title=&quot;Description&quot;&gt;&lt;/a&gt;Description&lt;/h2&gt;&lt;p&gt;烧录固件后，会概率性出现卡死在开机画面无法启动的问题，但是烧录新固件后会恢复正常。对比不同机型，发现只有带&lt;strong&gt;摄像头功能&lt;/strong&gt;的机型会有这个问题。&lt;/p&gt;
+&lt;h2 id=&quot;Root-cause&quot;&gt;&lt;a href=&quot;#Root-cause&quot; class=&quot;headerlink&quot; title=&quot;Root cause&quot;&gt;&lt;/a&gt;Root cause&lt;/h2&gt;&lt;p&gt;经过大量测试和排查，发现卡死问题源自一个文件,  &lt;code&gt;/data/camera/media_profiles.xml&lt;/code&gt; , 这是一个空文件，删除后系统就正常启动了。&lt;/p&gt;
+&lt;p&gt;通过使用 &lt;code&gt;logcat&lt;/code&gt; 结合系统源码发现，该文件是摄像头配置文件，如果为空会导致系统循环检测该文件，并尝试从中获取摄像头配置，但是由于文件为空，导致一直获取失败，最后陷入死循环。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;$ cd /data/camera
+$ ls
+media_profiles.xml
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;经过排查源码，发现系统在</summary>
+      
+    
+    
+    
+    <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
+    
+    
+    <category term="android" scheme="https://www.litreily.top/tags/android/"/>
+    
+    <category term="rk3288" scheme="https://www.litreily.top/tags/rk3288/"/>
+    
+  </entry>
   
   <entry>
     <title>RK3288 android 6.0 user release 相关问题处理</title>
@@ -989,43 +1020,6 @@ lftp username@1.2.3.4:~&amp;gt; ls
     <category term="shell" scheme="https://www.litreily.top/tags/shell/"/>
     
     <category term="ftp" scheme="https://www.litreily.top/tags/ftp/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>简单实用的tftp烧录image脚本</title>
-    <link href="https://www.litreily.top/2020/04/27/tftp/"/>
-    <id>https://www.litreily.top/2020/04/27/tftp/</id>
-    <published>2020-04-27T11:21:03.000Z</published>
-    <updated>2021-05-28T03:12:11.503Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;烧录FW image时，经常需要打开带有UI界面的tftp客户端，然后输入IP，选择FW image，然后点击写入，很是繁琐。&lt;/p&gt;
-&lt;p&gt;为了简化这个过程，我决定使用shell script，在win10中自带WSL(windows subsystem for linux)，配合zsh食用。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;zsh&quot;&gt;#!/bin/zsh
-# install to ~/bin/burnImage
-
-[ &amp;quot;x$1&amp;quot; = &amp;quot;x&amp;quot;  ] &amp;amp;&amp;amp; echo &amp;quot;usage: $&amp;#123;0##*/&amp;#125; &amp;lt;imagefile&amp;gt;&amp;quot; &amp;amp;&amp;amp; exit 1
-
-tftp 192.168.1.1 &amp;lt;&amp;lt;-EOF &amp;gt; /dev/null
-    binary
-    put $1
-EOF
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;脚本使用&lt;code&gt;tftp&lt;/code&gt;连接tftp server 192.168.1.1, 然后进入&lt;code&gt;binary&lt;/code&gt;模式，最后将image文件&lt;code&gt;$1&lt;/code&gt;传输至server端。&lt;/p&gt;
-&lt;p&gt;使用方法很简单，保证该文件&lt;code&gt;burnImage&lt;/code&gt;所在目录在环境变量&lt;c</summary>
-      
-    
-    
-    
-    <category term="Linux" scheme="https://www.litreily.top/categories/Linux/"/>
-    
-    
-    <category term="shell" scheme="https://www.litreily.top/tags/shell/"/>
-    
-    <category term="tftp" scheme="https://www.litreily.top/tags/tftp/"/>
     
   </entry>
   
