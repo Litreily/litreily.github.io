@@ -1,0 +1,653 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>RK3288 Android 10 系统开发[1] - 支持 EC20 4G 模块 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
+</head><link rel="stylesheet" type="text/css" href="/plugins/highlight/atom-one-dark.min.css"><script type="text/javascript" src="/plugins/highlight/highlight.min.js"></script><script>hljs.initHighlightingOnLoad();
+</script><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">RK3288 Android 10 系统开发[1] - 支持 EC20 4G 模块</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2022/02/21/android-4g/">2022-02-21</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Android/">Android</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>根据业务需求，需要升级安卓系统，从 <code>Android6.0</code> 升级到 <code>Android10.0</code>, 本节介绍如何移植 <code>EC20 4G</code> 模块。</p>
+<p>主要参考 <code>Quetecl</code> 提供的以下文档。</p>
+<ul>
+<li><code>Quectel_WCDMA&amp;LTE_Linux_USB_Driver_User_Guide_V1.8.pdf</code></li>
+<li><code>Quectel_Android_RIL_Driver_User_Guide_V1.9.pdf</code></li>
+</ul>
+<h2 id="kernel"><a href="#kernel" class="headerlink" title="kernel"></a>kernel</h2><p>内核部分，需要修改两部分，<code>EC20</code>模块的使能和供电, 以及 <code>EC20</code> 联网所需的驱动移植。</p>
+<h3 id="EC20-供电使能"><a href="#EC20-供电使能" class="headerlink" title="EC20 供电使能"></a>EC20 供电使能</h3><p>针对供电使能问题，<code>dts</code> 中需要添加 <code>EC20</code> 模块的供电接口信息， <code>init-gpios</code> 对应EC20 供电接口， <code>4g_rst_gpio</code> 对应重置接口，这个可以参考原理图获取。</p>
+<pre><code class="c"> &amp;pinctrl &#123;
++       //used for init some gpio
++       // GPIO0_B5 : EC20 4G module Power EN   (1)
++       // GPIO8_A0 : EEPROM Write protect              (0)
++       // GPIO5_C3 : EC20 4G module RF Disable (1)
++       init-gpios = &lt; &amp;gpio0 RK_PB5 GPIO_ACTIVE_LOW&gt;;
++       4g_rst_gpio = &lt;&amp;gpio5 RK_PB4 GPIO_ACTIVE_HIGH&gt;;
++
+        backlight &#123;
+                bl_en: bl-en &#123;
+                        rockchip,pins = &lt;7 2 RK_FUNC_GPIO &amp;pcfg_pull_none&gt;;
+</code></pre>
+<p>除了 <code>dts</code> 的修改外，还需要修改 <code>pinctrl</code> 驱动程序。</p>
+<pre><code class="c">--- a/drivers/pinctrl/pinctrl-rockchip.c
++++ b/drivers/pinctrl/pinctrl-rockchip.c
+@@ -41,6 +41,7 @@
+ #include &lt;linux/mfd/syscon.h&gt;
+ #include &lt;linux/rockchip/cpu.h&gt;
+ #include &lt;dt-bindings/pinctrl/rockchip.h&gt;
++#include &lt;linux/of_gpio.h&gt;
+ 
+ #include &quot;core.h&quot;
+ #include &quot;pinconf.h&quot;
+@@ -433,6 +434,14 @@ struct rockchip_pmx_func &#123;
+        u8                      ngroups;
+ &#125;;
+ 
++/*
++ * porting from android6.0 
++ */
++struct gpio_init_config &#123;
++       struct gpio *gpios;
++       int nr_gpios;
++&#125;;
++
+ struct rockchip_pinctrl &#123;
+        struct regmap                   *regmap_base;
+        int                             reg_size;
+@@ -446,6 +455,8 @@ struct rockchip_pinctrl &#123;
+        unsigned int                    ngroups;
+        struct rockchip_pmx_func        *functions;
+        unsigned int                    nfunctions;
++       /* porting from android6.0 */
++       struct gpio_init_config         *config;
+ &#125;;
+ 
+ static struct regmap_config rockchip_regmap_config = &#123;
+@@ -4331,6 +4342,45 @@ static int rk3308b_soc_data_init(struct rockchip_pinctrl *info)
+        return 0;
+ &#125;
+ 
++/*
++ * porting from android6.0
++ */
++static struct gpio_init_config *
++of_get_gpio_init_config(struct device *dev, struct device_node *np)
++&#123;
++       struct gpio_init_config *config;
++       int gpio, i;
++       enum of_gpio_flags flags;
++
++       config = devm_kzalloc(dev,
++                       sizeof(struct gpio_init_config),
++                       GFP_KERNEL);
++       if (!config)
++               return ERR_PTR(-ENOMEM);
++
++       /* Fetch GPIOs. */
++       config-&gt;nr_gpios = of_gpio_named_count(np, &quot;init-gpios&quot;);
++
++       config-&gt;gpios = devm_kzalloc(dev,
++                               sizeof(struct gpio) * config-&gt;nr_gpios,
++                               GFP_KERNEL);
++       if (!config-&gt;gpios)
++               return ERR_PTR(-ENOMEM);
++
++       for (i = 0; i &lt; config-&gt;nr_gpios; i++) &#123;
++               //gpio = of_get_named_gpio(np, &quot;gpios&quot;, i);
++               gpio = of_get_named_gpio_flags(np, &quot;init-gpios&quot;, i, &amp;flags);
++               if (gpio &lt; 0)
++                       break;
++               config-&gt;gpios[i].gpio = gpio;
++               config-&gt;gpios[i].flags = flags &amp; OF_GPIO_ACTIVE_LOW;
++
++               printk(&quot;%s:gpio[%d] = %d, value = %lu\n&quot;,__func__, i, gpio, config-&gt;gpios[i].flags);
++       &#125;
++
++       return config;
++&#125;
++
+ static int rockchip_pinctrl_probe(struct platform_device *pdev)
+ &#123;
+        struct rockchip_pinctrl *info;
+@@ -4339,7 +4389,9 @@ static int rockchip_pinctrl_probe(struct platform_device *pdev)
+        struct device_node *np = pdev-&gt;dev.of_node, *node;
+        struct resource *res;
+        void __iomem *base;
+-       int ret;
++       int ret, i, gpio;
++       enum of_gpio_flags flags;
++       int gpio_active = 0;
+ 
+        if (!dev-&gt;of_node) &#123;
+                dev_err(dev, &quot;device tree node not found\n&quot;);
+@@ -4419,6 +4471,41 @@ static int rockchip_pinctrl_probe(struct platform_device *pdev)
+                return ret;
+        &#125;
+ 
++       /* porting from android6.0 */
++       np = dev-&gt;of_node;
++       if (of_find_property(np, &quot;init-gpios&quot;, NULL)) &#123;
++               info-&gt;config = of_get_gpio_init_config(&amp;pdev-&gt;dev, np);
++               if (IS_ERR(info-&gt;config))
++               return PTR_ERR(info-&gt;config);
++
++               ret = gpio_request_array(info-&gt;config-&gt;gpios, info-&gt;config-&gt;nr_gpios);
++               if (ret) &#123;
++                       dev_err(&amp;pdev-&gt;dev, &quot;Could not obtain init GPIOs: %d\n&quot;, ret);
++                       return ret;
++               &#125;
++
++               for(i = 0; i &lt; info-&gt;config-&gt;nr_gpios; i++) &#123;
++                       gpio_direction_output(info-&gt;config-&gt;gpios[i].gpio, info-&gt;config-&gt;gpios[i].flags);
++               &#125;
++       &#125;
++       // Reset 4G module
++       gpio = of_get_named_gpio_flags(np, &quot;4g_rst_gpio&quot;, 0, &amp;flags);
++       if (!gpio_is_valid(gpio)) &#123;
++               dev_err(&amp;pdev-&gt;dev, &quot;invalid 4g rst gpio%d\n&quot;, gpio);
++       &#125; else &#123;
++               ret = devm_gpio_request(&amp;pdev-&gt;dev, gpio, &quot;4g_rst_gpio&quot;);
++               if (ret) &#123;
++                       dev_err(&amp;pdev-&gt;dev, &quot;failed to request GPIO%d for 4g_rst\n&quot;, gpio);
++                       return ret;
++               &#125;
++               gpio_active = !(flags &amp; OF_GPIO_ACTIVE_LOW);
++               gpio_direction_output(gpio, gpio_active);
++               mdelay(350);
++               gpio_direction_output(gpio, !gpio_active);
++               printk(&quot;\n\n!!!!!!!!!!!4G reset!!!!!!!!!!!!!!!!!!!active=%d\n\n&quot;, gpio_active);
++       &#125;
++       /* porting end */
++
+        platform_set_drvdata(pdev, info);
+ 
+        return 0;
+</code></pre>
+<p>以上修改主要是为了使能 <code>EC20</code>模块，同时在开机过程中重置 <code>4G</code> 模块，以保证 <code>4G</code> 模块正常供电。</p>
+<h3 id="EC20-驱动移植"><a href="#EC20-驱动移植" class="headerlink" title="EC20 驱动移植"></a>EC20 驱动移植</h3><p><code>EC20</code> 驱动相关文件如下：</p>
+<pre><code>drivers/net/usb/qmi_wwan.c
+drivers/usb/serial/option.c
+drivers/usb/serial/qcserial.c
+drivers/usb/serial/usb_wwan.c
+</code></pre>
+<p><code>EC20</code> 包含以下4种工作模式：</p>
+<ol>
+<li> <code>USB Serial</code></li>
+<li><code>GobiNet</code></li>
+<li><code>QMI WWAN</code></li>
+<li><code>CDC ACM</code></li>
+</ol>
+<p>我们使用的是第一种， <code>USB Serial</code>. 根据参考文档一一修改。</p>
+<h4 id="添加-pid-vid"><a href="#添加-pid-vid" class="headerlink" title="添加 pid vid"></a>添加 <code>pid</code> <code>vid</code></h4><p>首先添加 <code>EC20</code> 模块的 <code>pid</code>, <code>vid</code>, 否则驱动无法识别设备。</p>
+<ul>
+<li><code>drivers/usb/serial/option.c</code></li>
+</ul>
+<pre><code class="c">@@ -573,6 +573,18 @@ static void option_instat_callback(struct urb *urb);
+ 
+ 
+ static const struct usb_device_id option_ids[] = &#123;
++#if 1 // Added by Quectel
++       &#123; USB_DEVICE(0x05C6, 0x9090)  &#125;, /* Quectel UC15 */
++       &#123; USB_DEVICE(0x05C6, 0x9003)  &#125;, /* Quectel UC20 */
++       &#123; USB_DEVICE(0x2C7C, 0x0125)  &#125;, /* Quectel EC25 */
++       &#123; USB_DEVICE(0x2C7C, 0x0121)  &#125;, /* Quectel EC21 */
++       &#123; USB_DEVICE(0x05C6, 0x9215)  &#125;, /* Quectel EC20 */
++       &#123; USB_DEVICE(0x2C7C, 0x0191)  &#125;, /* Quectel EG91 */
++       &#123; USB_DEVICE(0x2C7C, 0x0195)  &#125;, /* Quectel EG95 */
++       &#123; USB_DEVICE(0x2C7C, 0x0306)  &#125;, /* Quectel EG06/EP06/EM06 */
++       &#123; USB_DEVICE(0x2C7C, 0x0296)  &#125;, /* Quectel BG96 */
++       &#123; USB_DEVICE(0x2C7C, 0x0435)  &#125;, /* Quectel AG35 */
++#endif
+        &#123; USB_DEVICE(0x1286, 0x4e3c) &#125;,
+        &#123; USB_DEVICE(OPTION_VENDOR_ID, OPTION_PRODUCT_COLT) &#125;,
+        &#123; USB_DEVICE(OPTION_VENDOR_ID, OPTION_PRODUCT_RICOLA) &#125;,
+</code></pre>
+<p>此外，为了防止与其它设备的id冲突，需要修改以下文件，禁用部分干扰项。</p>
+<ul>
+<li><code>drivers/net/usb/qmi_wwan.c</code></li>
+</ul>
+<pre><code class="c">--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -1332,7 +1332,8 @@ static const struct usb_device_id products[] = &#123;
+        &#123;QMI_GOBI_DEVICE(0x05c6, 0x9225)&#125;,      /* Sony Gobi 2000 Modem device (N0279, VU730) */
+        &#123;QMI_GOBI_DEVICE(0x05c6, 0x9245)&#125;,      /* Samsung Gobi 2000 Modem device (VL176) */
+        &#123;QMI_GOBI_DEVICE(0x03f0, 0x251d)&#125;,      /* HP Gobi 2000 Modem device (VP412) */
+-       &#123;QMI_GOBI_DEVICE(0x05c6, 0x9215)&#125;,      /* Acer Gobi 2000 Modem device (VP413) */
++       // Disabled for prevent conflict from quectel EC20 driver
++       //&#123;QMI_GOBI_DEVICE(0x05c6, 0x9215)&#125;,    /* Acer Gobi 2000 Modem device (VP413) */
+        &#123;QMI_FIXED_INTF(0x05c6, 0x9215, 4)&#125;,    /* Quectel EC20 Mini PCIe */
+        &#123;QMI_GOBI_DEVICE(0x05c6, 0x9265)&#125;,      /* Asus Gobi 2000 Modem device (VR305) */
+        &#123;QMI_GOBI_DEVICE(0x05c6, 0x9235)&#125;,      /* Top Global Gobi 2000 Modem device (VR306) */
+</code></pre>
+<ul>
+<li><code>drivers/usb/serial/qcserial.c</code></li>
+</ul>
+<pre><code class="c">--- a/drivers/usb/serial/qcserial.c
++++ b/drivers/usb/serial/qcserial.c
+@@ -88,7 +88,8 @@ static const struct usb_device_id id_table[] = &#123;
+        &#123;USB_DEVICE(0x03f0, 0x241d)&#125;,   /* HP Gobi 2000 QDL device (VP412) */
+        &#123;USB_DEVICE(0x03f0, 0x251d)&#125;,   /* HP Gobi 2000 Modem device (VP412) */
+        &#123;USB_DEVICE(0x05c6, 0x9214)&#125;,   /* Acer Gobi 2000 QDL device (VP413) */
+-       &#123;USB_DEVICE(0x05c6, 0x9215)&#125;,   /* Acer Gobi 2000 Modem device (VP413) */
++       // Disabled for prevent conflict from quectel EC20 driver
++       //&#123;USB_DEVICE(0x05c6, 0x9215)&#125;, /* Acer Gobi 2000 Modem device (VP413) */
+        &#123;USB_DEVICE(0x05c6, 0x9264)&#125;,   /* Asus Gobi 2000 QDL device (VR305) */
+        &#123;USB_DEVICE(0x05c6, 0x9265)&#125;,   /* Asus Gobi 2000 Modem device (VR305) */
+        &#123;USB_DEVICE(0x05c6, 0x9234)&#125;,   /* Top Global Gobi 2000 QDL device (VR306) */
+</code></pre>
+<h4 id="启用-reset-resume"><a href="#启用-reset-resume" class="headerlink" title="启用 reset_resume"></a>启用 <code>reset_resume</code></h4><p>启用 <code>reset_resume</code> 是为了防止系统进入挂起或睡眠模式后无法重新唤醒USB设备。</p>
+<ul>
+<li><code>drivers/usb/serial/option.c</code></li>
+</ul>
+<pre><code class="c">@@ -2051,6 +2063,9 @@ static struct usb_serial_driver option_1port_device = &#123;
+ #ifdef CONFIG_PM
+        .suspend           = usb_wwan_suspend,
+        .resume            = usb_wwan_resume,
++#if 1 // Added by Quectel
++       .reset_resume      = usb_wwan_resume,
++#endif
+ #endif
+ &#125;;
+ 
+</code></pre>
+<h4 id="启用-autosuspend-remote-wakeup"><a href="#启用-autosuspend-remote-wakeup" class="headerlink" title="启用 autosuspend remote wakeup"></a>启用 <code>autosuspend</code> <code>remote wakeup</code></h4><p>为了支持USB网络的自动挂起与远程唤醒，可以添加以下patch，当然这不是必须的。</p>
+<pre><code class="c">@@ -2086,6 +2101,33 @@ static int option_probe(struct usb_serial *serial,
+        if (device_flags &amp; NUMEP2 &amp;&amp; iface_desc-&gt;bNumEndpoints != 2)
+                return -ENODEV;
+ 
++#if 1 // Added by Quectel
++       //For USB Auto Suspend and Remote Wakeup
++       if (serial-&gt;dev-&gt;descriptor.idVendor == cpu_to_le16(0x05C6) &amp;&amp; 
++               serial-&gt;dev-&gt;descriptor.idProduct == cpu_to_le16(0x9090)) &#123;
++               pm_runtime_set_autosuspend_delay(&amp;serial-&gt;dev-&gt;dev, 3000);
++               usb_enable_autosuspend(serial-&gt;dev);
++               device_init_wakeup(&amp;serial-&gt;dev-&gt;dev, 1); //usb remote wakeup
++       &#125;
++       if (serial-&gt;dev-&gt;descriptor.idVendor == cpu_to_le16(0x05C6) &amp;&amp;
++               serial-&gt;dev-&gt;descriptor.idProduct == cpu_to_le16(0x9003)) &#123;
++               pm_runtime_set_autosuspend_delay(&amp;serial-&gt;dev-&gt;dev, 3000);
++               usb_enable_autosuspend(serial-&gt;dev);
++               device_init_wakeup(&amp;serial-&gt;dev-&gt;dev, 1); //usb remote wakeup
++       &#125;
++       if (serial-&gt;dev-&gt;descriptor.idVendor == cpu_to_le16(0x05C6) &amp;&amp;
++               serial-&gt;dev-&gt;descriptor.idProduct == cpu_to_le16(0x9215)) &#123;
++               pm_runtime_set_autosuspend_delay(&amp;serial-&gt;dev-&gt;dev, 3000);
++               usb_enable_autosuspend(serial-&gt;dev);
++               device_init_wakeup(&amp;serial-&gt;dev-&gt;dev, 1); //usb remote wakeup
++       &#125;
++       if (serial-&gt;dev-&gt;descriptor.idVendor == cpu_to_le16(0x2C7C)) &#123;
++               pm_runtime_set_autosuspend_delay(&amp;serial-&gt;dev-&gt;dev, 3000);
++               usb_enable_autosuspend(serial-&gt;dev);
++               device_init_wakeup(&amp;serial-&gt;dev-&gt;dev, 1); //usb remote wakeup
++       &#125;
++#endif
++
+</code></pre>
+<h4 id="添加零包机制"><a href="#添加零包机制" class="headerlink" title="添加零包机制"></a>添加零包机制</h4><ul>
+<li><code>drivers/usb/serial/usb_wwan.c</code></li>
+</ul>
+<pre><code class="c">--- a/drivers/usb/serial/usb_wwan.c
++++ b/drivers/usb/serial/usb_wwan.c
+@@ -509,6 +509,17 @@ static struct urb *usb_wwan_setup_urb(struct usb_serial_port *port,
+                if ((desc-&gt;idVendor == cpu_to_le16(0x1286) &amp;&amp;
+                     desc-&gt;idProduct == cpu_to_le16(0x4e3c)))
+                        urb-&gt;transfer_flags |= URB_ZERO_PACKET;
++#if 1
++               // Added by Quectel for zero packet
++               if (desc-&gt;idVendor == cpu_to_le16(0x05C6) &amp;&amp; desc-&gt;idProduct == cpu_to_le16(0x9090))
++                       urb-&gt;transfer_flags |= URB_ZERO_PACKET;
++               if (desc-&gt;idVendor == cpu_to_le16(0x05C6) &amp;&amp; desc-&gt;idProduct == cpu_to_le16(0x9003))
++                       urb-&gt;transfer_flags |= URB_ZERO_PACKET;
++               if (desc-&gt;idVendor == cpu_to_le16(0x05C6) &amp;&amp; desc-&gt;idProduct == cpu_to_le16(0x9215))
++                       urb-&gt;transfer_flags |= URB_ZERO_PACKET;
++               if (desc-&gt;idVendor == cpu_to_le16(0x2C7C))
++                       urb-&gt;transfer_flags |= URB_ZERO_PACKET;
++#endif
+        &#125;
+        return urb;
+ &#125;
+</code></pre>
+<h4 id="支持usb网络"><a href="#支持usb网络" class="headerlink" title="支持usb网络"></a>支持usb网络</h4><p>这一项主要是针对 EC20 的第5个usb interface，EC20 默认会生成 <code>ttyUSB0~ttyUSB3</code> 4个接口，还有一个 interface，可以用于支持 <code>Gobinet</code> 或者 <code>qmi wwan</code> 接口，用以生成 <code>ethx</code> 或者 <code>wwanx</code> 接口。以下patch就是为了防止 <code>USB serial</code> 驱动将该接口用掉。</p>
+<pre><code class="c">--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -2082,6 +2082,29 @@ static int option_probe(struct usb_serial *serial,
+                                &amp;serial-&gt;interface-&gt;cur_altsetting-&gt;desc;
+        unsigned long device_flags = id-&gt;driver_info;
+ 
++       #if 1 //Added by Quectel
++       //Quectel UC20&#39;s interface 4 can be used as USB Network device
++       if (serial-&gt;dev-&gt;descriptor.idVendor == cpu_to_le16(0x05C6) &amp;&amp;
++               serial-&gt;dev-&gt;descriptor.idProduct == cpu_to_le16(0x9003) &amp;&amp;
++               serial-&gt;interface-&gt;cur_altsetting-&gt;desc.bInterfaceNumber &gt;= 4)
++               return -ENODEV;
++       //Quectel EC20&#39;s interface 4 can be used as USB Network device
++       if (serial-&gt;dev-&gt;descriptor.idVendor == cpu_to_le16(0x05C6) &amp;&amp;
++               serial-&gt;dev-&gt;descriptor.idProduct == cpu_to_le16(0x9215) &amp;&amp;
++               serial-&gt;interface-&gt;cur_altsetting-&gt;desc.bInterfaceNumber &gt;= 4)
++               return -ENODEV;
++       if (serial-&gt;dev-&gt;descriptor.idVendor == cpu_to_le16(0x2C7C)) &#123;
++               __u16 idProduct = le16_to_cpu(serial-&gt;dev-&gt;descriptor.idProduct);
++               //Quectel EC200&amp;UC200&#39;s interface 0 can be used as USB Network device (ecm, rndis)
++               if (serial-&gt;interface-&gt;cur_altsetting-&gt;desc.bInterfaceClass != 0xFF)
++                       return -ENODEV;
++               //Quectel EC25&amp;EC21&amp;EG91&amp;EG95&amp;EG06&amp;EP06&amp;EM06&amp;BG96&amp;AG35&amp;EG12&amp;EG18&#39;s interface 4 can be used as USB network device (qmi,ecm,mbim)
++               if ((idProduct != 0x6026 &amp;&amp; idProduct != 0x6126) &amp;&amp;
++                       serial-&gt;interface-&gt;cur_altsetting-&gt;desc.bInterfaceNumber &gt;= 4)
++                       return -ENODEV;
++       &#125;
++       #endif
++
+        /* Never bind to the CD-Rom emulation interface */
+        if (iface_desc-&gt;bInterfaceClass == USB_CLASS_MASS_STORAGE)
+                return -ENODEV;
+</code></pre>
+<blockquote>
+<p>注意：该patch针对使用 <code>USB Serial</code> 模式的情况而言并不是必须的，加不加都无所谓。</p>
+</blockquote>
+<h3 id="kernel-config"><a href="#kernel-config" class="headerlink" title="kernel config"></a>kernel config</h3><p>当驱动和供电都没问题后，还需要确保以下功能配置，大部分已经默认支持了</p>
+<ul>
+<li>启用 ppp 相关配置</li>
+<li>启用 USB serial 相关配置</li>
+</ul>
+<p>需要注意的是，由于 <code>android10</code> kernel版本 （<code>v4.19.194</code>） 比较新，所以 <code>qmi wwan</code> 驱动已经集成了 <code>EC20</code> 的 pid，vid，所以系统检测到设备会自动加载 <code>qmi_wwan</code> 驱动并自动生成 <code>wwan0</code> 接口，导致无法使用 <code>ppp</code> 拨号上网，为了解决这个问题，需要将 <code>qmi_wwan</code> 驱动禁用。</p>
+<pre><code class="c">--- a/arch/arm/configs/rockchip_defconfig
++++ b/arch/arm/configs/rockchip_defconfig
+@@ -327,7 +327,7 @@ CONFIG_USB_EPSON2888=y
+ CONFIG_USB_KC2190=y
+ CONFIG_USB_NET_CX82310_ETH=y
+ CONFIG_USB_NET_KALMIA=y
+-CONFIG_USB_NET_QMI_WWAN=y
++# CONFIG_USB_NET_QMI_WWAN is not set
+ CONFIG_USB_HSO=y
+ CONFIG_USB_NET_INT51X1=y
+ CONFIG_USB_IPHETH=y
+</code></pre>
+<p>至此，<code>kernel</code> 部分的修改就完成了。</p>
+<h2 id="android"><a href="#android" class="headerlink" title="android"></a>android</h2><p>下面来看看 <code>android 10</code> 除  <code>kernel</code> 外的其它修改。</p>
+<pre><code class="bash">device/rockchip/rk3288/rk3288_Android10/BoardConfig.mk
+device/rockchip/rk3288/rk3288_Android10/EC20/
+device/rockchip/rk3288/rk3288_Android10/rk3288_Android10.mk
+device/rockchip/rk3288/device.mk
+device/rockchip/rk3288/manifest_ab.xml
+device/rockchip/common/device.mk
+device/rockchip/common/init.rk30board.rc
+hardware/ril/reference-ril/Android.mk
+hardware/ril/rild/rild.rc
+external/ppp/chat/Android.mk
+</code></pre>
+<h3 id="vendor"><a href="#vendor" class="headerlink" title="vendor"></a>vendor</h3><ul>
+<li><code>vendor/rockchip/common/phone/phone.mk</code></li>
+</ul>
+<p>这个目录的文件可改可不改，里面主要定义了 <code>dongle</code> 相关的配置，如果有用到就改。</p>
+<h3 id="device"><a href="#device" class="headerlink" title="device"></a>device</h3><h4 id="BoardConfig-mk"><a href="#BoardConfig-mk" class="headerlink" title="BoardConfig.mk"></a>BoardConfig.mk</h4><ul>
+<li><strong><code>device/rockchip/rk3288/rk3288_Android10/BoardConfig.mk</code></strong></li>
+</ul>
+<p>在 <code>BoardConfig.mk</code> 中添加 <code>BOARD_HAS_RK_4G_MODEM</code> 配置。</p>
+<pre><code class="bash">--- a/rk3288_Android10/BoardConfig.mk
++++ b/rk3288_Android10/BoardConfig.mk
+@@ -7,6 +7,9 @@ BOARD_GYROSCOPE_SENSOR_SUPPORT := true
+ BUILD_WITH_GOOGLE_GMS_EXPRESS := false
+ CAMERA_SUPPORT_AUTOFOCUS:= false
+ 
++# enable 4g for ec20
++BOARD_HAS_RK_4G_MODEM := true
++
+ PRODUCT_KERNEL_CONFIG := rockchip_defconfig android-10.config
+ 
+ # AB image definition
+</code></pre>
+<p>与 <code>BOARD_HAS_RK_4G_MODEM</code> 相关的配置主要有两处。分别配置了需要安装的软件和依赖的 <code>manifest.xml</code>.</p>
+<pre><code class="bash"># device/rockchip/common/device.mk
+ifeq ($(strip $(BOARD_HAS_RK_4G_MODEM)),true)
+PRODUCT_PACKAGES += \
+    CarrierDefaultApp \
+    CarrierConfig \
+    rild \
+    librk-ril \
+    dhcpcd
+  
+# device/rockchip/common/BoardConfig.mk
+ifeq ($(strip $(BOARD_HAS_RK_4G_MODEM)),true)
+DEVICE_MANIFEST_FILE := device/rockchip/common/4g_modem/manifest.xml
+endif
+</code></pre>
+<p>这个 <code>manifest.xml</code>  和后面提到的 <code>manifest_ab.xml</code> 内容差不多，如果使用 <code>4g_modem</code> 目录下，那么下面关于 <code>manifest_ab.xml</code> 的修改就不用管了。</p>
+<h4 id="rk3288-device-mk"><a href="#rk3288-device-mk" class="headerlink" title="rk3288/device.mk"></a>rk3288/device.mk</h4><ul>
+<li><strong><code>device/rockchip/rk3288/device.mk</code></strong></li>
+</ul>
+<p>在 <code>device.mk</code> 中更新 <code>rild</code> 参数。</p>
+<pre><code class="bash">--- a/device.mk
++++ b/device.mk
+@@ -128,8 +128,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
+                 ro.ril.ecclist=112,911 \
+                 ro.opengles.version=196610 \
+                 wifi.interface=wlan0 \
+-                rild.libpath=/system/lib/libril-rk29-dataonly.so \
+-                rild.libargs=-d /dev/ttyACM0 \
++                rild.libpath=/vendor/lib/libreference-ril.so \
++                rild.libargs=-d /dev/ttyUSB2 \
+                 persist.tegra.nvmmlite = 1 \
+                 ro.audio.monitorOrientation=true \
+                 debug.nfc.fw_download=false \
+</code></pre>
+<h4 id="common-device-mk"><a href="#common-device-mk" class="headerlink" title="common/device.mk"></a>common/device.mk</h4><ul>
+<li><strong><code>device/rockchip/common/device.mk</code></strong></li>
+</ul>
+<p>修改 <code>BOARD_HAS_RK_4G_MODEM</code> 相关的配置，禁用默认的 <code>librk-ril</code>, 并修正 <code>rild</code> 相关参数。</p>
+<pre><code class="c">--- a/device.mk
++++ b/device.mk
+@@ -202,7 +202,6 @@ PRODUCT_PACKAGES += \
+     CarrierDefaultApp \
+     CarrierConfig \
+     rild \
+-    librk-ril \
+     dhcpcd
+
+ PRODUCT_PROPERTY_OVERRIDES += \
+@@ -218,11 +217,12 @@ PRODUCT_COPY_FILES += \
+                $(LOCAL_PATH)/4g_modem/lib64/librk-ril.so:$(TARGET_COPY_OUT_VENDOR)/lib64/librk-ril.so
+ else
+ PRODUCT_PROPERTY_OVERRIDES += \
+-               vendor.rild.libpath=/vendor/lib/librk-ril.so
++               vendor.rild.libpath=/vendor/lib/libreference-ril.so \
++               vendor.rild.libargs=-d /dev/ttyUSB2
+
+ PRODUCT_COPY_FILES += \
+-               $(LOCAL_PATH)/4g_modem/bin32/dhcpcd:$(TARGET_COPY_OUT_VENDOR)/bin/dhcpcd \
+-               $(LOCAL_PATH)/4g_modem/lib32/librk-ril.so:$(TARGET_COPY_OUT_VENDOR)/lib/librk-ril.so
++               $(LOCAL_PATH)/4g_modem/bin32/dhcpcd:$(TARGET_COPY_OUT_VENDOR)/bin/dhcpcd
++               #$(LOCAL_PATH)/4g_modem/lib32/librk-ril.so:$(TARGET_COPY_OUT_VENDOR)/lib/librk-ril.so
+
+ endif
+ endif
+</code></pre>
+<blockquote>
+<p>注意：为什么前面定义了 <code>rild.libpath</code>, <code>rild.libargs</code>, 这里还要定义 <code>vendor.rild.libpath</code>, <code>vendor.rild.libargs</code>, 这是因为 <code>rild</code> 有两套配置，根据配置 <code>PRODUCT_COMPATIBLE_PROPERTY</code> 使用这两套配置之一。</p>
+</blockquote>
+<h4 id="init-rk30board-rc"><a href="#init-rk30board-rc" class="headerlink" title="init.rk30board.rc"></a>init.rk30board.rc</h4><ul>
+<li><strong><code>device/rockchip/common/init.rk30board.rc</code></strong></li>
+</ul>
+<p>在 <code>init.rk30board.rc</code> 文件中启动 <code>ril-daemon</code>, 而 <code>ril-daemon</code> 定义位于后续提及的 <code>rild.rc</code>.</p>
+<pre><code class="c">--- a/init.rk30board.rc
++++ b/init.rk30board.rc
+@@ -259,9 +259,9 @@ on property:persist.internet_adb_enable=0
+     restart adbd
+
+ # for telephony function
+-on property:ro.boot.noril=true
+-    setprop ro.radio.noril true
+-    stop ril-daemon
++on property:ro.boot.noril=false
++    setprop ro.radio.noril false
++    start ril-daemon
+</code></pre>
+<h4 id="manifest-ab-xml"><a href="#manifest-ab-xml" class="headerlink" title="manifest_ab.xml"></a>manifest_ab.xml</h4><ul>
+<li><strong><code>device/rockchip/rk3288/manifest_ab.xml</code></strong></li>
+</ul>
+<p>在 <code>manifest_ab.xml</code> 或者 <code>manifest.xml</code> 中添加两条 <code>hidl</code> 记录，这是 <code>android 8</code> 及高版本所需的。当然，不改文件，直接使用 <code>4g_modem</code> 目录的也可以。</p>
+<pre><code class="bash">--- a/manifest_ab.xml
++++ b/manifest_ab.xml
+@@ -183,5 +183,23 @@
+             &lt;instance&gt;default&lt;/instance&gt;
+         &lt;/interface&gt;
+     &lt;/hal&gt;
++    &lt;hal format=&quot;hidl&quot;&gt;
++        &lt;name&gt;android.hardware.radio.deprecated&lt;/name&gt;
++        &lt;transport&gt;hwbinder&lt;/transport&gt;
++        &lt;version&gt;1.0&lt;/version&gt;
++        &lt;interface&gt;
++            &lt;name&gt;IOemHook&lt;/name&gt;
++            &lt;instance&gt;slot1&lt;/instance&gt;
++        &lt;/interface&gt;
++    &lt;/hal&gt;
++    &lt;hal format=&quot;hidl&quot;&gt;
++        &lt;name&gt;android.hardware.radio&lt;/name&gt;
++        &lt;transport&gt;hwbinder&lt;/transport&gt;
++        &lt;version&gt;1.0&lt;/version&gt;
++        &lt;interface&gt;
++            &lt;name&gt;IRadio&lt;/name&gt;
++            &lt;instance&gt;slot1&lt;/instance&gt;
++        &lt;/interface&gt;
++    &lt;/hal&gt;
+ &lt;/manifest&gt;
+ 
+</code></pre>
+<h4 id="EC20-files"><a href="#EC20-files" class="headerlink" title="EC20 files"></a>EC20 files</h4><ul>
+<li><strong><code>device/rockchip/rk3288/rk3288_Android/EC20/</code></strong></li>
+</ul>
+<p>将 <code>quectel</code> 提供的文件拷贝至以下目录。</p>
+<pre><code class="bash">$ ls device/rockchip/rk3288/rk3288_Android10/EC20 
+chat  ip-down  ip-up  libreference-ril.so
+</code></pre>
+<ul>
+<li><strong><code>device/rockchip/rk3288/rk3288_Android10/rk3288_Android10.mk</code></strong></li>
+</ul>
+<p>在 <code>rk3288_Android10.mk</code> 文件中添加拷贝项 <code>PRODUCT_COPY_FILES</code> , 将前面的4个文件拷贝至指定目录。</p>
+<pre><code class="bash">--- a/rk3288_Android10/rk3288_Android10.mk
++++ b/rk3288_Android10/rk3288_Android10.mk
+@@ -43,6 +43,10 @@ PRODUCT_PACKAGES += \
+ PRODUCT_COPY_FILES += vendor/rockchip/common/phone/etc/apns-full-conf.xml:system/etc/apns-conf.xml
+ PRODUCT_COPY_FILES += vendor/rockchip/common/phone/etc/spn-conf.xml:system/etc/spn-conf.xml
+ PRODUCT_COPY_FILES += $&#123;TARGET_DEVICE_DIR&#125;/user_service.sh:system/bin/user_service.sh
++PRODUCT_COPY_FILES += $&#123;TARGET_DEVICE_DIR&#125;/EC20/chat:system/bin/chat
++PRODUCT_COPY_FILES += $&#123;TARGET_DEVICE_DIR&#125;/EC20/ip-down:system/etc/ppp/ip-down
++PRODUCT_COPY_FILES += $&#123;TARGET_DEVICE_DIR&#125;/EC20/ip-up:system/etc/ppp/ip-up
++PRODUCT_COPY_FILES += $&#123;TARGET_DEVICE_DIR&#125;/EC20/libreference-ril.so:vendor/lib/libreference-ril.so
+ PRODUCT_PROPERTY_OVERRIDES += \
+     ro.product.version = 1.0.0 \
+     ro.product.ota.host = www.rockchip.com:2300 \
+</code></pre>
+<h3 id="hardware"><a href="#hardware" class="headerlink" title="hardware"></a>hardware</h3><h4 id="ril"><a href="#ril" class="headerlink" title="ril"></a>ril</h4><ul>
+<li><strong><code>hardware/ril/reference-ril/</code></strong></li>
+</ul>
+<p>由于使用 <code>quectel</code> 提供的 <code>libreference-ril.so</code>, 所以需要禁用 <code>SDK</code> 自带的 <code>reference-ril</code>, 将对应目录下的 <code>Android.mk</code> 重命名即可。</p>
+<pre><code class="bash">cd hardware/ril/reference-ril
+git mv Android.mk Android.mk_bak
+</code></pre>
+<h4 id="rild"><a href="#rild" class="headerlink" title="rild"></a>rild</h4><ul>
+<li><strong><code>hardware/ril/rild/rild.rc</code></strong></li>
+</ul>
+<p><code>rk3288 android10</code> 的 <code>ril-daemon</code> 定义于 <code>rild.rc</code> 文件中，为了使用 <code>quectel</code> 提供的 <code>libreference-ril.so</code> ，需要修改该文件。</p>
+<pre><code class="c">--- a/rild/rild.rc
++++ b/rild/rild.rc
+@@ -1,5 +1,5 @@
+-service vendor.ril-daemon /vendor/bin/hw/rild
++service ril-daemon /vendor/bin/hw/rild -l /vendor/lib/libreference-ril.so
+     class main                                                                                                           
+     user radio                                                                                                           
+-    group radio cache inet misc audio log readproc wakelock
++    group radio cache inet misc audio log readproc wakelock sdcard_rw
+     capabilities BLOCK_SUSPEND NET_ADMIN NET_RAW
+</code></pre>
+<h3 id="external"><a href="#external" class="headerlink" title="external"></a>external</h3><ul>
+<li><strong><code>external/ppp/chat</code></strong></li>
+</ul>
+<p>由于使用 <code>quectel</code> 提供的 <code>chat</code>, 所以需要禁用SDK自带的 <code>chat</code> , 简单将自带 <code>chat</code> 目录的 <code>Android.mk</code> 重命名即可，这样编译时就检索不到了。</p>
+<pre><code class="bash">cd external/ppp/chat
+git mv Android.mk Android.mk_bak
+</code></pre>
+<h2 id="查看信息"><a href="#查看信息" class="headerlink" title="查看信息"></a>查看信息</h2><p>系统配置好并烧录后，查看相关信息。</p>
+<pre><code class="bash">console:/ # ifconfig
+ppp0      Link encap:Point-to-Point Protocol
+          inet addr:10.167.182.79  P-t-P:10.64.64.64  Mask:255.255.255.255
+          UP POINTOPOINT RUNNING NOARP MULTICAST  MTU:1500  Metric:1
+          RX packets:20 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:82 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:3
+          RX bytes:1989 TX bytes:5010
+console:/ # ping baidu.com
+PING baidu.com (220.181.38.148) 56(84) bytes of data.
+64 bytes from 220.181.38.148: icmp_seq=1 ttl=45 time=111 ms
+64 bytes from 220.181.38.148: icmp_seq=2 ttl=45 time=114 ms
+64 bytes from 220.181.38.148: icmp_seq=3 ttl=45 time=117 ms
+64 bytes from 220.181.38.148: icmp_seq=4 ttl=45 time=115 ms
+console:/ # ls /dev/ttyUSB*
+/dev/ttyUSB0 /dev/ttyUSB1 /dev/ttyUSB2 /dev/ttyUSB3
+console:/ # dmesg |grep GSM
+[    1.363745] usbserial: USB Serial support registered for GSM modem (1-port)
+[   10.353990] option 3-1.2:1.0: GSM modem (1-port) converter detected
+[   10.354280] usb 3-1.2: GSM modem (1-port) converter now attached to ttyUSB0
+[   10.360191] option 3-1.2:1.1: GSM modem (1-port) converter detected
+[   10.360825] usb 3-1.2: GSM modem (1-port) converter now attached to ttyUSB1
+[   10.362188] option 3-1.2:1.2: GSM modem (1-port) converter detected
+[   10.362542] usb 3-1.2: GSM modem (1-port) converter now attached to ttyUSB2
+[   10.363543] option 3-1.2:1.3: GSM modem (1-port) converter detected
+[   10.364808] usb 3-1.2: GSM modem (1-port) converter now attached to ttyUSB3
+console:/ # microcom -s 115200 /dev/ttyUSB2
++CSQ: 23,99
+
+OK
+
+Quectel
+EC20F
+Revision: EC20CNHDLGR09A06M1G
+</code></pre>
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ol>
+<li>如果使用 <code>USB Serial</code> 模式，记得禁用 <code>qmi_wwan</code> 驱动，否则会自动生成 <code>wwan0</code>, 且影响 pppd 拨号上网。</li>
+<li>记得查看 <code>rild</code> 中是否有 <code>rild.rc</code> ，如果有且定义了 <code>ril-daemon</code>, 则无需在 <code>init.*.rc</code> 中定义了</li>
+<li><code>rild.libpath</code> , <code>rild.libargs</code> 需要与 <code>rild</code> 中使用的匹配，如果不确定，<code>vendor.rild.libpath</code>, <code>vendor.rild.libargs</code> 也加上。</li>
+<li>在 <code>android10</code> 中，需要将 <code>libreference-ril.so</code> 放置在 <code>vendor</code> 目录，而非 <code>system</code> 目录</li>
+</ol>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><code>Quectel_WCDMA&amp;LTE_Linux_USB_Driver_User_Guide_V1.8.pdf</code></li>
+<li><code>Quectel_Android_RIL_Driver_User_Guide_V1.9.pdf</code></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/fhy00229390/article/details/108757338">4G模块 EC20 R2.0 USB Serial/GobiNet/QMI WWAN 驱动移植过程</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/rendong_yang/article/details/102912589">Android 4G上网流程分析</a></li>
+</ul>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2022/02/21/android-4g/">https://www.litreily.top/2022/02/21/android-4g/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tags"></i><a href="/tags/android/">android</a><a href="/tags/rk3288/">rk3288</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#kernel"><span class="toc-number">1.</span> <span class="toc-text">kernel</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#EC20-%E4%BE%9B%E7%94%B5%E4%BD%BF%E8%83%BD"><span class="toc-number">1.1.</span> <span class="toc-text">EC20 供电使能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#EC20-%E9%A9%B1%E5%8A%A8%E7%A7%BB%E6%A4%8D"><span class="toc-number">1.2.</span> <span class="toc-text">EC20 驱动移植</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0-pid-vid"><span class="toc-number">1.2.1.</span> <span class="toc-text">添加 pid vid</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%AF%E7%94%A8-reset-resume"><span class="toc-number">1.2.2.</span> <span class="toc-text">启用 reset_resume</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%AF%E7%94%A8-autosuspend-remote-wakeup"><span class="toc-number">1.2.3.</span> <span class="toc-text">启用 autosuspend remote wakeup</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E9%9B%B6%E5%8C%85%E6%9C%BA%E5%88%B6"><span class="toc-number">1.2.4.</span> <span class="toc-text">添加零包机制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%94%AF%E6%8C%81usb%E7%BD%91%E7%BB%9C"><span class="toc-number">1.2.5.</span> <span class="toc-text">支持usb网络</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#kernel-config"><span class="toc-number">1.3.</span> <span class="toc-text">kernel config</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#android"><span class="toc-number">2.</span> <span class="toc-text">android</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#vendor"><span class="toc-number">2.1.</span> <span class="toc-text">vendor</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#device"><span class="toc-number">2.2.</span> <span class="toc-text">device</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#BoardConfig-mk"><span class="toc-number">2.2.1.</span> <span class="toc-text">BoardConfig.mk</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#rk3288-device-mk"><span class="toc-number">2.2.2.</span> <span class="toc-text">rk3288&#x2F;device.mk</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#common-device-mk"><span class="toc-number">2.2.3.</span> <span class="toc-text">common&#x2F;device.mk</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#init-rk30board-rc"><span class="toc-number">2.2.4.</span> <span class="toc-text">init.rk30board.rc</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#manifest-ab-xml"><span class="toc-number">2.2.5.</span> <span class="toc-text">manifest_ab.xml</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#EC20-files"><span class="toc-number">2.2.6.</span> <span class="toc-text">EC20 files</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hardware"><span class="toc-number">2.3.</span> <span class="toc-text">hardware</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ril"><span class="toc-number">2.3.1.</span> <span class="toc-text">ril</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#rild"><span class="toc-number">2.3.2.</span> <span class="toc-text">rild</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#external"><span class="toc-number">2.4.</span> <span class="toc-text">external</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E4%BF%A1%E6%81%AF"><span class="toc-number">3.</span> <span class="toc-text">查看信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">4.</span> <span class="toc-text">注意事项</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="next" href="/2022/01/11/rk3288-hang/">RK3288 android 6.0 卡死在开机logo画面问题处理 &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+.night .v[data-class=v] a:hover { color: #216C73 !important; }
+.night .v[data-class=v] li { list-style: inherit; }
+.night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
+.night .v[data-class=v] .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.night .v[data-class=v] .vbtn { border-radius: 0; background: none; }
+.night .v[data-class=v] .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.night .v[data-class=v] .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.night .v[data-class=v] .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre,.night .v[data-class=v] .vlist .vcard .vhead .vsys { background: #203240 !important; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre { color: #F0F0F0; font-size: 95%; }
+.v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
+</style><div id="vcomment"></div><script src="//cdn.bootcdn.net/ajax/libs/valine/1.4.14/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
+  lang: 'zh-cn',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></section><footer><p>Copyright © 2016 - 2022 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script></body></html>

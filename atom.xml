@@ -6,7 +6,7 @@
   <link href="https://www.litreily.top/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2022-01-11T04:31:07.119Z</updated>
+  <updated>2022-02-21T08:55:42.269Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -17,11 +17,42 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>RK3288 Android 10 系统开发[1] - 支持 EC20 4G 模块</title>
+    <link href="https://www.litreily.top/2022/02/21/android-4g/"/>
+    <id>https://www.litreily.top/2022/02/21/android-4g/</id>
+    <published>2022-02-21T08:50:51.000Z</published>
+    <updated>2022-02-21T08:55:42.269Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;根据业务需求，需要升级安卓系统，从 &lt;code&gt;Android6.0&lt;/code&gt; 升级到 &lt;code&gt;Android10.0&lt;/code&gt;, 本节介绍如何移植 &lt;code&gt;EC20 4G&lt;/code&gt; 模块。&lt;/p&gt;
+&lt;p&gt;主要参考 &lt;code&gt;Quetecl&lt;/code&gt; 提供的以下文档。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Quectel_WCDMA&amp;amp;LTE_Linux_USB_Driver_User_Guide_V1.8.pdf&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Quectel_Android_RIL_Driver_User_Guide_V1.9.pdf&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;kernel&quot;&gt;&lt;a href=&quot;#kernel&quot; class=&quot;headerlink&quot; title=&quot;kernel&quot;&gt;&lt;/a&gt;kernel&lt;/h2&gt;&lt;p&gt;内核部分，需要修改两部分，&lt;code&gt;EC20&lt;/code&gt;模块的使能和供电, 以及 &lt;code&gt;EC20&lt;/code&gt; 联网所需的驱动移植。&lt;/p&gt;
+&lt;h3 id=&quot;EC20-供电使能&quot;&gt;&lt;a href=&quot;#EC20-供电使能&quot; class=&quot;headerlink&quot; title=&quot;EC20 供电使能&quot;&gt;&lt;/a&gt;EC20 供电使能&lt;/h3&gt;&lt;p&gt;针对供电使能问题，&lt;code&gt;dts&lt;/code</summary>
+      
+    
+    
+    
+    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
+    
+    
+    <category term="android" scheme="https://www.litreily.top/tags/android/"/>
+    
+    <category term="rk3288" scheme="https://www.litreily.top/tags/rk3288/"/>
+    
+  </entry>
+  
+  <entry>
     <title>RK3288 android 6.0 卡死在开机logo画面问题处理</title>
     <link href="https://www.litreily.top/2022/01/11/rk3288-hang/"/>
     <id>https://www.litreily.top/2022/01/11/rk3288-hang/</id>
     <published>2022-01-11T03:49:02.000Z</published>
-    <updated>2022-01-11T04:31:07.119Z</updated>
+    <updated>2022-02-21T08:52:04.167Z</updated>
     
     
       
@@ -38,7 +69,7 @@ media_profiles.xml
     
     
     
-    <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
+    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
     
     
     <category term="android" scheme="https://www.litreily.top/tags/android/"/>
@@ -52,7 +83,7 @@ media_profiles.xml
     <link href="https://www.litreily.top/2021/12/31/rk3288-security/"/>
     <id>https://www.litreily.top/2021/12/31/rk3288-security/</id>
     <published>2021-12-31T02:58:22.000Z</published>
-    <updated>2021-12-31T03:45:28.968Z</updated>
+    <updated>2022-02-21T08:52:09.747Z</updated>
     
     
       
@@ -67,7 +98,7 @@ media_profiles.xml
     
     
     
-    <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
+    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
     
     
     <category term="android" scheme="https://www.litreily.top/tags/android/"/>
@@ -81,7 +112,7 @@ media_profiles.xml
     <link href="https://www.litreily.top/2021/12/30/rk3288-su/"/>
     <id>https://www.litreily.top/2021/12/30/rk3288-su/</id>
     <published>2021-12-30T02:22:18.000Z</published>
-    <updated>2021-12-31T03:01:24.994Z</updated>
+    <updated>2022-02-21T08:52:12.711Z</updated>
     
     
       
@@ -97,7 +128,7 @@ cp out/target/product/rk3288/system/xbin/su ~/backup/
     
     
     
-    <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
+    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
     
     
     <category term="android" scheme="https://www.litreily.top/tags/android/"/>
@@ -176,7 +207,7 @@ cp out/target/product/rk3288/system/xbin/su ~/backup/
     <link href="https://www.litreily.top/2021/10/27/system-app/"/>
     <id>https://www.litreily.top/2021/10/27/system-app/</id>
     <published>2021-10-27T11:02:51.000Z</published>
-    <updated>2021-10-27T11:29:45.567Z</updated>
+    <updated>2022-02-21T08:52:22.259Z</updated>
     
     
       
@@ -198,7 +229,7 @@ cp $&amp;#123;ap</summary>
     
     
     
-    <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
+    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
     
     
     <category term="linux" scheme="https://www.litreily.top/tags/linux/"/>
@@ -238,7 +269,7 @@ $ mkdir root
     <link href="https://www.litreily.top/2021/07/16/gt9xx-drvier/"/>
     <id>https://www.litreily.top/2021/07/16/gt9xx-drvier/</id>
     <published>2021-07-16T05:49:36.000Z</published>
-    <updated>2021-07-31T06:02:19.453Z</updated>
+    <updated>2022-02-21T08:52:30.995Z</updated>
     
     
       
@@ -266,7 +297,7 @@ $ mkdir root
     
     
     
-    <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
+    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
     
     
     <category term="android" scheme="https://www.litreily.top/tags/android/"/>
@@ -280,7 +311,7 @@ $ mkdir root
     <link href="https://www.litreily.top/2021/07/12/dual-camera/"/>
     <id>https://www.litreily.top/2021/07/12/dual-camera/</id>
     <published>2021-07-12T10:02:15.000Z</published>
-    <updated>2021-07-12T10:32:17.355Z</updated>
+    <updated>2022-02-21T08:52:33.715Z</updated>
     
     
       
@@ -298,7 +329,7 @@ $ mkdir root
     
     
     
-    <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
+    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
     
     
     <category term="android" scheme="https://www.litreily.top/tags/android/"/>
@@ -312,7 +343,7 @@ $ mkdir root
     <link href="https://www.litreily.top/2021/06/18/dual-lcd/"/>
     <id>https://www.litreily.top/2021/06/18/dual-lcd/</id>
     <published>2021-06-18T08:23:15.000Z</published>
-    <updated>2021-06-18T08:51:19.610Z</updated>
+    <updated>2022-02-21T08:52:36.131Z</updated>
     
     
       
@@ -332,7 +363,7 @@ $ mkdir root
     
     
     
-    <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
+    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
     
     
     <category term="android" scheme="https://www.litreily.top/tags/android/"/>
@@ -990,36 +1021,6 @@ sudo npm i -g npx
     
     
     <category term="music" scheme="https://www.litreily.top/tags/music/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>lftp获取FTP Server端最新文件</title>
-    <link href="https://www.litreily.top/2020/04/30/lftp_get/"/>
-    <id>https://www.litreily.top/2020/04/30/lftp_get/</id>
-    <published>2020-04-30T09:33:02.000Z</published>
-    <updated>2021-05-28T03:12:11.503Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;最近解一个bug，要频繁编译和烧录FW，每次都要将image从远程的FTP server手动copy到本地，然后使用tftp进行烧录，实在不胜其烦。虽然上一篇&lt;a href=&quot;https://www.litreily.top/2020/04/27/tftp/&quot;&gt;简单实用的tftp烧录image脚本&lt;/a&gt;提高了烧录效率，但是每次将image拷贝到本地也是麻烦。&lt;/p&gt;
-&lt;p&gt;这次，我依旧想到了WSL, 使用shell脚本还是更加方便快捷，思路很简单，检查server端的最新文件，得到文件名后使用lftp下载到本地。&lt;/p&gt;
-&lt;h2 id=&quot;获取最新文件&quot;&gt;&lt;a href=&quot;#获取最新文件&quot; class=&quot;headerlink&quot; title=&quot;获取最新文件&quot;&gt;&lt;/a&gt;获取最新文件&lt;/h2&gt;&lt;p&gt;FTP Server文件存储方式是将每天的新数据归档到以当日日期命名的文件夹中，如今天&lt;code&gt;20200430&lt;/code&gt;&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;zsh&quot;&gt;➜  lftp -u &amp;quot;username,password&amp;quot; ftp://1.2.3.4
-lftp username@1.2.3.4:~&amp;gt; ls
-04-27-20  02:03PM       &amp;lt;DIR&amp;gt;          20200427
-04-29-20  05:3</summary>
-      
-    
-    
-    
-    <category term="Linux" scheme="https://www.litreily.top/categories/Linux/"/>
-    
-    
-    <category term="shell" scheme="https://www.litreily.top/tags/shell/"/>
-    
-    <category term="ftp" scheme="https://www.litreily.top/tags/ftp/"/>
     
   </entry>
   
