@@ -6,7 +6,7 @@
   <link href="https://www.litreily.top/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2022-02-21T09:48:42.921Z</updated>
+  <updated>2022-02-22T02:03:47.937Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>RK3288 Android 10 系统开发[2] - 更新开机logo与动画</title>
+    <link href="https://www.litreily.top/2022/02/22/android-ani/"/>
+    <id>https://www.litreily.top/2022/02/22/android-ani/</id>
+    <published>2022-02-22T01:58:40.000Z</published>
+    <updated>2022-02-22T02:03:47.937Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;替换开机logo&quot;&gt;&lt;a href=&quot;#替换开机logo&quot; class=&quot;headerlink&quot; title=&quot;替换开机logo&quot;&gt;&lt;/a&gt;替换开机logo&lt;/h2&gt;&lt;p&gt;在 &lt;code&gt;kernel&lt;/code&gt; 目录，将 &lt;code&gt;logo.bmp&lt;/code&gt;, 以及 &lt;code&gt;logo_kernel.bmp&lt;/code&gt; 替换为所需logo即可。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;logo.bmp: uboot 阶段显示&lt;/li&gt;
+&lt;li&gt;logo_kernel.bmp: kernel 阶段显示&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;替换-Android-开机动画&quot;&gt;&lt;a href=&quot;#替换-Android-开机动画&quot; class=&quot;headerlink&quot; title=&quot;替换 Android 开机动画&quot;&gt;&lt;/a&gt;替换 Android 开机动画&lt;/h2&gt;&lt;h3 id=&quot;替换-bootanimation-zip&quot;&gt;&lt;a href=&quot;#替换-bootanimation-zip&quot; class=&quot;headerlink&quot; title=&quot;替换 bootanimation.zip&quot;&gt;&lt;/a&gt;替换 bootanimation.zip&lt;/h3&gt;&lt;p&gt;&lt;code&gt;rk3288&lt;/code&gt; android10 的动画文件位于 &lt;code&gt;device/rockchip/common&lt;</summary>
+      
+    
+    
+    
+    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
+    
+    
+    <category term="android" scheme="https://www.litreily.top/tags/android/"/>
+    
+    <category term="rk3288" scheme="https://www.litreily.top/tags/rk3288/"/>
+    
+  </entry>
   
   <entry>
     <title>RK3288 Android 10 系统开发[1] - 支持 EC20 4G 模块</title>
@@ -989,38 +1018,6 @@ Pa</summary>
     <category term="markdown" scheme="https://www.litreily.top/tags/markdown/"/>
     
     <category term="chrome" scheme="https://www.litreily.top/tags/chrome/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>解锁网易云音乐灰色无版权歌曲</title>
-    <link href="https://www.litreily.top/2020/05/03/netease/"/>
-    <id>https://www.litreily.top/2020/05/03/netease/</id>
-    <published>2020-05-03T01:11:39.000Z</published>
-    <updated>2021-05-28T03:12:11.503Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;由于版权之争，网易云的很多歌曲都灰掉并且无法播放了，想要使其可以播放还是有办法的，万能的Google和Github让我找到了&lt;a href=&quot;https://github.com/nondanee/UnblockNeteaseMusic&quot;&gt;答案&lt;/a&gt;，直接上享用方法吧。&lt;/p&gt;
-&lt;h2 id=&quot;前提条件&quot;&gt;&lt;a href=&quot;#前提条件&quot; class=&quot;headerlink&quot; title=&quot;前提条件&quot;&gt;&lt;/a&gt;前提条件&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;一个可以远程访问的服务器，比如vps，阿里云、腾讯云、...&lt;/li&gt;
-&lt;li&gt;如果没有服务器，只能寻找别人搭建好的服务&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;搭建服务&quot;&gt;&lt;a href=&quot;#搭建服务&quot; class=&quot;headerlink&quot; title=&quot;搭建服务&quot;&gt;&lt;/a&gt;搭建服务&lt;/h2&gt;&lt;p&gt;在服务器端，首先安装依赖的工具&lt;code&gt;npx&lt;/code&gt;，如果有则忽略&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;zsh&quot;&gt;sudo apt install npm
-sudo npm i -g npx
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;然后clone项目UnblockNeteaseMusic.git到本地&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;zsh&quot;&gt;git clone git@github.com:nondanee/Unb</summary>
-      
-    
-    
-    
-    <category term="Media" scheme="https://www.litreily.top/categories/Media/"/>
-    
-    
-    <category term="music" scheme="https://www.litreily.top/tags/music/"/>
     
   </entry>
   

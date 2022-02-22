@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>RK3288 Android 10 系统开发[2] - 更新开机logo与动画</title>
+      <link href="2022/02/22/android-ani/"/>
+      <url>2022/02/22/android-ani/</url>
+      
+        <content type="html"><![CDATA[<h2 id="替换开机logo"><a href="#替换开机logo" class="headerlink" title="替换开机logo"></a>替换开机logo</h2><p>在 <code>kernel</code> 目录，将 <code>logo.bmp</code>, 以及 <code>logo_kernel.bmp</code> 替换为所需logo即可。</p><ul><li>logo.bmp: uboot 阶段显示</li><li>logo_kernel.bmp: kernel 阶段显示</li></ul><h2 id="替换-Android-开机动画"><a href="#替换-Android-开机动画" class="headerlink" title="替换 Android 开机动画"></a>替换 Android 开机动画</h2><h3 id="替换-bootanimation-zip"><a href="#替换-bootanimation-zip" class="headerlink" title="替换 bootanimation.zip"></a>替换 bootanimation.zip</h3><p><code>rk3288</code> android10 的动画文件位于 <code>device/rockchip/common</code> 目录，将默认的<code>bootanimation.zip</code> 替换为所需动画。</p><pre><code class="bash">mv bootanimation.zip device/rockchip/common</code></pre><h3 id="更新-device-mk"><a href="#更新-device-mk" class="headerlink" title="更新 device.mk"></a>更新 device.mk</h3><p>在 <code>device.mk</code> 中搜索 <code>bootanimation</code>, 发现当前设备默认不会替换动画文件，所以需要手动添加以下行。</p><pre><code class="makefile">--- a/device.mk+++ b/device.mk    @@ -1056,6 +1059,8 @@ else ifeq ($(TARGET_BOARD_PLATFORM_PRODUCT),laptop) else # tablet   PRODUCT_PROPERTY_OVERRIDES += \         ro.target.product=tablet+  PRODUCT_COPY_FILES += \+       $(LOCAL_PATH)/bootanimation.zip:/system/media/bootanimation.zip    PRODUCT_PACKAGES += \         SoundRecorder</code></pre><h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p>如何判断当前设备类型呢，也就是如何得知 <code>TARGET_BOARD_PLATFORM_PRODUCT</code> 呢? 可以通过以下方式。</p><pre><code class="bash">$ cd &lt;sdk-root&gt;$ source build/envsetup.sh$ lunch rk3288_Android10-userdebug$ get_build_var TARGET_BOARD_PLATFORM_PRODUCTtablet</code></pre><p>可知当前产品类型为 <code>tablet</code> ,然后根据这个去看 <code>device.mk</code>, 匹配相应配置即可。</p><blockquote><p>在RK3288 Android10 sdk 中，配置好环境变量并确定设备类型后，即可使用 <code>get_build_var</code> 获取各类全局配置了。</p></blockquote>]]></content>
+      
+      
+      <categories>
+          
+          <category> Android </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> android </tag>
+            
+            <tag> rk3288 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>RK3288 Android 10 系统开发[1] - 支持 EC20 4G 模块</title>
       <link href="2022/02/21/android-4g/"/>
       <url>2022/02/21/android-4g/</url>
