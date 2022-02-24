@@ -1,0 +1,168 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>RK3288 Android 10 系统开发[3] - 结合 gitlab 搭建 repo 代码仓库管理平台 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
+</head><link rel="stylesheet" type="text/css" href="/plugins/highlight/atom-one-dark.min.css"><script type="text/javascript" src="/plugins/highlight/highlight.min.js"></script><script>hljs.initHighlightingOnLoad();
+</script><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">RK3288 Android 10 系统开发[3] - 结合 gitlab 搭建 repo 代码仓库管理平台</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2022/02/24/gitlab-repo/">2022-02-24</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Android/">Android</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>目前为了本地服务器搭建 <code>gitlab</code> 管理平台，并配合 <code>gerrit</code> 进行代码审查，需要对代码管理重新部署。</p>
+<p>Android 系统使用 <code>repo</code> 管理源码，但是 <code>Android 10</code> 源码包含 <code>732</code> 个仓库，如果在本地 gitlab 服务器和 <code>gerrit</code> 服务器上将所有的仓库都创建一遍的话，仓库太多了， 不便于管理和审查，所以需要重新设计代码结构，并使用 <code>repo</code> 和 <code>manifest</code> 进行管理，为此，我先使用官方 <code>gitlab</code> 搭建了一些测试仓库。用于学习和研究 <code>repo</code> 的代码管理方式。</p>
+<h2 id="gitlab-操作"><a href="#gitlab-操作" class="headerlink" title="gitlab 操作"></a>gitlab 操作</h2><h3 id="新建-group"><a href="#新建-group" class="headerlink" title="新建 group"></a>新建 group</h3><p>首先在 <code>gitlab</code> 上创建一个新的 group，我这里命名为 <code>repo-test</code>, 然后 <code>gitlab</code> 会自动分配一个group链接 &quot;<a target="_blank" rel="noopener" href="https://gitlab.com/te3597/&quot;">https://gitlab.com/te3597/&quot;</a></p>
+<h3 id="新建空仓库"><a href="#新建空仓库" class="headerlink" title="新建空仓库"></a>新建空仓库</h3><p>在新建好的 <code>repo-test</code> 组下新建以下空仓库</p>
+<ul>
+<li>git-repo</li>
+<li>manifest</li>
+<li>sdk</li>
+<li>kernel</li>
+<li>uboot</li>
+<li>frameworks_base</li>
+</ul>
+<p>将仓库的克隆路径保存下来</p>
+<pre><code class="bash">https://gitlab.com/te3597/git-repo.git
+https://gitlab.com/te3597/manifest.git
+https://gitlab.com/te3597/kernel.git
+https://gitlab.com/te3597/uboot.git
+https://gitlab.com/te3597/frameworks_base.git
+</code></pre>
+<p><img src="/assets/repo/repo-test.png" alt="repo-test"></p>
+<h2 id="本地代码管理"><a href="#本地代码管理" class="headerlink" title="本地代码管理"></a>本地代码管理</h2><p>前面在 <code>gitlab</code> 上将远程仓库创建好了，本地在创建对应的仓库目录，并初始化仓库，配置好远程仓库。</p>
+<pre><code class="bash">mkdir repo-test
+cd repo-test
+for dir in manifest sdk uboot kernel frameworks_base
+do
+    mkdir $dir; cd $dir; git init; git remote add gitlab https://gitlab.com/te3597/$dir.git; cd -
+done
+</code></pre>
+<h3 id="下载-repo"><a href="#下载-repo" class="headerlink" title="下载 repo"></a>下载 repo</h3><p>首先需要下载 <code>repo</code></p>
+<pre><code class="bash">curl https://storage.googleapis.com/git-repo-downloads/repo &gt; ~/bin/repo
+chmod +x ~/bin/repo
+</code></pre>
+<h3 id="下载-git-repo"><a href="#下载-git-repo" class="headerlink" title="下载 git-repo"></a>下载 git-repo</h3><p>下载 <code>git-repo</code> 是为了方便国内访问，因为 <code>git-repo</code> 服务器在国外无法直接访问。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://gerrit.googlesource.com/git-repo/+/stable">https://gerrit.googlesource.com/git-repo/+/stable</a></li>
+</ul>
+<p>以上是<code>git-repo</code> 官方路径，但是国内可能无法直接访问。需要梯子或者使用其它下载源，具体参考博客 <a target="_blank" rel="noopener" href="https://www.itmangoto.cn/2018/05/08/git-repo-install/">下载安装和使用git-repo</a>。</p>
+<p>下载完成后，同样放置在 <code>repo-test</code> 目录，这样就把所有仓库目录都准备好了。</p>
+<pre><code>$ ls
+frameworks_base  git-repo  kernel  manifest  sdk  uboot
+</code></pre>
+<h3 id="添加代码"><a href="#添加代码" class="headerlink" title="添加代码"></a>添加代码</h3><p>在处理 <code>git-repo</code>, <code>manifest</code> 外的其它仓库时，添加一些文件，或者目录，然后提交一次commit，并将代码推送到 <code>gitlab</code>, 以 <code>kernel</code> 目录为例。</p>
+<pre><code class="bash">cd kernel
+touch REAMDE
+echo test &gt; README
+git add .
+git commit -m &quot;init commit&quot;
+git push gitlab master
+</code></pre>
+<p>针对 <code>git-repo</code>, 需要添加一个新的remote，并推送上去。</p>
+<pre><code class="bash">cd git-repo
+git remote add gitlab https://gitlab.com/te3597/git-repo.git
+git checkout -b master
+git tag v1.0.0
+git push gitlab master
+</code></pre>
+<h2 id="manifest"><a href="#manifest" class="headerlink" title="manifest"></a>manifest</h2><p><code>repo</code> 需要使用 <code>*.xml</code> 文件管理所有仓库目录，用以确定各个仓库的<strong>下载路径</strong>和<strong>本地部署路径</strong>, 这个 <code>xml</code> 文件可以单独存放在 <code>manifest</code> 仓库中。</p>
+<p>针对当前测试项目，编写的 <code>test.xml</code> 如下：</p>
+<pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;manifest&gt;
+  &lt;notice&gt;DO NOT MODIFY!!!! THIS IS A BRANCH MANIFEST&lt;/notice&gt;
+
+  &lt;remote fetch=&quot;https://gitlab.com/&quot;  name=&quot;gitlab&quot; review=&quot;null&quot;/&gt;
+
+  &lt;default remote=&quot;gitlab&quot; revision=&quot;master&quot;/&gt;
+
+  &lt;project name=&quot;te3597/uboot&quot;                 path=&quot;u-boot&quot;               remote=&quot;gitlab&quot;   revision=&quot;master&quot;/&gt;
+  &lt;project name=&quot;te3597/kernel&quot;                path=&quot;kernel&quot;               remote=&quot;gitlab&quot;   revision=&quot;master&quot;/&gt;
+  &lt;project name=&quot;te3597/sdk&quot;                   path=&quot;.&quot;                    remote=&quot;gitlab&quot;   revision=&quot;master&quot;/&gt;
+  &lt;project name=&quot;te3597/frameworks_base&quot;       path=&quot;frameworks/base&quot;      remote=&quot;gitlab&quot;   revision=&quot;master&quot;/&gt;
+
+&lt;/manifest&gt;
+</code></pre>
+<p>可以看到其中主要用到4种节点。</p>
+<pre><code>notice: 注意信息
+remote: 远程仓库链接，名称等信息；可以包含多个 &lt;remote&gt; 节点
+default: 仓库默认的remote，与 &lt;remote&gt; 节点对应；以及默认分支，这里是“master”
+project: 仓库信息，包含name:名称，path: 本地部署路径，remote:远程服务器，revision:分支
+</code></pre>
+<p>在使用 <code>repo sync</code> 同步代码时，每个仓库的链接组成如下：</p>
+<pre><code class="bash">&lt;remote-fetch&gt;/&lt;project-name&gt;
+
+# examples: uboot
+remote-fetch: &quot;https://gitlab.com&quot;
+project-name:  &quot;te3597/uboot&quot;
+project-url: &quot;https://gitlab.com/te3597/uboot&quot;
+</code></pre>
+<p>当 <code>repo sync</code> 时，<code>repo</code> 会根据 <code>xml</code> 中<code>project</code>的 <code>path</code> 信息创建相应路径，并将代码解析到该路径。根据以上 <code>test.xml</code> 信息可知，同步后的代码结构如下：</p>
+<pre><code>.repo sdk-files u-boot/uboot-files kernel/kernel-files frameworks/base/frameworks_base-files
+</code></pre>
+<h2 id="repo-操作"><a href="#repo-操作" class="headerlink" title="repo 操作"></a>repo 操作</h2><p>在代码全部提交到gitlab后，其它人就可以通过 <code>repo</code> 去下载同步和管理代码了。</p>
+<h3 id="repo-init"><a href="#repo-init" class="headerlink" title="repo init"></a>repo init</h3><pre><code class="bash">$ mkdir root
+$ cd root
+$ git clone https://gitlab.com/te3597/git-repo.git ..
+
+# download manifest
+$ ../git-repo/repo init -u https://gitlab.com/te3597/manifest.git  -b master -m test.xml --no-repo-verify
+</code></pre>
+<h3 id="repo-sync"><a href="#repo-sync" class="headerlink" title="repo sync"></a>repo sync</h3><p><code>repo sync</code> 会根据 <code>test.xml</code> 挨个从远程仓库拉取仓库代码到本地。</p>
+<pre><code class="bash"># repo sync
+$ .repo/repo/repo sync
+</code></pre>
+<h3 id="repo-list"><a href="#repo-list" class="headerlink" title="repo list"></a>repo list</h3><pre><code class="bash"># repo list
+$ .repo/repo/repo list
+. : te3597/sdk
+frameworks/base : te3597/frameworks_base
+kernel : te3597/kernel
+u-boot : te3597/uboot
+</code></pre>
+<h3 id="repo-forall"><a href="#repo-forall" class="headerlink" title="repo forall"></a>repo forall</h3><p><code>repo forall</code> 是针对所有仓库的遍历操作，后面添加 <code>-c &lt;cmds&gt;</code> 可以遍历所有仓库并执行相应指令。</p>
+<p>比如想要切换所有仓库的分支。</p>
+<pre><code class="bash">.repo/repo/repo forall -c git checkout -b master
+</code></pre>
+<h3 id="repo-status"><a href="#repo-status" class="headerlink" title="repo status"></a>repo status</h3><p><code>repo status</code> 与 <code>git status</code> 类似，不过前者针对的是所有仓库，后者针对某一个仓库。</p>
+<pre><code>.repo/repo/repo status
+</code></pre>
+<p><code>repo</code> 的其它相关操作可以参考 <code>Google</code> 安卓源码管理文档 <a target="_blank" rel="noopener" href="https://source.android.com/setup/develop/repo">repo 使用</a> .</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://source.android.com/setup/develop/repo">repo 使用</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.itmangoto.cn/2018/05/08/git-repo-install/">下载安装和使用git-repo</a></li>
+</ul>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2022/02/24/gitlab-repo/">https://www.litreily.top/2022/02/24/gitlab-repo/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tags"></i><a href="/tags/repo/">repo</a><a href="/tags/gitlab/">gitlab</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#gitlab-%E6%93%8D%E4%BD%9C"><span class="toc-number">1.</span> <span class="toc-text">gitlab 操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B0%E5%BB%BA-group"><span class="toc-number">1.1.</span> <span class="toc-text">新建 group</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B0%E5%BB%BA%E7%A9%BA%E4%BB%93%E5%BA%93"><span class="toc-number">1.2.</span> <span class="toc-text">新建空仓库</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%AC%E5%9C%B0%E4%BB%A3%E7%A0%81%E7%AE%A1%E7%90%86"><span class="toc-number">2.</span> <span class="toc-text">本地代码管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD-repo"><span class="toc-number">2.1.</span> <span class="toc-text">下载 repo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD-git-repo"><span class="toc-number">2.2.</span> <span class="toc-text">下载 git-repo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E4%BB%A3%E7%A0%81"><span class="toc-number">2.3.</span> <span class="toc-text">添加代码</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#manifest"><span class="toc-number">3.</span> <span class="toc-text">manifest</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#repo-%E6%93%8D%E4%BD%9C"><span class="toc-number">4.</span> <span class="toc-text">repo 操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#repo-init"><span class="toc-number">4.1.</span> <span class="toc-text">repo init</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#repo-sync"><span class="toc-number">4.2.</span> <span class="toc-text">repo sync</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#repo-list"><span class="toc-number">4.3.</span> <span class="toc-text">repo list</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#repo-forall"><span class="toc-number">4.4.</span> <span class="toc-text">repo forall</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#repo-status"><span class="toc-number">4.5.</span> <span class="toc-text">repo status</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="next" href="/2022/02/22/android-ani/">RK3288 Android 10 系统开发[2] - 更新开机logo与动画 &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+.night .v[data-class=v] a:hover { color: #216C73 !important; }
+.night .v[data-class=v] li { list-style: inherit; }
+.night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
+.night .v[data-class=v] .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.night .v[data-class=v] .vbtn { border-radius: 0; background: none; }
+.night .v[data-class=v] .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.night .v[data-class=v] .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.night .v[data-class=v] .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre,.night .v[data-class=v] .vlist .vcard .vhead .vsys { background: #203240 !important; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre { color: #F0F0F0; font-size: 95%; }
+.v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
+</style><div id="vcomment"></div><script src="//cdn.bootcdn.net/ajax/libs/valine/1.4.14/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
+  lang: 'zh-cn',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></section><footer><p>Copyright © 2016 - 2022 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script></body></html>
