@@ -6,7 +6,7 @@
   <link href="https://www.litreily.top/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2022-02-24T08:31:43.202Z</updated>
+  <updated>2022-07-08T11:02:08.349Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -15,6 +15,38 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>RK3288 Android 6.0 适配 RTL8821CU wifi&amp;BT 功能</title>
+    <link href="https://www.litreily.top/2022/07/08/rk3288-bt/"/>
+    <id>https://www.litreily.top/2022/07/08/rk3288-bt/</id>
+    <published>2022-07-08T09:54:55.000Z</published>
+    <updated>2022-07-08T11:02:08.349Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;需求背景&quot;&gt;&lt;a href=&quot;#需求背景&quot; class=&quot;headerlink&quot; title=&quot;需求背景&quot;&gt;&lt;/a&gt;需求背景&lt;/h2&gt;&lt;p&gt;项目需求，要求添加蓝牙功能，选择的芯片是WIFI&amp;amp;蓝牙二合一的 &lt;code&gt;RTL8821CU&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;为此，需要更新蓝牙和wifi的相关驱动，以及Android系统层的一些配置，同时还要向下兼容旧的wifi芯片 RTL8188EU.&lt;/p&gt;
+&lt;h2 id=&quot;相关文件&quot;&gt;&lt;a href=&quot;#相关文件&quot; class=&quot;headerlink&quot; title=&quot;相关文件&quot;&gt;&lt;/a&gt;相关文件&lt;/h2&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;# kernel
+## config
+kernel/arch/arm/configs/rockchip_defconfig
+## dts
+kernel/arch/arm/boot/dts/rk3288-tb_8846.dts
+## wifi
+kernel/drivers/net/wireless/rockchip_wlan/rtl8821cu/*
+kernel/drivers/net/wireless/rockchip_wlan/rtl8821cu/Makefile
+kernel/drivers/net/wireless/rockchip_wlan/wifi_sys</summary>
+      
+    
+    
+    
+    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
+    
+    
+    <category term="android" scheme="https://www.litreily.top/tags/android/"/>
+    
+  </entry>
   
   <entry>
     <title>RK3288 Android 10 系统开发[3] - 结合 gitlab 搭建 repo 代码仓库管理平台</title>
@@ -979,36 +1011,6 @@ Pa</summary>
     <category term="ssh" scheme="https://www.litreily.top/tags/ssh/"/>
     
     <category term="putty" scheme="https://www.litreily.top/tags/putty/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Linux 内核驱动解析 - UBI坏块预留大小</title>
-    <link href="https://www.litreily.top/2020/05/07/ubi-driver/"/>
-    <id>https://www.litreily.top/2020/05/07/ubi-driver/</id>
-    <published>2020-05-07T01:21:29.000Z</published>
-    <updated>2021-05-28T03:12:11.503Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;在处理ubifs相关bug的过程中，学习了ubi驱动对坏块保留分区的处理方式，在此记录一下。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/assets/linux/ubi-reserved-maps.png&quot; alt=&quot;ubi reserved mind maps&quot;&gt;&lt;/p&gt;
-&lt;h2 id=&quot;相关概念&quot;&gt;&lt;a href=&quot;#相关概念&quot; class=&quot;headerlink&quot; title=&quot;相关概念&quot;&gt;&lt;/a&gt;相关概念&lt;/h2&gt;&lt;h3 id=&quot;mtd&quot;&gt;&lt;a href=&quot;#mtd&quot; class=&quot;headerlink&quot; title=&quot;mtd&quot;&gt;&lt;/a&gt;mtd&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;mtd&lt;/strong&gt; 全称 memory technology device 内存技术设备，是用于访问内存设备(RAM, Flash)的Linux 子系统，在硬件层和用户空间之间提供抽象接口。&lt;/p&gt;
-&lt;p&gt;在嵌入式linux设备中的&lt;code&gt;/dev/&lt;/code&gt;目录下有很多&lt;code&gt;/dev/mtdxx&lt;/code&gt;文件，这些文件对应的就是内存设备。比如，嵌入式设备的Nand Flash被划分为多个分区，每个分区对应一个&lt;code&gt;/dev/mtdxx&lt;/code&gt;文件。&lt;/p&gt;
-&lt;p&gt;如下所示，&lt;code&gt;/dev/mtd0&lt;/code&gt;至&lt;code&gt;/dev/mtd10&lt;/code&gt;对</summary>
-      
-    
-    
-    
-    <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
-    
-    
-    <category term="C/C++" scheme="https://www.litreily.top/tags/C-C/"/>
-    
-    <category term="ubi" scheme="https://www.litreily.top/tags/ubi/"/>
-    
-    <category term="flash" scheme="https://www.litreily.top/tags/flash/"/>
     
   </entry>
   

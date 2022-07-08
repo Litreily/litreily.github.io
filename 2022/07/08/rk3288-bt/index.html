@@ -1,0 +1,380 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>RK3288 Android 6.0 适配 RTL8821CU wifi&amp;BT 功能 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
+</head><link rel="stylesheet" type="text/css" href="/plugins/highlight/atom-one-dark.min.css"><script type="text/javascript" src="/plugins/highlight/highlight.min.js"></script><script>hljs.initHighlightingOnLoad();
+</script><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">RK3288 Android 6.0 适配 RTL8821CU wifi&amp;BT 功能</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2022/07/08/rk3288-bt/">2022-07-08</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Android/">Android</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><h2 id="需求背景"><a href="#需求背景" class="headerlink" title="需求背景"></a>需求背景</h2><p>项目需求，要求添加蓝牙功能，选择的芯片是WIFI&amp;蓝牙二合一的 <code>RTL8821CU</code>.</p>
+<p>为此，需要更新蓝牙和wifi的相关驱动，以及Android系统层的一些配置，同时还要向下兼容旧的wifi芯片 RTL8188EU.</p>
+<h2 id="相关文件"><a href="#相关文件" class="headerlink" title="相关文件"></a>相关文件</h2><pre><code class="bash"># kernel
+## config
+kernel/arch/arm/configs/rockchip_defconfig
+## dts
+kernel/arch/arm/boot/dts/rk3288-tb_8846.dts
+## wifi
+kernel/drivers/net/wireless/rockchip_wlan/rtl8821cu/*
+kernel/drivers/net/wireless/rockchip_wlan/rtl8821cu/Makefile
+kernel/drivers/net/wireless/rockchip_wlan/wifi_sys/rkwifi_sys_iface.c
+kernel/drivers/net/wireless/Kconfig
+kernel/drivers/net/wireless/Makefile
+kernel/include/linux/rfkill-wlan.h
+kernel/net/rfkill/rfkill-wlan.c
+## bt
+kernel/drivers/bluetooth/rtk_btusb.c
+kernel/drivers/bluetooth/rtk_btusb.h
+
+# vendor
+## wifi
+vendor/rockchip/common/wifi/modules/8188eu.ko
+vendor/rockchip/common/wifi/modules/8821cu.ko
+## bt
+vendor/rockchip/common/bluetooth/bluetooth.mk
+vendor/rockchip/common/bluetooth/realtek/firmware/usb/rtl8821c/device-rtl.mk
+vendor/rockchip/common/bluetooth/realtek/firmware/usb/rtl8821c/rtl8821c_config
+vendor/rockchip/common/bluetooth/realtek/firmware/usb/rtl8821c/rtl8821c_fw
+## hci tools
+vendor/rockchip/common/rftesttool/broadcom/broadcom.mk
+vendor/rockchip/common/rftesttool/rftesttool.mk
+
+# device/rockchip/rk3288
+device/rockchip/rk3288/init.rc
+</code></pre>
+<h2 id="kernel"><a href="#kernel" class="headerlink" title="kernel"></a>kernel</h2><h3 id="config"><a href="#config" class="headerlink" title="config"></a>config</h3><p>在内核配置中启用RTL8821CU.</p>
+<pre><code class="patch">--- a/arch/arm/configs/rockchip_defconfig
++++ b/arch/arm/configs/rockchip_defconfig
+@@ -298,8 +298,9 @@ CONFIG_USB_HSO=y
+ CONFIG_USB_NET_INT51X1=y
+ CONFIG_USB_IPHETH=y
+ CONFIG_USB_SIERRA_NET=y
+-CONFIG_RTL8188EU=y
+ CONFIG_ESP8089=y
++CONFIG_RTL8188EU=m
++CONFIG_RTL8821CU=m
+ CONFIG_RKWIFI=y
+ CONFIG_AP6335=y
+ # CONFIG_INPUT_MOUSEDEV is not set
+</code></pre>
+<h3 id="dts"><a href="#dts" class="headerlink" title="dts"></a>dts</h3><p>在 dts 将wifi_chip_type 改成 RTL8723BU, 注意！是RTL8723BU, 而不是RTL8821CU.</p>
+<p>这一步非常关键，RK3288 android 6.0 sdk默认支持RTL8723BU, 但是还不支持RTL8821CU.也就是说明，安卓系统层只支持RTL8723BU， 而不支持RTL8821CU. 如果不修改，那么蓝牙打开时不会触发驱动层去打开蓝牙。</p>
+<pre><code class="patch">--- a/arch/arm/boot/dts/rk3288-tb_8846.dts
++++ b/arch/arm/boot/dts/rk3288-tb_8846.dts
+@@ -15,8 +15,8 @@
+ * rtl8188eu, rtl8723bs, rtl8723bu
+ * esp8089
+ */
+-//wifi_chip_type = &quot;rtl8723bu&quot;;
+-wifi_chip_type = &quot;rtl8188eu&quot;;
++wifi_chip_type = &quot;rtl8723bu&quot;;
++//wifi_chip_type = &quot;rtl8188eu&quot;;
+
+ sdio_vref = &lt;1800&gt;; //1800mv or 3300mv
+</code></pre>
+<h3 id="wifi"><a href="#wifi" class="headerlink" title="wifi"></a>wifi</h3><p>wifi 驱动移植相对简单，把RTL8821CU的wifi驱动拷贝到 <code>kernel/drivers/net/wireless/rockchip_wlan/rtl8821cu</code> 目录，然后添加和修改相应的Kconfig, Makefile等即可。</p>
+<pre><code class="patch">diff --git a/drivers/net/wireless/Kconfig b/drivers/net/wireless/Kconfig
+index 4e3af3d..5213afe 100644
+--- a/drivers/net/wireless/Kconfig
++++ b/drivers/net/wireless/Kconfig
+@@ -45,6 +45,7 @@ choice
+     bool &quot;No Realtek WiFi&quot;
+ 
+ source &quot;drivers/net/wireless/rockchip_wlan/rtl8188eu/Kconfig&quot;
++source &quot;drivers/net/wireless/rockchip_wlan/rtl8821cu/Kconfig&quot;
+ source &quot;drivers/net/wireless/rockchip_wlan/rtl8189es/Kconfig&quot;
+ source &quot;drivers/net/wireless/rockchip_wlan/rtl8192cu/Kconfig&quot;
+ source &quot;drivers/net/wireless/rockchip_wlan/rtl8192du/Kconfig&quot;
+diff --git a/drivers/net/wireless/Makefile b/drivers/net/wireless/Makefile
+index c3c8b85..4f18726 100644
+--- a/drivers/net/wireless/Makefile
++++ b/drivers/net/wireless/Makefile
+@@ -5,6 +5,7 @@ obj-y += rockchip_wlan/wifi_sys/rkwifi_sys_iface.o
+ obj-$(CONFIG_RTL8192CU)        += rockchip_wlan/rtl8192cu/
+ obj-$(CONFIG_RTL8192DU)        += rockchip_wlan/rtl8192du/
+ obj-$(CONFIG_RTL8188EU)           += rockchip_wlan/rtl8188eu/
++obj-$(CONFIG_RTL8821CU)           += rockchip_wlan/rtl8821cu/
+ obj-$(CONFIG_RTL8189ES)           += rockchip_wlan/rtl8189es/
+ obj-$(CONFIG_RTL8723AU)           += rockchip_wlan/rtl8723au/
+ obj-$(CONFIG_RTL8723BU)           += rockchip_wlan/rtl8723bu/
+diff --git a/drivers/net/wireless/rockchip_wlan/rtl8821cu/Makefile b/drivers/net/wireless/rockchip_wlan/rtl8821cu/Makefile
+index 850fb5a..3a6bacc 100644
+--- a/drivers/net/wireless/rockchip_wlan/rtl8821cu/Makefile
++++ b/drivers/net/wireless/rockchip_wlan/rtl8821cu/Makefile
+@@ -92,7 +92,7 @@ CONFIG_RTW_UP_MAPPING_RULE = tos
+ CONFIG_RTW_MBO = n
+ ########################## Android ###########################
+ # CONFIG_RTW_ANDROID - 0: no Android, 4/5/6/7/8/9/10/11 : Android version
+-CONFIG_RTW_ANDROID = 0
++CONFIG_RTW_ANDROID = 6
+ 
+ ifeq ($(shell test $(CONFIG_RTW_ANDROID) -gt 0; echo $$?), 0)
+ EXTRA_CFLAGS += -DCONFIG_RTW_ANDROID=$(CONFIG_RTW_ANDROID)
+@@ -102,7 +102,7 @@ endif
+ CONFIG_RTW_DEBUG = y
+ # default log level is _DRV_INFO_ = 4,
+ # please refer to &quot;How_to_set_driver_debug_log_level.doc&quot; to set the available level.
+-CONFIG_RTW_LOG_LEVEL = 4
++CONFIG_RTW_LOG_LEVEL = 2
+ 
+ # enable /proc/net/rtlxxxx/ debug interfaces
+ CONFIG_PROC_DEBUG = y
+@@ -135,7 +135,7 @@ CONFIG_LAYER2_ROAMING = y
+ #bit0: ROAM_ON_EXPIRED, #bit1: ROAM_ON_RESUME, #bit2: ROAM_ACTIVE
+ CONFIG_ROAMING_FLAG = 0x3
+ ###################### Platform Related #######################
+-CONFIG_PLATFORM_I386_PC = y
++CONFIG_PLATFORM_I386_PC = n
+ CONFIG_PLATFORM_ANDROID_X86 = n
+ CONFIG_PLATFORM_ANDROID_INTEL_X86 = n
+ CONFIG_PLATFORM_JB_X86 = n
+@@ -161,6 +161,7 @@ CONFIG_PLATFORM_ARM_TCC8930_JB42 = n
+ CONFIG_PLATFORM_ARM_RK2818 = n
+ CONFIG_PLATFORM_ARM_RK3066 = n
+ CONFIG_PLATFORM_ARM_RK3188 = n
++CONFIG_PLATFORM_ARM_RK3288 = y
+ CONFIG_PLATFORM_ARM_URBETTER = n
+ CONFIG_PLATFORM_ARM_TI_PANDA = n
+ CONFIG_PLATFORM_MIPS_JZ4760 = n
+@@ -1712,6 +1713,23 @@ KSRC := /home/android_sdk/Rockchip/Rk3188/kernel
+ MODULE_NAME := wlan
+ endif
+ 
++ifeq ($(CONFIG_PLATFORM_ARM_RK3288), y)
++EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN -DCONFIG_PLATFORM_ANDROID -DCONFIG_PLATFORM_ROCKCHIPS
++# default setting for Android 4.1, 4.2, 4.3, 4.4
++EXTRA_CFLAGS += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
++EXTRA_CFLAGS += -DCONFIG_CONCURRENT_MODE
++# default setting for Power control
++EXTRA_CFLAGS += -DRTW_ENABLE_WIFI_CONTROL_FUNC
++ifeq ($(CONFIG_SDIO_HCI), y)
++EXTRA_CFLAGS += -DRTW_SUPPORT_PLATFORM_SHUTDOWN
++endif
++# default setting for Special function
++ARCH := arm
++CROSS_COMPILE := /media/hdd1/wugt/rk3288-android6.0-sdk/prebuilts/gcc/linux-x86/arm/arm-eabi-4.6/bin/arm-eabi-
++KSRC := /media/hdd1/wugt/rk3288-android6.0-sdk/kernel
++MODULE_NAME := wlan
++endif
++
+ ifeq ($(CONFIG_PLATFORM_ARM_RK3066), y)
+ EXTRA_CFLAGS += -DCONFIG_PLATFORM_ARM_RK3066
+ EXTRA_CFLAGS += -DRTW_ENABLE_WIFI_CONTROL_FUNC
+</code></pre>
+<p>除了wifi驱动外，还需要更新rfkill驱动。</p>
+<pre><code class="patch">diff --git a/drivers/net/wireless/rockchip_wlan/wifi_sys/rkwifi_sys_iface.c b/drivers/net/wireless/rockchip_wlan/wifi_sys/rkwifi_sys_iface.c
+index 58112a9..f7245d6 100755
+--- a/drivers/net/wireless/rockchip_wlan/wifi_sys/rkwifi_sys_iface.c
++++ b/drivers/net/wireless/rockchip_wlan/wifi_sys/rkwifi_sys_iface.c
+@@ -81,6 +81,11 @@ static ssize_t wifi_chip_read(struct class *cls, struct class_attribute *attr, c
+            count = sprintf(_buf, &quot;%s&quot;, &quot;RTL8188EU&quot;);
+            printk(&quot;Current WiFi chip is RTL8188EU.\n&quot;);
+        &#125;
++
++       if(type == WIFI_RTL8821CU) &#123;
++           count = sprintf(_buf, &quot;%s&quot;, &quot;RTL8821CU&quot;);
++           printk(&quot;Current WiFi chip is RTL8821CU.\n&quot;);
++       &#125;
+
+        if(type == WIFI_RTL8723BS) &#123;
+            count = sprintf(_buf, &quot;%s&quot;, &quot;RTL8723BS&quot;);
+diff --git a/include/linux/rfkill-wlan.h b/include/linux/rfkill-wlan.h
+index 6015bf4..041353f 100755
+--- a/include/linux/rfkill-wlan.h
++++ b/include/linux/rfkill-wlan.h
+@@ -57,6 +57,7 @@ enum &#123;
+     WIFI_AP6493,
+     WIFI_AP6XXX_SERIES,
+     WIFI_RTL8188EU,
++    WIFI_RTL8821CU,
+     WIFI_RTL8192DU,
+     WIFI_RTL8723AS,
+     WIFI_RTL8723BS,
+diff --git a/net/rfkill/rfkill-wlan.c b/net/rfkill/rfkill-wlan.c
+index 55b8b5f..4f5d82c 100755
+--- a/net/rfkill/rfkill-wlan.c
++++ b/net/rfkill/rfkill-wlan.c
+@@ -126,6 +126,8 @@ int get_wifi_chip_type(void)
+         type = WIFI_AP6493;
+     &#125; else if (strcmp(wifi_chip_type_string, &quot;rtl8188eu&quot;) == 0) &#123;
+         type = WIFI_RTL8188EU;
++    &#125; else if (strcmp(wifi_chip_type_string, &quot;rtl8821cu&quot;) == 0) &#123;
++        type = WIFI_RTL8821CU;
+     &#125; else if (strcmp(wifi_chip_type_string, &quot;rtl8192du&quot;) == 0) &#123;
+         type = WIFI_RTL8192DU;
+     &#125; else if (strcmp(wifi_chip_type_string, &quot;rtl8723as&quot;) == 0) &#123;
+</code></pre>
+<h3 id="bt"><a href="#bt" class="headerlink" title="bt"></a>bt</h3><p>接下来是蓝牙驱动，由于sdk默认不支持RTL8821CU, 所以需要手动添加相关配置。</p>
+<pre><code class="patch">--- a/drivers/bluetooth/rtk_btusb.c
++++ b/drivers/bluetooth/rtk_btusb.c
+@@ -70,7 +70,7 @@
+ #define CMD_HDR_LEN            sizeof(struct hci_command_hdr)
+ #define EVT_HDR_LEN            sizeof(struct hci_event_hdr)
+ #define CMD_CMP_LEN            sizeof(struct hci_ev_cmd_complete)
+-#define RTK_PATCH_LENGTH_MAX 1024*24
++#define RTK_PATCH_LENGTH_MAX 1024*36
+
+ static spinlock_t queue_lock;
+ enum rtk_endpoit &#123;
+@@ -145,6 +145,8 @@ static patch_info fw_patch_table[] = &#123;
+
+ &#123; 0xb720, 0x8723, 0, 0, &quot;mp_rtl8723b_fw&quot;, &quot;rtl8723b_fw&quot;, &quot;rtl8723bu_config&quot;, NULL, 0 &#125;, /* RTL8723BU */
+ &#123; 0xb72A, 0x8723, 0, 0, &quot;mp_rtl8723b_fw&quot;, &quot;rtl8723b_fw&quot;, &quot;rtl8723bu_config&quot;, NULL, 0 &#125;, /* RTL8723BU */
++&#123; 0xB820, 0x8821, 0, 0, &quot;mp_rtl8821c_fw&quot;, &quot;rtl8821c_fw&quot;, &quot;rtl8821c_config&quot;, NULL, 0 &#125;, /* RTL8821CU */
++&#123; 0xC820, 0x8821, 0, 0, &quot;mp_rtl8821c_fw&quot;, &quot;rtl8821c_fw&quot;, &quot;rtl8821c_config&quot;, NULL, 0 &#125;, /* RTL8821CU */
+ &#123; 0xb728, 0x8723, 0, 0, &quot;mp_rtl8723b_fw&quot;, &quot;rtl8723b_fw&quot;, &quot;rtl8723b_config&quot;, NULL, 0 &#125;, /* RTL8723BE for LC */
+ &#123; 0xb723, 0x8723, 0, 0, &quot;mp_rtl8723b_fw&quot;, &quot;rtl8723b_fw&quot;, &quot;rtl8723b_config&quot;, NULL, 0 &#125;, /* RTL8723BE */
+ &#123; 0xb72B, 0x8723, 0, 0, &quot;mp_rtl8723b_fw&quot;, &quot;rtl8723b_fw&quot;, &quot;rtl8723b_config&quot;, NULL, 0 &#125;, /* RTL8723BE */
+diff --git a/drivers/bluetooth/rtk_btusb.h b/drivers/bluetooth/rtk_btusb.h
+index 5f5e53a..f71d7b1 100755
+--- a/drivers/bluetooth/rtk_btusb.h
++++ b/drivers/bluetooth/rtk_btusb.h
+@@ -127,6 +127,7 @@ struct rtk_bt_vendor_config&#123;
+ #define ROM_LMP_8723a0x1200
+ #define ROM_LMP_8723b0x8723
+ #define ROM_LMP_8821a0X8821
++#define ROM_LMP_8821c0X8821
+ #define ROM_LMP_8761a0X8761
+ #define ROM_LMP_8703a0x8723
+ #define ROM_LMP_8763a0x8763
+@@ -149,6 +150,8 @@ uint16_t project_id[] = &#123;
+     ROM_LMP_8703b,
+     ROM_LMP_8723c,
+     ROM_LMP_8822b,
++       ROM_LMP_NONE,
++       ROM_LMP_8821c,
+        ROM_LMP_NONE
+ &#125;;
+ struct rtk_eversion_evt &#123;
+</code></pre>
+<p>值得注意的是：</p>
+<ol>
+<li><code>rtk_usb</code> 驱动配置的最大fw size为24k, 而 RTL8821CU 的 FW 约 30k, 所以需要修改最大值为 36k</li>
+<li>添加 <code>project_id</code> 时，通过debug信息知道 RTL8821CU 对应的 ID 为 10，所以需要修改枚举列表，将 RTL8821CU 放置到第 10 个位置</li>
+<li>通过设置 <code>DBG_FLAG</code> 可以打开调试信息</li>
+</ol>
+<h2 id="vendor"><a href="#vendor" class="headerlink" title="vendor"></a>vendor</h2><p>vendor 目录需要添加 RTL8821CU 所需的fw和config文件。</p>
+<pre><code class="patch"> rockchip/common/bluetooth/bluetooth.mk|   1 +
+ rockchip/common/bluetooth/realtek/firmware/usb/rtl8821c/device-rtl.mk   |   4 ++++
+ rockchip/common/bluetooth/realtek/firmware/usb/rtl8821c/rtl8821c_config | Bin 0 -&gt; 14 bytes
+ rockchip/common/bluetooth/realtek/firmware/usb/rtl8821c/rtl8821c_fw     | Bin 0 -&gt; 50344 bytes
+ 4 files changed, 5 insertions(+)
+
+diff --git a/rockchip/common/bluetooth/bluetooth.mk b/rockchip/common/bluetooth/bluetooth.mk
+index 0f6bde8..1dafdcc 100755
+--- a/rockchip/common/bluetooth/bluetooth.mk
++++ b/rockchip/common/bluetooth/bluetooth.mk
+@@ -12,6 +12,7 @@ $(call inherit-product-if-exists, $(LOCAL_PATH)/realtek/firmware/usb/rtl8723b/de
+ $(call inherit-product-if-exists, $(LOCAL_PATH)/realtek/firmware/usb/rtl8703b/device-rtl.mk)
+ $(call inherit-product-if-exists, $(LOCAL_PATH)/realtek/firmware/usb/rtl8761a/device-rtl.mk)
+ $(call inherit-product-if-exists, $(LOCAL_PATH)/realtek/firmware/usb/rtl8821a/device-rtl.mk)
++$(call inherit-product-if-exists, $(LOCAL_PATH)/realtek/firmware/usb/rtl8821c/device-rtl.mk)
+ $(call inherit-product-if-exists, $(LOCAL_PATH)/realtek/firmware/usb/rtl8822b/device-rtl.mk)
+
+ $(call inherit-product-if-exists, $(LOCAL_PATH)/realtek/firmware/uart/rtlbtfw_cfg.mk)
+diff --git a/rockchip/common/bluetooth/realtek/firmware/usb/rtl8821c/device-rtl.mk b/rockchip/common/bluetooth/realtek/firmware/usb/rtl8821c/device-rtl.mk
+new file mode 100755
+index 0000000..440034c
+--- /dev/null
++++ b/rockchip/common/bluetooth/realtek/firmware/usb/rtl8821c/device-rtl.mk
+@@ -0,0 +1,4 @@
++RTK_BT_FIRMWARE_DIR := rtl8821c
++PRODUCT_COPY_FILES += \
++       $(LOCAL_PATH)/$(RTK_BT_FIRMWARE_DIR)_fw:system/etc/firmware/rtl8821c_fw \
++       $(LOCAL_PATH)/$(RTK_BT_FIRMWARE_DIR)_config:system/etc/firmware/rtl8821c_config
+diff --git a/rockchip/common/bluetooth/realtek/firmware/usb/rtl8821c/rtl8821c_config b/rockchip/common/bluetooth/realtek/firmware/usb/rtl8821c/rtl8821c_config
+new file mode 100755
+index 0000000..cbec41e
+Binary files /dev/null and b/rockchip/common/bluetooth/realtek/firmware/usb/rtl8821c/rtl8821c_config differ
+diff --git a/rockchip/common/bluetooth/realtek/firmware/usb/rtl8821c/rtl8821c_fw b/rockchip/common/bluetooth/realtek/firmware/usb/rtl8821c/rtl8821c_fw
+new file mode 100755
+index 0000000..bc0df07
+Binary files /dev/null and b/rockchip/common/bluetooth/realtek/firmware/usb/rtl8821c/rtl8821c_fw differ
+</code></pre>
+<p>此外，还要把 wifi 驱动 RTL8821CU.ko 放置到 <code>rockchip/common/wifi/modules/</code> 目录。</p>
+<h2 id="hci-tools"><a href="#hci-tools" class="headerlink" title="hci tools"></a>hci tools</h2><p>如果要添加 hci 工具，需要添加以下patch. 这样可以将 hciconfig, hcitool, hcidump 等工具集成到安卓系统。</p>
+<pre><code class="patch">diff --git a/rockchip/common/rftesttool/broadcom/broadcom.mk b/rockchip/common/rftesttool/broadcom/broadcom.mk
+index 8819218..4c50604 100644
+--- a/rockchip/common/rftesttool/broadcom/broadcom.mk
++++ b/rockchip/common/rftesttool/broadcom/broadcom.mk
+@@ -1,8 +1,10 @@
++ifneq ($(strip $(TARGET_BOARD_PLATFORM)), rk3288)
+ $(call inherit-product-if-exists, $(LOCAL_PATH)/app/app.mk)
+
+ MFG_FWS := $(shell ls $(LOCAL_PATH)/mfg)
+ PRODUCT_COPY_FILES += \
+        $(foreach file, $(MFG_FWS), $(LOCAL_PATH)/mfg/$(file):system/etc/firmware/mfg/$(file))
++endif
+
+ EXE_FILES := $(shell ls $(LOCAL_PATH)/bin)
+ PRODUCT_COPY_FILES += \
+diff --git a/rockchip/common/rftesttool/rftesttool.mk b/rockchip/common/rftesttool/rftesttool.mk
+index bed8945..1012e91 100644
+--- a/rockchip/common/rftesttool/rftesttool.mk
++++ b/rockchip/common/rftesttool/rftesttool.mk
+@@ -3,4 +3,6 @@ PRODUCT_PACKAGES += \
+        RFTestTool
+
+ $(call inherit-product-if-exists, $(LOCAL_PATH)/broadcom/broadcom.mk)
++else ifeq ($(strip $(TARGET_BOARD_PLATFORM)), rk3288)
++$(call inherit-product-if-exists, $(LOCAL_PATH)/broadcom/broadcom.mk)
+ endif
+</code></pre>
+<h2 id="init-rc"><a href="#init-rc" class="headerlink" title="init.rc"></a>init.rc</h2><p>最后，在 <code>device/rockchip/rk3288/init.rc</code> 文件中添加wifi驱动加载的指令。</p>
+<pre><code class="patch">diff --git a/init.rc b/init.rc
+index 90a0b9e..e4285c3 100644
+--- a/init.rc
++++ b/init.rc
+@@ -463,6 +463,8 @@ on boot
+     chown root radio /proc/cmdline
+
+     insmod /drmboot.ko
++    insmod /system/lib/modules/8188eu.ko
++    insmod /system/lib/modules/8821cu.ko
+
+     # export power io of extend screen and set the default value
+     write /sys/class/gpio/export 224 
+</code></pre>
+<p>以上修改全部完成后，完整编译固件即可打开wifi和蓝牙了。</p>
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ol>
+<li>wifi驱动需要在kernel目录通过 <code>make modules</code> 得到</li>
+<li>rtk_usb 驱动使能 DBG_FLAG 可以打印更多调试信息</li>
+</ol>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2022/07/08/rk3288-bt/">https://www.litreily.top/2022/07/08/rk3288-bt/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tag"></i><a href="/tags/android/">android</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9C%80%E6%B1%82%E8%83%8C%E6%99%AF"><span class="toc-number">1.</span> <span class="toc-text">需求背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3%E6%96%87%E4%BB%B6"><span class="toc-number">2.</span> <span class="toc-text">相关文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#kernel"><span class="toc-number">3.</span> <span class="toc-text">kernel</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#config"><span class="toc-number">3.1.</span> <span class="toc-text">config</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dts"><span class="toc-number">3.2.</span> <span class="toc-text">dts</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#wifi"><span class="toc-number">3.3.</span> <span class="toc-text">wifi</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#bt"><span class="toc-number">3.4.</span> <span class="toc-text">bt</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#vendor"><span class="toc-number">4.</span> <span class="toc-text">vendor</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hci-tools"><span class="toc-number">5.</span> <span class="toc-text">hci tools</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#init-rc"><span class="toc-number">6.</span> <span class="toc-text">init.rc</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">7.</span> <span class="toc-text">注意事项</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="next" href="/2022/02/24/gitlab-repo/">RK3288 Android 10 系统开发[3] - 结合 gitlab 搭建 repo 代码仓库管理平台 &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+.night .v[data-class=v] a:hover { color: #216C73 !important; }
+.night .v[data-class=v] li { list-style: inherit; }
+.night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
+.night .v[data-class=v] .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.night .v[data-class=v] .vbtn { border-radius: 0; background: none; }
+.night .v[data-class=v] .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.night .v[data-class=v] .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.night .v[data-class=v] .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre,.night .v[data-class=v] .vlist .vcard .vhead .vsys { background: #203240 !important; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre { color: #F0F0F0; font-size: 95%; }
+.v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
+</style><div id="vcomment"></div><script src="//cdn.bootcdn.net/ajax/libs/valine/1.4.14/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
+  lang: 'zh-cn',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></section><footer><p>Copyright © 2016 - 2022 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script></body></html>
