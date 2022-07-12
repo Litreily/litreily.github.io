@@ -10,6 +10,8 @@
 <blockquote>
 <p>此应用专为旧版 Android 打造，因此可能无法正常运行。请尝试检查更新或与开发者联系。</p>
 </blockquote>
+<span id="more"></span>
+
 <p>为了去掉这个弹框提示，需要添加以下修改, 将 <code>onStartActivity</code> 函数中的 <code>showDeprecatedTargetDialogIfNeeded</code> 禁用。</p>
 <pre><code class="patch">--- a/services/core/java/com/android/server/wm/AppWarnings.java
 +++ b/services/core/java/com/android/server/wm/AppWarnings.java
