@@ -1,0 +1,216 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>RK3288 Android 6.0 logcat 过滤带冒号的 tag | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
+</head><link rel="stylesheet" type="text/css" href="/plugins/highlight/atom-one-dark.min.css"><script type="text/javascript" src="/plugins/highlight/highlight.min.js"></script><script>hljs.initHighlightingOnLoad();
+</script><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">RK3288 Android 6.0 logcat 过滤带冒号的 tag</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2022/12/06/logcat-arg/">2022-12-06</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Android/">Android</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><h2 id="logcat-过滤"><a href="#logcat-过滤" class="headerlink" title="logcat 过滤"></a>logcat 过滤</h2><p>logcat 过滤不打印的日志时，可以使用 <code>&lt;tag&gt;:S</code> 的参数，比如排除 ActivityManager 相关日志。使用 以下指令</p>
+<pre><code class="bash">logcat ActivityManager:S
+</code></pre>
+<p>但是我遇到一种特殊情况，应用app的tag中包含了冒号，比如 <code>APP:SDK--</code>, 其它类似的tag有很多，这种情况使用以下指令是无法过滤掉的。</p>
+<pre><code class="bash">logcat APP:SDK--:S
+</code></pre>
+<p>为了分析原因，需要查看 <code>logcat</code> 源码。</p>
+<pre><code class="bash">system/core/logcat/logcat.cpp
+system/core/liblog/logprint.c
+</code></pre>
+<h3 id="logcat-cpp"><a href="#logcat-cpp" class="headerlink" title="logcat.cpp"></a>logcat.cpp</h3><p>logcat.cpp 中解析参数时，针对 <code>s</code> 使用 <code>android_log_addFilterRule</code> 解析。这里需要说明的是， <code>logcat -s</code> 与 <code>logcat *:S</code> 是等效的。<code>logcat</code> 在解析 <code>&lt;tag&gt;:S</code> 时也是调用 <code>android_log_addFilterRule</code> 函数。</p>
+<pre><code class="cpp">   for (;;) &#123;
+         int ret;
+
+         ret = getopt(argc, argv, &quot;:cdDLt:T:gG:sQf:r:n:v:b:BSpP:k&quot;);
+
+         if (ret &lt; 0) &#123;
+             break;
+         &#125;
+                      
+         switch(ret) &#123;
+             case &#39;s&#39;:
+                 // default to all silent
+                 android_log_addFilterRule(g_logformat, &quot;*:s&quot;);
+             break;
+</code></pre>
+<h3 id="logprint-c"><a href="#logprint-c" class="headerlink" title="logprint.c"></a>logprint.c</h3><p><code>android_log_addFilterRule</code> 定义于 <code>logprint.c</code> 文件。</p>
+<pre><code class="c">int android_log_addFilterRule(AndroidLogFormat *p_format,
+        const char *filterExpression)
+&#123;
+    size_t tagNameLength;
+    android_LogPriority pri = ANDROID_LOG_DEFAULT;
+
+    tagNameLength = strcspn(filterExpression, &quot;:&quot;);
+
+    if (tagNameLength == 0) &#123;
+        goto error;
+    &#125;
+
+    if(filterExpression[tagNameLength] == &#39;:&#39;) &#123;
+        pri = filterCharToPri(filterExpression[tagNameLength+1]);
+
+        if (pri == ANDROID_LOG_UNKNOWN) &#123;
+            goto error;
+        &#125;
+    &#125;
+
+    if(0 == strncmp(&quot;*&quot;, filterExpression, tagNameLength)) &#123;
+        /*
+         * This filter expression refers to the global filter
+         * The default level for this is DEBUG if the priority
+         * is unspecified
+         */
+        if (pri == ANDROID_LOG_DEFAULT) &#123;
+            pri = ANDROID_LOG_DEBUG;
+        &#125;
+
+        p_format-&gt;global_pri = pri;
+    &#125; else &#123;
+        /*
+         * for filter expressions that don&#39;t refer to the global
+         * filter, the default is verbose if the priority is unspecified
+         */
+        if (pri == ANDROID_LOG_DEFAULT) &#123;
+            pri = ANDROID_LOG_VERBOSE;
+        &#125;
+
+        char *tagName;
+
+/*
+ * Presently HAVE_STRNDUP is never defined, so the second case is always taken
+ * Darwin doesn&#39;t have strnup, everything else does
+ */
+#ifdef HAVE_STRNDUP
+        tagName = strndup(filterExpression, tagNameLength);
+#else
+        /* a few extra bytes copied... */
+        tagName = strdup(filterExpression);
+        tagName[tagNameLength] = &#39;\0&#39;;
+#endif /*HAVE_STRNDUP*/
+
+        FilterInfo *p_fi = filterinfo_new(tagName, pri);
+        free(tagName);
+
+        p_fi-&gt;p_next = p_format-&gt;filters;
+        p_format-&gt;filters = p_fi;
+    &#125;
+
+    return 0;
+error:
+    return -1;
+&#125;
+</code></pre>
+<p>分析以上代码发现，在处理 <code>&lt;tag&gt;:S</code> 或者 <code>*:S</code> 时，是通过分隔符 <code>:</code> 解析为前后两部分，当tag中出现冒号时是无法正确处理的。</p>
+<p>为此，在保证原有功能不变的基础上，可以添加一些定制化的参数，新增新的api函数，用以支持过滤特定tag。</p>
+<h2 id="定制化logcat"><a href="#定制化logcat" class="headerlink" title="定制化logcat"></a>定制化logcat</h2><p>logcat已经支持的参数列表为 <code>:cdDLt:T:gG:sQf:r:n:v:b:BSpP:k</code>, 在这里添加一个没用到的参数，比如 <code>C</code>.</p>
+<pre><code class="c">--- a/core/logcat/logcat.cpp
++++ b/core/logcat/logcat.cpp
+@@ -255,6 +255,7 @@ static void show_help(const char *cmd)
+     fprintf(stderr, &quot;options include:\n&quot;
+                     &quot;  -s              Set default filter to silent.\n&quot;
+                     &quot;                  Like specifying filterspec &#39;*:S&#39;\n&quot;
++                    &quot;  -C              Set customize filter to slient.\n&quot;
+                     &quot;  -f &lt;filename&gt;   Log to file. Default is stdout\n&quot;
+                     &quot;  -r &lt;kbytes&gt;     Rotate log every kbytes. Requires -f\n&quot;
+                     &quot;  -n &lt;count&gt;      Sets max number of rotated logs to &lt;count&gt;, default 4\n&quot;
+@@ -492,7 +493,7 @@ int main(int argc, char **argv)
+     for (;;) &#123;
+         int ret;
+ 
+-        ret = getopt(argc, argv, &quot;:cdDLt:T:gG:sQf:r:n:v:b:BSpP:&quot;);
++        ret = getopt(argc, argv, &quot;:cdDLt:T:gG:sQf:r:n:v:b:BSpP:C&quot;);
+ 
+         if (ret &lt; 0) &#123;
+             break;
+@@ -504,6 +505,10 @@ int main(int argc, char **argv)
+                 android_log_addFilterRule(g_logformat, &quot;*:s&quot;);
+             break;
+ 
++            case &#39;C&#39;:
++                android_log_addFilterRule_custom(g_logformat);
++            break;
++
+             case &#39;c&#39;:
+                 clearLog = 1;
+                 mode |= ANDROID_LOG_WRONLY;
+</code></pre>
+<p>然后在 <code>logprint.c</code> 中添加定制化的代码。</p>
+<pre><code class="c">+static int android_log_addFilterRule_customize(AndroidLogFormat *p_format,
++        const char *filterExpression)
++&#123;
++    size_t tagNameLength;
++    android_LogPriority pri = ANDROID_LOG_SILENT;
++
++    tagNameLength = strlen(filterExpression);
++
++    char *tagName;
++
++#ifdef HAVE_STRNDUP
++    tagName = strndup(filterExpression, tagNameLength);
++#else
++    tagName = strdup(filterExpression);
++    tagName[tagNameLength] = &#39;\0&#39;;
++#endif /*HAVE_STRNDUP*/
++
++    FilterInfo *p_fi = filterinfo_new(filterExpression, pri);
++    free(tagName);
++
++    p_fi-&gt;p_next = p_format-&gt;filters;
++    p_format-&gt;filters = p_fi;
++    return 0;
++&#125;
++
++/**
++ * returns 0 on success and -1 on invalid expression
++ *
++ * Assumes single threaded execution
++ */
++
++int android_log_addFilterRule_custom(AndroidLogFormat *p_format)
++&#123;
++    android_log_addFilterRule_customize(p_format, &quot;APP:SDK--&quot;);
++    android_log_addFilterRule_customize(p_format, &quot;APP:API--&quot;);
++    android_log_addFilterRule_customize(p_format, &quot;APP:RUNTIME--&quot;);
++    return 0;
++&#125;
+</code></pre>
+<p>这样一来就可以通过 <code>logcat -C</code> 去过滤特定标签信息了。</p>
+<p>以上方法还可以进一步优化，比如添加打印等级相关的参数，针对当前业务已经够用，有兴趣的可以按需修改。</p>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2022/12/06/logcat-arg/">https://www.litreily.top/2022/12/06/logcat-arg/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tag"></i><a href="/tags/android/">android</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#logcat-%E8%BF%87%E6%BB%A4"><span class="toc-number">1.</span> <span class="toc-text">logcat 过滤</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#logcat-cpp"><span class="toc-number">1.1.</span> <span class="toc-text">logcat.cpp</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#logprint-c"><span class="toc-number">1.2.</span> <span class="toc-text">logprint.c</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9A%E5%88%B6%E5%8C%96logcat"><span class="toc-number">2.</span> <span class="toc-text">定制化logcat</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="next" href="/2022/07/12/android-perm/">RK3288 Android 10 系统开发[4] - 提供 app 默认权限 &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+.night .v[data-class=v] a:hover { color: #216C73 !important; }
+.night .v[data-class=v] li { list-style: inherit; }
+.night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
+.night .v[data-class=v] .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.night .v[data-class=v] .vbtn { border-radius: 0; background: none; }
+.night .v[data-class=v] .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.night .v[data-class=v] .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.night .v[data-class=v] .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre,.night .v[data-class=v] .vlist .vcard .vhead .vsys { background: #203240 !important; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre { color: #F0F0F0; font-size: 95%; }
+.v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
+</style><div id="vcomment"></div><script src="//cdn.bootcdn.net/ajax/libs/valine/1.4.14/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
+  lang: 'zh-cn',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></section><footer><p>Copyright © 2016 - 2022 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script></body></html>
