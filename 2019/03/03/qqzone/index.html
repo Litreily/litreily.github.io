@@ -1,19 +1,17 @@
-<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>Python网络爬虫5 - 爬取QQ空间相册 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+<!DOCTYPE html><html lang="en"><head><meta name="generator" content="Hexo 3.9.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>Python网络爬虫5 - 爬取QQ空间相册 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
 (function() {
     var hm = document.createElement("script");
     hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
     var s = document.getElementsByTagName("script")[0];
     s.parentNode.insertBefore(hm, s);
-})();</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
-</head><link rel="stylesheet" type="text/css" href="/plugins/highlight/atom-one-dark.min.css"><script type="text/javascript" src="/plugins/highlight/highlight.min.js"></script><script>hljs.initHighlightingOnLoad();
-</script><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">Python网络爬虫5 - 爬取QQ空间相册</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2019/03/03/qqzone/">2019-03-03</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Language/">Language</a>&nbsp;&bull;&nbsp;<a href="/categories/Language/Python/">Python</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>自毕业后，就再也没有用过QQ，QQ空间里记录的是些并不精彩的青葱岁月，但好歹也是份回忆，近日想着学以致用，用<code>Python</code>把QQ空间相册的所有照片爬取下来，以作备份。</p>
+})();</script></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">Python网络爬虫5 - 爬取QQ空间相册</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2019/03/03/qqzone/">2019-03-03</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Python/">Python</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>自毕业后，就再也没有用过QQ，QQ空间里记录的是些并不精彩的青葱岁月，但好歹也是份回忆，近日想着学以致用，用<code>Python</code>把QQ空间相册的所有照片爬取下来，以作备份。</p>
 <h2 id="分析QQ空间"><a href="#分析QQ空间" class="headerlink" title="分析QQ空间"></a>分析QQ空间</h2><h3 id="登录QQ空间"><a href="#登录QQ空间" class="headerlink" title="登录QQ空间"></a>登录QQ空间</h3><p>爬取第一步，分析站点，首先需要知道如何登录QQ空间。最初想法是用<code>requests</code>库配置登录请求，模拟登录，但是不久便放弃了这一思路，请看下图↓</p>
 <p><img src="/assets/qqzone/login.png" alt="login"></p>
 <p>根据登录按钮绑定的监听事件可以追踪到该按钮的点击事件如下：</p>
 <p><img src="/assets/qqzone/login_func.png" alt="login function"></p>
 <p>账号加密是必然的，但这一堆堆的代码真心不好解析，有耐心的勇士尽情一试！</p>
 <p>在排除这种登录方法后，选择<code>selenium</code>模拟用户登录不失为省时省力的方法，而且我们只是需要通过<code>selenium</code>完成登录，获取到<code>Cookies</code>和后面讲述的<code>g_tk</code>参数后，就可以停用了，所以效率并不太低。</p>
-<h3 id="分析空间相册"><a href="#分析空间相册" class="headerlink" title="分析空间相册"></a>分析空间相册</h3><p>登录以后，页面会跳转至 <a href="javascript:;">https://user.qzone.qq.com/{QQ_NUMBER}</a>, 这时把鼠标移到导航栏你会发现，所有的导航栏链接都是<code>javascript:;</code> 😳。没错就是这么坑，一切都是暗箱操作。</p>
+<h3 id="分析空间相册"><a href="#分析空间相册" class="headerlink" title="分析空间相册"></a>分析空间相册</h3><p>登录以后，页面会跳转至 <a href="javascript:;" target="_blank" rel="noopener">https://user.qzone.qq.com/{QQ_NUMBER}</a>, 这时把鼠标移到导航栏你会发现，所有的导航栏链接都是<code>javascript:;</code> 😳。没错就是这么坑，一切都是暗箱操作。</p>
 <p>当然这并不难处理，使用调试工具捕获点击后产生的请求，然后过滤出正确的请求包即可。因为网络包非常多，那么怎么过滤呢，猜想相册数据的API必然会返回个列表<code>list</code>，尝试过滤<code>list</code>然后逐个排除，最后定位到请求包。下面是通过<code>fcg_list</code>过滤后的数据包，列表信息以<code>jsonp</code>格式返回，稍作处理即可当做<code>json</code>格式来读取（后面有讲）。</p>
 <p><img src="/assets/qqzone/album_list.png" alt="album list"></p>
 <p>从<code>Headers</code>和<code>Response</code>可以分别获取到两组<strong>重要</strong>信息：</p>
@@ -48,7 +46,7 @@ callbackFun: shine0
 _: 1551788226819
 </code></pre>
 <p>其中<code>hostUin</code>, <code>uin</code>都是QQ号，<code>g_tk</code>是必须的且每次重新登录都会更新（后面有讲如何获取），其它有些参数不是必须的，我尝试后整理出如下请求参数：</p>
-<pre><code class="python">query = &#123;
+<pre><code class="python">query = {
     &#39;g_tk&#39;: self.g_tk,
     &#39;hostUin&#39;: self.username,
     &#39;uin&#39;: self.username,
@@ -58,18 +56,18 @@ _: 1551788226819
     &#39;source&#39;: &#39;qzone&#39;,
     &#39;plat&#39;: &#39;qzone&#39;,
     &#39;format&#39;: &#39;jsonp&#39;
-&#125;
+}
 </code></pre>
 <p>接下来看<code>jsonp</code>格式的跨域响应包：</p>
-<pre><code class="json">shine0_Callback(&#123;
+<pre><code class="json">shine0_Callback({
     &quot;code&quot;:0,
     &quot;subcode&quot;:0,
     &quot;message&quot;:&quot;&quot;,
     &quot;default&quot;:0,
     &quot;data&quot;:
-&#123;
+{
    &quot;albumListModeSort&quot; : [
-      &#123;
+      {
          &quot;allowAccess&quot; : 1,
          &quot;anonymity&quot; : 0,
          &quot;bitmap&quot; : &quot;10000000&quot;,
@@ -88,7 +86,7 @@ _: 1551788226819
          &quot;pypriv&quot; : 1,
          &quot;total&quot; : 4,
          &quot;viewtype&quot; : 0
-      &#125;,
+      },
 </code></pre>
 <p>shine0_Callback是请求包的<code>callbackFun</code>参数决定的，如果没这个参数，响应包会以<code>_Callback</code>作为默认名，当然这都不重要。所有相册信息以<code>json</code>格式存入<code>albumListModeSort</code>中，上面仅截取了一个相册的信息。</p>
 <p>相册信息中，<code>name</code>代表相册名称，<code>id</code>作为唯一标识可用于请求该相册内的照片信息，而<code>pre</code>仅仅是一个预览缩略图的链接，无关紧要。</p>
@@ -139,16 +137,16 @@ _: 1551790719497
 </blockquote>
 <p>同样可以对上面的参数进行简化，在相册列表请求参数的基础上添加<code>topicId</code>，<code>pageStart</code>和<code>pageNum</code>三个参数即可。</p>
 <p>下面来看返回的照片列表信息：</p>
-<pre><code class="json">shine0_Callback(&#123;
+<pre><code class="json">shine0_Callback({
     &quot;code&quot;:0,
     &quot;subcode&quot;:0,
     &quot;message&quot;:&quot;&quot;,
     &quot;default&quot;:0,
     &quot;data&quot;:
-&#123;
+{
    &quot;limit&quot; : 0,
    &quot;photoList&quot; : [
-      &#123;
+      {
          &quot;batchId&quot; : &quot;1402662093402000&quot;,
          &quot;browser&quot; : 0,
          &quot;cameratype&quot; : &quot; &quot;,
@@ -156,7 +154,7 @@ _: 1551790719497
          &quot;cp_x&quot; : 455,
          &quot;cp_y&quot; : 388,
          &quot;desc&quot; : &quot;&quot;,
-         &quot;exif&quot; : &#123;
+         &quot;exif&quot; : {
             &quot;exposureCompensation&quot; : &quot;&quot;,
             &quot;exposureMode&quot; : &quot;&quot;,
             &quot;exposureProgram&quot; : &quot;&quot;,
@@ -170,7 +168,7 @@ _: 1551790719497
             &quot;meteringMode&quot; : &quot;&quot;,
             &quot;model&quot; : &quot;&quot;,
             &quot;originalTime&quot; : &quot;&quot;
-         &#125;,
+         },
          &quot;forum&quot; : 0,
          &quot;frameno&quot; : 0,
          &quot;height&quot; : 621,
@@ -205,11 +203,11 @@ _: 1551790719497
          &quot;url&quot; : &quot;http:\/\/b171.photo.store.qq.com\/psb?\/V13LmPKk0JLNRY\/eSAslg*mYWaytEtLysg*Q*5Km91gIWfSk58K2rQY!\/b\/dIY29GUbJgAA&amp;bo=pANtAgAAAAABCeY!&quot;,
          &quot;width&quot; : 932,
          &quot;yurl&quot; : 0
-      &#125;,
+      },
       // ...
    ]
    &quot;t&quot; : &quot;952444063&quot;,
-   &quot;topic&quot; : &#123;
+   &quot;topic&quot; : {
       &quot;bitmap&quot; : &quot;10000000&quot;,
       &quot;browser&quot; : 0,
       &quot;classid&quot; : 106,
@@ -232,10 +230,10 @@ _: 1551790719497
       &quot;total&quot; : 4,
       &quot;url&quot; : &quot;http:\/\/b171.photo.store.qq.com\/psb?\/V13LmPKk0JLNRY\/eSAslg*mYWaytEtLysg*Q*5Km91gIWfGuwSk58K2rQY!\/b\/dIY29GUbJgAA&quot;,
       &quot;viewtype&quot; : 0
-   &#125;,
+   },
    &quot;totalInAlbum&quot; : 4,
    &quot;totalInPage&quot; : 4
-&#125;
+}
 </code></pre>
 <p>返回的照片信息都存于<code>photoList</code>, 上面同样只截取了一张照片的信息，后面一部分返回的是当前相册的一些基本信息。<code>totalInAlbum</code>， <code>totalInPage</code>存储了当前相册总共包含的照片数及本次返回的照片数。而我们需要下载的图片链接则是<code>url</code>！</p>
 <p>OK, 到此，所有请求和响应数据都分析清楚了，接下来便是<code>coding</code>的时候了。</p>
@@ -267,7 +265,7 @@ def _login_and_get_args(self):
     driver.get(&#39;https://i.qq.com/&#39;)
     # time.sleep(2)
 
-    logging.info(&#39;User &#123;&#125; login...&#39;.format(self.username))
+    logging.info(&#39;User {} login...&#39;.format(self.username))
     driver.switch_to.frame(&#39;login_frame&#39;)
     driver.find_element_by_id(&#39;switcher_plogin&#39;).click()
     driver.find_element_by_id(&#39;u&#39;).clear()
@@ -277,7 +275,7 @@ def _login_and_get_args(self):
     driver.find_element_by_id(&#39;login_button&#39;).click()
 
     time.sleep(1)
-    driver.get(&#39;https://user.qzone.qq.com/&#123;&#125;&#39;.format(self.username))
+    driver.get(&#39;https://user.qzone.qq.com/{}&#39;.format(self.username))
 </code></pre>
 <p>此处需要注意的是：</p>
 <ol>
@@ -299,15 +297,15 @@ def _login_and_get_args(self):
     self.session = requests.Session()
     for cookie in self.cookies:
         self.session.cookies.set(cookie[&#39;name&#39;], cookie[&#39;value&#39;])
-    self.session.headers = &#123;
+    self.session.headers = {
         &#39;Referer&#39;: &#39;https://qzs.qq.com/qzone/photo/v7/page/photo.html?init=photo.v7/module/albumList/index&amp;navBar=1&#39;,
         &#39;User-Agent&#39;: &#39;Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.109 Safari/537.36&#39;
-    &#125;
+    }
 </code></pre>
 <h3 id="请求相册信息"><a href="#请求相册信息" class="headerlink" title="请求相册信息"></a>请求相册信息</h3><p>获取相册信息，需要先封装好请求参数，然后通过<code>session.get</code>爬取数据，再通过正则匹配以<code>json</code>格式读取<code>jsonp</code>数据，最后解析所需的<code>name</code>和<code>id</code>。</p>
 <pre><code class="python">def _get_ablum_list(self):
     &quot;&quot;&quot;获取相册的列表信息&quot;&quot;&quot;
-    album_url = &#39;&#123;&#125;&#123;&#125;&#39;.format(
+    album_url = &#39;{}{}&#39;.format(
         &#39;https://h5.qzone.qq.com/proxy/domain/photo.qzone.qq.com/fcgi-bin/fcg_list_album_v3?&#39;,
         self._get_query_for_request())
 
@@ -315,7 +313,7 @@ def _login_and_get_args(self):
     resp = self.session.get(album_url)
     data = self._load_callback_data(resp)
 
-    album_list = &#123;&#125;
+    album_list = {}
     for item in data[&#39;data&#39;][&#39;albumListModeSort&#39;]:
         album_list[item[&#39;name&#39;]] = item[&#39;id&#39;]
 
@@ -333,7 +331,7 @@ def _login_and_get_args(self):
     Returns:
         一个组合好所有请求参数的字符串
     &quot;&quot;&quot;
-    query = &#123;
+    query = {
         &#39;g_tk&#39;: self.g_tk,
         &#39;hostUin&#39;: self.username,
         &#39;uin&#39;: self.username,
@@ -343,19 +341,19 @@ def _login_and_get_args(self):
         &#39;source&#39;: &#39;qzone&#39;,
         &#39;plat&#39;: &#39;qzone&#39;,
         &#39;format&#39;: &#39;jsonp&#39;
-    &#125;
+    }
     if topicId:
         query[&#39;topicId&#39;] = topicId
         query[&#39;pageStart&#39;] = pageStart
         query[&#39;pageNum&#39;] = pageNum
-    return &#39;&amp;&#39;.join(&#39;&#123;&#125;=&#123;&#125;&#39;.format(key, val) for key, val in query.items())
+    return &#39;&amp;&#39;.join(&#39;{}={}&#39;.format(key, val) for key, val in query.items())
 </code></pre>
 <p>其中的<code>jsonp</code>解析函数如下，主体部分就是一个正则匹配，非常简单。</p>
 <pre><code class="Python">def _load_callback_data(self, resp):
     &quot;&quot;&quot;以json格式解析返回的jsonp数据&quot;&quot;&quot;
     try:
         resp.encoding = &#39;utf-8&#39;
-        data = loads(re.search(r&#39;.*?\((&#123;.*&#125;).*?\).*&#39;, resp.text, re.S)[1])
+        data = loads(re.search(r&#39;.*?\(({.*}).*?\).*&#39;, resp.text, re.S)[1])
         return data
     except ValueError:
         logging.error(&#39;Invalid input&#39;)
@@ -363,11 +361,11 @@ def _login_and_get_args(self):
 <h3 id="解析并下载照片"><a href="#解析并下载照片" class="headerlink" title="解析并下载照片"></a>解析并下载照片</h3><p>获取相册列表后，逐个请求照片列表信息，进而逐一下载</p>
 <pre><code class="python">def _get_photo(self, album_name, album_id):
     &quot;&quot;&quot;获取单个相册的照片列表信息，并下载该相册所有照片&quot;&quot;&quot;
-    photo_list_url = &#39;&#123;&#125;&#123;&#125;&#39;.format(
+    photo_list_url = &#39;{}{}&#39;.format(
         &#39;https://h5.qzone.qq.com/proxy/domain/photo.qzone.qq.com/fcgi-bin/cgi_list_photo?&#39;,
         self._get_query_for_request(topicId=album_id))
 
-    logging.info(&#39;Getting photo list for album &#123;&#125;...&#39;.format(album_name))
+    logging.info(&#39;Getting photo list for album {}...&#39;.format(album_name))
     resp = self.session.get(photo_list_url)
     data = self._load_callback_data(resp)
     if data[&#39;data&#39;][&#39;totalInPage&#39;] == 0:
@@ -375,8 +373,8 @@ def _login_and_get_args(self):
 
     file_dir = self.get_path(album_name)
     for item in data[&#39;data&#39;][&#39;photoList&#39;]:
-        path = &#39;&#123;&#125;/&#123;&#125;.jpg&#39;.format(file_dir, item[&#39;name&#39;])
-        logging.info(&#39;Downloading &#123;&#125;-&#123;&#125;&#39;.format(album_name, item[&#39;name&#39;]))
+        path = &#39;{}/{}.jpg&#39;.format(file_dir, item[&#39;name&#39;])
+        logging.info(&#39;Downloading {}-{}&#39;.format(album_name, item[&#39;name&#39;]))
         self._download_image(item[&#39;url&#39;], path)
 </code></pre>
 <p>下载图片也是通过<code>request</code>,记得设置超时时间。</p>
@@ -387,7 +385,7 @@ def _login_and_get_args(self):
         if resp.status_code == 200:
             open(path, &#39;wb&#39;).write(resp.content)
     except requests.exceptions.Timeout:
-        logging.warning(&#39;get &#123;&#125; timeout&#39;.format(url))
+        logging.warning(&#39;get {} timeout&#39;.format(url))
     except requests.exceptions.ConnectionError as e:
         logging.error(e.__str__)
     finally:
@@ -404,9 +402,9 @@ def _login_and_get_args(self):
 <h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><ol>
 <li>如果将请求参数中的<code>format</code>由<code>jsonp</code>改成<code>json</code>，则可以直接获取<code>json</code>数据</li>
 <li>本用例并未使用多进程或多线程，所以速率不算快，还有待优化的地方</li>
-<li>该爬虫已存放至开源项目<a target="_blank" rel="noopener" href="https://github.com/Litreily/capturer">Github capturer</a>，欢迎交流</li>
+<li>该爬虫已存放至开源项目<a href="https://github.com/Litreily/capturer" target="_blank" rel="noopener">Github capturer</a>，欢迎交流</li>
 </ol>
-</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2019/03/03/qqzone/">https://www.litreily.top/2019/03/03/qqzone/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tags"></i><a href="/tags/spider/">spider</a><a href="/tags/qqzone/">qqzone</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E6%9E%90QQ%E7%A9%BA%E9%97%B4"><span class="toc-number">1.</span> <span class="toc-text">分析QQ空间</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%99%BB%E5%BD%95QQ%E7%A9%BA%E9%97%B4"><span class="toc-number">1.1.</span> <span class="toc-text">登录QQ空间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%9E%90%E7%A9%BA%E9%97%B4%E7%9B%B8%E5%86%8C"><span class="toc-number">1.2.</span> <span class="toc-text">分析空间相册</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%9E%90%E5%8D%95%E4%B8%AA%E7%9B%B8%E5%86%8C"><span class="toc-number">1.3.</span> <span class="toc-text">分析单个相册</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A1%AE%E5%AE%9A%E7%88%AC%E5%8F%96%E6%96%B9%E6%A1%88"><span class="toc-number">2.</span> <span class="toc-text">确定爬取方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BAqqzone%E7%B1%BB"><span class="toc-number">2.1.</span> <span class="toc-text">创建qqzone类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E6%8B%9F%E7%99%BB%E5%BD%95"><span class="toc-number">2.2.</span> <span class="toc-text">模拟登录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96-Cookies"><span class="toc-number">2.3.</span> <span class="toc-text">获取 Cookies</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96-g-tk"><span class="toc-number">2.4.</span> <span class="toc-text">获取 g_tk</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96-request-Session"><span class="toc-number">2.5.</span> <span class="toc-text">初始化 request.Session</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%B7%E6%B1%82%E7%9B%B8%E5%86%8C%E4%BF%A1%E6%81%AF"><span class="toc-number">2.6.</span> <span class="toc-text">请求相册信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E6%9E%90%E5%B9%B6%E4%B8%8B%E8%BD%BD%E7%85%A7%E7%89%87"><span class="toc-number">2.7.</span> <span class="toc-text">解析并下载照片</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%88%AC%E5%8F%96%E6%B5%8B%E8%AF%95"><span class="toc-number">3.</span> <span class="toc-text">爬取测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%99%E5%9C%A8%E6%9C%80%E5%90%8E"><span class="toc-number">4.</span> <span class="toc-text">写在最后</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2019/03/12/commitizen/">&lt; git commit 工具 - commitizen</a><a class="next" href="/2019/02/27/ipv6/">记一次Client无法获取IPv6地址问题的分析过程 &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2019/03/03/qqzone/">https://www.litreily.top/2019/03/03/qqzone/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tags"></i><a href="/tags/spider/">spider</a><a href="/tags/qqzone/">qqzone</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#分析QQ空间"><span class="toc-number">1.</span> <span class="toc-text">分析QQ空间</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#登录QQ空间"><span class="toc-number">1.1.</span> <span class="toc-text">登录QQ空间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分析空间相册"><span class="toc-number">1.2.</span> <span class="toc-text">分析空间相册</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分析单个相册"><span class="toc-number">1.3.</span> <span class="toc-text">分析单个相册</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#确定爬取方案"><span class="toc-number">2.</span> <span class="toc-text">确定爬取方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建qqzone类"><span class="toc-number">2.1.</span> <span class="toc-text">创建qqzone类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#模拟登录"><span class="toc-number">2.2.</span> <span class="toc-text">模拟登录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#获取-Cookies"><span class="toc-number">2.3.</span> <span class="toc-text">获取 Cookies</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#获取-g-tk"><span class="toc-number">2.4.</span> <span class="toc-text">获取 g_tk</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#初始化-request-Session"><span class="toc-number">2.5.</span> <span class="toc-text">初始化 request.Session</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#请求相册信息"><span class="toc-number">2.6.</span> <span class="toc-text">请求相册信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解析并下载照片"><span class="toc-number">2.7.</span> <span class="toc-text">解析并下载照片</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#爬取测试"><span class="toc-number">3.</span> <span class="toc-text">爬取测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#写在最后"><span class="toc-number">4.</span> <span class="toc-text">写在最后</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2019/03/12/commitizen/">&lt; git commit 工具 - commitizen</a><a class="next" href="/2019/02/27/ipv6/">记一次Client无法获取IPv6地址问题的分析过程 &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
 .night .v[data-class=v] a:hover { color: #216C73 !important; }
 .night .v[data-class=v] li { list-style: inherit; }
 .night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
@@ -420,7 +418,7 @@ def _login_and_get_args(self):
 .v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
 .night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
 .night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
-</style><div id="vcomment"></div><script src="//cdn.bootcdn.net/ajax/libs/valine/1.4.14/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+</style><div id="vcomment"></div><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
 var verify = 'false' == true ? true : false;
 var GUEST_INFO = ['nick','mail','link'];
 var guest_info = 'nick,mail,link'.split(',').filter(function(item){
@@ -438,7 +436,7 @@ window.valine = new Valine({
   avatar:'identicon',
   guest_info:guest_info,
   pageSize:'10'
-})</script></div></section><footer><p>Copyright © 2016 - 2022 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+})</script></div></section><footer><p>Copyright © 2016 - 2020 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/plugins/prettify/prettify.js"></script><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
 if (search_path.length == 0) {
     search_path = 'search.xml';
 }
