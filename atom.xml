@@ -6,7 +6,7 @@
   <link href="https://www.litreily.top/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2023-01-19T03:33:18.631Z</updated>
+  <updated>2023-01-19T05:46:58.579Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://www.litreily.top/2023/01/19/binwalk/"/>
     <id>https://www.litreily.top/2023/01/19/binwalk/</id>
     <published>2023-01-19T02:38:26.000Z</published>
-    <updated>2023-01-19T03:33:18.631Z</updated>
+    <updated>2023-01-19T05:46:58.579Z</updated>
     
     
     <summary type="html">&lt;h2 id=&quot;android-6-0-boot-img-解包&quot;&gt;&lt;a href=&quot;#android-6-0-boot-img-解包&quot; class=&quot;headerlink&quot; title=&quot;android 6.0 boot.img 解包&quot;&gt;&lt;/a&gt;android 6.0 boot.img 解包&lt;/h2&gt;&lt;h3 id=&quot;file&quot;&gt;&lt;a href=&quot;#file&quot; class=&quot;headerlink&quot; title=&quot;file&quot;&gt;&lt;/a&gt;file&lt;/h3&gt;&lt;p&gt;file指令可以显示文件类型，但是对于特定封装的文件无能为力，比如Android系统编译出的&lt;code&gt;boot.img&lt;/code&gt;&lt;/p&gt;
