@@ -6,7 +6,7 @@
   <link href="https://www.litreily.top/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2022-12-07T08:23:42.354Z</updated>
+  <updated>2023-01-19T03:33:18.631Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>RK3288 Android 系统 boot.img 镜像解压方法</title>
+    <link href="https://www.litreily.top/2023/01/19/binwalk/"/>
+    <id>https://www.litreily.top/2023/01/19/binwalk/</id>
+    <published>2023-01-19T02:38:26.000Z</published>
+    <updated>2023-01-19T03:33:18.631Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;android-6-0-boot-img-解包&quot;&gt;&lt;a href=&quot;#android-6-0-boot-img-解包&quot; class=&quot;headerlink&quot; title=&quot;android 6.0 boot.img 解包&quot;&gt;&lt;/a&gt;android 6.0 boot.img 解包&lt;/h2&gt;&lt;h3 id=&quot;file&quot;&gt;&lt;a href=&quot;#file&quot; class=&quot;headerlink&quot; title=&quot;file&quot;&gt;&lt;/a&gt;file&lt;/h3&gt;&lt;p&gt;file指令可以显示文件类型，但是对于特定封装的文件无能为力，比如Android系统编译出的&lt;code&gt;boot.img&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;$ file boot.img
+boot.img: data
+&lt;/code&gt;&lt;/pre&gt;</summary>
+    
+    
+    
+    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
+    
+    
+    <category term="android" scheme="https://www.litreily.top/tags/android/"/>
+    
+  </entry>
   
   <entry>
     <title>RK3288 Android 10 系统开发[5] - 解决wifi mac随机问题</title>
@@ -958,34 +980,6 @@ brwan     Link encap:Ethernet  HWaddr 00:13:2F:34:42:59
     
     
     <category term="openssl" scheme="https://www.litreily.top/tags/openssl/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>python之给pdf添加页码</title>
-    <link href="https://www.litreily.top/2020/08/13/python-pdf/"/>
-    <id>https://www.litreily.top/2020/08/13/python-pdf/</id>
-    <published>2020-08-13T08:56:37.000Z</published>
-    <updated>2021-05-28T03:12:11.503Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;最近写release note, 总感觉用&lt;code&gt;tex&lt;/code&gt;不太方便，特别是装&lt;code&gt;texlive&lt;/code&gt;占用大量空间，还有各种依赖问题，想着能不能用&lt;code&gt;markdown&lt;/code&gt;写更方便。实践证明，&lt;a href=&quot;https://typora.io/&quot;&gt;typora&lt;/a&gt;导出pdf的功能真的很棒，唯独一个不足之处就是生成的PDF不带&lt;strong&gt;页码&lt;/strong&gt;。&lt;/p&gt;
-&lt;p&gt;这个虽然可以使用在线工具实现，或者使用Adobe、福昕的 pdf 编辑功能，但是很多情况，尤其是工作平台是不方便使用的。为此我想到了&lt;code&gt;Python&lt;/code&gt;，通过脚本把页码加上。&lt;/p&gt;
-&lt;h2 id=&quot;安装Python库&quot;&gt;&lt;a href=&quot;#安装Python库&quot; class=&quot;headerlink&quot; title=&quot;安装Python库&quot;&gt;&lt;/a&gt;安装Python库&lt;/h2&gt;&lt;p&gt;首先需要安装两个依赖库，&lt;code&gt;PyPDF2&lt;/code&gt;以及&lt;code&gt;reportLab&lt;/code&gt;, &lt;code&gt;PyPDF2&lt;/code&gt;可以对PDF进行拆分、合并、删除、加密等操作；&lt;code&gt;reportlab&lt;/code&gt;则更是强大，看看下面的官方介绍。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;We build solutions to g</summary>
-      
-    
-    
-    
-    <category term="Language" scheme="https://www.litreily.top/categories/Language/"/>
-    
-    <category term="Python" scheme="https://www.litreily.top/categories/Language/Python/"/>
-    
-    
-    <category term="pdf" scheme="https://www.litreily.top/tags/pdf/"/>
     
   </entry>
   
