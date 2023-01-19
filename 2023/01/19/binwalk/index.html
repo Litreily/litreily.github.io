@@ -165,7 +165,12 @@ else
 fi
 fi #### boot
 </code></pre>
-<p>不考虑 OTA 情况下，Android6只会打包 ramdisk.img, 该镜像源文件位于 <code>$OUT/root</code> 目录。使用 mkbootfs 和 minigzip 生成 ramdisk.img, 然后通过 truncate 调整尺寸. 最后通过 RK 自带的工具 <code>rkst/mkkrnlimg</code> 添加特定的头部信息，也就是前面提到的 <code>KRNLT</code>.</p>
+<p>不考虑 OTA 情况下，Android6只会打包 ramdisk.img, 该镜像源文件位于 <code>$OUT/root</code> 目录。使用 mkbootfs 和 minigzip 生成 ramdisk.img, 然后通过 truncate 调整尺寸. 最后通过 RK 自带的工具 <code>rkst/mkkrnlimg</code> 添加特定的头部信息，也就是前面提到的 <code>KRNL</code>.</p>
+<p><code>rkst/mkkrnlimg</code> 会给输入文件添加两部分数据：</p>
+<ol>
+<li>头部添加 KRNL.... 前缀 （8个字节）</li>
+<li>尾部添加 CRC校验 （4个字节）</li>
+</ol>
 <h3 id="android-10-0"><a href="#android-10-0" class="headerlink" title="android 10.0"></a>android 10.0</h3><ul>
 <li><code>SDK/mkimage.sh</code></li>
 </ul>

@@ -653,14 +653,14 @@
   </url>
   
   <url>
-    <loc>https://www.litreily.top/2016/04/15/install-jekyll/</loc>
+    <loc>https://www.litreily.top/2016/05/11/DAQ-TDMS/</loc>
     
     <lastmod>2021-05-28</lastmod>
     
   </url>
   
   <url>
-    <loc>https://www.litreily.top/2016/05/11/DAQ-TDMS/</loc>
+    <loc>https://www.litreily.top/2016/04/15/install-jekyll/</loc>
     
     <lastmod>2021-05-28</lastmod>
     
@@ -844,6 +844,20 @@
   </url>
   
   <url>
+    <loc>https://www.litreily.top/tags/labview/</loc>
+    <lastmod>2023-01-19</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.litreily.top/tags/tdms/</loc>
+    <lastmod>2023-01-19</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://www.litreily.top/tags/windows/</loc>
     <lastmod>2023-01-19</lastmod>
     <changefreq>daily</changefreq>
@@ -859,20 +873,6 @@
   
   <url>
     <loc>https://www.litreily.top/tags/ruby/</loc>
-    <lastmod>2023-01-19</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.litreily.top/tags/labview/</loc>
-    <lastmod>2023-01-19</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.litreily.top/tags/tdms/</loc>
     <lastmod>2023-01-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -1432,6 +1432,20 @@
   </url>
   
   <url>
+    <loc>https://www.litreily.top/tags/repo/</loc>
+    <lastmod>2023-01-19</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.litreily.top/tags/gitlab/</loc>
+    <lastmod>2023-01-19</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://www.litreily.top/tags/lofter/</loc>
     <lastmod>2023-01-19</lastmod>
     <changefreq>daily</changefreq>
@@ -1474,13 +1488,6 @@
   </url>
   
   <url>
-    <loc>https://www.litreily.top/tags/FreeRTOS/</loc>
-    <lastmod>2023-01-19</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://www.litreily.top/tags/rk3399/</loc>
     <lastmod>2023-01-19</lastmod>
     <changefreq>daily</changefreq>
@@ -1488,14 +1495,7 @@
   </url>
   
   <url>
-    <loc>https://www.litreily.top/tags/repo/</loc>
-    <lastmod>2023-01-19</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.litreily.top/tags/gitlab/</loc>
+    <loc>https://www.litreily.top/tags/FreeRTOS/</loc>
     <lastmod>2023-01-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -1595,14 +1595,14 @@
   </url>
   
   <url>
-    <loc>https://www.litreily.top/categories/Network/Protocol/</loc>
+    <loc>https://www.litreily.top/categories/Android/</loc>
     <lastmod>2023-01-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://www.litreily.top/categories/Android/</loc>
+    <loc>https://www.litreily.top/categories/Network/Protocol/</loc>
     <lastmod>2023-01-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
