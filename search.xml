@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>RK3288 Android 10 系统开发[6] - 新增lunch</title>
+      <link href="2023/04/17/android-lunch/"/>
+      <url>2023/04/17/android-lunch/</url>
+      
+        <content type="html"><![CDATA[<p>如果要新增产品，在Android sdk中可以新增lunch进行适配。以 rk3288 产品为例，新增 rk3288_tablet.</p><ol><li>首先从已有的 <code>rk3288_Android10</code> 拷贝一份到新增的 <code>rk3288_tablet</code> 目录；</li></ol><pre><code class="bash">cd &lt;SDK&gt;/device/rockchip/rk3288cp -rf rk3288_Android10 rk3288_tablet</code></pre><ol start="2"><li>然后修改 <code>device/rockchip/rk3288/AndroidProducts.mk</code> 文件，添加新产品配置</li></ol><pre><code class="patch">--- a/AndroidProducts.mk+++ b/AndroidProducts.mk@@ -16,8 +16,11 @@                                                                                                            PRODUCT_MAKEFILES := \     $(LOCAL_DIR)/rk3288_Android10/rk3288_Android10.mk \+    $(LOCAL_DIR)/rk3288_tablet/rk3288_tablet.mk \ COMMON_LUNCH_CHOICES := \         rk3288_Android10-userdebug \         rk3288_Android10-user \+        rk3288_tablet-userdebug \+        rk3288_tablet-user \</code></pre><ol start="3"><li>进入 <code>rk3288_tablet</code> 目录, 将 <code>rk3288_Android10.mk</code> 重命名为 <code>rk3288_tablet.mk</code>, 并根据需求对其定制化。</li></ol><pre><code class="bash">cd rk3288_tabletmv rk3288_Android10.mk rk3288_tablet.mk</code></pre><ol start="4"><li>修改 <code>BoardConfig.mk</code>, 修改默认内核配置和dts配置</li></ol><pre><code class="Makefile">--- a/rk3288_tablet/BoardConfig.mk+++ b/rk3288_tablet/BoardConfig.mk@@ -7,7 +7,8 @@ BOARD_GYROSCOPE_SENSOR_SUPPORT := true BUILD_WITH_GOOGLE_GMS_EXPRESS := false CAMERA_SUPPORT_AUTOFOCUS:= false-PRODUCT_KERNEL_CONFIG := rockchip_defconfig android-10.config+PRODUCT_KERNEL_CONFIG := rk3288_tablet_defconfig android-10.config+PRODUCT_KERNEL_DTS := rk3288-tablet # AB image definition BOARD_USES_AB_IMAGE := false</code></pre><p>修改完成后回到根目录，执行以下指令可以看到新增的lunch.</p><pre><code class="bash">source build/envsetup.shlunch</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> Android </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> android </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>RK3288 Android 系统 boot.img 镜像解压方法</title>
       <link href="2023/01/19/binwalk/"/>
       <url>2023/01/19/binwalk/</url>

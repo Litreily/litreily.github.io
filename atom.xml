@@ -6,7 +6,7 @@
   <link href="https://www.litreily.top/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2023-01-19T07:21:22.151Z</updated>
+  <updated>2023-04-17T13:02:06.605Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -15,6 +15,42 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>RK3288 Android 10 系统开发[6] - 新增lunch</title>
+    <link href="https://www.litreily.top/2023/04/17/android-lunch/"/>
+    <id>https://www.litreily.top/2023/04/17/android-lunch/</id>
+    <published>2023-04-17T12:47:59.000Z</published>
+    <updated>2023-04-17T13:02:06.605Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;如果要新增产品，在Android sdk中可以新增lunch进行适配。以 rk3288 产品为例，新增 rk3288_tablet.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;首先从已有的 &lt;code&gt;rk3288_Android10&lt;/code&gt; 拷贝一份到新增的 &lt;code&gt;rk3288_tablet&lt;/code&gt; 目录；&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;cd &amp;lt;SDK&amp;gt;/device/rockchip/rk3288
+cp -rf rk3288_Android10 rk3288_tablet
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&quot;2&quot;&gt;
+&lt;li&gt;然后修改 &lt;code&gt;device/rockchip/rk3288/AndroidProducts.mk&lt;/code&gt; 文件，添加新产品配置&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&quot;patch&quot;&gt;--- a/AndroidProducts.mk
++++ b/AndroidProducts.mk
+@@ -16,8 +16,11 @@
+                                                                                                           
+ PRODUCT_MAK</summary>
+      
+    
+    
+    
+    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
+    
+    
+    <category term="android" scheme="https://www.litreily.top/tags/android/"/>
+    
+  </entry>
   
   <entry>
     <title>RK3288 Android 系统 boot.img 镜像解压方法</title>
@@ -956,30 +992,6 @@ brwan     Link encap:Ethernet  HWaddr 00:13:2F:34:42:59
     <category term="pptp" scheme="https://www.litreily.top/tags/pptp/"/>
     
     <category term="dns" scheme="https://www.litreily.top/tags/dns/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>openssl 验证证书有效性</title>
-    <link href="https://www.litreily.top/2020/09/17/openssl/"/>
-    <id>https://www.litreily.top/2020/09/17/openssl/</id>
-    <published>2020-09-17T06:17:27.000Z</published>
-    <updated>2021-05-28T03:12:11.503Z</updated>
-    
-    
-    <summary type="html">&lt;blockquote&gt;
-&lt;p&gt;OpenSSL is a robust, commercial-grade, and full-featured toolkit for the Transport Layer Security (TLS) and Secure Sockets Layer (SSL) protocols. It is also a general-purpose cryptography library.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;openssl是非常强大的TLS/SSL协议相关的工具集，包含丰富的测试工具。 这篇文章来讲讲如何使用openssl工具集中的&lt;code&gt;s_client&lt;/code&gt;测试证书认证。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="Network" scheme="https://www.litreily.top/categories/Network/"/>
-    
-    <category term="Security" scheme="https://www.litreily.top/categories/Network/Security/"/>
-    
-    
-    <category term="openssl" scheme="https://www.litreily.top/tags/openssl/"/>
     
   </entry>
   
