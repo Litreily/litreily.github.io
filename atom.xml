@@ -6,7 +6,7 @@
   <link href="https://www.litreily.top/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2023-04-17T13:02:06.605Z</updated>
+  <updated>2023-12-06T07:47:42.678Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>RK3399 Android10 bind cpu with isolcpus</title>
+    <link href="https://www.litreily.top/2023/12/06/isolcpus/"/>
+    <id>https://www.litreily.top/2023/12/06/isolcpus/</id>
+    <published>2023-12-06T07:29:46.000Z</published>
+    <updated>2023-12-06T07:47:42.678Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;Per new request to bind cpus for some special processes, we need isolate some cpus of RK3399, which only used for thes special processes.&lt;/p&gt;
+&lt;p&gt;we can update dts file to set &lt;code&gt;isolcpus&lt;/code&gt; arg in &lt;code&gt;bootargs&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;set-isolcpus&quot;&gt;&lt;a href=&quot;#set-isolcpus&quot; class=&quot;headerlink&quot; title=&quot;set isolcpus&quot;&gt;&lt;/a&gt;set isolcpus&lt;/h2&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;diff --git a/arch/arm64/boot/dts/rockchip/rk3399-android.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-android.dtsi
+index 76753a9..a2a3206 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-android.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk</summary>
+      
+    
+    
+    
+    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
+    
+    
+    <category term="andorid" scheme="https://www.litreily.top/tags/andorid/"/>
+    
+  </entry>
   
   <entry>
     <title>RK3288 Android 10 系统开发[6] - 新增lunch</title>
@@ -964,34 +991,6 @@ brwan     Link encap:Ethernet  HWaddr 00:13:2F:34:42:59
     <category term="openwrt" scheme="https://www.litreily.top/tags/openwrt/"/>
     
     <category term="gdb" scheme="https://www.litreily.top/tags/gdb/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Setup PPTP and DNS server</title>
-    <link href="https://www.litreily.top/2020/12/02/setup-pptp/"/>
-    <id>https://www.litreily.top/2020/12/02/setup-pptp/</id>
-    <published>2020-12-02T11:06:32.000Z</published>
-    <updated>2021-05-28T03:12:11.503Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;PPTP (Point to Point Tunneling Protocol) 点对点隧道协议，与PPPoE, L2TP 均属于 PPP(Point to Point Protocol) 点对点协议。这篇来记录下PPTP server的安装和配置过程。&lt;/p&gt;
-&lt;h2 id=&quot;install-DHCP-server&quot;&gt;&lt;a href=&quot;#install-DHCP-server&quot; class=&quot;headerlink&quot; title=&quot;install DHCP server&quot;&gt;&lt;/a&gt;install DHCP server&lt;/h2&gt;&lt;p&gt;除了PPPoE外，PPTP 与 L2TP 都无法直接给client分配IP，需要使用dhcp server分配。所以在安装PPTP的同时，也要保证DHCP server也已安装。具体方法参考 &lt;a href=&quot;https://www.litreily.top/2020/01/17/dhcpd_server/&quot;&gt;Setup dhcpd/dhcpdv6 server&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;需要注意的是，在Ubuntu 20.10 版本中，网卡的静态IP管理模式与以往有所不同。在以往版本中，是修改 &lt;code&gt;/etc/network/interfaces&lt;/code&gt; 文件，但是在最新Ubuntu确不一样，最新版提出了一个叫 &lt;code&gt;netpl</summary>
-      
-    
-    
-    
-    <category term="Network" scheme="https://www.litreily.top/categories/Network/"/>
-    
-    
-    <category term="ubuntu" scheme="https://www.litreily.top/tags/ubuntu/"/>
-    
-    <category term="pptp" scheme="https://www.litreily.top/tags/pptp/"/>
-    
-    <category term="dns" scheme="https://www.litreily.top/tags/dns/"/>
     
   </entry>
   
