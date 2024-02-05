@@ -1,0 +1,185 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>RK3288 Android6 新增分区 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
+</head><link rel="stylesheet" type="text/css" href="/plugins/highlight/atom-one-dark.min.css"><script type="text/javascript" src="/plugins/highlight/highlight.min.js"></script><script>hljs.initHighlightingOnLoad();
+</script><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">RK3288 Android6 新增分区</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2024/02/05/rk32-new-part/">2024-02-05</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Android/">Android</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>特定情况下需要新增分区，比如开辟一个分区专门用于保存系统日志，恢复出厂默认时不会被清理. 以新增slog分区为例，说明RK3288 Android6新增分区的方法。</p>
+<h2 id="代码结构"><a href="#代码结构" class="headerlink" title="代码结构"></a>代码结构</h2><pre><code class="bash"># package-file
+FFTools/mkupdate/package-file
+
+# 分区表
+FFTools/parameter/rk3288-3.10-uboot-android.parameter.txt
+
+# 开机自动挂载相关
+device/rockchip/rk3288/
+|-- fstab.rk30board.bootmode.emmc
+|-- init.rc
+`-- slog
+    `-- README.md
+
+# 创建 slog.img
+mkimage.sh
+</code></pre>
+<h2 id="新增分区"><a href="#新增分区" class="headerlink" title="新增分区"></a>新增分区</h2><h3 id="修改分区表"><a href="#修改分区表" class="headerlink" title="修改分区表"></a>修改分区表</h3><ul>
+<li><code>FFTools/parameter/rk3288-3.10-uboot-android.parameter.txt</code></li>
+</ul>
+<pre><code class="bash">--- a/FFTools/parameter/rk3288-3.10-uboot-android.parameter.txt
++++ b/FFTools/parameter/rk3288-3.10-uboot-android.parameter.txt
+@@ -10,4 +10,4 @@ PWR_HLD: 0,0,A,0,1
+ #KERNEL_IMG: 0x62008000
+ #FDT_NAME: rk-kernel.dtb
+ #RECOVER_KEY: 1,1,0,20,0
+-CMDLINE:console=ttyS0 androidboot.selinux=permissive androidboot.hardware=rk30board androidboot.console=ttyS0 root=/dev/block/mtd/by-name/linuxroot rw rootfstype=ext4 init=/sbin/init initrd=0x62000000,0x00800000 mtdparts=rk29xxnand:0x00002000@0x00002000(uboot),0x00002000@0x00004000(misc),0x00008000@0x00006000(resource),0x00008000@0x0000e000(kernel),0x00010000@0x00016000(boot),0x00010000@0x00026000(recovery),0x0001a000@0x00036000(backup),0x00040000@0x00050000(cache),0x00002000@0x00090000(kpanic),0x00300000@0x00092000(system),0x00008000@0x00392000(metadata),0x00002000@0x0039A000(baseparamer),-@0x003BC000(userdata)
++CMDLINE:console=ttyS0 androidboot.selinux=permissive androidboot.hardware=rk30board androidboot.console=ttyS0 root=/dev/block/mtd/by-name/linuxroot rw rootfstype=ext4 init=/sbin/init initrd=0x62000000,0x00800000 mtdparts=rk29xxnand:0x00002000@0x00002000(uboot),0x00002000@0x00004000(misc),0x00008000@0x00006000(resource),0x00008000@0x0000e000(kernel),0x00010000@0x00016000(boot),0x00010000@0x00026000(recovery),0x0001a000@0x00036000(backup),0x00040000@0x00050000(cache),0x00002000@0x00090000(kpanic),0x00300000@0x00092000(system),0x00008000@0x00392000(metadata),0x00002000@0x0039A000(baseparamer),0x00200000@0x003BC000(slog),-@0x005BC000(userdata)
+</code></pre>
+<p>从原来的<code>userdata</code>分区分了1G出来，用于创建新的分区 slog.<br><code>-@0x003BC000(userdata)</code> 变为 <code>0x00200000@0x003BC000(slog),-@0x005BC000(userdata)</code>。</p>
+<ul>
+<li><code>@</code> 前面<code>0x00200000</code>代表分区大小， 单位为1个block，也就是512Bytes</li>
+<li><code>@</code>后面<code>0x003BC000</code>代表分区在<code>emmc</code>中的起始地址</li>
+<li>新增slog分区后，<code>userdata</code>起始地址需要更新为 <code>0x003BC000 + 0x00200000 = 0x005BC000</code></li>
+</ul>
+<h3 id="修改-package-file"><a href="#修改-package-file" class="headerlink" title="修改 package-file"></a>修改 package-file</h3><ul>
+<li><code>FFTools/mkupdate/package-file</code></li>
+</ul>
+<p><code>package-file</code>用于打包<code>update.img</code>，新增分区后，也需要添加新的slog.img信息。</p>
+<pre><code class="bash">--- a/FFTools/mkupdate/package-file
++++ b/FFTools/mkupdate/package-file
+@@ -12,6 +12,7 @@ kernel                Image/kernel.img
+ boot        Image/boot.img
+ recovery       Image/recovery.img
+ system         Image/system.img
++slog           Image/slog.img
+</code></pre>
+<h3 id="修改-fstab"><a href="#修改-fstab" class="headerlink" title="修改 fstab"></a>修改 fstab</h3><ul>
+<li><code>device/rockchip/rk3288/fstab.rk30board.bootmode.emmc</code></li>
+</ul>
+<p><code>fstab</code>是系统启动后用于挂载分区的配置表，为了自动挂载slog分区，需要修改这个文件。</p>
+<pre><code class="bash">--- a/fstab.rk30board.bootmode.emmc
++++ b/fstab.rk30board.bootmode.emmc
+@@ -10,6 +10,7 @@
+ /dev/block/platform/ff0f0000.rksdmmc/by-name/metadata       /metadata           ext4      noatime,nodiratime,nosuid,nodev,noauto_da_alloc,discard                wait,check
+ /dev/block/platform/ff0f0000.rksdmmc/by-name/userdata       /data               f2fs      noatime,nodiratime,nosuid,nodev   wait,check,encryptable=/metadata/key_file
+ /dev/block/platform/ff0f0000.rksdmmc/by-name/userdata       /data               ext4      noatime,nodiratime,nosuid,nodev,noauto_da_alloc,discard,errors=panic   wait,check,encryptable=/metadata/key_file
++/dev/block/platform/ff0f0000.rksdmmc/by-name/slog           /slog               ext4      noatime,nodiratime,nosuid,nodev,noauto_da_alloc,discard                wait,check
+ # /dev/block/platform/ff0f0000.rksdmmc/by-name/radical_update /radical_update     ext4      noatime,nodiratime,nosuid,nodev,noauto_da_alloc,discard          wait
+ 
+ /devices/ff0c0000.rksdmmc/mmc_host*        auto  auto    defaults        voldmanaged=sdcard1:auto,encryptable=userdata
+</code></pre>
+<p>新增一行 <strong>slog</strong> 配置。</p>
+<pre><code class="bash">/dev/block/platform/ff0f0000.rksdmmc/by-name/slog /slog  ext4  noatime,nodiratime,nosuid,nodev,noauto_da_alloc,discard    wait,check
+</code></pre>
+<ul>
+<li><strong>/dev/block/platform/ff0f0000.rksdmmc/by-name/slog</strong>: 指定要挂载的分区设备路径。</li>
+<li><strong>/slog</strong>: 指定挂载点，即分区将被挂载到文件系统中的 <strong>/slog</strong> 目录。</li>
+<li><strong>ext4</strong>: 文件系统类型，表明该分区使用 ext4 文件系统。</li>
+<li><strong>noatime,nodiratime,nosuid,nodev,noauto_da_alloc,discard</strong>: 这是挂载选项，具体含义如下：<ul>
+<li><strong>noatime</strong>: 不更新文件和目录的访问时间。</li>
+<li><strong>nodiratime</strong>: 不更新目录的访问时间。</li>
+<li><strong>nosuid</strong>: 防止设置 setuid 位的执行文件的 suid 权限。</li>
+<li><strong>nodev</strong>: 不允许在文件系统上执行设备文件。</li>
+<li><strong>noauto_da_alloc</strong>: 禁用自动的数据区块分配。</li>
+<li><strong>discard</strong>: 启用 TRIM/DISCARD支持，允许文件系统通知底层设备已删除的块，适用于 SSD，有助于提高性能。</li>
+</ul>
+</li>
+<li><strong>wait</strong>: 表明系统在挂载时会等待直到这个分区可用。</li>
+<li><strong>check</strong>: 表示在挂载前会检查文件系统。</li>
+</ul>
+<h3 id="修改-init-rc"><a href="#修改-init-rc" class="headerlink" title="修改 init.rc"></a>修改 init.rc</h3><ul>
+<li><code>device/rockchip/rk3288/init.rc</code></li>
+</ul>
+<pre><code class="bash">--- a/init.rc
++++ b/init.rc
+@@ -62,6 +62,7 @@ on init
+     mkdir /cache 0770 system cache
+     mkdir /config 0500 root root
+     mkdir /backup
++    mkdir /slog
+</code></pre>
+<p><code>init.rc</code>中需要创建挂载点 <code>/slog</code>。</p>
+<h3 id="新增-slog-目录"><a href="#新增-slog-目录" class="headerlink" title="新增 slog 目录"></a>新增 slog 目录</h3><ul>
+<li><code>device/rockchip/rk3288/slog</code></li>
+</ul>
+<p>为了生成 slog.img 镜像，需要有原始文件目录，当然也可以是个空目录。这里仅放了一个 README.md</p>
+<pre><code class="markdown"># README
+
+this is slog partition.
+</code></pre>
+<h3 id="修改-mkimage-sh"><a href="#修改-mkimage-sh" class="headerlink" title="修改 mkimage.sh"></a>修改 mkimage.sh</h3><ul>
+<li><code>mkimage.sh</code></li>
+</ul>
+<pre><code class="bash">--- a/mkimage.sh
++++ b/mkimage.sh
+@@ -28,6 +28,7 @@ echo IMG_TARGET=$IMG_TARGET , ota = $TARGET
+ IMAGE_PATH=rockdev/Image-$TARGET_PRODUCT
+ UBOOT_PATH=u-boot
+ KERNEL_PATH=kernel
++SLOG_PATH=device/rockchip/rk3288/slog
+ PARAMETER=FFTools/parameter/rk3288-3.10-uboot-android.parameter.txt
+ 
+ rm -rf $IMAGE_PATH
+@@ -155,6 +156,19 @@ then
+        echo &quot;done.&quot;
+ fi
+ 
++if [ -d $SLOG_PATH ]
++then
++    echo -n &quot;create slog.img...&quot;
++    slog_size=10485760
++    MAKE_EXT4FS_ARGS=&quot; -L slog -a slog $IMAGE_PATH/slog.img $SLOG_PATH&quot;
++    make_ext4fs -l $slog_size $MAKE_EXT4FS_ARGS &gt;/dev/null 2&gt;&amp;1 &amp;&amp;
++    tune2fs -c -1 -i 0 $IMAGE_PATH/slog.img &gt;/dev/null 2&gt;&amp;1 &amp;&amp;
++    e2fsck -fyD $IMAGE_PATH/slog.img &gt;/dev/null 2&gt;&amp;1 || true
++    echo &quot;done.&quot;
++fi
++
+ if [ -f $KERNEL_PATH/resource.img ]
+ then
+         echo -n &quot;create resource.img...&quot;
+</code></pre>
+<p>这里主要是为了创建 slog.img.<br>到此，整个分区相关的配置都改好了，编译后完整固件后，在系统中就可以看到<code>/slog</code> 目录了，也可以看到分区默认挂载好了。</p>
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ol>
+<li>重新烧录固件后，slog分区也会被清除</li>
+<li>恢复出厂默认设置时，slog分区不会被清除</li>
+</ol>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2024/02/05/rk32-new-part/">https://www.litreily.top/2024/02/05/rk32-new-part/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tag"></i><a href="/tags/android/">android</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%83%8C%E6%99%AF"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84"><span class="toc-number">2.</span> <span class="toc-text">代码结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B0%E5%A2%9E%E5%88%86%E5%8C%BA"><span class="toc-number">3.</span> <span class="toc-text">新增分区</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E5%88%86%E5%8C%BA%E8%A1%A8"><span class="toc-number">3.1.</span> <span class="toc-text">修改分区表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9-package-file"><span class="toc-number">3.2.</span> <span class="toc-text">修改 package-file</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9-fstab"><span class="toc-number">3.3.</span> <span class="toc-text">修改 fstab</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9-init-rc"><span class="toc-number">3.4.</span> <span class="toc-text">修改 init.rc</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B0%E5%A2%9E-slog-%E7%9B%AE%E5%BD%95"><span class="toc-number">3.5.</span> <span class="toc-text">新增 slog 目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9-mkimage-sh"><span class="toc-number">3.6.</span> <span class="toc-text">修改 mkimage.sh</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">4.</span> <span class="toc-text">注意事项</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="next" href="/2023/12/06/isolcpus/">RK3399 Android10 bind cpu with isolcpus &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+.night .v[data-class=v] a:hover { color: #216C73 !important; }
+.night .v[data-class=v] li { list-style: inherit; }
+.night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
+.night .v[data-class=v] .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.night .v[data-class=v] .vbtn { border-radius: 0; background: none; }
+.night .v[data-class=v] .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.night .v[data-class=v] .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.night .v[data-class=v] .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre,.night .v[data-class=v] .vlist .vcard .vhead .vsys { background: #203240 !important; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre { color: #F0F0F0; font-size: 95%; }
+.v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
+</style><div id="vcomment"></div><script src="//cdn.bootcdn.net/ajax/libs/valine/1.4.14/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
+  lang: 'zh-cn',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></section><footer><p>Copyright © 2016 - 2024 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script></body></html>

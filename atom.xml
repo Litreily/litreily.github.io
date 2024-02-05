@@ -6,7 +6,7 @@
   <link href="https://www.litreily.top/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2023-12-06T08:48:22.093Z</updated>
+  <updated>2024-02-05T08:40:35.944Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -15,6 +15,45 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>RK3288 Android6 新增分区</title>
+    <link href="https://www.litreily.top/2024/02/05/rk32-new-part/"/>
+    <id>https://www.litreily.top/2024/02/05/rk32-new-part/</id>
+    <published>2024-02-05T08:38:12.000Z</published>
+    <updated>2024-02-05T08:40:35.944Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot; title=&quot;背景&quot;&gt;&lt;/a&gt;背景&lt;/h2&gt;&lt;p&gt;特定情况下需要新增分区，比如开辟一个分区专门用于保存系统日志，恢复出厂默认时不会被清理. 以新增slog分区为例，说明RK3288 Android6新增分区的方法。&lt;/p&gt;
+&lt;h2 id=&quot;代码结构&quot;&gt;&lt;a href=&quot;#代码结构&quot; class=&quot;headerlink&quot; title=&quot;代码结构&quot;&gt;&lt;/a&gt;代码结构&lt;/h2&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;# package-file
+FFTools/mkupdate/package-file
+
+# 分区表
+FFTools/parameter/rk3288-3.10-uboot-android.parameter.txt
+
+# 开机自动挂载相关
+device/rockchip/rk3288/
+|-- fstab.rk30board.bootmode.emmc
+|-- init.rc
+`-- slog
+    `-- README.md
+
+# 创建 slog.img
+mkimage.sh
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;新增分区&quot;&gt;&lt;a href=&quot;#新增分区&quot; class=&quot;headerlink&quot; title=&quot;新增分区&quot;&gt;&lt;/a&gt;新增分区&lt;/h2&gt;&lt;h3 id=&quot;修改</summary>
+      
+    
+    
+    
+    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
+    
+    
+    <category term="android" scheme="https://www.litreily.top/tags/android/"/>
+    
+  </entry>
   
   <entry>
     <title>RK3399 Android10 bind cpu with isolcpus</title>
@@ -957,40 +996,6 @@ make install
     
     
     <category term="lua" scheme="https://www.litreily.top/tags/lua/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>使用 gdb 解析 ppp driver crash log</title>
-    <link href="https://www.litreily.top/2020/12/17/gdb-kernel/"/>
-    <id>https://www.litreily.top/2020/12/17/gdb-kernel/</id>
-    <published>2020-12-17T06:04:28.000Z</published>
-    <updated>2021-05-28T03:12:11.503Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;由于项目整合，经过一次大版本升级后的项目，继承了大家族中许多新的特性，然而在正常功能测试中崩溃了，而且还是kernel crash, 会导致reboot的那种。本文就此问题重现、调试分析过程予以归纳总结。&lt;/p&gt;
-&lt;h2 id=&quot;问题描述&quot;&gt;&lt;a href=&quot;#问题描述&quot; class=&quot;headerlink&quot; title=&quot;问题描述&quot;&gt;&lt;/a&gt;问题描述&lt;/h2&gt;&lt;p&gt;PPTP 拨号上网模式下，Router 在添加特定静态路由后crash. 添加路由的原因在本文讨论内容中不重要，因此略过。&lt;/p&gt;
-&lt;h2 id=&quot;问题再现&quot;&gt;&lt;a href=&quot;#问题再现&quot; class=&quot;headerlink&quot; title=&quot;问题再现&quot;&gt;&lt;/a&gt;问题再现&lt;/h2&gt;&lt;p&gt;实际测试过程中寻找重现方法耗时较长，经过大量实验后简化如下：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;连接 WAN Port&lt;/li&gt;
-&lt;li&gt;PPTP 拨号上网&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;拨号成功后，查看 &lt;code&gt;WAN&lt;/code&gt; 口及 &lt;code&gt;ppp0&lt;/code&gt; 的 IP.&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;root@model:$ ifconfig brwan
-brwan     Link encap:Ethernet  HWaddr 00:13:2F:34:42:59
-          inet</summary>
-      
-    
-    
-    
-    <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
-    
-    
-    <category term="openwrt" scheme="https://www.litreily.top/tags/openwrt/"/>
-    
-    <category term="gdb" scheme="https://www.litreily.top/tags/gdb/"/>
     
   </entry>
   
