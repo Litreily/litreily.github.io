@@ -56,6 +56,35 @@ mkimage.sh
   </entry>
   
   <entry>
+    <title>RK3288 Android6 禁用 wifi</title>
+    <link href="https://www.litreily.top/2024/01/10/rk32-disable-wifi/"/>
+    <id>https://www.litreily.top/2024/01/10/rk32-disable-wifi/</id>
+    <published>2024-01-10T08:55:19.000Z</published>
+    <updated>2024-02-05T09:15:43.094Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;某些特殊情况下，需要禁用系统的wifi配置功能。&lt;/p&gt;
+&lt;h2 id=&quot;删除快捷-wifi-开关&quot;&gt;&lt;a href=&quot;#删除快捷-wifi-开关&quot; class=&quot;headerlink&quot; title=&quot;删除快捷 wifi 开关&quot;&gt;&lt;/a&gt;删除快捷 wifi 开关&lt;/h2&gt;&lt;p&gt;在 &lt;code&gt;frameworks/base&lt;/code&gt; 中的 &lt;code&gt;SystemUI&lt;/code&gt; app 中禁用wifi开关，只需要修改配置 &lt;code&gt;quick_settings_tiles_default&lt;/code&gt; 即可。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;patch&quot;&gt;--- a/packages/SystemUI/res/values/config.xml
++++ b/packages/SystemUI/res/values/config.xml
+@@ -119,7 +119,7 @@
+     &amp;lt;!-- The default tiles to display in QuickSettings --&amp;gt;
+     &amp;lt;string name=&amp;quot;quick_settings_tiles_default&amp;quot; translatable=&amp;quot;false&amp;quot;&amp;gt;
+-        wifi,bt,inversion,dnd</summary>
+      
+    
+    
+    
+    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
+    
+    
+    <category term="android" scheme="https://www.litreily.top/tags/android/"/>
+    
+  </entry>
+  
+  <entry>
     <title>RK3399 Android10 bind cpu with isolcpus</title>
     <link href="https://www.litreily.top/2023/12/06/isolcpus/"/>
     <id>https://www.litreily.top/2023/12/06/isolcpus/</id>
@@ -950,43 +979,6 @@ loc</summary>
     mutil line comments
 ]]
 &lt;/code&gt;&lt;/pre&gt;</summary>
-    
-    
-    
-    <category term="Language" scheme="https://www.litreily.top/categories/Language/"/>
-    
-    <category term="Lua" scheme="https://www.litreily.top/categories/Language/Lua/"/>
-    
-    
-    <category term="lua" scheme="https://www.litreily.top/tags/lua/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>lua 语言的基本使用</title>
-    <link href="https://www.litreily.top/2020/12/23/lua/"/>
-    <id>https://www.litreily.top/2020/12/23/lua/</id>
-    <published>2020-12-23T01:07:51.000Z</published>
-    <updated>2021-05-28T03:12:11.503Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;下载安装&quot;&gt;&lt;a href=&quot;#下载安装&quot; class=&quot;headerlink&quot; title=&quot;下载安装&quot;&gt;&lt;/a&gt;下载安装&lt;/h2&gt;&lt;p&gt;在联网状态下，Ubuntu可以直接apt安装。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;sudo apt install lua
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;如果是不直接联网的服务器，并且没有root权限的情况下，需要先在联网PC上下载后导入，再编译安装。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;wget http://www.lua.org/ftp/lua-5.1.5.tar.gz
-# copy lua-5.1.5.tar.gz to server by scp or ftp
-tar -xvf lua-5.1.5.tar.gz
-cd lua-5.1.5
-sed -i &amp;#39;s/\/usr\/local/~\/bin\/local/&amp;#39; Makefile
-make generic
-make install
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;默认安装目录是&lt;code&gt;/usr/local&lt;/code&gt;, 如果没有root权限，需要修改Makefile，将其改为指定目录(~/bin/local)，上面通过sed修改。&lt;/p&gt;
-&lt;p&gt;值得注意的是，Lua 如果按 make linux 编</summary>
-      
     
     
     
