@@ -6,7 +6,7 @@
   <link href="https://www.litreily.top/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2024-02-05T08:40:35.944Z</updated>
+  <updated>2024-05-31T10:42:26.777Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>rk3399 ubuntu 休眠唤醒功能</title>
+    <link href="https://www.litreily.top/2024/05/31/rk3399-wol/"/>
+    <id>https://www.litreily.top/2024/05/31/rk3399-wol/</id>
+    <published>2024-05-31T10:31:47.000Z</published>
+    <updated>2024-05-31T10:42:26.777Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot; title=&quot;背景&quot;&gt;&lt;/a&gt;背景&lt;/h1&gt;&lt;p&gt;为了降低功耗，需要考虑使用系统的休眠唤醒功能。&lt;/p&gt;
+&lt;h1 id=&quot;休眠方式&quot;&gt;&lt;a href=&quot;#休眠方式&quot; class=&quot;headerlink&quot; title=&quot;休眠方式&quot;&gt;&lt;/a&gt;休眠方式&lt;/h1&gt;&lt;p&gt;rk3399 休眠方式有两种,&lt;code&gt;mem&lt;/code&gt;,&lt;code&gt;freeze&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;内存待机-mem&quot;&gt;&lt;a href=&quot;#内存待机-mem&quot; class=&quot;headerlink&quot; title=&quot;内存待机 (mem)&quot;&gt;&lt;/a&gt;内存待机 (mem)&lt;/h2&gt;&lt;p&gt;在 mem 模式下，系统将所有设备状态保存到内存中，然后进入低功耗状态。唤醒后，系统从内存中恢复设备状态。内存待机模式通常称为 S3 睡眠模式。&lt;/p&gt;
+&lt;h2 id=&quot;冻结-freeze&quot;&gt;&lt;a href=&quot;#冻结-freeze&quot; class=&quot;headerlink&quot; title=&quot;冻结 (freeze)&quot;&gt;&lt;/a&gt;冻结 (freeze)&lt;/h2&gt;&lt;p&gt;在 freeze 模式下，所有用户空间任务被冻结，所有设备进入低功耗状态，但 CPU 仍保持活跃。冻结模式更适用于在短时间内节省电能。&lt;br&gt;我们使用 &lt;code&gt;mem&lt;/cod</summary>
+      
+    
+    
+    
+    <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
+    
+    
+    <category term="Ubuntu" scheme="https://www.litreily.top/tags/Ubuntu/"/>
+    
+  </entry>
   
   <entry>
     <title>RK3288 Android6 新增分区</title>
@@ -953,32 +978,6 @@ module.func1()
 -- or
 loc</summary>
       
-    
-    
-    
-    <category term="Language" scheme="https://www.litreily.top/categories/Language/"/>
-    
-    <category term="Lua" scheme="https://www.litreily.top/categories/Language/Lua/"/>
-    
-    
-    <category term="lua" scheme="https://www.litreily.top/tags/lua/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>lua 基本语法</title>
-    <link href="https://www.litreily.top/2020/12/24/lua-basic/"/>
-    <id>https://www.litreily.top/2020/12/24/lua-basic/</id>
-    <published>2020-12-24T03:19:14.000Z</published>
-    <updated>2021-05-28T03:12:11.503Z</updated>
-    
-    
-    <summary type="html">&lt;h2 id=&quot;基本语法&quot;&gt;&lt;a href=&quot;#基本语法&quot; class=&quot;headerlink&quot; title=&quot;基本语法&quot;&gt;&lt;/a&gt;基本语法&lt;/h2&gt;&lt;h3 id=&quot;注释&quot;&gt;&lt;a href=&quot;#注释&quot; class=&quot;headerlink&quot; title=&quot;注释&quot;&gt;&lt;/a&gt;注释&lt;/h3&gt;&lt;pre&gt;&lt;code class=&quot;lua&quot;&gt;-- single line comment
-
---[[
-    mutil line comments
-]]
-&lt;/code&gt;&lt;/pre&gt;</summary>
     
     
     
