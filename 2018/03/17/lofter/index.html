@@ -1,14 +1,12 @@
-<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>Python网络爬虫1 - 爬取网易LOFTER图片 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+<!DOCTYPE html><html lang="en"><head><meta name="generator" content="Hexo 3.9.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>Python网络爬虫1 - 爬取网易LOFTER图片 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
 (function() {
     var hm = document.createElement("script");
     hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
     var s = document.getElementsByTagName("script")[0];
     s.parentNode.insertBefore(hm, s);
-})();</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
-</head><link rel="stylesheet" type="text/css" href="/plugins/highlight/atom-one-dark.min.css"><script type="text/javascript" src="/plugins/highlight/highlight.min.js"></script><script>hljs.initHighlightingOnLoad();
-</script><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">Python网络爬虫1 - 爬取网易LOFTER图片</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2018/03/17/lofter/">2018-03-17</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Language/">Language</a>&nbsp;&bull;&nbsp;<a href="/categories/Language/Python/">Python</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p><code>LOFTER</code>是网易出品的优质轻博客，灵感源于国外的<code>tumblr</code>，但比之更加文艺，更加本地化。本人非常喜欢<code>LOFTER</code>的UI设计，以及其中的优质用户和内容，似乎网易并不擅长推广，所以受众并不广泛。这都是题外话，本文主要记录作者近期学习<code>python3</code>并用之爬取<code>LOFTER</code>用户图片的过程和成果，与大家交流分享。</p>
+})();</script></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">Python网络爬虫1 - 爬取网易LOFTER图片</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2018/03/17/lofter/">2018-03-17</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Python/">Python</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p><code>LOFTER</code>是网易出品的优质轻博客，灵感源于国外的<code>tumblr</code>，但比之更加文艺，更加本地化。本人非常喜欢<code>LOFTER</code>的UI设计，以及其中的优质用户和内容，似乎网易并不擅长推广，所以受众并不广泛。这都是题外话，本文主要记录作者近期学习<code>python3</code>并用之爬取<code>LOFTER</code>用户图片的过程和成果，与大家交流分享。</p>
 <blockquote>
-<p>本文将以本人<a target="_blank" rel="noopener" href="http://litreily.lofter.com/">litreily</a>博客为例说明整个爬取过程</p>
+<p>本文将以本人<a href="http://litreily.lofter.com" target="_blank" rel="noopener">litreily</a>博客为例说明整个爬取过程</p>
 </blockquote>
 <h2 id="分析LOFTER站点"><a href="#分析LOFTER站点" class="headerlink" title="分析LOFTER站点"></a>分析LOFTER站点</h2><p>在爬取站点之前，首先需要分析站点的关键信息有哪些，如果给自己提问，可能会有以下问题：</p>
 <ol>
@@ -24,7 +22,7 @@
 <p>主页: <code>http://[username].lofter.com</code></p>
 </blockquote>
 <p><img src="/assets/spider/lofter/litreily.png" alt="litreily"></p>
-<p>从主页可以看到<a target="_blank" rel="noopener" href="http://litreily.lofter.com/view">归档</a>的链接，暂时不管。不同的用户，其主页所用模板不尽一致，<code>LOFTER</code>为提供了大量精美的主页模板，以满足不同用户的需求：</p>
+<p>从主页可以看到<a href="http://litreily.lofter.com/view" target="_blank" rel="noopener">归档</a>的链接，暂时不管。不同的用户，其主页所用模板不尽一致，<code>LOFTER</code>为提供了大量精美的主页模板，以满足不同用户的需求：</p>
 <p><img src="/assets/spider/lofter/lofterTemplet.png" alt="lofter templet"></p>
 <p>然而，正是因为所用模板不同，其网页内容格式也不同，这个从不同模板中图片的位置，大小，图片信息等就可以看出来。相同的资源，不同的展示方式，就好像同样一件艺术品，既可以摆放在玻璃框中，也可以悬挂在高空。</p>
 <p>当然这不是本文重点，这里只是为了说明不同用户的主页信息展示不一样，会给爬虫爬取带来一定影响。</p>
@@ -65,7 +63,7 @@
 <p><img src="/assets/spider/lofter/post_values.png" alt="request values"></p>
 <p>现在的关键问题是，这些请求包中的参数都是干嘛的？经我多方尝试、猜测与观察，总结如下：</p>
 <pre><code class="C#">callCount=1       # 固定
-scriptSessionId=$&#123;scriptSessionId&#125;187   # 固定
+scriptSessionId=${scriptSessionId}187   # 固定
 httpSessionId=    # 固定
 c0-scriptName=ArchiveBean       # 固定
 c0-methodName=getArchivePostByTime      # 固定
@@ -77,7 +75,7 @@ c0-param3=boolean:false   # 固定
 batchId=822456            # 6位随机数，爬取时可以固定
 </code></pre>
 <p>所以我们模拟请求包的时候就按这个来就可以了，至于时间戳怎么获取，请求包的<code>headers</code>如何确定，后面会有详述。</p>
-<p>下面我们来看看请求后得到的响应包长啥样，look，就下面这个，看到没，**<code>permalink</code>**, 千呼万唤始出来啊，这不就是我们想要的博客固定路径了么。响应包并不是<code>html</code>文件，而是一组数据，我觉着归档页包含的那个脚本就是根据这个数据文件进而请求首张图片信息或文本信息的，当然这是我的猜测了，有兴趣的可以去看看那个脚本。</p>
+<p>下面我们来看看请求后得到的响应包长啥样，look，就下面这个，看到没，<strong><code>permalink</code></strong>, 千呼万唤始出来啊，这不就是我们想要的博客固定路径了么。响应包并不是<code>html</code>文件，而是一组数据，我觉着归档页包含的那个脚本就是根据这个数据文件进而请求首张图片信息或文本信息的，当然这是我的猜测了，有兴趣的可以去看看那个脚本。</p>
 <p><img src="/assets/spider/lofter/post_response.png" alt="post response"></p>
 <p>有了这组数据，咱就可以获取每次请求得到的博客路径列表，进而逐一爬取博客内的图片链接了。</p>
 <p>到此处为止，归档页的信息就分析完了，我们已经知道该发送怎样的请求包去获取归档数据，与此同时，我们也知道了从归档页如何获取每篇博客的真实路径。</p>
@@ -85,7 +83,7 @@ batchId=822456            # 6位随机数，爬取时可以固定
 <h3 id="博客页信息"><a href="#博客页信息" class="headerlink" title="博客页信息"></a>博客页信息</h3><blockquote>
 <p>博客： <code>http://[username].lofter.com/post/******_********</code></p>
 </blockquote>
-<p>以上面获取的博客 <a target="_blank" rel="noopener" href="http://litreily.lofter.com/post/33a459_1230cb50">http://litreily.lofter.com/post/33a459_1230cb50</a> 为例，大部分博客内的图片都不止一张，这也是必须访问博客页本身的主要原因，好了照旧查看页面元素。</p>
+<p>以上面获取的博客 <a href="http://litreily.lofter.com/post/33a459_1230cb50" target="_blank" rel="noopener">http://litreily.lofter.com/post/33a459_1230cb50</a> 为例，大部分博客内的图片都不止一张，这也是必须访问博客页本身的主要原因，好了照旧查看页面元素。</p>
 <p><img src="/assets/spider/lofter/blog_pic.png" alt="blog pictures"></p>
 <p>可以发现每篇博客内所有图片的大图链接都是上图框选中这样的，都有着同样的属性<code>bigimgsrc</code>，并且是博客页面唯一的。由于每篇博客源码内包含了该篇博客所有的图片链接，所以当我们获取了某篇博客的<code>html</code>文件后，便可以使用正则表达式获取所有图片链接。</p>
 <p>至此，我们已经掌握了爬取<code>lofter</code>单用户博客图片所需的所有信息，是时候确定爬取方案了。</p>
@@ -132,12 +130,12 @@ def _get_timestamp(html, time_pattern):
 <p>注意，首次请求的时间戳可以直接使用当前系统时间(ms)</p>
 </blockquote>
 <h3 id="发送POST请求包"><a href="#发送POST请求包" class="headerlink" title="发送POST请求包"></a>发送POST请求包</h3><p>POST请求包的<code>url</code>是固定的，<code>data</code>就是前面获取到的所有请求参数，<code>headers</code>如下：</p>
-<pre><code class="python">headers = &#123;
+<pre><code class="python">headers = {
         &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.146 Safari/537.36&#39;,
         &#39;Host&#39;: username + &#39;.lofter.com&#39;,
         &#39;Referer&#39;: &#39;http://%s.lofter.com/view&#39; % username,
         &#39;Accept-Encoding&#39;: &#39;gzip, deflate&#39;
-    &#125;
+    }
 </code></pre>
 <p>其中，<code>User-Agent</code>用于模拟浏览器请求，后面三个参数最好都加上，否则可能无法请求成功。POST请求其实就是一条语句<code>requests.post</code>，具体实现如下：</p>
 <pre><code class="python">def _get_html(url, data, headers):
@@ -173,7 +171,7 @@ if num_new_blogs != 0:
     return imgurls
 </code></pre>
 <h3 id="下载图片"><a href="#下载图片" class="headerlink" title="下载图片"></a>下载图片</h3><pre><code class="python">def _capture_images(imgurl, path):
-    headers = &#123;&#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.146 Safari/537.36&#39;&#125;
+    headers = {&#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.146 Safari/537.36&#39;}
     for i in range(1,3):
         try:
             image_request = requests.get(imgurl, headers = headers, timeout = 20)
@@ -191,6 +189,7 @@ if num_new_blogs != 0:
             print(e)
         finally:
             pass
+
 </code></pre>
 <p>有了图链，最后的工作当然是下载图片了，上面这段代码便是用来下载图片的，<code>headers</code>是为了模拟浏览器访问。那为什么要尝试下载两次呢？因为我在抓取过程中，有时候会出现抓取失败的情况，并显示以下错误信息：</p>
 <pre><code class="yaml">&#39;Connection aborted.&#39;, RemoteDisconnected(&#39;Remote end closed connection without response&#39;
@@ -230,10 +229,10 @@ import random
 
 
 def _get_path(username):
-    path = &#123;
+    path = {
         &#39;Windows&#39;: &#39;D:/litreily/Pictures/python/lofter/&#39; + username,
         &#39;Linux&#39;: &#39;/mnt/d/litreily/Pictures/python/lofter/&#39; + username
-    &#125;.get(platform.system())
+    }.get(platform.system())
 
     if not os.path.isdir(path):
         os.makedirs(path)
@@ -281,7 +280,7 @@ def _get_imgurls(username, blog, headers):
 
 
 def _capture_images(imgurl, path):
-    headers = &#123;&#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.146 Safari/537.36&#39;&#125;
+    headers = {&#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.146 Safari/537.36&#39;}
     for i in range(1,3):
         try:
             image_request = requests.get(imgurl, headers = headers, timeout = 20)
@@ -302,8 +301,8 @@ def _capture_images(imgurl, path):
 
 
 def _create_query_data(blogid, timestamp, query_number):
-    data = &#123;&#39;callCount&#39;:&#39;1&#39;,
-    &#39;scriptSessionId&#39;:&#39;$&#123;scriptSessionId&#125;187&#39;,
+    data = {&#39;callCount&#39;:&#39;1&#39;,
+    &#39;scriptSessionId&#39;:&#39;${scriptSessionId}187&#39;,
     &#39;httpSessionId&#39;:&#39;&#39;,
     &#39;c0-scriptName&#39;:&#39;ArchiveBean&#39;,
     &#39;c0-methodName&#39;:&#39;getArchivePostByTime&#39;,
@@ -312,7 +311,7 @@ def _create_query_data(blogid, timestamp, query_number):
     &#39;c0-param1&#39;:&#39;number:&#39; + timestamp,
     &#39;c0-param2&#39;:&#39;number:&#39; + query_number,
     &#39;c0-param3&#39;:&#39;boolean:false&#39;,
-    &#39;batchId&#39;:&#39;123456&#39;&#125;
+    &#39;batchId&#39;:&#39;123456&#39;}
     return data
 
 
@@ -330,12 +329,12 @@ def main():
     # parameters of post packet
     url = &#39;http://%s.lofter.com/dwr/call/plaincall/ArchiveBean.getArchivePostByTime.dwr&#39; % username
     data = _create_query_data(blogid, _get_timestamp(None, time_pattern), str(query_number))
-    headers = &#123;
+    headers = {
         &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.146 Safari/537.36&#39;,
         &#39;Host&#39;: username + &#39;.lofter.com&#39;,
         &#39;Referer&#39;: &#39;http://%s.lofter.com/view&#39; % username,
         &#39;Accept-Encoding&#39;: &#39;gzip, deflate&#39;
-    &#125;
+    }
 
     num_blogs = 0
     num_imgs = 0
@@ -360,7 +359,7 @@ def main():
             for imgurl in imgurls:
                 index_img += 1
                 paths = &#39;%s/%d.%s&#39; % (path, index_img, re.search(r&#39;(jpg|png|gif)&#39;, imgurl).group(0))
-                print(&#39;&#123;&#125;\t&#123;&#125;&#39;.format(index_img, paths))
+                print(&#39;{}\t{}&#39;.format(index_img, paths))
                 _capture_images(imgurl, paths)
 
         if num_new_blogs != query_number:
@@ -383,11 +382,11 @@ if __name__ == &#39;__main__&#39;:
 <h2 id="爬取测试"><a href="#爬取测试" class="headerlink" title="爬取测试"></a>爬取测试</h2><p><img src="/assets/spider/lofter/lofter_spider.png" alt="lofter spider"></p>
 <p><img src="/assets/spider/lofter/pictures.png" alt="pictures"></p>
 <h2 id="说在最后"><a href="#说在最后" class="headerlink" title="说在最后"></a>说在最后</h2><ul>
-<li>Github 源码：<a target="_blank" rel="noopener" href="https://github.com/Litreily/capturer">https://github.com/Litreily/capturer</a></li>
+<li>Github 源码：<a href="https://github.com/Litreily/capturer" target="_blank" rel="noopener">https://github.com/Litreily/capturer</a></li>
 <li>欢迎交流探讨与STAR</li>
 <li>请节制使用！</li>
 </ul>
-</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2018/03/17/lofter/">https://www.litreily.top/2018/03/17/lofter/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tags"></i><a href="/tags/tools/">tools</a><a href="/tags/spider/">spider</a><a href="/tags/lofter/">lofter</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E6%9E%90LOFTER%E7%AB%99%E7%82%B9"><span class="toc-number">1.</span> <span class="toc-text">分析LOFTER站点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E9%A1%B5%E4%BF%A1%E6%81%AF"><span class="toc-number">1.1.</span> <span class="toc-text">主页信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E9%A1%B5%E4%BF%A1%E6%81%AF"><span class="toc-number">1.2.</span> <span class="toc-text">分页信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BD%92%E6%A1%A3%E9%A1%B5%E4%BF%A1%E6%81%AF"><span class="toc-number">1.3.</span> <span class="toc-text">归档页信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%9A%E5%AE%A2%E9%A1%B5%E4%BF%A1%E6%81%AF"><span class="toc-number">1.4.</span> <span class="toc-text">博客页信息</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A1%AE%E5%AE%9A%E7%88%AC%E5%8F%96%E6%96%B9%E6%A1%88"><span class="toc-number">2.</span> <span class="toc-text">确定爬取方案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-number">3.</span> <span class="toc-text">代码实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%9D%E8%B5%96%E5%BA%93"><span class="toc-number">3.1.</span> <span class="toc-text">依赖库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7ID"><span class="toc-number">3.2.</span> <span class="toc-text">获取用户ID</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E6%88%90POST%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE"><span class="toc-number">3.3.</span> <span class="toc-text">生成POST请求数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%91%E9%80%81POST%E8%AF%B7%E6%B1%82%E5%8C%85"><span class="toc-number">3.4.</span> <span class="toc-text">发送POST请求包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E6%9E%90POST%E5%93%8D%E5%BA%94%E5%8C%85"><span class="toc-number">3.5.</span> <span class="toc-text">解析POST响应包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E5%9B%BE%E7%89%87"><span class="toc-number">3.6.</span> <span class="toc-text">下载图片</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E5%BE%AA%E7%8E%AF"><span class="toc-number">3.7.</span> <span class="toc-text">主循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%8C%E6%95%B4%E4%BB%A3%E7%A0%81"><span class="toc-number">3.8.</span> <span class="toc-text">完整代码</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%88%AC%E5%8F%96%E6%B5%8B%E8%AF%95"><span class="toc-number">4.</span> <span class="toc-text">爬取测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%B4%E5%9C%A8%E6%9C%80%E5%90%8E"><span class="toc-number">5.</span> <span class="toc-text">说在最后</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2018/04/10/sina/">&lt; Python网络爬虫2 - 爬取新浪微博用户图片</a><a class="next" href="/2018/02/22/ddos-attack/">两款实用的DDos攻击工具 &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2018/03/17/lofter/">https://www.litreily.top/2018/03/17/lofter/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tags"></i><a href="/tags/tools/">tools</a><a href="/tags/spider/">spider</a><a href="/tags/lofter/">lofter</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#分析LOFTER站点"><span class="toc-number">1.</span> <span class="toc-text">分析LOFTER站点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#主页信息"><span class="toc-number">1.1.</span> <span class="toc-text">主页信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分页信息"><span class="toc-number">1.2.</span> <span class="toc-text">分页信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#归档页信息"><span class="toc-number">1.3.</span> <span class="toc-text">归档页信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#博客页信息"><span class="toc-number">1.4.</span> <span class="toc-text">博客页信息</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#确定爬取方案"><span class="toc-number">2.</span> <span class="toc-text">确定爬取方案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码实现"><span class="toc-number">3.</span> <span class="toc-text">代码实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#依赖库"><span class="toc-number">3.1.</span> <span class="toc-text">依赖库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#获取用户ID"><span class="toc-number">3.2.</span> <span class="toc-text">获取用户ID</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#生成POST请求数据"><span class="toc-number">3.3.</span> <span class="toc-text">生成POST请求数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#发送POST请求包"><span class="toc-number">3.4.</span> <span class="toc-text">发送POST请求包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解析POST响应包"><span class="toc-number">3.5.</span> <span class="toc-text">解析POST响应包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#下载图片"><span class="toc-number">3.6.</span> <span class="toc-text">下载图片</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#主循环"><span class="toc-number">3.7.</span> <span class="toc-text">主循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#完整代码"><span class="toc-number">3.8.</span> <span class="toc-text">完整代码</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#爬取测试"><span class="toc-number">4.</span> <span class="toc-text">爬取测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#说在最后"><span class="toc-number">5.</span> <span class="toc-text">说在最后</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2018/04/10/sina/">&lt; Python网络爬虫2 - 爬取新浪微博用户图片</a><a class="next" href="/2018/02/22/ddos-attack/">两款实用的DDos攻击工具 &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
 .night .v[data-class=v] a:hover { color: #216C73 !important; }
 .night .v[data-class=v] li { list-style: inherit; }
 .night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
@@ -401,7 +400,7 @@ if __name__ == &#39;__main__&#39;:
 .v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
 .night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
 .night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
-</style><div id="vcomment"></div><script src="//cdn.bootcdn.net/ajax/libs/valine/1.4.14/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+</style><div id="vcomment"></div><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
 var verify = 'false' == true ? true : false;
 var GUEST_INFO = ['nick','mail','link'];
 var guest_info = 'nick,mail,link'.split(',').filter(function(item){
@@ -419,7 +418,7 @@ window.valine = new Valine({
   avatar:'identicon',
   guest_info:guest_info,
   pageSize:'10'
-})</script></div></section><footer><p>Copyright © 2016 - 2024 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+})</script></div></section><footer><p>Copyright © 2016 - 2020 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/plugins/prettify/prettify.js"></script><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
 if (search_path.length == 0) {
     search_path = 'search.xml';
 }

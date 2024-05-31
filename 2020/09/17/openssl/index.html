@@ -1,17 +1,14 @@
-<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>openssl 验证证书有效性 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+<!DOCTYPE html><html lang="en"><head><meta name="generator" content="Hexo 3.9.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>openssl 验证证书有效性 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
 (function() {
     var hm = document.createElement("script");
     hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
     var s = document.getElementsByTagName("script")[0];
     s.parentNode.insertBefore(hm, s);
-})();</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
-</head><link rel="stylesheet" type="text/css" href="/plugins/highlight/atom-one-dark.min.css"><script type="text/javascript" src="/plugins/highlight/highlight.min.js"></script><script>hljs.initHighlightingOnLoad();
-</script><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">openssl 验证证书有效性</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2020/09/17/openssl/">2020-09-17</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Network/">Network</a>&nbsp;&bull;&nbsp;<a href="/categories/Network/Security/">Security</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><blockquote>
+})();</script></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">openssl 验证证书有效性</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2020/09/17/openssl/">2020-09-17</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Network/">Network</a>&nbsp;&bull;&nbsp;<a href="/categories/Network/Security/">Security</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><blockquote>
 <p>OpenSSL is a robust, commercial-grade, and full-featured toolkit for the Transport Layer Security (TLS) and Secure Sockets Layer (SSL) protocols. It is also a general-purpose cryptography library.</p>
 </blockquote>
 <p>openssl是非常强大的TLS/SSL协议相关的工具集，包含丰富的测试工具。 这篇文章来讲讲如何使用openssl工具集中的<code>s_client</code>测试证书认证。</p>
-<span id="more"></span>
-
+<a id="more"></a>
 <pre><code class="bash">$ openssl -h
 openssl:Error: &#39;-h&#39; is an invalid command.
 
@@ -150,14 +147,13 @@ SSL-Session:
     0070 - 6a 6d 97 4a de 09 e1 b2-5c 18 2e af ac a0 a1 7a   jm.J....\......z
     0080 - b8 e9 3f 83 65 5e 3e da-db 4f 1d fd 94 b6 66 e1   ..?.e^&gt;..O....f.
     0090 - 74 73 3b 09 93 83 2f 23-7f 13 98 8c 63 3b 13 6b   ts;.../#....c;.k
-    00a0 - 03 07 0f d2 b2 66 37 df-92 e7 c9 c1 7b da 26 67   .....f7.....&#123;.&amp;g
+    00a0 - 03 07 0f d2 b2 66 37 df-92 e7 c9 c1 7b da 26 67   .....f7.....{.&amp;g
 
     Start Time: 1600248002
     Timeout   : 300 (sec)
     Verify return code: 0 (ok)
 ---
-</code></pre>
-<p>输出结果中包含server端的证书以及认证结果，Verify return code 为0(ok)，说明一切正常。</p>
+</code></pre><p>输出结果中包含server端的证书以及认证结果，Verify return code 为0(ok)，说明一切正常。</p>
 <p>现在我故意将系统时间调整为去年的时间</p>
 <pre><code class="bash">date -s 2019-09-14
 </code></pre>
@@ -252,14 +248,14 @@ SSL-Session:
     TLS session ticket:
     0000 - c3 33 dc 6e 4b 4c 35 4f-3a 84 49 5d 7f 4a 12 30   .3.nKL5O:.I].J.0
     0010 - be c3 28 c9 3a fd 73 6a-c7 65 65 b0 a7 69 a1 ca   ..(.:.sj.ee..i..
-    0020 - f8 89 1d 62 75 3d 46 7d-92 62 01 f6 8b fa 40 c7   ...bu=F&#125;.b....@.
+    0020 - f8 89 1d 62 75 3d 46 7d-92 62 01 f6 8b fa 40 c7   ...bu=F}.b....@.
     0030 - ef de 3b 35 50 ab 0c 45-79 ce 97 2f 13 9e 0c 10   ..;5P..Ey../....
     0040 - 4c d2 2a 4e 85 fc 8f b1-4c c9 98 1a 0d 39 a9 26   L.*N....L....9.&amp;
     0050 - e3 c3 18 16 fc ad b9 9a-ba 5d f7 b1 db 70 ab 30   .........]...p.0
     0060 - 04 b3 9a 2f 66 97 74 e6-74 c9 04 59 3b 18 df 67   .../f.t.t..Y;..g
     0070 - a3 17 03 52 c8 c9 b9 8c-1f 11 01 8e cf bc 17 22   ...R...........&quot;
-    0080 - e7 7d 40 ad 53 c6 04 83-d2 80 24 28 3f cb f8 c6   .&#125;@.S.....$(?...
-    0090 - c4 1c 2f 42 15 7b a3 13-c7 4f 8f 62 18 71 0f 2a   ../B.&#123;...O.b.q.*
+    0080 - e7 7d 40 ad 53 c6 04 83-d2 80 24 28 3f cb f8 c6   .}@.S.....$(?...
+    0090 - c4 1c 2f 42 15 7b a3 13-c7 4f 8f 62 18 71 0f 2a   ../B.{...O.b.q.*
     00a0 - 90 8b 8b d9 64 b8 1e 0d-cf df 62 cc fc 95 d0 ce   ....d.....b.....
 
     Start Time: 1598327363
@@ -275,7 +271,7 @@ notBefore=Aug 28 00:00:00 2020 GMT
 <p>在出错的情况下使用<code>wireshark</code>抓包就可以发现，client端认为证书无效，会alert一个<code>Bad Certificate</code>的错误信息，然后关闭当前连接。</p>
 <p><img src="/assets/network/ssl/bad-certificate.png" alt="wireshark Bad Certificate"></p>
 <p>在嵌入式设备中，如果NTP没有同步，当前系统时间就有可能是错误的，此时使用<code>https</code>与远程服务器通信就可能出错。</p>
-</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2020/09/17/openssl/">https://www.litreily.top/2020/09/17/openssl/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tag"></i><a href="/tags/openssl/">openssl</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS%E8%A7%A3%E6%9E%90"><span class="toc-number">1.</span> <span class="toc-text">DNS解析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#openssl-s-client"><span class="toc-number">2.</span> <span class="toc-text">openssl s_client</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2020/12/02/setup-pptp/">&lt; Setup PPTP and DNS server</a><a class="next" href="/2020/08/13/python-pdf/">python之给pdf添加页码 &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2020/09/17/openssl/">https://www.litreily.top/2020/09/17/openssl/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tag"></i><a href="/tags/openssl/">openssl</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS解析"><span class="toc-number">1.</span> <span class="toc-text">DNS解析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#openssl-s-client"><span class="toc-number">2.</span> <span class="toc-text">openssl s_client</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2020/12/02/setup-pptp/">&lt; Setup PPTP and DNS server</a><a class="next" href="/2020/08/13/python-pdf/">python之给pdf添加页码 &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
 .night .v[data-class=v] a:hover { color: #216C73 !important; }
 .night .v[data-class=v] li { list-style: inherit; }
 .night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
@@ -289,7 +285,7 @@ notBefore=Aug 28 00:00:00 2020 GMT
 .v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
 .night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
 .night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
-</style><div id="vcomment"></div><script src="//cdn.bootcdn.net/ajax/libs/valine/1.4.14/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+</style><div id="vcomment"></div><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
 var verify = 'false' == true ? true : false;
 var GUEST_INFO = ['nick','mail','link'];
 var guest_info = 'nick,mail,link'.split(',').filter(function(item){
@@ -307,7 +303,7 @@ window.valine = new Valine({
   avatar:'identicon',
   guest_info:guest_info,
   pageSize:'10'
-})</script></div></section><footer><p>Copyright © 2016 - 2024 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+})</script></div></section><footer><p>Copyright © 2016 - 2020 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/plugins/prettify/prettify.js"></script><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
 if (search_path.length == 0) {
     search_path = 'search.xml';
 }

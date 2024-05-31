@@ -1,18 +1,16 @@
-<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>Python网络爬虫3 - 生产者消费者模型爬取某金融网站数据 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+<!DOCTYPE html><html lang="en"><head><meta name="generator" content="Hexo 3.9.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>Python网络爬虫3 - 生产者消费者模型爬取某金融网站数据 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
 (function() {
     var hm = document.createElement("script");
     hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
     var s = document.getElementsByTagName("script")[0];
     s.parentNode.insertBefore(hm, s);
-})();</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
-</head><link rel="stylesheet" type="text/css" href="/plugins/highlight/atom-one-dark.min.css"><script type="text/javascript" src="/plugins/highlight/highlight.min.js"></script><script>hljs.initHighlightingOnLoad();
-</script><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">Python网络爬虫3 - 生产者消费者模型爬取某金融网站数据</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2018/04/30/cfachina/">2018-04-30</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Language/">Language</a>&nbsp;&bull;&nbsp;<a href="/categories/Language/Python/">Python</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>应一位金融圈的朋友所托，帮忙写个爬虫，帮他爬取<a target="_blank" rel="noopener" href="http://www.cfachina.org/cfainfo/organbaseinfoServlet?all=personinfo#">中国期货行业协议</a>网站中所有金融机构的从业人员信息。网站数据的获取本身比较简单，但是为了学习一些新的爬虫方法和技巧，即本文要讲述的<strong>生产者消费者模型</strong>，我又学习了一下Python中队列库<code>queue</code>及线程库<code>Thread</code>的使用方法。</p>
+})();</script></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">Python网络爬虫3 - 生产者消费者模型爬取某金融网站数据</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2018/04/30/cfachina/">2018-04-30</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Python/">Python</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>应一位金融圈的朋友所托，帮忙写个爬虫，帮他爬取<a href="http://www.cfachina.org/cfainfo/organbaseinfoServlet?all=personinfo#" target="_blank" rel="noopener">中国期货行业协议</a>网站中所有金融机构的从业人员信息。网站数据的获取本身比较简单，但是为了学习一些新的爬虫方法和技巧，即本文要讲述的<strong>生产者消费者模型</strong>，我又学习了一下Python中队列库<code>queue</code>及线程库<code>Thread</code>的使用方法。</p>
 <h2 id="生产者消费者模型"><a href="#生产者消费者模型" class="headerlink" title="生产者消费者模型"></a>生产者消费者模型</h2><p>生产者消费者模型非常简单，相信大部分程序员都知道，就是一方作为生产者不断提供资源，另一方作为消费者不断消费资源。简单点说，就好比餐馆的厨师和顾客，厨师作为生产者不断制作美味的食物，而顾客作为消费者不断食用厨师提供的食物。此外，生产者与消费者之间可以是一对一、一对多、多对一和多对多的关系。</p>
 <p>那么这个模型和爬虫有什么关系呢？其实，爬虫可以认为是一个生产者，它不断从网站爬取数据，爬取到的数据就是食物；而所得数据需要消费者进行数据清洗，把有用的数据吸收掉，把无用的数据丢弃。</p>
 <p>在实践过程中，爬虫爬取和数据清洗分别对应一个<code>Thread</code>，两个线程之间通过顺序队列<code>queue</code>传递数据，数据传递过程就好比餐馆服务员从厨房把食物送到顾客餐桌上的过程。爬取线程负责爬取网站数据，并将原始数据存入队列，清洗线程从队列中按入队顺序读取原始数据并提取出有效数据。</p>
 <p>以上便是对生产者消费者模型的简单介绍了，下面针对本次爬取任务予以详细说明。</p>
 <h2 id="分析站点"><a href="#分析站点" class="headerlink" title="分析站点"></a>分析站点</h2><blockquote>
-<p><a target="_blank" rel="noopener" href="http://www.cfachina.org/cfainfo/organbaseinfoServlet?all=personinfo">http://www.cfachina.org/cfainfo/organbaseinfoServlet?all=personinfo</a></p>
+<p><a href="http://www.cfachina.org/cfainfo/organbaseinfoServlet?all=personinfo" target="_blank" rel="noopener">http://www.cfachina.org/cfainfo/organbaseinfoServlet?all=personinfo</a></p>
 </blockquote>
 <p><img src="/assets/spider/cfachina/home_page.png" alt="home page"></p>
 <p>我们要爬取的数据是主页显示的表格中所有期货公司的<strong>从业人员信息</strong>，每个公司对应一个<strong>机构编号</strong>(<code>G01001~G01198</code>)。从上图可以看到有主页有分页，共8页。以<code>G01001</code>方正中期期货公司为例，点击该公司名称跳转至对应网页如下:</p>
@@ -20,7 +18,7 @@
 <p>从网址及网页内容可以提取出以下信息：</p>
 <ol>
 <li>网址<ul>
-<li><a target="_blank" rel="noopener" href="http://www.cfachina.org/cfainfo/organbaseinfoOneServlet?organid=+G01001+&amp;currentPage=1&amp;pageSize=20&amp;selectType=personinfo">http://www.cfachina.org/cfainfo/organbaseinfoOneServlet?organid=+G01001+&amp;currentPage=1&amp;pageSize=20&amp;selectType=personinfo</a><ul>
+<li><a href="http://www.cfachina.org/cfainfo/organbaseinfoOneServlet?organid=+G01001+&amp;currentPage=1&amp;pageSize=20&amp;selectType=personinfo" target="_blank" rel="noopener">http://www.cfachina.org/cfainfo/organbaseinfoOneServlet?organid=+G01001+&amp;currentPage=1&amp;pageSize=20&amp;selectType=personinfo</a><ul>
 <li><code>organid</code>: 机构编号，<code>+G01001+</code> ~ <code>+G01198+</code></li>
 <li><code>currentPage</code>: 该机构从业人员信息当前页面编号</li>
 <li><code>pageSize</code>: 每个页面显示的人员个数，默认20</li>
@@ -36,7 +34,7 @@
 <p>我们最终爬取的数据可以按机构名称存储到对应的txt文件或excel文件中。</p>
 <h3 id="获取机构名称"><a href="#获取机构名称" class="headerlink" title="获取机构名称"></a>获取机构名称</h3><p><img src="/assets/spider/cfachina/gst_title.png" alt="get mechanism name"></p>
 <p>获取到某机构的任意从业信息页面后，使用<code>BeautifulSoup</code>可快速提取机构名称。</p>
-<pre><code class="python">mechanism_name = soup.find(&#39;&#39;, &#123;&#39;class&#39;:&#39;gst_title&#39;&#125;).find_all(&#39;a&#39;)[2].get_text()
+<pre><code class="python">mechanism_name = soup.find(&#39;&#39;, {&#39;class&#39;:&#39;gst_title&#39;}).find_all(&#39;a&#39;)[2].get_text()
 </code></pre>
 <p>那么有人可能会问，既然主页表格都已经包含了所有机构的编号和名称，为何还要多此一举的再获取一次呢？这是因为，我压根就不想爬主页的那些表格，直接根据机构编号的递增规律生成对应的网址即可，所以获取机构名称的任务就放在了爬取每个机构首个信息页面之后。</p>
 <h3 id="获取机构信息对应的网页数量"><a href="#获取机构信息对应的网页数量" class="headerlink" title="获取机构信息对应的网页数量"></a>获取机构信息对应的网页数量</h3><p><img src="/assets/spider/cfachina/page_cnt.png" alt="get count of page"></p>
@@ -68,13 +66,13 @@ page_cnt = url_re.search(html).group(1)
 </li>
 </ol>
 <h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><h3 id="生成者SpiderThread"><a href="#生成者SpiderThread" class="headerlink" title="生成者SpiderThread"></a>生成者<code>SpiderThread</code></h3><p>爬虫线程先从队列获取一个机构编号，生成机构首页网址并进行爬取，接着判断机构页面数量是否为0，如若不为0则继续获取机构名称，并根据页面数循环爬取剩余页面，将原始html数据以如下<code>dict</code>格式存入队列<code>html_queue</code>:</p>
-<pre><code class="json">&#123;
+<pre><code class="json">{
     &#39;name&#39;: mechanismId_mechanismName,
     &#39;num&#39;: currentPage,
     &#39;content&#39;: html
-&#125;
+}
 </code></pre>
-<p>爬虫产生的数据队列<code>html_queue</code>将由数据清洗线程进行处理，下面是爬虫线程的主程序，整个线程代码请看后面的<a href="#%E6%BA%90%E7%A0%81">源码</a>。</p>
+<p>爬虫产生的数据队列<code>html_queue</code>将由数据清洗线程进行处理，下面是爬虫线程的主程序，整个线程代码请看后面的<a href="#源码">源码</a>。</p>
 <pre><code class="python">def run(self):
     while True:
         mechanism_id = &#39;G0&#39; + self.url_queue.get()
@@ -89,15 +87,15 @@ page_cnt = url_re.search(html).group(1)
             continue
 
         soup = BeautifulSoup(html.text, &#39;html.parser&#39;)
-        mechanism_name = soup.find(&#39;&#39;, &#123;&#39;class&#39;:&#39;gst_title&#39;&#125;).find_all(&#39;a&#39;)[2].get_text()
+        mechanism_name = soup.find(&#39;&#39;, {&#39;class&#39;:&#39;gst_title&#39;}).find_all(&#39;a&#39;)[2].get_text()
         print(&#39;\nGrab Thread: get %s - %s with %s pages\n&#39; % (mechanism_id, mechanism_name, page_cnt))
 
         # put data into html_queue
-        self.html_queue.put(&#123;&#39;name&#39;:&#39;%s_%s&#39; % (mechanism_id, mechanism_name), &#39;num&#39;:1, &#39;content&#39;:html&#125;)
+        self.html_queue.put({&#39;name&#39;:&#39;%s_%s&#39; % (mechanism_id, mechanism_name), &#39;num&#39;:1, &#39;content&#39;:html})
         for i in range(2, int(page_cnt) + 1):
             url = self.__get_url(mechanism_id, i)
             html = self.grab(url)
-            self.html_queue.put(&#123;&#39;name&#39;:&#39;%s_%s&#39; % (mechanism_id, mechanism_name), &#39;num&#39;:i, &#39;content&#39;:html&#125;)
+            self.html_queue.put({&#39;name&#39;:&#39;%s_%s&#39; % (mechanism_id, mechanism_name), &#39;num&#39;:i, &#39;content&#39;:html})
 
         self.url_queue.task_done()
 </code></pre>
@@ -131,10 +129,10 @@ page_cnt = url_re.search(html).group(1)
 </code></pre>
 <h3 id="数据存储Storage"><a href="#数据存储Storage" class="headerlink" title="数据存储Storage"></a>数据存储<code>Storage</code></h3><p>我写了两类文件格式的存储函数，<code>write_txt</code>, <code>write_excel</code>，分别对应<code>txt</code>,<code>excel</code>文件。实际存储时由调用方确定文件格式。</p>
 <pre><code class="python">def save(self, data):
-    &#123;
+    {
         &#39;.txt&#39;: self.write_txt,
         &#39;.xls&#39;: self.write_excel
-    &#125;.get(self.filetype)(data)
+    }.get(self.filetype)(data)
 </code></pre>
 <h4 id="存入txt文件"><a href="#存入txt文件" class="headerlink" title="存入txt文件"></a>存入txt文件</h4><p>存入<code>txt</code>文件是比较简单的，就是以附加(<code>a</code>)形式打开文件，写入数据，关闭文件。其中，文件名称由调用方提供。写入数据时，每个人员信息占用一行，以制表符<code>\t</code>分隔。</p>
 <pre><code class="python">def write_txt(self, data):
@@ -189,7 +187,7 @@ page_cnt = url_re.search(html).group(1)
             wb.save(self.path)
             break
         except PermissionError as e:
-            print(&#39;&#123;0&#125; error: &#123;1&#125;&#39;.format(self.path, e.strerror))
+            print(&#39;{0} error: {1}&#39;.format(self.path, e.strerror))
             time.sleep(5)
         finally:
             pass
@@ -254,7 +252,7 @@ import time
 # Thread-1, get first page url, then get page_num and mechanism_name from first page
 # Thread-2, parse html file and get data from it, then output data to local file
 # url_queue data -&gt; &#39;url&#39;  # first url of each mechanism
-# html_queue data -&gt; &#123;&#39;name&#39;:&#39;mechanism_name&#39;, &#39;html&#39;:data&#125;
+# html_queue data -&gt; {&#39;name&#39;:&#39;mechanism_name&#39;, &#39;html&#39;:data}
 
 url_queue = queue.Queue()
 html_queue = queue.Queue()
@@ -268,7 +266,7 @@ class SpiderThread(Thread):
         self.html_queue = html_queue
         self.page_size = 20
         self.url_re = re.compile(&#39;#currentPage.*\+.*\+\&#39;(\d+)\&#39;&#39;)
-        self.headers = &#123;&#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36&#39;&#125;
+        self.headers = {&#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36&#39;}
 
     def __get_url(self, mechanism_id, current_page):
         return &#39;http://www.cfachina.org/cfainfo/organbaseinfoOneServlet?organid=+%s+&amp;currentPage=%d&amp;pageSize=%d&amp;selectType=personinfo&amp;all=undefined&#39; \
@@ -312,15 +310,15 @@ class SpiderThread(Thread):
                 continue
 
             soup = BeautifulSoup(html.text, &#39;html.parser&#39;)
-            mechanism_name = soup.find(&#39;&#39;, &#123;&#39;class&#39;:&#39;gst_title&#39;&#125;).find_all(&#39;a&#39;)[2].get_text()
+            mechanism_name = soup.find(&#39;&#39;, {&#39;class&#39;:&#39;gst_title&#39;}).find_all(&#39;a&#39;)[2].get_text()
             print(&#39;\nGrab Thread: get %s - %s with %s pages\n&#39; % (mechanism_id, mechanism_name, page_cnt))
 
             # put data into html_queue
-            self.html_queue.put(&#123;&#39;name&#39;:&#39;%s_%s&#39; % (mechanism_id, mechanism_name), &#39;num&#39;:1, &#39;content&#39;:html&#125;)
+            self.html_queue.put({&#39;name&#39;:&#39;%s_%s&#39; % (mechanism_id, mechanism_name), &#39;num&#39;:1, &#39;content&#39;:html})
             for i in range(2, int(page_cnt) + 1):
                 url = self.__get_url(mechanism_id, i)
                 html = self.grab(url)
-                self.html_queue.put(&#123;&#39;name&#39;:&#39;%s_%s&#39; % (mechanism_id, mechanism_name), &#39;num&#39;:i, &#39;content&#39;:html&#125;)
+                self.html_queue.put({&#39;name&#39;:&#39;%s_%s&#39; % (mechanism_id, mechanism_name), &#39;num&#39;:i, &#39;content&#39;:html})
 
             self.url_queue.task_done()
 
@@ -361,10 +359,10 @@ class Storage():
         self.path = self.__get_path()
 
     def __get_path(self):
-        path = &#123;
+        path = {
             &#39;Windows&#39;: &#39;D:/litreily/Documents/python/cfachina&#39;,
             &#39;Linux&#39;: &#39;/mnt/d/litreily/Documents/python/cfachina&#39;
-        &#125;.get(platform.system())
+        }.get(platform.system())
 
         if not os.path.isdir(path):
             os.makedirs(path)
@@ -415,7 +413,7 @@ class Storage():
                 wb.save(self.path)
                 break
             except PermissionError as e:
-                print(&#39;&#123;0&#125; error: &#123;1&#125;&#39;.format(self.path, e.strerror))
+                print(&#39;{0} error: {1}&#39;.format(self.path, e.strerror))
                 time.sleep(5)
             finally:
                 pass
@@ -429,10 +427,10 @@ class Storage():
         Args:
             data: a 2d-list array that need be save
         &#39;&#39;&#39;
-        &#123;
+        {
             &#39;.txt&#39;: self.write_txt,
             &#39;.xls&#39;: self.write_excel
-        &#125;.get(self.filetype)(data)
+        }.get(self.filetype)(data)
 
 
 def main():
@@ -463,9 +461,9 @@ if __name__ == &#39;__main__&#39;:
 <h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><ul>
 <li>测试发现，写入<code>txt</code>的速度明显高于写入<code>excel</code>的速度</li>
 <li>如果将页面网址中的<code>pageSize</code>修改为<code>1000</code>或更大，则可以一次性获取某机构的所有从业人员信息，而不用逐页爬取，效率可以大大提高。</li>
-<li>该爬虫已托管至<a target="_blank" rel="noopener" href="https://github.com/Litreily/Python-demos">github Python-demos</a></li>
+<li>该爬虫已托管至<a href="https://github.com/Litreily/Python-demos" target="_blank" rel="noopener">github Python-demos</a></li>
 </ul>
-</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2018/04/30/cfachina/">https://www.litreily.top/2018/04/30/cfachina/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tags"></i><a href="/tags/spider/">spider</a><a href="/tags/queue/">queue</a><a href="/tags/xlwt/">xlwt</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%9F%E4%BA%A7%E8%80%85%E6%B6%88%E8%B4%B9%E8%80%85%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.</span> <span class="toc-text">生产者消费者模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E6%9E%90%E7%AB%99%E7%82%B9"><span class="toc-number">2.</span> <span class="toc-text">分析站点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E6%9C%BA%E6%9E%84%E5%90%8D%E7%A7%B0"><span class="toc-number">2.1.</span> <span class="toc-text">获取机构名称</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E6%9C%BA%E6%9E%84%E4%BF%A1%E6%81%AF%E5%AF%B9%E5%BA%94%E7%9A%84%E7%BD%91%E9%A1%B5%E6%95%B0%E9%87%8F"><span class="toc-number">2.2.</span> <span class="toc-text">获取机构信息对应的网页数量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E5%BD%93%E5%89%8D%E9%A1%B5%E9%9D%A2%E4%BB%8E%E4%B8%9A%E4%BA%BA%E5%91%98%E4%BF%A1%E6%81%AF"><span class="toc-number">2.3.</span> <span class="toc-text">获取当前页面从业人员信息</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A1%AE%E5%AE%9A%E7%88%AC%E5%8F%96%E6%96%B9%E6%A1%88"><span class="toc-number">3.</span> <span class="toc-text">确定爬取方案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-number">4.</span> <span class="toc-text">代码实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E8%80%85SpiderThread"><span class="toc-number">4.1.</span> <span class="toc-text">生成者SpiderThread</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B6%88%E8%B4%B9%E8%80%85DatamineThread"><span class="toc-number">4.2.</span> <span class="toc-text">消费者DatamineThread</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8Storage"><span class="toc-number">4.3.</span> <span class="toc-text">数据存储Storage</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AD%98%E5%85%A5txt%E6%96%87%E4%BB%B6"><span class="toc-number">4.3.1.</span> <span class="toc-text">存入txt文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AD%98%E5%85%A5Excel%E6%96%87%E4%BB%B6"><span class="toc-number">4.3.2.</span> <span class="toc-text">存入Excel文件</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#main"><span class="toc-number">4.4.</span> <span class="toc-text">main</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BA%90%E7%A0%81"><span class="toc-number">5.</span> <span class="toc-text">源码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%88%AC%E5%8F%96%E6%B5%8B%E8%AF%95"><span class="toc-number">6.</span> <span class="toc-text">爬取测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%99%E5%9C%A8%E6%9C%80%E5%90%8E"><span class="toc-number">7.</span> <span class="toc-text">写在最后</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2018/05/27/scrapy-start/">&lt; Python网络爬虫4 - scrapy入门</a><a class="next" href="/2018/04/10/sina/">Python网络爬虫2 - 爬取新浪微博用户图片 &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2018/04/30/cfachina/">https://www.litreily.top/2018/04/30/cfachina/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tags"></i><a href="/tags/spider/">spider</a><a href="/tags/queue/">queue</a><a href="/tags/xlwt/">xlwt</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#生产者消费者模型"><span class="toc-number">1.</span> <span class="toc-text">生产者消费者模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分析站点"><span class="toc-number">2.</span> <span class="toc-text">分析站点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#获取机构名称"><span class="toc-number">2.1.</span> <span class="toc-text">获取机构名称</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#获取机构信息对应的网页数量"><span class="toc-number">2.2.</span> <span class="toc-text">获取机构信息对应的网页数量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#获取当前页面从业人员信息"><span class="toc-number">2.3.</span> <span class="toc-text">获取当前页面从业人员信息</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#确定爬取方案"><span class="toc-number">3.</span> <span class="toc-text">确定爬取方案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码实现"><span class="toc-number">4.</span> <span class="toc-text">代码实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#生成者SpiderThread"><span class="toc-number">4.1.</span> <span class="toc-text">生成者SpiderThread</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#消费者DatamineThread"><span class="toc-number">4.2.</span> <span class="toc-text">消费者DatamineThread</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数据存储Storage"><span class="toc-number">4.3.</span> <span class="toc-text">数据存储Storage</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#存入txt文件"><span class="toc-number">4.3.1.</span> <span class="toc-text">存入txt文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#存入Excel文件"><span class="toc-number">4.3.2.</span> <span class="toc-text">存入Excel文件</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#main"><span class="toc-number">4.4.</span> <span class="toc-text">main</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#源码"><span class="toc-number">5.</span> <span class="toc-text">源码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#爬取测试"><span class="toc-number">6.</span> <span class="toc-text">爬取测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#写在最后"><span class="toc-number">7.</span> <span class="toc-text">写在最后</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2018/05/27/scrapy-start/">&lt; Python网络爬虫4 - scrapy入门</a><a class="next" href="/2018/04/10/sina/">Python网络爬虫2 - 爬取新浪微博用户图片 &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
 .night .v[data-class=v] a:hover { color: #216C73 !important; }
 .night .v[data-class=v] li { list-style: inherit; }
 .night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
@@ -479,7 +477,7 @@ if __name__ == &#39;__main__&#39;:
 .v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
 .night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
 .night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
-</style><div id="vcomment"></div><script src="//cdn.bootcdn.net/ajax/libs/valine/1.4.14/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+</style><div id="vcomment"></div><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
 var verify = 'false' == true ? true : false;
 var GUEST_INFO = ['nick','mail','link'];
 var guest_info = 'nick,mail,link'.split(',').filter(function(item){
@@ -497,7 +495,7 @@ window.valine = new Valine({
   avatar:'identicon',
   guest_info:guest_info,
   pageSize:'10'
-})</script></div></section><footer><p>Copyright © 2016 - 2024 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+})</script></div></section><footer><p>Copyright © 2016 - 2020 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/plugins/prettify/prettify.js"></script><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
 if (search_path.length == 0) {
     search_path = 'search.xml';
 }

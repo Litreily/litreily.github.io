@@ -3,10 +3,10 @@
   <title>LITREILY</title>
   <icon>https://www.gravatar.com/avatar/6ae20d989e9d976faf00ecc6d9bcfe82</icon>
   <subtitle>Stay Hungry, Stay Foolish</subtitle>
-  <link href="https://www.litreily.top/atom.xml" rel="self"/>
+  <link href="/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2024-05-31T10:42:26.777Z</updated>
+  <updated>2020-12-15T12:32:21.604Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -14,979 +14,938 @@
     <email>707922098@qq.com</email>
   </author>
   
-  <generator uri="https://hexo.io/">Hexo</generator>
+  <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>rk3399 ubuntu 休眠唤醒功能</title>
-    <link href="https://www.litreily.top/2024/05/31/rk3399-wol/"/>
-    <id>https://www.litreily.top/2024/05/31/rk3399-wol/</id>
-    <published>2024-05-31T10:31:47.000Z</published>
-    <updated>2024-05-31T10:42:26.777Z</updated>
+    <title>Setup PPTP and DNS server</title>
+    <link href="https://www.litreily.top/2020/12/02/setup-pptp/"/>
+    <id>https://www.litreily.top/2020/12/02/setup-pptp/</id>
+    <published>2020-12-02T11:06:32.000Z</published>
+    <updated>2020-12-15T12:32:21.604Z</updated>
     
+    <summary type="html">
     
       
       
-    <summary type="html">&lt;h1 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot; title=&quot;背景&quot;&gt;&lt;/a&gt;背景&lt;/h1&gt;&lt;p&gt;为了降低功耗，需要考虑使用系统的休眠唤醒功能。&lt;/p&gt;
-&lt;h1 id=&quot;休眠方式&quot;&gt;&lt;a href=&quot;#休眠方式&quot; class=&quot;headerlink&quot; title=&quot;休眠方式&quot;&gt;&lt;/a&gt;休眠方式&lt;/h1&gt;&lt;p&gt;rk3399 休眠方式有两种,&lt;code&gt;mem&lt;/code&gt;,&lt;code&gt;freeze&lt;/code&gt;.&lt;/p&gt;
-&lt;h2 id=&quot;内存待机-mem&quot;&gt;&lt;a href=&quot;#内存待机-mem&quot; class=&quot;headerlink&quot; title=&quot;内存待机 (mem)&quot;&gt;&lt;/a&gt;内存待机 (mem)&lt;/h2&gt;&lt;p&gt;在 mem 模式下，系统将所有设备状态保存到内存中，然后进入低功耗状态。唤醒后，系统从内存中恢复设备状态。内存待机模式通常称为 S3 睡眠模式。&lt;/p&gt;
-&lt;h2 id=&quot;冻结-freeze&quot;&gt;&lt;a href=&quot;#冻结-freeze&quot; class=&quot;headerlink&quot; title=&quot;冻结 (freeze)&quot;&gt;&lt;/a&gt;冻结 (freeze)&lt;/h2&gt;&lt;p&gt;在 freeze 模式下，所有用户空间任务被冻结，所有设备进入低功耗状态，但 CPU 仍保持活跃。冻结模式更适用于在短时间内节省电能。&lt;br&gt;我们使用 &lt;code&gt;mem&lt;/cod</summary>
+        &lt;p&gt;PPTP (Point to Point Tunneling Protocol) 点对点隧道协议，与PPPoE, L2TP 均属于 PPP(Point to Point Protocol) 点对点协议。这篇来记录下PPTP server的安装和配置过程。&lt;/p&gt;
+&lt;h2 id=&quot;install-DHCP-server&quot;&gt;&lt;a href=&quot;#install-DHCP-server&quot; class=&quot;headerlink&quot; title=&quot;install DHCP server&quot;&gt;&lt;/a&gt;install DHCP server&lt;/h2&gt;&lt;p&gt;除了PPPoE外，PPTP 与 L2TP 都无法直接给client分配IP，需要使用dhcp server分配。所以在安装PPTP的同时，也要保证DHCP server也已安装。具体方法参考 &lt;a href=&quot;https://www.litreily.top/2020/01/17/dhcpd_server/&quot;&gt;Setup dhcpd/dhcpdv6 server&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;需要注意的是，在Ubuntu 20.10 版本中，网卡的静态IP管理模式与以往有所不同。在以往版本中，是修改 &lt;code&gt;/etc/network/interfaces&lt;/code&gt; 文件，但是在最新Ubuntu确不一样，最新版提出了一个叫 &lt;code&gt;netpl
       
     
+    </summary>
+    
+      <category term="Network" scheme="https://www.litreily.top/categories/Network/"/>
     
     
-    <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
+      <category term="ubuntu" scheme="https://www.litreily.top/tags/ubuntu/"/>
     
+      <category term="pptp" scheme="https://www.litreily.top/tags/pptp/"/>
     
-    <category term="Ubuntu" scheme="https://www.litreily.top/tags/Ubuntu/"/>
+      <category term="dns" scheme="https://www.litreily.top/tags/dns/"/>
     
   </entry>
   
   <entry>
-    <title>RK3288 Android6 新增分区</title>
-    <link href="https://www.litreily.top/2024/02/05/rk32-new-part/"/>
-    <id>https://www.litreily.top/2024/02/05/rk32-new-part/</id>
-    <published>2024-02-05T08:38:12.000Z</published>
-    <updated>2024-02-05T08:40:35.944Z</updated>
+    <title>openssl 验证证书有效性</title>
+    <link href="https://www.litreily.top/2020/09/17/openssl/"/>
+    <id>https://www.litreily.top/2020/09/17/openssl/</id>
+    <published>2020-09-17T06:17:27.000Z</published>
+    <updated>2020-09-18T12:10:23.062Z</updated>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;OpenSSL is a robust, commercial-grade, and full-featured toolkit for the Transport Layer Security (TLS) and Secure Sockets Layer (SSL) protocols. It is also a general-purpose cryptography library.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;openssl是非常强大的TLS/SSL协议相关的工具集，包含丰富的测试工具。 这篇文章来讲讲如何使用openssl工具集中的&lt;code&gt;s_client&lt;/code&gt;测试证书认证。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Network" scheme="https://www.litreily.top/categories/Network/"/>
+    
+      <category term="Security" scheme="https://www.litreily.top/categories/Network/Security/"/>
     
     
-      
-      
-    <summary type="html">&lt;h2 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot; title=&quot;背景&quot;&gt;&lt;/a&gt;背景&lt;/h2&gt;&lt;p&gt;特定情况下需要新增分区，比如开辟一个分区专门用于保存系统日志，恢复出厂默认时不会被清理. 以新增slog分区为例，说明RK3288 Android6新增分区的方法。&lt;/p&gt;
-&lt;h2 id=&quot;代码结构&quot;&gt;&lt;a href=&quot;#代码结构&quot; class=&quot;headerlink&quot; title=&quot;代码结构&quot;&gt;&lt;/a&gt;代码结构&lt;/h2&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;# package-file
-FFTools/mkupdate/package-file
-
-# 分区表
-FFTools/parameter/rk3288-3.10-uboot-android.parameter.txt
-
-# 开机自动挂载相关
-device/rockchip/rk3288/
-|-- fstab.rk30board.bootmode.emmc
-|-- init.rc
-`-- slog
-    `-- README.md
-
-# 创建 slog.img
-mkimage.sh
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;新增分区&quot;&gt;&lt;a href=&quot;#新增分区&quot; class=&quot;headerlink&quot; title=&quot;新增分区&quot;&gt;&lt;/a&gt;新增分区&lt;/h2&gt;&lt;h3 id=&quot;修改</summary>
-      
-    
-    
-    
-    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
-    
-    
-    <category term="android" scheme="https://www.litreily.top/tags/android/"/>
+      <category term="openssl" scheme="https://www.litreily.top/tags/openssl/"/>
     
   </entry>
   
   <entry>
-    <title>RK3288 Android6 禁用 wifi</title>
-    <link href="https://www.litreily.top/2024/01/10/rk32-disable-wifi/"/>
-    <id>https://www.litreily.top/2024/01/10/rk32-disable-wifi/</id>
-    <published>2024-01-10T08:55:19.000Z</published>
-    <updated>2024-02-05T09:15:43.094Z</updated>
+    <title>python之给pdf添加页码</title>
+    <link href="https://www.litreily.top/2020/08/13/python-pdf/"/>
+    <id>https://www.litreily.top/2020/08/13/python-pdf/</id>
+    <published>2020-08-13T08:56:37.000Z</published>
+    <updated>2020-08-13T11:34:41.043Z</updated>
     
+    <summary type="html">
     
       
       
-    <summary type="html">&lt;p&gt;某些特殊情况下，需要禁用系统的wifi配置功能。&lt;/p&gt;
-&lt;h2 id=&quot;删除快捷-wifi-开关&quot;&gt;&lt;a href=&quot;#删除快捷-wifi-开关&quot; class=&quot;headerlink&quot; title=&quot;删除快捷 wifi 开关&quot;&gt;&lt;/a&gt;删除快捷 wifi 开关&lt;/h2&gt;&lt;p&gt;在 &lt;code&gt;frameworks/base&lt;/code&gt; 中的 &lt;code&gt;SystemUI&lt;/code&gt; app 中禁用wifi开关，只需要修改配置 &lt;code&gt;quick_settings_tiles_default&lt;/code&gt; 即可。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;patch&quot;&gt;--- a/packages/SystemUI/res/values/config.xml
-+++ b/packages/SystemUI/res/values/config.xml
-@@ -119,7 +119,7 @@
-     &amp;lt;!-- The default tiles to display in QuickSettings --&amp;gt;
-     &amp;lt;string name=&amp;quot;quick_settings_tiles_default&amp;quot; translatable=&amp;quot;false&amp;quot;&amp;gt;
--        wifi,bt,inversion,dnd</summary>
+        &lt;p&gt;最近写release note, 总感觉用&lt;code&gt;tex&lt;/code&gt;不太方便，特别是装&lt;code&gt;texlive&lt;/code&gt;占用大量空间，还有各种依赖问题，想着能不能用&lt;code&gt;markdown&lt;/code&gt;写更方便。实践证明，&lt;a href=&quot;https://typora.io/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;typora&lt;/a&gt;导出pdf的功能真的很棒，唯独一个不足之处就是生成的PDF不带&lt;strong&gt;页码&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;这个虽然可以使用在线工具实现，或者使用Adobe、福昕的 pdf 编辑功能，但是很多情况，尤其是工作平台是不方便使用的。为此我想到了&lt;code&gt;Python&lt;/code&gt;，通过脚本把页码加上。&lt;/p&gt;
+&lt;h2 id=&quot;安装Python库&quot;&gt;&lt;a href=&quot;#安装Python库&quot; class=&quot;headerlink&quot; title=&quot;安装Python库&quot;&gt;&lt;/a&gt;安装Python库&lt;/h2&gt;&lt;p&gt;首先需要安装两个依赖库，&lt;code&gt;PyPDF2&lt;/code&gt;以及&lt;code&gt;reportLab&lt;/code&gt;, &lt;code&gt;PyPDF2&lt;/code&gt;可以对PDF进行拆分、合并、删除、加密等操作；&lt;code&gt;reportlab&lt;/code&gt;则更是强大，看看下面的官方介绍。&lt;/p&gt;
+&lt;blockqu
       
     
+    </summary>
+    
+      <category term="Python" scheme="https://www.litreily.top/categories/Python/"/>
     
     
-    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
-    
-    
-    <category term="android" scheme="https://www.litreily.top/tags/android/"/>
+      <category term="pdf" scheme="https://www.litreily.top/tags/pdf/"/>
     
   </entry>
   
   <entry>
-    <title>RK3399 Android10 bind cpu with isolcpus</title>
-    <link href="https://www.litreily.top/2023/12/06/isolcpus/"/>
-    <id>https://www.litreily.top/2023/12/06/isolcpus/</id>
-    <published>2023-12-06T07:29:46.000Z</published>
-    <updated>2023-12-06T08:48:22.093Z</updated>
+    <title>Python网络爬虫8 - 爬取彼岸图网美图</title>
+    <link href="https://www.litreily.top/2020/08/09/netbian/"/>
+    <id>https://www.litreily.top/2020/08/09/netbian/</id>
+    <published>2020-08-09T02:54:47.000Z</published>
+    <updated>2020-08-11T10:28:13.625Z</updated>
     
-    
-      
-      
-    <summary type="html">&lt;p&gt;Per new request to bind cpus for some special processes, we need isolate some cpus of RK3399, which only used for thes special processes.&lt;/p&gt;
-&lt;p&gt;we can update dts file to set &lt;code&gt;isolcpus&lt;/code&gt; arg in &lt;code&gt;bootargs&lt;/code&gt;.&lt;/p&gt;
-&lt;h2 id=&quot;set-isolcpus&quot;&gt;&lt;a href=&quot;#set-isolcpus&quot; class=&quot;headerlink&quot; title=&quot;set isolcpus&quot;&gt;&lt;/a&gt;set isolcpus&lt;/h2&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;diff --git a/arch/arm64/boot/dts/rockchip/rk3399-android.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-android.dtsi
-index 76753a9..a2a3206 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399-android.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk</summary>
-      
-    
-    
-    
-    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
-    
-    
-    <category term="andorid" scheme="https://www.litreily.top/tags/andorid/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>RK3288 Android 10 系统开发[6] - 新增lunch</title>
-    <link href="https://www.litreily.top/2023/04/17/android-lunch/"/>
-    <id>https://www.litreily.top/2023/04/17/android-lunch/</id>
-    <published>2023-04-17T12:47:59.000Z</published>
-    <updated>2023-04-17T13:02:06.605Z</updated>
-    
+    <summary type="html">
     
       
       
-    <summary type="html">&lt;p&gt;如果要新增产品，在Android sdk中可以新增lunch进行适配。以 rk3288 产品为例，新增 rk3288_tablet.&lt;/p&gt;
+        &lt;p&gt;&lt;a href=&quot;http://pic.netbian.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;彼岸图网&lt;/a&gt;收集了大量美图，是个不错的爬取对象。话不多说，直接上图。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/netbian/netbian.png&quot; alt=&quot;彼岸图网&quot;&gt;&lt;/p&gt;
+&lt;h2 id=&quot;分析站点&quot;&gt;&lt;a href=&quot;#分析站点&quot; class=&quot;headerlink&quot; title=&quot;分析站点&quot;&gt;&lt;/a&gt;分析站点&lt;/h2&gt;&lt;h3 id=&quot;分类列表&quot;&gt;&lt;a href=&quot;#分类列表&quot; class=&quot;headerlink&quot; title=&quot;分类列表&quot;&gt;&lt;/a&gt;分类列表&lt;/h3&gt;&lt;p&gt;爬取之前，自然要分析一波，这个站点的框架比较简单，从分类着手，共包含12个分类项。&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;首先从已有的 &lt;code&gt;rk3288_Android10&lt;/code&gt; 拷贝一份到新增的 &lt;code&gt;rk3288_tablet&lt;/code&gt; 目录；&lt;/li&gt;
+&lt;li&gt;4K人物&lt;/li&gt;
+&lt;li&gt;4K动漫&lt;/li&gt;
+&lt;li&gt;4K动物&lt;/li&gt;
+&lt;li&gt;4K宗教&lt;/li&gt;
+&lt;li&gt;4K影视&lt;/li&gt;
+&lt;li&gt;4K明星&lt;/li&gt;
+&lt;li&gt;4K汽车&lt;/li&gt;
+&lt;li&gt;4K游戏&lt;/li&gt;
+&lt;li&gt;4K美女&lt;/li&gt;
+&lt;li&gt;4K美食&lt;/li&gt;
+&lt;li&gt;4K背景&lt;/li&gt;
+&lt;li&gt;4K风景&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;cd &amp;lt;SDK&amp;gt;/device/rockchip/rk3288
-cp -rf rk3288_Android10 rk3288_tablet
+&lt;p&gt;名称都含有4K，但是获取原图是需要会员的，所以我这里获取的不是原图，而是详细页展示的大图。首先要获取的当
+      
+    
+    </summary>
+    
+      <category term="Python" scheme="https://www.litreily.top/categories/Python/"/>
+    
+    
+      <category term="spider" scheme="https://www.litreily.top/tags/spider/"/>
+    
+      <category term="xpath" scheme="https://www.litreily.top/tags/xpath/"/>
+    
+      <category term="pool" scheme="https://www.litreily.top/tags/pool/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>VPS搭建在线VSCode Server</title>
+    <link href="https://www.litreily.top/2020/06/13/code-server/"/>
+    <id>https://www.litreily.top/2020/06/13/code-server/</id>
+    <published>2020-06-13T06:41:26.000Z</published>
+    <updated>2020-06-13T08:03:49.353Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;VSCode-Server&quot;&gt;&lt;a href=&quot;#VSCode-Server&quot; class=&quot;headerlink&quot; title=&quot;VSCode Server&quot;&gt;&lt;/a&gt;VSCode Server&lt;/h2&gt;&lt;p&gt;VSCode(Visual Studio Code), 是我目前使用过的最好的编辑器，也应该是很多程序员的首选。然而很多人不知道的是，这款开发利器还有在线版，这包括GitHub即将推出的&lt;code&gt;Satellite&lt;/code&gt;, 也会搭载VSCode，那么如果我们想要搭建自己的在线开发环境呢？答案就是&lt;a href=&quot;https://github.com/cdr/code-server&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Code Server&lt;/a&gt;, 一款可以部署在个人服务器上的VSCode服务。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/vscode/pods-lg.png&quot; alt=&quot;pods logo&quot;&gt;&lt;/p&gt;
+&lt;h3 id=&quot;安装&quot;&gt;&lt;a href=&quot;#安装&quot; class=&quot;headerlink&quot; title=&quot;安装&quot;&gt;&lt;/a&gt;安装&lt;/h3&gt;&lt;p&gt;如果在本地，自然是无需搭建这个server的，我的选择是放在阿里云服务器上，对应的是Ubuntu系统，安装过程非常简单。&lt;/p&gt;
+&lt;pre&gt;&lt;code clas
+      
+    
+    </summary>
+    
+      <category term="Linux" scheme="https://www.litreily.top/categories/Linux/"/>
+    
+    
+      <category term="ubuntu" scheme="https://www.litreily.top/tags/ubuntu/"/>
+    
+      <category term="vps" scheme="https://www.litreily.top/tags/vps/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Win10中使用ssh访问WSL</title>
+    <link href="https://www.litreily.top/2020/05/08/putty-wsl/"/>
+    <id>https://www.litreily.top/2020/05/08/putty-wsl/</id>
+    <published>2020-05-08T14:31:20.000Z</published>
+    <updated>2020-05-09T13:39:48.639Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;win10的WSL作为目前日常必备，实在是爱不释手，奈何默认终端界面实在一言难尽，尽管配色问题可以解决，但是字体问题导致ohmyzsh的很多图标无法正常显示，配置好&lt;a href=&quot;https://github.com/powerline/fonts&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;powerline&lt;/a&gt;字体略有改善，但配合tmux使用又会出现乱码问题，实在难以忍受，于是准备通过ssh间接访问。&lt;/p&gt;
+&lt;h2 id=&quot;配置ssh&quot;&gt;&lt;a href=&quot;#配置ssh&quot; class=&quot;headerlink&quot; title=&quot;配置ssh&quot;&gt;&lt;/a&gt;配置ssh&lt;/h2&gt;&lt;p&gt;重装&lt;code&gt;openssh-server&lt;/code&gt;, 如果自带的没问题也不用重装。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;zsh&quot;&gt;sudo apt remove openssh-server
+sudo apt install openssh-server
 &lt;/code&gt;&lt;/pre&gt;
-&lt;ol start=&quot;2&quot;&gt;
-&lt;li&gt;然后修改 &lt;code&gt;device/rockchip/rk3288/AndroidProducts.mk&lt;/code&gt; 文件，添加新产品配置&lt;/li&gt;
+&lt;p&gt;修改&lt;code&gt;/etc/ssh/sshd_config&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;zsh&quot;&gt;# 服务端每分钟发送一次数据包给客户端，客户端回复即保持连接
+ClientAliveInterval 60
+# 客户端3次未响应则断开
+ClientAli
+      
+    
+    </summary>
+    
+      <category term="Linux" scheme="https://www.litreily.top/categories/Linux/"/>
+    
+    
+      <category term="ssh" scheme="https://www.litreily.top/tags/ssh/"/>
+    
+      <category term="putty" scheme="https://www.litreily.top/tags/putty/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Linux 内核驱动解析 - UBI坏块预留大小</title>
+    <link href="https://www.litreily.top/2020/05/07/ubi-driver/"/>
+    <id>https://www.litreily.top/2020/05/07/ubi-driver/</id>
+    <published>2020-05-07T01:21:29.000Z</published>
+    <updated>2020-06-13T10:34:27.988Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;在处理ubifs相关bug的过程中，学习了ubi驱动对坏块保留分区的处理方式，在此记录一下。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/linux/ubi-reserved-maps.png&quot; alt=&quot;ubi reserved mind maps&quot;&gt;&lt;/p&gt;
+&lt;h2 id=&quot;相关概念&quot;&gt;&lt;a href=&quot;#相关概念&quot; class=&quot;headerlink&quot; title=&quot;相关概念&quot;&gt;&lt;/a&gt;相关概念&lt;/h2&gt;&lt;h3 id=&quot;mtd&quot;&gt;&lt;a href=&quot;#mtd&quot; class=&quot;headerlink&quot; title=&quot;mtd&quot;&gt;&lt;/a&gt;mtd&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;mtd&lt;/strong&gt; 全称 memory technology device 内存技术设备，是用于访问内存设备(RAM, Flash)的Linux 子系统，在硬件层和用户空间之间提供抽象接口。&lt;/p&gt;
+&lt;p&gt;在嵌入式linux设备中的&lt;code&gt;/dev/&lt;/code&gt;目录下有很多&lt;code&gt;/dev/mtdxx&lt;/code&gt;文件，这些文件对应的就是内存设备。比如，嵌入式设备的Nand Flash被划分为多个分区，每个分区对应一个&lt;code&gt;/dev/mtdxx&lt;/code&gt;文件。&lt;/p&gt;
+&lt;p&gt;如下所示，&lt;code&gt;/dev/mtd0&lt;/code&gt;至&lt;code&gt;/dev/mtd10&lt;/code&gt;对
+      
+    
+    </summary>
+    
+      <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
+    
+    
+      <category term="C/C++" scheme="https://www.litreily.top/tags/C-C/"/>
+    
+      <category term="ubi" scheme="https://www.litreily.top/tags/ubi/"/>
+    
+      <category term="flash" scheme="https://www.litreily.top/tags/flash/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Python之markdown转Chrome收藏夹</title>
+    <link href="https://www.litreily.top/2020/05/03/md2bm/"/>
+    <id>https://www.litreily.top/2020/05/03/md2bm/</id>
+    <published>2020-05-03T08:49:25.000Z</published>
+    <updated>2020-05-03T10:42:22.813Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;网上可以搜到很多chrome收藏夹转markdown文档的方法，却鲜有markdown文档转为Chrome收藏夹的方法，不过这种需求也确实不多。我之所以用到，是因为平常会用markdown文档收集一些网站，现在想要转换为Chrome收藏夹，方便访问。&lt;/p&gt;
+&lt;h2 id=&quot;思路&quot;&gt;&lt;a href=&quot;#思路&quot; class=&quot;headerlink&quot; title=&quot;思路&quot;&gt;&lt;/a&gt;思路&lt;/h2&gt;&lt;p&gt;要实现这个功能倒也不难，因为Chrome的收藏夹本质上也是一个html文件，只不过有其固定的DOM结构而已，所以我们的实现思路很简单。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;导出Chrome已有的收藏夹&lt;/li&gt;
+&lt;li&gt;分析导出得到的html文件格式&lt;/li&gt;
+&lt;li&gt;将自己需要转成Chrome收藏夹的markdown按相同格式转换为html文件&lt;/li&gt;
+&lt;li&gt;在chrome中导入生成后的收藏夹&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre&gt;&lt;code class=&quot;patch&quot;&gt;--- a/AndroidProducts.mk
-+++ b/AndroidProducts.mk
-@@ -16,8 +16,11 @@
-                                                                                                           
- PRODUCT_MAK</summary>
+&lt;h2 id=&quot;收藏夹的DOM结构&quot;&gt;&lt;a href=&quot;#收藏夹的DOM结构&quot; class=&quot;headerlink&quot; title=&quot;收藏夹的DOM结构&quot;&gt;&lt;/a&gt;收藏夹的DOM结构&lt;/h2&gt;&lt;p&gt;我导出了自己的收藏夹，取出其中一小部分为例进行分析，比较局部是可以反映整体的。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;html&quot;&gt;&amp;lt;!DOCTYPE NETSCAPE-B
       
     
+    </summary>
+    
+      <category term="Python" scheme="https://www.litreily.top/categories/Python/"/>
     
     
-    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
+      <category term="markdown" scheme="https://www.litreily.top/tags/markdown/"/>
     
-    
-    <category term="android" scheme="https://www.litreily.top/tags/android/"/>
+      <category term="chrome" scheme="https://www.litreily.top/tags/chrome/"/>
     
   </entry>
   
   <entry>
-    <title>RK3288 Android 系统 boot.img 镜像解压方法</title>
-    <link href="https://www.litreily.top/2023/01/19/binwalk/"/>
-    <id>https://www.litreily.top/2023/01/19/binwalk/</id>
-    <published>2023-01-19T02:38:26.000Z</published>
-    <updated>2023-01-19T07:21:22.151Z</updated>
+    <title>解锁网易云音乐灰色无版权歌曲</title>
+    <link href="https://www.litreily.top/2020/05/03/netease/"/>
+    <id>https://www.litreily.top/2020/05/03/netease/</id>
+    <published>2020-05-03T01:11:39.000Z</published>
+    <updated>2020-05-03T02:17:08.972Z</updated>
     
-    
-    <summary type="html">&lt;h2 id=&quot;android-6-0-boot-img-解包&quot;&gt;&lt;a href=&quot;#android-6-0-boot-img-解包&quot; class=&quot;headerlink&quot; title=&quot;android 6.0 boot.img 解包&quot;&gt;&lt;/a&gt;android 6.0 boot.img 解包&lt;/h2&gt;&lt;h3 id=&quot;file&quot;&gt;&lt;a href=&quot;#file&quot; class=&quot;headerlink&quot; title=&quot;file&quot;&gt;&lt;/a&gt;file&lt;/h3&gt;&lt;p&gt;file指令可以显示文件类型，但是对于特定封装的文件无能为力，比如Android系统编译出的&lt;code&gt;boot.img&lt;/code&gt;&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;$ file boot.img
-boot.img: data
-&lt;/code&gt;&lt;/pre&gt;</summary>
-    
-    
-    
-    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
-    
-    
-    <category term="android" scheme="https://www.litreily.top/tags/android/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>RK3288 Android 10 系统开发[5] - 解决wifi mac随机问题</title>
-    <link href="https://www.litreily.top/2022/12/07/rand-mac/"/>
-    <id>https://www.litreily.top/2022/12/07/rand-mac/</id>
-    <published>2022-12-07T07:45:04.000Z</published>
-    <updated>2022-12-07T08:23:42.354Z</updated>
-    
+    <summary type="html">
     
       
       
-    <summary type="html">&lt;p&gt;在Android10的使用过程中，由于业务要求使用wifi mac地址作为设备的 &lt;code&gt;SN&lt;/code&gt; ，所以要求mac地址必须是唯一且固定的。然而测试发现在wifi 连接过程中会出现短暂时间的随机mac，wifi连接成功后保持稳定。&lt;/p&gt;
-&lt;h2 id=&quot;Android-官方解释&quot;&gt;&lt;a href=&quot;#Android-官方解释&quot; class=&quot;headerlink&quot; title=&quot;Android 官方解释&quot;&gt;&lt;/a&gt;Android 官方解释&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;/assets/android/rand-mac.png&quot; alt=&quot;rand mac&quot;&gt;&lt;/p&gt;
-&lt;p&gt;从官方解析来看，高版本安卓系统为了安全考虑，支持随机分配wifi mac.&lt;/p&gt;
-&lt;p&gt;但是要支持的话需要修改以下参数：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;frameworks/base/core/res/res/values/config.xml
-- config_wifi_connected_mac_randomization_supported
-- config_wifi_p2p_mac_randomization_supported
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;但是这两个参数默认已经配置为 &lt;code&gt;false&lt;/code&gt; 了。只能换个方向查。&lt;</summary>
-      
-    
-    
-    
-    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
-    
-    
-    <category term="android" scheme="https://www.litreily.top/tags/android/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>RK3288 Android 6.0 logcat 过滤带冒号的 tag</title>
-    <link href="https://www.litreily.top/2022/11/06/logcat-arg/"/>
-    <id>https://www.litreily.top/2022/11/06/logcat-arg/</id>
-    <published>2022-11-06T10:32:20.000Z</published>
-    <updated>2022-12-07T08:23:57.410Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;logcat-过滤&quot;&gt;&lt;a href=&quot;#logcat-过滤&quot; class=&quot;headerlink&quot; title=&quot;logcat 过滤&quot;&gt;&lt;/a&gt;logcat 过滤&lt;/h2&gt;&lt;p&gt;logcat 过滤不打印的日志时，可以使用 &lt;code&gt;&amp;lt;tag&amp;gt;:S&lt;/code&gt; 的参数，比如排除 ActivityManager 相关日志。使用 以下指令&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;logcat ActivityManager:S
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;但是我遇到一种特殊情况，应用app的tag中包含了冒号，比如 &lt;code&gt;APP:SDK--&lt;/code&gt;, 其它类似的tag有很多，这种情况使用以下指令是无法过滤掉的。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;logcat APP:SDK--:S
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;为了分析原因，需要查看 &lt;code&gt;logcat&lt;/code&gt; 源码。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;system/core/logcat/logcat.cpp
-system/core/liblog/logprint.c
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&quot;logcat-cpp&quot;&gt;&lt;a href=&quot;#logcat-cpp&quot; class=&quot;headerli</summary>
-      
-    
-    
-    
-    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
-    
-    
-    <category term="android" scheme="https://www.litreily.top/tags/android/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>RK3288 Android 10 系统开发[4] - 提供 app 默认权限</title>
-    <link href="https://www.litreily.top/2022/07/12/android-perm/"/>
-    <id>https://www.litreily.top/2022/07/12/android-perm/</id>
-    <published>2022-07-12T09:49:46.000Z</published>
-    <updated>2022-07-12T10:20:53.050Z</updated>
-    
-    
-    <summary type="html">&lt;h2 id=&quot;禁用旧版本SDK弹框&quot;&gt;&lt;a href=&quot;#禁用旧版本SDK弹框&quot; class=&quot;headerlink&quot; title=&quot;禁用旧版本SDK弹框&quot;&gt;&lt;/a&gt;禁用旧版本SDK弹框&lt;/h2&gt;&lt;p&gt;如果在Android10系统上安装旧版本的app，会提示以下信息。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;此应用专为旧版 Android 打造，因此可能无法正常运行。请尝试检查更新或与开发者联系。&lt;/p&gt;
-&lt;/blockquote&gt;</summary>
-    
-    
-    
-    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
-    
-    
-    <category term="android" scheme="https://www.litreily.top/tags/android/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>RK3288 Android 6.0 适配 RTL8821CU wifi&amp;BT 功能</title>
-    <link href="https://www.litreily.top/2022/07/08/rk3288-bt/"/>
-    <id>https://www.litreily.top/2022/07/08/rk3288-bt/</id>
-    <published>2022-07-08T09:54:55.000Z</published>
-    <updated>2022-07-08T11:02:08.349Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;需求背景&quot;&gt;&lt;a href=&quot;#需求背景&quot; class=&quot;headerlink&quot; title=&quot;需求背景&quot;&gt;&lt;/a&gt;需求背景&lt;/h2&gt;&lt;p&gt;项目需求，要求添加蓝牙功能，选择的芯片是WIFI&amp;amp;蓝牙二合一的 &lt;code&gt;RTL8821CU&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;为此，需要更新蓝牙和wifi的相关驱动，以及Android系统层的一些配置，同时还要向下兼容旧的wifi芯片 RTL8188EU.&lt;/p&gt;
-&lt;h2 id=&quot;相关文件&quot;&gt;&lt;a href=&quot;#相关文件&quot; class=&quot;headerlink&quot; title=&quot;相关文件&quot;&gt;&lt;/a&gt;相关文件&lt;/h2&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;# kernel
-## config
-kernel/arch/arm/configs/rockchip_defconfig
-## dts
-kernel/arch/arm/boot/dts/rk3288-tb_8846.dts
-## wifi
-kernel/drivers/net/wireless/rockchip_wlan/rtl8821cu/*
-kernel/drivers/net/wireless/rockchip_wlan/rtl8821cu/Makefile
-kernel/drivers/net/wireless/rockchip_wlan/wifi_sys</summary>
-      
-    
-    
-    
-    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
-    
-    
-    <category term="android" scheme="https://www.litreily.top/tags/android/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>RK3288 Android 10 系统开发[3] - 结合 gitlab 搭建 repo 代码仓库管理平台</title>
-    <link href="https://www.litreily.top/2022/02/24/gitlab-repo/"/>
-    <id>https://www.litreily.top/2022/02/24/gitlab-repo/</id>
-    <published>2022-02-24T08:26:13.000Z</published>
-    <updated>2022-02-24T08:31:43.202Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;目前为了本地服务器搭建 &lt;code&gt;gitlab&lt;/code&gt; 管理平台，并配合 &lt;code&gt;gerrit&lt;/code&gt; 进行代码审查，需要对代码管理重新部署。&lt;/p&gt;
-&lt;p&gt;Android 系统使用 &lt;code&gt;repo&lt;/code&gt; 管理源码，但是 &lt;code&gt;Android 10&lt;/code&gt; 源码包含 &lt;code&gt;732&lt;/code&gt; 个仓库，如果在本地 gitlab 服务器和 &lt;code&gt;gerrit&lt;/code&gt; 服务器上将所有的仓库都创建一遍的话，仓库太多了， 不便于管理和审查，所以需要重新设计代码结构，并使用 &lt;code&gt;repo&lt;/code&gt; 和 &lt;code&gt;manifest&lt;/code&gt; 进行管理，为此，我先使用官方 &lt;code&gt;gitlab&lt;/code&gt; 搭建了一些测试仓库。用于学习和研究 &lt;code&gt;repo&lt;/code&gt; 的代码管理方式。&lt;/p&gt;
-&lt;h2 id=&quot;gitlab-操作&quot;&gt;&lt;a href=&quot;#gitlab-操作&quot; class=&quot;headerlink&quot; title=&quot;gitlab 操作&quot;&gt;&lt;/a&gt;gitlab 操作&lt;/h2&gt;&lt;h3 id=&quot;新建-group&quot;&gt;&lt;a href=&quot;#新建-group&quot; class=&quot;headerlink&quot; title=&quot;新建 group&quot;&gt;&lt;/a&gt;新建 group&lt;/h3&gt;&lt;p&gt;首先在 &lt;code&gt;gitlab</summary>
-      
-    
-    
-    
-    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
-    
-    
-    <category term="repo" scheme="https://www.litreily.top/tags/repo/"/>
-    
-    <category term="gitlab" scheme="https://www.litreily.top/tags/gitlab/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>RK3288 Android 10 系统开发[2] - 更新开机logo与动画</title>
-    <link href="https://www.litreily.top/2022/02/22/android-ani/"/>
-    <id>https://www.litreily.top/2022/02/22/android-ani/</id>
-    <published>2022-02-22T01:58:40.000Z</published>
-    <updated>2022-02-22T02:03:47.937Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;替换开机logo&quot;&gt;&lt;a href=&quot;#替换开机logo&quot; class=&quot;headerlink&quot; title=&quot;替换开机logo&quot;&gt;&lt;/a&gt;替换开机logo&lt;/h2&gt;&lt;p&gt;在 &lt;code&gt;kernel&lt;/code&gt; 目录，将 &lt;code&gt;logo.bmp&lt;/code&gt;, 以及 &lt;code&gt;logo_kernel.bmp&lt;/code&gt; 替换为所需logo即可。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;logo.bmp: uboot 阶段显示&lt;/li&gt;
-&lt;li&gt;logo_kernel.bmp: kernel 阶段显示&lt;/li&gt;
+        &lt;p&gt;由于版权之争，网易云的很多歌曲都灰掉并且无法播放了，想要使其可以播放还是有办法的，万能的Google和Github让我找到了&lt;a href=&quot;https://github.com/nondanee/UnblockNeteaseMusic&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;答案&lt;/a&gt;，直接上享用方法吧。&lt;/p&gt;
+&lt;h2 id=&quot;前提条件&quot;&gt;&lt;a href=&quot;#前提条件&quot; class=&quot;headerlink&quot; title=&quot;前提条件&quot;&gt;&lt;/a&gt;前提条件&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;一个可以远程访问的服务器，比如vps，阿里云、腾讯云、...&lt;/li&gt;
+&lt;li&gt;如果没有服务器，只能寻找别人搭建好的服务&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&quot;替换-Android-开机动画&quot;&gt;&lt;a href=&quot;#替换-Android-开机动画&quot; class=&quot;headerlink&quot; title=&quot;替换 Android 开机动画&quot;&gt;&lt;/a&gt;替换 Android 开机动画&lt;/h2&gt;&lt;h3 id=&quot;替换-bootanimation-zip&quot;&gt;&lt;a href=&quot;#替换-bootanimation-zip&quot; class=&quot;headerlink&quot; title=&quot;替换 bootanimation.zip&quot;&gt;&lt;/a&gt;替换 bootanimation.zip&lt;/h3&gt;&lt;p&gt;&lt;code&gt;rk3288&lt;/code&gt; android10 的动画文件位于 &lt;code&gt;device/rockchip/common&lt;</summary>
-      
-    
-    
-    
-    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
-    
-    
-    <category term="android" scheme="https://www.litreily.top/tags/android/"/>
-    
-    <category term="rk3288" scheme="https://www.litreily.top/tags/rk3288/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>RK3288 Android 10 系统开发[1] - 支持 EC20 4G 模块</title>
-    <link href="https://www.litreily.top/2022/02/21/android-4g/"/>
-    <id>https://www.litreily.top/2022/02/21/android-4g/</id>
-    <published>2022-02-21T08:50:51.000Z</published>
-    <updated>2022-02-21T09:48:42.921Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;根据业务需求，需要升级安卓系统，从 &lt;code&gt;Android6.0&lt;/code&gt; 升级到 &lt;code&gt;Android10.0&lt;/code&gt;, 本节介绍如何移植 &lt;code&gt;EC20 4G&lt;/code&gt; 模块。&lt;/p&gt;
-&lt;p&gt;主要参考 &lt;code&gt;Quetecl&lt;/code&gt; 提供的以下文档。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;Quectel_WCDMA&amp;amp;LTE_Linux_USB_Driver_User_Guide_V1.8.pdf&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;Quectel_Android_RIL_Driver_User_Guide_V1.9.pdf&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;kernel&quot;&gt;&lt;a href=&quot;#kernel&quot; class=&quot;headerlink&quot; title=&quot;kernel&quot;&gt;&lt;/a&gt;kernel&lt;/h2&gt;&lt;p&gt;内核部分，需要修改两部分，&lt;code&gt;EC20&lt;/code&gt;模块的使能和供电, 以及 &lt;code&gt;EC20&lt;/code&gt; 联网所需的驱动移植。&lt;/p&gt;
-&lt;h3 id=&quot;EC20-供电使能&quot;&gt;&lt;a href=&quot;#EC20-供电使能&quot; class=&quot;headerlink&quot; title=&quot;EC20 供电使能&quot;&gt;&lt;/a&gt;EC20 供电使能&lt;/h3&gt;&lt;p&gt;针对供电使能问题，&lt;code&gt;dts&lt;/code</summary>
-      
-    
-    
-    
-    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
-    
-    
-    <category term="android" scheme="https://www.litreily.top/tags/android/"/>
-    
-    <category term="rk3288" scheme="https://www.litreily.top/tags/rk3288/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>RK3288 android 6.0 卡死在开机logo画面问题处理</title>
-    <link href="https://www.litreily.top/2022/01/11/rk3288-hang/"/>
-    <id>https://www.litreily.top/2022/01/11/rk3288-hang/</id>
-    <published>2022-01-11T03:49:02.000Z</published>
-    <updated>2022-02-21T08:52:04.167Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;Description&quot;&gt;&lt;a href=&quot;#Description&quot; class=&quot;headerlink&quot; title=&quot;Description&quot;&gt;&lt;/a&gt;Description&lt;/h2&gt;&lt;p&gt;烧录固件后，会概率性出现卡死在开机画面无法启动的问题，但是烧录新固件后会恢复正常。对比不同机型，发现只有带&lt;strong&gt;摄像头功能&lt;/strong&gt;的机型会有这个问题。&lt;/p&gt;
-&lt;h2 id=&quot;Root-cause&quot;&gt;&lt;a href=&quot;#Root-cause&quot; class=&quot;headerlink&quot; title=&quot;Root cause&quot;&gt;&lt;/a&gt;Root cause&lt;/h2&gt;&lt;p&gt;经过大量测试和排查，发现卡死问题源自一个文件,  &lt;code&gt;/data/camera/media_profiles.xml&lt;/code&gt; , 这是一个空文件，删除后系统就正常启动了。&lt;/p&gt;
-&lt;p&gt;通过使用 &lt;code&gt;logcat&lt;/code&gt; 结合系统源码发现，该文件是摄像头配置文件，如果为空会导致系统循环检测该文件，并尝试从中获取摄像头配置，但是由于文件为空，导致一直获取失败，最后陷入死循环。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;$ cd /data/camera
-$ ls
-media_profiles.xml
+&lt;h2 id=&quot;搭建服务&quot;&gt;&lt;a href=&quot;#搭建服务&quot; class=&quot;headerlink&quot; title=&quot;搭建服务&quot;&gt;&lt;/a&gt;搭建服务&lt;/h2&gt;&lt;p&gt;在服务器端，首先安装依赖的工具&lt;code&gt;npx&lt;/code&gt;，如果有则忽略&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;zsh&quot;&gt;sudo apt install npm
+sudo npm i -g npx
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;经过排查源码，发现系统在</summary>
+&lt;p&gt;然后clone项目UnblockNeteaseMusic.git到本地&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;zsh&quot;&gt;git cl
       
     
+    </summary>
+    
+      <category term="Media" scheme="https://www.litreily.top/categories/Media/"/>
     
     
-    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
-    
-    
-    <category term="android" scheme="https://www.litreily.top/tags/android/"/>
-    
-    <category term="rk3288" scheme="https://www.litreily.top/tags/rk3288/"/>
+      <category term="music" scheme="https://www.litreily.top/tags/music/"/>
     
   </entry>
   
   <entry>
-    <title>RK3288 android 6.0 user release 相关问题处理</title>
-    <link href="https://www.litreily.top/2021/12/31/rk3288-security/"/>
-    <id>https://www.litreily.top/2021/12/31/rk3288-security/</id>
-    <published>2021-12-31T02:58:22.000Z</published>
-    <updated>2022-02-21T08:52:09.747Z</updated>
+    <title>lftp获取FTP Server端最新文件</title>
+    <link href="https://www.litreily.top/2020/04/30/lftp_get/"/>
+    <id>https://www.litreily.top/2020/04/30/lftp_get/</id>
+    <published>2020-04-30T09:33:02.000Z</published>
+    <updated>2020-04-30T11:47:40.692Z</updated>
     
+    <summary type="html">
     
       
       
-    <summary type="html">&lt;p&gt;之前一直用的 &lt;code&gt;userdebug&lt;/code&gt; 版本，默认 &lt;code&gt;adb root&lt;/code&gt; 或者使用 &lt;code&gt;su&lt;/code&gt; 即可获取 root 权限。目前基于安全考虑，固件发布需要使用 &lt;code&gt;user&lt;/code&gt; 版本配置，很多功能都需要重新测试，下面对 &lt;code&gt;RK3288&lt;/code&gt; &lt;code&gt;user&lt;/code&gt; 发布版本遇到的问题进行总结。&lt;/p&gt;
-&lt;h2 id=&quot;编译固件&quot;&gt;&lt;a href=&quot;#编译固件&quot; class=&quot;headerlink&quot; title=&quot;编译固件&quot;&gt;&lt;/a&gt;编译固件&lt;/h2&gt;&lt;p&gt;首先是编译固件，将原先的 &lt;code&gt;rk3288-userdebug&lt;/code&gt; 改为 &lt;code&gt;rk3288-user&lt;/code&gt;.&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;./FFTools/make.sh -d rk3288-tb_8846 -j16 -l rk3288-user
-./FFTools/mkupdate/mkupdate.sh -l rk3288-user
+        &lt;p&gt;最近解一个bug，要频繁编译和烧录FW，每次都要将image从远程的FTP server手动copy到本地，然后使用tftp进行烧录，实在不胜其烦。虽然上一篇&lt;a href=&quot;https://www.litreily.top/2020/04/27/tftp/&quot;&gt;简单实用的tftp烧录image脚本&lt;/a&gt;提高了烧录效率，但是每次将image拷贝到本地也是麻烦。&lt;/p&gt;
+&lt;p&gt;这次，我依旧想到了WSL, 使用shell脚本还是更加方便快捷，思路很简单，检查server端的最新文件，得到文件名后使用lftp下载到本地。&lt;/p&gt;
+&lt;h2 id=&quot;获取最新文件&quot;&gt;&lt;a href=&quot;#获取最新文件&quot; class=&quot;headerlink&quot; title=&quot;获取最新文件&quot;&gt;&lt;/a&gt;获取最新文件&lt;/h2&gt;&lt;p&gt;FTP Server文件存储方式是将每天的新数据归档到以当日日期命名的文件夹中，如今天&lt;code&gt;20200430&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;zsh&quot;&gt;➜  lftp -u &amp;quot;username,password&amp;quot; ftp://1.2.3.4
+lftp username@1.2.3.4:~&amp;gt; ls
+04-27-20  02:03PM       &amp;lt;DIR&amp;gt;          20200427
+04-29-20  05:3
+      
+    
+    </summary>
+    
+      <category term="Linux" scheme="https://www.litreily.top/categories/Linux/"/>
+    
+    
+      <category term="shell" scheme="https://www.litreily.top/tags/shell/"/>
+    
+      <category term="ftp" scheme="https://www.litreily.top/tags/ftp/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>简单实用的tftp烧录image脚本</title>
+    <link href="https://www.litreily.top/2020/04/27/tftp/"/>
+    <id>https://www.litreily.top/2020/04/27/tftp/</id>
+    <published>2020-04-27T11:21:03.000Z</published>
+    <updated>2020-04-27T12:33:44.650Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;烧录FW image时，经常需要打开带有UI界面的tftp客户端，然后输入IP，选择FW image，然后点击写入，很是繁琐。&lt;/p&gt;
+&lt;p&gt;为了简化这个过程，我决定使用shell script，在win10中自带WSL(windows subsystem for linux)，配合zsh食用。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;zsh&quot;&gt;#!/bin/zsh
+# install to ~/bin/burnImage
+
+[ &amp;quot;x$1&amp;quot; = &amp;quot;x&amp;quot;  ] &amp;amp;&amp;amp; echo &amp;quot;usage: ${0##*/} &amp;lt;imagefile&amp;gt;&amp;quot; &amp;amp;&amp;amp; exit 1
+
+tftp 192.168.1.1 &amp;lt;&amp;lt;-EOF &amp;gt; /dev/null
+    binary
+    put $1
+EOF
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;下面是 firefly 官方 wiki 文档对 &lt;code&gt;user&lt;/code&gt;, &lt;code&gt;userdebug&lt;/code&gt;, &lt;code&gt;eng&lt;/code&gt; 版本的对比。&lt;/p&gt;</summary>
+&lt;p&gt;脚本使用&lt;code&gt;tftp&lt;/code&gt;连接tftp server 192.168.1.1, 然后进入&lt;code&gt;binary&lt;/code&gt;模式，最后将image文件&lt;code&gt;$1&lt;/code&gt;传输至server端。&lt;/p&gt;
+&lt;p&gt;使用方法很简单，保证该文件&lt;code&gt;burnImage&lt;/code&gt;所在目录在环境变量&lt;code&gt;$PATH&lt;
       
     
+    </summary>
+    
+      <category term="Linux" scheme="https://www.litreily.top/categories/Linux/"/>
     
     
-    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
+      <category term="shell" scheme="https://www.litreily.top/tags/shell/"/>
     
-    
-    <category term="android" scheme="https://www.litreily.top/tags/android/"/>
-    
-    <category term="rk3288" scheme="https://www.litreily.top/tags/rk3288/"/>
+      <category term="tftp" scheme="https://www.litreily.top/tags/tftp/"/>
     
   </entry>
   
   <entry>
-    <title>RK3288 android 6.0 user release 获取 root 权限</title>
-    <link href="https://www.litreily.top/2021/12/30/rk3288-su/"/>
-    <id>https://www.litreily.top/2021/12/30/rk3288-su/</id>
-    <published>2021-12-30T02:22:18.000Z</published>
-    <updated>2022-02-21T08:52:12.711Z</updated>
+    <title>NBNS客户端的C语言实现</title>
+    <link href="https://www.litreily.top/2020/03/15/nbns_code/"/>
+    <id>https://www.litreily.top/2020/03/15/nbns_code/</id>
+    <published>2020-03-15T09:01:33.000Z</published>
+    <updated>2020-06-13T10:34:27.988Z</updated>
     
+    <summary type="html">
     
       
       
-    <summary type="html">&lt;p&gt;编译 RK3288 &lt;code&gt;user&lt;/code&gt; 版本后，固件不会安装su，也就无法使用root权限，导致很多功能无法调试，非常不便。&lt;/p&gt;
-&lt;p&gt;为此，我想办法把 su 重新加到系统里了。&lt;/p&gt;
-&lt;h2 id=&quot;准备su&quot;&gt;&lt;a href=&quot;#准备su&quot; class=&quot;headerlink&quot; title=&quot;准备su&quot;&gt;&lt;/a&gt;准备su&lt;/h2&gt;&lt;p&gt;先使用 &lt;code&gt;userdebug&lt;/code&gt; 模式编译系统，将 &lt;code&gt;out/target/product/rk3288/system/xbin/su&lt;/code&gt; 保存到别的地方，因为改用 &lt;code&gt;user&lt;/code&gt; 模式编译后会覆盖掉。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;mkdir ~/backup
-cp out/target/product/rk3288/system/xbin/su ~/backup/
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;删除-su-Android-mk&quot;&gt;&lt;a href=&quot;#删除-su-Android-mk&quot; class=&quot;headerlink&quot; title=&quot;删除 su Android.mk&quot;&gt;&lt;/a&gt;删除 su Android.mk&lt;/h2&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;rm system/extras/su/Andro</summary>
+        &lt;p&gt;接上一篇&lt;a href=&quot;/2020/02/28/nbns/&quot;&gt;【网络协议详解1 - NBNS】&lt;/a&gt;对NBNS的介绍，这一篇将要讲述使用C语言如何实现一个NBNS客户端，用于向局域网内其它设备发送NBNS NODE STATUS QUERY，并将接收到的RESPONSE信息打印出来。其实也就是一个UDP socket的实例。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/network/udp-socket.png&quot; alt=&quot;UDP socket flowchart&quot;&gt;&lt;/p&gt;
+&lt;p&gt;编写一个客户端，首先要清楚它要完成什么任务，进而确定完成任务的方法和步骤。其任务很简单，就是NBNS数据包的发送和接收，也就是一个简单的socket收发进程。实现主要分以下几步：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;组包&lt;/strong&gt;得到NBNS NODE STATUS QUERY&lt;/li&gt;
+&lt;li&gt;发送NBNS NODE STATUS QUERY&lt;/li&gt;
+&lt;li&gt;接收RESPONSE并解析&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;include-amp-define&quot;&gt;&lt;a href=&quot;#include-amp-define&quot; class=&quot;headerlink&quot; title=&quot;include &amp;amp; define&quot;&gt;&lt;/a&gt;include &amp;amp; define&lt;/
       
     
+    </summary>
+    
+      <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
     
     
-    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
-    
-    
-    <category term="android" scheme="https://www.litreily.top/tags/android/"/>
-    
-    <category term="rk3288" scheme="https://www.litreily.top/tags/rk3288/"/>
+      <category term="C/C++" scheme="https://www.litreily.top/tags/C-C/"/>
     
   </entry>
   
   <entry>
-    <title>RK3399 新设计工控机配置指南</title>
-    <link href="https://www.litreily.top/2021/12/20/rk3399-dts/"/>
-    <id>https://www.litreily.top/2021/12/20/rk3399-dts/</id>
-    <published>2021-12-20T06:20:20.000Z</published>
-    <updated>2021-12-21T06:13:50.773Z</updated>
+    <title>使用油猴脚本批量下载canvas图片</title>
+    <link href="https://www.litreily.top/2020/03/15/canvas-dl/"/>
+    <id>https://www.litreily.top/2020/03/15/canvas-dl/</id>
+    <published>2020-03-15T09:01:33.000Z</published>
+    <updated>2020-06-13T10:38:45.607Z</updated>
     
+    <summary type="html">
     
       
       
-    <summary type="html">&lt;p&gt;用时两周，总算将新的 RK3399 工控机配置好了，期间遇到各种坑，在此记录一二。&lt;/p&gt;
-&lt;h2 id=&quot;RK3399-工控机硬件配置&quot;&gt;&lt;a href=&quot;#RK3399-工控机硬件配置&quot; class=&quot;headerlink&quot; title=&quot;RK3399 工控机硬件配置&quot;&gt;&lt;/a&gt;RK3399 工控机硬件配置&lt;/h2&gt;&lt;p&gt;首先看下硬件配置。&lt;/p&gt;
+        &lt;p&gt;女友最近在网上下载一些北大网盘的pdf&lt;a href=&quot;https://disk.pku.edu.cn/#/link/3A7748E0466521E3E68A0CBA4C24DE20?gns=AE26ACF837E24D51B1EC40E0A80A5D23%2F7F0E54D7D92343B1B62031B1C41F2280&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;文档&lt;/a&gt;，结果发现没有下载接口，另存为也只能存储单张图片。找我帮忙，这时候发现程序员男票的好处了哈。&lt;/p&gt;
+&lt;h2 id=&quot;分析页面&quot;&gt;&lt;a href=&quot;#分析页面&quot; class=&quot;headerlink&quot; title=&quot;分析页面&quot;&gt;&lt;/a&gt;分析页面&lt;/h2&gt;&lt;p&gt;一开始想着使用Chrome调试工具看下pdf链接，发现这个网盘居然不是直接获取的pdf文件，而是使用js脚本动态渲染生成的，涨知识了。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/canvas/pdf-js.png&quot; alt=&quot;pdf-combine js&quot;&gt;&lt;/p&gt;
+&lt;p&gt;那看看是否可以以图片形式批量下载呢，结果查看pdf单页的html结构发现，这居然是个canvas!!!还不是普通图片，而是画布。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/canvas/canvas.png&quot; alt=&quot;cancvs&quot;&gt;&lt;/p
+      
+    
+    </summary>
+    
+      <category term="Tools" scheme="https://www.litreily.top/categories/Tools/"/>
+    
+    
+      <category term="tampermonkey" scheme="https://www.litreily.top/tags/tampermonkey/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>网络协议详解1 - NBNS</title>
+    <link href="https://www.litreily.top/2020/02/28/nbns/"/>
+    <id>https://www.litreily.top/2020/02/28/nbns/</id>
+    <published>2020-02-28T01:48:26.000Z</published>
+    <updated>2020-06-13T10:32:42.143Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;NetBIOS-简介&quot;&gt;&lt;a href=&quot;#NetBIOS-简介&quot; class=&quot;headerlink&quot; title=&quot;NetBIOS 简介&quot;&gt;&lt;/a&gt;NetBIOS 简介&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;NetBIOS&lt;/strong&gt;，Network Basic Input/Output System的缩写，一般指用于&lt;strong&gt;局域网&lt;/strong&gt;通信的一套API，相关RFC文档包括 &lt;a href=&quot;https://tools.ietf.org/html/rfc1001&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;RFC 1001&lt;/a&gt;, &lt;a href=&quot;https://tools.ietf.org/html/rfc1002&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;RFC 1002&lt;/a&gt;. RFC 1001主要对NetBIOS及相关协议和服务进行解释说明，RFC 1002给出了相关协议和服务的数据组包格式。&lt;/p&gt;
+&lt;p&gt;NetBIOS提供三种软件服务：&lt;/p&gt;
 &lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
-&lt;th&gt;接口&lt;/th&gt;
-&lt;th&gt;数量&lt;/th&gt;
-&lt;th&gt;说明&lt;/th&gt;
+&lt;th&gt;Service Name&lt;/th&gt;
+&lt;th&gt;Port&lt;/th&gt;
+&lt;th&gt;Protocol&lt;/th&gt;
+&lt;th&gt;Short Name&lt;/th&gt;
 &lt;/tr&gt;
 &lt;/thead&gt;
-&lt;tbody&gt;&lt;tr&gt;
-&lt;td&gt;TypeC&lt;/td&gt;
-&lt;td&gt;1个&lt;/td&gt;
-&lt;td&gt;OTG 口，可用于烧录固件&lt;/td&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;NetBIOS Name service&lt;/td&gt;
+&lt;td&gt;137&lt;/td&gt;
+&lt;td&gt;UDP/TCP&lt;/td&gt;
+&lt;td&gt;NBNS&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-&lt;td&gt;USB3.0&lt;/td&gt;
-&lt;td&gt;4个&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;NetBIOS Datagram&lt;/td&gt;
+&lt;td&gt;138&lt;/td&gt;
+&lt;td&gt;UDP&lt;/td&gt;
+&lt;td&gt;NBND&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-&lt;td&gt;USB2.0&lt;/td&gt;
-&lt;td&gt;2个&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;NetBIOS Session service&lt;/td&gt;
+&lt;td&gt;139&lt;/td&gt;
+&lt;td&gt;TCP&lt;/td&gt;
+&lt;td&gt;NBSS&lt;/td&gt;
 &lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;RTC芯片 hym8563&lt;/td&gt;
-&lt;td&gt;1个&lt;/td&gt;
-&lt;td&gt;用于RTC时钟存储&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;SD&lt;/td&gt;
-&lt;td&gt;1个&lt;/td&gt;
-&lt;td&gt;可插入SD/TF 卡&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;HDMI&lt;/td&gt;
-&lt;td&gt;1个&lt;/td&gt;
-&lt;td&gt;可接显示器&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;</summary>
-      
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;本文主要描述最常见的&lt;code&gt;NBNS&lt;/code&gt;.&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Network" scheme="https://www.litreily.top/categories/Network/"/>
+    
+      <category term="Protocol" scheme="https://www.litreily.top/categories/Network/Protocol/"/>
     
     
-    
-    <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
-    
-    
-    <category term="linux" scheme="https://www.litreily.top/tags/linux/"/>
-    
-    <category term="rk3399" scheme="https://www.litreily.top/tags/rk3399/"/>
+      <category term="wireshark" scheme="https://www.litreily.top/tags/wireshark/"/>
     
   </entry>
   
   <entry>
-    <title>RK3288 android 6.0 内置系统应用</title>
-    <link href="https://www.litreily.top/2021/10/27/system-app/"/>
-    <id>https://www.litreily.top/2021/10/27/system-app/</id>
-    <published>2021-10-27T11:02:51.000Z</published>
-    <updated>2022-02-21T08:52:22.259Z</updated>
+    <title>Setup dhcpd/dhcpdv6 server</title>
+    <link href="https://www.litreily.top/2020/01/17/dhcpd_server/"/>
+    <id>https://www.litreily.top/2020/01/17/dhcpd_server/</id>
+    <published>2020-01-17T13:36:16.000Z</published>
+    <updated>2020-06-13T10:31:34.020Z</updated>
     
+    <summary type="html">
     
       
       
-    <summary type="html">&lt;p&gt;安卓系统的内置应用可分为以下两大类：&lt;/p&gt;
+        &lt;p&gt;搭建DHCP server在许多网络应用中是非常必要的，尤其是测试IPv6相关的功能时，本文就来介绍下针对IPv4和IPv6该如何搭建DHCP server.&lt;/p&gt;
+&lt;h2 id=&quot;Install-dhcpd-server&quot;&gt;&lt;a href=&quot;#Install-dhcpd-server&quot; class=&quot;headerlink&quot; title=&quot;Install dhcpd server&quot;&gt;&lt;/a&gt;Install dhcpd server&lt;/h2&gt;&lt;p&gt;首先通过&lt;code&gt;apt&lt;/code&gt;安装&lt;code&gt;isc-dhcp-server&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;sudo apt install isc-dhcp-server
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;Setup-dhcpd&quot;&gt;&lt;a href=&quot;#Setup-dhcpd&quot; class=&quot;headerlink&quot; title=&quot;Setup dhcpd&quot;&gt;&lt;/a&gt;Setup dhcpd&lt;/h2&gt;&lt;h3 id=&quot;Config-interfaces&quot;&gt;&lt;a href=&quot;#Config-interfaces&quot; class=&quot;headerlink&quot; title=&quot;Config interfaces&quot;&gt;&lt;/a&gt;Config interfaces&lt;/h3&gt;&lt;p&gt;通过&lt;code&gt;ifco
+      
+    
+    </summary>
+    
+      <category term="Network" scheme="https://www.litreily.top/categories/Network/"/>
+    
+    
+      <category term="ubuntu" scheme="https://www.litreily.top/tags/ubuntu/"/>
+    
+      <category term="dhcp" scheme="https://www.litreily.top/tags/dhcp/"/>
+    
+      <category term="ipv6" scheme="https://www.litreily.top/tags/ipv6/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>根据socket端口号查看进程信息</title>
+    <link href="https://www.litreily.top/2020/01/15/socket_fd/"/>
+    <id>https://www.litreily.top/2020/01/15/socket_fd/</id>
+    <published>2020-01-15T11:28:56.000Z</published>
+    <updated>2020-02-26T13:11:56.224Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;根据已知的一个端口号，以telnet默认端口号23为例，去查找系统中监听该端口号的进程，主要可以通过下面3种方式。&lt;/p&gt;
+&lt;h2 id=&quot;netstat&quot;&gt;&lt;a href=&quot;#netstat&quot; class=&quot;headerlink&quot; title=&quot;netstat&quot;&gt;&lt;/a&gt;netstat&lt;/h2&gt;&lt;p&gt;使用&lt;code&gt;netstat&lt;/code&gt;可以查看系统网络状态，&lt;code&gt;-p&lt;/code&gt;参数可以显示对应的进程信息&lt;code&gt;pid/process&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;$ netstat -anp |grep &amp;quot;:23&amp;quot;
+tcp        0      0 192.168.1.1:23          0.0.0.0:*               LISTEN      3698/utelnetd
+tcp        0      0 192.168.1.1:23          192.168.1.10:10381      ESTABLISHED 3698/utelnetd
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;从上面的信息中可以看到两条信息：&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;可卸载的普通应用&lt;/li&gt;
-&lt;li&gt;不可卸载的系统应用，可以在首次烧录后自启动&lt;/li&gt;
+&lt;li&gt;监听23端口的进程是pid为&lt;code&gt;3698&lt;/code&gt;的&lt;code&gt;utelnetd&lt;/code&gt;&lt;/li&gt;
+
+      
+    
+    </summary>
+    
+      <category term="Linux" scheme="https://www.litreily.top/categories/Linux/"/>
+    
+    
+      <category term="socket" scheme="https://www.litreily.top/tags/socket/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>awk &#39;!a[$0]++&#39;去重小技巧</title>
+    <link href="https://www.litreily.top/2020/01/09/awk_dedup/"/>
+    <id>https://www.litreily.top/2020/01/09/awk_dedup/</id>
+    <published>2020-01-09T13:04:16.000Z</published>
+    <updated>2020-02-26T13:11:56.223Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;今天碰到一个关于awk的去重用法，觉得挺有意思的，记录一下&lt;/p&gt;
+&lt;h2 id=&quot;awk-按行去重&quot;&gt;&lt;a href=&quot;#awk-按行去重&quot; class=&quot;headerlink&quot; title=&quot;awk 按行去重&quot;&gt;&lt;/a&gt;awk 按行去重&lt;/h2&gt;&lt;p&gt;&lt;code&gt;awk &amp;#39;!a[$0]++&amp;#39; file&lt;/code&gt; 是个神奇的用法，通过它可以实现文件内容去重&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;$0&lt;/code&gt;: 代表整行&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;a[]&lt;/code&gt;: 代表数组a,名称随意,首次调用时为空&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;++&lt;/code&gt;:　与&lt;code&gt;C/C++&lt;/code&gt;中的&lt;code&gt;++&lt;/code&gt;一个含义，&lt;code&gt;i++&lt;/code&gt;先使用i后i自增1，&lt;code&gt;++i&lt;/code&gt;代表i先自增1然后被使用&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;!&lt;/code&gt;: 代表取反&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;所以&lt;code&gt;a[$0]&lt;/code&gt;代表对当前行构建一个名为a的数组，首次构建后其值为0&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;a[$0]++&lt;/code&gt;代表先使用&lt;code&gt;a[$0]&lt;/code&gt;的值，然后&lt;code&gt;a[$0]&lt;/code&gt;的值自增1。首次调用自然就是0,下次遇到重复的行就变为1，所以不加&lt;code&gt;
+      
+    
+    </summary>
+    
+      <category term="Linux" scheme="https://www.litreily.top/categories/Linux/"/>
+    
+    
+      <category term="shell" scheme="https://www.litreily.top/tags/shell/"/>
+    
+      <category term="awk" scheme="https://www.litreily.top/tags/awk/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>insmod内核模块提示Unknown Symbol问题处理</title>
+    <link href="https://www.litreily.top/2019/11/07/unknown_symbol/"/>
+    <id>https://www.litreily.top/2019/11/07/unknown_symbol/</id>
+    <published>2019-11-07T02:19:26.000Z</published>
+    <updated>2020-06-13T10:33:48.582Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;问题描述&quot;&gt;&lt;a href=&quot;#问题描述&quot; class=&quot;headerlink&quot; title=&quot;问题描述&quot;&gt;&lt;/a&gt;问题描述&lt;/h2&gt;&lt;p&gt;在调试内核crash问题时打开了&lt;code&gt;lockup&lt;/code&gt;相关的kernel CONFIG，重新编译FW后发现有个内核模块insmod失败&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;log&quot;&gt;[Wed Nov 06 15:51:57.384 2019] ip6t_CONE: Unknown symbol rcu_bh_lock_map (err 0)
+[Wed Nov 06 15:51:57.384 2019] ip6t_CONE: Unknown symbol lock_acquire (err 0)
+[Wed Nov 06 15:51:57.384 2019] ip6t_CONE: Unknown symbol lock_release (err 0)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;手动使用&lt;code&gt;insmod&lt;/code&gt;重新加载也是提示相同的错误。&lt;/p&gt;
+&lt;h2 id=&quot;问题分析&quot;&gt;&lt;a href=&quot;#问题分析&quot; class=&quot;headerlink&quot; title=&quot;问题分析&quot;&gt;&lt;/a&gt;问题分析&lt;/h2&gt;&lt;p&gt;原本这个问题是不存在的，出现的原因必然和启用的CONFIG相关，对比前后两个FW的&lt;cod
+      
+    
+    </summary>
+    
+      <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
+    
+    
+      <category term="IPv6" scheme="https://www.litreily.top/tags/IPv6/"/>
+    
+      <category term="kernel" scheme="https://www.litreily.top/tags/kernel/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>openwrt swconfig stack trace分析</title>
+    <link href="https://www.litreily.top/2019/11/06/swconfig_crash/"/>
+    <id>https://www.litreily.top/2019/11/06/swconfig_crash/</id>
+    <published>2019-11-06T11:04:20.000Z</published>
+    <updated>2020-06-13T10:33:48.582Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;接上一篇博客 &lt;a href=&quot;/2019/11/03/kernel_debug/&quot; title=&quot;watchdog bite导致系统重启问题的调试&quot;&gt;watchdog bite导致系统重启问题的调试&lt;/a&gt; ，打开调试功能后开始压力测试，在测试过程中发现DUT每隔2s打印一次以下异常信息&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;log&quot;&gt;BUG: sleeping function called from invalid context at kernel/locking/mutex.c:616
+in_atomic(): 1, irqs_disabled(): 0, pid: 9465, name: swconfig
+INFO: lockdep is turned off.
+CPU: 2 PID: 9465 Comm: swconfig Tainted: P        W    3.14.77 #1
+[&amp;lt;c021561c&amp;gt;] (unwind_backtrace) from [&amp;lt;c0211d44&amp;gt;] (show_stack+0x18/0x1c)
+[&amp;lt;c0211d44&amp;gt;] (show_stack) from [&amp;lt;c062ea98&amp;gt;] (dump_stack+0x9c/0xd4)
+[&amp;lt;c062ea98&amp;gt;] (du
+      
+    
+    </summary>
+    
+      <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
+    
+    
+      <category term="openwrt" scheme="https://www.litreily.top/tags/openwrt/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>watchdog bite导致系统重启问题的调试</title>
+    <link href="https://www.litreily.top/2019/11/03/kernel_debug/"/>
+    <id>https://www.litreily.top/2019/11/03/kernel_debug/</id>
+    <published>2019-11-03T07:04:20.000Z</published>
+    <updated>2020-01-14T13:33:20.000Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;背景说明&quot;&gt;&lt;a href=&quot;#背景说明&quot; class=&quot;headerlink&quot; title=&quot;背景说明&quot;&gt;&lt;/a&gt;背景说明&lt;/h2&gt;&lt;p&gt;ST在做stress test过程中发现一个bug，DUT会在工作一段时间后重启，重启原因是&lt;code&gt;watchdog bite&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;txt&quot;&gt;[Thu Sep 26 09:21:59.734 2019] Watchdog bark! Now = 831425.568038
+[Thu Sep 26 09:21:59.734 2019] Causing a watchdog bite!
+[Thu Sep 26 09:21:59.734 2019] Configuring Watchdog Timer
+[Thu Sep 26 09:21:59.734 2019] Wa
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;但是无法确定根本原因是什么，是什么导致的死锁，让watchdog没办法在规定时间内bark。为此，我们需要启用相关的内核调试手段去获取相关信息，然后深入分析crashdump和console log。&lt;/p&gt;
+&lt;h2 id=&quot;内核裁剪&quot;&gt;&lt;a href=&quot;#内核裁剪&quot; class=&quot;headerlink&quot; title=&quot;内核裁剪&quot;&gt;&lt;/a&gt;内核裁剪&lt;/h2&gt;&lt;h3 id=&quot;启用f
+      
+    
+    </summary>
+    
+      <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
+    
+    
+      <category term="openwrt" scheme="https://www.litreily.top/tags/openwrt/"/>
+    
+      <category term="ftrace" scheme="https://www.litreily.top/tags/ftrace/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Python网络爬虫7 - 爬取表情包</title>
+    <link href="https://www.litreily.top/2019/10/09/fabiaoqing/"/>
+    <id>https://www.litreily.top/2019/10/09/fabiaoqing/</id>
+    <published>2019-10-09T12:22:30.000Z</published>
+    <updated>2020-08-09T03:13:30.510Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;为了逗女朋友开心，想找一堆表情包，那么作为一名程序员，自然是会想到用程序来完成这个事情，而Python爬虫就是一个非常好的方法。&lt;/p&gt;
+&lt;p&gt;我先找到了一个专门发布表情包的网站，就叫做&lt;a href=&quot;https://www.fabiaoqing.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;发表情&lt;/a&gt;网，可以通过搜索关键词得到大量相关的表情包，下面对这个网站的爬取进行详细介绍。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/emotion/fabiaoqing.png&quot; alt=&quot;fabiaoqing&quot;&gt;&lt;/p&gt;
+&lt;h2 id=&quot;分析站点&quot;&gt;&lt;a href=&quot;#分析站点&quot; class=&quot;headerlink&quot; title=&quot;分析站点&quot;&gt;&lt;/a&gt;分析站点&lt;/h2&gt;&lt;p&gt;为了不引起不适，我选择搜索“你好”，出来的结果是这样的&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/emotion/hello.png&quot; alt=&quot;hello&quot;&gt;&lt;/p&gt;
+&lt;p&gt;可以看到共有&lt;code&gt;688&lt;/code&gt;个相关的&lt;strong&gt;表情&lt;/strong&gt;，右侧的&lt;strong&gt;表情包&lt;/strong&gt;是分组形式的，不是我的爬取对象。我们只关注表情，在网页底部可以看到分页信息：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/emotion/page.p
+      
+    
+    </summary>
+    
+      <category term="Python" scheme="https://www.litreily.top/categories/Python/"/>
+    
+    
+      <category term="spider" scheme="https://www.litreily.top/tags/spider/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>嵌入式设备在无法使用网络和USB的情况下如何进行文件传输</title>
+    <link href="https://www.litreily.top/2019/09/12/minicom/"/>
+    <id>https://www.litreily.top/2019/09/12/minicom/</id>
+    <published>2019-09-12T06:22:30.000Z</published>
+    <updated>2020-02-26T13:11:56.220Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;问题背景&quot;&gt;&lt;a href=&quot;#问题背景&quot; class=&quot;headerlink&quot; title=&quot;问题背景&quot;&gt;&lt;/a&gt;问题背景&lt;/h2&gt;&lt;p&gt;ST 测试时出现一个问题，路由器（采用&lt;a href=&quot;https://openwrt.org&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Openwrt&lt;/a&gt;系统）的console无法正常显示shell提示符，正常情况下是&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;root@DeviceName:/#
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这样的，出问题时是下面这样的，用户名不见了，设备名变成了none.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;@(none):/#
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+      <category term="Linux" scheme="https://www.litreily.top/categories/Linux/"/>
+    
+    
+      <category term="shell" scheme="https://www.litreily.top/tags/shell/"/>
+    
+      <category term="tftp" scheme="https://www.litreily.top/tags/tftp/"/>
+    
+      <category term="nand" scheme="https://www.litreily.top/tags/nand/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用正则模糊匹配的ftp文件传输</title>
+    <link href="https://www.litreily.top/2019/09/02/lftp/"/>
+    <id>https://www.litreily.top/2019/09/02/lftp/</id>
+    <published>2019-09-02T02:51:20.000Z</published>
+    <updated>2020-06-14T03:49:36.006Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;通常而言，FTP传输过程中，客户端在完成账户认证后，需要指定具体的文件路径方能下载或删除服务器端的文件。但是在使用命令行指令去操作ftp数据时，如果每次都要输入完整的路径就太麻烦了，而且如果想要同时下载多个文件还需逐个执行下载指令，那有什么方法可以通过&lt;strong&gt;正则表达式&lt;/strong&gt;去完成模糊匹配和批量下载呢？本文就来介绍一下FTP数据传输的常用操作及正则匹配的实现方法。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/ftp/ftp.png&quot; alt=&quot;ftp diagram&quot;&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Linux" scheme="https://www.litreily.top/categories/Linux/"/>
+    
+    
+      <category term="shell" scheme="https://www.litreily.top/tags/shell/"/>
+    
+      <category term="ftp" scheme="https://www.litreily.top/tags/ftp/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Python网络爬虫6 - Scrapy爬取vmgirls</title>
+    <link href="https://www.litreily.top/2019/08/09/vmgirls/"/>
+    <id>https://www.litreily.top/2019/08/09/vmgirls/</id>
+    <published>2019-08-09T12:09:10.000Z</published>
+    <updated>2020-06-14T02:08:52.910Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;今天介绍一个妹子站点图片的爬取过程，站点&lt;a href=&quot;https://www.vmgirls.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;唯美女生&lt;/a&gt;。站点结构非常简单，单独用&lt;code&gt;requests&lt;/code&gt;库或者&lt;code&gt;scrapy&lt;/code&gt;框架都可以。本文介绍的是使用&lt;code&gt;scrapy&lt;/code&gt;框架爬取。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/vmgirls/vmgirls.png&quot; alt=&quot;vmgirls&quot;&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Python" scheme="https://www.litreily.top/categories/Python/"/>
+    
+    
+      <category term="spider" scheme="https://www.litreily.top/tags/spider/"/>
+    
+      <category term="girls" scheme="https://www.litreily.top/tags/girls/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>高效思维导图应用训练</title>
+    <link href="https://www.litreily.top/2019/06/11/mind-map/"/>
+    <id>https://www.litreily.top/2019/06/11/mind-map/</id>
+    <published>2019-06-11T12:23:34.000Z</published>
+    <updated>2020-06-14T02:10:14.495Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;上周在公司进行了一天的思维导图培训，感觉收获颇丰，有必要总结一下。&lt;/p&gt;
+&lt;h2 id=&quot;思维导图概述&quot;&gt;&lt;a href=&quot;#思维导图概述&quot; class=&quot;headerlink&quot; title=&quot;思维导图概述&quot;&gt;&lt;/a&gt;思维导图概述&lt;/h2&gt;&lt;h3 id=&quot;定义&quot;&gt;&lt;a href=&quot;#定义&quot; class=&quot;headerlink&quot; title=&quot;定义&quot;&gt;&lt;/a&gt;定义&lt;/h3&gt;&lt;p&gt;思维导图主要用于解决以下三个问题：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;记不住&lt;/li&gt;
+&lt;li&gt;理不清&lt;/li&gt;
+&lt;li&gt;想不出&lt;/li&gt;
 &lt;/ol&gt;
-&lt;h2 id=&quot;可卸载应用&quot;&gt;&lt;a href=&quot;#可卸载应用&quot; class=&quot;headerlink&quot; title=&quot;可卸载应用&quot;&gt;&lt;/a&gt;可卸载应用&lt;/h2&gt;&lt;p&gt;对于可卸载应用，其内置很简单，只需要将apk文件放置在指定目录即可。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;cp My_application.apk device/rockchip/rk3288/preinstall_del/
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;不可卸载应用&quot;&gt;&lt;a href=&quot;#不可卸载应用&quot; class=&quot;headerlink&quot; title=&quot;不可卸载应用&quot;&gt;&lt;/a&gt;不可卸载应用&lt;/h2&gt;&lt;p&gt;针对不可卸载的系统应用，复杂一些，需要放置在 &lt;code&gt;packages/apps&lt;/code&gt; 目录，具体操作如下：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;apk_file=My_application.apk
-install_dir=packages/apps/$&amp;#123;apk_file&amp;#125;
-mkdir $&amp;#123;install_dir&amp;#125;
-cp $&amp;#123;ap</summary>
-      
-    
-    
-    
-    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
-    
-    
-    <category term="linux" scheme="https://www.litreily.top/tags/linux/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>解压并更新 ramdisk.img 或 initrd.img</title>
-    <link href="https://www.litreily.top/2021/07/31/ramdisk/"/>
-    <id>https://www.litreily.top/2021/07/31/ramdisk/</id>
-    <published>2021-07-31T06:03:20.000Z</published>
-    <updated>2021-07-31T06:18:36.245Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;&lt;code&gt;ramdisk.img&lt;/code&gt; 或者 &lt;code&gt;initrd.img&lt;/code&gt; 是类似的，都是一个小型的文件系统。在系统启动过程中起到引导的作用，内核通过它来启动真正的根文件系统。&lt;/p&gt;
-&lt;p&gt;有时候需要修改并更新这个文件，下面以&lt;code&gt;ramdisk.img&lt;/code&gt; 为例进行说明。&lt;/p&gt;
-&lt;h2 id=&quot;解压-ramdisk-img&quot;&gt;&lt;a href=&quot;#解压-ramdisk-img&quot; class=&quot;headerlink&quot; title=&quot;解压 ramdisk.img&quot;&gt;&lt;/a&gt;解压 ramdisk.img&lt;/h2&gt;&lt;p&gt;&lt;code&gt;ramdisk.img&lt;/code&gt; 其实是一个&lt;code&gt;gz&lt;/code&gt;格式的压缩包，可以通过 &lt;code&gt;gzip -d&lt;/code&gt; 或者 &lt;code&gt;gunzip&lt;/code&gt; 解压，不过需要注意的是 &lt;code&gt;gzip&lt;/code&gt;, &lt;code&gt;gunzip&lt;/code&gt; 会检查文件名后缀，所以需要先将后缀更新为 &lt;code&gt;.gz&lt;/code&gt;. 下面将其解压至新建的 &lt;code&gt;root&lt;/code&gt; 目录。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;$ cp ramdisk.img ramdisk.gz
-$ gzip -d ramdisk.gz
-$ mkdir root
-</summary>
-      
-    
-    
-    
-    <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
-    
-    
-    <category term="linux" scheme="https://www.litreily.top/tags/linux/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>RK3288 android 6.0 移植 gt9xx 驱动</title>
-    <link href="https://www.litreily.top/2021/07/16/gt9xx-drvier/"/>
-    <id>https://www.litreily.top/2021/07/16/gt9xx-drvier/</id>
-    <published>2021-07-16T05:49:36.000Z</published>
-    <updated>2022-02-21T08:52:30.995Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;问题描述&quot;&gt;&lt;a href=&quot;#问题描述&quot; class=&quot;headerlink&quot; title=&quot;问题描述&quot;&gt;&lt;/a&gt;问题描述&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;平台：RK3288&lt;/li&gt;
-&lt;li&gt;系统：Android 6.0&lt;/li&gt;
-&lt;li&gt;需求：触摸屏驱动移植&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;驱动移植&quot;&gt;&lt;a href=&quot;#驱动移植&quot; class=&quot;headerlink&quot; title=&quot;驱动移植&quot;&gt;&lt;/a&gt;驱动移植&lt;/h2&gt;&lt;p&gt;先从厂商获取驱动程序 gt9xx_v2.8.0.2.&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;gt9xx_v2.8.0.2
-├── dtsi
-│   ├── gt9xx_dts.txt
-│   ├── pinctrl_mtk.txt
-│   └── pinctrl_qcom.txt
-├── goodix_tool.c
-├── gt9xx.c
-├── gt9xx.h
-├── gt9xx_update.c
-├── Kconfig
-└── Makefile
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;新建目录 &lt;code&gt;drivers/input/touchscreen/gt9xx_v2.8.0.2/&lt;/code&gt; ,将以上 &lt;code&gt;.c&lt;/code&gt;, &lt;code&gt;.h&lt;/code&gt;, 及 &lt;code&gt;Makefile&lt;/cod</summary>
-      
-    
-    
-    
-    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
-    
-    
-    <category term="android" scheme="https://www.litreily.top/tags/android/"/>
-    
-    <category term="rk3288" scheme="https://www.litreily.top/tags/rk3288/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>RK3288 android 6.0 同时打开两个摄像头</title>
-    <link href="https://www.litreily.top/2021/07/12/dual-camera/"/>
-    <id>https://www.litreily.top/2021/07/12/dual-camera/</id>
-    <published>2021-07-12T10:02:15.000Z</published>
-    <updated>2022-02-21T08:52:33.715Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;问题描述&quot;&gt;&lt;a href=&quot;#问题描述&quot; class=&quot;headerlink&quot; title=&quot;问题描述&quot;&gt;&lt;/a&gt;问题描述&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;平台: RK3288&lt;/li&gt;
-&lt;li&gt;系统: Android 6.0&lt;/li&gt;
-&lt;li&gt;需求: 同时打开两个摄像头&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;业务需求，要支持同时打开多个摄像头，期间遇到一些问题，在这里记录下。&lt;/p&gt;
-&lt;h2 id=&quot;问题分析&quot;&gt;&lt;a href=&quot;#问题分析&quot; class=&quot;headerlink&quot; title=&quot;问题分析&quot;&gt;&lt;/a&gt;问题分析&lt;/h2&gt;&lt;h3 id=&quot;支持多摄像头&quot;&gt;&lt;a href=&quot;#支持多摄像头&quot; class=&quot;headerlink&quot; title=&quot;支持多摄像头&quot;&gt;&lt;/a&gt;支持多摄像头&lt;/h3&gt;&lt;p&gt;首先，Android系统默认只支持同时打开一个摄像头，并且最大只识别两个摄像头。所以，为了支持多摄像头，需要修改摄像头相关的 &lt;code&gt;HAL&lt;/code&gt; 层。&lt;/p&gt;
-&lt;p&gt;这个我参考 &lt;a href=&quot;https://www.programmersought.com/article/12481783276/&quot;&gt;[AndroidO] [RK3399] Support 4 way camera preview&lt;/a&gt; 解决了。patch 如下：&lt;/p&gt;
-&lt;pre&gt;&lt;code c</summary>
-      
-    
-    
-    
-    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
-    
-    
-    <category term="android" scheme="https://www.litreily.top/tags/android/"/>
-    
-    <category term="rk3288" scheme="https://www.litreily.top/tags/rk3288/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>RK3288 android 6.0 实现 lvds + edp 双屏异显</title>
-    <link href="https://www.litreily.top/2021/06/18/dual-lcd/"/>
-    <id>https://www.litreily.top/2021/06/18/dual-lcd/</id>
-    <published>2021-06-18T08:23:15.000Z</published>
-    <updated>2022-02-21T08:52:36.131Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;&lt;code&gt;rk3288&lt;/code&gt; 默认支持 edp+hdmi 双屏显示，或者 lvds + hdmi, 但不支持 &lt;code&gt;lvds&lt;/code&gt; + &lt;code&gt;edp&lt;/code&gt; 双屏异显。业务要求，需要使用RK3288 Android 6.0 系统，支持 &lt;code&gt;lvds&lt;/code&gt;, &lt;code&gt;edp&lt;/code&gt; 两种接口的双屏异显。本文介绍具体的实现方法。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;平台: RK3288&lt;/li&gt;
-&lt;li&gt;系统: Android 6.0&lt;/li&gt;
-&lt;li&gt;屏幕: LVDS(7 inch 1024x600), edp(11 inch 1920x1080)&lt;/li&gt;
-&lt;li&gt;需求: LVDS (Primary) + edp (EXTEND) 双屏异显&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;这三个也是工作效能低下的主要原因。那究竟什么是思维导图呢？&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt; 主屏副屏的切换只要修改dts相关参数即可，&lt;code&gt;lvds&lt;/code&gt; &lt;code&gt;edp&lt;/code&gt; 主副互换比较简单。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;思维导图&lt;/strong&gt;是表达&lt;strong&gt;放射性思维&lt;/strong&gt;的图形思维工具。用&lt;strong&gt;图文&lt;/strong&gt;技巧，把各级主题关系用层级图表现，将关键词与图像、颜色等建立思维链接。用&lt;strong&gt;全脑机能&lt;/strong&gt;，使在科学与艺术、逻辑与想象间平衡，开启大脑潜能。&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h2 id=&quot;kernel&quot;&gt;&lt;a href=&quot;#kernel&quot; class=&quot;headerlink&quot; title=&quot;kernel&quot;&gt;&lt;/a&gt;kernel&lt;/h2&gt;&lt;p&gt;首先修改 &lt;code&gt;kernel&lt;/code&gt;, 这里参考了博客&lt;a href=&quot;https:</summary>
-      
+    
+    </summary>
+    
+      <category term="Tools" scheme="https://www.litreily.top/categories/Tools/"/>
     
     
+      <category term="5W2H" scheme="https://www.litreily.top/tags/5W2H/"/>
     
-    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
-    
-    
-    <category term="android" scheme="https://www.litreily.top/tags/android/"/>
-    
-    <category term="rk3288" scheme="https://www.litreily.top/tags/rk3288/"/>
+      <category term="MECE" scheme="https://www.litreily.top/tags/MECE/"/>
     
   </entry>
   
   <entry>
-    <title>解决Ubuntu 18.04 minicom 不支持 1500000 波特率的问题</title>
-    <link href="https://www.litreily.top/2021/05/28/cp210x/"/>
-    <id>https://www.litreily.top/2021/05/28/cp210x/</id>
-    <published>2021-05-28T03:26:15.000Z</published>
-    <updated>2021-05-28T03:31:18.046Z</updated>
+    <title>哈希表的实现与常见操作</title>
+    <link href="https://www.litreily.top/2019/05/24/hash-table/"/>
+    <id>https://www.litreily.top/2019/05/24/hash-table/</id>
+    <published>2019-05-24T12:00:00.000Z</published>
+    <updated>2020-06-14T02:11:04.810Z</updated>
     
+    <summary type="html">
     
-    <summary type="html">&lt;p&gt;最近使用 &lt;code&gt;Ubuntu 18.04&lt;/code&gt; 作为台式机的办公系统，需要使用串口调试功能，于是安装了 &lt;code&gt;minicom&lt;/code&gt;, 但是配置波特率的时候发现无法配置高于 &lt;code&gt;1000000&lt;/code&gt; 以上波特率。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;$ sudo stty -F /dev/ttyUSB0 1500000
-stty: /dev/ttyUSB0: unable to perform all requested operations
-&lt;/code&gt;&lt;/pre&gt;</summary>
-    
-    
-    
-    <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
-    
-    
-    <category term="ubuntu" scheme="https://www.litreily.top/tags/ubuntu/"/>
-    
-    <category term="usb" scheme="https://www.litreily.top/tags/usb/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>基于 IPQ807x 编译 QSDK</title>
-    <link href="https://www.litreily.top/2021/02/07/qsdk-compile/"/>
-    <id>https://www.litreily.top/2021/02/07/qsdk-compile/</id>
-    <published>2021-02-07T06:19:04.000Z</published>
-    <updated>2021-05-28T03:12:11.503Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;接上一篇 &lt;a href=&quot;https://www.litreily.top/2021/01/29/qsdk/&quot;&gt;下载安装基于 openwrt 的 QSDK&lt;/a&gt;,  这一篇来讲下编译 &lt;code&gt;QSDK&lt;/code&gt; 的步骤以及遇到的问题及其处理方法。&lt;/p&gt;
-&lt;p&gt;正常步骤，是下面这样的，根据设备类型选择 config 文件，生成 .config, 然后完整编译。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;cp qca/configs/qsdk/ipq_open.config .config
-echo  CONFIG_TARGET_ipq_ipq807x_64=y  &amp;gt;&amp;gt; .config
-echo CONFIG_TARGET_ipq_ipq807x_64_QSDK_Open=y  &amp;gt;&amp;gt; .config
+      &lt;p&gt;前段时间基于数组和单链表以拉链法写了个哈希表，实现了基本的增删改查（&lt;code&gt;CRUD&lt;/code&gt;），以键值对的形式存储一些配置参数，便以此文记录一下。&lt;/p&gt;
+&lt;h2 id=&quot;数据结构&quot;&gt;&lt;a href=&quot;#数据结构&quot; class=&quot;headerlink&quot; title=&quot;数据结构&quot;&gt;&lt;/a&gt;数据结构&lt;/h2&gt;&lt;pre&gt;&lt;code class=&quot;c&quot;&gt;#define TABLE_SIZE 101
+#define KEY_SIZE 32
+#define VALUE_SIZE 128
+#define BUF_SIZE 256
 
-make package/symlinks
-make defconfig
-make V=s
+#define DATA_PATH &amp;quot;data.txt&amp;quot;
+
+struct linklist {
+    char key[KEY_SIZE];
+    char val[VALUE_SIZE];
+    struct linklist *next;
+};
+struct linklist *hashtbl[TABLE_SIZE];
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;code&gt;make V=s&lt;/code&gt; 之前的指令都能正常通过，但是编译过程中就可能出现各种情况，比如缺少编译工具等。&lt;/p&gt;
-&lt;h2 id=&quot;依赖工具&quot;&gt;&lt;a href=&quot;#依赖工具&quot; class=&quot;headerlink&quot; title=&quot;依赖工具&quot;&gt;&lt;/a&gt;依赖工具&lt;/h2&gt;&lt;p&gt;每个人的编译环境可能</summary>
-      
+    
+    </summary>
+    
+      <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
     
     
+      <category term="C/C++" scheme="https://www.litreily.top/tags/C-C/"/>
     
-    <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
+      <category term="linux" scheme="https://www.litreily.top/tags/linux/"/>
     
-    
-    <category term="openwrt" scheme="https://www.litreily.top/tags/openwrt/"/>
-    
-    <category term="qsdk" scheme="https://www.litreily.top/tags/qsdk/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>下载安装基于 openwrt 的 QSDK</title>
-    <link href="https://www.litreily.top/2021/01/29/qsdk/"/>
-    <id>https://www.litreily.top/2021/01/29/qsdk/</id>
-    <published>2021-01-29T09:29:56.000Z</published>
-    <updated>2021-05-28T03:12:11.503Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;&lt;code&gt;QSDK&lt;/code&gt; - QCA Software Development Kits, 基于 openwrt 加入了 QCA 相关的代码库，可以用于使用 qualcomm 芯片的路由器固件开发。本文讲述如何获取 QSDK.&lt;/p&gt;
-&lt;p&gt;我们通常会使用 &lt;code&gt;git clone&lt;/code&gt; 获取开源项目的代码，比如 github, gitlab, coding 等平台，但是 &lt;code&gt;QSDK&lt;/code&gt; 并不存放于这些平台，而是有它自己的维护站点，并且需要通过 &lt;code&gt;repo&lt;/code&gt; 和 &lt;code&gt;git&lt;/code&gt; 共同完成仓库文件的 &lt;code&gt;clone&lt;/code&gt;, 下面来看看吧。&lt;/p&gt;
-&lt;h2 id=&quot;install-repo&quot;&gt;&lt;a href=&quot;#install-repo&quot; class=&quot;headerlink&quot; title=&quot;install repo&quot;&gt;&lt;/a&gt;install repo&lt;/h2&gt;&lt;p&gt;首先来安装 &lt;code&gt;repo&lt;/code&gt; 工具，这其实是个 &lt;code&gt;Python&lt;/code&gt; 脚本.&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;curl https://storage.googleapis.com/git-repo-downloads/repo -o repo
-chmod +x</summary>
-      
-    
-    
-    
-    <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
-    
-    
-    <category term="openwrt" scheme="https://www.litreily.top/tags/openwrt/"/>
-    
-    <category term="qsdk" scheme="https://www.litreily.top/tags/qsdk/"/>
+      <category term="hash" scheme="https://www.litreily.top/tags/hash/"/>
     
   </entry>
   
   <entry>
-    <title>openwrt Makefile scan.mk 详解</title>
-    <link href="https://www.litreily.top/2021/01/15/mk-scan/"/>
-    <id>https://www.litreily.top/2021/01/15/mk-scan/</id>
-    <published>2021-01-15T08:22:51.000Z</published>
-    <updated>2021-05-28T03:12:11.503Z</updated>
+    <title>git commit 工具 - commitizen</title>
+    <link href="https://www.litreily.top/2019/03/12/commitizen/"/>
+    <id>https://www.litreily.top/2019/03/12/commitizen/</id>
+    <published>2019-03-12T13:39:10.000Z</published>
+    <updated>2020-06-14T02:11:21.056Z</updated>
     
+    <summary type="html">
     
-      
-      
-    <summary type="html">&lt;p&gt;&lt;code&gt;openwrt&lt;/code&gt; 中的 &lt;code&gt;include/scan.mk&lt;/code&gt; 用于扫描项目 &lt;code&gt;package&lt;/code&gt;, &lt;code&gt;target&lt;/code&gt; 目录信息，并将扫描结果存入 &lt;code&gt;tmp&lt;/code&gt; 目录。这个扫描过程几乎是 openwrt 所有目标生成的前提。也就是说，无论使用 &lt;code&gt;make&lt;/code&gt; 编译 &lt;code&gt;openwrt&lt;/code&gt; 哪个部分的代码，都会通过 &lt;code&gt;scan.mk&lt;/code&gt; 生成必要的临时文件，这是编译其它目录的大前提。&lt;/p&gt;
-&lt;p&gt;举例说明，我们指定编译某个 &lt;code&gt;package&lt;/code&gt; 时，如 &lt;code&gt;package/utils/demo&lt;/code&gt;，&lt;code&gt;make&lt;/code&gt; 根据层层 &lt;code&gt;Makefile&lt;/code&gt; 会去寻找该 &lt;code&gt;package&lt;/code&gt; 的路径，而这个路径信息就是通过 &lt;code&gt;scan.mk&lt;/code&gt; 扫描后存入了 &lt;code&gt;tmp&lt;/code&gt; 目录。这样有什么好处呢? 我完全可以手动执行 &lt;code&gt;make package/utils/demo/compile&lt;/code&gt; 不是吗？&lt;/p&gt;
-&lt;p&gt;的确如此，但是我们不可能每次都去写长串的路径，通过 &lt;code&gt;</summary>
-      
-    
-    
-    
-    <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
-    
-    
-    <category term="makefile" scheme="https://www.litreily.top/tags/makefile/"/>
-    
-    <category term="openwrt" scheme="https://www.litreily.top/tags/openwrt/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>openwrt Makefile subdir.mk 详解</title>
-    <link href="https://www.litreily.top/2021/01/13/mk-subdir/"/>
-    <id>https://www.litreily.top/2021/01/13/mk-subdir/</id>
-    <published>2021-01-13T08:25:37.000Z</published>
-    <updated>2021-05-28T03:12:11.503Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;之前讲述了 openwrt Makefile 的&lt;a href=&quot;https://www.litreily.top/2020/12/30/openwrt-mkfile/&quot;&gt;整体框架&lt;/a&gt;，主要包括主 Makefile 的描述，，最后简单描述了 &lt;code&gt;subdir.mk&lt;/code&gt; , 本文就来详细剖析这个文件。&lt;/p&gt;
-&lt;p&gt;但是在解析 &lt;code&gt;subdir.mk&lt;/code&gt; 之前，先来看两个 Makefile, &lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;debug.mk&lt;/code&gt;: 这也是主 Makefile 引入的第一个 .mk 文件，这里定义的调试函数在 &lt;code&gt;subdir.mk&lt;/code&gt; 中被调用&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;target/Makefile&lt;/code&gt;: 这是调用到 &lt;code&gt;subdir.mk&lt;/code&gt; 的首个 Makefile, 本文将以此为例进行说明&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;debug-mk&quot;&gt;&lt;a href=&quot;#debug-mk&quot; class=&quot;headerlink&quot; title=&quot;debug.mk&quot;&gt;&lt;/a&gt;debug.mk&lt;/h2&gt;&lt;p&gt;&lt;code&gt;debug.mk&lt;/code&gt; 定义了几个调试函数。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;debug&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;co</summary>
-      
-    
-    
-    
-    <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
-    
-    
-    <category term="makefile" scheme="https://www.litreily.top/tags/makefile/"/>
-    
-    <category term="openwrt" scheme="https://www.litreily.top/tags/openwrt/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>openwrt Makefile 框架分析</title>
-    <link href="https://www.litreily.top/2020/12/30/openwrt-mkfile/"/>
-    <id>https://www.litreily.top/2020/12/30/openwrt-mkfile/</id>
-    <published>2020-12-30T00:49:20.000Z</published>
-    <updated>2021-05-28T03:12:11.503Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;openwrt repo: &lt;a href=&quot;https://github.com/openwrt/openwrt&quot;&gt;https://github.com/openwrt/openwrt&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&quot;整体框架&quot;&gt;&lt;a href=&quot;#整体框架&quot; class=&quot;headerlink&quot; title=&quot;整体框架&quot;&gt;&lt;/a&gt;整体框架&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;/assets/openwrt/openwrt_arch.png&quot; alt=&quot;openwrt arch&quot;&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;首行为buildroot默认目录&lt;ul&gt;
-&lt;li&gt;config: 配置文件&lt;/li&gt;
-&lt;li&gt;include: openwrt 的 Makefile 文件&lt;/li&gt;
-&lt;li&gt;package: 各个软件包的Makefile, patches等文件&lt;/li&gt;
-&lt;li&gt;scripts: openwrt 包管理相关的 perl 脚本&lt;/li&gt;
-&lt;li&gt;target: 用于编译 kernel 和 firmware 的相关文件&lt;/li&gt;
-&lt;li&gt;toolchain: 包含用于获取 kernel headers, C lib, bin-utils, compiler, debugger 的指令&lt;/li&gt;
-&lt;li&gt;tools: 包含编译时所需的一些工具，如automake, autoco</summary>
-      
-    
-    
-    
-    <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
-    
-    
-    <category term="makefile" scheme="https://www.litreily.top/tags/makefile/"/>
-    
-    <category term="openwrt" scheme="https://www.litreily.top/tags/openwrt/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>openwrt make defconfig 详解</title>
-    <link href="https://www.litreily.top/2020/12/29/make-defconfig/"/>
-    <id>https://www.litreily.top/2020/12/29/make-defconfig/</id>
-    <published>2020-12-29T01:47:32.000Z</published>
-    <updated>2021-05-28T03:12:11.503Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;对于 linux kernel，有几个常用 make 指令用于生成 .config 文件。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;make oldconfig&lt;/li&gt;
-&lt;li&gt;make menuconfig&lt;/li&gt;
-&lt;li&gt;make defconfig&lt;/li&gt;
-&lt;li&gt;make config&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;那么这些指令具体执行了什么操作呢，针对 openwrt 来看下吧。&lt;/p&gt;
-&lt;h2 id=&quot;主-Makefile&quot;&gt;&lt;a href=&quot;#主-Makefile&quot; class=&quot;headerlink&quot; title=&quot;主 Makefile&quot;&gt;&lt;/a&gt;主 Makefile&lt;/h2&gt;&lt;p&gt;在 buildroot 执行 make，首先会访问仓库根目录的主 &lt;a href=&quot;https://github.com/openwrt/openwrt/blob/master/Makefile&quot;&gt;Makefile&lt;/a&gt;，其中有个 ifneq 判断如下：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;makefile&quot;&gt;ifneq ($(OPENWRT_BUILD),1)
-  _SINGLE=export MAKEFLAGS=$(space);
-
-  override OPENWRT_BUILD=1
-  export OPENWRT_BUILD
-  GREP_OPTIONS=
-  expor</summary>
-      
-    
-    
-    
-    <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
-    
-    
-    <category term="makefile" scheme="https://www.litreily.top/tags/makefile/"/>
-    
-    <category term="openwrt" scheme="https://www.litreily.top/tags/openwrt/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>lua 高级特性</title>
-    <link href="https://www.litreily.top/2020/12/25/lua-adv/"/>
-    <id>https://www.litreily.top/2020/12/25/lua-adv/</id>
-    <published>2020-12-25T02:08:01.000Z</published>
-    <updated>2021-05-28T03:12:11.503Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;这一篇来记录下 lua 的某些高级特性，以便在实际应用中得心应手。&lt;/p&gt;
-&lt;h2 id=&quot;模块和包&quot;&gt;&lt;a href=&quot;#模块和包&quot; class=&quot;headerlink&quot; title=&quot;模块和包&quot;&gt;&lt;/a&gt;模块和包&lt;/h2&gt;&lt;p&gt;为了方便代码复用和扩展，可以使用 table 实现模块 module，在模块中封装通用代码。把同类型的函数放在一个文件中，然后在其它脚本中调用。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lua&quot;&gt;module = &amp;#123;&amp;#125;
-
-module.version = &amp;quot;V0.1&amp;quot;
-module.author = &amp;quot;litreily&amp;quot;
-
-function module.func1 ()
-    function-body
-end
-
-function module.func2 ()
-    function-body
-end
-
-return module
+      &lt;p&gt;为了规范代码提交，最近学习了一下如何使用&lt;code&gt;commitizen&lt;/code&gt;进行commit提交，其实也很简单，这里简单做个介绍。&lt;/p&gt;
+&lt;h2 id=&quot;commitizen-安装&quot;&gt;&lt;a href=&quot;#commitizen-安装&quot; class=&quot;headerlink&quot; title=&quot;commitizen 安装&quot;&gt;&lt;/a&gt;commitizen 安装&lt;/h2&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;npm install -g commitizen
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;然后在其它文件通过 require 导入。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lua&quot;&gt;require (&amp;quot;module&amp;quot;)
--- or
-require &amp;quot;module&amp;quot;
-
-print(module.version)
-module.func1()
-
--- or
-loc</summary>
+    
+    </summary>
+    
+      <category term="Tools" scheme="https://www.litreily.top/categories/Tools/"/>
+    
+    
+      <category term="git" scheme="https://www.litreily.top/tags/git/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Python网络爬虫5 - 爬取QQ空间相册</title>
+    <link href="https://www.litreily.top/2019/03/03/qqzone/"/>
+    <id>https://www.litreily.top/2019/03/03/qqzone/</id>
+    <published>2019-03-03T10:34:20.000Z</published>
+    <updated>2020-06-14T02:11:37.325Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;自毕业后，就再也没有用过QQ，QQ空间里记录的是些并不精彩的青葱岁月，但好歹也是份回忆，近日想着学以致用，用&lt;code&gt;Python&lt;/code&gt;把QQ空间相册的所有照片爬取下来，以作备份。&lt;/p&gt;
+&lt;h2 id=&quot;分析QQ空间&quot;&gt;&lt;a href=&quot;#分析QQ空间&quot; class=&quot;headerlink&quot; title=&quot;分析QQ空间&quot;&gt;&lt;/a&gt;分析QQ空间&lt;/h2&gt;&lt;h3 id=&quot;登录QQ空间&quot;&gt;&lt;a href=&quot;#登录QQ空间&quot; class=&quot;headerlink&quot; title=&quot;登录QQ空间&quot;&gt;&lt;/a&gt;登录QQ空间&lt;/h3&gt;&lt;p&gt;爬取第一步，分析站点，首先需要知道如何登录QQ空间。最初想法是用&lt;code&gt;requests&lt;/code&gt;库配置登录请求，模拟登录，但是不久便放弃了这一思路，请看下图↓&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/qqzone/login.png&quot; alt=&quot;login&quot;&gt;&lt;/p&gt;
+&lt;p&gt;根据登录按钮绑定的监听事件可以追踪到该按钮的点击事件如下：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/qqzone/login_func.png&quot; alt=&quot;login function&quot;&gt;&lt;/p&gt;
+&lt;p&gt;账号加密是必然的，但这一堆堆的代码真心不好解析，有耐心的勇士尽情一试！&lt;/p&gt;
+&lt;p&gt;在排除这种登录方法后，选择&lt;code&gt;selenium&lt;/c
       
     
+    </summary>
+    
+      <category term="Python" scheme="https://www.litreily.top/categories/Python/"/>
     
     
-    <category term="Language" scheme="https://www.litreily.top/categories/Language/"/>
+      <category term="spider" scheme="https://www.litreily.top/tags/spider/"/>
     
-    <category term="Lua" scheme="https://www.litreily.top/categories/Language/Lua/"/>
+      <category term="qqzone" scheme="https://www.litreily.top/tags/qqzone/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>记一次Client无法获取IPv6地址问题的分析过程</title>
+    <link href="https://www.litreily.top/2019/02/27/ipv6/"/>
+    <id>https://www.litreily.top/2019/02/27/ipv6/</id>
+    <published>2019-02-27T05:47:30.000Z</published>
+    <updated>2020-06-13T10:33:48.579Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;近日SQA报了一个bug，对路由器经过6天左右的压力测试后，无论是有线设备还是无线设备都拿不到&lt;code&gt;IPv6&lt;/code&gt;地址了。经过层层分析发现可能是&lt;code&gt;kernel&lt;/code&gt;内存泄漏。本文便记录这一问题的分析过程。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
     
     
-    <category term="lua" scheme="https://www.litreily.top/tags/lua/"/>
+      <category term="IPv6" scheme="https://www.litreily.top/tags/IPv6/"/>
+    
+      <category term="router" scheme="https://www.litreily.top/tags/router/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Ubuntu开机自动挂载Windows系统中的磁盘分区</title>
+    <link href="https://www.litreily.top/2019/02/17/mount/"/>
+    <id>https://www.litreily.top/2019/02/17/mount/</id>
+    <published>2019-02-17T12:39:57.000Z</published>
+    <updated>2020-06-14T02:11:50.115Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;本人电脑装有&lt;code&gt;ubuntu&lt;/code&gt;和&lt;code&gt;windows&lt;/code&gt;双系统，有时候需要在&lt;code&gt;ubuntu&lt;/code&gt;下使用&lt;code&gt;windows&lt;/code&gt;系统下的文件，每次手动挂载的话很麻烦，所以想让它开机自动挂载常用的&lt;code&gt;windows&lt;/code&gt;磁盘分区。&lt;/p&gt;
+&lt;h2 id=&quot;查看分区&quot;&gt;&lt;a href=&quot;#查看分区&quot; class=&quot;headerlink&quot; title=&quot;查看分区&quot;&gt;&lt;/a&gt;查看分区&lt;/h2&gt;&lt;p&gt;在挂载windows磁盘前，需要知道每个磁盘的路径或&lt;code&gt;UUID&lt;/code&gt;，此时主要依靠&lt;code&gt;fdisk&lt;/code&gt;和&lt;code&gt;blkid&lt;/code&gt;两个指令，前一个指令获取分区信息，后一个指令获取&lt;code&gt;Block device&lt;/code&gt;块设备的属性。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;sh&quot;&gt;$ sudo blkid
+/dev/sda1: LABEL=&amp;quot;Win10&amp;quot; UUID=&amp;quot;C4A0E65EA0E65708&amp;quot; TYPE=&amp;quot;ntfs&amp;quot; PARTUUID=&amp;quot;6190c592-01&amp;quot;
+/dev/sda2: UUID=&amp;quot;AE3C137D3C133FAF&amp;quot; TYPE=&amp;
+      
+    
+    </summary>
+    
+      <category term="Linux" scheme="https://www.litreily.top/categories/Linux/"/>
+    
+    
+      <category term="ubuntu" scheme="https://www.litreily.top/tags/ubuntu/"/>
+    
+      <category term="mount" scheme="https://www.litreily.top/tags/mount/"/>
     
   </entry>
   

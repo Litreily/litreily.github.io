@@ -1,0 +1,948 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>openwrt make defconfig 详解 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script><meta name="generator" content="Hexo 5.3.0"></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/plugins/prettify/prettify.js"></script><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">openwrt make defconfig 详解</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2020/12/29/make-oldconfig/">2020-12-29</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Embedded/">Embedded</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>对于 linux kernel，有几个常用 make 指令用于生成 .config 文件。</p>
+<ul>
+<li>make oldconfig</li>
+<li>make menuconfig</li>
+<li>make defconfig</li>
+<li>make config</li>
+</ul>
+<p>那么这些指令具体执行了什么操作呢，针对 openwrt 来看下吧。</p>
+<h2 id="主-Makefile"><a href="#主-Makefile" class="headerlink" title="主 Makefile"></a>主 Makefile</h2><p>在 buildroot 执行 make，首先会访问仓库根目录的主 <a target="_blank" rel="noopener" href="https://github.com/openwrt/openwrt/blob/master/Makefile">Makefile</a>，其中有个 ifneq 判断如下：</p>
+<pre><code class="makefile">ifneq ($(OPENWRT_BUILD),1)
+  _SINGLE=export MAKEFLAGS=$(space);
+
+  override OPENWRT_BUILD=1
+  export OPENWRT_BUILD
+  GREP_OPTIONS=
+  export GREP_OPTIONS
+  CDPATH=
+  export CDPATH
+  include $(TOPDIR)/include/debug.mk
+  include $(TOPDIR)/include/depends.mk
+  include $(TOPDIR)/include/toplevel.mk
+else
+  include rules.mk
+  include $(INCLUDE_DIR)/depends.mk
+  include $(INCLUDE_DIR)/subdir.mk
+  include target/Makefile
+  include package/Makefile
+  include tools/Makefile
+  include toolchain/Makefile</code></pre>
+<p>make 时通常不会设置OPENWRT_BUILD，所以按照以上逻辑会 include 以下几个Makefile</p>
+<ol>
+<li>include/debug.mk</li>
+<li>include/depends.mk</li>
+<li>include/toplevel.mk</li>
+</ol>
+<p>前两个先不管，主要来看下toplevel.mk.</p>
+<h2 id="toplevel-mk"><a href="#toplevel-mk" class="headerlink" title="toplevel.mk"></a>toplevel.mk</h2><p>在这个顶层 <a target="_blank" rel="noopener" href="https://github.com/openwrt/openwrt/blob/master/include/toplevel.mk">Makefile</a> 中，定义了许多常用指令，其中就包含了 defconfig, oldconfig, menuconfig 等</p>
+<pre><code class="makefile">config: scripts/config/conf prepare-tmpinfo FORCE
+    [ -L .config ] &amp;&amp; export KCONFIG_OVERWRITECONFIG=1; \
+        $&lt; $(KCONF_FLAGS) Config.in
+
+config-clean: FORCE
+    $(_SINGLE)$(NO_TRACE_MAKE) -C scripts/config clean
+
+defconfig: scripts/config/conf prepare-tmpinfo FORCE
+    touch .config
+    @if [ ! -s .config -a -e $(HOME)/.openwrt/defconfig ]; then cp $(HOME)/.openwrt/defconfig .config; fi
+    [ -L .config ] &amp;&amp; export KCONFIG_OVERWRITECONFIG=1; \
+        $&lt; $(KCONF_FLAGS) --defconfig=.config Config.in
+
+confdefault-y=allyes
+confdefault-m=allmod
+confdefault-n=allno
+confdefault:=$(confdefault-$(CONFDEFAULT))
+
+oldconfig: scripts/config/conf prepare-tmpinfo FORCE
+    [ -L .config ] &amp;&amp; export KCONFIG_OVERWRITECONFIG=1; \
+        $&lt; $(KCONF_FLAGS) --$(if $(confdefault),$(confdefault),old)config Config.in
+
+menuconfig: scripts/config/mconf prepare-tmpinfo FORCE
+    if [ \! -e .config -a -e $(HOME)/.openwrt/defconfig ]; then \
+        cp $(HOME)/.openwrt/defconfig .config; \
+    fi
+    [ -L .config ] &amp;&amp; export KCONFIG_OVERWRITECONFIG=1; \
+        $&lt; Config.in
+
+nconfig: scripts/config/nconf prepare-tmpinfo FORCE
+    if [ \! -e .config -a -e $(HOME)/.openwrt/defconfig ]; then \
+        cp $(HOME)/.openwrt/defconfig .config; \
+    fi
+    [ -L .config ] &amp;&amp; export KCONFIG_OVERWRITECONFIG=1; \
+        $&lt; Config.in
+
+xconfig: scripts/config/qconf prepare-tmpinfo FORCE
+    if [ \! -e .config -a -e $(HOME)/.openwrt/defconfig ]; then \
+        cp $(HOME)/.openwrt/defconfig .config; \
+    fi
+    $&lt; Config.in</code></pre>
+<p>其中的oldconfig如下：</p>
+<pre><code class="makefile">oldconfig: scripts/config/conf prepare-tmpinfo FORCE
+    [ -L .config ] &amp;&amp; export KCONFIG_OVERWRITECONFIG=1; \
+        $&lt; $(KCONF_FLAGS) --$(if $(confdefault),$(confdefault),old)config Config.in</code></pre>
+<p><code>KCONF_FLAGS</code> 默认为空，<code>confdefault</code> 也默认为空，所以以上指令实际上就是</p>
+<pre><code class="bash">scripts/config/conf --oldconfig Config.in</code></pre>
+<h2 id="make-oldconfig"><a href="#make-oldconfig" class="headerlink" title="make oldconfig"></a>make oldconfig</h2><p>接下来来验证下是否是这个指令。使用make的 <code>-n</code> 参数可以打印执行过程，但并不执行具体指令，非常方便于调试。</p>
+<pre><code class="bash">$ make -n oldconfig
+make -r -s staging_dir/host/.prereq-build OPENWRT_BUILD= QUIET=0
+mkdir -p tmp/info
+export MAKEFLAGS= ;make V=s -j1 -r -s -f include/scan.mk SCAN_TARGET=&quot;packageinfo&quot; SCAN_DIR=&quot;package&quot; SCAN_NAME=&quot;package&quot; SCAN_DEPTH=5 SCAN_EXTRA=&quot;&quot;
+export MAKEFLAGS= ;make V=s -j1 -r -s -f include/scan.mk SCAN_TARGET=&quot;targetinfo&quot; SCAN_DIR=&quot;target/linux&quot; SCAN_NAME=&quot;target&quot; SCAN_DEPTH=2 SCAN_EXTRA=&quot;&quot; SCAN_MAKEOPTS=&quot;TARGET_BUILD=1&quot;
+for type in package target; do \
+    f=tmp/.$&#123;type&#125;info; t=tmp/.config-$&#123;type&#125;.in; \
+    [ &quot;$t&quot; -nt &quot;$f&quot; ] || ./scripts/$&#123;type&#125;-metadata.pl  config &quot;$f&quot; &gt; &quot;$t&quot; || &#123; rm -f &quot;$t&quot;; echo &quot;Failed to build $t&quot;; false; break; &#125;; \
+done
+[ tmp/.config-feeds.in -nt tmp/.packageauxvars ] || ./scripts/feeds feed_config &gt; tmp/.config-feeds.in
+./scripts/package-metadata.pl mk tmp/.packageinfo &gt; tmp/.packagedeps || &#123; rm -f tmp/.packagedeps; false; &#125;
+./scripts/package-metadata.pl pkgaux tmp/.packageinfo &gt; tmp/.packageauxvars || &#123; rm -f tmp/.packageauxvars; false; &#125;
+./scripts/package-metadata.pl usergroup tmp/.packageinfo &gt; tmp/.packageusergroup || &#123; rm -f tmp/.packageusergroup; false; &#125;
+touch /home/litreily/openwrt/tmp/.build
+[ -L .config ] &amp;&amp; export KCONFIG_OVERWRITECONFIG=1; \
+    scripts/config/conf  --oldconfig Config.in</code></pre>
+<p>可以看到最后一行对应的就是我们推算出来的结果。同样可知其它相关config的指令是：</p>
+<ul>
+<li><code>make defconfig</code>: scripts/config/conf --defconfig=.config Config.in</li>
+<li><code>make oldconfig</code>: scripts/config/conf --oldconfig Config.in</li>
+<li><code>make menuconfig</code>: scripts/config/mconf Config.in</li>
+</ul>
+<p>也就是说，make xxxconfig 最终执行的是 scripts/config 目录下的conf, mconf 指令，这两个指令也是需要编译的。在执行make xxxconfig时，conf, mconf 作为依赖文件同样会被编译。</p>
+<h2 id="make-defconfig-详解"><a href="#make-defconfig-详解" class="headerlink" title="make defconfig 详解"></a>make defconfig 详解</h2><p>如果想要更加详细的 make 信息，可以使用 <code>-d</code> 参数，打印 debug 信息，根据 debug 信息可以看到编译过程中各种依赖嵌套的判断流程，对于学习 make 指令非常有用。</p>
+<p>以 <code>make defconfig</code> 为例，执行 <code>make -d V=s defconfig</code></p>
+<pre><code class="log">GNU Make 4.2.1
+Built for x86_64-pc-linux-gnu
+Copyright (C) 1988-2016 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt;
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+Reading makefiles...
+Reading makefile &#39;Makefile&#39;...
+Reading makefile &#39;/home/litreily/openwrt/include/debug.mk&#39; (search path) (no ~ expansion)...
+Reading makefile &#39;/home/litreily/openwrt/include/depends.mk&#39; (search path) (no ~ expansion)...
+Reading makefile &#39;/home/litreily/openwrt/include/toplevel.mk&#39; (search path) (no ~ expansion)...
+Reading makefile &#39;/home/litreily/openwrt/include/verbose.mk&#39; (search path) (no ~ expansion)...
+Updating makefiles....
+ Considering target file &#39;/home/litreily/openwrt/include/verbose.mk&#39;.
+  Looking for an implicit rule for &#39;/home/litreily/openwrt/include/verbose.mk&#39;.
+  Trying pattern rule with stem &#39;verbose.mk&#39;.
+  Found an implicit rule for &#39;/home/litreily/openwrt/include/verbose.mk&#39;.
+  Finished prerequisites of target file &#39;/home/litreily/openwrt/include/verbose.mk&#39;.
+ No need to remake target &#39;/home/litreily/openwrt/include/verbose.mk&#39;.
+ Considering target file &#39;/home/litreily/openwrt/include/toplevel.mk&#39;.
+  Looking for an implicit rule for &#39;/home/litreily/openwrt/include/toplevel.mk&#39;.
+  Trying pattern rule with stem &#39;toplevel.mk&#39;.
+  Found an implicit rule for &#39;/home/litreily/openwrt/include/toplevel.mk&#39;.
+  Finished prerequisites of target file &#39;/home/litreily/openwrt/include/toplevel.mk&#39;.
+ No need to remake target &#39;/home/litreily/openwrt/include/toplevel.mk&#39;.
+ Considering target file &#39;/home/litreily/openwrt/include/depends.mk&#39;.
+  Looking for an implicit rule for &#39;/home/litreily/openwrt/include/depends.mk&#39;.
+  Trying pattern rule with stem &#39;depends.mk&#39;.
+  Found an implicit rule for &#39;/home/litreily/openwrt/include/depends.mk&#39;.
+  Finished prerequisites of target file &#39;/home/litreily/openwrt/include/depends.mk&#39;.
+ No need to remake target &#39;/home/litreily/openwrt/include/depends.mk&#39;.
+ Considering target file &#39;/home/litreily/openwrt/include/debug.mk&#39;.
+  Looking for an implicit rule for &#39;/home/litreily/openwrt/include/debug.mk&#39;.
+  Trying pattern rule with stem &#39;debug.mk&#39;.
+  Found an implicit rule for &#39;/home/litreily/openwrt/include/debug.mk&#39;.
+  Finished prerequisites of target file &#39;/home/litreily/openwrt/include/debug.mk&#39;.
+ No need to remake target &#39;/home/litreily/openwrt/include/debug.mk&#39;.
+ Considering target file &#39;Makefile&#39;.
+  Looking for an implicit rule for &#39;Makefile&#39;.
+  Trying pattern rule with stem &#39;Makefile&#39;.
+  Found an implicit rule for &#39;Makefile&#39;.
+  Finished prerequisites of target file &#39;Makefile&#39;.
+ No need to remake target &#39;Makefile&#39;.
+Updating goal targets....
+Considering target file &#39;defconfig&#39;.
+ File &#39;defconfig&#39; does not exist.
+  Considering target file &#39;scripts/config/conf&#39;.
+   File &#39;scripts/config/conf&#39; does not exist.
+   Looking for an implicit rule for &#39;scripts/config/conf&#39;.
+   Trying pattern rule with stem &#39;c&#39;.
+   Found an implicit rule for &#39;scripts/config/conf&#39;.
+    Considering target file &#39;staging_dir/host/.prereq-build&#39;.
+     File &#39;staging_dir/host/.prereq-build&#39; does not exist.
+      Considering target file &#39;include/prereq-build.mk&#39;.
+       Looking for an implicit rule for &#39;include/prereq-build.mk&#39;.
+       Trying pattern rule with stem &#39;prereq-build.mk&#39;.
+       Found an implicit rule for &#39;include/prereq-build.mk&#39;.
+       Finished prerequisites of target file &#39;include/prereq-build.mk&#39;.
+      No need to remake target &#39;include/prereq-build.mk&#39;.
+     Finished prerequisites of target file &#39;staging_dir/host/.prereq-build&#39;.
+    Must remake target &#39;staging_dir/host/.prereq-build&#39;.
+Putting child 0x7fffcb0a1800 (staging_dir/host/.prereq-build) PID 15999 on the chain.
+Live child 0x7fffcb0a1800 (staging_dir/host/.prereq-build) PID 15999 
+Reaping winning child 0x7fffcb0a1800 PID 15999 
+Live child 0x7fffcb0a1800 (staging_dir/host/.prereq-build) PID 16000 
+Checking &#39;working-make&#39;... ok.
+Checking &#39;case-sensitive-fs&#39;... ok.
+Checking &#39;proper-umask&#39;... ok.
+Checking &#39;gcc&#39;... ok.
+Checking &#39;working-gcc&#39;... ok.
+Checking &#39;g++&#39;... ok.
+Checking &#39;working-g++&#39;... ok.
+Checking &#39;ncurses&#39;... ok.
+Checking &#39;perl-data-dumper&#39;... ok.
+Checking &#39;perl-thread-queue&#39;... ok.
+Checking &#39;tar&#39;... ok.
+Checking &#39;find&#39;... ok.
+Checking &#39;bash&#39;... ok.
+Checking &#39;xargs&#39;... ok.
+Checking &#39;patch&#39;... ok.
+Checking &#39;diff&#39;... ok.
+Checking &#39;cp&#39;... ok.
+Checking &#39;seq&#39;... ok.
+Checking &#39;awk&#39;... ok.
+Checking &#39;grep&#39;... ok.
+Checking &#39;egrep&#39;... ok.
+Checking &#39;getopt&#39;... ok.
+Checking &#39;stat&#39;... ok.
+Checking &#39;unzip&#39;... ok.
+Checking &#39;bzip2&#39;... ok.
+Checking &#39;wget&#39;... ok.
+Checking &#39;perl&#39;... ok.
+Checking &#39;python2-cleanup&#39;... ok.
+Checking &#39;python&#39;... ok.
+Checking &#39;python3&#39;... ok.
+Checking &#39;git&#39;... ok.
+Checking &#39;file&#39;... ok.
+Checking &#39;rsync&#39;... ok.
+Checking &#39;ldconfig-stub&#39;... ok.
+Reaping winning child 0x7fffcb0a1800 PID 16000 
+Live child 0x7fffcb0a1800 (staging_dir/host/.prereq-build) PID 16418 
+Reaping winning child 0x7fffcb0a1800 PID 16418 
+Removing child 0x7fffcb0a1800 PID 16418 from chain.
+    Successfully remade target file &#39;staging_dir/host/.prereq-build&#39;.
+   Finished prerequisites of target file &#39;scripts/config/conf&#39;.
+  Must remake target &#39;scripts/config/conf&#39;.
+Putting child 0x7fffcb0a1b70 (scripts/config/conf) PID 16422 on the chain.
+Live child 0x7fffcb0a1b70 (scripts/config/conf) PID 16422 
+make[1]: Entering directory &#39;/home/litreily/openwrt/scripts/config&#39;
+cc -O2   -c -o conf.o conf.c
+cc -O2   -c -o confdata.o confdata.c
+cc -O2   -c -o expr.o expr.c
+cc -O2 -I ./.   -c -o lexer.lex.o lexer.lex.c
+cc -O2 -I ./.   -c -o parser.tab.o parser.tab.c
+cc -O2   -c -o preprocess.o preprocess.c
+cc -O2   -c -o symbol.o symbol.c
+cc -O2   -c -o util.o util.c
+cc   conf.o confdata.o expr.o lexer.lex.o parser.tab.o preprocess.o symbol.o util.o   -o conf
+make[1]: Leaving directory &#39;/home/litreily/openwrt/scripts/config&#39;
+Reaping winning child 0x7fffcb0a1b70 PID 16422 
+Removing child 0x7fffcb0a1b70 PID 16422 from chain.
+  Successfully remade target file &#39;scripts/config/conf&#39;.
+  Considering target file &#39;prepare-tmpinfo&#39;.
+   File &#39;prepare-tmpinfo&#39; does not exist.
+    Considering target file &#39;FORCE&#39;.
+     File &#39;FORCE&#39; does not exist.
+     Finished prerequisites of target file &#39;FORCE&#39;.
+    Must remake target &#39;FORCE&#39;.
+    Successfully remade target file &#39;FORCE&#39;.
+   Finished prerequisites of target file &#39;prepare-tmpinfo&#39;.
+  Must remake target &#39;prepare-tmpinfo&#39;.
+Putting child 0x7fffcb0a2010 (prepare-tmpinfo) PID 16454 on the chain.
+Live child 0x7fffcb0a2010 (prepare-tmpinfo) PID 16454 
+GNU Make 4.2.1
+Built for x86_64-pc-linux-gnu
+Copyright (C) 1988-2016 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt;
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+Reading makefiles...
+Reading makefile &#39;Makefile&#39;...
+Reading makefile &#39;/home/litreily/openwrt/include/debug.mk&#39; (search path) (no ~ expansion)...
+Reading makefile &#39;/home/litreily/openwrt/include/depends.mk&#39; (search path) (no ~ expansion)...
+Reading makefile &#39;/home/litreily/openwrt/include/toplevel.mk&#39; (search path) (no ~ expansion)...
+Reading makefile &#39;/home/litreily/openwrt/include/verbose.mk&#39; (search path) (no ~ expansion)...
+Updating makefiles....
+ Considering target file &#39;/home/litreily/openwrt/include/verbose.mk&#39;.
+  Looking for an implicit rule for &#39;/home/litreily/openwrt/include/verbose.mk&#39;.
+  Trying pattern rule with stem &#39;verbose.mk&#39;.
+  Found an implicit rule for &#39;/home/litreily/openwrt/include/verbose.mk&#39;.
+  Finished prerequisites of target file &#39;/home/litreily/openwrt/include/verbose.mk&#39;.
+ No need to remake target &#39;/home/litreily/openwrt/include/verbose.mk&#39;.
+ Considering target file &#39;/home/litreily/openwrt/include/toplevel.mk&#39;.
+  Looking for an implicit rule for &#39;/home/litreily/openwrt/include/toplevel.mk&#39;.
+  Trying pattern rule with stem &#39;toplevel.mk&#39;.
+  Found an implicit rule for &#39;/home/litreily/openwrt/include/toplevel.mk&#39;.
+  Finished prerequisites of target file &#39;/home/litreily/openwrt/include/toplevel.mk&#39;.
+ No need to remake target &#39;/home/litreily/openwrt/include/toplevel.mk&#39;.
+ Considering target file &#39;/home/litreily/openwrt/include/depends.mk&#39;.
+  Looking for an implicit rule for &#39;/home/litreily/openwrt/include/depends.mk&#39;.
+  Trying pattern rule with stem &#39;depends.mk&#39;.
+  Found an implicit rule for &#39;/home/litreily/openwrt/include/depends.mk&#39;.
+  Finished prerequisites of target file &#39;/home/litreily/openwrt/include/depends.mk&#39;.
+ No need to remake target &#39;/home/litreily/openwrt/include/depends.mk&#39;.
+ Considering target file &#39;/home/litreily/openwrt/include/debug.mk&#39;.
+  Looking for an implicit rule for &#39;/home/litreily/openwrt/include/debug.mk&#39;.
+  Trying pattern rule with stem &#39;debug.mk&#39;.
+  Found an implicit rule for &#39;/home/litreily/openwrt/include/debug.mk&#39;.
+  Finished prerequisites of target file &#39;/home/litreily/openwrt/include/debug.mk&#39;.
+ No need to remake target &#39;/home/litreily/openwrt/include/debug.mk&#39;.
+ Considering target file &#39;Makefile&#39;.
+  Looking for an implicit rule for &#39;Makefile&#39;.
+  Trying pattern rule with stem &#39;Makefile&#39;.
+  Found an implicit rule for &#39;Makefile&#39;.
+  Finished prerequisites of target file &#39;Makefile&#39;.
+ No need to remake target &#39;Makefile&#39;.
+Updating goal targets....
+Considering target file &#39;staging_dir/host/.prereq-build&#39;.
+  Considering target file &#39;include/prereq-build.mk&#39;.
+   Looking for an implicit rule for &#39;include/prereq-build.mk&#39;.
+   Trying pattern rule with stem &#39;prereq-build.mk&#39;.
+   Found an implicit rule for &#39;include/prereq-build.mk&#39;.
+   Finished prerequisites of target file &#39;include/prereq-build.mk&#39;.
+  No need to remake target &#39;include/prereq-build.mk&#39;.
+ Finished prerequisites of target file &#39;staging_dir/host/.prereq-build&#39;.
+ Prerequisite &#39;include/prereq-build.mk&#39; is older than target &#39;staging_dir/host/.prereq-build&#39;.
+No need to remake target &#39;staging_dir/host/.prereq-build&#39;.
+Reaping winning child 0x7fffcb0a2010 PID 16454 
+Live child 0x7fffcb0a2010 (prepare-tmpinfo) PID 16505 
+Reaping winning child 0x7fffcb0a2010 PID 16505 
+Live child 0x7fffcb0a2010 (prepare-tmpinfo) PID 16506 
+
+Collecting package info: package/base-files
+Collecting package info: package/boot/arm-trusted-firmware-mvebu
+Collecting package info: package/boot/arm-trusted-firmware-rockchip
+Collecting package info: package/boot/arm-trusted-firmware-sunxi
+Collecting package info: package/boot/at91bootstrap
+Collecting package info: package/boot/fconfig
+Collecting package info: package/boot/grub2
+Collecting package info: package/boot/imx-bootlets
+Collecting package info: package/boot/kexec-tools
+Collecting package info: package/boot/kobs-ng
+Collecting package info: package/boot/mt7623n-preloader
+Collecting package info: package/boot/tfa-layerscape
+Collecting package info: package/boot/uboot-at91
+Collecting package info: package/boot/uboot-envtools
+Collecting package info: package/boot/uboot-fritz4040
+Collecting package info: package/boot/uboot-imx6
+Collecting package info: package/boot/uboot-kirkwood
+Collecting package info: package/boot/uboot-lantiq
+Collecting package info: package/boot/uboot-layerscape
+Collecting package info: package/boot/uboot-mediatek
+Collecting package info: package/boot/uboot-mvebu
+Collecting package info: package/boot/uboot-mxs
+Collecting package info: package/boot/uboot-omap
+Collecting package info: package/boot/uboot-oxnas
+Collecting package info: package/boot/uboot-ramips
+Collecting package info: package/boot/uboot-rockchip
+Collecting package info: package/boot/uboot-sunxi
+Collecting package info: package/boot/uboot-tegra
+Collecting package info: package/boot/uboot-zynq
+Collecting package info: package/devel/binutils
+Collecting package info: package/devel/gdb
+Collecting package info: package/devel/perf
+Collecting package info: package/devel/strace
+Collecting package info: package/devel/trace-cmd
+Collecting package info: package/devel/valgrind
+Collecting package info: package/firmware/amd64-microcode
+Collecting package info: package/firmware/ath10k-ct-firmware
+Collecting package info: package/firmware/b43legacy-firmware
+Collecting package info: package/firmware/cypress-firmware
+Collecting package info: package/firmware/cypress-nvram
+Collecting package info: package/firmware/intel-microcode
+Collecting package info: package/firmware/ipq-wifi
+Collecting package info: package/firmware/lantiq/dsl-vrx200-firmware-xdsl
+Collecting package info: package/firmware/layerscape/fman-ucode
+Collecting package info: package/firmware/layerscape/ls-dpl
+Collecting package info: package/firmware/layerscape/ls-mc
+Collecting package info: package/firmware/layerscape/ls-rcw
+Collecting package info: package/firmware/layerscape/ppfe-firmware
+Collecting package info: package/firmware/linux-firmware
+Collecting package info: package/firmware/prism54-firmware
+Collecting package info: package/firmware/wireless-regdb
+Collecting package info: package/kernel/acx-mac80211
+Collecting package info: package/kernel/ath10k-ct
+Collecting package info: package/kernel/bcm27xx-gpu-fw
+Collecting package info: package/kernel/bcm63xx-cfe
+Collecting package info: package/kernel/broadcom-wl
+Collecting package info: package/kernel/button-hotplug
+Collecting package info: package/kernel/cryptodev-linux
+Collecting package info: package/kernel/exfat
+Collecting package info: package/kernel/gpio-button-hotplug
+Collecting package info: package/kernel/gpio-nct5104d
+Collecting package info: package/kernel/hwmon-gsc
+Collecting package info: package/kernel/lantiq/ltq-adsl
+Collecting package info: package/kernel/lantiq/ltq-adsl-fw
+Collecting package info: package/kernel/lantiq/ltq-adsl-mei
+Collecting package info: package/kernel/lantiq/ltq-atm
+Collecting package info: package/kernel/lantiq/ltq-deu
+Collecting package info: package/kernel/lantiq/ltq-ifxos
+Collecting package info: package/kernel/lantiq/ltq-ptm
+Collecting package info: package/kernel/lantiq/ltq-tapi
+Collecting package info: package/kernel/lantiq/ltq-vdsl
+Collecting package info: package/kernel/lantiq/ltq-vdsl-fw
+Collecting package info: package/kernel/lantiq/ltq-vdsl-mei
+Collecting package info: package/kernel/lantiq/ltq-vmmc
+Collecting package info: package/kernel/linux
+Collecting package info: package/kernel/mac80211
+Collecting package info: package/kernel/mt76
+Collecting package info: package/kernel/mt7621-qtn-rgmii
+Collecting package info: package/kernel/mwlwifi
+Collecting package info: package/kernel/nat46
+Collecting package info: package/kernel/om-watchdog
+Collecting package info: package/kernel/rtc-rv5c386a
+Collecting package info: package/kernel/rtl8812au-ct
+Collecting package info: package/kernel/trelay
+Collecting package info: package/libs/argp-standalone
+Collecting package info: package/libs/elfutils
+Collecting package info: package/libs/gettext
+Collecting package info: package/libs/gettext-full
+Collecting package info: package/libs/gmp
+Collecting package info: package/libs/jansson
+Collecting package info: package/libs/libaudit
+Collecting package info: package/libs/libbsd
+Collecting package info: package/libs/libevent2
+Collecting package info: package/libs/libiconv
+Collecting package info: package/libs/libiconv-full
+Collecting package info: package/libs/libjson-c
+Collecting package info: package/libs/libmnl
+Collecting package info: package/libs/libnetfilter-conntrack
+Collecting package info: package/libs/libnfnetlink
+Collecting package info: package/libs/libnftnl
+Collecting package info: package/libs/libnl
+Collecting package info: package/libs/libnl-tiny
+Collecting package info: package/libs/libpcap
+Collecting package info: package/libs/libselinux
+Collecting package info: package/libs/libsemanage
+Collecting package info: package/libs/libsepol
+Collecting package info: package/libs/libtool
+Collecting package info: package/libs/libubox
+Collecting package info: package/libs/libunwind
+Collecting package info: package/libs/libusb
+Collecting package info: package/libs/mbedtls
+Collecting package info: package/libs/musl-fts
+Collecting package info: package/libs/ncurses
+Collecting package info: package/libs/nettle
+Collecting package info: package/libs/openssl
+Collecting package info: package/libs/pcre
+Collecting package info: package/libs/popt
+Collecting package info: package/libs/readline
+Collecting package info: package/libs/sysfsutils
+Collecting package info: package/libs/toolchain
+Collecting package info: package/libs/uclibc++
+Collecting package info: package/libs/uclient
+Collecting package info: package/libs/ustream-ssl
+Collecting package info: package/libs/wolfssl
+Collecting package info: package/libs/zlib
+Collecting package info: package/network/config/firewall
+Collecting package info: package/network/config/gre
+Collecting package info: package/network/config/ipip
+Collecting package info: package/network/config/ltq-adsl-app
+Collecting package info: package/network/config/ltq-vdsl-app
+Collecting package info: package/network/config/netifd
+Collecting package info: package/network/config/qos-scripts
+Collecting package info: package/network/config/soloscli
+Collecting package info: package/network/config/swconfig
+Collecting package info: package/network/config/vti
+Collecting package info: package/network/config/vxlan
+Collecting package info: package/network/config/xfrm
+Collecting package info: package/network/ipv6/464xlat
+Collecting package info: package/network/ipv6/6in4
+Collecting package info: package/network/ipv6/6rd
+Collecting package info: package/network/ipv6/6to4
+Collecting package info: package/network/ipv6/ds-lite
+Collecting package info: package/network/ipv6/map
+Collecting package info: package/network/ipv6/odhcp6c
+Collecting package info: package/network/ipv6/thc-ipv6
+Collecting package info: package/network/services/dnsmasq
+Collecting package info: package/network/services/dropbear
+Collecting package info: package/network/services/ead
+Collecting package info: package/network/services/hostapd
+Collecting package info: package/network/services/igmpproxy
+Collecting package info: package/network/services/ipset-dns
+Collecting package info: package/network/services/lldpd
+Collecting package info: package/network/services/odhcpd
+Collecting package info: package/network/services/omcproxy
+Collecting package info: package/network/services/ppp
+Collecting package info: package/network/services/relayd
+Collecting package info: package/network/services/uhttpd
+Collecting package info: package/network/services/umdns
+Collecting package info: package/network/services/wireguard
+Collecting package info: package/network/utils/adb-enablemodem
+Collecting package info: package/network/utils/arptables
+Collecting package info: package/network/utils/bpftools
+Collecting package info: package/network/utils/comgt
+Collecting package info: package/network/utils/dante
+Collecting package info: package/network/utils/ebtables
+Collecting package info: package/network/utils/ethtool
+Collecting package info: package/network/utils/iperf
+Collecting package info: package/network/utils/iperf3
+Collecting package info: package/network/utils/iproute2
+Collecting package info: package/network/utils/ipset
+Collecting package info: package/network/utils/iptables
+Collecting package info: package/network/utils/iw
+Collecting package info: package/network/utils/iwcap
+Collecting package info: package/network/utils/iwinfo
+Collecting package info: package/network/utils/layerscape/restool
+Collecting package info: package/network/utils/linux-atm
+Collecting package info: package/network/utils/ltq-dsl-base
+Collecting package info: package/network/utils/maccalc
+Collecting package info: package/network/utils/nftables
+Collecting package info: package/network/utils/owipcalc
+Collecting package info: package/network/utils/resolveip
+Collecting package info: package/network/utils/rssileds
+Collecting package info: package/network/utils/tcpdump
+Collecting package info: package/network/utils/umbim
+Collecting package info: package/network/utils/uqmi
+Collecting package info: package/network/utils/wireguard-tools
+Collecting package info: package/network/utils/wireless-tools
+Collecting package info: package/network/utils/wpan-tools
+Collecting package info: package/network/utils/wwan
+Collecting package info: package/system/ca-certificates
+Collecting package info: package/system/fstools
+Collecting package info: package/system/fwtool
+Collecting package info: package/system/iucode-tool
+Collecting package info: package/system/mtd
+Collecting package info: package/system/openwrt-keyring
+Collecting package info: package/system/opkg
+Collecting package info: package/system/procd
+Collecting package info: package/system/refpolicy
+Collecting package info: package/system/rpcd
+Collecting package info: package/system/selinux-policy
+Collecting package info: package/system/ubox
+Collecting package info: package/system/ubus
+Collecting package info: package/system/ucert
+Collecting package info: package/system/uci
+Collecting package info: package/system/urandom-seed
+Collecting package info: package/system/urngd
+Collecting package info: package/system/usign
+Collecting package info: package/system/zram-swap
+Collecting package info: package/utils/adb
+Collecting package info: package/utils/bcm27xx-userland
+Collecting package info: package/utils/bsdiff
+Collecting package info: package/utils/busybox
+Collecting package info: package/utils/bzip2
+Collecting package info: package/utils/checkpolicy
+Collecting package info: package/utils/ct-bugcheck
+Collecting package info: package/utils/e2fsprogs
+Collecting package info: package/utils/f2fs-tools
+Collecting package info: package/utils/fbtest
+Collecting package info: package/utils/fritz-tools
+Collecting package info: package/utils/jboot-tools
+Collecting package info: package/utils/jsonfilter
+Collecting package info: package/utils/lua
+Collecting package info: package/utils/lua5.3
+Collecting package info: package/utils/mdadm
+Collecting package info: package/utils/mtd-utils
+Collecting package info: package/utils/nvram
+Collecting package info: package/utils/osafeloader
+Collecting package info: package/utils/oseama
+Collecting package info: package/utils/otrx
+Collecting package info: package/utils/policycoreutils
+Collecting package info: package/utils/px5g-mbedtls
+Collecting package info: package/utils/px5g-wolfssl
+Collecting package info: package/utils/ravpower-mcu
+Collecting package info: package/utils/secilc
+Collecting package info: package/utils/spidev_test
+Collecting package info: package/utils/ugps
+Collecting package info: package/utils/usbmode
+Collecting package info: package/utils/usbreset
+Collecting package info: package/utils/usbutils
+Collecting package info: package/utils/util-linux
+Collecting package info: merging...
+Collecting package info: done
+Reaping winning child 0x7fffcb0a2010 PID 16506 
+Live child 0x7fffcb0a2010 (prepare-tmpinfo) PID 18058 
+
+Collecting target info: target/linux/apm821xx
+Collecting target info: target/linux/arc770
+Collecting target info: target/linux/archs38
+Collecting target info: target/linux/armvirt
+Collecting target info: target/linux/at91
+Collecting target info: target/linux/ath25
+Collecting target info: target/linux/ath79
+Collecting target info: target/linux/bcm27xx
+Collecting target info: target/linux/bcm47xx
+Collecting target info: target/linux/bcm53xx
+Collecting target info: target/linux/bcm63xx
+Collecting target info: target/linux/gemini
+Collecting target info: target/linux/imx6
+Collecting target info: target/linux/ipq40xx
+Collecting target info: target/linux/ipq806x
+Collecting target info: target/linux/ipq807x
+Collecting target info: target/linux/kirkwood
+Collecting target info: target/linux/lantiq
+Collecting target info: target/linux/layerscape
+Collecting target info: target/linux/malta
+Collecting target info: target/linux/mediatek
+Collecting target info: target/linux/mpc85xx
+Collecting target info: target/linux/mvebu
+Collecting target info: target/linux/mxs
+Collecting target info: target/linux/octeon
+Collecting target info: target/linux/octeontx
+Collecting target info: target/linux/omap
+Collecting target info: target/linux/oxnas
+Collecting target info: target/linux/pistachio
+Collecting target info: target/linux/ramips
+Collecting target info: target/linux/realtek
+Collecting target info: target/linux/rockchip
+Collecting target info: target/linux/sunxi
+Collecting target info: target/linux/tegra
+Collecting target info: target/linux/uml
+Collecting target info: target/linux/x86
+Collecting target info: target/linux/zynq
+Collecting target info: merging...
+Collecting target info: done
+Reaping winning child 0x7fffcb0a2010 PID 18058 
+Live child 0x7fffcb0a2010 (prepare-tmpinfo) PID 20209 
+Reaping winning child 0x7fffcb0a2010 PID 20209 
+Live child 0x7fffcb0a2010 (prepare-tmpinfo) PID 20212 
+Reaping winning child 0x7fffcb0a2010 PID 20212 
+Live child 0x7fffcb0a2010 (prepare-tmpinfo) PID 20217 
+WARNING: Makefile &#39;package/utils/busybox/Makefile&#39; has a dependency on &#39;libpam&#39;, which does not exist
+WARNING: Makefile &#39;package/utils/busybox/Makefile&#39; has a dependency on &#39;libpam&#39;, which does not exist
+WARNING: Makefile &#39;package/utils/busybox/Makefile&#39; has a build dependency on &#39;libpam&#39;, which does not exist
+WARNING: Makefile &#39;package/boot/kexec-tools/Makefile&#39; has a dependency on &#39;liblzma&#39;, which does not exist
+WARNING: Makefile &#39;package/network/services/lldpd/Makefile&#39; has a dependency on &#39;libnetsnmp&#39;, which does not exist
+WARNING: Makefile &#39;package/utils/policycoreutils/Makefile&#39; has a dependency on &#39;libpam&#39;, which does not exist
+WARNING: Makefile &#39;package/utils/policycoreutils/Makefile&#39; has a dependency on &#39;libpam&#39;, which does not exist
+WARNING: Makefile &#39;package/utils/policycoreutils/Makefile&#39; has a build dependency on &#39;libpam&#39;, which does not exist
+Reaping winning child 0x7fffcb0a2010 PID 20217 
+Live child 0x7fffcb0a2010 (prepare-tmpinfo) PID 20219 
+Reaping winning child 0x7fffcb0a2010 PID 20219 
+Live child 0x7fffcb0a2010 (prepare-tmpinfo) PID 20221 
+Reaping winning child 0x7fffcb0a2010 PID 20221 
+Live child 0x7fffcb0a2010 (prepare-tmpinfo) PID 20223 
+Reaping winning child 0x7fffcb0a2010 PID 20223 
+Removing child 0x7fffcb0a2010 PID 20223 from chain.
+  Successfully remade target file &#39;prepare-tmpinfo&#39;.
+  Pruning file &#39;FORCE&#39;.
+ Finished prerequisites of target file &#39;defconfig&#39;.
+Must remake target &#39;defconfig&#39;.
+touch .config
+Putting child 0x7fffcb096b50 (defconfig) PID 20227 on the chain.
+Live child 0x7fffcb096b50 (defconfig) PID 20227 
+Reaping winning child 0x7fffcb096b50 PID 20227 
+Live child 0x7fffcb096b50 (defconfig) PID 20228 
+Reaping winning child 0x7fffcb096b50 PID 20228 
+[ -L .config ] &amp;&amp; export KCONFIG_OVERWRITECONFIG=1; \
+    scripts/config/conf  --defconfig=.config Config.in
+Live child 0x7fffcb096b50 (defconfig) PID 20229 
+#
+# configuration written to .config
+#
+Reaping winning child 0x7fffcb096b50 PID 20229 
+Removing child 0x7fffcb096b50 PID 20229 from chain.
+Successfully remade target file &#39;defconfig&#39;.</code></pre>
+<p>从以上 log 信息中可以非常完整清楚的看到 make 指令的执行流程，其中包含了每个目标文件及其依赖文件的规则查找和执行。下面我们结合 log 以及 Makefile 来详细追踪一下 <code>make defconfig</code> 的执行流程。</p>
+<p>首先要知道 make 的目标文件是<code>defconfig</code>, 对应 toplevel.mk 中的</p>
+<pre><code class="makefile">defconfig: scripts/config/conf prepare-tmpinfo FORCE
+    touch .config
+    @if [ ! -s .config -a -e $(HOME)/.openwrt/defconfig ]; then cp $(HOME)/.openwrt/defconfig .config; fi
+    [ -L .config ] &amp;&amp; export KCONFIG_OVERWRITECONFIG=1; \
+        $&lt; $(KCONF_FLAGS) --defconfig=.config Config.in</code></pre>
+<p>可以知道其依赖项包含3个：</p>
+<ol>
+<li>scripts/config/conf</li>
+<li>prepare-tmpinfo</li>
+<li>FORCE</li>
+</ol>
+<h3 id="script-config-conf"><a href="#script-config-conf" class="headerlink" title="script/config/conf"></a>script/config/conf</h3><p>对于依赖文件 <code>scripts/config/conf</code> ，make 执行log如下：</p>
+<pre><code class="log">Considering target file &#39;defconfig&#39;.
+ File &#39;defconfig&#39; does not exist.
+  Considering target file &#39;scripts/config/conf&#39;.
+   File &#39;scripts/config/conf&#39; does not exist.
+   Looking for an implicit rule for &#39;scripts/config/conf&#39;.
+   Trying pattern rule with stem &#39;c&#39;.
+   Found an implicit rule for &#39;scripts/config/conf&#39;.
+    Considering target file &#39;staging_dir/host/.prereq-build&#39;.
+     File &#39;staging_dir/host/.prereq-build&#39; does not exist.
+      Considering target file &#39;include/prereq-build.mk&#39;.
+       Looking for an implicit rule for &#39;include/prereq-build.mk&#39;.
+       Trying pattern rule with stem &#39;prereq-build.mk&#39;.
+       Found an implicit rule for &#39;include/prereq-build.mk&#39;.
+       Finished prerequisites of target file &#39;include/prereq-build.mk&#39;.
+      No need to remake target &#39;include/prereq-build.mk&#39;.
+     Finished prerequisites of target file &#39;staging_dir/host/.prereq-build&#39;.
+    Must remake target &#39;staging_dir/host/.prereq-build&#39;.</code></pre>
+<p>make 首先查找 <code>defconfig</code> 是否需要更新，发现不存在，因为本身就不是文件。然后查找第一个依赖 <code>scripts/config/conf</code> ，发现也不存在，然后去查找生成这个文件的规则，在 <code>toplevel.mk</code> 可以找到其规则如下：</p>
+<pre><code class="makefile">ifeq ($(FORCE),)
+  .config scripts/config/conf scripts/config/mconf: staging_dir/host/.prereq-build
+endif</code></pre>
+<p>其中 <code>$(FORCE)</code> 变量默认是个空值，所以条件满足，make 发现 conf 又依赖于 <code>staging_dir/host/.prereq-build</code>. 于是把 <code>.prereq-build</code> 当做新的目标，查找其规则，在 toplevel.mk 中如下：</p>
+<pre><code class="makefile">staging_dir/host/.prereq-build: include/prereq-build.mk
+    mkdir -p tmp
+    @$(_SINGLE)$(NO_TRACE_MAKE) -j1 -r -s -f $(TOPDIR)/include/prereq-build.mk prereq 2&gt;/dev/null || &#123; \
+        echo &quot;Prerequisite check failed. Use FORCE=1 to override.&quot;; \
+        false; \
+    &#125;
+  ifneq ($(realpath $(TOPDIR)/include/prepare.mk),)
+    @$(_SINGLE)$(NO_TRACE_MAKE) -j1 -r -s -f $(TOPDIR)/include/prepare.mk prepare 2&gt;/dev/null || &#123; \
+        echo &quot;Preparation failed.&quot;; \
+        false; \
+    &#125;
+  endif
+    touch $@</code></pre>
+<p>这里发现需要依赖 <code>include/prereq-build.mk</code> ，于是将该文件导入，并结束了对 <code>.prereq-build</code> 的依赖查找，同时标记需要重新生成目标 <code>staging_dir/host/.prereq-build</code>.</p>
+<pre><code class="log">     Finished prerequisites of target file &#39;staging_dir/host/.prereq-build&#39;.
+    Must remake target &#39;staging_dir/host/.prereq-build&#39;.</code></pre>
+<p>生成目标时，根据 Makefile 中 <code>.prereq-build</code> 规则，会执行以下指令:</p>
+<pre><code class="makefile">    mkdir -p tmp
+    @$(_SINGLE)$(NO_TRACE_MAKE) -j1 -r -s -f $(TOPDIR)/include/prereq-build.mk prereq 2&gt;/dev/null || &#123; \
+        echo &quot;Prerequisite check failed. Use FORCE=1 to override.&quot;; \
+        false; \
+    &#125;
+    touch $@</code></pre>
+<blockquote>
+<p>include 目录不包含文件 <code>prepare.mk</code>, 所以原先的的判断可以忽略。</p>
+</blockquote>
+<p>使用 <code>make -n defconfig</code> 可以看到以上指令解析后是这样的</p>
+<pre><code class="bash">mkdir -p tmp
+export MAKEFLAGS= ;make V=s -j1 -r -s -f /home/litreily/openwrt/include/prereq-build.mk prereq 2&gt;/dev/null || &#123; \
+    echo &quot;Prerequisite check failed. Use FORCE=1 to override.&quot;; \
+    false; \
+&#125;
+touch staging_dir/host/.prereq-build</code></pre>
+<p>以上 make 指令会根据 <code>prereq-build.mk</code> 和 <code>prereq.mk</code> 两个 Makefile 安装一些依赖工具。</p>
+<pre><code class="makefile"># Required for the toolchain
+$(eval $(call TestHostCommand,working-make, \
+    Please install GNU make v3.82 or later. (This version has bugs), \
+    $(MAKE) -v | grep -E &#39;Make (3\.8[2-9]|3\.9[0-9]|[4-9]\.)&#39;))
+
+$(eval $(call TestHostCommand,case-sensitive-fs, \
+    OpenWrt can only be built on a case-sensitive filesystem, \
+    rm -f $(TMP_DIR)/test.*; touch $(TMP_DIR)/test.fs; \
+        test ! -f $(TMP_DIR)/test.FS))
+
+$(eval $(call TestHostCommand,proper-umask, \
+    Please build with umask 022 - other values produce broken packages, \
+    umask | grep -xE 0?0[012][012]))
+
+# ...</code></pre>
+<p>其中的 <code>TestHostCommand</code> 定义于 <code>prereq.mk</code>. 对应的log如下，完整log参考前文。</p>
+<pre><code class="log">Putting child 0x7fffcb0a1800 (staging_dir/host/.prereq-build) PID 15999 on the chain.
+Live child 0x7fffcb0a1800 (staging_dir/host/.prereq-build) PID 15999 
+Reaping winning child 0x7fffcb0a1800 PID 15999 
+Live child 0x7fffcb0a1800 (staging_dir/host/.prereq-build) PID 16000 
+Checking &#39;working-make&#39;... ok.
+Checking &#39;case-sensitive-fs&#39;... ok.
+Checking &#39;proper-umask&#39;... ok.
+Checking &#39;gcc&#39;... ok.
+Checking &#39;working-gcc&#39;... ok.
+Checking &#39;g++&#39;... ok.
+Checking &#39;working-g++&#39;... ok.
+...
+Checking &#39;file&#39;... ok.
+Checking &#39;rsync&#39;... ok.
+Checking &#39;ldconfig-stub&#39;... ok.
+Reaping winning child 0x7fffcb0a1800 PID 16000 
+Live child 0x7fffcb0a1800 (staging_dir/host/.prereq-build) PID 16418 
+Reaping winning child 0x7fffcb0a1800 PID 16418 
+Removing child 0x7fffcb0a1800 PID 16418 from chain.
+    Successfully remade target file &#39;staging_dir/host/.prereq-build&#39;.
+   Finished prerequisites of target file &#39;scripts/config/conf&#39;.
+  Must remake target &#39;scripts/config/conf&#39;.</code></pre>
+<p>执行完 <code>prereq-build.mk</code> 之后，就完成了 <code>scripts/config/conf</code> 依赖文件的编译生成，接下来就是正式编译 <code>conf</code> 文件了。</p>
+<pre><code class="log">Putting child 0x7fffcb0a1b70 (scripts/config/conf) PID 16422 on the chain.
+Live child 0x7fffcb0a1b70 (scripts/config/conf) PID 16422 
+make[1]: Entering directory &#39;/home/litreily/openwrt/scripts/config&#39;
+cc -O2   -c -o conf.o conf.c
+cc -O2   -c -o confdata.o confdata.c
+cc -O2   -c -o expr.o expr.c
+cc -O2 -I ./.   -c -o lexer.lex.o lexer.lex.c
+cc -O2 -I ./.   -c -o parser.tab.o parser.tab.c
+cc -O2   -c -o preprocess.o preprocess.c
+cc -O2   -c -o symbol.o symbol.c
+cc -O2   -c -o util.o util.c
+cc   conf.o confdata.o expr.o lexer.lex.o parser.tab.o preprocess.o symbol.o util.o   -o conf
+make[1]: Leaving directory &#39;/home/litreily/openwrt/scripts/config&#39;
+Reaping winning child 0x7fffcb0a1b70 PID 16422 
+Removing child 0x7fffcb0a1b70 PID 16422 from chain.</code></pre>
+<p>可以看出来，编译 <code>conf</code> 文件时，会在子进程中先进入对应的目录 <code>scripts/config</code> , 然后使用该目录的Makefile进行编译。编译结束后离开该目录并退出子进程。</p>
+<p>至此，<code>defconfig</code> 的依赖文件 <code>scripts/config/conf</code> 就编译完成了。流程简述如下：</p>
+<pre><code class="log">make defconfig
+    check prerequisites of defconfig : 
+        scripts/config/conf, prepare-tmpinfo, FORCE
+        check prerequisites of scripts/config/conf:
+            staging_dir/host/.prereq-build
+            check prerequisites of staging_dir/host/.prereq-build
+                include/prereq-build.mk
+            finished prerequisites of staging_dir/host/.prereq-build
+            running commands in include/prereq-build.mk
+        finished prerequisites of scripts/config/conf
+        compiling scripts/config/conf
+        finished compile scripts/config/conf
+        ...</code></pre>
+<h3 id="prepare-tmpinfo"><a href="#prepare-tmpinfo" class="headerlink" title="prepare-tmpinfo"></a>prepare-tmpinfo</h3><p><code>scripts/config/conf</code> 编译完成后，接下来就是<code>defconfig</code> 的第二个依赖 <code>prepare-tmpinfo</code> 了。</p>
+<pre><code class="log">  Successfully remade target file &#39;scripts/config/conf&#39;.
+  Considering target file &#39;prepare-tmpinfo&#39;.
+   File &#39;prepare-tmpinfo&#39; does not exist.
+    Considering target file &#39;FORCE&#39;.
+     File &#39;FORCE&#39; does not exist.
+     Finished prerequisites of target file &#39;FORCE&#39;.
+    Must remake target &#39;FORCE&#39;.
+    Successfully remade target file &#39;FORCE&#39;.
+   Finished prerequisites of target file &#39;prepare-tmpinfo&#39;.
+  Must remake target &#39;prepare-tmpinfo&#39;.</code></pre>
+<p>同样，查找 <code>prepare-tmpinfo</code> 目录不存在，查找其规则如下：</p>
+<pre><code class="makefile">prepare-tmpinfo: FORCE
+    @+$(MAKE) -r -s staging_dir/host/.prereq-build $(PREP_MK)
+    mkdir -p tmp/info
+    $(_SINGLE)$(NO_TRACE_MAKE) -j1 -r -s -f include/scan.mk SCAN_TARGET=&quot;packageinfo&quot; SCAN_DIR=&quot;package&quot; SCAN_NAME=&quot;package&quot; SCAN_DEPTH=5 SCAN_EXTRA=&quot;&quot;
+    $(_SINGLE)$(NO_TRACE_MAKE) -j1 -r -s -f include/scan.mk SCAN_TARGET=&quot;targetinfo&quot; SCAN_DIR=&quot;target/linux&quot; SCAN_NAME=&quot;target&quot; SCAN_DEPTH=2 SCAN_EXTRA=&quot;&quot; SCAN_MAKEOPTS=&quot;TARGET_BUILD=1&quot;
+    for type in package target; do \
+        f=tmp/.$$&#123;type&#125;info; t=tmp/.config-$$&#123;type&#125;.in; \
+        [ &quot;$$t&quot; -nt &quot;$$f&quot; ] || ./scripts/$$&#123;type&#125;-metadata.pl $(_ignore) config &quot;$$f&quot; &gt; &quot;$$t&quot; || &#123; rm -f &quot;$$t&quot;; echo &quot;Failed to build $$t&quot;; false; break; &#125;; \
+    done
+    [ tmp/.config-feeds.in -nt tmp/.packageauxvars ] || ./scripts/feeds feed_config &gt; tmp/.config-feeds.in
+    ./scripts/package-metadata.pl mk tmp/.packageinfo &gt; tmp/.packagedeps || &#123; rm -f tmp/.packagedeps; false; &#125;
+    ./scripts/package-metadata.pl pkgaux tmp/.packageinfo &gt; tmp/.packageauxvars || &#123; rm -f tmp/.packageauxvars; false; &#125;
+    ./scripts/package-metadata.pl usergroup tmp/.packageinfo &gt; tmp/.packageusergroup || &#123; rm -f tmp/.packageusergroup; false; &#125;
+    touch $(TOPDIR)/tmp/.build</code></pre>
+<p>其依赖 <code>FORCE</code> 不存在，log提示remade target file <code>FORCE</code>, 实际上应该啥也没做，我尝试 echo ${FORCE} 也是个空值。</p>
+<p>按照以上指令，同样，通过 <code>make -n defconfig</code> 可以知晓对应指令如下：</p>
+<pre><code class="bash">make -r -s staging_dir/host/.prereq-build OPENWRT_BUILD= QUIET=0
+mkdir -p tmp
+export MAKEFLAGS= ;make V=s -j1 -r -s -f /home/litreily/openwrt/include/prereq-build.mk prereq 2&gt;/dev/null || &#123; \
+        echo &quot;Prerequisite check failed. Use FORCE=1 to override.&quot;; \
+        false; \
+&#125;
+touch staging_dir/host/.prereq-build
+mkdir -p tmp/info
+export MAKEFLAGS= ;make V=s -j1 -r -s -f include/scan.mk SCAN_TARGET=&quot;packageinfo&quot; SCAN_DIR=&quot;package&quot; SCAN_NAME=&quot;package&quot; SCAN_DEPTH=5 SCAN_EXTRA=&quot;&quot;
+export MAKEFLAGS= ;make V=s -j1 -r -s -f include/scan.mk SCAN_TARGET=&quot;targetinfo&quot; SCAN_DIR=&quot;target/linux&quot; SCAN_NAME=&quot;target&quot; SCAN_DEPTH=2 SCAN_EXTRA=&quot;&quot; SCAN_MAKEOPTS=&quot;TARGET_BUILD=1&quot;
+for type in package target; do \
+    f=tmp/.$&#123;type&#125;info; t=tmp/.config-$&#123;type&#125;.in; \
+    [ &quot;$t&quot; -nt &quot;$f&quot; ] || ./scripts/$&#123;type&#125;-metadata.pl config &quot;$f&quot; &gt; &quot;$t&quot; || &#123; rm -f &quot;$t&quot;; echo &quot;Failed to build $t&quot;; false; break; &#125;; \
+done
+[ tmp/.config-feeds.in -nt tmp/.packageauxvars ] || ./scripts/feeds feed_config &gt; tmp/.config-feeds.in
+./scripts/package-metadata.pl mk tmp/.packageinfo &gt; tmp/.packagedeps || &#123; rm -f tmp/.packagedeps; false; &#125;
+./scripts/package-metadata.pl pkgaux tmp/.packageinfo &gt; tmp/.packageauxvars || &#123; rm -f tmp/.packageauxvars; false; &#125;
+./scripts/package-metadata.pl usergroup tmp/.packageinfo &gt; tmp/.packageusergroup || &#123; rm -f tmp/.packageusergroup; false; &#125;
+touch /home/litreily/openwrt/tmp/.build</code></pre>
+<p><code>prepare-tmpinfo</code>, 顾名思义，就是准备一些临时信息，包括</p>
+<ol>
+<li>package</li>
+<li>target/linux</li>
+</ol>
+<p>这两个部分，通过 <code>include/scan.mk</code> 扫描以上两个目录，将所有的 package 以及 target 信息存到临时目录 tmp 下, 然后通过对应的perl脚本 <code>scripts/$&#123;type&#125;-metadata.pl</code> 生成 <code>tmp/.config-$&#123;type&#125;.in</code> 文件。</p>
+<ol>
+<li><code>tmp/.packageinfo</code> : <code>tmp/.config-package.in</code></li>
+<li><code>tmp/.targetinfo</code> : <code>tmp/config-target.in</code></li>
+</ol>
+<p>此外，通过<code>scripts</code>的其它脚本生成feed, package 相关的信息文件并存放于 tmp 目录。</p>
+<p><code>prepare-tmpinfo</code> 生成过程对应的log如下：</p>
+<pre><code class="log">Considering target file &#39;staging_dir/host/.prereq-build&#39;.
+  Considering target file &#39;include/prereq-build.mk&#39;.
+   Looking for an implicit rule for &#39;include/prereq-build.mk&#39;.
+   Trying pattern rule with stem &#39;prereq-build.mk&#39;.
+   Found an implicit rule for &#39;include/prereq-build.mk&#39;.
+   Finished prerequisites of target file &#39;include/prereq-build.mk&#39;.
+  No need to remake target &#39;include/prereq-build.mk&#39;.
+ Finished prerequisites of target file &#39;staging_dir/host/.prereq-build&#39;.
+ Prerequisite &#39;include/prereq-build.mk&#39; is older than target &#39;staging_dir/host/.prereq-build&#39;.
+No need to remake target &#39;staging_dir/host/.prereq-build&#39;.
+Reaping winning child 0x7fffcb0a2010 PID 16454 
+Live child 0x7fffcb0a2010 (prepare-tmpinfo) PID 16505 
+Reaping winning child 0x7fffcb0a2010 PID 16505 
+Live child 0x7fffcb0a2010 (prepare-tmpinfo) PID 16506 
+
+Collecting package info: package/base-files
+Collecting package info: package/boot/arm-trusted-firmware-mvebu
+Collecting package info: package/boot/arm-trusted-firmware-rockchip
+...
+Collecting package info: package/utils/usbreset
+Collecting package info: package/utils/usbutils
+Collecting package info: package/utils/util-linux
+Collecting package info: merging...
+Collecting package info: done
+Reaping winning child 0x7fffcb0a2010 PID 16506 
+Live child 0x7fffcb0a2010 (prepare-tmpinfo) PID 18058 
+
+Collecting target info: target/linux/apm821xx
+Collecting target info: target/linux/arc770
+Collecting target info: target/linux/archs38
+...
+Collecting target info: target/linux/uml
+Collecting target info: target/linux/x86
+Collecting target info: target/linux/zynq
+Collecting target info: merging...
+Collecting target info: done
+Reaping winning child 0x7fffcb0a2010 PID 18058 
+...</code></pre>
+<p>以上所有搜集信息相关的log都是 scan.mk 打印的。还有值得注意的是，<code>prepare-tmpinfo</code> 首条指令</p>
+<pre><code class="bash">make -r -s staging_dir/host/.prereq-build OPENWRT_BUILD= QUIET=0</code></pre>
+<p>实际上在编译 <code>scripts/config/conf</code> 之前已经按照依赖规则执行过了，所以在这里会检测 <code>.prereq-build</code> 的依赖没有更新，所以不重新生成。</p>
+<pre><code class="log">No need to remake target &#39;staging_dir/host/.prereq-build&#39;.</code></pre>
+<p>ok, 到此为止，<code>defconfig</code> 的两个依赖项都已编译完毕。只剩下一个 <code>FORCE</code>.</p>
+<h3 id="defconfig"><a href="#defconfig" class="headerlink" title="defconfig"></a>defconfig</h3><p>由于 <code>FORCE</code> 变量没有定义，所以直接略过，然后执行 <code>defconfig</code> 相关指令。</p>
+<pre><code class="makefile">defconfig: scripts/config/conf prepare-tmpinfo FORCE
+    touch .config
+    @if [ ! -s .config -a -e $(HOME)/.openwrt/defconfig ]; then cp $(HOME)/.openwrt/defconfig .config; fi
+    [ -L .config ] &amp;&amp; export KCONFIG_OVERWRITECONFIG=1; \
+        $&lt; $(KCONF_FLAGS) --defconfig=.config Config.in</code></pre>
+<p>这个指令前面已经解析过了，主体部分就是 <code>scripts/config/conf --defconfig=.config Config.in</code>, 详细log如下：</p>
+<pre><code class="log">  Successfully remade target file &#39;prepare-tmpinfo&#39;.
+  Pruning file &#39;FORCE&#39;.
+ Finished prerequisites of target file &#39;defconfig&#39;.
+Must remake target &#39;defconfig&#39;.
+touch .config
+Putting child 0x7fffcb096b50 (defconfig) PID 20227 on the chain.
+Live child 0x7fffcb096b50 (defconfig) PID 20227 
+Reaping winning child 0x7fffcb096b50 PID 20227 
+Live child 0x7fffcb096b50 (defconfig) PID 20228 
+Reaping winning child 0x7fffcb096b50 PID 20228 
+[ -L .config ] &amp;&amp; export KCONFIG_OVERWRITECONFIG=1; \
+    scripts/config/conf  --defconfig=.config Config.in
+Live child 0x7fffcb096b50 (defconfig) PID 20229 
+#
+# configuration written to .config
+#
+Reaping winning child 0x7fffcb096b50 PID 20229 
+Removing child 0x7fffcb096b50 PID 20229 from chain.
+Successfully remade target file &#39;defconfig&#39;. </code></pre>
+<p>执行不带参数的 <code>make defconfig</code> 通常只会看到以下部分的log</p>
+<pre><code class="log">#
+# configuration written to .config
+#</code></pre>
+<p>到此，<code>make defconfig</code> 整个流程就结束了，中间会调用到很多其它 Makefile，比如 <code>scan.mk</code>, <code>verbose.mk</code> 等，这些就不细讲了。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>本文主要目的是熟悉 openwrt Makefile 的执行流程，以便日后需要修改或调试某些相关问题时能够得心应手。Makefile 框架是 openwrt 非常重要的一部分，本文只是讲述了 make config 系列流程，实际上主 Makefile 有个条件分支判断 <code>OPENWRT_BUILD</code>, 当编译 kernel 或者 firmware 时，会先执行第一条分支进行初始化，然后通过 <code>toplevel.mk</code> 重新执行 make, 第二次调用时会进入第二个分支。那又将是另外一番风景，这个以后再说啦。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/openwrt/openwrt">github openwrt</a></li>
+</ul>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2020/12/29/make-oldconfig/">https://www.litreily.top/2020/12/29/make-oldconfig/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tags"></i><a href="/tags/makefile/">makefile</a><a href="/tags/openwrt/">openwrt</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB-Makefile"><span class="toc-number">1.</span> <span class="toc-text">主 Makefile</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#toplevel-mk"><span class="toc-number">2.</span> <span class="toc-text">toplevel.mk</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#make-oldconfig"><span class="toc-number">3.</span> <span class="toc-text">make oldconfig</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#make-defconfig-%E8%AF%A6%E8%A7%A3"><span class="toc-number">4.</span> <span class="toc-text">make defconfig 详解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#script-config-conf"><span class="toc-number">4.1.</span> <span class="toc-text">script&#x2F;config&#x2F;conf</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#prepare-tmpinfo"><span class="toc-number">4.2.</span> <span class="toc-text">prepare-tmpinfo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#defconfig"><span class="toc-number">4.3.</span> <span class="toc-text">defconfig</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-number">5.</span> <span class="toc-text">小结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">6.</span> <span class="toc-text">参考</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="next" href="/2020/12/28/openwrt-mkfile/">openwrt Makefile 框架分析 &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+.night .v[data-class=v] a:hover { color: #216C73 !important; }
+.night .v[data-class=v] li { list-style: inherit; }
+.night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
+.night .v[data-class=v] .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.night .v[data-class=v] .vbtn { border-radius: 0; background: none; }
+.night .v[data-class=v] .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.night .v[data-class=v] .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.night .v[data-class=v] .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre,.night .v[data-class=v] .vlist .vcard .vhead .vsys { background: #203240 !important; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre { color: #F0F0F0; font-size: 95%; }
+.v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
+</style><div id="vcomment"></div><script src="//cdn.bootcdn.net/ajax/libs/valine/1.4.14/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
+  lang: 'zh-cn',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></section><footer><p>Copyright © 2016 - 2020 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script></body></html>
