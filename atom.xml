@@ -6,7 +6,7 @@
   <link href="https://www.litreily.top/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2024-05-31T10:42:26.777Z</updated>
+  <updated>2024-09-19T10:04:40.604Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -15,6 +15,48 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>RK3399 Android 10 系统OTA升级失败问题</title>
+    <link href="https://www.litreily.top/2024/09/19/android10-ota/"/>
+    <id>https://www.litreily.top/2024/09/19/android10-ota/</id>
+    <published>2024-09-19T08:28:06.000Z</published>
+    <updated>2024-09-19T10:04:40.604Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;为了远程升级现场机器的 Android10 系统固件，需要支持验证系统OTA升级功能，但是验证发现OTA升级会失败，这里记录下分析过程。&lt;/p&gt;
+&lt;h1 id=&quot;编译OTA包&quot;&gt;&lt;a href=&quot;#编译OTA包&quot; class=&quot;headerlink&quot; title=&quot;编译OTA包&quot;&gt;&lt;/a&gt;编译OTA包&lt;/h1&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;source build/envsetup.sh
+lunch
+
+# compile android system
+make installclean -j16
+make -j16
+
+# compile ota
+make otapackage -j16
+
+# optional
+# ./mkimage.sh ota
+&lt;/code&gt;&lt;/pre&gt;
+&lt;blockquote&gt;
+&lt;p&gt; 说明：&lt;code&gt;mkimage.sh ota&lt;/code&gt; 不是必须的，而且可以说是有点重复的，可以看到下面这段脚本。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;if [ $TARGET == $BOOT_OTA ]
+ then
+ if [ &amp;quot;$PRODUCT_USE_DYNAMIC_PARTITIONS&amp;quot; = &amp;quot;true&amp;quot; ]; then
+     make insta</summary>
+      
+    
+    
+    
+    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
+    
+    
+    <category term="android" scheme="https://www.litreily.top/tags/android/"/>
+    
+  </entry>
   
   <entry>
     <title>rk3399 ubuntu 休眠唤醒功能</title>
@@ -937,56 +979,6 @@ chmod +x</summary>
     <category term="makefile" scheme="https://www.litreily.top/tags/makefile/"/>
     
     <category term="openwrt" scheme="https://www.litreily.top/tags/openwrt/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>lua 高级特性</title>
-    <link href="https://www.litreily.top/2020/12/25/lua-adv/"/>
-    <id>https://www.litreily.top/2020/12/25/lua-adv/</id>
-    <published>2020-12-25T02:08:01.000Z</published>
-    <updated>2021-05-28T03:12:11.503Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;这一篇来记录下 lua 的某些高级特性，以便在实际应用中得心应手。&lt;/p&gt;
-&lt;h2 id=&quot;模块和包&quot;&gt;&lt;a href=&quot;#模块和包&quot; class=&quot;headerlink&quot; title=&quot;模块和包&quot;&gt;&lt;/a&gt;模块和包&lt;/h2&gt;&lt;p&gt;为了方便代码复用和扩展，可以使用 table 实现模块 module，在模块中封装通用代码。把同类型的函数放在一个文件中，然后在其它脚本中调用。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lua&quot;&gt;module = &amp;#123;&amp;#125;
-
-module.version = &amp;quot;V0.1&amp;quot;
-module.author = &amp;quot;litreily&amp;quot;
-
-function module.func1 ()
-    function-body
-end
-
-function module.func2 ()
-    function-body
-end
-
-return module
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;然后在其它文件通过 require 导入。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lua&quot;&gt;require (&amp;quot;module&amp;quot;)
--- or
-require &amp;quot;module&amp;quot;
-
-print(module.version)
-module.func1()
-
--- or
-loc</summary>
-      
-    
-    
-    
-    <category term="Language" scheme="https://www.litreily.top/categories/Language/"/>
-    
-    <category term="Lua" scheme="https://www.litreily.top/categories/Language/Lua/"/>
-    
-    
-    <category term="lua" scheme="https://www.litreily.top/tags/lua/"/>
     
   </entry>
   

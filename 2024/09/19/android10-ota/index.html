@@ -1,0 +1,161 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>RK3399 Android 10 系统OTA升级失败问题 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
+</head><link rel="stylesheet" type="text/css" href="/plugins/highlight/atom-one-dark.min.css"><script type="text/javascript" src="/plugins/highlight/highlight.min.js"></script><script>hljs.initHighlightingOnLoad();
+</script><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">RK3399 Android 10 系统OTA升级失败问题</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2024/09/19/android10-ota/">2024-09-19</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Android/">Android</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>为了远程升级现场机器的 Android10 系统固件，需要支持验证系统OTA升级功能，但是验证发现OTA升级会失败，这里记录下分析过程。</p>
+<h1 id="编译OTA包"><a href="#编译OTA包" class="headerlink" title="编译OTA包"></a>编译OTA包</h1><pre><code class="bash">source build/envsetup.sh
+lunch
+
+# compile android system
+make installclean -j16
+make -j16
+
+# compile ota
+make otapackage -j16
+
+# optional
+# ./mkimage.sh ota
+</code></pre>
+<blockquote>
+<p> 说明：<code>mkimage.sh ota</code> 不是必须的，而且可以说是有点重复的，可以看到下面这段脚本。</p>
+</blockquote>
+<pre><code class="bash">if [ $TARGET == $BOOT_OTA ]
+ then
+ if [ &quot;$PRODUCT_USE_DYNAMIC_PARTITIONS&quot; = &quot;true&quot; ]; then
+     make installclean &amp;&amp; make -j4 &amp;&amp; make dist -j4
+     cp -rf  $OUT/obj/PACKAGING/super.img_intermediates/super.img  $IMAGE_PATH/
+ fi
+ echo -n &quot;create system.img boot.img oem.img vendor.img dtbo.img vbmeta.img for OTA...&quot;
+ cp -rf  $OUT/obj/PACKAGING/target_files_intermediates/*-target_files*/IMAGES/*.img  $IMAGE_PATH/
+ rm -rf  $IMAGE_PATH/cache.img
+ rm -rf  $IMAGE_PATH/recovery-two-step.img
+ if [ &quot;$PRODUCT_USE_DYNAMIC_PARTITIONS&quot; = &quot;true&quot; ]; then
+     rm -rf  $IMAGE_PATH/super_empty.img
+ fi
+ echo &quot;done.&quot;
+ fi
+</code></pre>
+<p><code>mkimage.sh</code> 会执行 <code>make installclean &amp;&amp; make -j4 &amp;&amp; make dist -j4</code> ,相当于重新编译安卓系统和发布内容（也包含ota包）。</p>
+<h1 id="OTA-升级失败"><a href="#OTA-升级失败" class="headerlink" title="OTA 升级失败"></a>OTA 升级失败</h1><p>将编译好的ota包(位于 out/target/product/PRODUCT_NAME/*ota*.zip), 放置到系统 /sdcard 目录，重启触发update service，弹框提示升级，点击升级后，发现系统升级失败。甚至都没有进入升级动画。</p>
+<p>于是接上串口，查看升级日志，发现显示以下异常。</p>
+<pre><code class="bash">[    3.393649] healthd: BatteryTemperaturePath I:charge_status UNKNOWN, chanrged 1, status SUCCESS, capoacity 1
+battery capacity is not enough for installing pafckage: 15% needed
+</code></pre>
+<p>从日志可以看到，recovery阶段检查当前电量为1，低于15%，导致升级失败。</p>
+<h2 id="recovery-源码分析"><a href="#recovery-源码分析" class="headerlink" title="recovery 源码分析"></a>recovery 源码分析</h2><p>查找recovery相关代码如下：</p>
+<ul>
+<li><code>bootable/recovery/recovery.cpp</code> </li>
+</ul>
+<pre><code class="cpp">     if (retry_count == 0 &amp;&amp; !is_battery_ok(&amp;required_battery_level)) &#123;
+       ui-&gt;Print(&quot;battery capacity is not enough for installing package: %d%% needed\n&quot;,
+                 required_battery_level);
+       // Log the error code to last_install when installation skips due to
+       // low battery.
+       log_failure_code(kLowBattery, update_package);
+       status = INSTALL_SKIPPED;
+     &#125;
+</code></pre>
+<p><code>recovery</code> 会判断电量信息<code>capacity</code> ，如果电量低于15%，则会跳过升级。</p>
+<p>由于我们的系统不是直接通过内核上报电量，而是需要系统启动后通过应用层串口通信获取电量，所以使用了一个<code>fake_battery</code> 驱动，该驱动默认电量为1，导致recovery阶段直接跳过OTA升级。</p>
+<ul>
+<li><code>is_battery_ok</code> </li>
+</ul>
+<pre><code class="cpp">     Result res = Result::UNKNOWN;
+     int32_t capacity = INT32_MIN;
+     if (health != nullptr) &#123;
+       health
+           -&gt;getCapacity([&amp;res, &amp;capacity](auto out_res, auto out_capacity) &#123;
+             res = out_res;
+             capacity = out_capacity;
+           &#125;)
+           .isOk();  // should not have transport error
+     &#125;
+
+     LOG(INFO) &lt;&lt; &quot;charge_status &quot; &lt;&lt; toString(charge_status) &lt;&lt; &quot;, charged &quot; &lt;&lt; charged
+               &lt;&lt; &quot;, status &quot; &lt;&lt; toString(res) &lt;&lt; &quot;, capacity &quot; &lt;&lt; capacity;
+     // At startup, the battery drivers in devices like N5X/N6P take some time to load
+     // the battery profile. Before the load finishes, it reports value 50 as a fake
+     // capacity. BATTERY_READ_TIMEOUT_IN_SEC is set that the battery drivers are expected
+     // to finish loading the battery profile earlier than 10 seconds after kernel startup.
+     if (res == Result::SUCCESS &amp;&amp; capacity == 50) &#123;
+       if (wait_second &lt; BATTERY_READ_TIMEOUT_IN_SEC) &#123;
+         sleep(1);
+         wait_second++;
+         continue;
+       &#125;
+     &#125;
+     // If we can&#39;t read battery percentage, it may be a device without battery. In this
+     // situation, use 100 as a fake battery percentage.
+     if (res != Result::SUCCESS) &#123;
+       capacity = 100;
+     &#125;
+</code></pre>
+<p>分析代码可知，当系统可以获取电量时，会以读取到的电量为准，如果获取失败会认为该系统无法获取电量，直接将电量设置为 <code>100</code>.</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>根据源码分析结果，可以考虑以下几种解决方案：</p>
+<ol>
+<li>更新recovery，将电量的判断逻辑去掉</li>
+<li>更新内核驱动，去掉fake_battery功能</li>
+<li>更新内核驱动，fake_battery 默认电量调整为15以上的数值</li>
+</ol>
+<p>经验证，第2种方案可行，理论上第3种方案也可以（未验证），但是综合考虑，由于电量上报功能不能去除，只能考虑第一种方案，将recovery的判断逻辑去掉。</p>
+<pre><code class="cpp">--- a/bootable/recovery/recovery.cpp
++++ b/bootable/recovery/recovery.cpp
+@@ -721,7 +721,8 @@ static bool is_battery_ok(int* required_battery_level) &#123;
+     static constexpr int BATTERY_OK_PERCENTAGE = 20;
+     static constexpr int BATTERY_WITH_CHARGER_OK_PERCENTAGE = 15;
+     *required_battery_level = charged ? BATTERY_WITH_CHARGER_OK_PERCENTAGE : BATTERY_OK_PERCENTAGE;
+-    return capacity &gt;= *required_battery_level;
++    // return capacity &gt;= *required_battery_level;
++    return true;
+   &#125;
+ &#125;
+</code></pre>
+<h1 id="远程更新-recovery"><a href="#远程更新-recovery" class="headerlink" title="远程更新 recovery"></a>远程更新 recovery</h1><p>将更新的recovery镜像远程到设备，然后通过指令刷新镜像。之后就可以通过ota包进行升级。</p>
+<pre><code class="bash">dd if=recovery.img of=/dev/block/by-name/recovery bs=1024k
+</code></pre>
+<h1 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h1><ul>
+<li>OTA升级包的制作时间需要比待升级的系统固件编译时间更新，否则也会升级失败。</li>
+</ul>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2024/09/19/android10-ota/">https://www.litreily.top/2024/09/19/android10-ota/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tag"></i><a href="/tags/android/">android</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BC%96%E8%AF%91OTA%E5%8C%85"><span class="toc-number">1.</span> <span class="toc-text">编译OTA包</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#OTA-%E5%8D%87%E7%BA%A7%E5%A4%B1%E8%B4%A5"><span class="toc-number">2.</span> <span class="toc-text">OTA 升级失败</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#recovery-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="toc-number">2.1.</span> <span class="toc-text">recovery 源码分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-number">2.2.</span> <span class="toc-text">解决方案</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%9C%E7%A8%8B%E6%9B%B4%E6%96%B0-recovery"><span class="toc-number">3.</span> <span class="toc-text">远程更新 recovery</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">4.</span> <span class="toc-text">注意事项</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="next" href="/2024/05/31/rk3399-wol/">rk3399 ubuntu 休眠唤醒功能 &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+.night .v[data-class=v] a:hover { color: #216C73 !important; }
+.night .v[data-class=v] li { list-style: inherit; }
+.night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
+.night .v[data-class=v] .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.night .v[data-class=v] .vbtn { border-radius: 0; background: none; }
+.night .v[data-class=v] .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.night .v[data-class=v] .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.night .v[data-class=v] .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre,.night .v[data-class=v] .vlist .vcard .vhead .vsys { background: #203240 !important; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre { color: #F0F0F0; font-size: 95%; }
+.v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
+</style><div id="vcomment"></div><script src="//cdn.bootcdn.net/ajax/libs/valine/1.4.14/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
+  lang: 'zh-cn',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></section><footer><p>Copyright © 2016 - 2024 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script></body></html>
