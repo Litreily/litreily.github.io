@@ -1,0 +1,281 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>RK3288 Android6 新增分区 | LITREILY</title><meta name="author" content="litreily,707922098@qq.com"><meta name="copyright" content="litreily"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="背景特定情况下需要新增分区，比如开辟一个分区专门用于保存系统日志，恢复出厂默认时不会被清理. 以新增slog分区为例，说明RK3288 Android6新增分区的方法。 代码结构123456789101112131415# package-fileFFTools&#x2F;mkupdate&#x2F;package-file# 分区表FFTools&#x2F;parameter&#x2F;rk3288-3.10-uboot-androi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RK3288 Android6 新增分区">
+<meta property="og:url" content="https://www.litreily.top/2024/02/05/rk32-new-part/index.html">
+<meta property="og:site_name" content="LITREILY">
+<meta property="og:description" content="背景特定情况下需要新增分区，比如开辟一个分区专门用于保存系统日志，恢复出厂默认时不会被清理. 以新增slog分区为例，说明RK3288 Android6新增分区的方法。 代码结构123456789101112131415# package-fileFFTools&#x2F;mkupdate&#x2F;package-file# 分区表FFTools&#x2F;parameter&#x2F;rk3288-3.10-uboot-androi">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://www.litreily.top/img/butterfly-icon.png">
+<meta property="article:published_time" content="2024-02-05T08:38:12.000Z">
+<meta property="article:modified_time" content="2026-05-14T01:37:35.817Z">
+<meta property="article:author" content="litreily">
+<meta property="article:tag" content="android">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.litreily.top/img/butterfly-icon.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "RK3288 Android6 新增分区",
+  "url": "https://www.litreily.top/2024/02/05/rk32-new-part/",
+  "image": "https://www.litreily.top/img/butterfly-icon.png",
+  "datePublished": "2024-02-05T08:38:12.000Z",
+  "dateModified": "2026-05-14T01:37:35.817Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "litreily",
+      "url": "https://www.litreily.top"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://www.litreily.top/2024/02/05/rk32-new-part/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.4"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'RK3288 Android6 新增分区',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">117</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">97</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">15</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">LITREILY</span></a><a class="nav-page-title" href="/"><span class="site-name">RK3288 Android6 新增分区</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">RK3288 Android6 新增分区</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2024-02-05T08:38:12.000Z" title="Created 2024-02-05 16:38:12">2024-02-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-05-14T01:37:35.817Z" title="Updated 2026-05-14 09:37:35">2026-05-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Android/">Android</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>特定情况下需要新增分区，比如开辟一个分区专门用于保存系统日志，恢复出厂默认时不会被清理. 以新增slog分区为例，说明RK3288 Android6新增分区的方法。</p>
+<h2 id="代码结构"><a href="#代码结构" class="headerlink" title="代码结构"></a>代码结构</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># package-file</span><br>FFTools/mkupdate/package-file<br><br><span class="hljs-comment"># 分区表</span><br>FFTools/parameter/rk3288-3.10-uboot-android.parameter.txt<br><br><span class="hljs-comment"># 开机自动挂载相关</span><br>device/rockchip/rk3288/<br>|-- fstab.rk30board.bootmode.emmc<br>|-- init.rc<br>`-- slog<br>    `-- README.md<br><br><span class="hljs-comment"># 创建 slog.img</span><br>mkimage.sh<br></code></pre></td></tr></table></figure>
+
+<h2 id="新增分区"><a href="#新增分区" class="headerlink" title="新增分区"></a>新增分区</h2><h3 id="修改分区表"><a href="#修改分区表" class="headerlink" title="修改分区表"></a>修改分区表</h3><ul>
+<li><code>FFTools/parameter/rk3288-3.10-uboot-android.parameter.txt</code></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash">--- a/FFTools/parameter/rk3288-3.10-uboot-android.parameter.txt<br>+++ b/FFTools/parameter/rk3288-3.10-uboot-android.parameter.txt<br>@@ -10,4 +10,4 @@ PWR_HLD: 0,0,A,0,1<br> <span class="hljs-comment">#KERNEL_IMG: 0x62008000</span><br> <span class="hljs-comment">#FDT_NAME: rk-kernel.dtb</span><br> <span class="hljs-comment">#RECOVER_KEY: 1,1,0,20,0</span><br>-CMDLINE:console=ttyS0 androidboot.selinux=permissive androidboot.hardware=rk30board androidboot.console=ttyS0 root=/dev/block/mtd/by-name/linuxroot rw rootfstype=ext4 init=/sbin/init initrd=0x62000000,0x00800000 mtdparts=rk29xxnand:0x00002000@0x00002000(uboot),0x00002000@0x00004000(misc),0x00008000@0x00006000(resource),0x00008000@0x0000e000(kernel),0x00010000@0x00016000(boot),0x00010000@0x00026000(recovery),0x0001a000@0x00036000(backup),0x00040000@0x00050000(cache),0x00002000@0x00090000(kpanic),0x00300000@0x00092000(system),0x00008000@0x00392000(metadata),0x00002000@0x0039A000(baseparamer),-@0x003BC000(userdata)<br>+CMDLINE:console=ttyS0 androidboot.selinux=permissive androidboot.hardware=rk30board androidboot.console=ttyS0 root=/dev/block/mtd/by-name/linuxroot rw rootfstype=ext4 init=/sbin/init initrd=0x62000000,0x00800000 mtdparts=rk29xxnand:0x00002000@0x00002000(uboot),0x00002000@0x00004000(misc),0x00008000@0x00006000(resource),0x00008000@0x0000e000(kernel),0x00010000@0x00016000(boot),0x00010000@0x00026000(recovery),0x0001a000@0x00036000(backup),0x00040000@0x00050000(cache),0x00002000@0x00090000(kpanic),0x00300000@0x00092000(system),0x00008000@0x00392000(metadata),0x00002000@0x0039A000(baseparamer),0x00200000@0x003BC000(slog),-@0x005BC000(userdata)<br></code></pre></td></tr></table></figure>
+
+<p>从原来的<code>userdata</code>分区分了1G出来，用于创建新的分区 slog.<br><code>-@0x003BC000(userdata)</code> 变为 <code>0x00200000@0x003BC000(slog),-@0x005BC000(userdata)</code>。</p>
+<ul>
+<li><code>@</code> 前面<code>0x00200000</code>代表分区大小， 单位为1个block，也就是512Bytes</li>
+<li><code>@</code>后面<code>0x003BC000</code>代表分区在<code>emmc</code>中的起始地址</li>
+<li>新增slog分区后，<code>userdata</code>起始地址需要更新为 <code>0x003BC000 + 0x00200000 = 0x005BC000</code></li>
+</ul>
+<h3 id="修改-package-file"><a href="#修改-package-file" class="headerlink" title="修改 package-file"></a>修改 package-file</h3><ul>
+<li><code>FFTools/mkupdate/package-file</code></li>
+</ul>
+<p><code>package-file</code>用于打包<code>update.img</code>，新增分区后，也需要添加新的slog.img信息。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">--- a/FFTools/mkupdate/package-file<br>+++ b/FFTools/mkupdate/package-file<br>@@ -12,6 +12,7 @@ kernel                Image/kernel.img<br> boot        Image/boot.img<br> recovery       Image/recovery.img<br> system         Image/system.img<br>+slog           Image/slog.img<br></code></pre></td></tr></table></figure>
+
+<h3 id="修改-fstab"><a href="#修改-fstab" class="headerlink" title="修改 fstab"></a>修改 fstab</h3><ul>
+<li><code>device/rockchip/rk3288/fstab.rk30board.bootmode.emmc</code></li>
+</ul>
+<p><code>fstab</code>是系统启动后用于挂载分区的配置表，为了自动挂载slog分区，需要修改这个文件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs bash">--- a/fstab.rk30board.bootmode.emmc<br>+++ b/fstab.rk30board.bootmode.emmc<br>@@ -10,6 +10,7 @@<br> /dev/block/platform/ff0f0000.rksdmmc/by-name/metadata       /metadata           ext4      noatime,nodiratime,nosuid,nodev,noauto_da_alloc,discard                <span class="hljs-built_in">wait</span>,check<br> /dev/block/platform/ff0f0000.rksdmmc/by-name/userdata       /data               f2fs      noatime,nodiratime,nosuid,nodev   <span class="hljs-built_in">wait</span>,check,encryptable=/metadata/key_file<br> /dev/block/platform/ff0f0000.rksdmmc/by-name/userdata       /data               ext4      noatime,nodiratime,nosuid,nodev,noauto_da_alloc,discard,errors=panic   <span class="hljs-built_in">wait</span>,check,encryptable=/metadata/key_file<br>+/dev/block/platform/ff0f0000.rksdmmc/by-name/slog           /slog               ext4      noatime,nodiratime,nosuid,nodev,noauto_da_alloc,discard                <span class="hljs-built_in">wait</span>,check<br> <span class="hljs-comment"># /dev/block/platform/ff0f0000.rksdmmc/by-name/radical_update /radical_update     ext4      noatime,nodiratime,nosuid,nodev,noauto_da_alloc,discard          wait</span><br> <br> /devices/ff0c0000.rksdmmc/mmc_host*        auto  auto    defaults        voldmanaged=sdcard1:auto,encryptable=userdata<br></code></pre></td></tr></table></figure>
+
+<p>新增一行 <strong>slog</strong> 配置。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">/dev/block/platform/ff0f0000.rksdmmc/by-name/slog /slog  ext4  noatime,nodiratime,nosuid,nodev,noauto_da_alloc,discard    <span class="hljs-built_in">wait</span>,check<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>/dev/block/platform/ff0f0000.rksdmmc/by-name/slog</strong>: 指定要挂载的分区设备路径。</li>
+<li><strong>/slog</strong>: 指定挂载点，即分区将被挂载到文件系统中的 <strong>/slog</strong> 目录。</li>
+<li><strong>ext4</strong>: 文件系统类型，表明该分区使用 ext4 文件系统。</li>
+<li><strong>noatime,nodiratime,nosuid,nodev,noauto_da_alloc,discard</strong>: 这是挂载选项，具体含义如下：<ul>
+<li><strong>noatime</strong>: 不更新文件和目录的访问时间。</li>
+<li><strong>nodiratime</strong>: 不更新目录的访问时间。</li>
+<li><strong>nosuid</strong>: 防止设置 setuid 位的执行文件的 suid 权限。</li>
+<li><strong>nodev</strong>: 不允许在文件系统上执行设备文件。</li>
+<li><strong>noauto_da_alloc</strong>: 禁用自动的数据区块分配。</li>
+<li><strong>discard</strong>: 启用 TRIM/DISCARD支持，允许文件系统通知底层设备已删除的块，适用于 SSD，有助于提高性能。</li>
+</ul>
+</li>
+<li><strong>wait</strong>: 表明系统在挂载时会等待直到这个分区可用。</li>
+<li><strong>check</strong>: 表示在挂载前会检查文件系统。</li>
+</ul>
+<h3 id="修改-init-rc"><a href="#修改-init-rc" class="headerlink" title="修改 init.rc"></a>修改 init.rc</h3><ul>
+<li><code>device/rockchip/rk3288/init.rc</code></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">--- a/init.rc<br>+++ b/init.rc<br>@@ -62,6 +62,7 @@ on init<br>     <span class="hljs-built_in">mkdir</span> /cache 0770 system cache<br>     <span class="hljs-built_in">mkdir</span> /config 0500 root root<br>     <span class="hljs-built_in">mkdir</span> /backup<br>+    <span class="hljs-built_in">mkdir</span> /slog<br></code></pre></td></tr></table></figure>
+
+<p><code>init.rc</code>中需要创建挂载点 <code>/slog</code>。</p>
+<h3 id="新增-slog-目录"><a href="#新增-slog-目录" class="headerlink" title="新增 slog 目录"></a>新增 slog 目录</h3><ul>
+<li><code>device/rockchip/rk3288/slog</code></li>
+</ul>
+<p>为了生成 slog.img 镜像，需要有原始文件目录，当然也可以是个空目录。这里仅放了一个 README.md</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-section"># README</span><br><br>this is slog partition.<br></code></pre></td></tr></table></figure>
+
+<h3 id="修改-mkimage-sh"><a href="#修改-mkimage-sh" class="headerlink" title="修改 mkimage.sh"></a>修改 mkimage.sh</h3><ul>
+<li><code>mkimage.sh</code></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs bash">--- a/mkimage.sh<br>+++ b/mkimage.sh<br>@@ -28,6 +28,7 @@ <span class="hljs-built_in">echo</span> IMG_TARGET=<span class="hljs-variable">$IMG_TARGET</span> , ota = <span class="hljs-variable">$TARGET</span><br> IMAGE_PATH=rockdev/Image-<span class="hljs-variable">$TARGET_PRODUCT</span><br> UBOOT_PATH=u-boot<br> KERNEL_PATH=kernel<br>+SLOG_PATH=device/rockchip/rk3288/slog<br> PARAMETER=FFTools/parameter/rk3288-3.10-uboot-android.parameter.txt<br> <br> <span class="hljs-built_in">rm</span> -rf <span class="hljs-variable">$IMAGE_PATH</span><br>@@ -155,6 +156,19 @@ <span class="hljs-keyword">then</span><br>        <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;done.&quot;</span><br> <span class="hljs-keyword">fi</span><br> <br>+<span class="hljs-keyword">if</span> [ -d <span class="hljs-variable">$SLOG_PATH</span> ]<br>+<span class="hljs-keyword">then</span><br>+    <span class="hljs-built_in">echo</span> -n <span class="hljs-string">&quot;create slog.img...&quot;</span><br>+    slog_size=10485760<br>+    MAKE_EXT4FS_ARGS=<span class="hljs-string">&quot; -L slog -a slog <span class="hljs-variable">$IMAGE_PATH</span>/slog.img <span class="hljs-variable">$SLOG_PATH</span>&quot;</span><br>+    make_ext4fs -l <span class="hljs-variable">$slog_size</span> <span class="hljs-variable">$MAKE_EXT4FS_ARGS</span> &gt;/dev/null 2&gt;&amp;1 &amp;&amp;<br>+    tune2fs -c -1 -i 0 <span class="hljs-variable">$IMAGE_PATH</span>/slog.img &gt;/dev/null 2&gt;&amp;1 &amp;&amp;<br>+    e2fsck -fyD <span class="hljs-variable">$IMAGE_PATH</span>/slog.img &gt;/dev/null 2&gt;&amp;1 || <span class="hljs-literal">true</span><br>+    <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;done.&quot;</span><br>+<span class="hljs-keyword">fi</span><br>+<br> <span class="hljs-keyword">if</span> [ -f <span class="hljs-variable">$KERNEL_PATH</span>/resource.img ]<br> <span class="hljs-keyword">then</span><br>         <span class="hljs-built_in">echo</span> -n <span class="hljs-string">&quot;create resource.img...&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>这里主要是为了创建 slog.img.<br>到此，整个分区相关的配置都改好了，编译后完整固件后，在系统中就可以看到<code>/slog</code> 目录了，也可以看到分区默认挂载好了。</p>
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ol>
+<li>重新烧录固件后，slog分区也会被清除</li>
+<li>恢复出厂默认设置时，slog分区不会被清除</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://www.litreily.top">litreily</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://www.litreily.top/2024/02/05/rk32-new-part/">https://www.litreily.top/2024/02/05/rk32-new-part/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/android/">android</a></div><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/05/31/rk3399-wol/" title="rk3399 ubuntu 休眠唤醒功能"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">rk3399 ubuntu 休眠唤醒功能</div></div><div class="info-2"><div class="info-item-1">背景为了降低功耗，需要考虑使用系统的休眠唤醒功能。 休眠方式rk3399 休眠方式有两种,mem,freeze. 内存待机 (mem)在 mem 模式下，系统将所有设备状态保存到内存中，然后进入低功耗状态。唤醒后，系统从内存中恢复设备状态。内存待机模式通常称为 S3 睡眠模式。 冻结 (freeze)在 freeze 模式下，所有用户空间任务被冻结，所有设备进入低功耗状态，但 CPU 仍保持活跃。冻结模式更适用于在短时间内节省电能。我们使用 mem模式进入休眠，指令如下： 123root@firefly:/sys/power# cat statefreeze memroot@firefly:/sys/power# echo mem &gt; state  USB 唤醒内核配置123456789101112131415161718192021222324252627282930&amp;rockchip_suspend &#123;    status = &quot;okay&quot;;    rockchip,sleep-debug-en = &lt;1&gt;;    ro...</div></div></div></a><a class="pagination-related" href="/2024/01/10/rk32-disable-wifi/" title="RK3288 Android6 禁用 wifi"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">RK3288 Android6 禁用 wifi</div></div><div class="info-2"><div class="info-item-1">某些特殊情况下，需要禁用系统的wifi配置功能。 删除快捷 wifi 开关在 frameworks/base 中的 SystemUI app 中禁用wifi开关，只需要修改配置 quick_settings_tiles_default 即可。 123456789--- a/packages/SystemUI/res/values/config.xml+++ b/packages/SystemUI/res/values/config.xml@@ -119,7 +119,7 @@     &lt;!-- The default tiles to display in QuickSettings --&gt;     &lt;string name=&quot;quick_settings_tiles_default&quot; translatable=&quot;false&quot;&gt;-        wifi,bt,inversion,dnd,cell,airplane,rotation,flashlight,location,cast,hotspot+        b...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2021/12/31/rk3288-security/" title="RK3288 android 6.0 user release 相关问题处理"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-31</div><div class="info-item-2">RK3288 android 6.0 user release 相关问题处理</div></div><div class="info-2"><div class="info-item-1">之前一直用的 userdebug 版本，默认 adb root 或者使用 su 即可获取 root 权限。目前基于安全考虑，固件发布需要使用 user 版本配置，很多功能都需要重新测试，下面对 RK3288 user 发布版本遇到的问题进行总结。 编译固件首先是编译固件，将原先的 rk3288-userdebug 改为 rk3288-user. 12./FFTools/make.sh -d rk3288-tb_8846 -j16 -l rk3288-user./FFTools/mkupdate/mkupdate.sh -l rk3288-user  下面是 firefly 官方 wiki 文档对 user, userdebug, eng 版本的对比。  构建变体说明默认的目标构建变体(TARGET_BUILD_VARIANT)为 userdebug。常用变体有三种，分别是用户(user)、用户调试(userdebug)和工程模式(eng)，其区别如下：  user 仅安装标签为 user 的模块 设定属性 ro.secure=1，打开安全检查功能 设定属性 ro.debuggab...</div></div></div></a><a class="pagination-related" href="/2021/07/16/gt9xx-drvier/" title="RK3288 android 6.0 移植 gt9xx 驱动"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-16</div><div class="info-item-2">RK3288 android 6.0 移植 gt9xx 驱动</div></div><div class="info-2"><div class="info-item-1">问题描述 平台：RK3288 系统：Android 6.0 需求：触摸屏驱动移植  驱动移植先从厂商获取驱动程序 gt9xx_v2.8.0.2. 1234567891011gt9xx_v2.8.0.2├── dtsi│   ├── gt9xx_dts.txt│   ├── pinctrl_mtk.txt│   └── pinctrl_qcom.txt├── goodix_tool.c├── gt9xx.c├── gt9xx.h├── gt9xx_update.c├── Kconfig└── Makefile  新建目录 drivers/input/touchscreen/gt9xx_v2.8.0.2/ ,将以上 .c, .h, 及 Makefile文件放入该目录。 修改 Kconfig将提供的Kconfig内容添加到以下文件  drivers/input/touchscreen/Kconfig  1234567891011121314151617181920212223242526272829303132333435## Goodix GT9xx Touchscreen driv...</div></div></div></a><a class="pagination-related" href="/2023/01/19/binwalk/" title="RK3288 Android 系统 boot.img 镜像解压方法"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-01-19</div><div class="info-item-2">RK3288 Android 系统 boot.img 镜像解压方法</div></div><div class="info-2"><div class="info-item-1">android 6.0 boot.img 解包filefile指令可以显示文件类型，但是对于特定封装的文件无能为力，比如Android系统编译出的boot.img 12$ file boot.imgboot.img: data    binwalkbinwalk 是一款非常强大的用于解析 bin 文件格式工具，可以通过扫描 bin 文件分析出文件的封装格式，列出 bin 文件中包含的不同类型的文件以及文件在bin中的偏移量。  安装 binwalk  12# 128M disk space will be usedsudo apt install binwalk  binwalk 可以用来分析 Android6 的 boot.img. 12345$ binwalk boot.img DECIMAL       HEXADECIMAL     DESCRIPTION--------------------------------------------------------------------------------8             0x8             ...</div></div></div></a><a class="pagination-related" href="/2023/04/17/android-lunch/" title="RK3288 Android 10 系统开发[6] - 新增lunch"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-04-17</div><div class="info-item-2">RK3288 Android 10 系统开发[6] - 新增lunch</div></div><div class="info-2"><div class="info-item-1">如果要新增产品，在Android sdk中可以新增lunch进行适配。以 rk3288 产品为例，新增 rk3288_tablet.  首先从已有的 rk3288_Android10 拷贝一份到新增的 rk3288_tablet 目录；  12cd &lt;SDK&gt;/device/rockchip/rk3288cp -rf rk3288_Android10 rk3288_tablet   然后修改 device/rockchip/rk3288/AndroidProducts.mk 文件，添加新产品配置  12345678910111213--- a/AndroidProducts.mk+++ b/AndroidProducts.mk@@ -16,8 +16,11 @@                                                                                                            PRODUCT_MAKEFILES := \     $(LOCAL_DIR)/rk3288_A...</div></div></div></a><a class="pagination-related" href="/2022/07/12/android-perm/" title="RK3288 Android 10 系统开发[4] - 提供 app 默认权限"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-07-12</div><div class="info-item-2">RK3288 Android 10 系统开发[4] - 提供 app 默认权限</div></div><div class="info-2"><div class="info-item-1">禁用旧版本SDK弹框如果在Android10系统上安装旧版本的app，会提示以下信息。  此应用专为旧版 Android 打造，因此可能无法正常运行。请尝试检查更新或与开发者联系。    为了去掉这个弹框提示，需要添加以下修改, 将 onStartActivity 函数中的 showDeprecatedTargetDialogIfNeeded 禁用。 1234567891011--- a/services/core/java/com/android/server/wm/AppWarnings.java+++ b/services/core/java/com/android/server/wm/AppWarnings.java@@ -166,7 +166,8 @@ class AppWarnings &#123;     public void onStartActivity(ActivityRecord r) &#123;         showUnsupportedCompileSdkDialogIfNeeded(r);         showUnsupportedDisp...</div></div></div></a><a class="pagination-related" href="/2022/01/11/rk3288-hang/" title="RK3288 android 6.0 卡死在开机logo画面问题处理"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-01-11</div><div class="info-item-2">RK3288 android 6.0 卡死在开机logo画面问题处理</div></div><div class="info-2"><div class="info-item-1">Description烧录固件后，会概率性出现卡死在开机画面无法启动的问题，但是烧录新固件后会恢复正常。对比不同机型，发现只有带摄像头功能的机型会有这个问题。 Root cause经过大量测试和排查，发现卡死问题源自一个文件,  /data/camera/media_profiles.xml , 这是一个空文件，删除后系统就正常启动了。 通过使用 logcat 结合系统源码发现，该文件是摄像头配置文件，如果为空会导致系统循环检测该文件，并尝试从中获取摄像头配置，但是由于文件为空，导致一直获取失败，最后陷入死循环。 123$ cd /data/camera$ lsmedia_profiles.xml  经过排查源码，发现系统在检查到有摄像头接入后，会将默认配置文件 /etc/media_profiles_default.xml 拷贝至 /data/camera/media_profiles_tmp.xml, 然后根据实际情况修改该tmp文件，并最终写入到 /data/camera/media_profiles.xml 文件中。相关函数 ProduceNewXml如下: 123456...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comments</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">litreily</div><div class="author-info-description">simple life</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">117</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">97</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">15</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Litreily"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://www.litreily.top/notes/" target="_blank" title="Notes"><i class="fas fa-sticky-note" style="color: #e8a618;"></i></a><a class="social-icon" href="mailto:litreily@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%83%8C%E6%99%AF"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84"><span class="toc-number">2.</span> <span class="toc-text">代码结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B0%E5%A2%9E%E5%88%86%E5%8C%BA"><span class="toc-number">3.</span> <span class="toc-text">新增分区</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E5%88%86%E5%8C%BA%E8%A1%A8"><span class="toc-number">3.1.</span> <span class="toc-text">修改分区表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9-package-file"><span class="toc-number">3.2.</span> <span class="toc-text">修改 package-file</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9-fstab"><span class="toc-number">3.3.</span> <span class="toc-text">修改 fstab</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9-init-rc"><span class="toc-number">3.4.</span> <span class="toc-text">修改 init.rc</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B0%E5%A2%9E-slog-%E7%9B%AE%E5%BD%95"><span class="toc-number">3.5.</span> <span class="toc-text">新增 slog 目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9-mkimage-sh"><span class="toc-number">3.6.</span> <span class="toc-text">修改 mkimage.sh</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">4.</span> <span class="toc-text">注意事项</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/09/19/android10-ota/" title="RK3399 Android 10 系统OTA升级失败问题">RK3399 Android 10 系统OTA升级失败问题</a><time datetime="2024-09-19T08:28:06.000Z" title="Created 2024-09-19 16:28:06">2024-09-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/05/31/rk3399-wol/" title="rk3399 ubuntu 休眠唤醒功能">rk3399 ubuntu 休眠唤醒功能</a><time datetime="2024-05-31T10:31:47.000Z" title="Created 2024-05-31 18:31:47">2024-05-31</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/02/05/rk32-new-part/" title="RK3288 Android6 新增分区">RK3288 Android6 新增分区</a><time datetime="2024-02-05T08:38:12.000Z" title="Created 2024-02-05 16:38:12">2024-02-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/01/10/rk32-disable-wifi/" title="RK3288 Android6 禁用 wifi">RK3288 Android6 禁用 wifi</a><time datetime="2024-01-10T08:55:19.000Z" title="Created 2024-01-10 16:55:19">2024-01-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/06/isolcpus/" title="RK3399 Android10 bind cpu with isolcpus">RK3399 Android10 bind cpu with isolcpus</a><time datetime="2023-12-06T07:29:46.000Z" title="Created 2023-12-06 15:29:46">2023-12-06</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By litreily</span><span class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 5.4.2</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll to Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4"></script><script src="/js/main.js?v=5.5.4"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const initValine = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyValine = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const valineConfig = {
+      el: '#vcomment',
+      appId: '1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+      appKey: 'uvA3xgqNW3q8TGR483lxXcpB',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      visitor: false,
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || window.location.pathname
+    }
+
+    new Valine(valineConfig)
+  }
+
+  const loadValine = async (el, path) => {
+    if (typeof Valine === 'function') {
+      initValine(el, path)
+    } else {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js')
+      initValine(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Valine' === 'Valine'
+      ? window.shuoshuoComment = { loadComment: loadValine }
+      : window.loadOtherComment = loadValine
+    return
+  }
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="local-search-input"><input placeholder="Search..." type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.4"></script></div></div></body></html>

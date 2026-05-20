@@ -1,0 +1,246 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>解锁网易云音乐灰色无版权歌曲 | LITREILY</title><meta name="author" content="litreily,707922098@qq.com"><meta name="copyright" content="litreily"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="由于版权之争，网易云的很多歌曲都灰掉并且无法播放了，想要使其可以播放还是有办法的，万能的Google和Github让我找到了答案，直接上享用方法吧。 前提条件 一个可以远程访问的服务器，比如vps，阿里云、腾讯云、... 如果没有服务器，只能寻找别人搭建好的服务  搭建服务在服务器端，首先安装依赖的工具npx，如果有则忽略 12sudo apt install npmsudo npm i -g n">
+<meta property="og:type" content="article">
+<meta property="og:title" content="解锁网易云音乐灰色无版权歌曲">
+<meta property="og:url" content="https://www.litreily.top/2020/05/03/netease/index.html">
+<meta property="og:site_name" content="LITREILY">
+<meta property="og:description" content="由于版权之争，网易云的很多歌曲都灰掉并且无法播放了，想要使其可以播放还是有办法的，万能的Google和Github让我找到了答案，直接上享用方法吧。 前提条件 一个可以远程访问的服务器，比如vps，阿里云、腾讯云、... 如果没有服务器，只能寻找别人搭建好的服务  搭建服务在服务器端，首先安装依赖的工具npx，如果有则忽略 12sudo apt install npmsudo npm i -g n">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://www.litreily.top/img/butterfly-icon.png">
+<meta property="article:published_time" content="2020-05-03T01:11:39.000Z">
+<meta property="article:modified_time" content="2026-05-14T01:37:35.498Z">
+<meta property="article:author" content="litreily">
+<meta property="article:tag" content="music">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.litreily.top/img/butterfly-icon.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "解锁网易云音乐灰色无版权歌曲",
+  "url": "https://www.litreily.top/2020/05/03/netease/",
+  "image": "https://www.litreily.top/img/butterfly-icon.png",
+  "datePublished": "2020-05-03T01:11:39.000Z",
+  "dateModified": "2026-05-14T01:37:35.498Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "litreily",
+      "url": "https://www.litreily.top"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://www.litreily.top/2020/05/03/netease/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.4"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '解锁网易云音乐灰色无版权歌曲',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">117</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">97</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">15</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">LITREILY</span></a><a class="nav-page-title" href="/"><span class="site-name">解锁网易云音乐灰色无版权歌曲</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">解锁网易云音乐灰色无版权歌曲</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2020-05-03T01:11:39.000Z" title="Created 2020-05-03 09:11:39">2020-05-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-05-14T01:37:35.498Z" title="Updated 2026-05-14 09:37:35">2026-05-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Media/">Media</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>由于版权之争，网易云的很多歌曲都灰掉并且无法播放了，想要使其可以播放还是有办法的，万能的Google和Github让我找到了<a target="_blank" rel="noopener" href="https://github.com/nondanee/UnblockNeteaseMusic">答案</a>，直接上享用方法吧。</p>
+<h2 id="前提条件"><a href="#前提条件" class="headerlink" title="前提条件"></a>前提条件</h2><ul>
+<li>一个可以远程访问的服务器，比如vps，阿里云、腾讯云、...</li>
+<li>如果没有服务器，只能寻找别人搭建好的服务</li>
+</ul>
+<h2 id="搭建服务"><a href="#搭建服务" class="headerlink" title="搭建服务"></a>搭建服务</h2><p>在服务器端，首先安装依赖的工具<code>npx</code>，如果有则忽略</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs zsh">sudo apt install npm<br>sudo npm i -g npx<br></code></pre></td></tr></table></figure>
+
+<p>然后clone项目UnblockNeteaseMusic.git到本地</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs zsh">git clone git@github.com:nondanee/UnblockNeteaseMusic.git<br>cd UnblockNeteaseMusic<br></code></pre></td></tr></table></figure>
+
+<p>接下来是运行服务，有好几种方式，下面介绍3种</p>
+<h3 id="npx启动"><a href="#npx启动" class="headerlink" title="npx启动"></a>npx启动</h3><p>第一种，最简单的是直接用npx启动，默认以8080端口打开</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs zsh">npx @npndanee/unblockneteasemusic<br></code></pre></td></tr></table></figure>
+
+<h3 id="node启动"><a href="#node启动" class="headerlink" title="node启动"></a>node启动</h3><p>第二种方式，使用node, <code>-p</code>参数指定端口</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs zsh">npde app.js -p 4321<br></code></pre></td></tr></table></figure>
+
+<h3 id="搭建系统服务"><a href="#搭建系统服务" class="headerlink" title="搭建系统服务"></a>搭建系统服务</h3><p>第三种，使用服务方式，方便管理和查看状态</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs zsh"># 新建服务<br># 注意填写的路径是clone的UnblockNeteaseMusic所在目录<br>sudo cat &gt; /etc/systemd/system/UnblockNeteaseMusic.service &lt;&lt;EOF<br>[Unit]<br>Description=UnblockNeteaseMusic<br>After=network.target<br>Wants=network.target<br><br>[Service]<br>Type=simple<br>PIDFile=/var/run/UnblockNeteaseMusic.pid<br>WorkingDirectory=/home/litreily/UnblockNeteaseMusic<br>ExecStart=/home/litreily/UnblockNeteaseMusic/app.js -p 4321<br>RestartPreventExitStatus=23<br>Restart=always<br><br>[Install]<br>WantedBy=multi-user.target<br>EOF<br><br># 添加app.js的执行权限，不添加可能无法启动服务<br>sudo chmod a+x app.js<br><br># 启动、停止、重启、查看服务<br>systemctl start UnblockNeteaseMusic.service<br>systemctl stop UnblockNeteaseMusic.service<br>systemctl restart UnblockNeteaseMusic.service<br>systemctl status UnblockNeteaseMusic.service<br></code></pre></td></tr></table></figure>
+
+<p>除了这三种以外，还可以使用Docker，具体参考github文档即可</p>
+<h2 id="使用代理"><a href="#使用代理" class="headerlink" title="使用代理"></a>使用代理</h2><p>在服务器端搭建好了代理，就需要在我们的客户端使用它咯，在windows上，网易云音乐不管UWP应用还是普通安装应用都是直接设置代理的。</p>
+<p><img src="/assets/music/netease-proxy.png" alt="网易云音乐代理"></p>
+<p>当然，也可以使用其它工具设置代理，比如小飞机、系统代理等等，因为这个代理已经实现了完整的http/https服务，所以也是可以作为全局代理使用的，不过我已经使用其它代理用于科学上网，所以就只在网易云配置下代理就好了。</p>
+<p>该工具非常强大，代理配置好后，我看了下之前灰掉的歌曲，确实可以正常播放了，amazing!</p>
+<p><img src="/assets/stickers/cheers.gif" alt="cheers"></p>
+<p>该工具也适用于其它系统和移动端，有需要的可以尝试下。最后提醒下各位，有能力的还是支持正版，同时也请低调使用。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/nondanee/UnblockNeteaseMusic">Github UnblockNeteaseMusic</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.nange.cn/unlock-netease-music.html">解锁网易云音乐灰色无版权歌曲，使其变为正常可听可下载状态</a></li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://www.litreily.top">litreily</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://www.litreily.top/2020/05/03/netease/">https://www.litreily.top/2020/05/03/netease/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/music/">music</a></div><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2020/05/03/md2bm/" title="Python之markdown转Chrome收藏夹"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">Python之markdown转Chrome收藏夹</div></div><div class="info-2"><div class="info-item-1">网上可以搜到很多chrome收藏夹转markdown文档的方法，却鲜有markdown文档转为Chrome收藏夹的方法，不过这种需求也确实不多。我之所以用到，是因为平常会用markdown文档收集一些网站，现在想要转换为Chrome收藏夹，方便访问。 思路要实现这个功能倒也不难，因为Chrome的收藏夹本质上也是一个html文件，只不过有其固定的DOM结构而已，所以我们的实现思路很简单。  导出Chrome已有的收藏夹 分析导出得到的html文件格式 将自己需要转成Chrome收藏夹的markdown按相同格式转换为html文件 在chrome中导入生成后的收藏夹  收藏夹的DOM结构我导出了自己的收藏夹，取出其中一小部分为例进行分析，比较局部是可以反映整体的。 12345678910111213141516171819202122232425262728293031323334353637383940414243&lt;!DOCTYPE NETSCAPE-Bookmark-file-1&gt;&lt;!-- This is an automatically generated ...</div></div></div></a><a class="pagination-related" href="/2020/04/30/lftp_get/" title="lftp获取FTP Server端最新文件"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">lftp获取FTP Server端最新文件</div></div><div class="info-2"><div class="info-item-1">最近解一个bug，要频繁编译和烧录FW，每次都要将image从远程的FTP server手动copy到本地，然后使用tftp进行烧录，实在不胜其烦。虽然上一篇简单实用的tftp烧录image脚本提高了烧录效率，但是每次将image拷贝到本地也是麻烦。 这次，我依旧想到了WSL, 使用shell脚本还是更加方便快捷，思路很简单，检查server端的最新文件，得到文件名后使用lftp下载到本地。 获取最新文件FTP Server文件存储方式是将每天的新数据归档到以当日日期命名的文件夹中，如今天20200430 1234567891011121314➜  lftp -u &quot;username,password&quot; ftp://1.2.3.4lftp username@1.2.3.4:~&gt; ls04-27-20  02:03PM       &lt;DIR&gt;          2020042704-29-20  05:36PM       &lt;DIR&gt;          2020042904-30-20  01:11PM       &lt;DIR&...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2016/10/28/add-Music/" title="在博客中添加音乐"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2016-10-28</div><div class="info-item-2">在博客中添加音乐</div></div><div class="info-2"><div class="info-item-1">音乐来源现在要找个 .mp3 外链资源可真不容易，以往的酷狗歌曲信息里带着，现在也不见了，百度音乐下载也得用客户端，还不显示链接，各大音乐网站真是越来越小心了啊。 网易云音乐想要从网站获取音乐链接的方法还是有的，比如说  网易云音乐  。使用Google/firefox/edge等带开发者工具的浏览器打开网易云音乐，搜索自己想要的音乐，并进行播放，然后打开开发者工具。开发工具打开方式：  谷歌：右键点击  检查，或使用快捷键 Ctrl+Shift+I ; edge：右键点击 检查元素/ 查看源，或使用快捷键 F12 ; firefox：快捷键 Shift+F2 。   以  夕山谣  为例，打开开发工具，找到  Application ，打开 Frames/top/Media 。  右键选择&quot; Open link in new tab &quot; 或者 &quot; Copy link address &quot;，选取链接的前半部分,以 .mp3 结尾。得到链接： 12夕山谣http://m10.music.126.net/20161028204714/808f68...</div></div></div></a><a class="pagination-related" href="/2016/10/27/antiquity-music/" title="优美的古风歌曲"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2016-10-27</div><div class="info-item-2">优美的古风歌曲</div></div><div class="info-2"><div class="info-item-1">古风 古风 是一类新型的文化，是现代人对古代曲风的称呼。&quot;古风&quot; 以中国的传统文化为基调，结合中国传统的文学、琴棋书画、诗词歌赋等，经过不断的发展磨合，形成了比较完备的音乐、文学、绘画等艺术形式。  古风音乐社团墨明棋妙 鸾凤鸣 平纱落雁 满汉全席 声自在 千城醉歌 流觞曲水 花魁楼 千歌未央 云歌落 古风音乐人河图 董贞 小曲儿 少司命 清弄 潇梦临 檀烧 心然 萧人凤 凌之轩 晃儿 重小烟 音频怪物 古风网站5sing 古风杏猫网 古风圈论坛 古风歌曲品鉴杏花弦外雨 杏花弦外雨  是由  潇梦临  作曲及编曲，若紫鸢作词，由  西国的海妖、CRITTY  演唱的一首优质古风歌曲。收录在CRITTY的《弦上春雪》原创古风非实体专辑中。MV由尉迟嘉馨制作，展现了江南水乡的美丽风景，讲述了西厢记中一段才子佳人相思空守的故事。    1234567891011121314151617181920212223242526272829303132333435363738394041作曲/编曲：潇梦临作词：若紫鸢演唱：西国的海妖、CRITTY流莺悄飞近船侧  伴桨声低语...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comments</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">litreily</div><div class="author-info-description">simple life</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">117</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">97</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">15</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Litreily"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://www.litreily.top/notes/" target="_blank" title="Notes"><i class="fas fa-sticky-note" style="color: #e8a618;"></i></a><a class="social-icon" href="mailto:litreily@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E6%8F%90%E6%9D%A1%E4%BB%B6"><span class="toc-number">1.</span> <span class="toc-text">前提条件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%90%AD%E5%BB%BA%E6%9C%8D%E5%8A%A1"><span class="toc-number">2.</span> <span class="toc-text">搭建服务</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#npx%E5%90%AF%E5%8A%A8"><span class="toc-number">2.1.</span> <span class="toc-text">npx启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#node%E5%90%AF%E5%8A%A8"><span class="toc-number">2.2.</span> <span class="toc-text">node启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%90%AD%E5%BB%BA%E7%B3%BB%E7%BB%9F%E6%9C%8D%E5%8A%A1"><span class="toc-number">2.3.</span> <span class="toc-text">搭建系统服务</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%90%86"><span class="toc-number">3.</span> <span class="toc-text">使用代理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/09/19/android10-ota/" title="RK3399 Android 10 系统OTA升级失败问题">RK3399 Android 10 系统OTA升级失败问题</a><time datetime="2024-09-19T08:28:06.000Z" title="Created 2024-09-19 16:28:06">2024-09-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/05/31/rk3399-wol/" title="rk3399 ubuntu 休眠唤醒功能">rk3399 ubuntu 休眠唤醒功能</a><time datetime="2024-05-31T10:31:47.000Z" title="Created 2024-05-31 18:31:47">2024-05-31</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/02/05/rk32-new-part/" title="RK3288 Android6 新增分区">RK3288 Android6 新增分区</a><time datetime="2024-02-05T08:38:12.000Z" title="Created 2024-02-05 16:38:12">2024-02-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/01/10/rk32-disable-wifi/" title="RK3288 Android6 禁用 wifi">RK3288 Android6 禁用 wifi</a><time datetime="2024-01-10T08:55:19.000Z" title="Created 2024-01-10 16:55:19">2024-01-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/06/isolcpus/" title="RK3399 Android10 bind cpu with isolcpus">RK3399 Android10 bind cpu with isolcpus</a><time datetime="2023-12-06T07:29:46.000Z" title="Created 2023-12-06 15:29:46">2023-12-06</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By litreily</span><span class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 5.4.2</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll to Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4"></script><script src="/js/main.js?v=5.5.4"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const initValine = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyValine = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const valineConfig = {
+      el: '#vcomment',
+      appId: '1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+      appKey: 'uvA3xgqNW3q8TGR483lxXcpB',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      visitor: false,
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || window.location.pathname
+    }
+
+    new Valine(valineConfig)
+  }
+
+  const loadValine = async (el, path) => {
+    if (typeof Valine === 'function') {
+      initValine(el, path)
+    } else {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js')
+      initValine(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Valine' === 'Valine'
+      ? window.shuoshuoComment = { loadComment: loadValine }
+      : window.loadOtherComment = loadValine
+    return
+  }
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="local-search-input"><input placeholder="Search..." type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.4"></script></div></div></body></html>

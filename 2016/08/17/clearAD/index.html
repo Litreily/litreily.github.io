@@ -1,0 +1,230 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>消除utorrent中的广告 | LITREILY</title><meta name="author" content="litreily,707922098@qq.com"><meta name="copyright" content="litreily"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="utorrent中的广告真是不胜其烦，让我们消灭它吧!">
+<meta property="og:type" content="article">
+<meta property="og:title" content="消除utorrent中的广告">
+<meta property="og:url" content="https://www.litreily.top/2016/08/17/clearAD/index.html">
+<meta property="og:site_name" content="LITREILY">
+<meta property="og:description" content="utorrent中的广告真是不胜其烦，让我们消灭它吧!">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://www.litreily.top/img/butterfly-icon.png">
+<meta property="article:published_time" content="2016-08-16T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-14T01:37:34.728Z">
+<meta property="article:author" content="litreily">
+<meta property="article:tag" content="tools">
+<meta property="article:tag" content="utorrent">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.litreily.top/img/butterfly-icon.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "消除utorrent中的广告",
+  "url": "https://www.litreily.top/2016/08/17/clearAD/",
+  "image": "https://www.litreily.top/img/butterfly-icon.png",
+  "datePublished": "2016-08-16T16:00:00.000Z",
+  "dateModified": "2026-05-14T01:37:34.728Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "litreily",
+      "url": "https://www.litreily.top"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://www.litreily.top/2016/08/17/clearAD/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.4"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '消除utorrent中的广告',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">117</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">97</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">15</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">LITREILY</span></a><a class="nav-page-title" href="/"><span class="site-name">消除utorrent中的广告</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">消除utorrent中的广告</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2016-08-16T16:00:00.000Z" title="Created 2016-08-17 00:00:00">2016-08-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-05-14T01:37:34.728Z" title="Updated 2026-05-14 09:37:34">2026-05-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Tools/">Tools</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>其实，网上已有大把的教程教我如何去广告，但每次都要谷歌百度却也烦不胜烦，这也就只好搬运到这咯，一劳永逸。</p>
+<h2 id="去广告前"><a href="#去广告前" class="headerlink" title="去广告前"></a>去广告前</h2><p><img src="/assets/utorrent/haveAD.png" alt="haveAD"></p>
+<h2 id="去广告"><a href="#去广告" class="headerlink" title="去广告"></a>去广告</h2><ol>
+<li>在utorrent的菜单栏中选择&quot;选项&quot;，打开“设置”界面，或者按快捷键<code>ctrl+p</code>;</li>
+<li>在设置界面中选择最后一项&quot;高级&quot;;</li>
+<li>在过滤中输入&quot;offers.&quot;，将以下两项设为false：<ul>
+<li>&quot;offers.sponsored_torrent_offer_enabled&quot; ,</li>
+<li>&quot;offers.left_rail_offer_enabled&quot;</li>
+</ul>
+</li>
+<li>在过滤中输入&quot;gui.&quot;,将&quot;gui.show_notorrents_node&quot;设为false.</li>
+</ol>
+<p><img src="/assets/utorrent/settingPanel.png" alt="haveAD"></p>
+<h2 id="去广告后"><a href="#去广告后" class="headerlink" title="去广告后"></a>去广告后</h2><p><img src="/assets/utorrent/noAD.png" alt="haveAD"></p>
+<p>好了，至此广告一扫全无，enjoy it！</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://www.litreily.top">litreily</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://www.litreily.top/2016/08/17/clearAD/">https://www.litreily.top/2016/08/17/clearAD/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/tools/">tools</a><a class="post-meta__tags" href="/tags/utorrent/">utorrent</a></div><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2016/08/21/atom-packages/" title="解决atom无法安装插件的问题"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">解决atom无法安装插件的问题</div></div><div class="info-2"><div class="info-item-1">出错信息倘若使用atom自带的插件安装工具&quot;File-&gt;Settings-&gt;Install&quot;安装插件，通常会报错，以&quot;pp-markdown&quot;为例，其错误信息如下： 1234567891011gyp info it worked if it ends with okgyp info using node-gyp@2.0.2gyp info using node@0.10.40 | win32 | ia32gyp http GET http://gh-contractor-zcbenz.s3.amazonaws.com/atom-shell/dist/v0.37.8/node-v0.37.8.tar.gzgyp WARN install got an error, rolling back installgyp! Compiler tools not foundPackages that depend on modules that contain C/C++ code will fail to install.Read &lt;...</div></div></div></a><a class="pagination-related" href="/2016/06/10/labview-rwTxt/" title="Labview - 存储txt文件"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">Labview - 存储txt文件</div></div><div class="info-2"><div class="info-item-1">存储文件简单存储写个简单的小程序，用于存储四列随机数，每隔1s存储一次，数据之间以tab作为分隔符。  存储后的文件:  加入表头看着上面这个文件，总感觉少点什么，对了，表头还没加。那就加个判断，首次创建文件时添个表头。为了简化点，定时结构就不截图了。  现在再来看看这个txt文件，表头已经被加上了，虽然看着没怎么对齐，但这是正常的，如果导入至Excel就可以看出来。  存储时间大部分情况下，我们在存储数据的同时需要记录存储时间，那么就再稍稍修改一下程序。  添加的东西也不多，就是多了个表头，每组数据前多了个时间标识，需要说明一点的是，这里用到的&quot;格式化日期/时间字符串&quot;，它的格式化方法可以参考以下说明。   下列代码为部分常用的时间格式代码：%c可显示依据地域语言设定的日期/时间。时间相关格式代码为：%X（指定地域的时间），%H（小时，24小时），%I（小时，12小时），%M（分钟），%S（秒），%u（分数秒），%p（a.m./p.m.标识）。日期相关格式代码为：%x（指定地域日期），%y（两位年份），%Y（四位年份），%m（月份），%b（月名缩写），%d（...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2018/04/10/sina/" title="Python网络爬虫2 - 爬取新浪微博用户图片"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2018-04-10</div><div class="info-item-2">Python网络爬虫2 - 爬取新浪微博用户图片</div></div><div class="info-2"><div class="info-item-1">其实，新浪微博用户图片爬虫是我学习python以来写的第一个爬虫，只不过当时懒，后来爬完Lofter后觉得有必要总结一下，所以就有了第一篇爬虫博客。现在暂时闲下来了，准备把新浪的这个也补上。 言归正传，既然选择爬新浪微博，那当然是有需求的，这也是学习的主要动力之一，没错，就是美图。sina用户多数微博都是包含图片的，而且是组图居多，单个图片的较少。 为了避免侵权，本文以本人微博litreily为例说明整个爬取过程，虽然图片较少，质量较低，但爬取方案是绝对ok的，使用时只要换个用户ID就可以了。 分析sina站点获取用户ID在爬取前，我们需要知道的是每个用户都有一个用户名，而一个用户名又对应一个唯一的整型数字ID，类似于学生的学号，本人的是2657006573。至于怎么根据用户名去获取ID，有以下两种方法：  进入待爬取用户主页，在浏览器网址栏中即可看到一串数据，那就是用户ID Ctrl-U查看待爬取用户的源码，搜索&quot;uid，注意是双引号  其实是可以在已知用户名的情况下通过爬虫自动获取到uid的，但是我当时初学python，并没有考虑充分，所以后面的源码是以用户ID作为...</div></div></div></a><a class="pagination-related" href="/2016/05/15/brackets-git/" title="Brackets - Git插件的使用方法"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2016-05-15</div><div class="info-item-2">Brackets - Git插件的使用方法</div></div><div class="info-2"><div class="info-item-1">Brackets，一款专职做网页设计的开发工具，其插件也是极为丰富，Git自然是少不了的，那么如何安装和使用它呢，我以Windows 10环境为例进行说明。 安装插件打开插件管理器在Brackets中，基本上所有的插件都可以从插件管理器(Extension Manager)中安装，该管理器可以从Brackets软件菜单栏File中找到。 ![Extension Manager](/assets/brackets/git/extension manager.png) 搜素并安装git插件 打开插件管理器后，选择“Available”选项卡，在搜索框中输入“git”。  ![input git](/assets/brackets/git/input git.png)  在弹出的列表中找到“Brackets Git”，点击“install”开始安装。  ![install git](/assets/brackets/git/install git.png)  安装完成后，将提示“Installation successful!”。  ![install success](/assets...</div></div></div></a><a class="pagination-related" href="/2018/03/17/lofter/" title="Python网络爬虫1 - 爬取网易LOFTER图片"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2018-03-17</div><div class="info-item-2">Python网络爬虫1 - 爬取网易LOFTER图片</div></div><div class="info-2"><div class="info-item-1">LOFTER是网易出品的优质轻博客，灵感源于国外的tumblr，但比之更加文艺，更加本地化。本人非常喜欢LOFTER的UI设计，以及其中的优质用户和内容，似乎网易并不擅长推广，所以受众并不广泛。这都是题外话，本文主要记录作者近期学习python3并用之爬取LOFTER用户图片的过程和成果，与大家交流分享。  本文将以本人litreily博客为例说明整个爬取过程  分析LOFTER站点在爬取站点之前，首先需要分析站点的关键信息有哪些，如果给自己提问，可能会有以下问题：  用户的主页网址格式是？ 用户博客链接的格式是？ 每篇博客内的图片链接的格式是？ 不同用户的主页模板不同，是否可以按同样方法抓取博客信息？ 用户的博客数量巨大，主页以什么方式分页？ 有没有归档页面方便爬取（大多数网站都有归档页面）？  当然，这些问题不是一下子就能想出来，可以在探索网页内容的过程逐步展开，并思考下一步该考虑的问题，下面针对各个问题对主页进行探索分析。 主页信息 主页: http://[username].lofter.com   从主页可以看到归档的链接，暂时不管。不同的用户，其主页所用模板不尽一致，...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comments</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">litreily</div><div class="author-info-description">simple life</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">117</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">97</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">15</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Litreily"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://www.litreily.top/notes/" target="_blank" title="Notes"><i class="fas fa-sticky-note" style="color: #e8a618;"></i></a><a class="social-icon" href="mailto:litreily@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%BB%E5%B9%BF%E5%91%8A%E5%89%8D"><span class="toc-number">1.</span> <span class="toc-text">去广告前</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%BB%E5%B9%BF%E5%91%8A"><span class="toc-number">2.</span> <span class="toc-text">去广告</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%BB%E5%B9%BF%E5%91%8A%E5%90%8E"><span class="toc-number">3.</span> <span class="toc-text">去广告后</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/09/19/android10-ota/" title="RK3399 Android 10 系统OTA升级失败问题">RK3399 Android 10 系统OTA升级失败问题</a><time datetime="2024-09-19T08:28:06.000Z" title="Created 2024-09-19 16:28:06">2024-09-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/05/31/rk3399-wol/" title="rk3399 ubuntu 休眠唤醒功能">rk3399 ubuntu 休眠唤醒功能</a><time datetime="2024-05-31T10:31:47.000Z" title="Created 2024-05-31 18:31:47">2024-05-31</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/02/05/rk32-new-part/" title="RK3288 Android6 新增分区">RK3288 Android6 新增分区</a><time datetime="2024-02-05T08:38:12.000Z" title="Created 2024-02-05 16:38:12">2024-02-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/01/10/rk32-disable-wifi/" title="RK3288 Android6 禁用 wifi">RK3288 Android6 禁用 wifi</a><time datetime="2024-01-10T08:55:19.000Z" title="Created 2024-01-10 16:55:19">2024-01-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/06/isolcpus/" title="RK3399 Android10 bind cpu with isolcpus">RK3399 Android10 bind cpu with isolcpus</a><time datetime="2023-12-06T07:29:46.000Z" title="Created 2023-12-06 15:29:46">2023-12-06</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By litreily</span><span class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 5.4.2</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll to Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4"></script><script src="/js/main.js?v=5.5.4"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const initValine = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyValine = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const valineConfig = {
+      el: '#vcomment',
+      appId: '1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+      appKey: 'uvA3xgqNW3q8TGR483lxXcpB',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      visitor: false,
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || window.location.pathname
+    }
+
+    new Valine(valineConfig)
+  }
+
+  const loadValine = async (el, path) => {
+    if (typeof Valine === 'function') {
+      initValine(el, path)
+    } else {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js')
+      initValine(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Valine' === 'Valine'
+      ? window.shuoshuoComment = { loadComment: loadValine }
+      : window.loadOtherComment = loadValine
+    return
+  }
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="local-search-input"><input placeholder="Search..." type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.4"></script></div></div></body></html>

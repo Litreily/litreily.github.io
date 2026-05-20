@@ -1,0 +1,401 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>建站日志 | LITREILY</title><meta name="author" content="litreily,707922098@qq.com"><meta name="copyright" content="litreily"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="使用hexo建站后，改用了新的主题，但存在许多问题，后续将不断修复更新，本文将记录主要的更新内容。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="建站日志">
+<meta property="og:url" content="https://www.litreily.top/2016/12/12/blog-log/index.html">
+<meta property="og:site_name" content="LITREILY">
+<meta property="og:description" content="使用hexo建站后，改用了新的主题，但存在许多问题，后续将不断修复更新，本文将记录主要的更新内容。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://www.litreily.top/img/butterfly-icon.png">
+<meta property="article:published_time" content="2016-12-12T03:21:05.000Z">
+<meta property="article:modified_time" content="2026-05-14T01:37:34.879Z">
+<meta property="article:author" content="litreily">
+<meta property="article:tag" content="jekyll">
+<meta property="article:tag" content="hexo">
+<meta property="article:tag" content="log">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.litreily.top/img/butterfly-icon.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "建站日志",
+  "url": "https://www.litreily.top/2016/12/12/blog-log/",
+  "image": "https://www.litreily.top/img/butterfly-icon.png",
+  "datePublished": "2016-12-12T03:21:05.000Z",
+  "dateModified": "2026-05-14T01:37:34.879Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "litreily",
+      "url": "https://www.litreily.top"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://www.litreily.top/2016/12/12/blog-log/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.4"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '建站日志',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">117</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">97</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">15</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">LITREILY</span></a><a class="nav-page-title" href="/"><span class="site-name">建站日志</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">建站日志</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2016-12-12T03:21:05.000Z" title="Created 2016-12-12 11:21:05">2016-12-12</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-05-14T01:37:34.879Z" title="Updated 2026-05-14 09:37:34">2026-05-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%9D%82%E7%89%A9%E6%9F%9C/">杂物柜</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>使用 <code>hexo</code> 建站后，改用了新的主题，但存在许多问题，后续将不断修复更新，本文将记录主要的更新内容。</p>
+<h2 id="Before"><a href="#Before" class="headerlink" title="Before"></a>Before</h2><p>在使用 <a target="_blank" rel="noopener" href="https://github.com/yumemor/hexo-theme-primer">primer</a> 主题之前，我使用 <code>jekyll</code> 建站，配合 <code>coding-pages</code> 服务部署网站，站点所有样式均为自定义。</p>
+<h3 id="Infomation"><a href="#Infomation" class="headerlink" title="Infomation"></a>Infomation</h3><ul>
+<li><code>jekyll</code> + <code>coding-pages</code> 建站</li>
+<li><code>url</code>: <a href="http://www.litreily.top/">www.litreily.top</a></li>
+<li>评论系统：<code>disqus</code> | 友言</li>
+<li>统计服务：<a target="_blank" rel="noopener" href="http://tongji.baidu.com/">百度统计</a></li>
+</ul>
+<h3 id="Display"><a href="#Display" class="headerlink" title="Display"></a>Display</h3><p><img src="/assets/log/jekyll_home.png" alt="jekyll-homepage"></p>
+<p><img src="/assets/log/jekyll_blog.png" alt="jekyll-blogpage"></p>
+<p><img src="/assets/log/jekyll_category.png" alt="jekyll-category"></p>
+<p><img src="/assets/log/jekyll_about.png" alt="jekyll-about"></p>
+<h2 id="2016-12-11"><a href="#2016-12-11" class="headerlink" title="2016-12-11"></a>2016-12-11</h2><p>经好友 <a target="_blank" rel="noopener" href="https://www.smslit.top/">smslit</a> 推荐，使用 <code>hexo</code> 主题建站，纠结许久后决定使用 <code>primer</code> 主题，并根据个人需求进行定制和优化。好了，下面对建站过程进行简要介绍。</p>
+<h3 id="Install"><a href="#Install" class="headerlink" title="Install"></a>Install</h3><ul>
+<li>安装 <code>hexo</code></li>
+</ul>
+<p>在确保安装好 <a target="_blank" rel="noopener" href="https://nodejs.org/en/">node.js</a> 以及 <a target="_blank" rel="noopener" href="https://git-scm.com/downloads">git</a> 的情况下执行以下指令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">npm install hexo-cli -g<br>hexo init hexoBlog<br><span class="hljs-built_in">cd</span> hexoBlog<br>npm install<br></code></pre></td></tr></table></figure>
+
+<p><code>hexo</code>系统默认下载主题 <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo-theme-landscape">landscape</a> ，折腾了一小会觉得除了代码高亮不错外，其它样式略显一般，所以直接放弃，改用 <a target="_blank" rel="noopener" href="https://github.com/yumemor/hexo-theme-primer">primer</a>。</p>
+<ul>
+<li>下载 <code>primer</code></li>
+</ul>
+<p>在 <code>hexoBlog\themes</code> 目录下克隆主题</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">clone</span> https://github.com/yumemor/hexo-theme-primer.git<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>新建 <code>github</code> 远程仓库</li>
+</ul>
+<p>为了使用 <code>github pages</code> ,需要将仓库名称设为 <code>[username].github.io</code> ，后续配置 <code>_config.yml</code> 时，需要将 <code>deploy</code> 的属性 <code>repo</code> 设为该仓库目录。</p>
+<ul>
+<li>安装插件</li>
+</ul>
+<p>为了使用 <code>hexo</code> 的发布功能、站内搜索等功能，需要安装以下插件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">npm install hexo-server --save<br>npm install hexo-renderer-less --save<br>npm install hexo-generator-feed --save<br>npm install hexo-generator-search --save<br></code></pre></td></tr></table></figure>
+
+<h3 id="Config"><a href="#Config" class="headerlink" title="Config"></a>Config</h3><ul>
+<li>修改 <strong>根目录</strong> 下的 <code>_config.yml</code></li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs YAML"><span class="hljs-comment"># Site</span><br><span class="hljs-attr">title:</span> <span class="hljs-string">LITREILY</span><br><span class="hljs-attr">subtitle:</span> <span class="hljs-string">simple</span> <span class="hljs-string">life</span><br><span class="hljs-attr">description:</span> <span class="hljs-string">Stay</span> <span class="hljs-string">Hungry,</span> <span class="hljs-string">Stay</span> <span class="hljs-string">Foolish</span><br><span class="hljs-attr">author:</span> <span class="hljs-string">litreily</span><br><span class="hljs-attr">language:</span> <span class="hljs-string">default</span><br><span class="hljs-attr">email:</span> <span class="hljs-number">707922098</span><span class="hljs-string">@qq.com</span><br><br><span class="hljs-comment"># URL</span><br><span class="hljs-attr">url:</span> <span class="hljs-string">www.litreily.top/</span><br><br><span class="hljs-comment"># Writing</span><br><span class="hljs-comment">## transplant from jekyll system which post-name write  with date</span><br><span class="hljs-comment">## so it&#x27;s needed to change the name of new posts</span><br><span class="hljs-attr">new_post_name:</span> <span class="hljs-string">:year-:month-:day-:title.markdown</span><br><br><span class="hljs-comment"># Pagination</span><br><span class="hljs-comment">## Set per_page to 0 to disable pagination</span><br><span class="hljs-attr">per_page:</span> <span class="hljs-number">8</span><br><span class="hljs-attr">pagination_dir:</span> <span class="hljs-string">page</span><br><br><span class="hljs-comment"># Extensions</span><br><span class="hljs-comment">## Plugins: https://hexo.io/plugins/</span><br><span class="hljs-comment">## Themes: https://hexo.io/themes/</span><br><span class="hljs-attr">theme:</span> <span class="hljs-string">primer</span><br><br><span class="hljs-comment"># Deployment</span><br><span class="hljs-comment">## Docs: https://hexo.io/docs/deployment.html</span><br><span class="hljs-attr">deploy:</span><br>  <span class="hljs-attr">type:</span> <span class="hljs-string">git</span><br>  <span class="hljs-attr">repo:</span> <span class="hljs-string">git@github.com:Litreily/Litreily.github.io.git</span><br>  <span class="hljs-attr">branch:</span> <span class="hljs-string">master</span><br><br><span class="hljs-comment"># Search</span><br><span class="hljs-attr">search:</span><br>  <span class="hljs-attr">path:</span> <span class="hljs-string">search.xml</span><br>  <span class="hljs-attr">field:</span> <span class="hljs-string">post</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>修改 <strong>主题目录</strong> 下的 <code>_config.yml</code></li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs YAML"><span class="hljs-attr">menus:</span><br>    <span class="hljs-bullet">-</span><br>        <span class="hljs-attr">name:</span> <span class="hljs-string">首页</span><br>        <span class="hljs-attr">link:</span> <span class="hljs-string">/</span><br>    <span class="hljs-bullet">-</span><br>        <span class="hljs-attr">name:</span> <span class="hljs-string">分类</span><br>        <span class="hljs-attr">link:</span> <span class="hljs-string">categories/</span><br>    <span class="hljs-bullet">-</span><br>        <span class="hljs-attr">name:</span> <span class="hljs-string">开源项目</span><br>        <span class="hljs-attr">link:</span> <span class="hljs-string">open-source/</span><br>    <span class="hljs-bullet">-</span><br>        <span class="hljs-attr">name:</span> <span class="hljs-string">留言板</span><br>        <span class="hljs-attr">link:</span> <span class="hljs-string">message/</span><br><br><span class="hljs-comment"># Profile</span><br><span class="hljs-attr">profile:</span><br>    <span class="hljs-attr">location:</span> <span class="hljs-string">QingDao,</span> <span class="hljs-string">China</span><br>    <span class="hljs-attr">github:</span> <span class="hljs-string">litreily</span><br>    <span class="hljs-attr">organization:</span> <span class="hljs-string">upc</span><br><br><span class="hljs-comment"># Github</span><br><span class="hljs-attr">github:</span><br>  <span class="hljs-attr">username:</span> <span class="hljs-string">litreily</span><br>  <span class="hljs-attr">popular_repos:</span> [<span class="hljs-string">hexoBlogProject</span>,<span class="hljs-string">jekyllBlog</span>,<span class="hljs-string">Student</span>]<br><br><span class="hljs-comment"># Comments</span><br><span class="hljs-attr">youyan_username:</span> <span class="hljs-string">litreily</span><br><span class="hljs-attr">duoshuo_username:</span> <span class="hljs-string">litreily</span> <span class="hljs-comment"># 多说配置</span><br><span class="hljs-comment">#disqus_username: litreily # disqus 配置</span><br><br><span class="hljs-comment"># Search</span><br><span class="hljs-comment">## google | local</span><br><span class="hljs-attr">search:</span><br>    <span class="hljs-attr">use:</span> <span class="hljs-string">local</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="Deploy"><a href="#Deploy" class="headerlink" title="Deploy"></a>Deploy</h3><ul>
+<li><p>将 <code>jekyll</code> 系统中的博客复制到文件夹 <code>/source/_posts</code> 中</p>
+</li>
+<li><p>发布博客</p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo clean<br>hexo generate<br>hexo deploy<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>本地服务器</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo serve<br></code></pre></td></tr></table></figure>
+
+<h3 id="Fix"><a href="#Fix" class="headerlink" title="Fix"></a>Fix</h3><ul>
+<li>解决代码高亮不正常问题</li>
+</ul>
+<p>由于 <code>primer</code>主题自带高亮样式，所以需要将原有样式禁用，修改 <strong>根目录</strong> 下的 <code>_config.yml</code> 文件</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs YAML"><span class="hljs-attr">highlight:</span><br>  <span class="hljs-attr">enable:</span> <span class="hljs-literal">false</span><br>  <span class="hljs-attr">line_number:</span> <span class="hljs-literal">false</span><br>  <span class="hljs-attr">auto_detect:</span> <span class="hljs-literal">false</span><br>  <span class="hljs-attr">tab_replace:</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>解决首页显示全部博文问题</li>
+</ul>
+<p>首次使用 <code>primer</code> 主题，成功发布后发现主页博客列表显示了整个博文内容，而非摘要，后来查找主题文件发现原主人使用了 <code>excerpt</code> 变量，而我原先使用的均是 <code>description</code> ，所以将主题文件 <code>primer\layout\_partial\article.ejs</code> 中的 <code>excerpt</code> 替换为 <code>description</code> 后便可以了。</p>
+<ul>
+<li>解决留言板样式不正常问题</li>
+</ul>
+<p>首先需要说明的是， <code>primer</code> 主题自带 <strong>首页</strong>、<strong>分类</strong> 、 <strong>开源项目</strong> 和 <strong>留言板</strong> 4个页面，当然在使用时，需要通过</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo new page categories<br>hexo new page open-source<br>hexo new page message<br></code></pre></td></tr></table></figure>
+
+<p>创建好除首页外的其它三个页面后，因为主题中都有 <code>layout</code> 文件 <code>categories.ejs</code> 与 <code>open.ejs</code>与之对应，所以<code>category</code> 和 <code>open-source</code> 都能够正常显示。</p>
+<p>而 <code>message</code> 页面并没有，它默认使用 <code>layout:page</code> ，导致页面中保留了目录栏和分享栏，而这并不是我想要的，所以我在 <code>primer\layout\_partial\</code> 中添加 <code>message.ejs</code> 文件，在 <code>article-post.ejs</code> 文件基础上删除了多余项。</p>
+<p>最后在 <code>primer\layout\</code> 中添加 <code>message.ejs</code>（与<code>_partial</code>文件夹中的不同）文件，写入以下内容即可。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span><br>    &lt;%- partial(&#x27;_partial/header&#x27;) %&gt;<br>    &lt;%- partial(&#x27;_partial/banner-post&#x27;,&#123;post: page,index: true&#125;) %&gt;<br>    &lt;%- partial(&#x27;_partial/message&#x27;,&#123;post: page,index: false&#125;) %&gt;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>categories 与 tags</li>
+</ul>
+<p>在 <code>jekyll</code> 中，分类与标签基本是一个概念，但在 <code>hexo</code> 却截然不同， <code>categories</code> 有级别之分（按先后顺序分级），而 <code>tags</code> 并没有。所以需要将原有博客重新归类并设置标签。</p>
+<h2 id="2016-12-12"><a href="#2016-12-12" class="headerlink" title="2016-12-12"></a>2016-12-12</h2><ul>
+<li>将评论系统改为 <a target="_blank" rel="noopener" href="http://duoshuo.com/">多说</a></li>
+<li>将原有博文的 <code>h4</code> 标题统一改为 <code>h3</code></li>
+<li>添加博文 &quot;建站日志&quot; ，用以记录网站建设过程</li>
+<li>将博客部署到域名 <code>www.litreily.top</code></li>
+<li>修改 <code>primer\layout\_partial\footer.ejs</code> ，配置 <code>RSS</code> 路径，将 <code>atom.xml</code> 改为 <code>search.xml</code>。</li>
+</ul>
+<h2 id="2016-12-14"><a href="#2016-12-14" class="headerlink" title="2016-12-14"></a>2016-12-14</h2><ul>
+<li>用PS手绘字母 <code>L</code> ，修改网站logo</li>
+<li>修复了博文中所有引用 <code>&gt;</code> 显示异常的问题</li>
+<li>修复了博文中图片错位的问题</li>
+<li>修改了 <code>footer</code> 中的主题链接，已修改为 <a target="_blank" rel="noopener" href="https://github.com/Litreily/hexo-theme-primer">https://github.com/Litreily/hexo-theme-primer</a></li>
+</ul>
+<h2 id="2016-12-15"><a href="#2016-12-15" class="headerlink" title="2016-12-15"></a>2016-12-15</h2><ul>
+<li>对部分博文重新分类，减少 <code>categories</code> 数量</li>
+<li>将分类页面的标签栏 <code>Blog Tags</code> 换为分类栏 <code>Blog Categories</code>，并给所有类型添加链接</li>
+<li>去除留言板页面中标题下方的时间显示</li>
+<li>在 <code>css/_partial/article.styl</code> 中添加了 <code>pre.descriptions</code> 样式</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs css">pre<span class="hljs-selector-class">.descriptions</span><br>    <span class="hljs-attribute">font-size</span>: <span class="hljs-number">14px</span> <span class="hljs-meta">!important</span>;<br>    <span class="hljs-attribute">border-left</span>: <span class="hljs-number">3px</span> solid <span class="hljs-number">#4996D1</span>;<br>    <span class="hljs-attribute">border-radius</span>: <span class="hljs-number">0</span> <span class="hljs-meta">!important</span>;<br>    <span class="hljs-attribute">background-color</span>: <span class="hljs-built_in">rgba</span>(<span class="hljs-number">255</span>,<span class="hljs-number">255</span>,<span class="hljs-number">255</span>,<span class="hljs-number">0</span>) <span class="hljs-meta">!important</span>;<br>    <span class="hljs-attribute">margin-left</span>: <span class="hljs-number">2em</span>;<br></code></pre></td></tr></table></figure>
+
+<p>示例</p>
+<hr>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">pre</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;descriptions&quot;</span>&gt;</span><br>1. step1<br>2. step2<br>3. step3<br><span class="hljs-tag">&lt;/<span class="hljs-name">pre</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>针对特定博文添加了两个标签样式 <code>tagBlack</code> &amp; <code>tagGrey</code></li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-selector-class">.tagBlack</span> <span class="hljs-selector-tag">a</span>, <span class="hljs-selector-class">.tagGrey</span> <span class="hljs-selector-tag">a</span>&#123;<br>    <span class="hljs-attribute">text-decoration</span>: none <span class="hljs-meta">!important</span>;<br>    <span class="hljs-attribute">transition</span>: background-color .<span class="hljs-number">2s</span> ease;<br>    <span class="hljs-attribute">padding</span>: .<span class="hljs-number">4em</span> .<span class="hljs-number">6em</span>;<br>    <span class="hljs-attribute">margin</span>: <span class="hljs-number">0</span> <span class="hljs-number">3px</span> <span class="hljs-number">3px</span> <span class="hljs-number">0</span>;<br>    <span class="hljs-attribute">line-height</span>: <span class="hljs-number">1</span>;<br>    <span class="hljs-attribute">white-space</span>: nowrap;<br>    <span class="hljs-attribute">font-size</span>: <span class="hljs-number">12px</span>;<br>    <span class="hljs-attribute">border</span>: <span class="hljs-number">1px</span> solid transparent;<br>    <span class="hljs-attribute">display</span>: inline-block;<br>    <span class="hljs-attribute">border-radius</span>: <span class="hljs-number">4px</span>;<br>&#125;<br><br><span class="hljs-selector-class">.tagBlack</span> <span class="hljs-selector-tag">a</span>&#123;<br>    <span class="hljs-attribute">color</span>: <span class="hljs-number">#FFF</span>;<br>    <span class="hljs-attribute">background-color</span>: <span class="hljs-number">#2f3337</span>;<br>    &amp;<span class="hljs-selector-pseudo">:hover</span>&#123;<br>        <span class="hljs-attribute">color</span>: <span class="hljs-number">#FFF</span>;<br>        <span class="hljs-attribute">background-color</span>: <span class="hljs-number">#0C0D0E</span>;<br>    &#125;<br>&#125;<br><br><span class="hljs-selector-class">.tagGrey</span> <span class="hljs-selector-tag">a</span>&#123;<br>    <span class="hljs-attribute">color</span>: <span class="hljs-number">#535a60</span>;<br>    <span class="hljs-attribute">background-color</span>: <span class="hljs-number">#eff0f1</span>;<br>    <span class="hljs-attribute">border-color</span>: <span class="hljs-number">#d6d9dc</span>;<br>    &amp;<span class="hljs-selector-pseudo">:hover</span>&#123;<br>        <span class="hljs-attribute">color</span>: <span class="hljs-number">#535a60</span>;<br>        <span class="hljs-attribute">background-color</span>: <span class="hljs-number">#D6D9DC</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>示例</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;tagBlack&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;http://www.mymmqm.com/&quot;</span>&gt;</span>莫明棋妙<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;tagGrey&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;http://www.xiami.com/artist/68934&quot;</span>&gt;</span>河图<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>在菜单栏加入 <code>标签</code> 项，并在标签页内中加入 <code>标签云</code></li>
+</ul>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs txt">tags.ejs: 标签云界面<br>tag.ejs:  单个标签页，显示某标签内的博客列表，并在侧边显示带有链接的标签栏<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>修改 <code>search.js</code> 与 <code>search-local-js.ejs</code> ，在搜索后的路径中添加 <code>http://</code> , p修复搜索框链接出错问题</p>
+</li>
+<li><p>在 <code>themes\primer\source</code> 中添加文件 <code>CNAME</code>，添加域名</p>
+</li>
+</ul>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs yml"><span class="hljs-string">www.litreily.top</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="2016-12-23"><a href="#2016-12-23" class="headerlink" title="2016-12-23"></a>2016-12-23</h2><ul>
+<li>修复RSS，将主题中的 <code>footer.ejs</code> ，将 <code>search</code> 改为 <code>atom</code></li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;/atom.xml&quot;</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>当然，让博客成功生成 <code>atom.xml</code> 的前提是安装好 <code>feed</code> 生成插件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">npm install hexo-generate-feed --save<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>参考<a target="_blank" rel="noopener" href="http://ibruce.info/2015/04/04/busuanzi/">不蒜子</a>，添加站点流量统计服务</li>
+</ul>
+<p>在 <code>head</code> 中导入所需的 <code>js</code> 文件：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">async</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js&quot;</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>并在 <code>banner.ejs</code> 添加两个标签：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;meta-info&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;octicon octicon-pulse&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;busuanzi_value_site_pv&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;views&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;meta-info&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;octicon octicon-flame&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;busuanzi_value_site_uv&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;views&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>添加百度统计服务</li>
+</ul>
+<p>在<a target="_blank" rel="noopener" href="http://tongji.baidu.com/">百度统计</a>中添加好站点，根据提示获取统计代码</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span><br><span class="language-javascript">    <span class="hljs-keyword">var</span> _hmt = _hmt || [];</span><br><span class="language-javascript">    (<span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;</span><br><span class="language-javascript">    <span class="hljs-keyword">var</span> hm = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">&quot;script&quot;</span>);</span><br><span class="language-javascript">    hm.<span class="hljs-property">src</span> = <span class="hljs-string">&quot;https://hm.baidu.com/hm.js?d34587ee0aac7488b7dd789f9f17f366&quot;</span>;</span><br><span class="language-javascript">    <span class="hljs-keyword">var</span> s = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementsByTagName</span>(<span class="hljs-string">&quot;script&quot;</span>)[<span class="hljs-number">0</span>];</span><br><span class="language-javascript">    s.<span class="hljs-property">parentNode</span>.<span class="hljs-title function_">insertBefore</span>(hm, s);</span><br><span class="language-javascript">    &#125;)();</span><br><span class="language-javascript"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>在 <code>head.ejs</code> 中的 <code>&lt;/head&gt;</code> 前添加以上代码，往后便可在百度统计中查看站点的详细信息啦。</p>
+<h2 id="2016-12-24"><a href="#2016-12-24" class="headerlink" title="2016-12-24"></a>2016-12-24</h2><ul>
+<li>修复RSS无法被正常获取资源的问题</li>
+</ul>
+<p>今天用 <code>FeedDemon</code> 获取本站点的 <code>RSS</code> 资源，发现能够得到列表，但点击链接后发现多了一个站点根目录的前缀，后来发现是自己的根目录设置有问题。于是我修改了站点配置文件<code>_config.yml</code>，加上前缀<code>http://</code>就ok了。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs YAML"><span class="hljs-attr">url:</span> <span class="hljs-string">http://www.litreily.top/</span><br><span class="hljs-attr">root:</span> <span class="hljs-string">/</span><br></code></pre></td></tr></table></figure>
+
+<p>但是修改以后发现搜索功能又出问题了，这才意识到原来修改 <code>search.js</code> 与 <code>search-local-js.ejs</code> 才是多此一举，原来的问题同样出在这个<code>url</code>，所以只能又将这两个文件的 <code>http://</code> 去掉了。</p>
+<h2 id="2017-04-29"><a href="#2017-04-29" class="headerlink" title="2017-04-29"></a>2017-04-29</h2><ul>
+<li>更换新主题 <a target="_blank" rel="noopener" href="https://github.com/tufu9441/maupassant-hexo">maupassant</a>，大道至简</li>
+<li>解决代码高亮不正常问题</li>
+<li>替换搜索引擎至本地搜索</li>
+</ul>
+<h2 id="2017-04-30"><a href="#2017-04-30" class="headerlink" title="2017-04-30"></a>2017-04-30</h2><ul>
+<li>更新主题样式，修复部分文章显示异常的问题</li>
+<li>更新标签云样式</li>
+</ul>
+<h2 id="2017-05-01"><a href="#2017-05-01" class="headerlink" title="2017-05-01"></a>2017-05-01</h2><ul>
+<li>在About页面添加联系方式和一句简短的介绍</li>
+<li>在菜单中添加了gitbook笔记的接口</li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><h3 id="域名"><a href="#域名" class="headerlink" title="域名"></a>域名</h3><ul>
+<li>国际域名网：<a target="_blank" rel="noopener" href="http://www.yuming.top/">http://www.yuming.top/</a></li>
+</ul>
+<h3 id="hexo"><a href="#hexo" class="headerlink" title="hexo"></a>hexo</h3><ul>
+<li><code>hexo</code>帮助文档：<a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/">https://hexo.io/zh-cn/docs/</a></li>
+<li><code>primer</code>主题：<a target="_blank" rel="noopener" href="https://github.com/yumemor/hexo-theme-primer">https://github.com/yumemor/hexo-theme-primer</a></li>
+<li><code>hexo</code>搭建<code>Github-Pages</code>博客填坑教程：<a target="_blank" rel="noopener" href="http://www.jianshu.com/p/35e197cb1273">http://www.jianshu.com/p/35e197cb1273</a></li>
+</ul>
+<h3 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h3><ul>
+<li><strong>不蒜子</strong>站点统计：<a target="_blank" rel="noopener" href="http://ibruce.info/2015/04/04/busuanzi/">http://ibruce.info/2015/04/04/busuanzi/</a></li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://www.litreily.top">litreily</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://www.litreily.top/2016/12/12/blog-log/">https://www.litreily.top/2016/12/12/blog-log/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/jekyll/">jekyll</a><a class="post-meta__tags" href="/tags/hexo/">hexo</a><a class="post-meta__tags" href="/tags/log/">log</a></div><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2016/12/26/RSS-descr/" title="RSS简介"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">RSS简介</div></div><div class="info-2"><div class="info-item-1">简介之前看到好多网站都有下面这个图标，然后点进去就出来个xml文件，一直不明白这个是干什么的，后来自己使用jekyll创建博客，发现自动生成了一个feed.xml，也不明白这是干啥的。  直到近日使用Hexo创建博客，又遇到RSS配置问题，这才决定一探究竟。经过搜索，知道 RSS (Really Simple Syndication, 简易信息聚合)是一种基于XML标准，广泛用于互联网的内容包装和投递协议。 而前面所说的feed.xml就是一个RSS文件，当我们把rss文件通过链接形式放在自己的博客网站上后，其他人就能通过这个链接订阅自己的博客了。 在这个信息爆炸的时代，使用RSS订阅能更快速地获取自己想要关注的信息，避免浪费大量时间在网络上漫无目的的瞎逛。 RSS源了解了什么是rss后，我们需要知道的就是如果获取RSS资源，现在的大部分新闻网站和博客网站都提供了RSS订阅功能。如何分辨一个网站是否支持RSS订阅功能，目前我所知道的方法包括：  查找网站中的 RSS logo 标注了 “RSS” 文字的地方 标注了 “订阅” 相关的链接  嫌麻烦，当然可以找别人已经总结好的订阅源...</div></div></div></a><a class="pagination-related" href="/2016/12/10/hello-hexo/" title="Welcome to hexo"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">Welcome to hexo</div></div><div class="info-2"><div class="info-item-1">Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick StartCreate a new post named new post1hexo new &quot;My New Post&quot;  More info: Writing Run server1hexo server  More info: Server Generate static files1hexo generate  More info: Generating Deploy to remote sites1hexo deploy  More info: Deployment </div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2016/12/10/hello-hexo/" title="Welcome to hexo"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2016-12-10</div><div class="info-item-2">Welcome to hexo</div></div><div class="info-2"><div class="info-item-1">Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick StartCreate a new post named new post1hexo new &quot;My New Post&quot;  More info: Writing Run server1hexo server  More info: Server Generate static files1hexo generate  More info: Generating Deploy to remote sites1hexo deploy  More info: Deployment </div></div></div></a><a class="pagination-related" href="/2016/04/15/install-jekyll/" title="在Windows中安装Jekyll"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2016-04-15</div><div class="info-item-2">在Windows中安装Jekyll</div></div><div class="info-2"><div class="info-item-1">本着无聊爱折腾的精神，又鉴于Windows系统的限制，无奈寻觅网上资料千千万，终寻得一卷 **奇书**，得偿所愿！ 依赖工具 Ruby &amp; Ruby Development Kit Jekyll Python(可选) Pygments(可选)  搭建Jekyll环境在Windows中下载安装所需的依赖包，并配置好对应的环境变量。 安装Ruby由于jekyll采用Ruby开发而得，所以想要使用它就得安装Ruby语言环境。可以从http://rubyinstaller.org/downloads/下载Ruby安装包，推荐选择Ruby 2.2.4。下载后安装在C:\Ruby，当然，路径不是固定的。  下载解压Devkit下载Ruby的开发工具DevKit，地址与Ruby的下载地址一致。当然，别忘了根据系统位数选择最新版本的DevKit。至于解压路径，选择C:\devkit即可。  初始化Devkit使用快捷键Win+R输入cmd打开命令窗口，输入以下指令： 12cd C:\devkitruby dk.rb init   运行以上指令后，devkit目录下将会多出一个&quot;...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comments</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">litreily</div><div class="author-info-description">simple life</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">117</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">97</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">15</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Litreily"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://www.litreily.top/notes/" target="_blank" title="Notes"><i class="fas fa-sticky-note" style="color: #e8a618;"></i></a><a class="social-icon" href="mailto:litreily@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Before"><span class="toc-number">1.</span> <span class="toc-text">Before</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Infomation"><span class="toc-number">1.1.</span> <span class="toc-text">Infomation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Display"><span class="toc-number">1.2.</span> <span class="toc-text">Display</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2016-12-11"><span class="toc-number">2.</span> <span class="toc-text">2016-12-11</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Install"><span class="toc-number">2.1.</span> <span class="toc-text">Install</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Config"><span class="toc-number">2.2.</span> <span class="toc-text">Config</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploy"><span class="toc-number">2.3.</span> <span class="toc-text">Deploy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Fix"><span class="toc-number">2.4.</span> <span class="toc-text">Fix</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2016-12-12"><span class="toc-number">3.</span> <span class="toc-text">2016-12-12</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2016-12-14"><span class="toc-number">4.</span> <span class="toc-text">2016-12-14</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2016-12-15"><span class="toc-number">5.</span> <span class="toc-text">2016-12-15</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2016-12-23"><span class="toc-number">6.</span> <span class="toc-text">2016-12-23</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2016-12-24"><span class="toc-number">7.</span> <span class="toc-text">2016-12-24</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2017-04-29"><span class="toc-number">8.</span> <span class="toc-text">2017-04-29</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2017-04-30"><span class="toc-number">9.</span> <span class="toc-text">2017-04-30</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2017-05-01"><span class="toc-number">10.</span> <span class="toc-text">2017-05-01</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">11.</span> <span class="toc-text">参考资料</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%9F%E5%90%8D"><span class="toc-number">11.1.</span> <span class="toc-text">域名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hexo"><span class="toc-number">11.2.</span> <span class="toc-text">hexo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E5%AE%83"><span class="toc-number">11.3.</span> <span class="toc-text">其它</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/09/19/android10-ota/" title="RK3399 Android 10 系统OTA升级失败问题">RK3399 Android 10 系统OTA升级失败问题</a><time datetime="2024-09-19T08:28:06.000Z" title="Created 2024-09-19 16:28:06">2024-09-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/05/31/rk3399-wol/" title="rk3399 ubuntu 休眠唤醒功能">rk3399 ubuntu 休眠唤醒功能</a><time datetime="2024-05-31T10:31:47.000Z" title="Created 2024-05-31 18:31:47">2024-05-31</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/02/05/rk32-new-part/" title="RK3288 Android6 新增分区">RK3288 Android6 新增分区</a><time datetime="2024-02-05T08:38:12.000Z" title="Created 2024-02-05 16:38:12">2024-02-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/01/10/rk32-disable-wifi/" title="RK3288 Android6 禁用 wifi">RK3288 Android6 禁用 wifi</a><time datetime="2024-01-10T08:55:19.000Z" title="Created 2024-01-10 16:55:19">2024-01-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/06/isolcpus/" title="RK3399 Android10 bind cpu with isolcpus">RK3399 Android10 bind cpu with isolcpus</a><time datetime="2023-12-06T07:29:46.000Z" title="Created 2023-12-06 15:29:46">2023-12-06</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By litreily</span><span class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 5.4.2</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll to Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4"></script><script src="/js/main.js?v=5.5.4"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const initValine = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyValine = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const valineConfig = {
+      el: '#vcomment',
+      appId: '1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+      appKey: 'uvA3xgqNW3q8TGR483lxXcpB',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      visitor: false,
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || window.location.pathname
+    }
+
+    new Valine(valineConfig)
+  }
+
+  const loadValine = async (el, path) => {
+    if (typeof Valine === 'function') {
+      initValine(el, path)
+    } else {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js')
+      initValine(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Valine' === 'Valine'
+      ? window.shuoshuoComment = { loadComment: loadValine }
+      : window.loadOtherComment = loadValine
+    return
+  }
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="local-search-input"><input placeholder="Search..." type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.4"></script></div></div></body></html>

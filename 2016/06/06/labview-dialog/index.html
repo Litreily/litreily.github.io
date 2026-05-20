@@ -1,0 +1,250 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Labview - 对话框程序模板 | LITREILY</title><meta name="author" content="litreily,707922098@qq.com"><meta name="copyright" content="litreily"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="软件开发过程中，经常要使用对话框界面，例如各种参数设置界面等。为了减少重复性工作，我们可以创建一个对话框模板，往后就可以通过该模板直接新建对话框界面。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Labview - 对话框程序模板">
+<meta property="og:url" content="https://www.litreily.top/2016/06/06/labview-dialog/index.html">
+<meta property="og:site_name" content="LITREILY">
+<meta property="og:description" content="软件开发过程中，经常要使用对话框界面，例如各种参数设置界面等。为了减少重复性工作，我们可以创建一个对话框模板，往后就可以通过该模板直接新建对话框界面。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://www.litreily.top/img/butterfly-icon.png">
+<meta property="article:published_time" content="2016-06-05T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-14T01:37:34.697Z">
+<meta property="article:author" content="litreily">
+<meta property="article:tag" content="labview">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.litreily.top/img/butterfly-icon.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Labview - 对话框程序模板",
+  "url": "https://www.litreily.top/2016/06/06/labview-dialog/",
+  "image": "https://www.litreily.top/img/butterfly-icon.png",
+  "datePublished": "2016-06-05T16:00:00.000Z",
+  "dateModified": "2026-05-14T01:37:34.697Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "litreily",
+      "url": "https://www.litreily.top"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://www.litreily.top/2016/06/06/labview-dialog/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.4"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Labview - 对话框程序模板',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">117</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">97</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">15</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">LITREILY</span></a><a class="nav-page-title" href="/"><span class="site-name">Labview - 对话框程序模板</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Labview - 对话框程序模板</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2016-06-05T16:00:00.000Z" title="Created 2016-06-06 00:00:00">2016-06-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-05-14T01:37:34.697Z" title="Updated 2026-05-14 09:37:34">2026-05-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Language/">Language</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Language/LabVIEW/">LabVIEW</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>软件开发过程中，经常要使用对话框界面，例如各种参数设置界面等。为了减少重复性工作，我们可以创建一个对话框模板，往后就可以通过该模板直接新建对话框界面。</p>
+<h2 id="创建模板"><a href="#创建模板" class="headerlink" title="创建模板"></a>创建模板</h2><h3 id="新建vi"><a href="#新建vi" class="headerlink" title="新建vi"></a>新建vi</h3><p>打开LabVIEW软件，新建vi，保存为&quot;对话框模板.vi&quot;。</p>
+<p><img src="/assets/labview/dialog/template.png" alt="Labview template.vi"></p>
+<h3 id="添加while循环"><a href="#添加while循环" class="headerlink" title="添加while循环"></a>添加while循环</h3><p>对话框界面也属于用户界面，所以需要给它单独开辟一个线程，即一个while循环。</p>
+<p><img src="/assets/labview/dialog/while.png" alt="Labview while"></p>
+<h3 id="添加移位寄存器"><a href="#添加移位寄存器" class="headerlink" title="添加移位寄存器"></a>添加移位寄存器</h3><p>在while循环左上角添加一个移位寄存器，然后创建一个<strong>枚举常量</strong>，给其添加以下内容：</p>
+<ul>
+<li>init：初始化</li>
+<li>run：运行</li>
+<li>exit：退出</li>
+</ul>
+<p>编辑完成后点击确定，然后将其连接至移位寄存器的输入端，默认设为&quot;init&quot;。</p>
+<p><img src="/assets/labview/dialog/enum.png" alt="Labview enum"></p>
+<h3 id="添加条件结构"><a href="#添加条件结构" class="headerlink" title="添加条件结构"></a>添加条件结构</h3><p>在while循环中添加一个条件结构，将将移位寄存器的值作为判断条件。为条件结构的每个值添加分支。</p>
+<p><img src="/assets/labview/dialog/switch.png" alt="Labview switch"></p>
+<h3 id="添加事件结构"><a href="#添加事件结构" class="headerlink" title="添加事件结构"></a>添加事件结构</h3><p>在条件结构的&quot;run&quot;分支中添加事件结构，用于响应用户操作。至此，所需的三个主要控制结构就都有了。</p>
+<p><img src="/assets/labview/dialog/event.png" alt="Labview event"></p>
+<h3 id="修改init分支"><a href="#修改init分支" class="headerlink" title="修改init分支"></a>修改init分支</h3><p>在条件结构的&quot;init&quot;（初始化）分支中，用户可以添加对话框的<strong>初始化</strong>程序。该分支只执行一次，接着进入&quot;run&quot;（主程序运行）分支，所以需要将移位寄存器的值设为&quot;run&quot;。</p>
+<p><img src="/assets/labview/dialog/init.png" alt="Labview init"></p>
+<h3 id="添加前面板关闭事件"><a href="#添加前面板关闭事件" class="headerlink" title="添加前面板关闭事件"></a>添加前面板关闭事件</h3><p>给事件结构添加&quot;前面板关闭？&quot;事件分支，然后将&quot;放弃？&quot;设为真，不让前面板在此刻关闭。同时将移位寄存器的值设为&quot;exit&quot;。</p>
+<p><img src="/assets/labview/dialog/closeFront.png" alt="Labview closeFront"></p>
+<p><img src="/assets/labview/dialog/exit.png" alt="Labview exit"></p>
+<h3 id="添加循环停止条件"><a href="#添加循环停止条件" class="headerlink" title="添加循环停止条件"></a>添加循环停止条件</h3><p>所有的while循环都需要一个停止条件，这里的while循环同样也需要，其停止条件便是移位寄存器的值变为&quot;exit&quot;。</p>
+<p><img src="/assets/labview/dialog/exitRule.png" alt="Labview exitRule"></p>
+<h3 id="完善移位寄存器"><a href="#完善移位寄存器" class="headerlink" title="完善移位寄存器"></a>完善移位寄存器</h3><p>现在看看程序，是不是还无法执行，因为移位寄存器的部分连线没有赋值，现在简要演示一下完善过程。</p>
+<p><img src="/assets/labview/dialog/register.gif" alt="Labview register"></p>
+<h3 id="添加界面关闭程序"><a href="#添加界面关闭程序" class="headerlink" title="添加界面关闭程序"></a>添加界面关闭程序</h3><p>从上面可以看出，在关闭前面板时，我们选择了放弃，然后进入&quot;exit&quot;分支，就是为了在这个分支中处理界面关闭前的任务，例如存储数据，保存界面参数等操作。不过这样一来，我们就需要在while循环结束时关闭界面，此处可以使用属性节点。</p>
+<p><img src="/assets/labview/dialog/exitPanel.png" alt="Labview exitPanel"></p>
+<h2 id="设置vi属性"><a href="#设置vi属性" class="headerlink" title="设置vi属性"></a>设置vi属性</h2><p>以上操作完成了对话框界面的程序框图设计，但此时运行该对话框，它还包含了系统自带的菜单栏和工具栏，而这些都是对话框不需要的。</p>
+<p><img src="/assets/labview/dialog/dialog_1.png" alt="Labview dialog"></p>
+<p>此时，我们可以通过快捷键<code>Ctrl+I</code>打开<strong>VI属性</strong>界面，在类别中选择<strong>窗口外观</strong>，最后选择<strong>对话框</strong>，点击确定。</p>
+<p><img src="/assets/labview/dialog/dialog_view.png" alt="Labview VI Properties"></p>
+<p>到此为止，一个简单的对话框界面模板就完成了，往后使用时，就可以通过&quot;复制该模板&rarr;重命名vi文件&rarr;添砖加瓦&quot;得到新的对话框。</p>
+<p><img src="/assets/labview/dialog/dialog_2.png" alt="Labview dialog"></p>
+<p>该模板比较简单，但是非常实用，大多数设置界面都可以使用该模板进行设计。当然也可以进一步完善。例如，很多设置界面都有<strong>应用</strong>按钮和<strong>退出</strong>按钮，那么，我们可以在模板中添加一个应用按钮和一个退出按钮，并添加对应的按钮点击事件，修改移位寄存器的值。</p>
+<h2 id="下载模板"><a href="#下载模板" class="headerlink" title="下载模板"></a>下载模板</h2><p>我将模板存至网盘便于下载：<a target="_blank" rel="noopener" href="http://pan.baidu.com/s/1pKUe7Ib">下载链接</a>。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://www.litreily.top">litreily</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://www.litreily.top/2016/06/06/labview-dialog/">https://www.litreily.top/2016/06/06/labview-dialog/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/labview/">labview</a></div><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2016/06/06/shrotcuts/" title="Labview - 常用快捷键"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">Labview - 常用快捷键</div></div><div class="info-2"><div class="info-item-1">作为一款功能强大的编程软件，自然少不了大量的快捷键支持。在开发过程中，熟练使用这些快捷键，可以高效完成编码调试过程，减少手动操作，提高工作效率。 菜单快捷键打开LabVIEW中的&quot;选项&quot;界面，在&quot;菜单快捷键&quot;中可以看到所有可用的快捷键。当然，如果觉得不够用或是与其它软件有冲突，可以手动添加或修改新的快捷键。  常用快捷键快捷键虽多，但常用的却有限。我简单将其分为通用键、功能键和技巧键。 通用键有些快捷键是大部分软件共有的，其功能也类似。  Ctrl+N：新建 Ctrl+A：全选 Ctrl+C：复制 Ctrl+V：粘贴 Ctrl+S：保存 Ctrl+Shift+S：保存全部  功能键在代码编辑过程中经常会用到的功能性快捷键包括：  Ctrl+R：运行程序 Ctrl+E：在前面板和程序框图之间切换 Ctrl+H：打开/关闭即时帮助 Ctrl+B：删除断线 Ctrl+I：查看当前VI属性 Ctrl+T：左右两栏显示前面板和程序框图 Ctrl+W：关闭当前界面或项目 Ctrl+Q：退出LabVIEW  技巧键 Ctrl+鼠标拖动：复制被选控件或函数...</div></div></div></a><a class="pagination-related" href="/2016/06/05/labview-base/" title="Labview - 基本概念"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">Labview - 基本概念</div></div><div class="info-2"><div class="info-item-1">引言《百度百科》词条&quot;LabVIEW&quot;中提到：  LabVIEW（Laboratory Virtual Instrument Engineering Workbench）由美国国家仪器（NI）公司研制开发，是一种用图标代替文本行创建应用程序的图形化编程语言，它广泛地被工业界、学术界和研究实验室所接受，视为一个标准的数据采集和仪器控制软件。与C和BASIC一样，LabVIEW也是通用的编程系统，有一个完成任何编程任务的庞大函数库。采用数据流编程方式，程序框图中节点之间的数据流向决定了VI及函数的执行顺序。   基本概念在使用LabVIEW进行软件开发的过程中，少不了提及一些专有名词和概念，这里对常用的几个概念进行简要说明。 VIVI 是（Virtual Instrument）的简称，其对应的 .vi 文件是LabVIEW软件开发过程中用到的基本单元，类似于 C/C 语言开发的 .c/.cpp 文件。无论是用于显示的用户界面，还是不用于显示的函数，都是以 .vi 文件形式存在。 项目相对于独立的vi文件，LabVIEW项目则是一个大的容器，它可以包含一个或多个 ....</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2016/11/25/matlab-coder/" title="Matlab - 经VS将.m文件转换为.dll文件"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2016-11-25</div><div class="info-item-2">Matlab - 经VS将.m文件转换为.dll文件</div></div><div class="info-2"><div class="info-item-1">引言在使用 LabVIEW 进行软件开发的过程中，有时需要使用 Matlab 强大的数据处理功能，以提高开发效率，此时可以通过 Matlab Coder 将 Matlab 中的函数转换为 C/C++ 源文件，然后通过 Visual Studio 将这些源文件封装为 .dll 文件，最后通过 LabVIEW 调用库函数实现对 Matlab 函数的调用。 本文将通过一个实例讲述以上功能的实现过程，大体步骤如下：  Matlab 编写代码 1.1 编写 .m 函数 1.2 使用 Coder 生成 C/C++ 文件 Visual Studio 生成 .dll 文件 LabVIEW 调用 .dll文件  软件版本说明：  Matlab 2016a       (64bit) LabVIEW 2015       (64bit) Visual Studio 2015 (64bit)  通过 Matlab 生成 C/C++ 源文件.m 函数编码在 Matlab 文件目录中新建文件夹&quot;CreateDll&quot;，在该文件夹下新建两个函数文件，分别实现简单加法运算函数，以及一个用自相...</div></div></div></a><a class="pagination-related" href="/2017/03/25/labview-cfg/" title="Labview - 存储 .cfg 配置文件"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2017-03-25</div><div class="info-item-2">Labview - 存储 .cfg 配置文件</div></div><div class="info-2"><div class="info-item-1">配置文件简介在 LabVIEW 应用软件开发过程中，对于稍微大型一点的软件而言，一般都需要在本地文件中保存一些配置参数，如在 windows 系统中安装软件时，安装程序在 C 盘 documents 文件夹下自动创建的用户数据。对于需要更新的配置参数或者重要的常值参数，在 LabVIEW 中可以使用 .cfg 格式的配置文件进行存储与读取。 应用场合 软件的全局配置参数（如：串口通讯参数，DAQ 采样参数，信号处理参数，···） 软件主界面关闭前的输入、输出控件的最新数值 报表生成时的默认信息（如：署名，标题，摘要，···） 统计量（如：游戏最高分，排行榜排名，参与次数，···） ···  .cfg 文件格式如下所示，.cfg 文件的数据存储格式格式满足标记性语言的特点，有点类似于 JSON 和 XML，但与之不同的是 .cfg 不支持数据嵌套。.cfg 文件以段为基本单位、以键为最小单位组织数据，段包含了相应的段名及该段包含的所有键，每个键包含了相应的键名和键值，中间用等号连接。 12345678910111213[段名1]键名1 = 键值1键名2 = 键值2键名3 = 键值3...</div></div></div></a><a class="pagination-related" href="/2016/05/11/DAQ-TDMS/" title="Labview - 手自动存储TDMS文件的区别"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2016-05-11</div><div class="info-item-2">Labview - 手自动存储TDMS文件的区别</div></div><div class="info-2"><div class="info-item-1">在Labview的软件开发过程中，少不了使用DAQ（Data Acquisition）助手，在使用DAQ助手采集数据时，通常需要存储数据，此时我们可以使用DAQ助手的配置界面设置TDMS（Technical Data Management Streaming）文件路径。而TDMS文件是NI主推的一种二进制记录文件，可以大大减小数据的存储容量。 为了研究使用DAQ助手自动存储TDMS文件产生的数据大小，我专程写了个测试程序，使用NI MAX创建的模拟采集卡生成模拟正弦波信号，通过测试程序进行采集和存储。 示例程序程序名称：仿DAQ设计.vi  前面板    程序框图   程序测试采样信息 模拟采集卡：NI USB-6341 采样频率：100Hz； 采样点数：100； 采样时间：5分钟； 物理通道：ai0,ai1,ai2;  采样过程 程序运行中    程序运行结束   采样结果1234总采样点数：30000*3 = 90000.tdms文件大小：180kB(185,132Bytes)185216(Bytes)/90000 ≈ 2.057956Bytes ≈ 2Bytes.tdms_...</div></div></div></a><a class="pagination-related" href="/2016/06/06/shrotcuts/" title="Labview - 常用快捷键"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2016-06-06</div><div class="info-item-2">Labview - 常用快捷键</div></div><div class="info-2"><div class="info-item-1">作为一款功能强大的编程软件，自然少不了大量的快捷键支持。在开发过程中，熟练使用这些快捷键，可以高效完成编码调试过程，减少手动操作，提高工作效率。 菜单快捷键打开LabVIEW中的&quot;选项&quot;界面，在&quot;菜单快捷键&quot;中可以看到所有可用的快捷键。当然，如果觉得不够用或是与其它软件有冲突，可以手动添加或修改新的快捷键。  常用快捷键快捷键虽多，但常用的却有限。我简单将其分为通用键、功能键和技巧键。 通用键有些快捷键是大部分软件共有的，其功能也类似。  Ctrl+N：新建 Ctrl+A：全选 Ctrl+C：复制 Ctrl+V：粘贴 Ctrl+S：保存 Ctrl+Shift+S：保存全部  功能键在代码编辑过程中经常会用到的功能性快捷键包括：  Ctrl+R：运行程序 Ctrl+E：在前面板和程序框图之间切换 Ctrl+H：打开/关闭即时帮助 Ctrl+B：删除断线 Ctrl+I：查看当前VI属性 Ctrl+T：左右两栏显示前面板和程序框图 Ctrl+W：关闭当前界面或项目 Ctrl+Q：退出LabVIEW  技巧键 Ctrl+鼠标拖动：复制被选控件或函数...</div></div></div></a><a class="pagination-related" href="/2017/04/24/labview-DAQ/" title="Labview - DAQ 助手详解"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2017-04-24</div><div class="info-item-2">Labview - DAQ 助手详解</div></div><div class="info-2"><div class="info-item-1">DAQ 助手简介Express VIExpress VI 是 LabVIEW 7 及更高版本拥有的快速 VI，此类 VI 将一些常见的功能打包，然后封装在简单易用的交互式的 VI 程序中，方便开发人员配置参数和实现功能。 DAQ 助手是完成信号采集任务的常用工具，以 Express VI 的形式呈现，具有交互式的配置界面，配合 NI 公司提供的采集卡，可以完成绝大部分的信号采集任务。 使用方法简述（采集 AI 信号）选择信号类型 在采集卡（虚拟的或实际的均可）已连接的情况下，从 VI 的程序框图中打开 DAQ 助手，选择待采集信号的类型，此处选择模拟输入电压信号。 选择物理通道 选择通道时，按住Ctrl 或 Shift 可同时选择多路通道 配置信号采集参数 配置界面中可以进行物理通道的删除与添加，通道名称的修改，接线端连接方式的选择，采集模式的选择等操作，配置界面右侧对于每个选项都有详细说明。 信号采集模式包含“1 采样”、“N 采样”和“连续采样” 3 大类。对于连续采样而言，采样率决定了信号采样的间隔时间，通常将其设为最大有效信号频率的 10 倍左右；采样点数指定了连续采样时...</div></div></div></a><a class="pagination-related" href="/2016/06/05/labview-base/" title="Labview - 基本概念"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2016-06-05</div><div class="info-item-2">Labview - 基本概念</div></div><div class="info-2"><div class="info-item-1">引言《百度百科》词条&quot;LabVIEW&quot;中提到：  LabVIEW（Laboratory Virtual Instrument Engineering Workbench）由美国国家仪器（NI）公司研制开发，是一种用图标代替文本行创建应用程序的图形化编程语言，它广泛地被工业界、学术界和研究实验室所接受，视为一个标准的数据采集和仪器控制软件。与C和BASIC一样，LabVIEW也是通用的编程系统，有一个完成任何编程任务的庞大函数库。采用数据流编程方式，程序框图中节点之间的数据流向决定了VI及函数的执行顺序。   基本概念在使用LabVIEW进行软件开发的过程中，少不了提及一些专有名词和概念，这里对常用的几个概念进行简要说明。 VIVI 是（Virtual Instrument）的简称，其对应的 .vi 文件是LabVIEW软件开发过程中用到的基本单元，类似于 C/C 语言开发的 .c/.cpp 文件。无论是用于显示的用户界面，还是不用于显示的函数，都是以 .vi 文件形式存在。 项目相对于独立的vi文件，LabVIEW项目则是一个大的容器，它可以包含一个或多个 ....</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comments</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">litreily</div><div class="author-info-description">simple life</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">117</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">97</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">15</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Litreily"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://www.litreily.top/notes/" target="_blank" title="Notes"><i class="fas fa-sticky-note" style="color: #e8a618;"></i></a><a class="social-icon" href="mailto:litreily@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E6%A8%A1%E6%9D%BF"><span class="toc-number">1.</span> <span class="toc-text">创建模板</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B0%E5%BB%BAvi"><span class="toc-number">1.1.</span> <span class="toc-text">新建vi</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0while%E5%BE%AA%E7%8E%AF"><span class="toc-number">1.2.</span> <span class="toc-text">添加while循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E7%A7%BB%E4%BD%8D%E5%AF%84%E5%AD%98%E5%99%A8"><span class="toc-number">1.3.</span> <span class="toc-text">添加移位寄存器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E6%9D%A1%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="toc-number">1.4.</span> <span class="toc-text">添加条件结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E4%BA%8B%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="toc-number">1.5.</span> <span class="toc-text">添加事件结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9init%E5%88%86%E6%94%AF"><span class="toc-number">1.6.</span> <span class="toc-text">修改init分支</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E5%89%8D%E9%9D%A2%E6%9D%BF%E5%85%B3%E9%97%AD%E4%BA%8B%E4%BB%B6"><span class="toc-number">1.7.</span> <span class="toc-text">添加前面板关闭事件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E5%BE%AA%E7%8E%AF%E5%81%9C%E6%AD%A2%E6%9D%A1%E4%BB%B6"><span class="toc-number">1.8.</span> <span class="toc-text">添加循环停止条件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%8C%E5%96%84%E7%A7%BB%E4%BD%8D%E5%AF%84%E5%AD%98%E5%99%A8"><span class="toc-number">1.9.</span> <span class="toc-text">完善移位寄存器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E7%95%8C%E9%9D%A2%E5%85%B3%E9%97%AD%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.10.</span> <span class="toc-text">添加界面关闭程序</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AEvi%E5%B1%9E%E6%80%A7"><span class="toc-number">2.</span> <span class="toc-text">设置vi属性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E6%A8%A1%E6%9D%BF"><span class="toc-number">3.</span> <span class="toc-text">下载模板</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/09/19/android10-ota/" title="RK3399 Android 10 系统OTA升级失败问题">RK3399 Android 10 系统OTA升级失败问题</a><time datetime="2024-09-19T08:28:06.000Z" title="Created 2024-09-19 16:28:06">2024-09-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/05/31/rk3399-wol/" title="rk3399 ubuntu 休眠唤醒功能">rk3399 ubuntu 休眠唤醒功能</a><time datetime="2024-05-31T10:31:47.000Z" title="Created 2024-05-31 18:31:47">2024-05-31</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/02/05/rk32-new-part/" title="RK3288 Android6 新增分区">RK3288 Android6 新增分区</a><time datetime="2024-02-05T08:38:12.000Z" title="Created 2024-02-05 16:38:12">2024-02-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/01/10/rk32-disable-wifi/" title="RK3288 Android6 禁用 wifi">RK3288 Android6 禁用 wifi</a><time datetime="2024-01-10T08:55:19.000Z" title="Created 2024-01-10 16:55:19">2024-01-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/06/isolcpus/" title="RK3399 Android10 bind cpu with isolcpus">RK3399 Android10 bind cpu with isolcpus</a><time datetime="2023-12-06T07:29:46.000Z" title="Created 2023-12-06 15:29:46">2023-12-06</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By litreily</span><span class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 5.4.2</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll to Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4"></script><script src="/js/main.js?v=5.5.4"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const initValine = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyValine = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const valineConfig = {
+      el: '#vcomment',
+      appId: '1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+      appKey: 'uvA3xgqNW3q8TGR483lxXcpB',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      visitor: false,
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || window.location.pathname
+    }
+
+    new Valine(valineConfig)
+  }
+
+  const loadValine = async (el, path) => {
+    if (typeof Valine === 'function') {
+      initValine(el, path)
+    } else {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js')
+      initValine(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Valine' === 'Valine'
+      ? window.shuoshuoComment = { loadComment: loadValine }
+      : window.loadOtherComment = loadValine
+    return
+  }
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="local-search-input"><input placeholder="Search..." type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.4"></script></div></div></body></html>

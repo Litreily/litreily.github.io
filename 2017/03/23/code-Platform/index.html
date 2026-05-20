@@ -1,0 +1,249 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>常用的代码托管平台 | LITREILY</title><meta name="author" content="litreily,707922098@qq.com"><meta name="copyright" content="litreily"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="作为一名程序员，最不缺的就是代码，那自然得选择个好用的代码托管平台，本文对常用的几个平台进行简要描述。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="常用的代码托管平台">
+<meta property="og:url" content="https://www.litreily.top/2017/03/23/code-Platform/index.html">
+<meta property="og:site_name" content="LITREILY">
+<meta property="og:description" content="作为一名程序员，最不缺的就是代码，那自然得选择个好用的代码托管平台，本文对常用的几个平台进行简要描述。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://www.litreily.top/img/butterfly-icon.png">
+<meta property="article:published_time" content="2017-03-23T01:52:32.000Z">
+<meta property="article:modified_time" content="2026-05-14T01:37:34.977Z">
+<meta property="article:author" content="litreily">
+<meta property="article:tag" content="git">
+<meta property="article:tag" content="VS">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.litreily.top/img/butterfly-icon.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "常用的代码托管平台",
+  "url": "https://www.litreily.top/2017/03/23/code-Platform/",
+  "image": "https://www.litreily.top/img/butterfly-icon.png",
+  "datePublished": "2017-03-23T01:52:32.000Z",
+  "dateModified": "2026-05-14T01:37:34.977Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "litreily",
+      "url": "https://www.litreily.top"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://www.litreily.top/2017/03/23/code-Platform/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.4"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '常用的代码托管平台',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">117</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">97</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">15</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">LITREILY</span></a><a class="nav-page-title" href="/"><span class="site-name">常用的代码托管平台</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">常用的代码托管平台</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2017-03-23T01:52:32.000Z" title="Created 2017-03-23 09:52:32">2017-03-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-05-14T01:37:34.977Z" title="Updated 2026-05-14 09:37:34">2026-05-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Tools/">Tools</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>作为一名程序员，最不缺的就是代码，那自然得选择个好用的代码托管平台，本文将对常用的几个平台进行简要描述。</p>
+<h2 id="Github"><a href="#Github" class="headerlink" title="Github"></a>Github</h2><p><img src="/assets/introduction/codePlatform/github.png" alt="github"></p>
+<p>毋庸置疑，<a target="_blank" rel="noopener" href="https://github.com/">Github</a> 是全球应用最广的代码托管平台，兼社交平台，本博客便承载于 Github 的 pages 服务。但是使用 Github 保存私有项目是要收费的，所以我主要用其管理可公布于众的开源项目。</p>
+<h2 id="GitLab"><a href="#GitLab" class="headerlink" title="GitLab"></a>GitLab</h2><p><img src="/assets/introduction/codePlatform/gitlab.png" alt="gitLab"></p>
+<p><a target="_blank" rel="noopener" href="https://gitlab.com/">gitLab</a> 相比于 <code>Github</code> 具有更多的特性，官方点明的特性有：</p>
+<ul>
+<li>Unlimited repositories</li>
+<li>Unlimited private collaborators</li>
+<li>10GB disk space per project (including Git LFS)</li>
+<li>Unlimited total disk space</li>
+<li>Completely free, no credit card required</li>
+<li>Unlimited CI Runners to do parallel testing</li>
+<li>Alternate SSH port for git+ssh (443)</li>
+</ul>
+<h2 id="Visual-Studio-Team-Services-VSTS"><a href="#Visual-Studio-Team-Services-VSTS" class="headerlink" title="Visual Studio Team Services(VSTS)"></a>Visual Studio Team Services(VSTS)</h2><p><img src="/assets/introduction/codePlatform/VS-team-services.png" alt="VS Team Services"></p>
+<p>微软提供的 <a target="_blank" rel="noopener" href="https://www.visualstudio.com/team-services/">Team Services</a> 也是相当出色的团队协作服务平台，为开发人员或团队协助开发提供线上服务，提供了项目管理、版本控制、自动建置、自动测试、部署发行管理等功能，并且支持各种语言、开发平台或是 IDE 工具等，五人以下团队可免费使用。</p>
+<p>微软的亲儿子 <a target="_blank" rel="noopener" href="https://www.visualstudio.com/">Visual Studio</a> 现已更新至 2017 版，从早期版本便已集成了 <code>VSTS</code> 工具，在 <code>VS</code> 中，配合 <code>git</code> 或 Team Foundation Version Control (<code>TFVC</code>) 版本控制系统，从团队资源管理器可以方便上传代码至 <code>VSTS</code> 服务器，还可以从 <code>Github</code> 等其它平台进行项目克隆。我通常在使用 <code>VS</code> 进行软件开发时可用它来管理代码。</p>
+<p><img src="/assets/introduction/codePlatform/VSTS.png" alt="VSTS"></p>
+<h2 id="Bitbucket"><a href="#Bitbucket" class="headerlink" title="Bitbucket"></a>Bitbucket</h2><p><img src="/assets/introduction/codePlatform/bitbucket.png" alt="Bitbucket"></p>
+<p><a target="_blank" rel="noopener" href="https://bitbucket.org/">Bitbucket</a> 是一个源代码托管网站，采用 Mercurial 和 git 作为版本控制系统，对于小等于5人的小团队提供免费托管服务，算是非常不错的 <code>Github</code> 替代品。</p>
+<h2 id="Coding"><a href="#Coding" class="headerlink" title="Coding"></a>Coding</h2><p><img src="/assets/introduction/codePlatform/coding.png" alt="coding"></p>
+<p><a target="_blank" rel="noopener" href="https://coding.net/">Coding</a> 官方介绍：</p>
+<blockquote>
+<p>CODING 是国内首个一站式云端软件服务平台，于 2014 年 2 月在深圳成立，并于北京、上海、成都、西雅图设立分部。在云计算时代，CODING 致力于通过技术创新推动软件开发与交付模式的转变，让开发更简单。</p>
+</blockquote>
+<p>coding 是国内少有的做得非常棒的代码托管平台之一，于 2016 年 3 月 2 日收购了 2011 年成立的 <a target="_blank" rel="noopener" href="https://coding.net/gitcafe.html">GitCafe</a>，能够免费存储私有项目和开源项目，包含有趣的社交平台 “冒泡”，大型的众包平台 “码市”，同样支持 pages 服务，我主要用其管理私有项目。</p>
+<h2 id="华为-DevCloud"><a href="#华为-DevCloud" class="headerlink" title="华为 DevCloud"></a>华为 DevCloud</h2><p><img src="/assets/introduction/codePlatform/devCloud.png" alt="DevCloud"></p>
+<p><code>2017.3.22</code>参加了华为在青岛香格里拉酒店举办的软件开发云大会，又了解了一款企业级的集华为研发实践、前沿研发理念、先进研发工具为一体的研发云平台 <a target="_blank" rel="noopener" href="http://www.hwclouds.com/devcloud/">DevCloud</a> ，面向开发者提供研发工具服务，让软件开发简单高效，对国内开发者而言绝对是一大福音了。同样，该平台功能强大，自然也少不了基础的代码托管功能。</p>
+<p><img src="/assets/introduction/codePlatform/devCloudFuncs.png" alt="DevCloudFuntions"></p>
+<h2 id="码云"><a href="#码云" class="headerlink" title="码云"></a>码云</h2><p><img src="/assets/introduction/codePlatform/codeCloud.png" alt="codeCloud"></p>
+<p><a target="_blank" rel="noopener" href="http://git.oschina.net/">码云</a> 依托于国内知名网站 <a target="_blank" rel="noopener" href="https://www.oschina.net/">开源中国</a>，界面与 <code>Github</code> 非常相像，可免费托管私有、开源项目。</p>
+<h2 id="CSDN"><a href="#CSDN" class="headerlink" title="CSDN"></a>CSDN</h2><p><img src="/assets/introduction/codePlatform/csdnCode.png" alt="csdnCode"></p>
+<p><a target="_blank" rel="noopener" href="http://bbs.csdn.net/">CSDN</a> 号称全球最大中文IT社区，社区内的 <a target="_blank" rel="noopener" href="https://code.csdn.net/">CODE</a> 模块为开发者提供了代码托管服务，每个项目的使用空间为<code>1GB</code>.</p>
+<p>本人目前作为学生党，最常用的还是 <code>Github</code> 和 <code>Coding</code> ，平台再多，还是要选择最合适自己的嘛。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://www.litreily.top">litreily</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://www.litreily.top/2017/03/23/code-Platform/">https://www.litreily.top/2017/03/23/code-Platform/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/git/">git</a><a class="post-meta__tags" href="/tags/VS/">VS</a></div><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2017/03/25/labview-cfg/" title="Labview - 存储 .cfg 配置文件"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">Labview - 存储 .cfg 配置文件</div></div><div class="info-2"><div class="info-item-1">配置文件简介在 LabVIEW 应用软件开发过程中，对于稍微大型一点的软件而言，一般都需要在本地文件中保存一些配置参数，如在 windows 系统中安装软件时，安装程序在 C 盘 documents 文件夹下自动创建的用户数据。对于需要更新的配置参数或者重要的常值参数，在 LabVIEW 中可以使用 .cfg 格式的配置文件进行存储与读取。 应用场合 软件的全局配置参数（如：串口通讯参数，DAQ 采样参数，信号处理参数，···） 软件主界面关闭前的输入、输出控件的最新数值 报表生成时的默认信息（如：署名，标题，摘要，···） 统计量（如：游戏最高分，排行榜排名，参与次数，···） ···  .cfg 文件格式如下所示，.cfg 文件的数据存储格式格式满足标记性语言的特点，有点类似于 JSON 和 XML，但与之不同的是 .cfg 不支持数据嵌套。.cfg 文件以段为基本单位、以键为最小单位组织数据，段包含了相应的段名及该段包含的所有键，每个键包含了相应的键名和键值，中间用等号连接。 12345678910111213[段名1]键名1 = 键值1键名2 = 键值2键名3 = 键值3...</div></div></div></a><a class="pagination-related" href="/2016/12/28/word-numbering/" title="Word排版 - 章节编号"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">Word排版 - 章节编号</div></div><div class="info-2"><div class="info-item-1">在论文攥写过程中，少不了对文档进行排版，而对章节名称进行编号就是排版中的一环，本文将以Word2016为例进行说明。 添加标题并设置标题样式在word文档中添加好标题，然后对各个标题按层级顺序设置好对应的标题样式。  选择默认的多级列表样式在菜单栏的“开始”选项卡中选择如下所示的多级列表，单击选中后点击底部的“定义新的多级列表”  定义新的多级列表在弹出的设置界面中点击“更多”，然后依次设置三层标题样式 一级标题在编号格式中添加前缀和后缀，在后面添加两个空格，取消制表符，并将文本缩进位置设为0厘米，最后将该样式链接到 “标题1”。  二级标题与一级标题不同的是，二级标题需要勾选右下方的 “正规形式编号”。  三级标题三级标题和二级标题的样式类似，照着来一遍就行。  效果展示点击确定以后，便可以看到所有标题都已经按给定格式添加好了编号。  Notes：  由于有的一级标题可能不需要编号，如参考文献，所以可以在设计多级列表时把右上角的 “将级别链接到样式” 选为 “(无样式)”，设置好后。对于需要编号的一级标题，可以手动选择标题后选择该多级列表样式。 注意千万不要在设置编号的时候把默...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2016/08/21/atom-packages/" title="解决atom无法安装插件的问题"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2016-08-21</div><div class="info-item-2">解决atom无法安装插件的问题</div></div><div class="info-2"><div class="info-item-1">出错信息倘若使用atom自带的插件安装工具&quot;File-&gt;Settings-&gt;Install&quot;安装插件，通常会报错，以&quot;pp-markdown&quot;为例，其错误信息如下： 1234567891011gyp info it worked if it ends with okgyp info using node-gyp@2.0.2gyp info using node@0.10.40 | win32 | ia32gyp http GET http://gh-contractor-zcbenz.s3.amazonaws.com/atom-shell/dist/v0.37.8/node-v0.37.8.tar.gzgyp WARN install got an error, rolling back installgyp! Compiler tools not foundPackages that depend on modules that contain C/C++ code will fail to install.Read &lt;...</div></div></div></a><a class="pagination-related" href="/2016/05/15/brackets-git/" title="Brackets - Git插件的使用方法"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2016-05-15</div><div class="info-item-2">Brackets - Git插件的使用方法</div></div><div class="info-2"><div class="info-item-1">Brackets，一款专职做网页设计的开发工具，其插件也是极为丰富，Git自然是少不了的，那么如何安装和使用它呢，我以Windows 10环境为例进行说明。 安装插件打开插件管理器在Brackets中，基本上所有的插件都可以从插件管理器(Extension Manager)中安装，该管理器可以从Brackets软件菜单栏File中找到。 ![Extension Manager](/assets/brackets/git/extension manager.png) 搜素并安装git插件 打开插件管理器后，选择“Available”选项卡，在搜索框中输入“git”。  ![input git](/assets/brackets/git/input git.png)  在弹出的列表中找到“Brackets Git”，点击“install”开始安装。  ![install git](/assets/brackets/git/install git.png)  安装完成后，将提示“Installation successful!”。  ![install success](/assets...</div></div></div></a><a class="pagination-related" href="/2019/03/12/commitizen/" title="git commit 工具 - commitizen"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2019-03-12</div><div class="info-item-2">git commit 工具 - commitizen</div></div><div class="info-2"><div class="info-item-1">为了规范代码提交，最近学习了一下如何使用commitizen进行commit提交，其实也很简单，这里简单做个介绍。 commitizen 安装1npm install -g commitizen    使用对于并非使用nodejs的项目，要先通过 1npm init --yes  完成初始化，然后通过 1commitizen init cz-conventional-changelog --save --save-exact  启用commitizen功能，此后使用git cz替换git commit即可。当然为了方便可以在.bashrc或.zshrc中添加一个别名。 1alias cz=&quot;commitizen init cz-conventional-changelog --save --save-exact&quot;  然后source ~/.bashrc or source ~/.zshrc 即可。好了，下面是我的笔记库的应用实例。 1234567891011121314151617➜  Notes git:(master) ✗ npm init --yes➜ ...</div></div></div></a><a class="pagination-related" href="/2016/11/25/matlab-coder/" title="Matlab - 经VS将.m文件转换为.dll文件"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2016-11-25</div><div class="info-item-2">Matlab - 经VS将.m文件转换为.dll文件</div></div><div class="info-2"><div class="info-item-1">引言在使用 LabVIEW 进行软件开发的过程中，有时需要使用 Matlab 强大的数据处理功能，以提高开发效率，此时可以通过 Matlab Coder 将 Matlab 中的函数转换为 C/C++ 源文件，然后通过 Visual Studio 将这些源文件封装为 .dll 文件，最后通过 LabVIEW 调用库函数实现对 Matlab 函数的调用。 本文将通过一个实例讲述以上功能的实现过程，大体步骤如下：  Matlab 编写代码 1.1 编写 .m 函数 1.2 使用 Coder 生成 C/C++ 文件 Visual Studio 生成 .dll 文件 LabVIEW 调用 .dll文件  软件版本说明：  Matlab 2016a       (64bit) LabVIEW 2015       (64bit) Visual Studio 2015 (64bit)  通过 Matlab 生成 C/C++ 源文件.m 函数编码在 Matlab 文件目录中新建文件夹&quot;CreateDll&quot;，在该文件夹下新建两个函数文件，分别实现简单加法运算函数，以及一个用自相...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comments</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">litreily</div><div class="author-info-description">simple life</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">117</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">97</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">15</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Litreily"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://www.litreily.top/notes/" target="_blank" title="Notes"><i class="fas fa-sticky-note" style="color: #e8a618;"></i></a><a class="social-icon" href="mailto:litreily@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Github"><span class="toc-number">1.</span> <span class="toc-text">Github</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GitLab"><span class="toc-number">2.</span> <span class="toc-text">GitLab</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Visual-Studio-Team-Services-VSTS"><span class="toc-number">3.</span> <span class="toc-text">Visual Studio Team Services(VSTS)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Bitbucket"><span class="toc-number">4.</span> <span class="toc-text">Bitbucket</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Coding"><span class="toc-number">5.</span> <span class="toc-text">Coding</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%8E%E4%B8%BA-DevCloud"><span class="toc-number">6.</span> <span class="toc-text">华为 DevCloud</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A0%81%E4%BA%91"><span class="toc-number">7.</span> <span class="toc-text">码云</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CSDN"><span class="toc-number">8.</span> <span class="toc-text">CSDN</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/09/19/android10-ota/" title="RK3399 Android 10 系统OTA升级失败问题">RK3399 Android 10 系统OTA升级失败问题</a><time datetime="2024-09-19T08:28:06.000Z" title="Created 2024-09-19 16:28:06">2024-09-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/05/31/rk3399-wol/" title="rk3399 ubuntu 休眠唤醒功能">rk3399 ubuntu 休眠唤醒功能</a><time datetime="2024-05-31T10:31:47.000Z" title="Created 2024-05-31 18:31:47">2024-05-31</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/02/05/rk32-new-part/" title="RK3288 Android6 新增分区">RK3288 Android6 新增分区</a><time datetime="2024-02-05T08:38:12.000Z" title="Created 2024-02-05 16:38:12">2024-02-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/01/10/rk32-disable-wifi/" title="RK3288 Android6 禁用 wifi">RK3288 Android6 禁用 wifi</a><time datetime="2024-01-10T08:55:19.000Z" title="Created 2024-01-10 16:55:19">2024-01-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/06/isolcpus/" title="RK3399 Android10 bind cpu with isolcpus">RK3399 Android10 bind cpu with isolcpus</a><time datetime="2023-12-06T07:29:46.000Z" title="Created 2023-12-06 15:29:46">2023-12-06</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By litreily</span><span class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 5.4.2</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll to Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4"></script><script src="/js/main.js?v=5.5.4"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const initValine = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyValine = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const valineConfig = {
+      el: '#vcomment',
+      appId: '1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+      appKey: 'uvA3xgqNW3q8TGR483lxXcpB',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      visitor: false,
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || window.location.pathname
+    }
+
+    new Valine(valineConfig)
+  }
+
+  const loadValine = async (el, path) => {
+    if (typeof Valine === 'function') {
+      initValine(el, path)
+    } else {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js')
+      initValine(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Valine' === 'Valine'
+      ? window.shuoshuoComment = { loadComment: loadValine }
+      : window.loadOtherComment = loadValine
+    return
+  }
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="local-search-input"><input placeholder="Search..." type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.4"></script></div></div></body></html>

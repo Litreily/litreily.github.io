@@ -1,0 +1,259 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>RK3399 Android 10 系统OTA升级失败问题 | LITREILY</title><meta name="author" content="litreily,707922098@qq.com"><meta name="copyright" content="litreily"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="为了远程升级现场机器的 Android10 系统固件，需要支持验证系统OTA升级功能，但是验证发现OTA升级会失败，这里记录下分析过程。 编译OTA包123456789101112source build&#x2F;envsetup.shlunch# compile android systemmake installclean -j16make -j16# compile otamake otapacka">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RK3399 Android 10 系统OTA升级失败问题">
+<meta property="og:url" content="https://www.litreily.top/2024/09/19/android10-ota/index.html">
+<meta property="og:site_name" content="LITREILY">
+<meta property="og:description" content="为了远程升级现场机器的 Android10 系统固件，需要支持验证系统OTA升级功能，但是验证发现OTA升级会失败，这里记录下分析过程。 编译OTA包123456789101112source build&#x2F;envsetup.shlunch# compile android systemmake installclean -j16make -j16# compile otamake otapacka">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://www.litreily.top/img/butterfly-icon.png">
+<meta property="article:published_time" content="2024-09-19T08:28:06.000Z">
+<meta property="article:modified_time" content="2026-05-14T01:37:35.845Z">
+<meta property="article:author" content="litreily">
+<meta property="article:tag" content="android">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.litreily.top/img/butterfly-icon.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "RK3399 Android 10 系统OTA升级失败问题",
+  "url": "https://www.litreily.top/2024/09/19/android10-ota/",
+  "image": "https://www.litreily.top/img/butterfly-icon.png",
+  "datePublished": "2024-09-19T08:28:06.000Z",
+  "dateModified": "2026-05-14T01:37:35.845Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "litreily",
+      "url": "https://www.litreily.top"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://www.litreily.top/2024/09/19/android10-ota/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.4"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'RK3399 Android 10 系统OTA升级失败问题',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">117</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">97</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">15</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">LITREILY</span></a><a class="nav-page-title" href="/"><span class="site-name">RK3399 Android 10 系统OTA升级失败问题</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">RK3399 Android 10 系统OTA升级失败问题</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2024-09-19T08:28:06.000Z" title="Created 2024-09-19 16:28:06">2024-09-19</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-05-14T01:37:35.845Z" title="Updated 2026-05-14 09:37:35">2026-05-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Android/">Android</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>为了远程升级现场机器的 Android10 系统固件，需要支持验证系统OTA升级功能，但是验证发现OTA升级会失败，这里记录下分析过程。</p>
+<h1 id="编译OTA包"><a href="#编译OTA包" class="headerlink" title="编译OTA包"></a>编译OTA包</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">source</span> build/envsetup.sh<br>lunch<br><br><span class="hljs-comment"># compile android system</span><br>make installclean -j16<br>make -j16<br><br><span class="hljs-comment"># compile ota</span><br>make otapackage -j16<br><br><span class="hljs-comment"># optional</span><br><span class="hljs-comment"># ./mkimage.sh ota</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p> 说明：<code>mkimage.sh ota</code> 不是必须的，而且可以说是有点重复的，可以看到下面这段脚本。</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-keyword">if</span> [ <span class="hljs-variable">$TARGET</span> == <span class="hljs-variable">$BOOT_OTA</span> ]<br> <span class="hljs-keyword">then</span><br> <span class="hljs-keyword">if</span> [ <span class="hljs-string">&quot;<span class="hljs-variable">$PRODUCT_USE_DYNAMIC_PARTITIONS</span>&quot;</span> = <span class="hljs-string">&quot;true&quot;</span> ]; <span class="hljs-keyword">then</span><br>     make installclean &amp;&amp; make -j4 &amp;&amp; make dist -j4<br>     <span class="hljs-built_in">cp</span> -rf  <span class="hljs-variable">$OUT</span>/obj/PACKAGING/super.img_intermediates/super.img  <span class="hljs-variable">$IMAGE_PATH</span>/<br> <span class="hljs-keyword">fi</span><br> <span class="hljs-built_in">echo</span> -n <span class="hljs-string">&quot;create system.img boot.img oem.img vendor.img dtbo.img vbmeta.img for OTA...&quot;</span><br> <span class="hljs-built_in">cp</span> -rf  <span class="hljs-variable">$OUT</span>/obj/PACKAGING/target_files_intermediates/*-target_files*/IMAGES/*.img  <span class="hljs-variable">$IMAGE_PATH</span>/<br> <span class="hljs-built_in">rm</span> -rf  <span class="hljs-variable">$IMAGE_PATH</span>/cache.img<br> <span class="hljs-built_in">rm</span> -rf  <span class="hljs-variable">$IMAGE_PATH</span>/recovery-two-step.img<br> <span class="hljs-keyword">if</span> [ <span class="hljs-string">&quot;<span class="hljs-variable">$PRODUCT_USE_DYNAMIC_PARTITIONS</span>&quot;</span> = <span class="hljs-string">&quot;true&quot;</span> ]; <span class="hljs-keyword">then</span><br>     <span class="hljs-built_in">rm</span> -rf  <span class="hljs-variable">$IMAGE_PATH</span>/super_empty.img<br> <span class="hljs-keyword">fi</span><br> <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;done.&quot;</span><br> <span class="hljs-keyword">fi</span><br></code></pre></td></tr></table></figure>
+
+<p><code>mkimage.sh</code> 会执行 <code>make installclean &amp;&amp; make -j4 &amp;&amp; make dist -j4</code> ,相当于重新编译安卓系统和发布内容（也包含ota包）。</p>
+<h1 id="OTA-升级失败"><a href="#OTA-升级失败" class="headerlink" title="OTA 升级失败"></a>OTA 升级失败</h1><p>将编译好的ota包(位于 out/target/product/PRODUCT_NAME/*ota*.zip), 放置到系统 /sdcard 目录，重启触发update service，弹框提示升级，点击升级后，发现系统升级失败。甚至都没有进入升级动画。</p>
+<p>于是接上串口，查看升级日志，发现显示以下异常。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">[    3.393649] healthd: BatteryTemperaturePath I:charge_status UNKNOWN, chanrged 1, status SUCCESS, capoacity 1<br>battery capacity is not enough <span class="hljs-keyword">for</span> installing pafckage: 15% needed<br></code></pre></td></tr></table></figure>
+
+<p>从日志可以看到，recovery阶段检查当前电量为1，低于15%，导致升级失败。</p>
+<h2 id="recovery-源码分析"><a href="#recovery-源码分析" class="headerlink" title="recovery 源码分析"></a>recovery 源码分析</h2><p>查找recovery相关代码如下：</p>
+<ul>
+<li><code>bootable/recovery/recovery.cpp</code> </li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">if</span> (retry_count == <span class="hljs-number">0</span> &amp;&amp; !<span class="hljs-built_in">is_battery_ok</span>(&amp;required_battery_level)) &#123;<br>  ui-&gt;<span class="hljs-built_in">Print</span>(<span class="hljs-string">&quot;battery capacity is not enough for installing package: %d%% needed\n&quot;</span>,<br>            required_battery_level);<br>  <span class="hljs-comment">// Log the error code to last_install when installation skips due to</span><br>  <span class="hljs-comment">// low battery.</span><br>  <span class="hljs-built_in">log_failure_code</span>(kLowBattery, update_package);<br>  status = INSTALL_SKIPPED;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><code>recovery</code> 会判断电量信息<code>capacity</code> ，如果电量低于15%，则会跳过升级。</p>
+<p>由于我们的系统不是直接通过内核上报电量，而是需要系统启动后通过应用层串口通信获取电量，所以使用了一个<code>fake_battery</code> 驱动，该驱动默认电量为1，导致recovery阶段直接跳过OTA升级。</p>
+<ul>
+<li><code>is_battery_ok</code> </li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs cpp">Result res = Result::UNKNOWN;<br><span class="hljs-type">int32_t</span> capacity = INT32_MIN;<br><span class="hljs-keyword">if</span> (health != <span class="hljs-literal">nullptr</span>) &#123;<br>  health<br>      -&gt;<span class="hljs-built_in">getCapacity</span>([&amp;res, &amp;capacity](<span class="hljs-keyword">auto</span> out_res, <span class="hljs-keyword">auto</span> out_capacity) &#123;<br>        res = out_res;<br>        capacity = out_capacity;<br>      &#125;)<br>      .<span class="hljs-built_in">isOk</span>();  <span class="hljs-comment">// should not have transport error</span><br>&#125;<br><br><span class="hljs-built_in">LOG</span>(INFO) &lt;&lt; <span class="hljs-string">&quot;charge_status &quot;</span> &lt;&lt; <span class="hljs-built_in">toString</span>(charge_status) &lt;&lt; <span class="hljs-string">&quot;, charged &quot;</span> &lt;&lt; charged<br>          &lt;&lt; <span class="hljs-string">&quot;, status &quot;</span> &lt;&lt; <span class="hljs-built_in">toString</span>(res) &lt;&lt; <span class="hljs-string">&quot;, capacity &quot;</span> &lt;&lt; capacity;<br><span class="hljs-comment">// At startup, the battery drivers in devices like N5X/N6P take some time to load</span><br><span class="hljs-comment">// the battery profile. Before the load finishes, it reports value 50 as a fake</span><br><span class="hljs-comment">// capacity. BATTERY_READ_TIMEOUT_IN_SEC is set that the battery drivers are expected</span><br><span class="hljs-comment">// to finish loading the battery profile earlier than 10 seconds after kernel startup.</span><br><span class="hljs-keyword">if</span> (res == Result::SUCCESS &amp;&amp; capacity == <span class="hljs-number">50</span>) &#123;<br>  <span class="hljs-keyword">if</span> (wait_second &lt; BATTERY_READ_TIMEOUT_IN_SEC) &#123;<br>    <span class="hljs-built_in">sleep</span>(<span class="hljs-number">1</span>);<br>    wait_second++;<br>    <span class="hljs-keyword">continue</span>;<br>  &#125;<br>&#125;<br><span class="hljs-comment">// If we can&#x27;t read battery percentage, it may be a device without battery. In this</span><br><span class="hljs-comment">// situation, use 100 as a fake battery percentage.</span><br><span class="hljs-keyword">if</span> (res != Result::SUCCESS) &#123;<br>  capacity = <span class="hljs-number">100</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>分析代码可知，当系统可以获取电量时，会以读取到的电量为准，如果获取失败会认为该系统无法获取电量，直接将电量设置为 <code>100</code>.</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>根据源码分析结果，可以考虑以下几种解决方案：</p>
+<ol>
+<li>更新recovery，将电量的判断逻辑去掉</li>
+<li>更新内核驱动，去掉fake_battery功能</li>
+<li>更新内核驱动，fake_battery 默认电量调整为15以上的数值</li>
+</ol>
+<p>经验证，第2种方案可行，理论上第3种方案也可以（未验证），但是综合考虑，由于电量上报功能不能去除，只能考虑第一种方案，将recovery的判断逻辑去掉。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs cpp">--- a/bootable/recovery/recovery.cpp<br>+++ b/bootable/recovery/recovery.cpp<br>@@ <span class="hljs-number">-721</span>,<span class="hljs-number">7</span> <span class="hljs-number">+721</span>,<span class="hljs-number">8</span> @@ <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">bool</span> <span class="hljs-title">is_battery_ok</span><span class="hljs-params">(<span class="hljs-type">int</span>* required_battery_level)</span> </span>&#123;<br>     <span class="hljs-type">static</span> <span class="hljs-keyword">constexpr</span> <span class="hljs-type">int</span> BATTERY_OK_PERCENTAGE = <span class="hljs-number">20</span>;<br>     <span class="hljs-type">static</span> <span class="hljs-keyword">constexpr</span> <span class="hljs-type">int</span> BATTERY_WITH_CHARGER_OK_PERCENTAGE = <span class="hljs-number">15</span>;<br>     *required_battery_level = charged ? BATTERY_WITH_CHARGER_OK_PERCENTAGE : BATTERY_OK_PERCENTAGE;<br>-    <span class="hljs-keyword">return</span> capacity &gt;= *required_battery_level;<br>+    <span class="hljs-comment">// return capacity &gt;= *required_battery_level;</span><br>+    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>   &#125;<br> &#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h1 id="远程更新-recovery"><a href="#远程更新-recovery" class="headerlink" title="远程更新 recovery"></a>远程更新 recovery</h1><p>将更新的recovery镜像远程到设备，然后通过指令刷新镜像。之后就可以通过ota包进行升级。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">dd</span> <span class="hljs-keyword">if</span>=recovery.img of=/dev/block/by-name/recovery bs=1024k<br></code></pre></td></tr></table></figure>
+
+<h1 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h1><ul>
+<li>OTA升级包的制作时间需要比待升级的系统固件编译时间更新，否则也会升级失败。</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://www.litreily.top">litreily</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://www.litreily.top/2024/09/19/android10-ota/">https://www.litreily.top/2024/09/19/android10-ota/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/android/">android</a></div><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2024/05/31/rk3399-wol/" title="rk3399 ubuntu 休眠唤醒功能"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">rk3399 ubuntu 休眠唤醒功能</div></div><div class="info-2"><div class="info-item-1">背景为了降低功耗，需要考虑使用系统的休眠唤醒功能。 休眠方式rk3399 休眠方式有两种,mem,freeze. 内存待机 (mem)在 mem 模式下，系统将所有设备状态保存到内存中，然后进入低功耗状态。唤醒后，系统从内存中恢复设备状态。内存待机模式通常称为 S3 睡眠模式。 冻结 (freeze)在 freeze 模式下，所有用户空间任务被冻结，所有设备进入低功耗状态，但 CPU 仍保持活跃。冻结模式更适用于在短时间内节省电能。我们使用 mem模式进入休眠，指令如下： 123root@firefly:/sys/power# cat statefreeze memroot@firefly:/sys/power# echo mem &gt; state  USB 唤醒内核配置123456789101112131415161718192021222324252627282930&amp;rockchip_suspend &#123;    status = &quot;okay&quot;;    rockchip,sleep-debug-en = &lt;1&gt;;    ro...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2022/01/11/rk3288-hang/" title="RK3288 android 6.0 卡死在开机logo画面问题处理"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-01-11</div><div class="info-item-2">RK3288 android 6.0 卡死在开机logo画面问题处理</div></div><div class="info-2"><div class="info-item-1">Description烧录固件后，会概率性出现卡死在开机画面无法启动的问题，但是烧录新固件后会恢复正常。对比不同机型，发现只有带摄像头功能的机型会有这个问题。 Root cause经过大量测试和排查，发现卡死问题源自一个文件,  /data/camera/media_profiles.xml , 这是一个空文件，删除后系统就正常启动了。 通过使用 logcat 结合系统源码发现，该文件是摄像头配置文件，如果为空会导致系统循环检测该文件，并尝试从中获取摄像头配置，但是由于文件为空，导致一直获取失败，最后陷入死循环。 123$ cd /data/camera$ lsmedia_profiles.xml  经过排查源码，发现系统在检查到有摄像头接入后，会将默认配置文件 /etc/media_profiles_default.xml 拷贝至 /data/camera/media_profiles_tmp.xml, 然后根据实际情况修改该tmp文件，并最终写入到 /data/camera/media_profiles.xml 文件中。相关函数 ProduceNewXml如下: 123456...</div></div></div></a><a class="pagination-related" href="/2022/07/12/android-perm/" title="RK3288 Android 10 系统开发[4] - 提供 app 默认权限"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-07-12</div><div class="info-item-2">RK3288 Android 10 系统开发[4] - 提供 app 默认权限</div></div><div class="info-2"><div class="info-item-1">禁用旧版本SDK弹框如果在Android10系统上安装旧版本的app，会提示以下信息。  此应用专为旧版 Android 打造，因此可能无法正常运行。请尝试检查更新或与开发者联系。    为了去掉这个弹框提示，需要添加以下修改, 将 onStartActivity 函数中的 showDeprecatedTargetDialogIfNeeded 禁用。 1234567891011--- a/services/core/java/com/android/server/wm/AppWarnings.java+++ b/services/core/java/com/android/server/wm/AppWarnings.java@@ -166,7 +166,8 @@ class AppWarnings &#123;     public void onStartActivity(ActivityRecord r) &#123;         showUnsupportedCompileSdkDialogIfNeeded(r);         showUnsupportedDisp...</div></div></div></a><a class="pagination-related" href="/2022/12/07/rand-mac/" title="RK3288 Android 10 系统开发[5] - 解决wifi mac随机问题"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-12-07</div><div class="info-item-2">RK3288 Android 10 系统开发[5] - 解决wifi mac随机问题</div></div><div class="info-2"><div class="info-item-1">在Android10的使用过程中，由于业务要求使用wifi mac地址作为设备的 SN ，所以要求mac地址必须是唯一且固定的。然而测试发现在wifi 连接过程中会出现短暂时间的随机mac，wifi连接成功后保持稳定。 Android 官方解释 从官方解析来看，高版本安卓系统为了安全考虑，支持随机分配wifi mac. 但是要支持的话需要修改以下参数： 123frameworks/base/core/res/res/values/config.xml- config_wifi_connected_mac_randomization_supported- config_wifi_p2p_mac_randomization_supported  但是这两个参数默认已经配置为 false 了。只能换个方向查。 wifi 随机 mac追踪日志，dmesg 中发现wifi 扫描过程中确实会更新mac地址，而且随机的mac地址前3个字节是固定的。 123456[   27.378506] pno_mac_addr: 00000000: da a1 19 60 00 87           ...</div></div></div></a><a class="pagination-related" href="/2021/07/12/dual-camera/" title="RK3288 android 6.0 同时打开两个摄像头"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-12</div><div class="info-item-2">RK3288 android 6.0 同时打开两个摄像头</div></div><div class="info-2"><div class="info-item-1">问题描述 平台: RK3288 系统: Android 6.0 需求: 同时打开两个摄像头  业务需求，要支持同时打开多个摄像头，期间遇到一些问题，在这里记录下。 问题分析支持多摄像头首先，Android系统默认只支持同时打开一个摄像头，并且最大只识别两个摄像头。所以，为了支持多摄像头，需要修改摄像头相关的 HAL 层。 这个我参考 [AndroidO] [RK3399] Support 4 way camera preview 解决了。patch 如下： 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394959697989910010110210310410510610710810911011111211311411511611711811912012112212312412...</div></div></div></a><a class="pagination-related" href="/2021/07/16/gt9xx-drvier/" title="RK3288 android 6.0 移植 gt9xx 驱动"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-16</div><div class="info-item-2">RK3288 android 6.0 移植 gt9xx 驱动</div></div><div class="info-2"><div class="info-item-1">问题描述 平台：RK3288 系统：Android 6.0 需求：触摸屏驱动移植  驱动移植先从厂商获取驱动程序 gt9xx_v2.8.0.2. 1234567891011gt9xx_v2.8.0.2├── dtsi│   ├── gt9xx_dts.txt│   ├── pinctrl_mtk.txt│   └── pinctrl_qcom.txt├── goodix_tool.c├── gt9xx.c├── gt9xx.h├── gt9xx_update.c├── Kconfig└── Makefile  新建目录 drivers/input/touchscreen/gt9xx_v2.8.0.2/ ,将以上 .c, .h, 及 Makefile文件放入该目录。 修改 Kconfig将提供的Kconfig内容添加到以下文件  drivers/input/touchscreen/Kconfig  1234567891011121314151617181920212223242526272829303132333435## Goodix GT9xx Touchscreen driv...</div></div></div></a><a class="pagination-related" href="/2023/01/19/binwalk/" title="RK3288 Android 系统 boot.img 镜像解压方法"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-01-19</div><div class="info-item-2">RK3288 Android 系统 boot.img 镜像解压方法</div></div><div class="info-2"><div class="info-item-1">android 6.0 boot.img 解包filefile指令可以显示文件类型，但是对于特定封装的文件无能为力，比如Android系统编译出的boot.img 12$ file boot.imgboot.img: data    binwalkbinwalk 是一款非常强大的用于解析 bin 文件格式工具，可以通过扫描 bin 文件分析出文件的封装格式，列出 bin 文件中包含的不同类型的文件以及文件在bin中的偏移量。  安装 binwalk  12# 128M disk space will be usedsudo apt install binwalk  binwalk 可以用来分析 Android6 的 boot.img. 12345$ binwalk boot.img DECIMAL       HEXADECIMAL     DESCRIPTION--------------------------------------------------------------------------------8             0x8             ...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comments</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">litreily</div><div class="author-info-description">simple life</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">117</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">97</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">15</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Litreily"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://www.litreily.top/notes/" target="_blank" title="Notes"><i class="fas fa-sticky-note" style="color: #e8a618;"></i></a><a class="social-icon" href="mailto:litreily@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BC%96%E8%AF%91OTA%E5%8C%85"><span class="toc-number">1.</span> <span class="toc-text">编译OTA包</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#OTA-%E5%8D%87%E7%BA%A7%E5%A4%B1%E8%B4%A5"><span class="toc-number">2.</span> <span class="toc-text">OTA 升级失败</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#recovery-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="toc-number">2.1.</span> <span class="toc-text">recovery 源码分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-number">2.2.</span> <span class="toc-text">解决方案</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%9C%E7%A8%8B%E6%9B%B4%E6%96%B0-recovery"><span class="toc-number">3.</span> <span class="toc-text">远程更新 recovery</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">4.</span> <span class="toc-text">注意事项</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/09/19/android10-ota/" title="RK3399 Android 10 系统OTA升级失败问题">RK3399 Android 10 系统OTA升级失败问题</a><time datetime="2024-09-19T08:28:06.000Z" title="Created 2024-09-19 16:28:06">2024-09-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/05/31/rk3399-wol/" title="rk3399 ubuntu 休眠唤醒功能">rk3399 ubuntu 休眠唤醒功能</a><time datetime="2024-05-31T10:31:47.000Z" title="Created 2024-05-31 18:31:47">2024-05-31</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/02/05/rk32-new-part/" title="RK3288 Android6 新增分区">RK3288 Android6 新增分区</a><time datetime="2024-02-05T08:38:12.000Z" title="Created 2024-02-05 16:38:12">2024-02-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/01/10/rk32-disable-wifi/" title="RK3288 Android6 禁用 wifi">RK3288 Android6 禁用 wifi</a><time datetime="2024-01-10T08:55:19.000Z" title="Created 2024-01-10 16:55:19">2024-01-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/06/isolcpus/" title="RK3399 Android10 bind cpu with isolcpus">RK3399 Android10 bind cpu with isolcpus</a><time datetime="2023-12-06T07:29:46.000Z" title="Created 2023-12-06 15:29:46">2023-12-06</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By litreily</span><span class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 5.4.2</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll to Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4"></script><script src="/js/main.js?v=5.5.4"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const initValine = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyValine = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const valineConfig = {
+      el: '#vcomment',
+      appId: '1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+      appKey: 'uvA3xgqNW3q8TGR483lxXcpB',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      visitor: false,
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || window.location.pathname
+    }
+
+    new Valine(valineConfig)
+  }
+
+  const loadValine = async (el, path) => {
+    if (typeof Valine === 'function') {
+      initValine(el, path)
+    } else {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js')
+      initValine(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Valine' === 'Valine'
+      ? window.shuoshuoComment = { loadComment: loadValine }
+      : window.loadOtherComment = loadValine
+    return
+  }
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="local-search-input"><input placeholder="Search..." type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.4"></script></div></div></body></html>

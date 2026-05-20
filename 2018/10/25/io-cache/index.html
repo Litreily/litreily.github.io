@@ -1,0 +1,294 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Linux中的文件I/O缓冲 | LITREILY</title><meta name="author" content="litreily,707922098@qq.com"><meta name="copyright" content="litreily"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="近日阅读《Linux&#x2F;UNIX系统编程手册》第13章 - 文件I&#x2F;O缓冲，有些收获，是以此文以记之。以往只知道Linux的I&#x2F;O操作有缓冲机制，但始终不知道具体的缓冲流程及使用方法。读完本章节后方才有种恍然大悟的感觉，久违的因读书而觉得舒爽的感觉。 好了，进入正题，下图摘自原文(13.4-I&#x2F;O缓冲小结)，此图概括了stdio库及内核针对输出文件所用的缓冲以及各类缓冲的控制机制。本文依据此图逐步揭">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux中的文件I&#x2F;O缓冲">
+<meta property="og:url" content="https://www.litreily.top/2018/10/25/io-cache/index.html">
+<meta property="og:site_name" content="LITREILY">
+<meta property="og:description" content="近日阅读《Linux&#x2F;UNIX系统编程手册》第13章 - 文件I&#x2F;O缓冲，有些收获，是以此文以记之。以往只知道Linux的I&#x2F;O操作有缓冲机制，但始终不知道具体的缓冲流程及使用方法。读完本章节后方才有种恍然大悟的感觉，久违的因读书而觉得舒爽的感觉。 好了，进入正题，下图摘自原文(13.4-I&#x2F;O缓冲小结)，此图概括了stdio库及内核针对输出文件所用的缓冲以及各类缓冲的控制机制。本文依据此图逐步揭">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://www.litreily.top/img/butterfly-icon.png">
+<meta property="article:published_time" content="2018-10-25T01:42:40.000Z">
+<meta property="article:modified_time" content="2026-05-14T01:37:35.137Z">
+<meta property="article:author" content="litreily">
+<meta property="article:tag" content="stdio">
+<meta property="article:tag" content="cache">
+<meta property="article:tag" content="buffer">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.litreily.top/img/butterfly-icon.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Linux中的文件I/O缓冲",
+  "url": "https://www.litreily.top/2018/10/25/io-cache/",
+  "image": "https://www.litreily.top/img/butterfly-icon.png",
+  "datePublished": "2018-10-25T01:42:40.000Z",
+  "dateModified": "2026-05-14T01:37:35.137Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "litreily",
+      "url": "https://www.litreily.top"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://www.litreily.top/2018/10/25/io-cache/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.4"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Linux中的文件I/O缓冲',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">117</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">97</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">15</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">LITREILY</span></a><a class="nav-page-title" href="/"><span class="site-name">Linux中的文件I/O缓冲</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Linux中的文件I/O缓冲</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2018-10-25T01:42:40.000Z" title="Created 2018-10-25 09:42:40">2018-10-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-05-14T01:37:35.137Z" title="Updated 2026-05-14 09:37:35">2026-05-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Linux/">Linux</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>近日阅读《Linux/UNIX系统编程手册》第13章 - 文件I/O缓冲，有些收获，是以此文以记之。以往只知道Linux的I/O操作有缓冲机制，但始终不知道具体的缓冲流程及使用方法。读完本章节后方才有种恍然大悟的感觉，久违的因读书而觉得舒爽的感觉。</p>
+<p>好了，进入正题，下图摘自原文(13.4-I/O缓冲小结)，此图概括了<code>stdio</code>库及内核针对输出文件所用的缓冲以及各类缓冲的控制机制。本文依据此图逐步揭开文件I/O缓冲的面纱。</p>
+<p><img src="/assets/linux/io_buffer.jpg" alt="I/O缓冲"></p>
+<span id="more"></span>
+
+<h2 id="I-O缓冲的类型"><a href="#I-O缓冲的类型" class="headerlink" title="I/O缓冲的类型"></a>I/O缓冲的类型</h2><p>在使用<code>stdio</code>库中文件写操作相关的函数（如:<code>printf</code>, <code>fputc</code>, <code>fputs</code>, <code>fwrite</code>）时，待写入数据从用户空间内存到内核空间内存、再到磁盘会经过以下3类缓冲</p>
+<ol>
+<li>stdio库的缓冲区</li>
+<li>文件I/O的内核缓冲区的高速缓存</li>
+<li>磁盘驱动器内置高速缓存</li>
+</ol>
+<p>下面逐一介绍。</p>
+<h3 id="stdio库的缓冲"><a href="#stdio库的缓冲" class="headerlink" title="stdio库的缓冲"></a>stdio库的缓冲</h3><p><img src="/assets/linux/stdio_buffer.png" alt="stdio buffer"></p>
+<p>如上图所示，<code>stdio</code>库实现的缓冲位于用户空间内存当中，该缓冲区A会缓冲大块的文件数据以减少系统调用（如: <code>read</code>, <code>write</code>）。</p>
+<p>需要知道的是，<code>stdio</code>库函数内部会调用底层的系统调用，如<code>fgets</code>调用<code>read</code>，<code>fputs</code>调用<code>write</code>。但是在调用之前，</p>
+<ul>
+<li>对于读操作，库函数会先检查缓冲区A内是否已有所需数据，如果有则直接从缓冲区A读取；否则先执行系统调用<code>read</code>，从内核缓冲区B中读取数据到缓冲区A，然后从缓冲区A读取数据</li>
+<li>对于写操作，库函数会先检查缓冲区A是否还有空闲，如果有则先存入缓冲区A；否则先执行库函数<code>fflush</code>，将缓冲区A中数据刷新至内核缓冲区B，然后将当前待写入数据写入缓冲区A</li>
+</ul>
+<p>对于<code>stdio</code>库的缓冲数据，在执行库函数之后的某一时刻，系统会通过<code>fflush</code>函数将数据刷新至内核缓冲区。当然，我们也可以手动执行<code>fflush</code>函数强制刷新数据至内核缓冲区。</p>
+<p><code>fflush</code>定义如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-type">int</span> <span class="hljs-title function_">fflush</span><span class="hljs-params">(FILE *stream)</span>;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>fflush(stdin)</code>会清空缓冲区内的标准输入数据</li>
+<li><code>fflush(stdout)</code>会将缓冲区内的写入数据刷新至终端输出</li>
+<li><code>stderr</code>默认不使用缓冲</li>
+<li><code>fflush(stream)</code>将文件流<code>stream</code>的缓冲数据刷新至内核缓冲区</li>
+</ul>
+<h3 id="文件I-O的内核缓冲"><a href="#文件I-O的内核缓冲" class="headerlink" title="文件I/O的内核缓冲"></a>文件I/O的内核缓冲</h3><p>不管使不使用<code>stdio</code>库函数，最终都会直接或间接的调用<code>open</code>, <code>read</code>, <code>write</code>, <code>lseek</code>等系统调用读写文件I/O，那么系统就会在写操作后将数据存入内核缓冲区，但此时还并未存入磁盘。</p>
+<p>也就是说，在执行<code>write</code>后，函数直接返回，但数据只是存在内核缓冲区中。当有新的读取请求时，会先在内核缓冲区中查找，如果有则直接返回；如果没有则先从磁盘读入大块数据至内核缓冲区，这样可以减少磁盘读写操作。毕竟，相比于系统调用和用户空间与内核空间之间的数据传输，磁盘读写所花费的时间要长得多。</p>
+<blockquote>
+<p>若内容发生变化的内核缓冲区在30s内未经显式方式同步到磁盘上，则一条长期运行的内核线程会确保将其刷新到磁盘上。</p>
+</blockquote>
+<p>不同版本的<code>linux</code>，其内核线程不一样，可以使用指令<code>ps aux |grep flush</code>粗略查看一下。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 查看内核线程刷新之前脏缓冲区必须达到的时间，单位：0.01s</span><br>$ <span class="hljs-built_in">cat</span> /proc/sys/vm/dirty_expire_centisecs<br>3000<br><br><span class="hljs-comment"># 查看内核线程执行周期，单位：0.01s</span><br>$ <span class="hljs-built_in">cat</span> /proc/sys/vm/dirty_writeback_centisecs<br>500<br></code></pre></td></tr></table></figure>
+
+<h3 id="磁盘驱动器内置缓冲"><a href="#磁盘驱动器内置缓冲" class="headerlink" title="磁盘驱动器内置缓冲"></a>磁盘驱动器内置缓冲</h3><p>内核缓冲区的数据在真正存入物理磁盘前，会先存入磁盘驱动器内置的高速缓存，之后在某一时刻写入磁盘。具体过程没有深究过，目前只需知道还有这么一层缓冲区即可。</p>
+<h2 id="控制文件I-O缓冲"><a href="#控制文件I-O缓冲" class="headerlink" title="控制文件I/O缓冲"></a>控制文件I/O缓冲</h2><p>通过某些方式，我们可以控制I/O缓冲机制，其中包括修改缓冲区大小、缓冲模式，禁用缓冲，强制刷新缓冲数据等。</p>
+<h3 id="控制stdio库的缓冲"><a href="#控制stdio库的缓冲" class="headerlink" title="控制stdio库的缓冲"></a>控制stdio库的缓冲</h3><p>对于<code>stdio</code>库分配的缓冲区，在默认情况下会分配<code>BUFSIZ</code>大小的缓冲区，该参数值的大小说法不一，但据原文说明，在<code>glibc</code>中定义为<code>8192</code>字节。</p>
+<p><code>stdio</code>流的缓冲模式分以下三类：</p>
+<ul>
+<li><code>_IONBF</code> - 不缓冲</li>
+<li><code>_IOLBF</code> - 行缓冲，针对终端设备，在输出一个换行符前缓冲数据。对输入流，每次读取一行数据</li>
+<li><code>_IOFBF</code> - 全缓冲，单词读、写数据(read, write)的大小与缓冲区大小一致，磁盘默认使用此模式</li>
+</ul>
+<p>我们可以通过库函数<code>setvbuf</code>, <code>setbuffer</code>, <code>setbuf</code>三者之一设置<code>stdio</code>流的缓冲模式。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-type">void</span> <span class="hljs-title function_">setbuf</span><span class="hljs-params">(FILE *stream, <span class="hljs-type">char</span> *buf)</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">setbuffer</span><span class="hljs-params">(FILE *stream, <span class="hljs-type">char</span> *buf, <span class="hljs-type">size_t</span> size)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">setvbuf</span><span class="hljs-params">(FILE *stream, <span class="hljs-type">char</span> *buf, <span class="hljs-type">int</span> mode, <span class="hljs-type">size_t</span> size)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><code>setvbuf</code>函数中的mode对应的就是缓冲模式，可选项为<code>_IONBF</code>, <code>_IOLBF</code>, <code>_IOFBF</code>，<code>buf</code>和<code>size</code>分别对应指定的缓冲区指针及缓冲区大小。当然，当为不缓冲模式时，函数将忽略<code>buf</code>，<code>size</code>这两个参数。示例如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> BUF_SIZE 4096</span><br><span class="hljs-type">static</span> <span class="hljs-type">char</span> buf[BUF_SIZE];<br>FILE *fp;<br><br>fp = fopen(<span class="hljs-string">&quot;test.txt&quot;</span>, <span class="hljs-string">&#x27;w&#x27;</span>);<br><span class="hljs-keyword">if</span>(setvbuf(fp, buf, _IOFBF, BUF_SIZE) !=<span class="hljs-number">0</span> )<br>    <span class="hljs-built_in">exit</span>(EXIT_FAILURE);<br></code></pre></td></tr></table></figure>
+
+<p>从下面的<code>uClibc</code>源码可以看出，<code>setbuffer</code>, <code>setbuf</code>仅仅是对<code>setvbuf</code>的简单封装。但要注意的是，<code>SUSv3</code>标准并未对<code>setbuffer</code>函数加以定义，在使用时需要加上宏定义<code>_BSD_SOURCE</code>。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">setbuffer</span><span class="hljs-params">(FILE * __restrict stream, <span class="hljs-keyword">register</span> <span class="hljs-type">char</span> * __restrict buf, <span class="hljs-type">size_t</span> size)</span><br>&#123;<br><span class="hljs-meta">#<span class="hljs-keyword">ifdef</span> __STDIO_BUFFERS</span><br>    setvbuf(stream, buf, (buf ? _IOFBF : _IONBF), size);<br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">setbuf</span><span class="hljs-params">(FILE * __restrict stream, <span class="hljs-keyword">register</span> <span class="hljs-type">char</span> * __restrict buf)</span><br>&#123;<br><span class="hljs-meta">#<span class="hljs-keyword">ifdef</span> __STDIO_BUFFERS</span><br>    setvbuf(stream, buf, ((buf != <span class="hljs-literal">NULL</span>) ? _IOFBF : _IONBF), BUFSIZ);<br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>如果想要禁用缓冲，通常可以使用<code>setbuf(stream, NULL)</code>实现。但通常不推荐这么做，应该合理组织代码，在特定情况使用<code>fflush</code>刷新数据，这样可以在有效利用用户空间缓冲作用的同时，减少系统调用，适宜的存储数据至内核缓冲区。</p>
+<h3 id="控制文件I-O的内核缓冲"><a href="#控制文件I-O的内核缓冲" class="headerlink" title="控制文件I/O的内核缓冲"></a>控制文件I/O的内核缓冲</h3><p>在某些情况下，我们可能需要强制将内核缓冲区内的数据刷新至磁盘，而不必等待内核线程等待特定时间后才写入。此时主要有两种选择</p>
+<ol>
+<li>使用<code>fsync</code>，<code>fdatasync</code>, <code>sync</code>系统调用中的某一个将内核缓冲区的数据强制写入磁盘</li>
+<li>以<code>O_SYNC</code>同步方式调用<code>open</code>打开文件，此后每次读写操作都会自动立即写入磁盘</li>
+</ol>
+<h4 id="fsync"><a href="#fsync" class="headerlink" title="fsync"></a>fsync</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><span class="hljs-type">int</span> <span class="hljs-title function_">fsync</span><span class="hljs-params">(<span class="hljs-type">int</span> fd)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">fdatasync</span><span class="hljs-params">(<span class="hljs-type">int</span> fd)</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">sync</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><code>fsync</code>保证<strong>同步I/O文件完整性</strong>，<code>fdatasync</code>保证<strong>同步I/O数据完整性</strong>。两个<strong>完整性</strong>的区别在于前者会将所有更新的文件元数据写入磁盘，后者不会传递所有经过修改的文件元数据属性（如：时间戳）。</p>
+<p><code>fsync</code>与<code>fdatasync</code>均是刷新指定文件流数据，而<code>sync()</code>函数会更新所有内核缓冲区数据至磁盘，对应<code>shell</code>指令<code>sync</code>。</p>
+<h4 id="O-SYNC"><a href="#O-SYNC" class="headerlink" title="O_SYNC"></a>O_SYNC</h4><p><code>fsync</code>等系统调用需要被手动调用，仅在被调用处起作用；而以<code>O_SYNC</code>方式<code>open</code>的文件流，后续所有写操作都将把数据直接写入磁盘。</p>
+<p>不到万不得已还是不要以这种方式打开文件流，因为这将严重影响性能，当<code>write</code>缓冲区较小时尤为突出。</p>
+<h3 id="禁用磁盘高速缓存"><a href="#禁用磁盘高速缓存" class="headerlink" title="禁用磁盘高速缓存"></a>禁用磁盘高速缓存</h3><p>按照书上描述，使用<code>hdparm -W0</code>可以禁用磁盘上的高速缓存，但我没有实际试过。</p>
+<h3 id="直接I-O"><a href="#直接I-O" class="headerlink" title="直接I/O"></a>直接I/O</h3><p>当以<code>O_DIRECT</code>方式<code>open</code>文件流时，数据流会绕过内核缓冲区高速缓存，从用户空间直接传入文件或磁盘，此类过程称为<strong>直接I/O</strong>。</p>
+<p>使用直接I/O对I/O操作有诸多对齐限制，主要保证读取和写入时，偏移量、数据长度以及内存边界需要是块设备基本单元(通常为512字节)的整数倍，否则会导致<code>EINVAL</code>错误。</p>
+<p>使用直接I/O时，可以结合<code>memalign</code>函数动态分配内存。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>使用<code>stdio</code>库函数可以利用该库实现的用户空间缓冲区减少系统调用；<code>read</code>，<code>write</code>等系统调用默认不与磁盘直接传递数据，而是经过文件I/O的内核缓冲区作为中转，以此减少磁盘操作。</p>
+<p>通过<code>fflush</code>函数可以将<code>stdio</code>流的缓冲区数据刷新至内核缓冲区；通过<code>fsync</code>, <code>fdatasync</code>函数可以将内核缓冲区数据刷新至磁盘。</p>
+<p>使用<code>setvbuf</code>, <code>setbuf</code>等函数可以设置<code>stdio</code>流的缓冲模式，甚至禁用缓冲；以<code>O_SYNC</code>方式打开文件，可以在立即将数据同步至磁盘文件。</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ol>
+<li>《Linux/UNIX系统编程手册》 第13章 文件I/O缓冲</li>
+<li><a target="_blank" rel="noopener" href="http://www.pixelbeat.org/programming/stdio_buffering/">buffering in standard streams</a></li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://www.litreily.top">litreily</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://www.litreily.top/2018/10/25/io-cache/">https://www.litreily.top/2018/10/25/io-cache/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/stdio/">stdio</a><a class="post-meta__tags" href="/tags/cache/">cache</a><a class="post-meta__tags" href="/tags/buffer/">buffer</a></div><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2018/11/25/autossh/" title="autossh反向代理实现内网穿透"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">autossh反向代理实现内网穿透</div></div><div class="info-2"><div class="info-item-1">有时候需要在公司使用家里个人PC的一些资源，此时可以选择Teamvieawer进行远程，但是略微麻烦而且访问速率较慢，此时通过vps实现内网穿透就是个不错的想法。  本文讲述的内网穿透方法是通过autossh实现vps对内网的反向代理，在vps与内网之间建立一条长连接，使得外网PC通过vps的反向代理访问内网PC。整个实现所需的条件如下：  带有公网IP(222.222.222.222)的vps 保持开机且联网的内网PC 任一联网的外网PC    vps配置修改vps的文件/etc/ssh/sshd_config, 取消以下参数的注释或是修改其值 1234GetewayPorts yesTCPKeepAlive yesClientAliveInterval 60ClientAliveCountMax 3  内网PC配置为了保证内网PC可以免密码访问vps，需要在vps添加内网PC的公钥 1234$ ssh-keygen# ... enter ...$ ssh-copy-id -i ~/.ssh/id_rsa.pub -p 27000 root@222.222.222.222# 2...</div></div></div></a><a class="pagination-related" href="/2018/09/27/tee/" title="Linux指令 - tee的实现"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">Linux指令 - tee的实现</div></div><div class="info-2"><div class="info-item-1">近日学习《Linux/UNIX 系统编程手册》一书，巩固了C语言中一些常用库函数的使用，主要涉及基本IO操作相关的库函数。为了加深理解，手动实现了Linux系统中的tee指令的功能。借此文记述实现过程。 tee功能简述tee类似于一个单输入双输出的三通管道，将标准输入的数据输出到指定文件和标准输出中。为实现这个指令，主要考虑以下几点：  解析tee包含的命令行参数 读取标准输入数据，并将数据写入标准输出和指定文件 若未指定文件，则仅将数据输出到标准输出  下面逐步分析每个要点的实现方法。 参数解析tee包含以下可选项，本文实现仅考虑-a,--version,--help 123456789Usage: tee [OPTION]... [FILE]...Copy standard input to each FILE, and also to standard output.  -a, --append              append to the given FILEs, do not overwrite  -i, --ignore-interrupts   ignore...</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comments</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">litreily</div><div class="author-info-description">simple life</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">117</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">97</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">15</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Litreily"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://www.litreily.top/notes/" target="_blank" title="Notes"><i class="fas fa-sticky-note" style="color: #e8a618;"></i></a><a class="social-icon" href="mailto:litreily@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#I-O%E7%BC%93%E5%86%B2%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.</span> <span class="toc-text">I&#x2F;O缓冲的类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#stdio%E5%BA%93%E7%9A%84%E7%BC%93%E5%86%B2"><span class="toc-number">1.1.</span> <span class="toc-text">stdio库的缓冲</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6I-O%E7%9A%84%E5%86%85%E6%A0%B8%E7%BC%93%E5%86%B2"><span class="toc-number">1.2.</span> <span class="toc-text">文件I&#x2F;O的内核缓冲</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A3%81%E7%9B%98%E9%A9%B1%E5%8A%A8%E5%99%A8%E5%86%85%E7%BD%AE%E7%BC%93%E5%86%B2"><span class="toc-number">1.3.</span> <span class="toc-text">磁盘驱动器内置缓冲</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%A7%E5%88%B6%E6%96%87%E4%BB%B6I-O%E7%BC%93%E5%86%B2"><span class="toc-number">2.</span> <span class="toc-text">控制文件I&#x2F;O缓冲</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A7%E5%88%B6stdio%E5%BA%93%E7%9A%84%E7%BC%93%E5%86%B2"><span class="toc-number">2.1.</span> <span class="toc-text">控制stdio库的缓冲</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A7%E5%88%B6%E6%96%87%E4%BB%B6I-O%E7%9A%84%E5%86%85%E6%A0%B8%E7%BC%93%E5%86%B2"><span class="toc-number">2.2.</span> <span class="toc-text">控制文件I&#x2F;O的内核缓冲</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#fsync"><span class="toc-number">2.2.1.</span> <span class="toc-text">fsync</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#O-SYNC"><span class="toc-number">2.2.2.</span> <span class="toc-text">O_SYNC</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A6%81%E7%94%A8%E7%A3%81%E7%9B%98%E9%AB%98%E9%80%9F%E7%BC%93%E5%AD%98"><span class="toc-number">2.3.</span> <span class="toc-text">禁用磁盘高速缓存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%B4%E6%8E%A5I-O"><span class="toc-number">2.4.</span> <span class="toc-text">直接I&#x2F;O</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-number">3.</span> <span class="toc-text">小结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="toc-number">4.</span> <span class="toc-text">参考文献</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/09/19/android10-ota/" title="RK3399 Android 10 系统OTA升级失败问题">RK3399 Android 10 系统OTA升级失败问题</a><time datetime="2024-09-19T08:28:06.000Z" title="Created 2024-09-19 16:28:06">2024-09-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/05/31/rk3399-wol/" title="rk3399 ubuntu 休眠唤醒功能">rk3399 ubuntu 休眠唤醒功能</a><time datetime="2024-05-31T10:31:47.000Z" title="Created 2024-05-31 18:31:47">2024-05-31</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/02/05/rk32-new-part/" title="RK3288 Android6 新增分区">RK3288 Android6 新增分区</a><time datetime="2024-02-05T08:38:12.000Z" title="Created 2024-02-05 16:38:12">2024-02-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/01/10/rk32-disable-wifi/" title="RK3288 Android6 禁用 wifi">RK3288 Android6 禁用 wifi</a><time datetime="2024-01-10T08:55:19.000Z" title="Created 2024-01-10 16:55:19">2024-01-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/06/isolcpus/" title="RK3399 Android10 bind cpu with isolcpus">RK3399 Android10 bind cpu with isolcpus</a><time datetime="2023-12-06T07:29:46.000Z" title="Created 2023-12-06 15:29:46">2023-12-06</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By litreily</span><span class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 5.4.2</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll to Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4"></script><script src="/js/main.js?v=5.5.4"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const initValine = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyValine = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const valineConfig = {
+      el: '#vcomment',
+      appId: '1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+      appKey: 'uvA3xgqNW3q8TGR483lxXcpB',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      visitor: false,
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || window.location.pathname
+    }
+
+    new Valine(valineConfig)
+  }
+
+  const loadValine = async (el, path) => {
+    if (typeof Valine === 'function') {
+      initValine(el, path)
+    } else {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js')
+      initValine(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Valine' === 'Valine'
+      ? window.shuoshuoComment = { loadComment: loadValine }
+      : window.loadOtherComment = loadValine
+    return
+  }
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="local-search-input"><input placeholder="Search..." type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.4"></script></div></div></body></html>

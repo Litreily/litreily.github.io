@@ -1,0 +1,284 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>LITREILY - Stay Hungry, Stay Foolish</title><meta name="author" content="litreily,707922098@qq.com"><meta name="copyright" content="litreily"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="simple life">
+<meta property="og:type" content="website">
+<meta property="og:title" content="LITREILY">
+<meta property="og:url" content="https://www.litreily.top/page/14/index.html">
+<meta property="og:site_name" content="LITREILY">
+<meta property="og:description" content="simple life">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://www.litreily.top/img/butterfly-icon.png">
+<meta property="article:author" content="litreily">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.litreily.top/img/butterfly-icon.png"><script type="application/ld+json"></script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://www.litreily.top/page/14/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.4"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'LITREILY',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'home'
+}</script><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">117</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">97</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">15</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url(/img/index.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">LITREILY</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="site-info"><h1 id="site-title">LITREILY</h1><div id="site-subtitle"><span id="subtitle"></span></div><div id="site_social_icons"><a class="social-icon" href="https://www.litreily.top/notes/" target="_blank" title="Notes"><i class="fas fa-sticky-note" style="color: #e8a618;"></i></a><a class="social-icon" href="mailto:litreily@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts nc" id="recent-posts"><div class="recent-post-items"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2016/09/20/algor-sort/" title="常用的排序算法">常用的排序算法</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-09-19T16:00:00.000Z" title="Created 2016-09-20 00:00:00">2016-09-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%9D%82%E7%89%A9%E6%9F%9C/">杂物柜</a></span></div><div class="content">算法复杂度及稳定性   排序方法 最好时间 平均时间 最坏时间 辅助空间 稳定性    直接插入 O(n) O(n^2) O(n^2) O(1) 稳定   二分插入 O(n) O(n^2) O(n^2) O(1) 稳定   希尔  O(n^1.25)  O(1) 不稳定   冒泡 O(n) O(n^2) O(n^2) O(1) 稳定   快速 O(nlgn) O(nlgn) O(n^2) O(lgn) 不稳定   直接选择 O(n^2) O(n^2) O(n^2) O(1) 不稳定   堆 O(nlgn) O(nlgn) O(nlgn)  不稳定   归并 O(nlgn) O(nlgn) O(nlgn) O(n) 稳定   基数 O(d(rd+n)) O(d(rd+n)) O(d(rd+n)) O(rd+n) 稳定   算法实现直接插入算法步骤 将序列的第一个元素作为有序序列，第二个元素直至最后一个元素作为待排序序列; 从前往后依次扫描待排序序列，将扫描的元素依次插入到有序序列的适当位置。  原理示意 程序实现12345678910111213141516171819202122...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2016/09/12/WYMN1/" title="模拟试题1 - 计算PA+PB">模拟试题1 - 计算PA+PB</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-09-11T16:00:00.000Z" title="Created 2016-09-12 00:00:00">2016-09-12</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%9D%82%E7%89%A9%E6%9F%9C/">杂物柜</a></span></div><div class="content">题目描述正整数A的DA(1位整数)部分定义为由A中所有组成的新整数PA。例如：给定A=3862767，DA=6，则A的6部分PA是66，因为A中有2个6。 现给定A, DA, B, DB, 请编写程序计算PA+PB。 输入描述 输入在一行中依次给出A，DA，B,DB，中间以空格分隔，其中 0 &lt; A, B &lt; 1e10  输出描述 在一行中输出PA+PB的值  输入例子 3862767 6 13530293 3  输出例子 399  解题程序1234567891011121314151617181920212223242526#include &lt;iostream&gt;using namespace std;void getPA(unsigned long num, int DA, unsigned long &amp; PA)&#123;    PA = 0;    while(num)           // 循环查找num中DA的个数    &#123;      if(num%10==DA)        PA = PA*10+DA;      num...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2016/09/12/WYMN2/" title="模拟试题2 - 二货小易的网格盒子">模拟试题2 - 二货小易的网格盒子</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-09-11T16:00:00.000Z" title="Created 2016-09-12 00:00:00">2016-09-12</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%9D%82%E7%89%A9%E6%9F%9C/">杂物柜</a></span></div><div class="content">题目描述二货小易有一个W*H的网格盒子，网格的行编号为0H-1，网格的列编号为0W-1。每个格子至多可以放一块蛋糕，任意两块蛋糕的欧几里得距离不能等于2。 对于两个格子坐标(x1,y1), (x2,y2)的欧几里得距离为：((x1-x2)(x1-x2)+(y1-y2)(y1-y2))的算术平方根。 小易想知道最多可以放多少块蛋糕在网格盒子里。 输入描述 每组数组包含网格长宽W,H，用空格分隔。(1&lt;=W、H&lt;=1000)  输出描述 输出一个最多可以放的蛋糕数  输入例子 3 2  输出例子 4  题目解析根据题意，可以推测出蛋糕数最多的放置方案：将网格进行分区，每四个构成一个正方形的网格作为一个分区，类似于坐标变换。假设原坐标为(x,y),那么变换后的分区坐标为(x/2,y/2)。当变换后的分区坐标满足横纵坐标之和为偶数时，该分区内的4个网格均可放置蛋糕。  解题程序1234567891011121314151617#include &lt;iostream&gt;using namespace std;int main()&#123;  int W,H;  int...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2016/08/21/atom-packages/" title="解决atom无法安装插件的问题">解决atom无法安装插件的问题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-08-20T16:00:00.000Z" title="Created 2016-08-21 00:00:00">2016-08-21</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Web/">Web</a></span></div><div class="content">出错信息倘若使用atom自带的插件安装工具&quot;File-&gt;Settings-&gt;Install&quot;安装插件，通常会报错，以&quot;pp-markdown&quot;为例，其错误信息如下： 1234567891011gyp info it worked if it ends with okgyp info using node-gyp@2.0.2gyp info using node@0.10.40 | win32 | ia32gyp http GET http://gh-contractor-zcbenz.s3.amazonaws.com/atom-shell/dist/v0.37.8/node-v0.37.8.tar.gzgyp WARN install got an error, rolling back installgyp! Compiler tools not foundPackages that depend on modules that contain C/C++ code will fail to install.Read &lt;...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2016/08/17/clearAD/" title="消除utorrent中的广告">消除utorrent中的广告</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-08-16T16:00:00.000Z" title="Created 2016-08-17 00:00:00">2016-08-17</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Tools/">Tools</a></span></div><div class="content">其实，网上已有大把的教程教我如何去广告，但每次都要谷歌百度却也烦不胜烦，这也就只好搬运到这咯，一劳永逸。 去广告前 去广告 在utorrent的菜单栏中选择&quot;选项&quot;，打开“设置”界面，或者按快捷键ctrl+p; 在设置界面中选择最后一项&quot;高级&quot;; 在过滤中输入&quot;offers.&quot;，将以下两项设为false： &quot;offers.sponsored_torrent_offer_enabled&quot; , &quot;offers.left_rail_offer_enabled&quot;   在过滤中输入&quot;gui.&quot;,将&quot;gui.show_notorrents_node&quot;设为false.   去广告后 好了，至此广告一扫全无，enjoy it！ </div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2016/06/10/labview-rwTxt/" title="Labview - 存储txt文件">Labview - 存储txt文件</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-06-09T16:00:00.000Z" title="Created 2016-06-10 00:00:00">2016-06-10</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Language/">Language</a><i class="fas fa-angle-right article-meta-link"></i><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Language/LabVIEW/">LabVIEW</a></span></div><div class="content">存储文件简单存储写个简单的小程序，用于存储四列随机数，每隔1s存储一次，数据之间以tab作为分隔符。  存储后的文件:  加入表头看着上面这个文件，总感觉少点什么，对了，表头还没加。那就加个判断，首次创建文件时添个表头。为了简化点，定时结构就不截图了。  现在再来看看这个txt文件，表头已经被加上了，虽然看着没怎么对齐，但这是正常的，如果导入至Excel就可以看出来。  存储时间大部分情况下，我们在存储数据的同时需要记录存储时间，那么就再稍稍修改一下程序。  添加的东西也不多，就是多了个表头，每组数据前多了个时间标识，需要说明一点的是，这里用到的&quot;格式化日期/时间字符串&quot;，它的格式化方法可以参考以下说明。   下列代码为部分常用的时间格式代码：%c可显示依据地域语言设定的日期/时间。时间相关格式代码为：%X（指定地域的时间），%H（小时，24小时），%I（小时，12小时），%M（分钟），%S（秒），%u（分数秒），%p（a.m./p.m.标识）。日期相关格式代码为：%x（指定地域日期），%y（两位年份），%Y（四位年份），%m（月份），%b（月名缩写），%d（...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2016/06/06/labview-dialog/" title="Labview - 对话框程序模板">Labview - 对话框程序模板</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-06-05T16:00:00.000Z" title="Created 2016-06-06 00:00:00">2016-06-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Language/">Language</a><i class="fas fa-angle-right article-meta-link"></i><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Language/LabVIEW/">LabVIEW</a></span></div><div class="content">软件开发过程中，经常要使用对话框界面，例如各种参数设置界面等。为了减少重复性工作，我们可以创建一个对话框模板，往后就可以通过该模板直接新建对话框界面。 创建模板新建vi打开LabVIEW软件，新建vi，保存为&quot;对话框模板.vi&quot;。  添加while循环对话框界面也属于用户界面，所以需要给它单独开辟一个线程，即一个while循环。  添加移位寄存器在while循环左上角添加一个移位寄存器，然后创建一个枚举常量，给其添加以下内容：  init：初始化 run：运行 exit：退出  编辑完成后点击确定，然后将其连接至移位寄存器的输入端，默认设为&quot;init&quot;。  添加条件结构在while循环中添加一个条件结构，将将移位寄存器的值作为判断条件。为条件结构的每个值添加分支。  添加事件结构在条件结构的&quot;run&quot;分支中添加事件结构，用于响应用户操作。至此，所需的三个主要控制结构就都有了。  修改init分支在条件结构的&quot;init&quot;（初始化）分支中，用户可以添加对话框的初始化程序。该分支只执行一次，接着进入&quo...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2016/06/06/shrotcuts/" title="Labview - 常用快捷键">Labview - 常用快捷键</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-06-05T16:00:00.000Z" title="Created 2016-06-06 00:00:00">2016-06-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Language/">Language</a><i class="fas fa-angle-right article-meta-link"></i><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Language/LabVIEW/">LabVIEW</a></span></div><div class="content">作为一款功能强大的编程软件，自然少不了大量的快捷键支持。在开发过程中，熟练使用这些快捷键，可以高效完成编码调试过程，减少手动操作，提高工作效率。 菜单快捷键打开LabVIEW中的&quot;选项&quot;界面，在&quot;菜单快捷键&quot;中可以看到所有可用的快捷键。当然，如果觉得不够用或是与其它软件有冲突，可以手动添加或修改新的快捷键。  常用快捷键快捷键虽多，但常用的却有限。我简单将其分为通用键、功能键和技巧键。 通用键有些快捷键是大部分软件共有的，其功能也类似。  Ctrl+N：新建 Ctrl+A：全选 Ctrl+C：复制 Ctrl+V：粘贴 Ctrl+S：保存 Ctrl+Shift+S：保存全部  功能键在代码编辑过程中经常会用到的功能性快捷键包括：  Ctrl+R：运行程序 Ctrl+E：在前面板和程序框图之间切换 Ctrl+H：打开/关闭即时帮助 Ctrl+B：删除断线 Ctrl+I：查看当前VI属性 Ctrl+T：左右两栏显示前面板和程序框图 Ctrl+W：关闭当前界面或项目 Ctrl+Q：退出LabVIEW  技巧键 Ctrl+鼠标拖动：复制被选控件或函数...</div></div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/page/13/#content-inner"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/#content-inner">13</a><span class="page-number current">14</span><a class="page-number" href="/page/15/#content-inner">15</a><a class="extend next" rel="next" href="/page/15/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">litreily</div><div class="author-info-description">simple life</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">117</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">97</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">15</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Litreily"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://www.litreily.top/notes/" target="_blank" title="Notes"><i class="fas fa-sticky-note" style="color: #e8a618;"></i></a><a class="social-icon" href="mailto:litreily@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/09/19/android10-ota/" title="RK3399 Android 10 系统OTA升级失败问题">RK3399 Android 10 系统OTA升级失败问题</a><time datetime="2024-09-19T08:28:06.000Z" title="Created 2024-09-19 16:28:06">2024-09-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/05/31/rk3399-wol/" title="rk3399 ubuntu 休眠唤醒功能">rk3399 ubuntu 休眠唤醒功能</a><time datetime="2024-05-31T10:31:47.000Z" title="Created 2024-05-31 18:31:47">2024-05-31</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/02/05/rk32-new-part/" title="RK3288 Android6 新增分区">RK3288 Android6 新增分区</a><time datetime="2024-02-05T08:38:12.000Z" title="Created 2024-02-05 16:38:12">2024-02-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/01/10/rk32-disable-wifi/" title="RK3288 Android6 禁用 wifi">RK3288 Android6 禁用 wifi</a><time datetime="2024-01-10T08:55:19.000Z" title="Created 2024-01-10 16:55:19">2024-01-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/06/isolcpus/" title="RK3399 Android10 bind cpu with isolcpus">RK3399 Android10 bind cpu with isolcpus</a><time datetime="2023-12-06T07:29:46.000Z" title="Created 2023-12-06 15:29:46">2023-12-06</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>Categories</span>
+            <a class="card-more-btn" href="/categories/" title="View More">
+      <i class="fas fa-angle-right"></i></a>
+          </div>
+          <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Android/"><span class="card-category-list-name">Android</span><span class="card-category-list-count">20</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Embedded/"><span class="card-category-list-name">Embedded</span><span class="card-category-list-count">24</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Language/"><span class="card-category-list-name">Language</span><span class="card-category-list-count">27</span></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Language/LabVIEW/"><span class="card-category-list-name">LabVIEW</span><span class="card-category-list-count">7</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Language/Lua/"><span class="card-category-list-name">Lua</span><span class="card-category-list-count">3</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Language/Matlab/"><span class="card-category-list-name">Matlab</span><span class="card-category-list-count">4</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Language/Python/"><span class="card-category-list-name">Python</span><span class="card-category-list-count">13</span></a></li></ul></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Linux/"><span class="card-category-list-name">Linux</span><span class="card-category-list-count">18</span></a></li>
+          </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>Tags</span></div><div class="card-tag-cloud"><a href="/tags/girls/" style="font-size: 1.1em; color: #999">girls</a> <a href="/tags/C-C/" style="font-size: 1.5em; color: #99a9bf">C/C++</a> <a href="/tags/repo/" style="font-size: 1.1em; color: #999">repo</a> <a href="/tags/lofter/" style="font-size: 1.1em; color: #999">lofter</a> <a href="/tags/socket/" style="font-size: 1.1em; color: #999">socket</a> <a href="/tags/stdio/" style="font-size: 1.1em; color: #999">stdio</a> <a href="/tags/tampermonkey/" style="font-size: 1.1em; color: #999">tampermonkey</a> <a href="/tags/andorid/" style="font-size: 1.1em; color: #999">andorid</a> <a href="/tags/qqzone/" style="font-size: 1.1em; color: #999">qqzone</a> <a href="/tags/word/" style="font-size: 1.1em; color: #999">word</a> <a href="/tags/atom/" style="font-size: 1.2em; color: #999da3">atom</a> <a href="/tags/xlwt/" style="font-size: 1.1em; color: #999">xlwt</a> <a href="/tags/tdms/" style="font-size: 1.2em; color: #999da3">tdms</a> <a href="/tags/pug/" style="font-size: 1.1em; color: #999">pug</a> <a href="/tags/ftrace/" style="font-size: 1.1em; color: #999">ftrace</a> <a href="/tags/vps/" style="font-size: 1.2em; color: #999da3">vps</a> <a href="/tags/spider/" style="font-size: 1.4em; color: #99a5b6">spider</a> <a href="/tags/xss/" style="font-size: 1.1em; color: #999">xss</a> <a href="/tags/hping3/" style="font-size: 1.1em; color: #999">hping3</a> <a href="/tags/rk3288/" style="font-size: 1.4em; color: #99a5b6">rk3288</a> <a href="/tags/windows/" style="font-size: 1.1em; color: #999">windows</a> <a href="/tags/sort/" style="font-size: 1.1em; color: #999">sort</a> <a href="/tags/office/" style="font-size: 1.1em; color: #999">office</a> <a href="/tags/Feed/" style="font-size: 1.1em; color: #999">Feed</a> <a href="/tags/dpkt/" style="font-size: 1.1em; color: #999">dpkt</a> <a href="/tags/tmux/" style="font-size: 1.2em; color: #999da3">tmux</a> <a href="/tags/dns/" style="font-size: 1.1em; color: #999">dns</a> <a href="/tags/hexo/" style="font-size: 1.2em; color: #999da3">hexo</a> <a href="/tags/pool/" style="font-size: 1.1em; color: #999">pool</a> <a href="/tags/shell/" style="font-size: 1.3em; color: #99a1ac">shell</a> <a href="/tags/hash/" style="font-size: 1.1em; color: #999">hash</a> <a href="/tags/qsdk/" style="font-size: 1.2em; color: #999da3">qsdk</a> <a href="/tags/router/" style="font-size: 1.1em; color: #999">router</a> <a href="/tags/ubi/" style="font-size: 1.1em; color: #999">ubi</a> <a href="/tags/scrapy/" style="font-size: 1.1em; color: #999">scrapy</a> <a href="/tags/IPv6/" style="font-size: 1.2em; color: #999da3">IPv6</a> <a href="/tags/linux/" style="font-size: 1.4em; color: #99a5b6">linux</a> <a href="/tags/flash/" style="font-size: 1.1em; color: #999">flash</a> <a href="/tags/dhcp/" style="font-size: 1.1em; color: #999">dhcp</a> <a href="/tags/ruby/" style="font-size: 1.1em; color: #999">ruby</a></div></div><div class="card-widget card-archives">
+    <div class="item-headline">
+      <i class="fas fa-archive"></i>
+      <span>Archives</span>
+      <a class="card-more-btn" href="/archives/"
+            title="View More">
+            <i class="fas fa-angle-right"></i>
+          </a>
+    </div>
+  
+    <ul class="card-archive-list">
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/09/">
+            <span class="card-archive-list-date">
+              September 2024
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/05/">
+            <span class="card-archive-list-date">
+              May 2024
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/02/">
+            <span class="card-archive-list-date">
+              February 2024
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/01/">
+            <span class="card-archive-list-date">
+              January 2024
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2023/12/">
+            <span class="card-archive-list-date">
+              December 2023
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2023/04/">
+            <span class="card-archive-list-date">
+              April 2023
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2023/01/">
+            <span class="card-archive-list-date">
+              January 2023
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2022/12/">
+            <span class="card-archive-list-date">
+              December 2022
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+    </ul>
+  </div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>Website Info</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">Article Count :</div><div class="item-count">117</div></div><div class="webinfo-item"><div class="item-name">Unique Visitors :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">Page Views :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">Last Update :</div><div class="item-count" id="last-push-date" data-lastPushDate="2026-05-20T11:46:34.372Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By litreily</span><span class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 5.4.2</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4"></script><script src="/js/main.js?v=5.5.4"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>window.typedJSFn = {
+  init: str => {
+    window.typed = new Typed('#subtitle', Object.assign({
+      strings: str,
+      startDelay: 300,
+      typeSpeed: 150,
+      loop: true,
+      backSpeed: 50,
+    }, null))
+  },
+  run: subtitleType => {
+    if (true) {
+      if (typeof Typed === 'function') {
+        subtitleType()
+      } else {
+        btf.getScript('https://cdn.jsdelivr.net/npm/typed.js@3.0.0/dist/typed.umd.min.js').then(subtitleType)
+      }
+    } else {
+      subtitleType()
+    }
+  },
+  processSubtitle: (content, extraContents = []) => {
+    if (true) {
+      const sub = ["Stay Hungry, Stay Foolish","Welcome to my blog","Life is beautiful"].slice()
+
+      if (extraContents.length > 0) {
+        sub.unshift(...extraContents)
+      }
+
+      if (typeof content === 'string') {
+        sub.unshift(content)
+      } else if (Array.isArray(content)) {
+        sub.unshift(...content)
+      }
+
+      sub.length > 0 && typedJSFn.init(sub)
+    } else {
+      document.getElementById('subtitle').textContent = typeof content === 'string' ? content :
+        (Array.isArray(content) && content.length > 0 ? content[0] : '')
+    }
+  }
+}
+btf.addGlobalFn('pjaxSendOnce', () => { typed.destroy() }, 'typedDestroy')
+</script><script>function subtitleType () {
+  typedJSFn.processSubtitle(["Stay Hungry, Stay Foolish","Welcome to my blog","Life is beautiful"])
+}
+typedJSFn.run(subtitleType)</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="local-search-input"><input placeholder="Search..." type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.4"></script></div></div></body></html>

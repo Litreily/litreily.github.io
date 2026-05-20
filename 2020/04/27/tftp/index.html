@@ -1,0 +1,222 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>简单实用的tftp烧录image脚本 | LITREILY</title><meta name="author" content="litreily,707922098@qq.com"><meta name="copyright" content="litreily"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="烧录FW image时，经常需要打开带有UI界面的tftp客户端，然后输入IP，选择FW image，然后点击写入，很是繁琐。 为了简化这个过程，我决定使用shell script，在win10中自带WSL(windows subsystem for linux)，配合zsh食用。 123456789#!&#x2F;bin&#x2F;zsh# install to ~&#x2F;bin&#x2F;burnImage[ &quot;x$1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="简单实用的tftp烧录image脚本">
+<meta property="og:url" content="https://www.litreily.top/2020/04/27/tftp/index.html">
+<meta property="og:site_name" content="LITREILY">
+<meta property="og:description" content="烧录FW image时，经常需要打开带有UI界面的tftp客户端，然后输入IP，选择FW image，然后点击写入，很是繁琐。 为了简化这个过程，我决定使用shell script，在win10中自带WSL(windows subsystem for linux)，配合zsh食用。 123456789#!&#x2F;bin&#x2F;zsh# install to ~&#x2F;bin&#x2F;burnImage[ &quot;x$1">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://www.litreily.top/img/butterfly-icon.png">
+<meta property="article:published_time" content="2020-04-27T11:21:03.000Z">
+<meta property="article:modified_time" content="2026-05-14T01:37:35.471Z">
+<meta property="article:author" content="litreily">
+<meta property="article:tag" content="shell">
+<meta property="article:tag" content="tftp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.litreily.top/img/butterfly-icon.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "简单实用的tftp烧录image脚本",
+  "url": "https://www.litreily.top/2020/04/27/tftp/",
+  "image": "https://www.litreily.top/img/butterfly-icon.png",
+  "datePublished": "2020-04-27T11:21:03.000Z",
+  "dateModified": "2026-05-14T01:37:35.471Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "litreily",
+      "url": "https://www.litreily.top"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://www.litreily.top/2020/04/27/tftp/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.4"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '简单实用的tftp烧录image脚本',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">117</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">97</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">15</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">LITREILY</span></a><a class="nav-page-title" href="/"><span class="site-name">简单实用的tftp烧录image脚本</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">简单实用的tftp烧录image脚本</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2020-04-27T11:21:03.000Z" title="Created 2020-04-27 19:21:03">2020-04-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-05-14T01:37:35.471Z" title="Updated 2026-05-14 09:37:35">2026-05-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Linux/">Linux</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>烧录FW image时，经常需要打开带有UI界面的tftp客户端，然后输入IP，选择FW image，然后点击写入，很是繁琐。</p>
+<p>为了简化这个过程，我决定使用shell script，在win10中自带WSL(windows subsystem for linux)，配合zsh食用。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs zsh">#!/bin/zsh<br># install to ~/bin/burnImage<br><br>[ &quot;x$1&quot; = &quot;x&quot;  ] &amp;&amp; echo &quot;usage: $&#123;0##*/&#125; &lt;imagefile&gt;&quot; &amp;&amp; exit 1<br><br>tftp 192.168.1.1 &lt;&lt;-EOF &gt; /dev/null<br>    binary<br>    put $1<br>EOF<br></code></pre></td></tr></table></figure>
+
+<p>脚本使用<code>tftp</code>连接tftp server 192.168.1.1, 然后进入<code>binary</code>模式，最后将image文件<code>$1</code>传输至server端。</p>
+<p>使用方法很简单，保证该文件<code>burnImage</code>所在目录在环境变量<code>$PATH</code>中，之后在FW image所在目录执行以下指令完成烧录，非常方便。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs zsh">burnImage FW.img<br></code></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://www.litreily.top">litreily</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://www.litreily.top/2020/04/27/tftp/">https://www.litreily.top/2020/04/27/tftp/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/shell/">shell</a><a class="post-meta__tags" href="/tags/tftp/">tftp</a></div><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2020/04/30/lftp_get/" title="lftp获取FTP Server端最新文件"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">lftp获取FTP Server端最新文件</div></div><div class="info-2"><div class="info-item-1">最近解一个bug，要频繁编译和烧录FW，每次都要将image从远程的FTP server手动copy到本地，然后使用tftp进行烧录，实在不胜其烦。虽然上一篇简单实用的tftp烧录image脚本提高了烧录效率，但是每次将image拷贝到本地也是麻烦。 这次，我依旧想到了WSL, 使用shell脚本还是更加方便快捷，思路很简单，检查server端的最新文件，得到文件名后使用lftp下载到本地。 获取最新文件FTP Server文件存储方式是将每天的新数据归档到以当日日期命名的文件夹中，如今天20200430 1234567891011121314➜  lftp -u &quot;username,password&quot; ftp://1.2.3.4lftp username@1.2.3.4:~&gt; ls04-27-20  02:03PM       &lt;DIR&gt;          2020042704-29-20  05:36PM       &lt;DIR&gt;          2020042904-30-20  01:11PM       &lt;DIR&...</div></div></div></a><a class="pagination-related" href="/2020/03/15/canvas-dl/" title="使用油猴脚本批量下载canvas图片"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">使用油猴脚本批量下载canvas图片</div></div><div class="info-2"><div class="info-item-1">女友最近在网上下载一些北大网盘的pdf文档，结果发现没有下载接口，另存为也只能存储单张图片。找我帮忙，这时候发现程序员男票的好处了哈。 分析页面一开始想着使用Chrome调试工具看下pdf链接，发现这个网盘居然不是直接获取的pdf文件，而是使用js脚本动态渲染生成的，涨知识了。  那看看是否可以以图片形式批量下载呢，结果查看pdf单页的html结构发现，这居然是个canvas!!!还不是普通图片，而是画布。  下载插件没关系，canvas什么的也不是难事，万能的油猴插件总会有解决方案的，果不其然让我找到个专门用于下载svg, canvas的油猴插件↓  网站图片（背景图，svg，canvas）抓取预览下载  下载图片这正是我想要的，安装好后，使用起来非常简单，刷新要下载canvas图片的页面，在右下角有一个按钮自动获取图片。  点击之后开始扫描，注意下图中的数字并不代表实际的图片数量，不用理会。  扫描完成后，可以限定图片大小，以滤除不符合要求的小图片，然后通过批量下载完成下载，对于数量较多的页面可能需要稍微等一小会，绝大部分情况是很快的。  这样就下载完成啦。  至于如何将批量...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2019/09/12/minicom/" title="嵌入式设备在无法使用网络和USB的情况下如何进行文件传输"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2019-09-12</div><div class="info-item-2">嵌入式设备在无法使用网络和USB的情况下如何进行文件传输</div></div><div class="info-2"><div class="info-item-1">问题背景ST 测试时出现一个问题，路由器（采用Openwrt系统）的console无法正常显示shell提示符，正常情况下是 1root@DeviceName:/#  这样的，出问题时是下面这样的，用户名不见了，设备名变成了none. 1@(none):/#   不仅如此，执行ls发现根目录很多文件都不存在了。最初我和组长认为可能是存储固件的nand flash出了问题，所以想把固件dump出来换到另一块板子上，所以先使用nanddump指令把固件保存到fw.img文件中： 1nanddump /dev/mtd8 -f /tmp/fw.img  接着想要通过tftp传到外面，但是失败了，ifconfig查看网络信息发现没有任何IP，ps查看进程信息发现绝大部分进程都没有启动，很显然，缺失的文件过多，板子无法正常使用网络传输了。那么USB呢，对了我用的这款路由器带有USB功能，插上以后没有任何反应，不过也是意料之中，相关的USB检测进程木有起来呗。 那么现在问题来了，在无法使用网络和USB的情况下，如何把数据从板子copy到PC呢？下面介绍两种方法。 解决方法uboot tftp文...</div></div></div></a><a class="pagination-related" href="/2020/04/30/lftp_get/" title="lftp获取FTP Server端最新文件"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-04-30</div><div class="info-item-2">lftp获取FTP Server端最新文件</div></div><div class="info-2"><div class="info-item-1">最近解一个bug，要频繁编译和烧录FW，每次都要将image从远程的FTP server手动copy到本地，然后使用tftp进行烧录，实在不胜其烦。虽然上一篇简单实用的tftp烧录image脚本提高了烧录效率，但是每次将image拷贝到本地也是麻烦。 这次，我依旧想到了WSL, 使用shell脚本还是更加方便快捷，思路很简单，检查server端的最新文件，得到文件名后使用lftp下载到本地。 获取最新文件FTP Server文件存储方式是将每天的新数据归档到以当日日期命名的文件夹中，如今天20200430 1234567891011121314➜  lftp -u &quot;username,password&quot; ftp://1.2.3.4lftp username@1.2.3.4:~&gt; ls04-27-20  02:03PM       &lt;DIR&gt;          2020042704-29-20  05:36PM       &lt;DIR&gt;          2020042904-30-20  01:11PM       &lt;DIR&...</div></div></div></a><a class="pagination-related" href="/2020/01/09/awk_dedup/" title="awk &#39;!a[$0]++&#39;去重小技巧"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-01-09</div><div class="info-item-2">awk &#39;!a[$0]++&#39;去重小技巧</div></div><div class="info-2"><div class="info-item-1">今天碰到一个关于awk的去重用法，觉得挺有意思的，记录一下 awk 按行去重awk &#39;!a[$0]++&#39; file 是个神奇的用法，通过它可以实现文件内容去重  $0: 代表整行 a[]: 代表数组a,名称随意,首次调用时为空 ++:　与C/C++中的++一个含义，i++先使用i后i自增1，++i代表i先自增1然后被使用 !: 代表取反  所以a[$0]代表对当前行构建一个名为a的数组，首次构建后其值为0 a[$0]++代表先使用a[$0]的值，然后a[$0]的值自增1。首次调用自然就是0,下次遇到重复的行就变为1，所以不加!的情况下，该语法用于打印重复项，看下面的例子↓ 1234567891011121314$ cat testaaabbbaaacccbbbaaadddbbb$ awk &#x27;a[$0]++&#x27; testaaabbbaaabbb  它把文件中重复的行都打印出来了。为了去重，我们只需在前面加个取反符!即可，这便是!a[$0]++了 12345$ awk &#x27;!a[$0]++&#x27; testaaabbbcccddd  aw...</div></div></div></a><a class="pagination-related" href="/2017/07/27/mixwith-shell/" title="C程序与Shell脚本混合编程"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2017-07-27</div><div class="info-item-2">C程序与Shell脚本混合编程</div></div><div class="info-2"><div class="info-item-1">对于嵌入式软件开发，有时候需要在使用C语言进行开发的同时，嵌入shell脚本指令，以完成一些特定的任务。 本文结合上一篇博文“初探makefile”的程序代码，加上一个简单的shell脚本，说明两者混合编程的方法。 编写 shell 脚本1vim shell.sh  使用vim编辑器新建shell.sh脚本文件。 123456#!/bin/zshecho &quot;Hello world!&quot;echo &quot;Please input your strings&quot;read input_stringecho &quot;input_string=$input_string&quot;  脚本首先输出一个“Hello world!”，然后输出一个字符串输入提示语，等待用户输入后，打印出相应的信息。 在 main.c 中调用 shell 脚本为了在C文件中调用shell脚本，可以使用stdlib.h库中的system函数，调用方式如下： 12345678#include &lt;stdlib.h&gt;...void func(void)&#123;    sys...</div></div></div></a><a class="pagination-related" href="/2019/09/02/lftp/" title="使用正则模糊匹配的ftp文件传输"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2019-09-02</div><div class="info-item-2">使用正则模糊匹配的ftp文件传输</div></div><div class="info-2"><div class="info-item-1">通常而言，FTP传输过程中，客户端在完成账户认证后，需要指定具体的文件路径方能下载或删除服务器端的文件。但是在使用命令行指令去操作ftp数据时，如果每次都要输入完整的路径就太麻烦了，而且如果想要同时下载多个文件还需逐个执行下载指令，那有什么方法可以通过正则表达式去完成模糊匹配和批量下载呢？本文就来介绍一下FTP数据传输的常用操作及正则匹配的实现方法。    常用的ftp客户端在介绍ftp数据传输之前，简单介绍下常用的几款ftp client：  ftp lftp（支持ftp, http, https, sftp, fish, torrent, fxp, ...） sftp(Secure File Transfer Protocol) FileZilla(图形化软件，支持ftp, ftps, sftp)  ftp是最基本的ftp客户端，高效但不安全，数据传输过程中使用明文，容易被截获和篡改。lftp是非常强大的一款文件传输工具，支持多种文件传输协议，功能强大，支持递归镜像整个目录及断点续传等，也是本文采用的ftp客户端。sftp是ssh的一部分，支持加密传输，与ftp语法基本一致，...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comments</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">litreily</div><div class="author-info-description">simple life</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">117</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">97</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">15</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Litreily"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://www.litreily.top/notes/" target="_blank" title="Notes"><i class="fas fa-sticky-note" style="color: #e8a618;"></i></a><a class="social-icon" href="mailto:litreily@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/09/19/android10-ota/" title="RK3399 Android 10 系统OTA升级失败问题">RK3399 Android 10 系统OTA升级失败问题</a><time datetime="2024-09-19T08:28:06.000Z" title="Created 2024-09-19 16:28:06">2024-09-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/05/31/rk3399-wol/" title="rk3399 ubuntu 休眠唤醒功能">rk3399 ubuntu 休眠唤醒功能</a><time datetime="2024-05-31T10:31:47.000Z" title="Created 2024-05-31 18:31:47">2024-05-31</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/02/05/rk32-new-part/" title="RK3288 Android6 新增分区">RK3288 Android6 新增分区</a><time datetime="2024-02-05T08:38:12.000Z" title="Created 2024-02-05 16:38:12">2024-02-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/01/10/rk32-disable-wifi/" title="RK3288 Android6 禁用 wifi">RK3288 Android6 禁用 wifi</a><time datetime="2024-01-10T08:55:19.000Z" title="Created 2024-01-10 16:55:19">2024-01-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/06/isolcpus/" title="RK3399 Android10 bind cpu with isolcpus">RK3399 Android10 bind cpu with isolcpus</a><time datetime="2023-12-06T07:29:46.000Z" title="Created 2023-12-06 15:29:46">2023-12-06</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By litreily</span><span class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 5.4.2</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><a id="to_comment" href="#post-comment" title="Scroll to Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4"></script><script src="/js/main.js?v=5.5.4"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const initValine = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyValine = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const valineConfig = {
+      el: '#vcomment',
+      appId: '1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+      appKey: 'uvA3xgqNW3q8TGR483lxXcpB',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      visitor: false,
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || window.location.pathname
+    }
+
+    new Valine(valineConfig)
+  }
+
+  const loadValine = async (el, path) => {
+    if (typeof Valine === 'function') {
+      initValine(el, path)
+    } else {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js')
+      initValine(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Valine' === 'Valine'
+      ? window.shuoshuoComment = { loadComment: loadValine }
+      : window.loadOtherComment = loadValine
+    return
+  }
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="local-search-input"><input placeholder="Search..." type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.4"></script></div></div></body></html>
