@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://www.litreily.top/2026/05/20/gpt-prompt-1/</loc>
+    
+    <lastmod>2026-05-20</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://www.litreily.top/tags/index.html</loc>
     
     <lastmod>2026-05-20</lastmod>
@@ -1197,7 +1206,28 @@
   </url>
   
   <url>
+    <loc>https://www.litreily.top/tags/atom/</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://www.litreily.top/tags/C-C/</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.litreily.top/tags/music/</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.litreily.top/tags/signal/</loc>
     <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1218,49 +1248,7 @@
   </url>
   
   <url>
-    <loc>https://www.litreily.top/tags/atom/</loc>
-    <lastmod>2026-05-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.litreily.top/tags/music/</loc>
-    <lastmod>2026-05-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.litreily.top/tags/stm32/</loc>
-    <lastmod>2026-05-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.litreily.top/tags/signal/</loc>
-    <lastmod>2026-05-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://www.litreily.top/tags/algorithm/</loc>
-    <lastmod>2026-05-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.litreily.top/tags/RSS/</loc>
-    <lastmod>2026-05-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.litreily.top/tags/Feed/</loc>
     <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1274,14 +1262,7 @@
   </url>
   
   <url>
-    <loc>https://www.litreily.top/tags/office/</loc>
-    <lastmod>2026-05-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.litreily.top/tags/word/</loc>
+    <loc>https://www.litreily.top/tags/stm32/</loc>
     <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1309,7 +1290,35 @@
   </url>
   
   <url>
-    <loc>https://www.litreily.top/tags/shell/</loc>
+    <loc>https://www.litreily.top/tags/office/</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.litreily.top/tags/word/</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.litreily.top/tags/RSS/</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.litreily.top/tags/Feed/</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.litreily.top/tags/wireshark/</loc>
     <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1317,6 +1326,20 @@
   
   <url>
     <loc>https://www.litreily.top/tags/makefile/</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.litreily.top/tags/shell/</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.litreily.top/tags/tmux/</loc>
     <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1337,14 +1360,14 @@
   </url>
   
   <url>
-    <loc>https://www.litreily.top/tags/tmux/</loc>
+    <loc>https://www.litreily.top/tags/spider/</loc>
     <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://www.litreily.top/tags/wireshark/</loc>
+    <loc>https://www.litreily.top/tags/sina/</loc>
     <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1379,42 +1402,7 @@
   </url>
   
   <url>
-    <loc>https://www.litreily.top/tags/spider/</loc>
-    <lastmod>2026-05-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.litreily.top/tags/sina/</loc>
-    <lastmod>2026-05-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://www.litreily.top/tags/scrapy/</loc>
-    <lastmod>2026-05-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.litreily.top/tags/pug/</loc>
-    <lastmod>2026-05-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.litreily.top/tags/openwrt/</loc>
-    <lastmod>2026-05-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.litreily.top/tags/gdb/</loc>
     <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1429,6 +1417,13 @@
   
   <url>
     <loc>https://www.litreily.top/tags/visualization/</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.litreily.top/tags/pug/</loc>
     <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1477,6 +1472,20 @@
   </url>
   
   <url>
+    <loc>https://www.litreily.top/tags/openwrt/</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.litreily.top/tags/gdb/</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://www.litreily.top/tags/pypcap/</loc>
     <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
@@ -1485,41 +1494,6 @@
   
   <url>
     <loc>https://www.litreily.top/tags/dpkt/</loc>
-    <lastmod>2026-05-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.litreily.top/tags/MongoDB/</loc>
-    <lastmod>2026-05-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.litreily.top/tags/IPv6/</loc>
-    <lastmod>2026-05-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.litreily.top/tags/router/</loc>
-    <lastmod>2026-05-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.litreily.top/tags/mount/</loc>
-    <lastmod>2026-05-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.litreily.top/tags/hash/</loc>
     <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1540,6 +1514,48 @@
   </url>
   
   <url>
+    <loc>https://www.litreily.top/tags/MongoDB/</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.litreily.top/tags/girls/</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.litreily.top/tags/IPv6/</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.litreily.top/tags/router/</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.litreily.top/tags/hash/</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.litreily.top/tags/mount/</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://www.litreily.top/tags/5W2H/</loc>
     <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
@@ -1548,13 +1564,6 @@
   
   <url>
     <loc>https://www.litreily.top/tags/MECE/</loc>
-    <lastmod>2026-05-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.litreily.top/tags/girls/</loc>
     <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1582,13 +1591,6 @@
   </url>
   
   <url>
-    <loc>https://www.litreily.top/tags/socket/</loc>
-    <lastmod>2026-05-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://www.litreily.top/tags/awk/</loc>
     <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
@@ -1603,7 +1605,7 @@
   </url>
   
   <url>
-    <loc>https://www.litreily.top/tags/tampermonkey/</loc>
+    <loc>https://www.litreily.top/tags/socket/</loc>
     <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1618,6 +1620,13 @@
   
   <url>
     <loc>https://www.litreily.top/tags/ipv6/</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.litreily.top/tags/tampermonkey/</loc>
     <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1659,13 +1668,6 @@
   </url>
   
   <url>
-    <loc>https://www.litreily.top/tags/openssl/</loc>
-    <lastmod>2026-05-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://www.litreily.top/tags/pdf/</loc>
     <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
@@ -1694,6 +1696,20 @@
   </url>
   
   <url>
+    <loc>https://www.litreily.top/tags/openssl/</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.litreily.top/tags/usb/</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://www.litreily.top/tags/qsdk/</loc>
     <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
@@ -1715,13 +1731,6 @@
   </url>
   
   <url>
-    <loc>https://www.litreily.top/tags/usb/</loc>
-    <lastmod>2026-05-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://www.litreily.top/tags/repo/</loc>
     <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
@@ -1737,6 +1746,27 @@
   
   <url>
     <loc>https://www.litreily.top/tags/andorid/</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.litreily.top/tags/AI/</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.litreily.top/tags/gpt/</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.litreily.top/tags/prompt/</loc>
     <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1822,7 +1852,7 @@
   </url>
   
   <url>
-    <loc>https://www.litreily.top/categories/Language/LabVIEW/</loc>
+    <loc>https://www.litreily.top/categories/Tools/</loc>
     <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1836,7 +1866,7 @@
   </url>
   
   <url>
-    <loc>https://www.litreily.top/categories/Tools/</loc>
+    <loc>https://www.litreily.top/categories/Language/LabVIEW/</loc>
     <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1850,14 +1880,14 @@
   </url>
   
   <url>
-    <loc>https://www.litreily.top/categories/Linux/</loc>
+    <loc>https://www.litreily.top/categories/Media/</loc>
     <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://www.litreily.top/categories/Media/</loc>
+    <loc>https://www.litreily.top/categories/Linux/</loc>
     <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1900,6 +1930,13 @@
   
   <url>
     <loc>https://www.litreily.top/categories/Android/</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.litreily.top/categories/gpt-image2/</loc>
     <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>

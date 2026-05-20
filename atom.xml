@@ -6,7 +6,7 @@
   <link href="https://www.litreily.top/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2026-05-14T01:37:35.845Z</updated>
+  <updated>2026-05-20T12:07:48.323Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>gpt-image2 生图 - 赛博美女工程师</title>
+    <link href="https://www.litreily.top/2026/05/20/gpt-prompt-1/"/>
+    <id>https://www.litreily.top/2026/05/20/gpt-prompt-1/</id>
+    <published>2026-05-20T11:53:27.000Z</published>
+    <updated>2026-05-20T12:07:48.323Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;Prompt&quot;&gt;&lt;a href=&quot;#Prompt&quot; class=&quot;headerlink&quot; title=&quot;Prompt&quot;&gt;&lt;/a&gt;Prompt&lt;/h1&gt;&lt;figure class=&quot;highlight yaml&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;hljs yaml&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;A&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;cool&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;anime&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;girl&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;engineer&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;glowing&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;cyberpunk&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;tech-wear,&lt;/span&gt; &lt;span</summary>
+      
+    
+    
+    
+    <category term="gpt-image2" scheme="https://www.litreily.top/categories/gpt-image2/"/>
+    
+    
+    <category term="AI" scheme="https://www.litreily.top/tags/AI/"/>
+    
+    <category term="gpt" scheme="https://www.litreily.top/tags/gpt/"/>
+    
+    <category term="prompt" scheme="https://www.litreily.top/tags/prompt/"/>
+    
+  </entry>
   
   <entry>
     <title>RK3399 Android 10 系统OTA升级失败问题</title>
@@ -819,39 +845,6 @@
 &lt;li&gt;target: 用于编译 kernel 和 firmware 的相关文件&lt;/li&gt;
 &lt;li&gt;toolchain: 包含用于获取 kernel headers, C lib, bin-utils, compiler, debugger 的指令&lt;/li&gt;
 &lt;li&gt;tools: 包含编译时所需的一些工具，如automake, autoco</summary>
-      
-    
-    
-    
-    <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
-    
-    
-    <category term="makefile" scheme="https://www.litreily.top/tags/makefile/"/>
-    
-    <category term="openwrt" scheme="https://www.litreily.top/tags/openwrt/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>openwrt make defconfig 详解</title>
-    <link href="https://www.litreily.top/2020/12/29/make-defconfig/"/>
-    <id>https://www.litreily.top/2020/12/29/make-defconfig/</id>
-    <published>2020-12-29T01:47:32.000Z</published>
-    <updated>2026-05-14T01:37:35.589Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;对于 linux kernel，有几个常用 make 指令用于生成 .config 文件。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;make oldconfig&lt;/li&gt;
-&lt;li&gt;make menuconfig&lt;/li&gt;
-&lt;li&gt;make defconfig&lt;/li&gt;
-&lt;li&gt;make config&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;那么这些指令具体执行了什么操作呢，针对 openwrt 来看下吧。&lt;/p&gt;
-&lt;h2 id=&quot;主-Makefile&quot;&gt;&lt;a href=&quot;#主-Makefile&quot; class=&quot;headerlink&quot; title=&quot;主 Makefile&quot;&gt;&lt;/a&gt;主 Makefile&lt;/h2&gt;&lt;p&gt;在 buildroot 执行 make，首先会访问仓库根目录的主 &lt;a href=&quot;https://github.com/openwrt/openwrt/blob/master/Makefile&quot;&gt;Makefile&lt;/a&gt;，其中有个 ifneq 判断如下：&lt;/p&gt;
-&lt;figure class=&quot;highlight makefile&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;sp</summary>
       
     
     

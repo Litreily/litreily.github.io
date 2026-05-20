@@ -4,6 +4,35 @@
   
     
     <entry>
+      <title>gpt-image2 生图 - 赛博美女工程师</title>
+      <link href="/2026/05/20/gpt-prompt-1/"/>
+      <url>/2026/05/20/gpt-prompt-1/</url>
+      
+        <content type="html"><![CDATA[<h1 id="Prompt"><a href="#Prompt" class="headerlink" title="Prompt"></a>Prompt</h1><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-string">A</span> <span class="hljs-string">cool</span> <span class="hljs-string">anime</span> <span class="hljs-string">girl</span> <span class="hljs-string">engineer</span> <span class="hljs-string">with</span> <span class="hljs-string">glowing</span> <span class="hljs-string">cyberpunk</span> <span class="hljs-string">tech-wear,</span> <span class="hljs-string">sitting</span> <span class="hljs-string">in</span> <span class="hljs-string">front</span> <span class="hljs-string">of</span> <span class="hljs-string">multiple</span> <span class="hljs-string">holographic</span> <span class="hljs-string">screens</span> <span class="hljs-string">displaying</span> <span class="hljs-string">code</span> <span class="hljs-string">and</span> <span class="hljs-string">data</span> <span class="hljs-string">streams.</span> <span class="hljs-string">Futuristic</span> <span class="hljs-string">Tokyo</span> <span class="hljs-string">night</span> <span class="hljs-string">cityscape</span> <span class="hljs-string">with</span> <span class="hljs-string">neon</span> <span class="hljs-string">lights</span> <span class="hljs-string">outside</span> <span class="hljs-string">the</span> <span class="hljs-string">window.</span> <span class="hljs-string">Lofi</span> <span class="hljs-string">aesthetics,</span> <span class="hljs-string">neon</span> <span class="hljs-string">purple</span> <span class="hljs-string">and</span> <span class="hljs-string">cyan</span> <span class="hljs-string">lighting,</span> <span class="hljs-string">reflection</span> <span class="hljs-string">on</span> <span class="hljs-string">the</span> <span class="hljs-string">glass.</span> <span class="hljs-string">Masterpiece,</span> <span class="hljs-string">ultra-detailed,</span> <span class="hljs-string">8k</span> <span class="hljs-string">resolution,</span> <span class="hljs-string">trending</span> <span class="hljs-string">on</span> <span class="hljs-string">artstation,</span> <span class="hljs-string">sharp</span> <span class="hljs-string">focus</span> <span class="hljs-string">--ar</span> <span class="hljs-number">16</span><span class="hljs-string">:9</span><br></code></pre></td></tr></table></figure><h1 id="Image"><a href="#Image" class="headerlink" title="Image"></a>Image</h1><p><img src="/assets/gpt/Cyberpunk/cyberpunk_girl.png" alt="Cyberpunk girl"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> gpt-image2 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> AI </tag>
+            
+            <tag> gpt </tag>
+            
+            <tag> prompt </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>RK3399 Android 10 系统OTA升级失败问题</title>
       <link href="/2024/09/19/android10-ota/"/>
       <url>/2024/09/19/android10-ota/</url>
@@ -2352,9 +2381,9 @@
             
             <tag> ubuntu </tag>
             
-            <tag> shell </tag>
-            
             <tag> makefile </tag>
+            
+            <tag> shell </tag>
             
         </tags>
       
@@ -2823,11 +2852,11 @@
       
         <tags>
             
+            <tag> atom </tag>
+            
             <tag> ubuntu </tag>
             
             <tag> linux </tag>
-            
-            <tag> atom </tag>
             
         </tags>
       
