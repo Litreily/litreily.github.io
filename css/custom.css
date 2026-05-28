@@ -1,0 +1,799 @@
+/* ============================================================
+   Sky Blue Design System — Butterfly Theme Overhaul
+   Palette: Sky Blue (#49B1F5) × Warm Gold (#F59E0B) × Slate
+   ============================================================ */
+
+/* --- 0. Web Fonts --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* ============================================================
+   1. CSS Custom Properties — Light Mode
+   ============================================================ */
+:root {
+  /* ── Primary: Sky Blue ── */
+  --color-primary:        #49B1F5;
+  --color-primary-light:  #7CC8FC;
+  --color-primary-dark:   #3A9DE0;
+  --color-primary-bg:     rgba(73, 177, 245, 0.07);
+  --color-primary-bg-hov: rgba(73, 177, 245, 0.13);
+
+  /* ── Accent: Warm Gold ── */
+  --color-accent:         #F59E0B;
+  --color-accent-light:   #FBBF24;
+  --color-accent-dark:    #D97706;
+
+  /* ── Neutral Slate ── */
+  --color-text:           #1E293B;
+  --color-text-secondary: #64748B;
+  --color-text-tertiary:  #94A3B8;
+  --color-border:         #E2E8F0;
+  --color-border-light:   #F1F5F9;
+  --color-bg:             #FFFFFF;
+  --color-bg-secondary:   #F8FAFC;
+  --color-bg-tertiary:    #F1F5F9;
+
+  /* ── Surface ── */
+  --card-border:          rgba(73, 177, 245, 0.08);
+  --card-shadow:          0 1px 3px rgba(0,0,0,.04), 0 1px 2px rgba(0,0,0,.06);
+  --card-shadow-hover:    0 12px 28px rgba(73,177,245,.10), 0 4px 12px rgba(0,0,0,.06);
+
+  /* ── Override Butterfly core vars ── */
+  --global-font-size:     16px;
+  --font-color:           var(--color-text);
+  --text-highlight-color: var(--color-text);
+  --card-bg:              var(--color-bg);
+  --card-box-shadow:      var(--card-shadow);
+  --card-hover-box-shadow:var(--card-shadow-hover);
+  --blockquote-color:     var(--color-text-secondary);
+  --scrollbar-color:      var(--color-primary-light);
+  --btn-bg:               var(--color-primary);
+  --btn-hover-color:      var(--color-accent);
+  --pseudo-hover:         var(--color-accent);
+  --text-bg-hover:        var(--color-primary);
+  --sidebar-bg:           var(--color-bg-secondary);
+  --toc-link-color:       var(--color-text-secondary);
+  --light-grey:           var(--color-border);
+  --dark-grey:            var(--color-text-tertiary);
+  --search-bg:            var(--color-bg-secondary);
+}
+
+/* ============================================================
+   2. CSS Custom Properties — Dark Mode
+   ============================================================ */
+[data-theme="dark"] {
+  --color-primary:        #60A5FA;
+  --color-primary-light:  #93C5FD;
+  --color-primary-dark:   #49B1F5;
+  --color-primary-bg:     rgba(96,165,250,.12);
+  --color-primary-bg-hov: rgba(96,165,250,.20);
+
+  --color-accent:         #FBBF24;
+  --color-accent-light:   #FCD34D;
+  --color-accent-dark:    #F59E0B;
+
+  --color-text:           #E2E8F0;
+  --color-text-secondary: #94A3B8;
+  --color-text-tertiary:  #64748B;
+  --color-border:         #334155;
+  --color-border-light:   #1E293B;
+  --color-bg:             #0B1121;
+  --color-bg-secondary:   #1A2332;
+  --color-bg-tertiary:    #243044;
+
+  --card-border:          rgba(96,165,250,.10);
+  --card-shadow:          0 1px 3px rgba(0,0,0,.25);
+  --card-shadow-hover:    0 12px 28px rgba(0,0,0,.45), 0 4px 12px rgba(73,177,245,.10);
+
+  --global-font-size:     16px;
+  --font-color:           var(--color-text);
+  --text-highlight-color: var(--color-text);
+  --card-bg:              var(--color-bg-secondary);
+  --card-box-shadow:      var(--card-shadow);
+  --card-hover-box-shadow:var(--card-shadow-hover);
+  --blockquote-color:     var(--color-text-secondary);
+  --scrollbar-color:      var(--color-primary);
+  --btn-bg:               var(--color-primary);
+  --btn-hover-color:      var(--color-accent-light);
+  --pseudo-hover:         var(--color-accent-light);
+  --text-bg-hover:        var(--color-primary);
+  --sidebar-bg:           var(--color-bg-secondary);
+  --toc-link-color:       var(--color-text-secondary);
+  --light-grey:           var(--color-border);
+  --dark-grey:            var(--color-text-tertiary);
+  --search-bg:            var(--color-bg-secondary);
+  --white:                #FFFFFF;
+  --global-bg:            var(--color-bg);
+  --search-input-color:   var(--color-text);
+  --search-a-color:       var(--color-text);
+  --tab-border-color:     var(--color-border);
+  --tab-button-bg:        var(--color-bg-tertiary);
+  --tab-button-color:     var(--color-text);
+  --tab-button-active-bg: var(--color-bg-secondary);
+  --tab-button-hover-bg:  var(--color-border);
+  --reward-pop:           var(--color-bg-secondary);
+  --preloader-bg:         var(--color-bg-secondary);
+  --preloader-color:      var(--color-text);
+  --zoom-bg:              var(--color-bg-secondary);
+  --mark-bg:              rgba(0,0,0,.6);
+  --btn-color:            var(--color-text);
+  --blockquote-bg:        var(--color-bg-tertiary);
+  --timeline-bg:          var(--color-bg-tertiary);
+
+  /* Dark mode: social icons & SVGs */
+  --icon-color:           #E2E8F0;
+
+  /* Fix low-contrast base text */
+  #article-container,
+  .post-content,
+  .layout > div:first-child:not(.recent-posts) {
+    color: var(--color-text);
+  }
+}
+
+/* ── Dark mode: ensure social icons are visible ── */
+[data-theme="dark"] .social-icon {
+  color: #E2E8F0 !important;
+}
+
+[data-theme="dark"] .social-icon svg {
+  fill: #E2E8F0;
+}
+
+[data-theme="dark"] .social-icon:hover {
+  color: var(--color-primary) !important;
+}
+
+[data-theme="dark"] .social-icon:hover svg {
+  fill: var(--color-primary);
+}
+
+/* ============================================================
+   3. Global Typography
+   ============================================================ */
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont,
+               'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei',
+               'Noto Sans CJK SC', sans-serif;
+  font-size: var(--global-font-size);
+  line-height: 1.75;
+  letter-spacing: 0.01em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Code font */
+code, pre, kbd, samp,
+figure.highlight td.code,
+#article-container code {
+  font-family: 'JetBrains Mono', 'Cascadia Code', 'Fira Code',
+               'Consolas', 'Monaco', 'Andale Mono', monospace;
+}
+
+/* ── Headings ── */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  scroll-margin-top: 80px;
+}
+
+h1 { font-size: 2em;    margin: 1.5em 0 0.6em; }
+h2 { font-size: 1.625em; margin: 1.4em 0 0.5em; }
+h3 { font-size: 1.375em; margin: 1.3em 0 0.45em; }
+h4 { font-size: 1.125em; margin: 1.2em 0 0.4em; }
+
+/* ── Paragraph ── */
+.post-content p,
+#article-container p {
+  margin: 0 0 1.2em;
+  line-height: 1.8;
+  color: var(--color-text);
+}
+
+/* ── Links ── */
+a {
+  color: var(--color-primary);
+  transition: color var(--transition-fast, .15s ease),
+              background var(--transition-fast, .15s ease);
+}
+a:hover {
+  color: var(--color-primary-dark);
+}
+[data-theme="dark"] a:hover {
+  color: var(--color-primary-light);
+}
+
+/* ============================================================
+   4. Navigation — Glassmorphism Sticky
+   ============================================================ */
+#nav {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont,
+               'PingFang SC', 'Microsoft YaHei', sans-serif;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+/* Normal state: semi-transparent for top image pages */
+#page-header:not(.nav-fixed):not(.not-top-img) #nav {
+  background: transparent;
+}
+
+/* Scrolled / non-top-img: glassmorphism */
+#page-header.nav-fixed #nav,
+#page-header.not-top-img #nav {
+  background: rgba(255, 255, 255, 0.72) !important;
+  backdrop-filter: saturate(180%) blur(16px);
+  -webkit-backdrop-filter: saturate(180%) blur(16px);
+  border-bottom: 1px solid rgba(99, 102, 241, 0.08);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Nav links — active indicator */
+#nav .menus_item > a.site-page::after,
+#nav .menus_item > span.site-page::after {
+  background-color: var(--color-primary) !important;
+  height: 2px;
+  border-radius: 1px;
+}
+
+/* Blog name in nav */
+#nav .site-name {
+  font-weight: 700;
+  color: var(--color-text);
+  text-shadow: none !important;
+}
+
+/* Dark mode nav */
+[data-theme="dark"] #page-header.nav-fixed #nav,
+[data-theme="dark"] #page-header.not-top-img #nav {
+  background: rgba(11, 17, 33, 0.78) !important;
+  border-bottom: 1px solid rgba(129, 140, 248, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+}
+
+[data-theme="dark"] #nav .site-name {
+  color: var(--color-text);
+}
+
+/* ============================================================
+   5. Homepage Cards — Micro-interactions
+   ============================================================ */
+.recent-post-item {
+  border: 1px solid var(--card-border) !important;
+  border-radius: 12px !important;
+  box-shadow: var(--card-shadow);
+  background: var(--card-bg);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.recent-post-item:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--card-shadow-hover);
+  border-color: rgba(99, 102, 241, 0.18) !important;
+}
+
+/* Card cover image */
+.recent-post-item .post_cover img {
+  border-radius: 10px 10px 0 0;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.recent-post-item:hover .post_cover img {
+  transform: scale(1.03);
+}
+
+/* Article title in cards */
+.recent-post-item .article-title a {
+  font-weight: 700;
+  font-size: 1.15em;
+  color: var(--color-text);
+  transition: color 0.2s ease;
+}
+.recent-post-item .article-title a:hover {
+  color: var(--color-primary);
+}
+
+/* Card meta */
+.recent-post-item .article-meta {
+  color: var(--color-text-secondary);
+  font-size: 0.875em;
+}
+
+/* ── Sticky post ── */
+.recent-post-item.sticky {
+  border-left: 3px solid var(--color-accent);
+}
+
+/* ============================================================
+   6. Code Blocks
+   ============================================================ */
+figure.highlight {
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  margin: 1.2em 0;
+  border: 1px solid var(--card-border);
+}
+
+[data-theme="dark"] figure.highlight {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Code lang label */
+figure.highlight .highlight-tools .code-lang {
+  font-family: 'JetBrains Mono', 'Consolas', monospace;
+  font-size: 0.75em;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-tertiary);
+}
+
+/* Code content area */
+figure.highlight table {
+  border: none !important;
+  border-radius: 0 0 10px 10px;
+}
+
+figure.highlight td.code {
+  padding: 14px 18px;
+  line-height: 1.65;
+}
+
+figure.highlight td.code pre {
+  margin: 0;
+}
+
+/* Inline code */
+:not(pre) > code {
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(99, 102, 241, 0.08);
+  color: var(--color-primary-dark);
+  font-size: 0.9em;
+  font-weight: 500;
+}
+
+[data-theme="dark"] :not(pre) > code {
+  background: rgba(129, 140, 248, 0.15);
+  color: var(--color-primary-light);
+}
+
+/* ============================================================
+   7. Blockquotes
+   ============================================================ */
+blockquote {
+  margin: 1.2em 0;
+  padding: 14px 20px;
+  border-left: 4px solid var(--color-primary);
+  border-radius: 0 8px 8px 0;
+  background: rgba(99, 102, 241, 0.04);
+  color: var(--color-text-secondary);
+  font-style: normal;
+  line-height: 1.75;
+}
+
+[data-theme="dark"] blockquote {
+  background: rgba(129, 140, 248, 0.06);
+}
+
+blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* ============================================================
+   8. Tables
+   ============================================================ */
+table {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+table thead {
+  background: linear-gradient(135deg,
+    rgba(73, 177, 245, 0.08),
+    rgba(124, 200, 252, 0.05)
+  );
+}
+
+table thead th {
+  font-weight: 600;
+  font-size: 0.9em;
+  color: var(--color-text);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+[data-theme="dark"] table thead {
+  background: rgba(129, 140, 248, 0.1);
+}
+
+/* ============================================================
+   9. Sidebar / Widget Cards
+   ============================================================ */
+.card-widget,
+#aside-content .card-widget {
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+  background: var(--card-bg);
+  overflow: hidden;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.card-widget:hover {
+  border-color: rgba(99, 102, 241, 0.15);
+  box-shadow: var(--card-shadow-hover);
+}
+
+/* ── Tag Cloud — colorful pill badges ── */
+.card-tag-cloud a {
+  display: inline-block;
+  margin: 2px 3px;
+  padding: 5px 14px !important;
+  border-radius: 20px !important;
+  font-size: 0.85em !important;
+  line-height: 1.6;
+  font-weight: 500;
+  transition: all 0.25s ease;
+}
+
+/* Light: soft pastel backgrounds */
+.card-tag-cloud a:nth-child(6n+1) { background: #DBEAFE; color: #1D4ED8; }  /* blue */
+.card-tag-cloud a:nth-child(6n+2) { background: #D1FAE5; color: #047857; }  /* green */
+.card-tag-cloud a:nth-child(6n+3) { background: #FEF3C7; color: #B45309; }  /* amber */
+.card-tag-cloud a:nth-child(6n+4) { background: #EDE9FE; color: #6D28D9; }  /* violet */
+.card-tag-cloud a:nth-child(6n+5) { background: #FFE4E6; color: #BE123C; }  /* rose */
+.card-tag-cloud a:nth-child(6n+0) { background: #CCFBF1; color: #0F766E; }  /* teal */
+
+/* Dark: light tinted backgrounds + crisp text — same "pastel" feel as light mode */
+[data-theme="dark"] .card-tag-cloud a:nth-child(6n+1) { background: rgba(96,165,250,.22); color: #93C5FD; }  /* blue   */
+[data-theme="dark"] .card-tag-cloud a:nth-child(6n+2) { background: rgba(110,231,179,.20); color: #6EE7B7; }  /* green  */
+[data-theme="dark"] .card-tag-cloud a:nth-child(6n+3) { background: rgba(252,211,77,.24);  color: #FCD34D; }  /* amber  */
+[data-theme="dark"] .card-tag-cloud a:nth-child(6n+4) { background: rgba(196,181,253,.22); color: #C4B5FD; }  /* violet */
+[data-theme="dark"] .card-tag-cloud a:nth-child(6n+5) { background: rgba(253,164,175,.22); color: #FDA4AF; }  /* rose   */
+[data-theme="dark"] .card-tag-cloud a:nth-child(6n+0) { background: rgba(94,234,212,.20); color: #5EEAD4; }  /* teal   */
+
+.card-tag-cloud a:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,.18);
+  filter: brightness(1.08);
+}
+
+/* Category list */
+.card-category-list .category-list-count {
+  background: var(--color-primary-bg);
+  color: var(--color-primary);
+  border-radius: 10px;
+  padding: 1px 8px;
+  font-size: 0.8em;
+  font-weight: 500;
+}
+
+/* Archive list items */
+.aside-list-item {
+  transition: background 0.2s ease;
+  border-radius: 6px;
+  margin: 2px 0;
+  padding: 6px 8px;
+}
+.aside-list-item:hover {
+  background: var(--color-primary-bg);
+}
+
+/* ============================================================
+   10. Post Page Refinements
+   ============================================================ */
+
+/* Post page card */
+div#post,
+.layout > div#article-container {
+  border-radius: 12px;
+}
+
+/* Post title */
+.post-title {
+  font-weight: 800 !important;
+  letter-spacing: -0.02em;
+  line-height: 1.3 !important;
+}
+
+/* Strip ::before icon from all titles */
+.post-title::before,
+.article-title::before,
+#post-info .post-title::before,
+#page-header .post-title::before,
+.recent-post-item .article-title::before,
+#site-title::before {
+  content: none !important;
+  display: none !important;
+}
+
+/* Post meta — only apply to cards, NOT the page-header post-info */
+#recent-posts .post-meta,
+.recent-post-item .article-meta {
+  color: var(--color-text-secondary);
+  font-size: 0.875em;
+}
+
+/* ── Fix: post-info inside page-header (sky blue background) ── */
+#page-header #post-info #post-meta,
+#page-header #post-info #post-meta a,
+#page-header #post-info #post-meta .post-meta-label,
+#page-header #post-info #post-meta .post-meta-icon,
+#page-header #post-info #post-meta .post-meta-separator,
+#page-header #post-info #post-meta time,
+#page-header #post-info #post-meta .word-count,
+#page-header #post-info #post-meta span {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+#page-header #post-info #post-meta .post-meta-icon {
+  color: rgba(255, 255, 255, 0.65) !important;
+}
+
+#page-header #post-info #post-meta a:hover {
+  color: #FFFFFF !important;
+  text-decoration: underline;
+}
+
+/* When no top-img, post-info is inside #post on white bg → use slate text */
+#post > #post-info #post-meta,
+#post > #post-info #post-meta a {
+  color: var(--color-text-secondary);
+}
+
+#post > #post-info #post-meta a:hover {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+/* Post TOC */
+#card-toc .toc-link {
+  transition: all 0.2s ease;
+  border-radius: 4px;
+  padding: 2px 8px;
+}
+
+#card-toc .toc-link.active {
+  background: var(--color-primary-bg);
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+/* ============================================================
+   11. Selection & Scrollbar
+   ============================================================ */
+::selection {
+  background: rgba(99, 102, 241, 0.2);
+  color: var(--color-text);
+}
+
+::-moz-selection {
+  background: rgba(99, 102, 241, 0.2);
+  color: var(--color-text);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary-light);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-primary-light) transparent;
+}
+
+/* ============================================================
+   11b. Post Pagination — PREV / NEXT
+   ============================================================ */
+/* These sit on dark overlay backgrounds (cover images or colored fills).
+   Ensure text is always readable against any background. */
+
+#pagination.pagination-post .pagination-related .info-1 .info-item-1 {
+  color: rgba(255, 255, 255, 0.75) !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+#pagination.pagination-post .pagination-related .info-1 .info-item-2 {
+  color: #FFFFFF !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+}
+
+#pagination.pagination-post .pagination-related .info-2 .info-item-1 {
+  color: rgba(255, 255, 255, 0.85) !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* ============================================================
+   11c. Related Posts
+   ============================================================ */
+/* Same as pagination — dark overlay cards, need light text */
+
+.relatedPosts .pagination-related .info-1 .info-item-1 {
+  color: rgba(255, 255, 255, 0.8) !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  font-size: 85%;
+}
+
+.relatedPosts .pagination-related .info-1 .info-item-2 {
+  color: #FFFFFF !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  font-weight: 600;
+}
+
+.relatedPosts .pagination-related .info-2 .info-item-1 {
+  color: rgba(255, 255, 255, 0.85) !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* Headline styling */
+.relatedPosts > .headline {
+  color: var(--color-text);
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+/* ============================================================
+   12. Pagination (numbered)
+   ============================================================ */
+#pagination .page-number {
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+#pagination .page-number.current {
+  background: var(--color-primary);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+}
+
+#pagination .page-number:hover:not(.current) {
+  background: var(--color-primary-bg);
+  color: var(--color-primary);
+}
+
+/* ============================================================
+   13. Footer
+   ============================================================ */
+#footer-wrap {
+  color: var(--color-text-tertiary);
+  font-size: 0.875em;
+}
+
+#footer-wrap a {
+  color: var(--color-text-secondary);
+  transition: color 0.2s;
+}
+#footer-wrap a:hover {
+  color: var(--color-primary);
+}
+
+/* ============================================================
+   14. Button & Tag Plugins
+   ============================================================ */
+/* Buttons */
+.btn-beautify,
+.tag-plugin.button {
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-beautify:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+}
+
+/* Note callouts */
+.note {
+  border-radius: 10px;
+  border-left-width: 4px;
+}
+
+/* ============================================================
+   15. Page Header (Top Image Area)
+   ============================================================ */
+#page-header {
+  background-color: var(--color-primary);
+}
+
+#page-header #site-title {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+#page-header #site-subtitle {
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.88) !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+/* typewriter cursor — match subtitle color */
+#page-header #site-subtitle .typed-cursor {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* home page social icons in header */
+#page-header #site_social_icons .social-icon {
+  color: rgba(255, 255, 255, 0.8) !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+#page-header #site_social_icons .social-icon:hover {
+  color: #fff !important;
+}
+
+/* ============================================================
+   16. Right Side Buttons
+   ============================================================ */
+#rightside > div > button,
+#rightside > div > a {
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+#rightside > div > button:hover,
+#rightside > div > a:hover {
+  background: var(--color-primary);
+  color: #fff;
+  transform: scale(1.08);
+}
+
+/* ============================================================
+   17. Responsive Tweaks
+   ============================================================ */
+@media (max-width: 768px) {
+  :root {
+    --global-font-size: 15px;
+  }
+
+  #nav {
+    padding: 0 16px;
+    font-size: 1.15em;
+  }
+
+  .recent-post-item {
+    border-radius: 10px;
+    margin-bottom: 16px;
+  }
+
+  figure.highlight td.code {
+    padding: 10px 12px;
+  }
+}
+
+/* ============================================================
+   18. Smooth Page Load
+   ============================================================ */
+#content-inner,
+.recent-posts,
+.layout {
+  animation: fadeSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

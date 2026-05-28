@@ -6,7 +6,7 @@
   <link href="https://www.litreily.top/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2026-05-20T12:07:48.323Z</updated>
+  <updated>2026-05-28T09:29:47.967Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -21,12 +21,12 @@
     <link href="https://www.litreily.top/2026/05/20/gpt-prompt-1/"/>
     <id>https://www.litreily.top/2026/05/20/gpt-prompt-1/</id>
     <published>2026-05-20T11:53:27.000Z</published>
-    <updated>2026-05-20T12:07:48.323Z</updated>
+    <updated>2026-05-28T09:29:47.967Z</updated>
     
     
       
       
-    <summary type="html">&lt;h1 id=&quot;Prompt&quot;&gt;&lt;a href=&quot;#Prompt&quot; class=&quot;headerlink&quot; title=&quot;Prompt&quot;&gt;&lt;/a&gt;Prompt&lt;/h1&gt;&lt;figure class=&quot;highlight yaml&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;hljs yaml&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;A&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;cool&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;anime&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;girl&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;engineer&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;glowing&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;cyberpunk&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;tech-wear,&lt;/span&gt; &lt;span</summary>
+    <summary type="html">&lt;h1 id=&quot;Prompt&quot;&gt;&lt;a href=&quot;#Prompt&quot; class=&quot;headerlink&quot; title=&quot;Prompt&quot;&gt;&lt;/a&gt;Prompt&lt;/h1&gt;&lt;pre class=&quot;line-numbers language-yaml&quot; data-language=&quot;yaml&quot;&gt;&lt;code class=&quot;language-yaml&quot;&gt;A cool anime girl engineer with glowing cyberpunk tech&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;wear&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; sitting in front of multiple holographic screens displaying code and data streams. Futuristic Tokyo night cityscape with neon lights outside the window. Lofi aesthetics&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; neon purple and cyan lighting&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; reflection</summary>
       
     
     
@@ -47,13 +47,20 @@
     <link href="https://www.litreily.top/2024/09/19/android10-ota/"/>
     <id>https://www.litreily.top/2024/09/19/android10-ota/</id>
     <published>2024-09-19T08:28:06.000Z</published>
-    <updated>2026-05-14T01:37:35.845Z</updated>
+    <updated>2026-05-28T09:29:37.646Z</updated>
     
     
       
       
     <summary type="html">&lt;p&gt;为了远程升级现场机器的 Android10 系统固件，需要支持验证系统OTA升级功能，但是验证发现OTA升级会失败，这里记录下分析过程。&lt;/p&gt;
-&lt;h1 id=&quot;编译OTA包&quot;&gt;&lt;a href=&quot;#编译OTA包&quot; class=&quot;headerlink&quot; title=&quot;编译OTA包&quot;&gt;&lt;/a&gt;编译OTA包&lt;/h1&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;</summary>
+&lt;h1 id=&quot;编译OTA包&quot;&gt;&lt;a href=&quot;#编译OTA包&quot; class=&quot;headerlink&quot; title=&quot;编译OTA包&quot;&gt;&lt;/a&gt;编译OTA包&lt;/h1&gt;&lt;pre class=&quot;line-numbers language-bash&quot; data-language=&quot;bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;source&lt;/span&gt; build/envsetup.sh
+lunch
+
+&lt;span class=&quot;token comment&quot;&gt;# compile android system&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;make&lt;/span&gt; installclean &lt;span class=&quot;token parameter variable&quot;&gt;-j16&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;make&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;-j16&lt;/span&gt;
+
+&lt;span class=&quot;tok</summary>
       
     
     
@@ -101,7 +108,15 @@
       
       
     <summary type="html">&lt;h2 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot; title=&quot;背景&quot;&gt;&lt;/a&gt;背景&lt;/h2&gt;&lt;p&gt;特定情况下需要新增分区，比如开辟一个分区专门用于保存系统日志，恢复出厂默认时不会被清理. 以新增slog分区为例，说明RK3288 Android6新增分区的方法。&lt;/p&gt;
-&lt;h2 id=&quot;代码结构&quot;&gt;&lt;a href=&quot;#代码结构&quot; class=&quot;headerlink&quot; title=&quot;代码结构&quot;&gt;&lt;/a&gt;代码结构&lt;/h2&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/</summary>
+&lt;h2 id=&quot;代码结构&quot;&gt;&lt;a href=&quot;#代码结构&quot; class=&quot;headerlink&quot; title=&quot;代码结构&quot;&gt;&lt;/a&gt;代码结构&lt;/h2&gt;&lt;pre class=&quot;line-numbers language-bash&quot; data-language=&quot;bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# package-file&lt;/span&gt;
+FFTools/mkupdate/package-file
+
+&lt;span class=&quot;token comment&quot;&gt;# 分区表&lt;/span&gt;
+FFTools/parameter/rk3288-3.10-uboot-android.parameter.txt
+
+&lt;span class=&quot;token comment&quot;&gt;# 开机自动挂载相关&lt;/span&gt;
+device/rockchip/rk3288/
+&lt;span class=&quot;token operator&quot;</summary>
       
     
     
@@ -125,7 +140,11 @@
       
     <summary type="html">&lt;p&gt;某些特殊情况下，需要禁用系统的wifi配置功能。&lt;/p&gt;
 &lt;h2 id=&quot;删除快捷-wifi-开关&quot;&gt;&lt;a href=&quot;#删除快捷-wifi-开关&quot; class=&quot;headerlink&quot; title=&quot;删除快捷 wifi 开关&quot;&gt;&lt;/a&gt;删除快捷 wifi 开关&lt;/h2&gt;&lt;p&gt;在 &lt;code&gt;frameworks/base&lt;/code&gt; 中的 &lt;code&gt;SystemUI&lt;/code&gt; app 中禁用wifi开关，只需要修改配置 &lt;code&gt;quick_settings_tiles_default&lt;/code&gt; 即可。&lt;/p&gt;
-&lt;figure class=&quot;highlight patch&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;li</summary>
+&lt;pre class=&quot;line-numbers language-patch&quot; data-language=&quot;patch&quot;&gt;&lt;code class=&quot;language-patch&quot;&gt;--- a&amp;#x2F;packages&amp;#x2F;SystemUI&amp;#x2F;res&amp;#x2F;values&amp;#x2F;config.xml
++++ b&amp;#x2F;packages&amp;#x2F;SystemUI&amp;#x2F;res&amp;#x2F;values&amp;#x2F;config.xml
+@@ -119,7 +119,7 @@
+     &amp;lt;!-- The default tiles to display in QuickSettings --&amp;gt;
+     &amp;lt;s</summary>
       
     
     
@@ -149,7 +168,7 @@
       
     <summary type="html">&lt;p&gt;Per new request to bind cpus for some special processes, we need isolate some cpus of RK3399, which only used for thes special processes.&lt;/p&gt;
 &lt;p&gt;we can update dts file to set &lt;code&gt;isolcpus&lt;/code&gt; arg in &lt;code&gt;bootargs&lt;/code&gt;.&lt;/p&gt;
-&lt;h2 id=&quot;set-isolcpus&quot;&gt;&lt;a href=&quot;#set-isolcpus&quot; class=&quot;headerlink&quot; title=&quot;set isolcpus&quot;&gt;&lt;/a&gt;set isolcpus&lt;/h2&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span c</summary>
+&lt;h2 id=&quot;set-isolcpus&quot;&gt;&lt;a href=&quot;#set-isolcpus&quot; class=&quot;headerlink&quot; title=&quot;set isolcpus&quot;&gt;&lt;/a&gt;set isolcpus&lt;/h2&gt;&lt;pre class=&quot;line-numbers language-bash&quot; data-language=&quot;bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token function&quot;&gt;diff&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;--git&lt;/span&gt; a/arch/arm64/boot/dts/rockchip/rk3399-android.dtsi b/arch/arm64/boot/dts/rock</summary>
       
     
     
@@ -175,10 +194,8 @@
 &lt;ol&gt;
 &lt;li&gt;首先从已有的 &lt;code&gt;rk3288_Android10&lt;/code&gt; 拷贝一份到新增的 &lt;code&gt;rk3288_tablet&lt;/code&gt; 目录；&lt;/li&gt;
 &lt;/ol&gt;
-&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;hljs bash&quot;&gt;&lt;span class=&quot;hljs-built_in&quot;&gt;cd&lt;/span&gt; &amp;lt;SDK&amp;gt;/device/rockchip/rk3288&lt;br&gt;&lt;span class=&quot;hljs-built_in&quot;&gt;cp&lt;/span&gt; -rf rk3288_Android10 rk3288_tablet&lt;br&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-
-&lt;ol start=&quot;2&quot;&gt;
-&lt;li&gt;然后修改 &lt;code&gt;device/rockchip/rk32</summary>
+&lt;pre class=&quot;line-numbers language-bash&quot; data-language=&quot;bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;cd&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;SDK&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt;/device/rockchip/rk3288
+&lt;span class=&quot;token function&quot;&gt;cp&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;-rf&lt;/span&gt; rk3288_Android10 rk3288_tablet&lt;span aria-hidden=&quot;true&quot; class=&quot;line-numbers-rows&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;spa</summary>
       
     
     
@@ -199,7 +216,8 @@
     
     
     <summary type="html">&lt;h2 id=&quot;android-6-0-boot-img-解包&quot;&gt;&lt;a href=&quot;#android-6-0-boot-img-解包&quot; class=&quot;headerlink&quot; title=&quot;android 6.0 boot.img 解包&quot;&gt;&lt;/a&gt;android 6.0 boot.img 解包&lt;/h2&gt;&lt;h3 id=&quot;file&quot;&gt;&lt;a href=&quot;#file&quot; class=&quot;headerlink&quot; title=&quot;file&quot;&gt;&lt;/a&gt;file&lt;/h3&gt;&lt;p&gt;file指令可以显示文件类型，但是对于特定封装的文件无能为力，比如Android系统编译出的&lt;code&gt;boot.img&lt;/code&gt;&lt;/p&gt;
-&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;hljs bash&quot;&gt;$ file boot.img&lt;br&gt;boot.img: data&lt;br&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
+&lt;pre class=&quot;line-numbers language-bash&quot; data-language=&quot;bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;$ &lt;span class=&quot;token function&quot;&gt;file&lt;/span&gt; boot.img
+boot.img: data&lt;span aria-hidden=&quot;true&quot; class=&quot;line-numbers-rows&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;</summary>
     
     
     
@@ -224,7 +242,9 @@
 &lt;h2 id=&quot;Android-官方解释&quot;&gt;&lt;a href=&quot;#Android-官方解释&quot; class=&quot;headerlink&quot; title=&quot;Android 官方解释&quot;&gt;&lt;/a&gt;Android 官方解释&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;/assets/android/rand-mac.png&quot; alt=&quot;rand mac&quot;&gt;&lt;/p&gt;
 &lt;p&gt;从官方解析来看，高版本安卓系统为了安全考虑，支持随机分配wifi mac.&lt;/p&gt;
 &lt;p&gt;但是要支持的话需要修改以下参数：&lt;/p&gt;
-&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;hljs bash&quot;&gt;frameworks/base</summary>
+&lt;pre class=&quot;line-numbers language-bash&quot; data-language=&quot;bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;frameworks/base/core/res/res/values/config.xml
+- config_wifi_connected_mac_randomization_supported
+- config_wifi_p2p_mac_randomization_support</summary>
       
     
     
@@ -247,10 +267,10 @@
       
       
     <summary type="html">&lt;h2 id=&quot;logcat-过滤&quot;&gt;&lt;a href=&quot;#logcat-过滤&quot; class=&quot;headerlink&quot; title=&quot;logcat 过滤&quot;&gt;&lt;/a&gt;logcat 过滤&lt;/h2&gt;&lt;p&gt;logcat 过滤不打印的日志时，可以使用 &lt;code&gt;&amp;lt;tag&amp;gt;:S&lt;/code&gt; 的参数，比如排除 ActivityManager 相关日志。使用 以下指令&lt;/p&gt;
-&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;hljs bash&quot;&gt;logcat ActivityManager:S&lt;br&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;pre class=&quot;line-numbers language-bash&quot; data-language=&quot;bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;logcat ActivityManager:S&lt;span aria-hidden=&quot;true&quot; class=&quot;line-numbers-rows&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;但是我遇到一种特殊情况，应用app的tag中包含了冒号，比如 &lt;code&gt;APP:SDK--&lt;/code&gt;, 其它类似的tag有很多，这种情况使用以下指令是无法过滤掉的。&lt;/p&gt;
-&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;</summary>
+&lt;pre class=&quot;line-numbers language-bash&quot; data-language=&quot;bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;logcat APP:SDK--:S&lt;span aria-h</summary>
       
     
     
@@ -296,7 +316,12 @@
       
     <summary type="html">&lt;h2 id=&quot;需求背景&quot;&gt;&lt;a href=&quot;#需求背景&quot; class=&quot;headerlink&quot; title=&quot;需求背景&quot;&gt;&lt;/a&gt;需求背景&lt;/h2&gt;&lt;p&gt;项目需求，要求添加蓝牙功能，选择的芯片是WIFI&amp;amp;蓝牙二合一的 &lt;code&gt;RTL8821CU&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;为此，需要更新蓝牙和wifi的相关驱动，以及Android系统层的一些配置，同时还要向下兼容旧的wifi芯片 RTL8188EU.&lt;/p&gt;
-&lt;h2 id=&quot;相关文件&quot;&gt;&lt;a href=&quot;#相关文件&quot; class=&quot;headerlink&quot; title=&quot;相关文件&quot;&gt;&lt;/a&gt;相关文件&lt;/h2&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;</summary>
+&lt;h2 id=&quot;相关文件&quot;&gt;&lt;a href=&quot;#相关文件&quot; class=&quot;headerlink&quot; title=&quot;相关文件&quot;&gt;&lt;/a&gt;相关文件&lt;/h2&gt;&lt;pre class=&quot;line-numbers language-bash&quot; data-language=&quot;bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# kernel&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;## config&lt;/span&gt;
+kernel/arch/arm/configs/rockchip_defconfig
+&lt;span class=&quot;token comment&quot;&gt;## dts&lt;/span&gt;
+kernel/arch/arm/boot/dts/rk3288-tb_8846.dts
+&lt;sp</summary>
       
     
     
@@ -407,7 +432,7 @@
     <summary type="html">&lt;h2 id=&quot;Description&quot;&gt;&lt;a href=&quot;#Description&quot; class=&quot;headerlink&quot; title=&quot;Description&quot;&gt;&lt;/a&gt;Description&lt;/h2&gt;&lt;p&gt;烧录固件后，会概率性出现卡死在开机画面无法启动的问题，但是烧录新固件后会恢复正常。对比不同机型，发现只有带&lt;strong&gt;摄像头功能&lt;/strong&gt;的机型会有这个问题。&lt;/p&gt;
 &lt;h2 id=&quot;Root-cause&quot;&gt;&lt;a href=&quot;#Root-cause&quot; class=&quot;headerlink&quot; title=&quot;Root cause&quot;&gt;&lt;/a&gt;Root cause&lt;/h2&gt;&lt;p&gt;经过大量测试和排查，发现卡死问题源自一个文件,  &lt;code&gt;/data/camera/media_profiles.xml&lt;/code&gt; , 这是一个空文件，删除后系统就正常启动了。&lt;/p&gt;
 &lt;p&gt;通过使用 &lt;code&gt;logcat&lt;/code&gt; 结合系统源码发现，该文件是摄像头配置文件，如果为空会导致系统循环检测该文件，并尝试从中获取摄像头配置，但是由于文件为空，导致一直获取失败，最后陷入死循环。&lt;/p&gt;
-&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;b</summary>
+&lt;pre class=&quot;line-numbers language-bash&quot; data-language=&quot;bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;$ &lt;spa</summary>
       
     
     
@@ -433,7 +458,7 @@
       
     <summary type="html">&lt;p&gt;之前一直用的 &lt;code&gt;userdebug&lt;/code&gt; 版本，默认 &lt;code&gt;adb root&lt;/code&gt; 或者使用 &lt;code&gt;su&lt;/code&gt; 即可获取 root 权限。目前基于安全考虑，固件发布需要使用 &lt;code&gt;user&lt;/code&gt; 版本配置，很多功能都需要重新测试，下面对 &lt;code&gt;RK3288&lt;/code&gt; &lt;code&gt;user&lt;/code&gt; 发布版本遇到的问题进行总结。&lt;/p&gt;
 &lt;h2 id=&quot;编译固件&quot;&gt;&lt;a href=&quot;#编译固件&quot; class=&quot;headerlink&quot; title=&quot;编译固件&quot;&gt;&lt;/a&gt;编译固件&lt;/h2&gt;&lt;p&gt;首先是编译固件，将原先的 &lt;code&gt;rk3288-userdebug&lt;/code&gt; 改为 &lt;code&gt;rk3288-user&lt;/code&gt;.&lt;/p&gt;
-&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;hljs bash&quot;&gt;./FFTools/make.sh -d rk3288-tb_8846 -j16 -l rk3288-u</summary>
+&lt;pre class=&quot;line-numbers language-bash&quot; data-language=&quot;bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;./FFTools/make.sh &lt;span class=&quot;token parameter variable&quot;&gt;-d&lt;/span&gt; rk3288-tb_8846 &lt;span class=&quot;token parameter variable&quot;&gt;-j16&lt;/span&gt; &lt;span class=&quot;to</summary>
       
     
     
@@ -460,7 +485,8 @@
     <summary type="html">&lt;p&gt;编译 RK3288 &lt;code&gt;user&lt;/code&gt; 版本后，固件不会安装su，也就无法使用root权限，导致很多功能无法调试，非常不便。&lt;/p&gt;
 &lt;p&gt;为此，我想办法把 su 重新加到系统里了。&lt;/p&gt;
 &lt;h2 id=&quot;准备su&quot;&gt;&lt;a href=&quot;#准备su&quot; class=&quot;headerlink&quot; title=&quot;准备su&quot;&gt;&lt;/a&gt;准备su&lt;/h2&gt;&lt;p&gt;先使用 &lt;code&gt;userdebug&lt;/code&gt; 模式编译系统，将 &lt;code&gt;out/target/product/rk3288/system/xbin/su&lt;/code&gt; 保存到别的地方，因为改用 &lt;code&gt;user&lt;/code&gt; 模式编译后会覆盖掉。&lt;/p&gt;
-&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;hljs bash&quot;&gt;&lt;span class=&quot;hljs-built_in&quot;&gt;mkdir&lt;/span&gt; ~/backup&lt;br&gt;&lt;span class=&quot;hljs-built_in&quot;&gt;cp&lt;/span&gt; out</summary>
+&lt;pre class=&quot;line-numbers language-bash&quot; data-language=&quot;bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token function&quot;&gt;mkdir&lt;/span&gt; ~/backup
+&lt;span class=&quot;token function&quot;&gt;cp&lt;/span&gt; out/target/product/rk3288/system/xbin/su ~/backup/&lt;span aria-hidden=&quot;true&quot; class=&quot;line-numbers-rows&quot;</summary>
       
     
     
@@ -555,9 +581,9 @@
 &lt;li&gt;不可卸载的系统应用，可以在首次烧录后自启动&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h2 id=&quot;可卸载应用&quot;&gt;&lt;a href=&quot;#可卸载应用&quot; class=&quot;headerlink&quot; title=&quot;可卸载应用&quot;&gt;&lt;/a&gt;可卸载应用&lt;/h2&gt;&lt;p&gt;对于可卸载应用，其内置很简单，只需要将apk文件放置在指定目录即可。&lt;/p&gt;
-&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;hljs bash&quot;&gt;&lt;span class=&quot;hljs-built_in&quot;&gt;cp&lt;/span&gt; My_application.apk device/rockchip/rk3288/preinstall_del/&lt;br&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;pre class=&quot;line-numbers language-bash&quot; data-language=&quot;bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token function&quot;&gt;cp&lt;/span&gt; My_application.apk device/rockchip/rk3288/preinstall_del/&lt;span aria-hidden=&quot;true&quot; class=&quot;line-numbers-rows&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 
-&lt;h2 id=&quot;不可卸载应用&quot;&gt;&lt;a href=&quot;#不可卸载应用&quot; class=&quot;headerlink&quot; title=&quot;不可卸载应用&quot;&gt;&lt;/a&gt;不可卸载应用&lt;/h2&gt;&lt;p&gt;针对不可卸载的系统应用，</summary>
+&lt;h2 id=&quot;不可卸载应用&quot;&gt;&lt;a href=&quot;#不可卸载应用&quot; class=&quot;headerlink&quot; title=&quot;不可卸载应用&quot;&gt;&lt;/a&gt;不可卸载应用&lt;/h2&gt;&lt;p&gt;针对不可卸载的系统应用，复杂一些，需要放置在 &lt;code&gt;package</summary>
       
     
     
@@ -582,7 +608,7 @@
     <summary type="html">&lt;p&gt;&lt;code&gt;ramdisk.img&lt;/code&gt; 或者 &lt;code&gt;initrd.img&lt;/code&gt; 是类似的，都是一个小型的文件系统。在系统启动过程中起到引导的作用，内核通过它来启动真正的根文件系统。&lt;/p&gt;
 &lt;p&gt;有时候需要修改并更新这个文件，下面以&lt;code&gt;ramdisk.img&lt;/code&gt; 为例进行说明。&lt;/p&gt;
 &lt;h2 id=&quot;解压-ramdisk-img&quot;&gt;&lt;a href=&quot;#解压-ramdisk-img&quot; class=&quot;headerlink&quot; title=&quot;解压 ramdisk.img&quot;&gt;&lt;/a&gt;解压 ramdisk.img&lt;/h2&gt;&lt;p&gt;&lt;code&gt;ramdisk.img&lt;/code&gt; 其实是一个&lt;code&gt;gz&lt;/code&gt;格式的压缩包，可以通过 &lt;code&gt;gzip -d&lt;/code&gt; 或者 &lt;code&gt;gunzip&lt;/code&gt; 解压，不过需要注意的是 &lt;code&gt;gzip&lt;/code&gt;, &lt;code&gt;gunzip&lt;/code&gt; 会检查文件名后缀，所以需要先将后缀更新为 &lt;code&gt;.gz&lt;/code&gt;. 下面将其解压至新建的 &lt;code&gt;root&lt;/code&gt; 目录。&lt;/p&gt;
-&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1</summary>
+&lt;pre class=&quot;line-numbers language-bash&quot; data-language=&quot;bash&quot;&gt;&lt;code class=&quot;language-bas</summary>
       
     
     
@@ -610,7 +636,17 @@
 &lt;li&gt;需求：触摸屏驱动移植&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&quot;驱动移植&quot;&gt;&lt;a href=&quot;#驱动移植&quot; class=&quot;headerlink&quot; title=&quot;驱动移植&quot;&gt;&lt;/a&gt;驱动移植&lt;/h2&gt;&lt;p&gt;先从厂商获取驱动程序 gt9xx_v2.8.0.2.&lt;/p&gt;
-&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;</summary>
+&lt;pre class=&quot;line-numbers language-bash&quot; data-language=&quot;bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;gt9xx_v2.8.0.2
+├── dtsi
+│   ├── gt9xx_dts.txt
+│   ├── pinctrl_mtk.txt
+│   └── pinctrl_qcom.txt
+├── goodix_tool.c
+├── gt9xx.c
+├── gt9xx.h
+├── gt9xx_update.c
+├── Kconfig
+└── Makefile&lt;span aria-hidden=&quot;true&quot; class=&quot;line-numbers-rows&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/s</summary>
       
     
     
@@ -642,7 +678,7 @@
 &lt;p&gt;业务需求，要支持同时打开多个摄像头，期间遇到一些问题，在这里记录下。&lt;/p&gt;
 &lt;h2 id=&quot;问题分析&quot;&gt;&lt;a href=&quot;#问题分析&quot; class=&quot;headerlink&quot; title=&quot;问题分析&quot;&gt;&lt;/a&gt;问题分析&lt;/h2&gt;&lt;h3 id=&quot;支持多摄像头&quot;&gt;&lt;a href=&quot;#支持多摄像头&quot; class=&quot;headerlink&quot; title=&quot;支持多摄像头&quot;&gt;&lt;/a&gt;支持多摄像头&lt;/h3&gt;&lt;p&gt;首先，Android系统默认只支持同时打开一个摄像头，并且最大只识别两个摄像头。所以，为了支持多摄像头，需要修改摄像头相关的 &lt;code&gt;HAL&lt;/code&gt; 层。&lt;/p&gt;
 &lt;p&gt;这个我参考 &lt;a href=&quot;https://www.programmersought.com/article/12481783276/&quot;&gt;[AndroidO] [RK3399] Support 4 way camera preview&lt;/a&gt; 解决了。patch 如下：&lt;/p&gt;
-&lt;figure clas</summary>
+&lt;pre class=&quot;</summary>
       
     
     
@@ -699,7 +735,8 @@
     
     
     <summary type="html">&lt;p&gt;最近使用 &lt;code&gt;Ubuntu 18.04&lt;/code&gt; 作为台式机的办公系统，需要使用串口调试功能，于是安装了 &lt;code&gt;minicom&lt;/code&gt;, 但是配置波特率的时候发现无法配置高于 &lt;code&gt;1000000&lt;/code&gt; 以上波特率。&lt;/p&gt;
-&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;hljs bash&quot;&gt;$ &lt;span class=&quot;hljs-built_in&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;hljs-built_in&quot;&gt;stty&lt;/span&gt; -F /dev/ttyUSB0 1500000&lt;br&gt;&lt;span class=&quot;hljs-built_in&quot;&gt;stty&lt;/span&gt;: /dev/ttyUSB0: unable to perform all requested operations&lt;br&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
+&lt;pre class=&quot;line-numbers language-bash&quot; data-language=&quot;bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;$ &lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; stty &lt;span class=&quot;token parameter variable&quot;&gt;-F&lt;/span&gt; /dev/ttyUSB0 &lt;span class=&quot;token number&quot;&gt;1500000&lt;/span&gt;
+stty: /dev/ttyUSB0: unable to perform all requested operations&lt;span aria-hidden=&quot;true&quot; class=&quot;line-numbers-rows&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;</summary>
     
     
     
@@ -724,7 +761,9 @@
       
     <summary type="html">&lt;p&gt;接上一篇 &lt;a href=&quot;https://www.litreily.top/2021/01/29/qsdk/&quot;&gt;下载安装基于 openwrt 的 QSDK&lt;/a&gt;,  这一篇来讲下编译 &lt;code&gt;QSDK&lt;/code&gt; 的步骤以及遇到的问题及其处理方法。&lt;/p&gt;
 &lt;p&gt;正常步骤，是下面这样的，根据设备类型选择 config 文件，生成 .config, 然后完整编译。&lt;/p&gt;
-&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;hljs bash&quot;&gt;&lt;span class=&quot;hljs-built_in&quot;&gt;cp&lt;/span&gt; qca/configs/qsdk/ipq_open.c</summary>
+&lt;pre class=&quot;line-numbers language-bash&quot; data-language=&quot;bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token function&quot;&gt;cp&lt;/span&gt; qca/configs/qsdk/ipq_open.config .config
+&lt;span class=&quot;token builtin class-name&quot;&gt;echo&lt;/span&gt;  &lt;span class=&quot;token assign-left variable&quot;&gt;CONFIG_TARGET_ipq_ipq807x_64&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;y  &lt;span class=&quot;token operator&quot;&gt;&gt;&gt;&lt;/span&gt; .config
+&lt;span class=&quot;token bu</summary>
       
     
     
@@ -751,7 +790,7 @@
     <summary type="html">&lt;p&gt;&lt;code&gt;QSDK&lt;/code&gt; - QCA Software Development Kits, 基于 openwrt 加入了 QCA 相关的代码库，可以用于使用 qualcomm 芯片的路由器固件开发。本文讲述如何获取 QSDK.&lt;/p&gt;
 &lt;p&gt;我们通常会使用 &lt;code&gt;git clone&lt;/code&gt; 获取开源项目的代码，比如 github, gitlab, coding 等平台，但是 &lt;code&gt;QSDK&lt;/code&gt; 并不存放于这些平台，而是有它自己的维护站点，并且需要通过 &lt;code&gt;repo&lt;/code&gt; 和 &lt;code&gt;git&lt;/code&gt; 共同完成仓库文件的 &lt;code&gt;clone&lt;/code&gt;, 下面来看看吧。&lt;/p&gt;
 &lt;h2 id=&quot;install-repo&quot;&gt;&lt;a href=&quot;#install-repo&quot; class=&quot;headerlink&quot; title=&quot;install repo&quot;&gt;&lt;/a&gt;install repo&lt;/h2&gt;&lt;p&gt;首先来安装 &lt;code&gt;repo&lt;/code&gt; 工具，这其实是个 &lt;code&gt;Python&lt;/code&gt; 脚本.&lt;/p&gt;
-&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;sp</summary>
+&lt;pre class=&quot;line-numbers language-bash&quot; data-language=&quot;bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class</summary>
       
     
     
