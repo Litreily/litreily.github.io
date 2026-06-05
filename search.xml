@@ -2839,9 +2839,9 @@
             
             <tag> C/C++ </tag>
             
-            <tag> stm32 </tag>
-            
             <tag> FreeRTOS </tag>
+            
+            <tag> stm32 </tag>
             
         </tags>
       
@@ -3047,9 +3047,9 @@
       
         <tags>
             
-            <tag> tools </tag>
-            
             <tag> utorrent </tag>
+            
+            <tag> tools </tag>
             
         </tags>
       
@@ -3182,11 +3182,11 @@
       
         <tags>
             
+            <tag> tools </tag>
+            
             <tag> brackets </tag>
             
             <tag> git </tag>
-            
-            <tag> tools </tag>
             
         </tags>
       
