@@ -1,0 +1,347 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>把博客发布变成一个可复用的 Codex Skill | LITREILY</title><meta name="author" content="litreily,707922098@qq.com"><meta name="copyright" content="litreily"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#49B1F5"><meta name="description" content="记录如何把一次关于自动写作与发布博客的 AI 协作，沉淀成一个 Hexo-first、可安装、可扩展的 Codex Skill。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="把博客发布变成一个可复用的 Codex Skill">
+<meta property="og:url" content="https://www.litreily.top/2026/06/05/codex-blog-publisher-skill/index.html">
+<meta property="og:site_name" content="LITREILY">
+<meta property="og:description" content="记录如何把一次关于自动写作与发布博客的 AI 协作，沉淀成一个 Hexo-first、可安装、可扩展的 Codex Skill。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://www.litreily.top/img/header.png">
+<meta property="article:published_time" content="2026-06-05T08:35:54.000Z">
+<meta property="article:modified_time" content="2026-06-05T08:36:41.134Z">
+<meta property="article:author" content="litreily">
+<meta property="article:tag" content="hexo">
+<meta property="article:tag" content="codex">
+<meta property="article:tag" content="skill">
+<meta property="article:tag" content="ai-writing">
+<meta property="article:tag" content="blog-publishing">
+<meta property="article:tag" content="automation">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.litreily.top/img/header.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "把博客发布变成一个可复用的 Codex Skill",
+  "url": "https://www.litreily.top/2026/06/05/codex-blog-publisher-skill/",
+  "image": "https://www.litreily.top/img/header.png",
+  "datePublished": "2026-06-05T08:35:54.000Z",
+  "dateModified": "2026-06-05T08:36:41.134Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "litreily",
+      "url": "https://www.litreily.top"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://www.litreily.top/2026/06/05/codex-blog-publisher-skill/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.4"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0B1121')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#49B1F5')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  highlight: {"plugin":"prismjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '把博客发布变成一个可复用的 Codex Skill',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom.css"><style>figure.highlight pre,figure.highlight code{white-space:pre-wrap!important;word-wrap:break-word!important}</style><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/header.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">121</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">112</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">16</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(/img/title_1.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">LITREILY</span></a><a class="nav-page-title" href="/"><span class="site-name">把博客发布变成一个可复用的 Codex Skill</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">把博客发布变成一个可复用的 Codex Skill</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-06-05T08:35:54.000Z" title="Created 2026-06-05 16:35:54">2026-06-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-06-05T08:36:41.134Z" title="Updated 2026-06-05 16:36:41">2026-06-05</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Tools/">Tools</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;It has been&quot;,&quot;messageNext&quot;:&quot;days since the last update, the content of the article may be outdated.&quot;,&quot;postUpdate&quot;:&quot;2026-06-05 16:36:41&quot;}" hidden></div><p>很多 AI 对话当时很有用，结束后却很快消散。真正值得保存的不是聊天记录，而是其中被验证过的方法、规则和工具。</p>
+<p>这次我做的事情，就是把“让 AI 自动写 Hexo 博客并发布”这个想法，整理成一个可以长期复用的 Codex Skill：当前专注 Hexo，未来可以扩展到 Hugo、知乎、飞书、语雀等更多发布目标。</p>
+<span id="more"></span>
+
+<h2 id="从一次需求到一个-Skill"><a href="#从一次需求到一个-Skill" class="headerlink" title="从一次需求到一个 Skill"></a>从一次需求到一个 Skill</h2><p>最初的需求很直接：希望 AI 能把当前会话内容浓缩成一篇有价值的博客，并通过 Hexo 自动创建、生成和部署。</p>
+<p>但真正做起来后，需求很快变得更清晰：它不应该只服务于“当前会话”。很多值得发布的内容，可能只是一个突然冒出的想法、一段需求描述、一份笔记、一个代码变更，甚至是一句还没展开的问题。</p>
+<p>所以这个 Skill 最终被设计成四种输入模式：</p>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>输入来源</th>
+<th>输出目标</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Conversation mode</td>
+<td>当前 Codex/GPT 会话</td>
+<td>蒸馏成读者可读的文章</td>
+</tr>
+<tr>
+<td>Idea mode</td>
+<td>一个想法、标题、问题或方向</td>
+<td>扩展成完整博客</td>
+</tr>
+<tr>
+<td>Requirement mode</td>
+<td>需求、功能设想、工作流</td>
+<td>整理成文档或文章</td>
+</tr>
+<tr>
+<td>Source mode</td>
+<td>文件、笔记、草稿、截图、代码变更</td>
+<td>综合成结构化内容</td>
+</tr>
+</tbody></table>
+<p>这一步很关键。一个自动写博客的 Skill，如果只能“总结会话”，就很容易变成聊天记录整理器；如果能从任意输入主动思考，就更像一个发布助理。</p>
+<h2 id="核心原则：提炼，而不是搬运"><a href="#核心原则：提炼，而不是搬运" class="headerlink" title="核心原则：提炼，而不是搬运"></a>核心原则：提炼，而不是搬运</h2><p>AI 写博客最容易犯的错误，是把上下文完整复述一遍。这样的内容对参与者有意义，但对读者通常没有价值。</p>
+<p>这个 Skill 的写作规则是：</p>
+<ol>
+<li>先判断输入类型，而不是马上写正文。</li>
+<li>提炼长期价值：方法、决策、坑点、流程、示例、可复用规则。</li>
+<li>删除对话噪音：确认、闲聊、工具输出、重复尝试和只在当时有意义的细节。</li>
+<li>主动补全结构：读者是谁、文章承诺是什么、标题怎么取、分类和标签怎么设计。</li>
+<li>最后才进入 Hexo 创建、写入、生成和部署。</li>
+</ol>
+<p>这让 Skill 的目标从“帮我写一篇”变成“帮我把输入变成值得发布的内容”。</p>
+<h2 id="为什么仓库叫-blog-publisher-skill"><a href="#为什么仓库叫-blog-publisher-skill" class="headerlink" title="为什么仓库叫 blog-publisher-skill"></a>为什么仓库叫 blog-publisher-skill</h2><p>一开始它很自然地叫 <code>hexo-blog-publisher-skill</code>。这个名字清楚，但也有局限：它会让人以为这个项目永远只服务 Hexo。</p>
+<p>后来我把 GitHub 仓库名调整为：</p>
+<pre class="line-numbers language-text" data-language="text"><code class="language-text">blog-publisher-skill<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>但内部 Skill 调用名仍然保持：</p>
+<pre class="line-numbers language-text" data-language="text"><code class="language-text">$hexo-blog-publisher<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>这样做有一个明确边界：</p>
+<ul>
+<li>仓库名保持通用，为未来扩展留下空间。</li>
+<li>当前实现仍然 Hexo-first，不假装支持尚未实现的平台。</li>
+<li>调用名继续保留 Hexo 语义，避免误导使用者。</li>
+</ul>
+<p>换句话说，项目愿景可以更大，但当前能力必须诚实。</p>
+<h2 id="Hexo-first-的发布链路"><a href="#Hexo-first-的发布链路" class="headerlink" title="Hexo-first 的发布链路"></a>Hexo-first 的发布链路</h2><p>当前版本围绕 Hexo 做了完整约束：</p>
+<table>
+<thead>
+<tr>
+<th>环节</th>
+<th>规则</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>创建文章</td>
+<td>优先使用 <code>hexo new post</code></td>
+</tr>
+<tr>
+<td>写入内容</td>
+<td>保留 Hexo front matter 和主题约定</td>
+</tr>
+<tr>
+<td>分类标签</td>
+<td>分类少而稳定，标签具体而可检索</td>
+</tr>
+<tr>
+<td>图片</td>
+<td>优先使用已有素材或真实截图，不强行装饰</td>
+</tr>
+<tr>
+<td>校验</td>
+<td>部署前运行 <code>hexo clean &amp;&amp; hexo generate</code></td>
+</tr>
+<tr>
+<td>部署</td>
+<td>只有用户明确要求发布时才执行 <code>hexo deploy</code></td>
+</tr>
+</tbody></table>
+<p>这套规则看起来保守，但它解决的是自动化发布里最重要的问题：不要把不确定的内容推到线上。</p>
+<h2 id="安装方式也要面向-AI-Agent"><a href="#安装方式也要面向-AI-Agent" class="headerlink" title="安装方式也要面向 AI Agent"></a>安装方式也要面向 AI Agent</h2><p>传统 README 往往只写：</p>
+<pre class="line-numbers language-powershell" data-language="powershell"><code class="language-powershell">git clone <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>这当然能用，但如果这个项目本身就是给 AI agent 使用的，那么安装文档也应该面向 agent。</p>
+<p>因此 README 里加入了更符合实际使用方式的安装提示：</p>
+<pre class="line-numbers language-text" data-language="text"><code class="language-text">请从 https://github.com/Litreily/blog-publisher-skill.git 安装这个 Codex skill。
+把它 clone 或复制到我的 Codex skills 目录，并命名为 hexo-blog-publisher，
+这样我可以用 $hexo-blog-publisher 调用。
+安装后请确认 SKILL.md 和 agents/openai.yaml 都存在。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>这个变化很小，但方向很重要：文档不只是给人看的，也可以直接成为给 AI 执行的任务说明。</p>
+<h2 id="Push-也需要边界"><a href="#Push-也需要边界" class="headerlink" title="Push 也需要边界"></a>Push 也需要边界</h2><p>在这个过程中还有一个细节：自动化并不意味着所有动作都应该自动完成。</p>
+<p>一开始可以设想为“修改、提交、直接 push”。但更稳的流程是：</p>
+<ol>
+<li>AI 根据需求修改。</li>
+<li>本地验证。</li>
+<li>创建 commit。</li>
+<li>停在本地。</li>
+<li>只有用户明确说“push”或“推送”时，才推到远程。</li>
+</ol>
+<p>这条规则同样适用于博客发布。生成和部署可以自动化，但关键外部动作最好保留明确确认。</p>
+<h2 id="这次沉淀出的东西"><a href="#这次沉淀出的东西" class="headerlink" title="这次沉淀出的东西"></a>这次沉淀出的东西</h2><p>最终得到的不只是一篇文章，而是一套可以复用的工作方式：</p>
+<ul>
+<li>把模糊需求先变成 Skill 的输入模式。</li>
+<li>把写作标准写进 <code>SKILL.md</code>，而不是每次重新提示。</li>
+<li>把详细写作规则放进 <code>references/article-guidelines.md</code>，按需加载。</li>
+<li>把 Hexo 命令、图片路径、部署保护写进 <code>references/hexo-operations.md</code>。</li>
+<li>README 同时服务人和 AI agent。</li>
+<li>当前能力保持 Hexo-only，未来扩展方向保持清晰但不越界。</li>
+</ul>
+<p>这也是我觉得 AI 协作最值得沉淀的地方：不是让 AI 替你完成一次任务，而是把一次任务中形成的判断力，变成下一次可以直接调用的能力。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p><code>blog-publisher-skill</code> 当前只是一个 Hexo-first 的 Codex Skill，但它背后的思路更通用：让 AI 不只是回答问题，而是把想法、需求、笔记和会话转化成可发布、可维护、可演进的内容资产。</p>
+<p>当一个会话结束时，真正有价值的不是“我们聊了什么”，而是“哪些东西值得被留下”。这个 Skill 做的，就是把这一步变成一个稳定流程。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://www.litreily.top">litreily</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://www.litreily.top/2026/06/05/codex-blog-publisher-skill/">https://www.litreily.top/2026/06/05/codex-blog-publisher-skill/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/hexo/">hexo</a><a class="post-meta__tags" href="/tags/codex/">codex</a><a class="post-meta__tags" href="/tags/skill/">skill</a><a class="post-meta__tags" href="/tags/ai-writing/">ai-writing</a><a class="post-meta__tags" href="/tags/blog-publishing/">blog-publishing</a><a class="post-meta__tags" href="/tags/automation/">automation</a></div><div class="post-share"><div class="social-share" data-image="/img/header.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2026/06/05/workbuddy-hexo-auto-blog/" title="用 WorkBuddy AI 自动生成并发布 Hexo 博客"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">用 WorkBuddy AI 自动生成并发布 Hexo 博客</div></div><div class="info-2"><div class="info-item-1">有没有想过，和 AI 聊完一个技术问题之后，直接说一句&quot;帮我写成博客发出去&quot;，然后它就真的做到了？ 这篇文章记录了如何在 WorkBuddy 中配置一套自动化博客发布流程，让 AI 助手承担从内容提炼到 Git 部署的全部工作。   背景日常技术工作中，解决了一个问题后往往懒得再回头整理成博客。会话记录虽然完整，但结构松散，直接贴出去可读性很差。 WorkBuddy 是一款支持 Skill（技能）扩展的 AI 编程助手。通过编写自定义 Skill，可以让 AI 在对话结束时自动：  识别会话中的技术干货 提炼精华，组织成结构化文章 生成符合 Hexo 规范的 Markdown 文件 执行 hexo generate --deploy 构建并推送到 GitHub Pages  博客环境   项目 值    博客框架 Hexo 5.4.2   主题 Butterfly   本地目录 E:\litreily\workspace\blog\BlogSources   站点地址 https://www.litreily.top/   部署方式 hexo-deployer...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/06/05/workbuddy-hexo-auto-blog/" title="用 WorkBuddy AI 自动生成并发布 Hexo 博客"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-05</div><div class="info-item-2">用 WorkBuddy AI 自动生成并发布 Hexo 博客</div></div><div class="info-2"><div class="info-item-1">有没有想过，和 AI 聊完一个技术问题之后，直接说一句&quot;帮我写成博客发出去&quot;，然后它就真的做到了？ 这篇文章记录了如何在 WorkBuddy 中配置一套自动化博客发布流程，让 AI 助手承担从内容提炼到 Git 部署的全部工作。   背景日常技术工作中，解决了一个问题后往往懒得再回头整理成博客。会话记录虽然完整，但结构松散，直接贴出去可读性很差。 WorkBuddy 是一款支持 Skill（技能）扩展的 AI 编程助手。通过编写自定义 Skill，可以让 AI 在对话结束时自动：  识别会话中的技术干货 提炼精华，组织成结构化文章 生成符合 Hexo 规范的 Markdown 文件 执行 hexo generate --deploy 构建并推送到 GitHub Pages  博客环境   项目 值    博客框架 Hexo 5.4.2   主题 Butterfly   本地目录 E:\litreily\workspace\blog\BlogSources   站点地址 https://www.litreily.top/   部署方式 hexo-deployer...</div></div></div></a><a class="pagination-related" href="/2016/12/12/blog-log/" title="建站日志"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2016-12-12</div><div class="info-item-2">建站日志</div></div><div class="info-2"><div class="info-item-1">使用 hexo 建站后，改用了新的主题，但存在许多问题，后续将不断修复更新，本文将记录主要的更新内容。 Before在使用 primer 主题之前，我使用 jekyll 建站，配合 coding-pages 服务部署网站，站点所有样式均为自定义。 Infomation jekyll + coding-pages 建站 url: www.litreily.top 评论系统：disqus | 友言 统计服务：百度统计  Display    2016-12-11经好友 smslit 推荐，使用 hexo 主题建站，纠结许久后决定使用 primer 主题，并根据个人需求进行定制和优化。好了，下面对建站过程进行简要介绍。 Install 安装 hexo  在确保安装好 node.js 以及 git 的情况下执行以下指令 npm install hexo-cli -g hexo init hexoBlog cd hexoBlog npm install  hexo系统默认下载主题 landscape ，折腾了一小会觉得除了代码高亮不错外，其它样式略显一般，所以直接放弃，改用 primer。...</div></div></div></a><a class="pagination-related" href="/2016/12/10/hello-hexo/" title="Welcome to hexo"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2016-12-10</div><div class="info-item-2">Welcome to hexo</div></div><div class="info-2"><div class="info-item-1">Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick StartCreate a new post named new posthexo new "My New Post"  More info: Writing Run serverhexo server  More info: Server Generate static fileshexo generate  More info: Generating Deploy to remote siteshexo deploy  More info: Deployment </div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comments</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/header.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">litreily</div><div class="author-info-description">simple life</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">121</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">112</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">16</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Litreily"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://xhslink.com/m/893FaC3aK88" target="_blank" title="小红书"><i class="fas fa-seedling" style="color: #ff2442;"></i></a><a class="social-icon" href="mailto:litreily@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="https://www.litreily.top/notes/" target="_blank" title="Notes"><i class="fas fa-sticky-note" style="color: #e8a618;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8E%E4%B8%80%E6%AC%A1%E9%9C%80%E6%B1%82%E5%88%B0%E4%B8%80%E4%B8%AA-Skill"><span class="toc-number">1.</span> <span class="toc-text">从一次需求到一个 Skill</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E5%8E%9F%E5%88%99%EF%BC%9A%E6%8F%90%E7%82%BC%EF%BC%8C%E8%80%8C%E4%B8%8D%E6%98%AF%E6%90%AC%E8%BF%90"><span class="toc-number">2.</span> <span class="toc-text">核心原则：提炼，而不是搬运</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BB%93%E5%BA%93%E5%8F%AB-blog-publisher-skill"><span class="toc-number">3.</span> <span class="toc-text">为什么仓库叫 blog-publisher-skill</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hexo-first-%E7%9A%84%E5%8F%91%E5%B8%83%E9%93%BE%E8%B7%AF"><span class="toc-number">4.</span> <span class="toc-text">Hexo-first 的发布链路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E6%96%B9%E5%BC%8F%E4%B9%9F%E8%A6%81%E9%9D%A2%E5%90%91-AI-Agent"><span class="toc-number">5.</span> <span class="toc-text">安装方式也要面向 AI Agent</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Push-%E4%B9%9F%E9%9C%80%E8%A6%81%E8%BE%B9%E7%95%8C"><span class="toc-number">6.</span> <span class="toc-text">Push 也需要边界</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%99%E6%AC%A1%E6%B2%89%E6%B7%80%E5%87%BA%E7%9A%84%E4%B8%9C%E8%A5%BF"><span class="toc-number">7.</span> <span class="toc-text">这次沉淀出的东西</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-number">8.</span> <span class="toc-text">小结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/05/codex-blog-publisher-skill/" title="把博客发布变成一个可复用的 Codex Skill">把博客发布变成一个可复用的 Codex Skill</a><time datetime="2026-06-05T08:35:54.000Z" title="Created 2026-06-05 16:35:54">2026-06-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/05/workbuddy-hexo-auto-blog/" title="用 WorkBuddy AI 自动生成并发布 Hexo 博客">用 WorkBuddy AI 自动生成并发布 Hexo 博客</a><time datetime="2026-06-05T04:52:30.000Z" title="Created 2026-06-05 12:52:30">2026-06-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/04/yocto-desc/" title="Yocto 常用概念与使用说明">Yocto 常用概念与使用说明</a><time datetime="2026-06-04T02:45:00.000Z" title="Created 2026-06-04 10:45:00">2026-06-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/20/gpt-prompt-1/" title="gpt-image2 生图 - 赛博美女工程师">gpt-image2 生图 - 赛博美女工程师</a><time datetime="2026-05-20T11:53:27.000Z" title="Created 2026-05-20 19:53:27">2026-05-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/09/19/android10-ota/" title="RK3399 Android 10 系统OTA升级失败问题">RK3399 Android 10 系统OTA升级失败问题</a><time datetime="2024-09-19T08:28:06.000Z" title="Created 2024-09-19 16:28:06">2024-09-19</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By litreily</span><span class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 5.4.2</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll to Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4"></script><script src="/js/main.js?v=5.5.4"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@19.1.3/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const initValine = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyValine = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const valineConfig = {
+      el: '#vcomment',
+      appId: '1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+      appKey: 'uvA3xgqNW3q8TGR483lxXcpB',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      visitor: false,
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || window.location.pathname
+    }
+
+    new Valine(valineConfig)
+  }
+
+  const loadValine = async (el, path) => {
+    if (typeof Valine === 'function') {
+      initValine(el, path)
+    } else {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js')
+      initValine(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Valine' === 'Valine'
+      ? window.shuoshuoComment = { loadComment: loadValine }
+      : window.loadOtherComment = loadValine
+    return
+  }
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="local-search-input"><input placeholder="Search..." type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.4"></script></div></div></body></html>

@@ -6,7 +6,7 @@
   <link href="https://www.litreily.top/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2026-06-05T04:53:01.294Z</updated>
+  <updated>2026-06-05T08:36:41.134Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>把博客发布变成一个可复用的 Codex Skill</title>
+    <link href="https://www.litreily.top/2026/06/05/codex-blog-publisher-skill/"/>
+    <id>https://www.litreily.top/2026/06/05/codex-blog-publisher-skill/</id>
+    <published>2026-06-05T08:35:54.000Z</published>
+    <updated>2026-06-05T08:36:41.134Z</updated>
+    
+    
+    <summary type="html">记录如何把一次关于自动写作与发布博客的 AI 协作，沉淀成一个 Hexo-first、可安装、可扩展的 Codex Skill。</summary>
+    
+    
+    
+    <category term="Tools" scheme="https://www.litreily.top/categories/Tools/"/>
+    
+    
+    <category term="hexo" scheme="https://www.litreily.top/tags/hexo/"/>
+    
+    <category term="codex" scheme="https://www.litreily.top/tags/codex/"/>
+    
+    <category term="skill" scheme="https://www.litreily.top/tags/skill/"/>
+    
+    <category term="ai-writing" scheme="https://www.litreily.top/tags/ai-writing/"/>
+    
+    <category term="blog-publishing" scheme="https://www.litreily.top/tags/blog-publishing/"/>
+    
+    <category term="automation" scheme="https://www.litreily.top/tags/automation/"/>
+    
+  </entry>
   
   <entry>
     <title>用 WorkBuddy AI 自动生成并发布 Hexo 博客</title>
@@ -33,11 +62,11 @@
     
     <category term="hexo" scheme="https://www.litreily.top/tags/hexo/"/>
     
+    <category term="automation" scheme="https://www.litreily.top/tags/automation/"/>
+    
     <category term="workbuddy" scheme="https://www.litreily.top/tags/workbuddy/"/>
     
     <category term="ai" scheme="https://www.litreily.top/tags/ai/"/>
-    
-    <category term="automation" scheme="https://www.litreily.top/tags/automation/"/>
     
     <category term="blog" scheme="https://www.litreily.top/tags/blog/"/>
     
@@ -853,32 +882,6 @@ stty: /dev/ttyUSB0: unable to perform all requested operations&lt;span aria-hidd
     <category term="openwrt" scheme="https://www.litreily.top/tags/openwrt/"/>
     
     <category term="qsdk" scheme="https://www.litreily.top/tags/qsdk/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>openwrt Makefile scan.mk 详解</title>
-    <link href="https://www.litreily.top/2021/01/15/mk-scan/"/>
-    <id>https://www.litreily.top/2021/01/15/mk-scan/</id>
-    <published>2021-01-15T08:22:51.000Z</published>
-    <updated>2026-05-14T01:37:35.599Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;&lt;code&gt;openwrt&lt;/code&gt; 中的 &lt;code&gt;include/scan.mk&lt;/code&gt; 用于扫描项目 &lt;code&gt;package&lt;/code&gt;, &lt;code&gt;target&lt;/code&gt; 目录信息，并将扫描结果存入 &lt;code&gt;tmp&lt;/code&gt; 目录。这个扫描过程几乎是 openwrt 所有目标生成的前提。也就是说，无论使用 &lt;code&gt;make&lt;/code&gt; 编译 &lt;code&gt;openwrt&lt;/code&gt; 哪个部分的代码，都会通过 &lt;code&gt;scan.mk&lt;/code&gt; 生成必要的临时文件，这是编译其它目录的大前提。&lt;/p&gt;
-&lt;p&gt;举例说明，我们指定编译某个 &lt;code&gt;package&lt;/code&gt; 时，如 &lt;code&gt;package/utils/demo&lt;/code&gt;，&lt;code&gt;make&lt;/code&gt; 根据层层 &lt;code&gt;Makefile&lt;/code&gt; 会去寻找该 &lt;code&gt;package&lt;/code&gt; 的路径，而这个路径信息就是通过 &lt;code&gt;scan.mk&lt;/code&gt; 扫描后存入了 &lt;code&gt;tmp&lt;/code&gt; 目录。这样有什么好处呢? 我完全可以手动执行 &lt;code&gt;make package/utils/demo/compile&lt;/code&gt; 不是吗？&lt;/p&gt;
-&lt;p&gt;的确如此，但是我们不可能每次都去写长串的路径，通过 &lt;code&gt;</summary>
-      
-    
-    
-    
-    <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
-    
-    
-    <category term="makefile" scheme="https://www.litreily.top/tags/makefile/"/>
-    
-    <category term="openwrt" scheme="https://www.litreily.top/tags/openwrt/"/>
     
   </entry>
   

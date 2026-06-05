@@ -4,6 +4,41 @@
   
     
     <entry>
+      <title>把博客发布变成一个可复用的 Codex Skill</title>
+      <link href="/2026/06/05/codex-blog-publisher-skill/"/>
+      <url>/2026/06/05/codex-blog-publisher-skill/</url>
+      
+        <content type="html"><![CDATA[<p>很多 AI 对话当时很有用，结束后却很快消散。真正值得保存的不是聊天记录，而是其中被验证过的方法、规则和工具。</p><p>这次我做的事情，就是把“让 AI 自动写 Hexo 博客并发布”这个想法，整理成一个可以长期复用的 Codex Skill：当前专注 Hexo，未来可以扩展到 Hugo、知乎、飞书、语雀等更多发布目标。</p><span id="more"></span><h2 id="从一次需求到一个-Skill"><a href="#从一次需求到一个-Skill" class="headerlink" title="从一次需求到一个 Skill"></a>从一次需求到一个 Skill</h2><p>最初的需求很直接：希望 AI 能把当前会话内容浓缩成一篇有价值的博客，并通过 Hexo 自动创建、生成和部署。</p><p>但真正做起来后，需求很快变得更清晰：它不应该只服务于“当前会话”。很多值得发布的内容，可能只是一个突然冒出的想法、一段需求描述、一份笔记、一个代码变更，甚至是一句还没展开的问题。</p><p>所以这个 Skill 最终被设计成四种输入模式：</p><table><thead><tr><th>模式</th><th>输入来源</th><th>输出目标</th></tr></thead><tbody><tr><td>Conversation mode</td><td>当前 Codex/GPT 会话</td><td>蒸馏成读者可读的文章</td></tr><tr><td>Idea mode</td><td>一个想法、标题、问题或方向</td><td>扩展成完整博客</td></tr><tr><td>Requirement mode</td><td>需求、功能设想、工作流</td><td>整理成文档或文章</td></tr><tr><td>Source mode</td><td>文件、笔记、草稿、截图、代码变更</td><td>综合成结构化内容</td></tr></tbody></table><p>这一步很关键。一个自动写博客的 Skill，如果只能“总结会话”，就很容易变成聊天记录整理器；如果能从任意输入主动思考，就更像一个发布助理。</p><h2 id="核心原则：提炼，而不是搬运"><a href="#核心原则：提炼，而不是搬运" class="headerlink" title="核心原则：提炼，而不是搬运"></a>核心原则：提炼，而不是搬运</h2><p>AI 写博客最容易犯的错误，是把上下文完整复述一遍。这样的内容对参与者有意义，但对读者通常没有价值。</p><p>这个 Skill 的写作规则是：</p><ol><li>先判断输入类型，而不是马上写正文。</li><li>提炼长期价值：方法、决策、坑点、流程、示例、可复用规则。</li><li>删除对话噪音：确认、闲聊、工具输出、重复尝试和只在当时有意义的细节。</li><li>主动补全结构：读者是谁、文章承诺是什么、标题怎么取、分类和标签怎么设计。</li><li>最后才进入 Hexo 创建、写入、生成和部署。</li></ol><p>这让 Skill 的目标从“帮我写一篇”变成“帮我把输入变成值得发布的内容”。</p><h2 id="为什么仓库叫-blog-publisher-skill"><a href="#为什么仓库叫-blog-publisher-skill" class="headerlink" title="为什么仓库叫 blog-publisher-skill"></a>为什么仓库叫 blog-publisher-skill</h2><p>一开始它很自然地叫 <code>hexo-blog-publisher-skill</code>。这个名字清楚，但也有局限：它会让人以为这个项目永远只服务 Hexo。</p><p>后来我把 GitHub 仓库名调整为：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">blog-publisher-skill<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>但内部 Skill 调用名仍然保持：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">$hexo-blog-publisher<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>这样做有一个明确边界：</p><ul><li>仓库名保持通用，为未来扩展留下空间。</li><li>当前实现仍然 Hexo-first，不假装支持尚未实现的平台。</li><li>调用名继续保留 Hexo 语义，避免误导使用者。</li></ul><p>换句话说，项目愿景可以更大，但当前能力必须诚实。</p><h2 id="Hexo-first-的发布链路"><a href="#Hexo-first-的发布链路" class="headerlink" title="Hexo-first 的发布链路"></a>Hexo-first 的发布链路</h2><p>当前版本围绕 Hexo 做了完整约束：</p><table><thead><tr><th>环节</th><th>规则</th></tr></thead><tbody><tr><td>创建文章</td><td>优先使用 <code>hexo new post</code></td></tr><tr><td>写入内容</td><td>保留 Hexo front matter 和主题约定</td></tr><tr><td>分类标签</td><td>分类少而稳定，标签具体而可检索</td></tr><tr><td>图片</td><td>优先使用已有素材或真实截图，不强行装饰</td></tr><tr><td>校验</td><td>部署前运行 <code>hexo clean &amp;&amp; hexo generate</code></td></tr><tr><td>部署</td><td>只有用户明确要求发布时才执行 <code>hexo deploy</code></td></tr></tbody></table><p>这套规则看起来保守，但它解决的是自动化发布里最重要的问题：不要把不确定的内容推到线上。</p><h2 id="安装方式也要面向-AI-Agent"><a href="#安装方式也要面向-AI-Agent" class="headerlink" title="安装方式也要面向 AI Agent"></a>安装方式也要面向 AI Agent</h2><p>传统 README 往往只写：</p><pre class="line-numbers language-powershell" data-language="powershell"><code class="language-powershell">git clone <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>这当然能用，但如果这个项目本身就是给 AI agent 使用的，那么安装文档也应该面向 agent。</p><p>因此 README 里加入了更符合实际使用方式的安装提示：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">请从 https://github.com/Litreily/blog-publisher-skill.git 安装这个 Codex skill。把它 clone 或复制到我的 Codex skills 目录，并命名为 hexo-blog-publisher，这样我可以用 $hexo-blog-publisher 调用。安装后请确认 SKILL.md 和 agents/openai.yaml 都存在。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre><p>这个变化很小，但方向很重要：文档不只是给人看的，也可以直接成为给 AI 执行的任务说明。</p><h2 id="Push-也需要边界"><a href="#Push-也需要边界" class="headerlink" title="Push 也需要边界"></a>Push 也需要边界</h2><p>在这个过程中还有一个细节：自动化并不意味着所有动作都应该自动完成。</p><p>一开始可以设想为“修改、提交、直接 push”。但更稳的流程是：</p><ol><li>AI 根据需求修改。</li><li>本地验证。</li><li>创建 commit。</li><li>停在本地。</li><li>只有用户明确说“push”或“推送”时，才推到远程。</li></ol><p>这条规则同样适用于博客发布。生成和部署可以自动化，但关键外部动作最好保留明确确认。</p><h2 id="这次沉淀出的东西"><a href="#这次沉淀出的东西" class="headerlink" title="这次沉淀出的东西"></a>这次沉淀出的东西</h2><p>最终得到的不只是一篇文章，而是一套可以复用的工作方式：</p><ul><li>把模糊需求先变成 Skill 的输入模式。</li><li>把写作标准写进 <code>SKILL.md</code>，而不是每次重新提示。</li><li>把详细写作规则放进 <code>references/article-guidelines.md</code>，按需加载。</li><li>把 Hexo 命令、图片路径、部署保护写进 <code>references/hexo-operations.md</code>。</li><li>README 同时服务人和 AI agent。</li><li>当前能力保持 Hexo-only，未来扩展方向保持清晰但不越界。</li></ul><p>这也是我觉得 AI 协作最值得沉淀的地方：不是让 AI 替你完成一次任务，而是把一次任务中形成的判断力，变成下一次可以直接调用的能力。</p><h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p><code>blog-publisher-skill</code> 当前只是一个 Hexo-first 的 Codex Skill，但它背后的思路更通用：让 AI 不只是回答问题，而是把想法、需求、笔记和会话转化成可发布、可维护、可演进的内容资产。</p><p>当一个会话结束时，真正有价值的不是“我们聊了什么”，而是“哪些东西值得被留下”。这个 Skill 做的，就是把这一步变成一个稳定流程。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Tools </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> hexo </tag>
+            
+            <tag> codex </tag>
+            
+            <tag> skill </tag>
+            
+            <tag> ai-writing </tag>
+            
+            <tag> blog-publishing </tag>
+            
+            <tag> automation </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>用 WorkBuddy AI 自动生成并发布 Hexo 博客</title>
       <link href="/2026/06/05/workbuddy-hexo-auto-blog/"/>
       <url>/2026/06/05/workbuddy-hexo-auto-blog/</url>
@@ -22,11 +57,11 @@
             
             <tag> hexo </tag>
             
+            <tag> automation </tag>
+            
             <tag> workbuddy </tag>
             
             <tag> ai </tag>
-            
-            <tag> automation </tag>
             
             <tag> blog </tag>
             
@@ -2779,9 +2814,9 @@
       
         <tags>
             
-            <tag> matlab </tag>
-            
             <tag> labview </tag>
+            
+            <tag> matlab </tag>
             
             <tag> VS </tag>
             
@@ -2839,9 +2874,9 @@
             
             <tag> C/C++ </tag>
             
-            <tag> FreeRTOS </tag>
-            
             <tag> stm32 </tag>
+            
+            <tag> FreeRTOS </tag>
             
         </tags>
       
@@ -2954,11 +2989,11 @@
     
     
     <entry>
-      <title>模拟试题1 - 计算PA+PB</title>
-      <link href="/2016/09/12/WYMN1/"/>
-      <url>/2016/09/12/WYMN1/</url>
+      <title>模拟试题2 - 二货小易的网格盒子</title>
+      <link href="/2016/09/12/WYMN2/"/>
+      <url>/2016/09/12/WYMN2/</url>
       
-        <content type="html"><![CDATA[<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>正整数A的<strong>DA(1位整数)部分</strong>定义为由A中所有组成的新整数PA。例如：给定A=3862767，DA=6，则A的<strong>6部分</strong>PA是66，因为A中有2个6。</p><p>现给定A, DA, B, DB, 请编写程序计算PA+PB。</p><h3 id="输入描述"><a href="#输入描述" class="headerlink" title="输入描述"></a>输入描述</h3><blockquote><p>输入在一行中依次给出A，DA，B,DB，中间以空格分隔，其中 0 &lt; A, B &lt; 1e10</p></blockquote><h3 id="输出描述"><a href="#输出描述" class="headerlink" title="输出描述"></a>输出描述</h3><blockquote><p>在一行中输出PA+PB的值</p></blockquote><h3 id="输入例子"><a href="#输入例子" class="headerlink" title="输入例子"></a>输入例子</h3><blockquote><p>3862767 6 13530293 3</p></blockquote><h3 id="输出例子"><a href="#输出例子" class="headerlink" title="输出例子"></a>输出例子</h3><blockquote><p>399</p></blockquote><h2 id="解题程序"><a href="#解题程序" class="headerlink" title="解题程序"></a>解题程序</h2><pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">#include &lt;iostream&gt;using namespace std;void getPA(unsigned long num, int DA, unsigned long &amp; PA)&#123;    PA &#x3D; 0;    while(num)           &#x2F;&#x2F; 循环查找num中DA的个数    &#123;      if(num%10&#x3D;&#x3D;DA)        PA &#x3D; PA*10+DA;      num&#x2F;&#x3D;10;    &#125;&#125;int main()&#123;    unsigned long A,B;    unsigned long PA&#x3D;0,PB&#x3D;0;    int DA,DB;    cin&gt;&gt;A&gt;&gt;DA&gt;&gt;B&gt;&gt;DB;    getPA(A,DA,PA);      &#x2F;&#x2F; 计算PA    getPA(B,DB,PB);      &#x2F;&#x2F; 计算PB    cout&lt;&lt;PA+PB&lt;&lt;endl;    return 0;&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
+        <content type="html"><![CDATA[<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>二货小易有一个W*H的网格盒子，网格的行编号为0<del>H-1，网格的列编号为0</del>W-1。每个格子至多可以放一块蛋糕，任意两块蛋糕的欧几里得距离不能等于2。</p><p>对于两个格子坐标(x1,y1), (x2,y2)的欧几里得距离为：((x1-x2)<em>(x1-x2)+(y1-y2)</em>(y1-y2))的算术平方根。</p><p>小易想知道最多可以放多少块蛋糕在网格盒子里。</p><h3 id="输入描述"><a href="#输入描述" class="headerlink" title="输入描述"></a>输入描述</h3><blockquote><p>每组数组包含网格长宽W,H，用空格分隔。(1&lt;=W、H&lt;=1000)</p></blockquote><h3 id="输出描述"><a href="#输出描述" class="headerlink" title="输出描述"></a>输出描述</h3><blockquote><p>输出一个最多可以放的蛋糕数</p></blockquote><h3 id="输入例子"><a href="#输入例子" class="headerlink" title="输入例子"></a>输入例子</h3><blockquote><p>3 2</p></blockquote><h3 id="输出例子"><a href="#输出例子" class="headerlink" title="输出例子"></a>输出例子</h3><blockquote><p>4</p></blockquote><h2 id="题目解析"><a href="#题目解析" class="headerlink" title="题目解析"></a>题目解析</h2><p>根据题意，可以推测出蛋糕数最多的放置方案：将网格进行分区，每四个构成一个正方形的网格作为一个分区，类似于坐标变换。假设原坐标为(x,y),那么变换后的分区坐标为(x/2,y/2)。当变换后的分区坐标满足横纵坐标之和为偶数时，该分区内的4个网格均可放置蛋糕。</p><p><img src="/assets/algorithm/putCake.png" alt="putCake"></p><h2 id="解题程序"><a href="#解题程序" class="headerlink" title="解题程序"></a>解题程序</h2><pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">#include &lt;iostream&gt;using namespace std;int main()&#123;  int W,H;  int cnt&#x3D;0; &#x2F;&#x2F; 定义可放的蛋糕数  cin&gt;&gt;W&gt;&gt;H; &#x2F;&#x2F; 输入盒子网格的行列数  for(int i &#x3D; 0; i&lt;H; i++)      for(int j &#x3D; 0; j &lt; W; j++)        if((i&#x2F;2 + j&#x2F;2) % 2 &#x3D;&#x3D; 0)          cnt++;  cout&lt;&lt;cnt&lt;&lt;endl;  return 0;&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
       
       
       <categories>
@@ -2979,11 +3014,11 @@
     
     
     <entry>
-      <title>模拟试题2 - 二货小易的网格盒子</title>
-      <link href="/2016/09/12/WYMN2/"/>
-      <url>/2016/09/12/WYMN2/</url>
+      <title>模拟试题1 - 计算PA+PB</title>
+      <link href="/2016/09/12/WYMN1/"/>
+      <url>/2016/09/12/WYMN1/</url>
       
-        <content type="html"><![CDATA[<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>二货小易有一个W*H的网格盒子，网格的行编号为0<del>H-1，网格的列编号为0</del>W-1。每个格子至多可以放一块蛋糕，任意两块蛋糕的欧几里得距离不能等于2。</p><p>对于两个格子坐标(x1,y1), (x2,y2)的欧几里得距离为：((x1-x2)<em>(x1-x2)+(y1-y2)</em>(y1-y2))的算术平方根。</p><p>小易想知道最多可以放多少块蛋糕在网格盒子里。</p><h3 id="输入描述"><a href="#输入描述" class="headerlink" title="输入描述"></a>输入描述</h3><blockquote><p>每组数组包含网格长宽W,H，用空格分隔。(1&lt;=W、H&lt;=1000)</p></blockquote><h3 id="输出描述"><a href="#输出描述" class="headerlink" title="输出描述"></a>输出描述</h3><blockquote><p>输出一个最多可以放的蛋糕数</p></blockquote><h3 id="输入例子"><a href="#输入例子" class="headerlink" title="输入例子"></a>输入例子</h3><blockquote><p>3 2</p></blockquote><h3 id="输出例子"><a href="#输出例子" class="headerlink" title="输出例子"></a>输出例子</h3><blockquote><p>4</p></blockquote><h2 id="题目解析"><a href="#题目解析" class="headerlink" title="题目解析"></a>题目解析</h2><p>根据题意，可以推测出蛋糕数最多的放置方案：将网格进行分区，每四个构成一个正方形的网格作为一个分区，类似于坐标变换。假设原坐标为(x,y),那么变换后的分区坐标为(x/2,y/2)。当变换后的分区坐标满足横纵坐标之和为偶数时，该分区内的4个网格均可放置蛋糕。</p><p><img src="/assets/algorithm/putCake.png" alt="putCake"></p><h2 id="解题程序"><a href="#解题程序" class="headerlink" title="解题程序"></a>解题程序</h2><pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">#include &lt;iostream&gt;using namespace std;int main()&#123;  int W,H;  int cnt&#x3D;0; &#x2F;&#x2F; 定义可放的蛋糕数  cin&gt;&gt;W&gt;&gt;H; &#x2F;&#x2F; 输入盒子网格的行列数  for(int i &#x3D; 0; i&lt;H; i++)      for(int j &#x3D; 0; j &lt; W; j++)        if((i&#x2F;2 + j&#x2F;2) % 2 &#x3D;&#x3D; 0)          cnt++;  cout&lt;&lt;cnt&lt;&lt;endl;  return 0;&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
+        <content type="html"><![CDATA[<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>正整数A的<strong>DA(1位整数)部分</strong>定义为由A中所有组成的新整数PA。例如：给定A=3862767，DA=6，则A的<strong>6部分</strong>PA是66，因为A中有2个6。</p><p>现给定A, DA, B, DB, 请编写程序计算PA+PB。</p><h3 id="输入描述"><a href="#输入描述" class="headerlink" title="输入描述"></a>输入描述</h3><blockquote><p>输入在一行中依次给出A，DA，B,DB，中间以空格分隔，其中 0 &lt; A, B &lt; 1e10</p></blockquote><h3 id="输出描述"><a href="#输出描述" class="headerlink" title="输出描述"></a>输出描述</h3><blockquote><p>在一行中输出PA+PB的值</p></blockquote><h3 id="输入例子"><a href="#输入例子" class="headerlink" title="输入例子"></a>输入例子</h3><blockquote><p>3862767 6 13530293 3</p></blockquote><h3 id="输出例子"><a href="#输出例子" class="headerlink" title="输出例子"></a>输出例子</h3><blockquote><p>399</p></blockquote><h2 id="解题程序"><a href="#解题程序" class="headerlink" title="解题程序"></a>解题程序</h2><pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">#include &lt;iostream&gt;using namespace std;void getPA(unsigned long num, int DA, unsigned long &amp; PA)&#123;    PA &#x3D; 0;    while(num)           &#x2F;&#x2F; 循环查找num中DA的个数    &#123;      if(num%10&#x3D;&#x3D;DA)        PA &#x3D; PA*10+DA;      num&#x2F;&#x3D;10;    &#125;&#125;int main()&#123;    unsigned long A,B;    unsigned long PA&#x3D;0,PB&#x3D;0;    int DA,DB;    cin&gt;&gt;A&gt;&gt;DA&gt;&gt;B&gt;&gt;DB;    getPA(A,DA,PA);      &#x2F;&#x2F; 计算PA    getPA(B,DB,PB);      &#x2F;&#x2F; 计算PB    cout&lt;&lt;PA+PB&lt;&lt;endl;    return 0;&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
       
       
       <categories>
