@@ -1,0 +1,570 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Yocto 常用概念与使用说明 | LITREILY</title><meta name="author" content="litreily,707922098@qq.com"><meta name="copyright" content="litreily"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#49B1F5"><meta name="description" content="一篇面向实战的 Yocto&#x2F;BitBake 入门与速查：从 Layer、Recipe、meta-* 等核心概念，到构建流程、关键变量、常用命令与调试技巧。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Yocto 常用概念与使用说明">
+<meta property="og:url" content="https://www.litreily.top/2026/06/04/yocto-desc/index.html">
+<meta property="og:site_name" content="LITREILY">
+<meta property="og:description" content="一篇面向实战的 Yocto&#x2F;BitBake 入门与速查：从 Layer、Recipe、meta-* 等核心概念，到构建流程、关键变量、常用命令与调试技巧。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://www.litreily.top/img/header.png">
+<meta property="article:published_time" content="2026-06-04T02:45:00.000Z">
+<meta property="article:modified_time" content="2026-06-04T06:08:42.127Z">
+<meta property="article:author" content="litreily">
+<meta property="article:tag" content="Yocto">
+<meta property="article:tag" content="嵌入式">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="BitBake">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.litreily.top/img/header.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Yocto 常用概念与使用说明",
+  "url": "https://www.litreily.top/2026/06/04/yocto-desc/",
+  "image": "https://www.litreily.top/img/header.png",
+  "datePublished": "2026-06-04T02:45:00.000Z",
+  "dateModified": "2026-06-04T06:08:42.127Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "litreily",
+      "url": "https://www.litreily.top"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://www.litreily.top/2026/06/04/yocto-desc/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.4"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0B1121')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#49B1F5')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  highlight: {"plugin":"prismjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Yocto 常用概念与使用说明',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom.css"><style>figure.highlight pre,figure.highlight code{white-space:pre-wrap!important;word-wrap:break-word!important}</style><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/header.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">120</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">108</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">16</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(/img/title_1.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">LITREILY</span></a><a class="nav-page-title" href="/"><span class="site-name">Yocto 常用概念与使用说明</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Yocto 常用概念与使用说明</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-06-04T02:45:00.000Z" title="Created 2026-06-04 10:45:00">2026-06-04</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-06-04T06:08:42.127Z" title="Updated 2026-06-04 14:08:42">2026-06-04</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Linux/">Linux</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;It has been&quot;,&quot;messageNext&quot;:&quot;days since the last update, the content of the article may be outdated.&quot;,&quot;postUpdate&quot;:&quot;2026-06-04 14:08:42&quot;}" hidden></div><blockquote>
+<p>本文以实战视角梳理 Yocto 的核心概念与高频用法，适合做日常速查。示例以 RK3588 + scarthgap 分支为背景，但概念通用。</p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="名词辨析"><a href="#名词辨析" class="headerlink" title="名词辨析"></a>名词辨析</h2><p>刚入门最容易被这几个词绕晕，一句话区分：</p>
+<ul>
+<li><strong>BitBake</strong>：构建引擎（任务调度器），负责解析配方、解决依赖、执行编译。本身不含任何软件包。类比 <code>make</code>，但功能强大得多。</li>
+<li>**OpenEmbedded (OE)**：一套构建框架和元数据集合（大量配方、类库）。BitBake 是它的执行器。</li>
+<li><strong>Poky</strong>：Yocto 官方提供的<strong>参考发行版 + 集成环境</strong>，把 BitBake、OE-Core、参考配置打包在一起，开箱即用。</li>
+<li><strong>Yocto Project</strong>：一个<strong>伞形项目/品牌</strong>，统筹上述组件、发布周期（如 <code>kirkstone</code>、<code>scarthgap</code>）、合规与工具。</li>
+</ul>
+<p>通俗理解：</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>角色</th>
+<th>类比</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>BitBake</td>
+<td>构建引擎</td>
+<td>make / 编译调度器</td>
+</tr>
+<tr>
+<td>OpenEmbedded</td>
+<td>元数据 + 类库框架</td>
+<td>标准库 + 构建规则集</td>
+</tr>
+<tr>
+<td>Poky</td>
+<td>参考集成环境</td>
+<td>脚手架 / 发行版模板</td>
+</tr>
+<tr>
+<td>Yocto Project</td>
+<td>统筹品牌与发布</td>
+<td>基金会 / 总指挥</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h2><h3 id="Layer-与-meta"><a href="#Layer-与-meta" class="headerlink" title="Layer 与 meta-*"></a>Layer 与 meta-*</h3><p><strong>Layer</strong> 是一组配方和配置的<strong>集合容器</strong>，按功能或来源分组。<code>meta-</code> 开头的目录就是 layer 的实物形态，二者基本同义。</p>
+<p>Layer 不是软件本身，而是&quot;一批配方 + 配置&quot;的归类。按职责通常分三类：</p>
+<ul>
+<li><strong>BSP 层</strong>：硬件相关（u-boot、kernel、设备树）。例如 <code>meta-rockchip</code>。</li>
+<li><strong>发行版层（Distro）</strong>：定义&quot;这个 OS 长什么样&quot;（init 系统、包管理、特性开关）。</li>
+<li><strong>软件层</strong>：提供应用与库的配方。例如 <code>meta-openembedded</code>、<code>poky/meta</code>（OE-Core，基础包如 glib、systemd、glibc）。</li>
+</ul>
+<p><strong>为什么分层？</strong> 解耦与复用：升级 BSP 不影响业务层；自己的东西单独放一层，不污染上游，便于维护和移植。</p>
+<p>每个 layer 必须有 <code>conf/layer.conf</code> 来声明自己，关键字段：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 收集本层配方的路径规则</span>
+BBFILES <span class="token operator">+=</span> <span class="token string">"<span class="token variable">$&#123;LAYERDIR&#125;</span>/recipes-*/*/*.bb \
+            <span class="token variable">$&#123;LAYERDIR&#125;</span>/recipes-*/*/*.bbappend"</span>
+
+<span class="token comment"># 本层的唯一标识</span>
+BBFILE_COLLECTIONS <span class="token operator">+=</span> <span class="token string">"meta-stark"</span>
+BBFILE_PATTERN_meta-stark <span class="token operator">=</span> <span class="token string">"^<span class="token variable">$&#123;LAYERDIR&#125;</span>/"</span>
+<span class="token comment"># 层优先级：多个层修改同一个包时，数字大的优先</span>
+BBFILE_PRIORITY_meta-stark <span class="token operator">=</span> <span class="token string">"10"</span>
+
+<span class="token comment"># 本层依赖的其他层</span>
+LAYERDEPENDS_meta-stark <span class="token operator">=</span> <span class="token string">"core rockchip"</span>
+<span class="token comment"># 兼容的 Yocto 发布分支</span>
+LAYERSERIES_COMPAT_meta-stark <span class="token operator">=</span> <span class="token string">"scarthgap"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>一个典型的 layer 目录结构：</p>
+<pre class="line-numbers language-none"><code class="language-none">meta-mylayer&#x2F;
+├── conf&#x2F;
+│   └── layer.conf          # 层声明（必须）
+├── recipes-core&#x2F;           # 配方按主题分目录
+│   └── images&#x2F;
+│       └── my-image.bb
+├── recipes-myapp&#x2F;
+│   └── myapp&#x2F;
+│       ├── myapp_1.0.bb
+│       └── files&#x2F;          # 补丁、配置等本地文件
+└── classes&#x2F;                # 自定义 .bbclass（可选）<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="Recipe"><a href="#Recipe" class="headerlink" title="Recipe"></a>Recipe</h3><p>一个 <code>.bb</code> 文件 = <strong>一个软件包的完整构建说明书</strong>，回答四个问题：从哪拿源码、依赖谁、怎么编译、装到哪。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">SUMMARY <span class="token operator">=</span> <span class="token string">"My example daemon"</span>
+LICENSE <span class="token operator">=</span> <span class="token string">"MIT"</span>
+LIC_FILES_CHKSUM <span class="token operator">=</span> <span class="token string">"file://LICENSE;md5=xxxxxxxx"</span>
+
+<span class="token comment"># 源码来源（git / http / 本地 file://）</span>
+SRC_URI <span class="token operator">=</span> <span class="token string">"git://example.com/myapp.git;branch=master;protocol=https"</span>
+SRCREV <span class="token operator">=</span> <span class="token string">"a1b2c3d4..."</span>
+
+<span class="token comment"># 复用通用构建逻辑（这里套用 cmake 流程）</span>
+inherit cmake
+
+<span class="token comment"># 编译期依赖（其他 recipe）</span>
+DEPENDS <span class="token operator">=</span> <span class="token string">"glib-2.0 openssl"</span>
+<span class="token comment"># 运行期依赖（装进 rootfs 时一起带上）</span>
+RDEPENDS:<span class="token variable">$&#123;PN&#125;</span> <span class="token operator">=</span> <span class="token string">"bash"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><code>.bb</code> / <code>.bbappend</code> / <code>.inc</code> 区别：</p>
+<ul>
+<li><strong><code>.bb</code><strong>：定义一个</strong>新包</strong>。</li>
+<li><strong><code>.bbappend</code><strong>：</strong>不改原配方</strong>，向已有配方追加/覆盖配置（打补丁、加文件、改开关）。文件名要与目标配方同名，可用 <code>%</code> 通配版本，如 <code>bluez5_%.bbappend</code>。</li>
+<li>**<code>.inc</code>**：可被 <code>require</code>/<code>include</code> 复用的公共片段，常用于把多版本配方的共性抽出来。</li>
+</ul>
+<blockquote>
+<p>黄金法则：<strong>绝不直接修改上游 layer（poky、meta-openembedded）里的配方</strong>，需要改就在自己的 layer 里用 <code>.bbappend</code>。</p>
+</blockquote>
+<hr>
+<h2 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h2><p>构建配置集中在 <code>build/conf/</code> 下：</p>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>bblayers.conf</code></td>
+<td>启用哪些 layer（<code>BBLAYERS</code> 变量列出 layer 路径）</td>
+</tr>
+<tr>
+<td><code>local.conf</code></td>
+<td>本地构建配置：<code>MACHINE</code>、<code>DISTRO</code>、并行度、镜像类型、额外安装包等</td>
+</tr>
+<tr>
+<td><code>conf/distro/xxx.conf</code></td>
+<td>发行版定义：init 系统、包格式、<code>DISTRO_FEATURES</code></td>
+</tr>
+<tr>
+<td><code>conf/machine/xxx.conf</code></td>
+<td>机器定义：CPU 架构、内核设备树、u-boot 配置</td>
+</tr>
+</tbody></table>
+<p>几个最常调的变量：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">MACHINE ?<span class="token operator">=</span> <span class="token string">"stark-rk3588"</span>          <span class="token comment"># 目标硬件</span>
+DISTRO ?<span class="token operator">=</span> <span class="token string">"stark-os"</span>               <span class="token comment"># 发行版</span>
+PACKAGE_CLASSES ?<span class="token operator">=</span> <span class="token string">"package_deb"</span>   <span class="token comment"># 包格式：deb / rpm / ipk</span>
+BB_NUMBER_THREADS ?<span class="token operator">=</span> <span class="token string">"8"</span>           <span class="token comment"># BitBake 并行任务数</span>
+PARALLEL_MAKE ?<span class="token operator">=</span> <span class="token string">"-j 8"</span>            <span class="token comment"># 每个 make 的并行度</span>
+IMAGE_INSTALL:append <span class="token operator">=</span> <span class="token string">" myapp"</span>    <span class="token comment"># 往镜像里追加包</span>
+EXTRA_IMAGE_FEATURES ?<span class="token operator">=</span> <span class="token string">"debug-tweaks"</span>  <span class="token comment"># 例如允许空密码 root 登录</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<hr>
+<h2 id="构建流程"><a href="#构建流程" class="headerlink" title="构建流程"></a>构建流程</h2><p>每个配方的构建被拆成一串<strong>任务（task）</strong>，按顺序执行：</p>
+<pre class="line-numbers language-mermaid" data-language="mermaid"><code class="language-mermaid"><span class="token keyword">graph</span> LR
+    A<span class="token text string">[do_fetch 拉源码]</span> <span class="token arrow operator">--></span> B<span class="token text string">[do_unpack 解压]</span>
+    B <span class="token arrow operator">--></span> C<span class="token text string">[do_patch 打补丁]</span>
+    C <span class="token arrow operator">--></span> D<span class="token text string">[do_configure 配置]</span>
+    D <span class="token arrow operator">--></span> E<span class="token text string">[do_compile 编译]</span>
+    E <span class="token arrow operator">--></span> F<span class="token text string">[do_install 安装到临时目录]</span>
+    F <span class="token arrow operator">--></span> G<span class="token text string">[do_package 拆分打包]</span>
+    G <span class="token arrow operator">--></span> H<span class="token text string">[do_package_write_deb 生成包]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>镜像级别再多两步：<code>do_rootfs</code>（组装根文件系统）→ <code>do_image</code>（生成 <code>.wic</code> / <code>.ext4</code> 等）。</p>
+<p>可以单独跑某个任务（调试常用）：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">bitbake <span class="token parameter variable">-c</span> compile myapp      <span class="token comment"># 只执行到编译</span>
+bitbake <span class="token parameter variable">-c</span> cleanall myapp     <span class="token comment"># 清掉源码、状态、产物</span>
+bitbake <span class="token parameter variable">-c</span> listtasks myapp    <span class="token comment"># 列出所有可用任务</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<hr>
+<h2 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h2><p>构建产物都在 <code>build/</code> 下：</p>
+<table>
+<thead>
+<tr>
+<th>路径</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>downloads/</code></td>
+<td>所有下载的源码包（<code>DL_DIR</code>），可跨工程共享</td>
+</tr>
+<tr>
+<td><code>sstate-cache/</code></td>
+<td>共享状态缓存（<code>SSTATE_DIR</code>），命中可跳过重新编译，<strong>加速利器</strong></td>
+</tr>
+<tr>
+<td><code>tmp/work/&lt;arch&gt;/&lt;pn&gt;/&lt;ver&gt;/</code></td>
+<td>每个包的工作目录（源码、编译产物、日志）</td>
+</tr>
+<tr>
+<td><code>tmp/deploy/images/&lt;machine&gt;/</code></td>
+<td>最终镜像、内核、设备树、<code>.manifest</code></td>
+</tr>
+<tr>
+<td>`tmp/deploy/deb</td>
+<td>rpm</td>
+</tr>
+<tr>
+<td><code>tmp/work/.../temp/log.do_*</code></td>
+<td>各任务的详细日志（排错第一现场）</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><code>sstate-cache</code> 和 <code>downloads</code> 建议长期保留并跨工程复用，能极大缩短构建时间。</p>
+</blockquote>
+<hr>
+<h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><h3 id="环境初始化"><a href="#环境初始化" class="headerlink" title="环境初始化"></a>环境初始化</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 进入构建环境（会 cd 到 build/ 并导出环境变量）</span>
+<span class="token builtin class-name">source</span> oe-init-build-env build<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h3 id="BitBake-构建"><a href="#BitBake-构建" class="headerlink" title="BitBake 构建"></a>BitBake 构建</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">bitbake core-image-minimal      <span class="token comment"># 构建镜像</span>
+bitbake myapp                   <span class="token comment"># 只构建某个包</span>
+bitbake <span class="token parameter variable">-k</span> myapp                <span class="token comment"># keep going：出错也尽量继续</span>
+bitbake <span class="token parameter variable">-c</span> menuconfig virtual/kernel   <span class="token comment"># 配置内核</span>
+bitbake <span class="token parameter variable">-e</span> myapp                <span class="token comment"># 打印某配方最终展开的所有变量（排查变量值神器）</span>
+bitbake <span class="token parameter variable">-g</span> myapp                <span class="token comment"># 生成依赖关系图（task-depends.dot）</span>
+bitbake-layers show-layers      <span class="token comment"># 列出已启用的 layer</span>
+bitbake-layers show-recipes <span class="token string">'glib*'</span>   <span class="token comment"># 查某个配方在哪些层、什么版本</span>
+bitbake-layers add-layer <span class="token punctuation">..</span>/meta-foo  <span class="token comment"># 添加 layer 到 bblayers.conf</span>
+bitbake-layers create-layer <span class="token punctuation">..</span>/meta-foo  <span class="token comment"># 生成一个新 layer 骨架</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="devtool"><a href="#devtool" class="headerlink" title="devtool"></a>devtool</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">devtool <span class="token function">add</span> myapp <span class="token operator">&lt;</span>源码路径或git地址<span class="token operator">></span>   <span class="token comment"># 从源码自动生成配方并加入工作区</span>
+devtool modify myapp                    <span class="token comment"># 把已有配方的源码检出，方便改代码/打补丁</span>
+devtool build myapp                     <span class="token comment"># 构建工作区里的包</span>
+devtool deploy-target myapp root@board  <span class="token comment"># 直接部署到运行中的板子（快速迭代）</span>
+devtool finish myapp <span class="token punctuation">..</span>/meta-mylayer    <span class="token comment"># 把改动（含补丁）固化回某个 layer</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="查询与排错"><a href="#查询与排错" class="headerlink" title="查询与排错"></a>查询与排错</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 查某文件由哪个包提供</span>
+oe-pkgdata-util find-path /usr/bin/foo
+<span class="token comment"># 查某包安装了哪些文件</span>
+oe-pkgdata-util list-pkg-files myapp
+<span class="token comment"># 进入某配方的交叉编译 shell 环境</span>
+bitbake myapp <span class="token parameter variable">-c</span> devshell
+<span class="token comment"># 看某任务日志</span>
+<span class="token function">less</span> tmp/work/<span class="token operator">&lt;</span>arch<span class="token operator">></span>/myapp/<span class="token operator">&lt;</span>ver<span class="token operator">></span>/temp/log.do_compile<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<hr>
+<h2 id="高频变量"><a href="#高频变量" class="headerlink" title="高频变量"></a>高频变量</h2><table>
+<thead>
+<tr>
+<th>变量</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>PN</code> / <code>PV</code> / <code>PR</code></td>
+<td>包名 / 版本 / 修订号</td>
+</tr>
+<tr>
+<td><code>S</code></td>
+<td>源码解压后的工作目录</td>
+</tr>
+<tr>
+<td><code>B</code></td>
+<td>编译目录（out-of-tree 构建时与 S 不同）</td>
+</tr>
+<tr>
+<td><code>D</code></td>
+<td><code>do_install</code> 的安装目标根（伪根）</td>
+</tr>
+<tr>
+<td><code>WORKDIR</code></td>
+<td>该配方的工作根目录</td>
+</tr>
+<tr>
+<td><code>SRC_URI</code></td>
+<td>源码与本地文件来源</td>
+</tr>
+<tr>
+<td><code>SRCREV</code></td>
+<td>git 源码的提交哈希</td>
+</tr>
+<tr>
+<td><code>DEPENDS</code></td>
+<td>编译期依赖（其他配方名）</td>
+</tr>
+<tr>
+<td><code>RDEPENDS:$&#123;PN&#125;</code></td>
+<td>运行期依赖</td>
+</tr>
+<tr>
+<td><code>PROVIDES</code> / <code>RPROVIDES</code></td>
+<td>该配方额外提供的（虚拟）名字</td>
+</tr>
+<tr>
+<td><code>FILES:$&#123;PN&#125;</code></td>
+<td>哪些文件归入主包</td>
+</tr>
+<tr>
+<td><code>inherit</code></td>
+<td>继承的 <code>.bbclass</code>（如 cmake、autotools、systemd）</td>
+</tr>
+<tr>
+<td><code>IMAGE_INSTALL</code></td>
+<td>镜像要安装的包列表</td>
+</tr>
+<tr>
+<td><code>DISTRO_FEATURES</code></td>
+<td>发行版级特性（wifi、bluetooth、systemd 等）</td>
+</tr>
+<tr>
+<td><code>MACHINE_FEATURES</code></td>
+<td>硬件级特性</td>
+</tr>
+</tbody></table>
+<h3 id="变量覆盖语法"><a href="#变量覆盖语法" class="headerlink" title="变量覆盖语法"></a>变量覆盖语法</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">FOO <span class="token operator">=</span> <span class="token string">"a"</span>            <span class="token comment"># 直接赋值</span>
+FOO ?<span class="token operator">=</span> <span class="token string">"a"</span>           <span class="token comment"># 弱赋值（未定义才生效）</span>
+FOO:append <span class="token operator">=</span> <span class="token string">" b"</span>    <span class="token comment"># 追加（注意自己留空格）</span>
+FOO:prepend <span class="token operator">=</span> <span class="token string">"b "</span>   <span class="token comment"># 前插</span>
+FOO:remove <span class="token operator">=</span> <span class="token string">"b"</span>     <span class="token comment"># 移除</span>
+FOO:append:rk3588 <span class="token operator">=</span> <span class="token string">" c"</span>   <span class="token comment"># 仅当 OVERRIDES 含 rk3588 时追加（条件覆盖）</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<blockquote>
+<p><code>:append</code>/<code>:remove</code> 是 OE 的 override 语法（旧版本用 <code>_append</code>）。<code>:&lt;override&gt;</code> 可按 MACHINE、DISTRO、<code>$&#123;PN&#125;</code> 等条件生效，是 Yocto 灵活性的核心。</p>
+</blockquote>
+<hr>
+<h2 id="自定义包示例"><a href="#自定义包示例" class="headerlink" title="自定义包示例"></a>自定义包示例</h2><p>目录：<code>meta-mylayer/recipes-example/hello/hello_1.0.bb</code></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">SUMMARY <span class="token operator">=</span> <span class="token string">"Hello world daemon"</span>
+LICENSE <span class="token operator">=</span> <span class="token string">"MIT"</span>
+LIC_FILES_CHKSUM <span class="token operator">=</span> <span class="token string">"file://<span class="token variable">$&#123;COMMON_LICENSE_DIR&#125;</span>/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"</span>
+
+SRC_URI <span class="token operator">=</span> <span class="token string">"file://hello.c \
+           file://hello.service"</span>
+
+S <span class="token operator">=</span> <span class="token string">"<span class="token variable">$&#123;WORKDIR&#125;</span>"</span>
+
+inherit systemd
+SYSTEMD_SERVICE:<span class="token variable">$&#123;PN&#125;</span> <span class="token operator">=</span> <span class="token string">"hello.service"</span>
+
+<span class="token function-name function">do_compile</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token variable">$&#123;CC&#125;</span> <span class="token variable">$&#123;CFLAGS&#125;</span> <span class="token variable">$&#123;LDFLAGS&#125;</span> hello.c <span class="token parameter variable">-o</span> hello
+<span class="token punctuation">&#125;</span>
+
+<span class="token function-name function">do_install</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token function">install</span> <span class="token parameter variable">-d</span> <span class="token variable">$&#123;D&#125;</span><span class="token variable">$&#123;bindir&#125;</span>
+    <span class="token function">install</span> <span class="token parameter variable">-m</span> 0755 hello <span class="token variable">$&#123;D&#125;</span><span class="token variable">$&#123;bindir&#125;</span>/hello
+
+    <span class="token function">install</span> <span class="token parameter variable">-d</span> <span class="token variable">$&#123;D&#125;</span><span class="token variable">$&#123;systemd_system_unitdir&#125;</span>
+    <span class="token function">install</span> <span class="token parameter variable">-m</span> 0644 <span class="token variable">$&#123;WORKDIR&#125;</span>/hello.service <span class="token variable">$&#123;D&#125;</span><span class="token variable">$&#123;systemd_system_unitdir&#125;</span>/
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>把本地文件放到 <code>recipes-example/hello/files/</code>（<code>hello.c</code>、<code>hello.service</code>），然后：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">bitbake hello
+<span class="token comment"># 或加入镜像</span>
+<span class="token builtin class-name">echo</span> <span class="token string">'IMAGE_INSTALL:append = " hello"'</span> <span class="token operator">>></span> conf/local.conf
+bitbake my-image<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<hr>
+<h2 id="排错套路"><a href="#排错套路" class="headerlink" title="排错套路"></a>排错套路</h2><ol>
+<li><strong>变量值不对？</strong> <code>bitbake -e &lt;recipe&gt; | grep ^VAR=</code> 看最终展开值。</li>
+<li><strong>编译报错？</strong> 直接看 <code>tmp/work/.../temp/log.do_compile</code>，比终端输出全。</li>
+<li><strong>想手动复现编译？</strong> <code>bitbake &lt;recipe&gt; -c devshell</code>，进交叉环境手动敲命令。</li>
+<li><strong>改了没生效？</strong> 可能命中 sstate 缓存，<code>bitbake -c cleansstate &lt;recipe&gt;</code> 后重来。</li>
+<li><strong>依赖关系乱？</strong> <code>bitbake -g &lt;recipe&gt;</code> 生成 <code>.dot</code> 图，或用 <code>oe-depends-dot</code> 分析。</li>
+<li><strong>找文件归属？</strong> <code>oe-pkgdata-util find-path /path/to/file</code>。</li>
+</ol>
+<hr>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><ul>
+<li><strong>meta-* = layer</strong>：按职责分组的容器（BSP / Distro / 软件）。</li>
+<li><strong>recipe（<code>.bb</code>）</strong>：单个包怎么做出来的说明书；<code>.bbappend</code> 用来微调别人的包。</li>
+<li><strong>BitBake</strong>：解析配方、解决依赖、按任务流水线构建。</li>
+<li>三条铁律：<strong>改上游用 bbappend</strong>、<strong>善用 <code>bitbake -e</code> 看变量</strong>、<strong>保留 sstate/downloads 提速</strong>。</li>
+</ul>
+<p>掌握这些，就能看懂任意 Yocto 工程结构，并自己动手加层、写包、定制镜像。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://www.litreily.top">litreily</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://www.litreily.top/2026/06/04/yocto-desc/">https://www.litreily.top/2026/06/04/yocto-desc/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Yocto/">Yocto</a><a class="post-meta__tags" href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8F/">嵌入式</a><a class="post-meta__tags" href="/tags/Linux/">Linux</a><a class="post-meta__tags" href="/tags/BitBake/">BitBake</a></div><div class="post-share"><div class="social-share" data-image="/img/header.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/06/05/workbuddy-hexo-auto-blog/" title="用 WorkBuddy AI 自动生成并发布 Hexo 博客"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">用 WorkBuddy AI 自动生成并发布 Hexo 博客</div></div><div class="info-2"><div class="info-item-1">有没有想过，和 AI 聊完一个技术问题之后，直接说一句&quot;帮我写成博客发出去&quot;，然后它就真的做到了？ 这篇文章记录了如何在 WorkBuddy 中配置一套自动化博客发布流程，让 AI 助手承担从内容提炼到 Git 部署的全部工作。   背景日常技术工作中，解决了一个问题后往往懒得再回头整理成博客。会话记录虽然完整，但结构松散，直接贴出去可读性很差。 WorkBuddy 是一款支持 Skill（技能）扩展的 AI 编程助手。通过编写自定义 Skill，可以让 AI 在对话结束时自动：  识别会话中的技术干货 提炼精华，组织成结构化文章 生成符合 Hexo 规范的 Markdown 文件 执行 hexo generate --deploy 构建并推送到 GitHub Pages  博客环境   项目 值    博客框架 Hexo 5.4.2   主题 Butterfly   本地目录 E:\litreily\workspace\blog\BlogSources   站点地址 https://www.litreily.top/   部署方式 hexo-deployer...</div></div></div></a><a class="pagination-related" href="/2026/05/20/gpt-prompt-1/" title="gpt-image2 生图 - 赛博美女工程师"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">gpt-image2 生图 - 赛博美女工程师</div></div><div class="info-2"><div class="info-item-1">PromptA cool anime girl engineer with glowing cyberpunk tech-wear, sitting in front of multiple holographic screens displaying code and data streams. Futuristic Tokyo night cityscape with neon lights outside the window. Lofi aesthetics, neon purple and cyan lighting, reflection on the glass. Masterpiece, ultra-detailed, 8k resolution, trending on artstation, sharp focus --ar 16:9  Image </div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comments</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/header.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">litreily</div><div class="author-info-description">simple life</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">120</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">108</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">16</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Litreily"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://xhslink.com/m/893FaC3aK88" target="_blank" title="小红书"><i class="fas fa-seedling" style="color: #ff2442;"></i></a><a class="social-icon" href="mailto:litreily@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="https://www.litreily.top/notes/" target="_blank" title="Notes"><i class="fas fa-sticky-note" style="color: #e8a618;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8D%E8%AF%8D%E8%BE%A8%E6%9E%90"><span class="toc-number">1.</span> <span class="toc-text">名词辨析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="toc-number">2.</span> <span class="toc-text">核心概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Layer-%E4%B8%8E-meta"><span class="toc-number">2.1.</span> <span class="toc-text">Layer 与 meta-*</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Recipe"><span class="toc-number">2.2.</span> <span class="toc-text">Recipe</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">3.</span> <span class="toc-text">配置文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%84%E5%BB%BA%E6%B5%81%E7%A8%8B"><span class="toc-number">4.</span> <span class="toc-text">构建流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84"><span class="toc-number">5.</span> <span class="toc-text">目录结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">6.</span> <span class="toc-text">常用命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">6.1.</span> <span class="toc-text">环境初始化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BitBake-%E6%9E%84%E5%BB%BA"><span class="toc-number">6.2.</span> <span class="toc-text">BitBake 构建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#devtool"><span class="toc-number">6.3.</span> <span class="toc-text">devtool</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2%E4%B8%8E%E6%8E%92%E9%94%99"><span class="toc-number">6.4.</span> <span class="toc-text">查询与排错</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%AB%98%E9%A2%91%E5%8F%98%E9%87%8F"><span class="toc-number">7.</span> <span class="toc-text">高频变量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%98%E9%87%8F%E8%A6%86%E7%9B%96%E8%AF%AD%E6%B3%95"><span class="toc-number">7.1.</span> <span class="toc-text">变量覆盖语法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%8C%85%E7%A4%BA%E4%BE%8B"><span class="toc-number">8.</span> <span class="toc-text">自定义包示例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%92%E9%94%99%E5%A5%97%E8%B7%AF"><span class="toc-number">9.</span> <span class="toc-text">排错套路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-number">10.</span> <span class="toc-text">小结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/05/workbuddy-hexo-auto-blog/" title="用 WorkBuddy AI 自动生成并发布 Hexo 博客">用 WorkBuddy AI 自动生成并发布 Hexo 博客</a><time datetime="2026-06-05T04:52:30.000Z" title="Created 2026-06-05 12:52:30">2026-06-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/04/yocto-desc/" title="Yocto 常用概念与使用说明">Yocto 常用概念与使用说明</a><time datetime="2026-06-04T02:45:00.000Z" title="Created 2026-06-04 10:45:00">2026-06-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/20/gpt-prompt-1/" title="gpt-image2 生图 - 赛博美女工程师">gpt-image2 生图 - 赛博美女工程师</a><time datetime="2026-05-20T11:53:27.000Z" title="Created 2026-05-20 19:53:27">2026-05-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/09/19/android10-ota/" title="RK3399 Android 10 系统OTA升级失败问题">RK3399 Android 10 系统OTA升级失败问题</a><time datetime="2024-09-19T08:28:06.000Z" title="Created 2024-09-19 16:28:06">2024-09-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/05/31/rk3399-wol/" title="rk3399 ubuntu 休眠唤醒功能">rk3399 ubuntu 休眠唤醒功能</a><time datetime="2024-05-31T10:31:47.000Z" title="Created 2024-05-31 18:31:47">2024-05-31</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By litreily</span><span class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 5.4.2</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll to Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4"></script><script src="/js/main.js?v=5.5.4"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@19.1.3/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const initValine = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyValine = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const valineConfig = {
+      el: '#vcomment',
+      appId: '1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+      appKey: 'uvA3xgqNW3q8TGR483lxXcpB',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      visitor: false,
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || window.location.pathname
+    }
+
+    new Valine(valineConfig)
+  }
+
+  const loadValine = async (el, path) => {
+    if (typeof Valine === 'function') {
+      initValine(el, path)
+    } else {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js')
+      initValine(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Valine' === 'Valine'
+      ? window.shuoshuoComment = { loadComment: loadValine }
+      : window.loadOtherComment = loadValine
+    return
+  }
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="local-search-input"><input placeholder="Search..." type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.4"></script></div></div></body></html>

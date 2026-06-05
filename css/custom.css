@@ -55,6 +55,18 @@
   --light-grey:           var(--color-border);
   --dark-grey:            var(--color-text-tertiary);
   --search-bg:            var(--color-bg-secondary);
+
+  /* Code blocks (Butterfly --hl-* vars, light site mode) */
+  --copy-notice-bg:       #334155;
+  --copy-notice-color:    #FFFFFF;
+  --code-toolbar-fg:      rgba(255, 255, 255, 0.88);
+  --code-block-border:    #475569;
+  --code-block-shadow:    0 4px 18px rgba(15, 23, 42, 0.16);
+
+  /* Inline `code` — needs strong contrast on white/light bg */
+  --inline-code-bg:       #e8f4fd;
+  --inline-code-color:    #0b4f8a;
+  --inline-code-border:   #9fd0f5;
 }
 
 /* ============================================================
@@ -308,26 +320,52 @@ a:hover {
 /* ============================================================
    6. Code Blocks
    ============================================================ */
+
+/* Copy toast: inherits dark page text on dark tooltip bg in light mode */
+.copy-notice {
+  color: var(--copy-notice-color) !important;
+  background: var(--copy-notice-bg) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.35);
+  font-weight: 500;
+}
+
 figure.highlight {
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--code-block-shadow, 0 2px 8px rgba(0, 0, 0, 0.06));
   margin: 1.2em 0;
-  border: 1px solid var(--card-border);
+  border: 1px solid var(--code-block-border, var(--card-border));
 }
 
 [data-theme="dark"] figure.highlight {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --code-block-border: rgba(255, 255, 255, 0.08);
+  --copy-notice-bg: #1e293b;
+  --copy-notice-color: #f8fafc;
+  --code-toolbar-fg: #94a3b8;
 }
 
-/* Code lang label */
+/* Toolbar sits on dark --hltools-bg; use light foreground in light site mode */
+figure.highlight .highlight-tools {
+  color: var(--code-toolbar-fg, var(--hltools-color));
+}
+
+figure.highlight .highlight-tools i {
+  color: var(--code-toolbar-fg, var(--hltools-color));
+}
+
+figure.highlight .highlight-tools i:hover {
+  color: var(--color-accent-light) !important;
+}
+
 figure.highlight .highlight-tools .code-lang {
   font-family: 'JetBrains Mono', 'Consolas', monospace;
   font-size: 0.75em;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--color-text-tertiary);
+  color: var(--code-toolbar-fg, var(--hltools-color)) !important;
 }
 
 /* Code content area */
@@ -345,19 +383,50 @@ figure.highlight td.code pre {
   margin: 0;
 }
 
-/* Inline code */
-:not(pre) > code {
-  padding: 2px 6px;
+/* Light site mode: keep code block surface dark and syntax vivid */
+:root:not([data-theme="dark"]) figure.highlight,
+:root:not([data-theme="dark"]) figure.highlight > pre[class*="language-"] {
+  background: var(--hl-bg, #212121) !important;
+}
+
+:root:not([data-theme="dark"]) figure.highlight pre[class*="language-"] > code {
+  color: var(--hl-color, #eeffff);
+}
+
+:root:not([data-theme="dark"]) figure.highlight pre[class*="language-"] .token.comment,
+:root:not([data-theme="dark"]) figure.highlight pre[class*="language-"] .token.prolog,
+:root:not([data-theme="dark"]) figure.highlight pre[class*="language-"] .token.doctype,
+:root:not([data-theme="dark"]) figure.highlight pre[class*="language-"] .token.cdata {
+  color: #9ca3af !important;
+}
+
+:root:not([data-theme="dark"]) figure.highlight pre[class*="language-"] .token.punctuation {
+  color: #d1d5db !important;
+}
+
+/* Inline `code` in prose — light site mode only */
+:root:not([data-theme="dark"]) #article-container :not(pre) > code,
+:root:not([data-theme="dark"]) .container :not(pre) > code,
+:root:not([data-theme="dark"]) :not(pre) > code {
+  padding: 2px 7px;
   border-radius: 4px;
-  background: rgba(99, 102, 241, 0.08);
-  color: var(--color-primary-dark);
+  background: var(--inline-code-bg) !important;
+  color: var(--inline-code-color) !important;
+  border: 1px solid var(--inline-code-border);
   font-size: 0.9em;
-  font-weight: 500;
+  font-weight: 600;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
 }
 
 [data-theme="dark"] :not(pre) > code {
+  padding: 2px 6px;
+  border-radius: 4px;
   background: rgba(129, 140, 248, 0.15);
   color: var(--color-primary-light);
+  font-size: 0.9em;
+  font-weight: 500;
+  border: none;
 }
 
 /* ============================================================

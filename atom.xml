@@ -6,7 +6,7 @@
   <link href="https://www.litreily.top/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2026-05-29T10:10:59.588Z</updated>
+  <updated>2026-06-05T04:53:01.294Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -17,11 +17,63 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>用 WorkBuddy AI 自动生成并发布 Hexo 博客</title>
+    <link href="https://www.litreily.top/2026/06/05/workbuddy-hexo-auto-blog/"/>
+    <id>https://www.litreily.top/2026/06/05/workbuddy-hexo-auto-blog/</id>
+    <published>2026-06-05T04:52:30.000Z</published>
+    <updated>2026-06-05T04:53:01.294Z</updated>
+    
+    
+    <summary type="html">介绍如何借助 WorkBuddy AI 助手，通过自然语言对话自动提炼会话内容、生成结构化 Markdown 博客并一键部署到 GitHub Pages。</summary>
+    
+    
+    
+    <category term="Tools" scheme="https://www.litreily.top/categories/Tools/"/>
+    
+    
+    <category term="hexo" scheme="https://www.litreily.top/tags/hexo/"/>
+    
+    <category term="workbuddy" scheme="https://www.litreily.top/tags/workbuddy/"/>
+    
+    <category term="ai" scheme="https://www.litreily.top/tags/ai/"/>
+    
+    <category term="automation" scheme="https://www.litreily.top/tags/automation/"/>
+    
+    <category term="blog" scheme="https://www.litreily.top/tags/blog/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Yocto 常用概念与使用说明</title>
+    <link href="https://www.litreily.top/2026/06/04/yocto-desc/"/>
+    <id>https://www.litreily.top/2026/06/04/yocto-desc/</id>
+    <published>2026-06-04T02:45:00.000Z</published>
+    <updated>2026-06-04T06:08:42.127Z</updated>
+    
+    
+    <summary type="html">一篇面向实战的 Yocto/BitBake 入门与速查：从 Layer、Recipe、meta-* 等核心概念，到构建流程、关键变量、常用命令与调试技巧。</summary>
+    
+    
+    
+    <category term="Linux" scheme="https://www.litreily.top/categories/Linux/"/>
+    
+    
+    <category term="Yocto" scheme="https://www.litreily.top/tags/Yocto/"/>
+    
+    <category term="嵌入式" scheme="https://www.litreily.top/tags/%E5%B5%8C%E5%85%A5%E5%BC%8F/"/>
+    
+    <category term="Linux" scheme="https://www.litreily.top/tags/Linux/"/>
+    
+    <category term="BitBake" scheme="https://www.litreily.top/tags/BitBake/"/>
+    
+  </entry>
+  
+  <entry>
     <title>gpt-image2 生图 - 赛博美女工程师</title>
     <link href="https://www.litreily.top/2026/05/20/gpt-prompt-1/"/>
     <id>https://www.litreily.top/2026/05/20/gpt-prompt-1/</id>
     <published>2026-05-20T11:53:27.000Z</published>
-    <updated>2026-05-29T10:10:59.588Z</updated>
+    <updated>2026-06-04T06:08:42.116Z</updated>
     
     
       
@@ -47,7 +99,7 @@
     <link href="https://www.litreily.top/2024/09/19/android10-ota/"/>
     <id>https://www.litreily.top/2024/09/19/android10-ota/</id>
     <published>2024-09-19T08:28:06.000Z</published>
-    <updated>2026-05-28T09:29:37.646Z</updated>
+    <updated>2026-06-04T06:08:42.107Z</updated>
     
     
       
@@ -77,7 +129,7 @@ lunch
     <link href="https://www.litreily.top/2024/05/31/rk3399-wol/"/>
     <id>https://www.litreily.top/2024/05/31/rk3399-wol/</id>
     <published>2024-05-31T10:31:47.000Z</published>
-    <updated>2026-05-29T10:11:04.840Z</updated>
+    <updated>2026-06-04T06:08:42.094Z</updated>
     
     
       
@@ -102,7 +154,7 @@ lunch
     <link href="https://www.litreily.top/2024/02/05/rk32-new-part/"/>
     <id>https://www.litreily.top/2024/02/05/rk32-new-part/</id>
     <published>2024-02-05T08:38:12.000Z</published>
-    <updated>2026-05-29T10:11:03.759Z</updated>
+    <updated>2026-06-04T06:08:42.078Z</updated>
     
     
       
@@ -133,7 +185,7 @@ device/rockchip/rk3288/
     <link href="https://www.litreily.top/2024/01/10/rk32-disable-wifi/"/>
     <id>https://www.litreily.top/2024/01/10/rk32-disable-wifi/</id>
     <published>2024-01-10T08:55:19.000Z</published>
-    <updated>2026-05-29T10:11:02.650Z</updated>
+    <updated>2026-06-04T06:08:42.063Z</updated>
     
     
       
@@ -161,7 +213,7 @@ device/rockchip/rk3288/
     <link href="https://www.litreily.top/2023/12/06/isolcpus/"/>
     <id>https://www.litreily.top/2023/12/06/isolcpus/</id>
     <published>2023-12-06T07:29:46.000Z</published>
-    <updated>2026-05-29T10:11:01.731Z</updated>
+    <updated>2026-06-04T06:08:42.050Z</updated>
     
     
       
@@ -185,7 +237,7 @@ device/rockchip/rk3288/
     <link href="https://www.litreily.top/2023/04/17/android-lunch/"/>
     <id>https://www.litreily.top/2023/04/17/android-lunch/</id>
     <published>2023-04-17T12:47:59.000Z</published>
-    <updated>2026-05-29T10:08:34.364Z</updated>
+    <updated>2026-06-04T06:08:42.038Z</updated>
     
     
       
@@ -817,73 +869,6 @@ stty: /dev/ttyUSB0: unable to perform all requested operations&lt;span aria-hidd
     <summary type="html">&lt;p&gt;&lt;code&gt;openwrt&lt;/code&gt; 中的 &lt;code&gt;include/scan.mk&lt;/code&gt; 用于扫描项目 &lt;code&gt;package&lt;/code&gt;, &lt;code&gt;target&lt;/code&gt; 目录信息，并将扫描结果存入 &lt;code&gt;tmp&lt;/code&gt; 目录。这个扫描过程几乎是 openwrt 所有目标生成的前提。也就是说，无论使用 &lt;code&gt;make&lt;/code&gt; 编译 &lt;code&gt;openwrt&lt;/code&gt; 哪个部分的代码，都会通过 &lt;code&gt;scan.mk&lt;/code&gt; 生成必要的临时文件，这是编译其它目录的大前提。&lt;/p&gt;
 &lt;p&gt;举例说明，我们指定编译某个 &lt;code&gt;package&lt;/code&gt; 时，如 &lt;code&gt;package/utils/demo&lt;/code&gt;，&lt;code&gt;make&lt;/code&gt; 根据层层 &lt;code&gt;Makefile&lt;/code&gt; 会去寻找该 &lt;code&gt;package&lt;/code&gt; 的路径，而这个路径信息就是通过 &lt;code&gt;scan.mk&lt;/code&gt; 扫描后存入了 &lt;code&gt;tmp&lt;/code&gt; 目录。这样有什么好处呢? 我完全可以手动执行 &lt;code&gt;make package/utils/demo/compile&lt;/code&gt; 不是吗？&lt;/p&gt;
 &lt;p&gt;的确如此，但是我们不可能每次都去写长串的路径，通过 &lt;code&gt;</summary>
-      
-    
-    
-    
-    <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
-    
-    
-    <category term="makefile" scheme="https://www.litreily.top/tags/makefile/"/>
-    
-    <category term="openwrt" scheme="https://www.litreily.top/tags/openwrt/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>openwrt Makefile subdir.mk 详解</title>
-    <link href="https://www.litreily.top/2021/01/13/mk-subdir/"/>
-    <id>https://www.litreily.top/2021/01/13/mk-subdir/</id>
-    <published>2021-01-13T08:25:37.000Z</published>
-    <updated>2026-05-14T01:37:35.597Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;之前讲述了 openwrt Makefile 的&lt;a href=&quot;https://www.litreily.top/2020/12/30/openwrt-mkfile/&quot;&gt;整体框架&lt;/a&gt;，主要包括主 Makefile 的描述，，最后简单描述了 &lt;code&gt;subdir.mk&lt;/code&gt; , 本文就来详细剖析这个文件。&lt;/p&gt;
-&lt;p&gt;但是在解析 &lt;code&gt;subdir.mk&lt;/code&gt; 之前，先来看两个 Makefile, &lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;debug.mk&lt;/code&gt;: 这也是主 Makefile 引入的第一个 .mk 文件，这里定义的调试函数在 &lt;code&gt;subdir.mk&lt;/code&gt; 中被调用&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;target/Makefile&lt;/code&gt;: 这是调用到 &lt;code&gt;subdir.mk&lt;/code&gt; 的首个 Makefile, 本文将以此为例进行说明&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;debug-mk&quot;&gt;&lt;a href=&quot;#debug-mk&quot; class=&quot;headerlink&quot; title=&quot;debug.mk&quot;&gt;&lt;/a&gt;debug.mk&lt;/h2&gt;&lt;p&gt;&lt;code&gt;debug.mk&lt;/code&gt; 定义了几个调试函数。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;debug&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;co</summary>
-      
-    
-    
-    
-    <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
-    
-    
-    <category term="makefile" scheme="https://www.litreily.top/tags/makefile/"/>
-    
-    <category term="openwrt" scheme="https://www.litreily.top/tags/openwrt/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>openwrt Makefile 框架分析</title>
-    <link href="https://www.litreily.top/2020/12/30/openwrt-mkfile/"/>
-    <id>https://www.litreily.top/2020/12/30/openwrt-mkfile/</id>
-    <published>2020-12-30T00:49:20.000Z</published>
-    <updated>2026-05-14T01:37:35.593Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;openwrt repo: &lt;a href=&quot;https://github.com/openwrt/openwrt&quot;&gt;https://github.com/openwrt/openwrt&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&quot;整体框架&quot;&gt;&lt;a href=&quot;#整体框架&quot; class=&quot;headerlink&quot; title=&quot;整体框架&quot;&gt;&lt;/a&gt;整体框架&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;/assets/openwrt/openwrt_arch.png&quot; alt=&quot;openwrt arch&quot;&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;首行为buildroot默认目录&lt;ul&gt;
-&lt;li&gt;config: 配置文件&lt;/li&gt;
-&lt;li&gt;include: openwrt 的 Makefile 文件&lt;/li&gt;
-&lt;li&gt;package: 各个软件包的Makefile, patches等文件&lt;/li&gt;
-&lt;li&gt;scripts: openwrt 包管理相关的 perl 脚本&lt;/li&gt;
-&lt;li&gt;target: 用于编译 kernel 和 firmware 的相关文件&lt;/li&gt;
-&lt;li&gt;toolchain: 包含用于获取 kernel headers, C lib, bin-utils, compiler, debugger 的指令&lt;/li&gt;
-&lt;li&gt;tools: 包含编译时所需的一些工具，如automake, autoco</summary>
       
     
     
