@@ -6,7 +6,7 @@
   <link href="https://www.litreily.top/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2026-06-05T08:36:41.134Z</updated>
+  <updated>2026-06-06T02:19:10.756Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>每日东方美人探索 2026-06-06</title>
+    <link href="https://www.litreily.top/2026/06/06/daily-eastern-beauty-2026-06-06/"/>
+    <id>https://www.litreily.top/2026/06/06/daily-eastern-beauty-2026-06-06/</id>
+    <published>2026-06-06T00:05:00.000Z</published>
+    <updated>2026-06-06T02:19:10.756Z</updated>
+    
+    
+    <summary type="html">记录 2026-06-06 的四张东方美人 AI 生图探索：江南夜巷旗袍、唐宫花泉仪式、绮罗金帐回眸和自助洗衣房女友感。</summary>
+    
+    
+    
+    <category term="gpt-image2" scheme="https://www.litreily.top/categories/gpt-image2/"/>
+    
+    
+    <category term="AI" scheme="https://www.litreily.top/tags/AI/"/>
+    
+    <category term="GPT Image" scheme="https://www.litreily.top/tags/GPT-Image/"/>
+    
+    <category term="东方美人" scheme="https://www.litreily.top/tags/%E4%B8%9C%E6%96%B9%E7%BE%8E%E4%BA%BA/"/>
+    
+    <category term="AI绘画" scheme="https://www.litreily.top/tags/AI%E7%BB%98%E7%94%BB/"/>
+    
+    <category term="Prompt" scheme="https://www.litreily.top/tags/Prompt/"/>
+    
+  </entry>
   
   <entry>
     <title>把博客发布变成一个可复用的 Codex Skill</title>
@@ -33,6 +60,8 @@
     
     <category term="hexo" scheme="https://www.litreily.top/tags/hexo/"/>
     
+    <category term="automation" scheme="https://www.litreily.top/tags/automation/"/>
+    
     <category term="codex" scheme="https://www.litreily.top/tags/codex/"/>
     
     <category term="skill" scheme="https://www.litreily.top/tags/skill/"/>
@@ -40,8 +69,6 @@
     <category term="ai-writing" scheme="https://www.litreily.top/tags/ai-writing/"/>
     
     <category term="blog-publishing" scheme="https://www.litreily.top/tags/blog-publishing/"/>
-    
-    <category term="automation" scheme="https://www.litreily.top/tags/automation/"/>
     
   </entry>
   
@@ -62,11 +89,11 @@
     
     <category term="hexo" scheme="https://www.litreily.top/tags/hexo/"/>
     
-    <category term="automation" scheme="https://www.litreily.top/tags/automation/"/>
-    
     <category term="workbuddy" scheme="https://www.litreily.top/tags/workbuddy/"/>
     
     <category term="ai" scheme="https://www.litreily.top/tags/ai/"/>
+    
+    <category term="automation" scheme="https://www.litreily.top/tags/automation/"/>
     
     <category term="blog" scheme="https://www.litreily.top/tags/blog/"/>
     
@@ -845,33 +872,6 @@ stty: /dev/ttyUSB0: unable to perform all requested operations&lt;span aria-hidd
 &lt;pre class=&quot;line-numbers language-bash&quot; data-language=&quot;bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token function&quot;&gt;cp&lt;/span&gt; qca/configs/qsdk/ipq_open.config .config
 &lt;span class=&quot;token builtin class-name&quot;&gt;echo&lt;/span&gt;  &lt;span class=&quot;token assign-left variable&quot;&gt;CONFIG_TARGET_ipq_ipq807x_64&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;y  &lt;span class=&quot;token operator&quot;&gt;&gt;&gt;&lt;/span&gt; .config
 &lt;span class=&quot;token bu</summary>
-      
-    
-    
-    
-    <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
-    
-    
-    <category term="openwrt" scheme="https://www.litreily.top/tags/openwrt/"/>
-    
-    <category term="qsdk" scheme="https://www.litreily.top/tags/qsdk/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>下载安装基于 openwrt 的 QSDK</title>
-    <link href="https://www.litreily.top/2021/01/29/qsdk/"/>
-    <id>https://www.litreily.top/2021/01/29/qsdk/</id>
-    <published>2021-01-29T09:29:56.000Z</published>
-    <updated>2026-05-14T01:37:35.620Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;&lt;code&gt;QSDK&lt;/code&gt; - QCA Software Development Kits, 基于 openwrt 加入了 QCA 相关的代码库，可以用于使用 qualcomm 芯片的路由器固件开发。本文讲述如何获取 QSDK.&lt;/p&gt;
-&lt;p&gt;我们通常会使用 &lt;code&gt;git clone&lt;/code&gt; 获取开源项目的代码，比如 github, gitlab, coding 等平台，但是 &lt;code&gt;QSDK&lt;/code&gt; 并不存放于这些平台，而是有它自己的维护站点，并且需要通过 &lt;code&gt;repo&lt;/code&gt; 和 &lt;code&gt;git&lt;/code&gt; 共同完成仓库文件的 &lt;code&gt;clone&lt;/code&gt;, 下面来看看吧。&lt;/p&gt;
-&lt;h2 id=&quot;install-repo&quot;&gt;&lt;a href=&quot;#install-repo&quot; class=&quot;headerlink&quot; title=&quot;install repo&quot;&gt;&lt;/a&gt;install repo&lt;/h2&gt;&lt;p&gt;首先来安装 &lt;code&gt;repo&lt;/code&gt; 工具，这其实是个 &lt;code&gt;Python&lt;/code&gt; 脚本.&lt;/p&gt;
-&lt;pre class=&quot;line-numbers language-bash&quot; data-language=&quot;bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class</summary>
       
     
     
