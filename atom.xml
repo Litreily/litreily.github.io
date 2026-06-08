@@ -6,7 +6,7 @@
   <link href="https://www.litreily.top/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2026-06-06T02:19:10.756Z</updated>
+  <updated>2026-06-08T11:34:25.400Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>每日东方美人探索 2026-06-08</title>
+    <link href="https://www.litreily.top/2026/06/08/daily-eastern-beauty-2026-06-08/"/>
+    <id>https://www.litreily.top/2026/06/08/daily-eastern-beauty-2026-06-08/</id>
+    <published>2026-06-08T11:35:00.000Z</published>
+    <updated>2026-06-08T11:34:25.400Z</updated>
+    
+    
+    <summary type="html">记录 2026-06-08 的四张东方美人 AI 生图探索：青瓷月影琴姬、东方赛博雨街、敦煌风沙神女和雨夜书店女友感。</summary>
+    
+    
+    
+    <category term="gpt-image2" scheme="https://www.litreily.top/categories/gpt-image2/"/>
+    
+    
+    <category term="AI" scheme="https://www.litreily.top/tags/AI/"/>
+    
+    <category term="GPT Image" scheme="https://www.litreily.top/tags/GPT-Image/"/>
+    
+    <category term="东方美人" scheme="https://www.litreily.top/tags/%E4%B8%9C%E6%96%B9%E7%BE%8E%E4%BA%BA/"/>
+    
+    <category term="AI绘画" scheme="https://www.litreily.top/tags/AI%E7%BB%98%E7%94%BB/"/>
+    
+    <category term="Prompt" scheme="https://www.litreily.top/tags/Prompt/"/>
+    
+  </entry>
   
   <entry>
     <title>每日东方美人探索 2026-06-06</title>
@@ -60,8 +87,6 @@
     
     <category term="hexo" scheme="https://www.litreily.top/tags/hexo/"/>
     
-    <category term="automation" scheme="https://www.litreily.top/tags/automation/"/>
-    
     <category term="codex" scheme="https://www.litreily.top/tags/codex/"/>
     
     <category term="skill" scheme="https://www.litreily.top/tags/skill/"/>
@@ -69,6 +94,8 @@
     <category term="ai-writing" scheme="https://www.litreily.top/tags/ai-writing/"/>
     
     <category term="blog-publishing" scheme="https://www.litreily.top/tags/blog-publishing/"/>
+    
+    <category term="automation" scheme="https://www.litreily.top/tags/automation/"/>
     
   </entry>
   
@@ -89,11 +116,11 @@
     
     <category term="hexo" scheme="https://www.litreily.top/tags/hexo/"/>
     
+    <category term="automation" scheme="https://www.litreily.top/tags/automation/"/>
+    
     <category term="workbuddy" scheme="https://www.litreily.top/tags/workbuddy/"/>
     
     <category term="ai" scheme="https://www.litreily.top/tags/ai/"/>
-    
-    <category term="automation" scheme="https://www.litreily.top/tags/automation/"/>
     
     <category term="blog" scheme="https://www.litreily.top/tags/blog/"/>
     
@@ -854,34 +881,6 @@ stty: /dev/ttyUSB0: unable to perform all requested operations&lt;span aria-hidd
     <category term="ubuntu" scheme="https://www.litreily.top/tags/ubuntu/"/>
     
     <category term="usb" scheme="https://www.litreily.top/tags/usb/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>基于 IPQ807x 编译 QSDK</title>
-    <link href="https://www.litreily.top/2021/02/07/qsdk-compile/"/>
-    <id>https://www.litreily.top/2021/02/07/qsdk-compile/</id>
-    <published>2021-02-07T06:19:04.000Z</published>
-    <updated>2026-05-14T01:37:35.623Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;接上一篇 &lt;a href=&quot;https://www.litreily.top/2021/01/29/qsdk/&quot;&gt;下载安装基于 openwrt 的 QSDK&lt;/a&gt;,  这一篇来讲下编译 &lt;code&gt;QSDK&lt;/code&gt; 的步骤以及遇到的问题及其处理方法。&lt;/p&gt;
-&lt;p&gt;正常步骤，是下面这样的，根据设备类型选择 config 文件，生成 .config, 然后完整编译。&lt;/p&gt;
-&lt;pre class=&quot;line-numbers language-bash&quot; data-language=&quot;bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token function&quot;&gt;cp&lt;/span&gt; qca/configs/qsdk/ipq_open.config .config
-&lt;span class=&quot;token builtin class-name&quot;&gt;echo&lt;/span&gt;  &lt;span class=&quot;token assign-left variable&quot;&gt;CONFIG_TARGET_ipq_ipq807x_64&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;y  &lt;span class=&quot;token operator&quot;&gt;&gt;&gt;&lt;/span&gt; .config
-&lt;span class=&quot;token bu</summary>
-      
-    
-    
-    
-    <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
-    
-    
-    <category term="openwrt" scheme="https://www.litreily.top/tags/openwrt/"/>
-    
-    <category term="qsdk" scheme="https://www.litreily.top/tags/qsdk/"/>
     
   </entry>
   
