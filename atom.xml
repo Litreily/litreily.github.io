@@ -6,7 +6,7 @@
   <link href="https://www.litreily.top/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2026-06-08T11:34:25.400Z</updated>
+  <updated>2026-06-08T12:23:16.966Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>用 Codex 做一个东方美人全栈导演 Skill</title>
+    <link href="https://www.litreily.top/2026/06/08/codex-eastern-beauty-director-skill/"/>
+    <id>https://www.litreily.top/2026/06/08/codex-eastern-beauty-director-skill/</id>
+    <published>2026-06-08T12:20:00.000Z</published>
+    <updated>2026-06-08T12:23:16.966Z</updated>
+    
+    
+    <summary type="html">介绍一个面向 Codex 的东方美人生图 Skill：用结构化参数驱动风格推导、提示词生成、敏感最小改写、生图和博客发布。</summary>
+    
+    
+    
+    <category term="AI" scheme="https://www.litreily.top/categories/AI/"/>
+    
+    
+    <category term="GPT Image" scheme="https://www.litreily.top/tags/GPT-Image/"/>
+    
+    <category term="东方美人" scheme="https://www.litreily.top/tags/%E4%B8%9C%E6%96%B9%E7%BE%8E%E4%BA%BA/"/>
+    
+    <category term="AI绘画" scheme="https://www.litreily.top/tags/AI%E7%BB%98%E7%94%BB/"/>
+    
+    <category term="Prompt" scheme="https://www.litreily.top/tags/Prompt/"/>
+    
+    <category term="Codex" scheme="https://www.litreily.top/tags/Codex/"/>
+    
+    <category term="Skill" scheme="https://www.litreily.top/tags/Skill/"/>
+    
+  </entry>
   
   <entry>
     <title>每日东方美人探索 2026-06-08</title>
@@ -858,29 +887,6 @@ kernel/arch/arm/boot/dts/rk3288-tb_8846.dts
     <category term="android" scheme="https://www.litreily.top/tags/android/"/>
     
     <category term="rk3288" scheme="https://www.litreily.top/tags/rk3288/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>解决Ubuntu 18.04 minicom 不支持 1500000 波特率的问题</title>
-    <link href="https://www.litreily.top/2021/05/28/cp210x/"/>
-    <id>https://www.litreily.top/2021/05/28/cp210x/</id>
-    <published>2021-05-28T03:26:15.000Z</published>
-    <updated>2026-05-14T01:37:35.626Z</updated>
-    
-    
-    <summary type="html">&lt;p&gt;最近使用 &lt;code&gt;Ubuntu 18.04&lt;/code&gt; 作为台式机的办公系统，需要使用串口调试功能，于是安装了 &lt;code&gt;minicom&lt;/code&gt;, 但是配置波特率的时候发现无法配置高于 &lt;code&gt;1000000&lt;/code&gt; 以上波特率。&lt;/p&gt;
-&lt;pre class=&quot;line-numbers language-bash&quot; data-language=&quot;bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;$ &lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; stty &lt;span class=&quot;token parameter variable&quot;&gt;-F&lt;/span&gt; /dev/ttyUSB0 &lt;span class=&quot;token number&quot;&gt;1500000&lt;/span&gt;
-stty: /dev/ttyUSB0: unable to perform all requested operations&lt;span aria-hidden=&quot;true&quot; class=&quot;line-numbers-rows&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;</summary>
-    
-    
-    
-    <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
-    
-    
-    <category term="ubuntu" scheme="https://www.litreily.top/tags/ubuntu/"/>
-    
-    <category term="usb" scheme="https://www.litreily.top/tags/usb/"/>
     
   </entry>
   

@@ -1,0 +1,390 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>用 Codex 做一个东方美人全栈导演 Skill | LITREILY</title><meta name="author" content="litreily,707922098@qq.com"><meta name="copyright" content="litreily"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#49B1F5"><meta name="description" content="介绍一个面向 Codex 的东方美人生图 Skill：用结构化参数驱动风格推导、提示词生成、敏感最小改写、生图和博客发布。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="用 Codex 做一个东方美人全栈导演 Skill">
+<meta property="og:url" content="https://www.litreily.top/2026/06/08/codex-eastern-beauty-director-skill/index.html">
+<meta property="og:site_name" content="LITREILY">
+<meta property="og:description" content="介绍一个面向 Codex 的东方美人生图 Skill：用结构化参数驱动风格推导、提示词生成、敏感最小改写、生图和博客发布。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://www.litreily.top/assets/ai/eastern-beauty/2026-06-08/celadon-moon-qin.png">
+<meta property="article:published_time" content="2026-06-08T12:20:00.000Z">
+<meta property="article:modified_time" content="2026-06-08T12:23:16.966Z">
+<meta property="article:author" content="litreily">
+<meta property="article:tag" content="GPT Image">
+<meta property="article:tag" content="东方美人">
+<meta property="article:tag" content="AI绘画">
+<meta property="article:tag" content="Prompt">
+<meta property="article:tag" content="Codex">
+<meta property="article:tag" content="Skill">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.litreily.top/assets/ai/eastern-beauty/2026-06-08/celadon-moon-qin.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "用 Codex 做一个东方美人全栈导演 Skill",
+  "url": "https://www.litreily.top/2026/06/08/codex-eastern-beauty-director-skill/",
+  "image": "https://www.litreily.top/assets/ai/eastern-beauty/2026-06-08/celadon-moon-qin.png",
+  "datePublished": "2026-06-08T12:20:00.000Z",
+  "dateModified": "2026-06-08T12:23:16.966Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "litreily",
+      "url": "https://www.litreily.top"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://www.litreily.top/2026/06/08/codex-eastern-beauty-director-skill/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.4"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0B1121')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#49B1F5')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  highlight: {"plugin":"prismjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '用 Codex 做一个东方美人全栈导演 Skill',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom.css"><style>figure.highlight pre,figure.highlight code{white-space:pre-wrap!important;word-wrap:break-word!important}</style><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/header.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">124</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">118</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">17</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(/assets/ai/eastern-beauty/2026-06-08/celadon-moon-qin.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">LITREILY</span></a><a class="nav-page-title" href="/"><span class="site-name">用 Codex 做一个东方美人全栈导演 Skill</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">用 Codex 做一个东方美人全栈导演 Skill</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-06-08T12:20:00.000Z" title="Created 2026-06-08 20:20:00">2026-06-08</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-06-08T12:23:16.966Z" title="Updated 2026-06-08 20:23:16">2026-06-08</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/AI/">AI</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;It has been&quot;,&quot;messageNext&quot;:&quot;days since the last update, the content of the article may be outdated.&quot;,&quot;postUpdate&quot;:&quot;2026-06-08 20:23:16&quot;}" hidden></div><p>最近我在做一个很有意思的小项目：把「东方美人」这个 AI 生图方向，整理成一个可以被 Codex 调用的 Skill。</p>
+<p>它不是一份简单的 Prompt 合集，也不是把几个风格词堆在一起。我的目标是让 Codex 像一个全栈导演一样工作：理解用户想看的美，推导风格，控制画面，生成提示词，必要时做安全改写，最后还能把图片和过程沉淀成博客。</p>
+<p>项目地址在这里：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Litreily/codex-skill-eastern-beauty-director">https://github.com/Litreily/codex-skill-eastern-beauty-director</a></p>
+<p>如果你也在探索 AI 绘画、人物写真、国风审美、Codex Skill 或自动化内容生产，希望这篇文章能给你一些参考。</p>
+<span id="more"></span>
+
+<h2 id="1-我为什么要做这个-Skill"><a href="#1-我为什么要做这个-Skill" class="headerlink" title="1. 我为什么要做这个 Skill"></a>1. 我为什么要做这个 Skill</h2><p>AI 生图最开始很容易陷入一个误区：以为只要把关键词写得足够多，图就会变好。</p>
+<p>但我反复测试后发现，真正决定画面质量的不是词多，而是导演判断。</p>
+<p>比如同样是「东方美人」，它可以是：</p>
+<ul>
+<li>唐宫花泉里的高贵仪式感</li>
+<li>江南雨巷里的含蓄电影感</li>
+<li>敦煌风沙里的神性与壁画感</li>
+<li>现代城市里的甜系生活感</li>
+<li>青瓷、宋韵、昆曲、旗袍、新中式、东方赛博等更多方向</li>
+</ul>
+<p>这些风格看起来都属于东方审美，但它们需要完全不同的场景、服装、镜头、光线和负面约束。</p>
+<p>如果每次都从零写 Prompt，很快就会变成重复劳动。更麻烦的是，古风和东方幻想图特别容易失控：金色乱飞、珠宝乱飞、披帛乱飞、粒子乱飞，最后变成很热闹但没有高级感的 AI 壁纸。</p>
+<p>所以我想做的不是“收藏几个好词”，而是把这些判断沉淀成一个可调用的导演系统。</p>
+<h2 id="2-它解决的核心问题"><a href="#2-它解决的核心问题" class="headerlink" title="2. 它解决的核心问题"></a>2. 它解决的核心问题</h2><p>这个 Skill 主要解决四个问题。</p>
+<p>第一，让小白不用研究复杂 Prompt。</p>
+<p>用户只需要给出结构化参数，例如：</p>
+<pre class="line-numbers language-text" data-language="text"><code class="language-text">技能: 古典东方美人
+风格: 唐宫花泉仪式
+气质: 高贵大气，柔美
+场景: 唐代宫廷花泉池畔，花瓣倒影池，纱幔，烛台，香雾
+服装: 浅金与暖玉白层叠唐风礼服
+动作: 一手扶纱幔，一手持金碗，将牡丹花瓣轻轻洒向水面
+构图: 全身
+生成: 是<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>Codex 会负责把这些参数扩展成完整生图提示词。</p>
+<p>第二，让风格不再靠碰运气。</p>
+<p>Skill 里会区分不同路线：古典东方美人、东方幻想古风、现代东方审美、甜系纯欲生活写真等。每条路线都有自己的审美目标、镜头语言、服装逻辑、场景边界和负面提示。</p>
+<p>第三，让敏感内容自动做最小改写。</p>
+<p>比如用户说“泡花浴池”“浴裙”“洗浴柔美”，这类词在一些生图工具里可能比较敏感。一个好的 Skill 不应该直接把用户需求推翻，也不应该把画面改成完全无关的内容。</p>
+<p>更合理的做法是：保留核心元素，把表达转成更稳的版本。</p>
+<p>例如：</p>
+<pre class="line-numbers language-text" data-language="text"><code class="language-text">泡花浴池 -> 唐宫花泉池畔
+洗浴 -> 花泉仪式 / 洒花入水 / 香雾中的仪式瞬间
+浴裙 -> 覆身不透明丝绸浴礼服 / 唐风层叠礼服<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>这样画面的水、花、宫廷、柔美、仪式感都还在，但表达更克制，也更容易通过模型安全策略。</p>
+<p>第四，让生图结果可以沉淀。</p>
+<p>我后来把它接到了博客发布流程里：每天可以随机探索四张不同风格的东方美人图，按日期归档，自动写成 Hexo 博客并部署。</p>
+<p>这就不只是“生成一张图”，而是把审美探索变成一个长期项目。</p>
+<h2 id="3-我对「东方美人」的理解"><a href="#3-我对「东方美人」的理解" class="headerlink" title="3. 我对「东方美人」的理解"></a>3. 我对「东方美人」的理解</h2><p>这个项目最核心的主题始终是东方美人。</p>
+<p>但我不希望它被限制成一种脸、一种服装、一种古风模板。</p>
+<p>我更希望它能展示不同类型的美：</p>
+<ul>
+<li>柔美：线条、姿态、神态都温和流动</li>
+<li>妩媚：有成熟吸引力，但不粗暴、不擦边</li>
+<li>高贵：服饰、姿态和空间都有仪式感</li>
+<li>优雅：少一点堆砌，多一点留白</li>
+<li>神性：像壁画、神女、祭司、梦境里的角色</li>
+<li>生活感：现代女生也可以属于东方审美</li>
+</ul>
+<p>所以这个 Skill 不是“固定一个角色换衣服”，而是围绕东方美人的主体，持续探索不同风格的可能性。</p>
+<h2 id="4-一个重要规则：先看人，再看故事，最后看装饰"><a href="#4-一个重要规则：先看人，再看故事，最后看装饰" class="headerlink" title="4. 一个重要规则：先看人，再看故事，最后看装饰"></a>4. 一个重要规则：先看人，再看故事，最后看装饰</h2><p>做东方幻想图时，我最想固化的一条规则是：</p>
+<pre class="line-numbers language-text" data-language="text"><code class="language-text">先看脸和眼神
+再看故事瞬间
+最后看服装、珠宝、披帛、背景<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>很多 AI 古风图的问题，不是细节不够，而是细节太多。</p>
+<p>红色、金色、珠宝、烛火、纱幔、壁画、粒子、刺绣，全都是高频元素。如果不控制密度，画面会很快变成视觉噪音。</p>
+<p>所以我给 Skill 增加了一套东方审美的“去噪规则”：</p>
+<pre class="line-numbers language-text" data-language="text"><code class="language-text">subject-first composition
+clean face priority
+controlled ornament density
+one wow device only
+preserve negative space
+premium color harmony
+less but better<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>翻译成人话就是：</p>
+<p>不要让珠宝和光效抢走主角。每张图只保留一个最重要的视觉记忆点。</p>
+<h2 id="5-甜系纯欲为什么也放进东方美人系列"><a href="#5-甜系纯欲为什么也放进东方美人系列" class="headerlink" title="5. 甜系纯欲为什么也放进东方美人系列"></a>5. 甜系纯欲为什么也放进东方美人系列</h2><p>这个项目里还有一个比较特别的分支：甜系纯欲生活写真。</p>
+<p>一开始它看起来和古风、敦煌、唐宫不是一类东西。但测试下来我发现，它其实补足了东方美人的现代生活面。</p>
+<p>我对这个方向的定义不是“露肤”，也不是“网红性感”，而是：</p>
+<pre class="line-numbers language-text" data-language="text"><code class="language-text">真实感 + 女性魅力 + 恋爱感 + 故事瞬间 + 自然纯欲<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>用户可以这样调用：</p>
+<pre class="line-numbers language-text" data-language="text"><code class="language-text">技能: 甜系纯欲生活写真
+人脸风格: 邻家女孩
+场景: 自助洗衣房
+穿搭: 宽松白T，牛仔短裙，帆布鞋
+故事瞬间: 她正把衣服从烘干机里抱出来，发现你在门口等她，忍不住笑了一下
+构图: 9比16，上半身
+生成: 是<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>它和古典路线的共同点是：人物始终是主体，故事瞬间比摆拍更重要，吸引力来自真实感和画面关系，而不是单纯堆性感元素。</p>
+<h2 id="6-小白怎么使用"><a href="#6-小白怎么使用" class="headerlink" title="6. 小白怎么使用"></a>6. 小白怎么使用</h2><p>如果你只是想用，不需要读完整文档。给 Codex 一组参数就可以。</p>
+<p>最短格式是：</p>
+<pre class="line-numbers language-text" data-language="text"><code class="language-text">技能: 东方美人导演
+风格:
+气质:
+场景:
+服装:
+动作:
+构图:
+生成: 是<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>也可以用更具体的技能名：</p>
+<pre class="line-numbers language-text" data-language="text"><code class="language-text">技能: 古典东方美人
+风格: 宋韵青瓷
+气质: 清雅，温婉
+场景: 月夜书房，青瓷灯，竹影，窗外微雨
+服装: 月白宋制褙子，青灰色内裙
+动作: 她停下抚琴的手，抬眼看向镜头
+构图: 9比16，大腿以上
+生成: 是<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>如果你想走现代感：</p>
+<pre class="line-numbers language-text" data-language="text"><code class="language-text">技能: 现代东方美人
+风格: 江南雨巷电影感
+气质: 成熟，含蓄
+场景: 雨后江南夜巷，青石板，暖色路灯
+服装: 墨绿色改良旗袍，黑色短披肩
+动作: 撑伞走过巷口时回眸
+构图: 9比16，全身
+生成: 是<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>如果你想走幻想感：</p>
+<pre class="line-numbers language-text" data-language="text"><code class="language-text">技能: 东方幻想古风
+风格: 敦煌风沙神女
+气质: 神性，温柔，遥远
+场景: 沙漠石窟入口，残破壁画，低角度夕阳
+服装: 赭红与矿物蓝层叠纱衣，少量金饰
+动作: 她用手遮住风沙，回头望向远处
+构图: 9比16，全身
+生成: 是<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="7-它和普通-Prompt-项目有什么不同"><a href="#7-它和普通-Prompt-项目有什么不同" class="headerlink" title="7. 它和普通 Prompt 项目有什么不同"></a>7. 它和普通 Prompt 项目有什么不同</h2><p>普通 Prompt 项目通常提供一批现成模板。</p>
+<p>这个项目更像一个导演系统：</p>
+<ul>
+<li>它会根据用户参数推导完整画面</li>
+<li>它会判断哪个元素应该优先</li>
+<li>它会控制风格不要跑偏</li>
+<li>它会在敏感表达上做最小改写</li>
+<li>它会补充镜头、光线、材质、负面提示</li>
+<li>它还可以把结果写成博客，形成长期作品集</li>
+</ul>
+<p>对我来说，真正有价值的不是某一条 Prompt，而是这个系统背后的审美判断。</p>
+<h2 id="8-项目当前支持的方向"><a href="#8-项目当前支持的方向" class="headerlink" title="8. 项目当前支持的方向"></a>8. 项目当前支持的方向</h2><p>目前它主要覆盖这些方向：</p>
+<ul>
+<li>古典东方美人</li>
+<li>东方幻想古风</li>
+<li>现代东方审美</li>
+<li>新中式时装与杂志感</li>
+<li>甜系纯欲生活写真</li>
+<li>唐宫、宋韵、江南、敦煌、青瓷、昆曲、旗袍、东方赛博等扩展路线</li>
+</ul>
+<p>后续我还想继续探索更多不那么常见的方向，比如：</p>
+<ul>
+<li>东方珠宝大片</li>
+<li>博物馆文物拟人</li>
+<li>山海经异兽神女</li>
+<li>民国电影感</li>
+<li>东方海岛度假</li>
+<li>新中式都市通勤</li>
+<li>水墨实验影像</li>
+<li>古典舞台与戏曲美学</li>
+</ul>
+<p>只要东方美人这个主体不变，风格可以不断打开。</p>
+<h2 id="9-写在最后"><a href="#9-写在最后" class="headerlink" title="9. 写在最后"></a>9. 写在最后</h2><p>我做这个项目，最开始只是为了让 AI 生图更稳定一点。</p>
+<p>但做着做着，我发现它其实是在整理一套审美工作流：如何把模糊的美感偏好，变成可以调用、可以验证、可以迭代的系统。</p>
+<p>这也是 Codex Skill 很有意思的地方。它不只是让 AI “知道一些提示词”，而是让 AI 在一个具体领域里逐渐形成工作方法。</p>
+<p>如果你也对 AI 绘画、东方审美、Codex Skill 或自动化创作感兴趣，可以看看这个仓库：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Litreily/codex-skill-eastern-beauty-director">https://github.com/Litreily/codex-skill-eastern-beauty-director</a></p>
+<p>欢迎 Star，也欢迎拿它去试试不同风格的东方美人。真正有意思的地方，可能不在某一张图，而在不断探索“东方美还可以是什么”的过程里。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://www.litreily.top">litreily</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://www.litreily.top/2026/06/08/codex-eastern-beauty-director-skill/">https://www.litreily.top/2026/06/08/codex-eastern-beauty-director-skill/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/GPT-Image/">GPT Image</a><a class="post-meta__tags" href="/tags/%E4%B8%9C%E6%96%B9%E7%BE%8E%E4%BA%BA/">东方美人</a><a class="post-meta__tags" href="/tags/AI%E7%BB%98%E7%94%BB/">AI绘画</a><a class="post-meta__tags" href="/tags/Prompt/">Prompt</a><a class="post-meta__tags" href="/tags/Codex/">Codex</a><a class="post-meta__tags" href="/tags/Skill/">Skill</a></div><div class="post-share"><div class="social-share" data-image="/assets/ai/eastern-beauty/2026-06-08/celadon-moon-qin.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2026/06/08/daily-eastern-beauty-2026-06-08/" title="每日东方美人探索 2026-06-08"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-06-08/dunhuang-desert-oracle.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">每日东方美人探索 2026-06-08</div></div><div class="info-2"><div class="info-item-1">今天继续用「东方美人全栈导演」这个生图 Skill 做每日探索。 这组图的目标是验证自动任务能不能稳定产出不同风格、不同人物、不同穿搭、不同场景和不同镜头语言。今天生成了四个方向：青瓷月影琴姬、东方赛博雨街、敦煌风沙神女、雨夜书店女友感。   1. 青瓷月影琴姬 这个方向是古典东方美人路线。画面重点在宋韵琴室、青瓷色、纸窗月影、古琴和她停下调琴后看向镜头的安静瞬间。 结构化参数： 技能: 古典东方美人 风格: 宋韵青瓷月影 气质: 温婉清雅，成熟安静 场景: 月夜琴室，纸窗月影，青瓷花器，深木琴案 服装: 青瓷色与象牙白层叠宋风长裙，不透明丝绸，玉簪，少量首饰 动作: 她正在调琴，听见你靠近后停下动作看向镜头 构图: 9比16，全身  Prompt 摘要： 9:16 vertical classical Eastern beauty portrait, Song-inspired celadon moonlit qin chamber. Adult East Asian woman in pale celadon and ivory layered silk robe, tuni...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/06/06/daily-eastern-beauty-2026-06-06/" title="每日东方美人探索 2026-06-06"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-06-06/tang-palace-flower-ritual.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-06</div><div class="info-item-2">每日东方美人探索 2026-06-06</div></div><div class="info-2"><div class="info-item-1">今天开始把「东方美人全栈导演」这个生图 Skill 的每日探索结果沉淀到博客里。 这组图的目标不是固定某一种古风模板，而是围绕「东方美人」这个主体，探索不同风格、不同人物、不同穿搭、不同场景和不同镜头语言。今天生成了四个方向：江南夜巷旗袍、唐宫花泉仪式、绮罗金帐回眸、自助洗衣房女友感。   1. 江南夜巷旗袍 这个方向是现代东方电影感。画面重点在江南夜巷、雨后青石板、暖色路灯、墨绿色改良旗袍和回眸瞬间。 结构化参数： 技能: 现代东方美人 风格: 旗袍电影感 气质: 成熟，含蓄，电影感 场景: 江南夜巷，湿润青石板，暖色路灯，白墙黑瓦 服装: 墨绿色改良旗袍，外搭黑色短披肩 动作: 她撑着伞从巷口回头，灯光落在侧脸 构图: 9比16，全身  Prompt 摘要： 9:16 vertical full-body cinematic portrait. Modern Eastern beauty, mature and subtle, film-noir Jiangnan night alley. Adult East Asian woman in an elegant dark e...</div></div></div></a><a class="pagination-related" href="/2026/06/08/daily-eastern-beauty-2026-06-08/" title="每日东方美人探索 2026-06-08"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-06-08/dunhuang-desert-oracle.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-08</div><div class="info-item-2">每日东方美人探索 2026-06-08</div></div><div class="info-2"><div class="info-item-1">今天继续用「东方美人全栈导演」这个生图 Skill 做每日探索。 这组图的目标是验证自动任务能不能稳定产出不同风格、不同人物、不同穿搭、不同场景和不同镜头语言。今天生成了四个方向：青瓷月影琴姬、东方赛博雨街、敦煌风沙神女、雨夜书店女友感。   1. 青瓷月影琴姬 这个方向是古典东方美人路线。画面重点在宋韵琴室、青瓷色、纸窗月影、古琴和她停下调琴后看向镜头的安静瞬间。 结构化参数： 技能: 古典东方美人 风格: 宋韵青瓷月影 气质: 温婉清雅，成熟安静 场景: 月夜琴室，纸窗月影，青瓷花器，深木琴案 服装: 青瓷色与象牙白层叠宋风长裙，不透明丝绸，玉簪，少量首饰 动作: 她正在调琴，听见你靠近后停下动作看向镜头 构图: 9比16，全身  Prompt 摘要： 9:16 vertical classical Eastern beauty portrait, Song-inspired celadon moonlit qin chamber. Adult East Asian woman in pale celadon and ivory layered silk robe, tuni...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comments</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/header.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">litreily</div><div class="author-info-description">simple life</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">124</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">118</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">17</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Litreily"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://xhslink.com/m/893FaC3aK88" target="_blank" title="小红书"><i class="fas fa-seedling" style="color: #ff2442;"></i></a><a class="social-icon" href="mailto:litreily@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="https://www.litreily.top/notes/" target="_blank" title="Notes"><i class="fas fa-sticky-note" style="color: #e8a618;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%88%91%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%81%9A%E8%BF%99%E4%B8%AA-Skill"><span class="toc-text">1. 我为什么要做这个 Skill</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%AE%83%E8%A7%A3%E5%86%B3%E7%9A%84%E6%A0%B8%E5%BF%83%E9%97%AE%E9%A2%98"><span class="toc-text">2. 它解决的核心问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%88%91%E5%AF%B9%E3%80%8C%E4%B8%9C%E6%96%B9%E7%BE%8E%E4%BA%BA%E3%80%8D%E7%9A%84%E7%90%86%E8%A7%A3"><span class="toc-text">3. 我对「东方美人」的理解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E4%B8%80%E4%B8%AA%E9%87%8D%E8%A6%81%E8%A7%84%E5%88%99%EF%BC%9A%E5%85%88%E7%9C%8B%E4%BA%BA%EF%BC%8C%E5%86%8D%E7%9C%8B%E6%95%85%E4%BA%8B%EF%BC%8C%E6%9C%80%E5%90%8E%E7%9C%8B%E8%A3%85%E9%A5%B0"><span class="toc-text">4. 一个重要规则：先看人，再看故事，最后看装饰</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E7%94%9C%E7%B3%BB%E7%BA%AF%E6%AC%B2%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B9%9F%E6%94%BE%E8%BF%9B%E4%B8%9C%E6%96%B9%E7%BE%8E%E4%BA%BA%E7%B3%BB%E5%88%97"><span class="toc-text">5. 甜系纯欲为什么也放进东方美人系列</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E5%B0%8F%E7%99%BD%E6%80%8E%E4%B9%88%E4%BD%BF%E7%94%A8"><span class="toc-text">6. 小白怎么使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E5%AE%83%E5%92%8C%E6%99%AE%E9%80%9A-Prompt-%E9%A1%B9%E7%9B%AE%E6%9C%89%E4%BB%80%E4%B9%88%E4%B8%8D%E5%90%8C"><span class="toc-text">7. 它和普通 Prompt 项目有什么不同</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%E9%A1%B9%E7%9B%AE%E5%BD%93%E5%89%8D%E6%94%AF%E6%8C%81%E7%9A%84%E6%96%B9%E5%90%91"><span class="toc-text">8. 项目当前支持的方向</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-%E5%86%99%E5%9C%A8%E6%9C%80%E5%90%8E"><span class="toc-text">9. 写在最后</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/06/08/codex-eastern-beauty-director-skill/" title="用 Codex 做一个东方美人全栈导演 Skill"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-06-08/celadon-moon-qin.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="用 Codex 做一个东方美人全栈导演 Skill"/></a><div class="content"><a class="title" href="/2026/06/08/codex-eastern-beauty-director-skill/" title="用 Codex 做一个东方美人全栈导演 Skill">用 Codex 做一个东方美人全栈导演 Skill</a><time datetime="2026-06-08T12:20:00.000Z" title="Created 2026-06-08 20:20:00">2026-06-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/08/daily-eastern-beauty-2026-06-08/" title="每日东方美人探索 2026-06-08"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-06-08/dunhuang-desert-oracle.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="每日东方美人探索 2026-06-08"/></a><div class="content"><a class="title" href="/2026/06/08/daily-eastern-beauty-2026-06-08/" title="每日东方美人探索 2026-06-08">每日东方美人探索 2026-06-08</a><time datetime="2026-06-08T11:35:00.000Z" title="Created 2026-06-08 19:35:00">2026-06-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/06/daily-eastern-beauty-2026-06-06/" title="每日东方美人探索 2026-06-06"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-06-06/tang-palace-flower-ritual.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="每日东方美人探索 2026-06-06"/></a><div class="content"><a class="title" href="/2026/06/06/daily-eastern-beauty-2026-06-06/" title="每日东方美人探索 2026-06-06">每日东方美人探索 2026-06-06</a><time datetime="2026-06-06T00:05:00.000Z" title="Created 2026-06-06 08:05:00">2026-06-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/05/codex-blog-publisher-skill/" title="把博客发布变成一个可复用的 Codex Skill">把博客发布变成一个可复用的 Codex Skill</a><time datetime="2026-06-05T08:35:54.000Z" title="Created 2026-06-05 16:35:54">2026-06-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/05/workbuddy-hexo-auto-blog/" title="用 WorkBuddy AI 自动生成并发布 Hexo 博客">用 WorkBuddy AI 自动生成并发布 Hexo 博客</a><time datetime="2026-06-05T04:52:30.000Z" title="Created 2026-06-05 12:52:30">2026-06-05</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By litreily</span><span class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 5.4.2</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll to Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4"></script><script src="/js/main.js?v=5.5.4"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@19.1.3/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const initValine = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyValine = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const valineConfig = {
+      el: '#vcomment',
+      appId: '1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+      appKey: 'uvA3xgqNW3q8TGR483lxXcpB',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      visitor: false,
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || window.location.pathname
+    }
+
+    new Valine(valineConfig)
+  }
+
+  const loadValine = async (el, path) => {
+    if (typeof Valine === 'function') {
+      initValine(el, path)
+    } else {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js')
+      initValine(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Valine' === 'Valine'
+      ? window.shuoshuoComment = { loadComment: loadValine }
+      : window.loadOtherComment = loadValine
+    return
+  }
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="local-search-input"><input placeholder="Search..." type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.4"></script></div></div></body></html>
