@@ -4,6 +4,43 @@
   
     
     <entry>
+      <title>用 Codex 串起 AI 绘图与博客发布：从东方美人 Skill 到自动化 Hexo 工作流</title>
+      <link href="/2026/06/09/codex-eastern-beauty-blog-publishing-workflow/"/>
+      <url>/2026/06/09/codex-eastern-beauty-blog-publishing-workflow/</url>
+      
+        <content type="html"><![CDATA[<p>我最近逐渐把 Codex 当成一个“工作流编排器”来用，而不只是一个代码助手。</p><p>这篇文章记录一套完整链路：先通过 Codex 创建自动化流程，再调用“东方美人导演 Skill”生成图像提示词与示例图，最后交给 <code>blog-publisher-skill</code> 自动整理成 Hexo 博客、生成静态页面、压缩图片并部署上线。</p><p><img src="/assets/ai-workflow/codex-skill-blog-publishing-workflow.png" alt="Codex 自动化内容发布工作流"></p><span id="more"></span><h2 id="这套流程解决什么问题"><a href="#这套流程解决什么问题" class="headerlink" title="这套流程解决什么问题"></a>这套流程解决什么问题</h2><p>单独看，每个环节都不复杂：</p><ul><li>想一个选题。</li><li>写一组 AI 绘图提示词。</li><li>生成几张图。</li><li>整理成博客。</li><li>执行 Hexo 发布。</li></ul><p>真正麻烦的是这些动作之间的衔接。图像提示词要有风格一致性，图片要能被文章解释，博客要符合 Hexo 规范，文件名和 <code>subtitle</code> 要匹配站点规则，发布前还要生成、压缩、部署、提交源文件。</p><p>我希望 Codex 做的不是“帮我写一段文字”，而是把这一整套流程变成可重复执行的自动化管线。</p><h2 id="工作流总览"><a href="#工作流总览" class="headerlink" title="工作流总览"></a>工作流总览</h2><p>这套自动化流程可以拆成五步：</p><table><thead><tr><th>步骤</th><th>角色</th><th>产物</th></tr></thead><tbody><tr><td>1</td><td>用户</td><td>提出主题、方向或发布目标</td></tr><tr><td>2</td><td>Codex</td><td>拆解任务，选择合适 skill</td></tr><tr><td>3</td><td>东方美人导演 Skill</td><td>生成图像提示词、风格设定、负面提示词</td></tr><tr><td>4</td><td>GPT-Image 2</td><td>根据提示词生成示例图或流程图</td></tr><tr><td>5</td><td>Blog Publisher Skill</td><td>写文章、插图、Hexo 生成、压缩、部署、提交源文件</td></tr></tbody></table><p>这不是单个 prompt 能解决的问题，而是让不同 skill 各自负责自己最擅长的部分。</p><h2 id="第一步：让-Codex-成为编排器"><a href="#第一步：让-Codex-成为编排器" class="headerlink" title="第一步：让 Codex 成为编排器"></a>第一步：让 Codex 成为编排器</h2><p>Codex 的核心价值不只是生成代码，而是能读懂当前上下文、读取本地文件、执行命令、修改仓库，并根据任务选择不同能力。</p><p>在这套流程里，Codex 做三件事：</p><ol><li>判断用户到底要的是图片、文章、流程，还是发布结果。</li><li>调用合适的 skill，并把前一个环节的产物交给下一个环节。</li><li>在真正发布前做验证，例如检查 Hexo 生成是否成功、图片路径是否正确、Git 状态是否干净。</li></ol><p>这让“创作”不再只是一次模型输出，而是一个可检查、可回滚、可复用的工程流程。</p><h2 id="第二步：用东方美人导演-Skill-生成图像素材"><a href="#第二步：用东方美人导演-Skill-生成图像素材" class="headerlink" title="第二步：用东方美人导演 Skill 生成图像素材"></a>第二步：用东方美人导演 Skill 生成图像素材</h2><p>“东方美人导演 Skill”的价值在于，它不会只给出“美女、汉服、好看背景”这种泛泛关键词，而是会先做导演级设定：角色身份、视觉钩子、服装系统、场景、色彩、构图、光线和负面提示词。</p><p>例如，一个可用于系列图像的提示词方向可以这样设计：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">主题：东方美人图像创作流程示例角色：青瓷月下的东方美人，成人女性，清冷、温婉、有故事感场景：月色下的茶室与青瓷器物，窗外竹影，室内有微弱烛光视觉钩子：月光落在青瓷茶盏上，形成一圈淡淡的水纹光晕色彩：青瓷绿、月白、淡金、墨色阴影构图：三分之二半身像，脸部优先，手部轻扶茶盏负面：廉价影楼风、塑料皮肤、过度磨皮、手指错误、现代杂物、文字水印<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>这类提示词的关键不是堆砌形容词，而是把“画面为什么成立”讲清楚。</p><p>下面这张图可以作为这类流程中的东方美人示例素材：</p><p><img src="/assets/ai/eastern-beauty/2026-06-09/celadon-moon-tea.png" alt="青瓷月下的东方美人示例"></p><h2 id="第三步：用-GPT-Image-2-生成流程图"><a href="#第三步：用-GPT-Image-2-生成流程图" class="headerlink" title="第三步：用 GPT-Image 2 生成流程图"></a>第三步：用 GPT-Image 2 生成流程图</h2><p>博客不只有审美图，也需要解释系统如何工作。对于这类文章，我更适合用 GPT-Image 2 生成一张清晰的流程图，而不是再放一张装饰性封面。</p><p>这次流程图的目标很明确：</p><ul><li>16:9 横图，适合技术博客正文展示。</li><li>中文节点清晰可读。</li><li>展示从“用户想法”到“Codex 编排”，再到“图像 Skill”“GPT-Image 2”“Blog Publisher Skill”的完整链路。</li><li>风格要像文档插图，而不是海报。</li></ul><p>这种图的作用是降低读者理解成本。读者先看图，就能知道后面文章在讲一条自动化管线，而不是单点技巧。</p><h2 id="第四步：交给-Blog-Publisher-Skill-写作与发布"><a href="#第四步：交给-Blog-Publisher-Skill-写作与发布" class="headerlink" title="第四步：交给 Blog Publisher Skill 写作与发布"></a>第四步：交给 Blog Publisher Skill 写作与发布</h2><p>当素材准备好后，<code>blog-publisher-skill</code> 接手后半段工作。</p><p>它现在的规则包括：</p><ol><li>先检查 Hexo 项目已有文章的命名习惯。</li><li>中文标题也使用英文 slug 文件名，保证 URL 稳定。</li><li>自动生成 Hexo front matter，包括 <code>title</code>、<code>subtitle</code>、<code>tags</code>、<code>date</code>、<code>categories</code> 和 <code>description</code>。</li><li>将图片放入合适的 <code>source/assets/</code> 目录。</li><li>运行 <code>hexo clean &amp;&amp; hexo generate</code>。</li><li>如果根目录存在 <code>compress-images.mjs</code>，则在生成后执行 <code>node compress-images.mjs</code> 压缩图片。</li><li>压缩成功后执行 <code>hexo deploy</code>。</li><li>发布成功后，只提交本次文章相关的 Markdown 和图片资源，再 push 到源仓库。</li></ol><p>这套规则解决了两个很实际的问题：站点能成功发布，源文件也不会忘记提交。</p><h2 id="关键细节：不要让自动化变成失控"><a href="#关键细节：不要让自动化变成失控" class="headerlink" title="关键细节：不要让自动化变成失控"></a>关键细节：不要让自动化变成失控</h2><p>自动化越长，越需要边界。</p><p>这里有几个我觉得必须写进 skill 的规则：</p><ul><li>不要直接 <code>git add .</code>，只添加本次文章相关的 Markdown 和图片。</li><li><code>compress-images.mjs</code> 只有存在时才执行。</li><li>图片压缩失败时停止部署，而不是继续 <code>hexo deploy</code>。</li><li><code>hexo deploy</code> 成功和源仓库 push 成功要分开报告。</li><li>如果已有文章使用英文文件名，就不要发布中文文件名。</li></ul><p>这些规则看起来琐碎，但它们决定了这个流程能不能长期稳定运行。</p><h2 id="这套流程的价值"><a href="#这套流程的价值" class="headerlink" title="这套流程的价值"></a>这套流程的价值</h2><p>对我来说，这套工作流的价值不在于“AI 帮我写了一篇博客”，而在于它把内容生产拆成了几个明确角色：</p><table><thead><tr><th>角色</th><th>负责内容</th></tr></thead><tbody><tr><td>用户</td><td>提出方向、判断品味、确认结果</td></tr><tr><td>Codex</td><td>编排任务、读写文件、执行命令</td></tr><tr><td>东方美人导演 Skill</td><td>提供图像审美系统和提示词结构</td></tr><tr><td>GPT-Image 2</td><td>生成视觉素材</td></tr><tr><td>Blog Publisher Skill</td><td>完成文章写作、Hexo 发布和源文件同步</td></tr></tbody></table><p>每个角色都相对清晰，流程就不容易混乱。</p><h2 id="后续可以继续扩展什么"><a href="#后续可以继续扩展什么" class="headerlink" title="后续可以继续扩展什么"></a>后续可以继续扩展什么</h2><p>现在这套流程仍然是 Hexo-first，但它已经有了扩展空间：</p><ul><li>将发布目标扩展到 Hugo。</li><li>将文章同步到知乎、飞书、语雀等平台。</li><li>给不同平台维护不同 front matter 或格式转换规则。</li><li>在图像生成后自动生成 alt text、封面图、缩略图。</li><li>为每篇文章自动记录使用过的 prompt、模型和素材来源。</li></ul><p>真正重要的是：不要把这些能力全部塞进一个大 prompt，而是把它们拆成可维护的 skill 和步骤。</p><h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>这套流程把一次内容创作变成了一个完整系统：Codex 负责调度，东方美人导演 Skill 负责图像审美，GPT-Image 2 负责视觉生成，Blog Publisher Skill 负责文章组织与 Hexo 发布。</p><p>当这些环节串起来后，AI 不只是“回答问题”，而是在帮我把想法、图像和文字沉淀成可以长期访问的博客内容。</p><p>这才是我真正想要的自动化：不是替代创作，而是让创作结果稳定留下来。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Tools </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> hexo </tag>
+            
+            <tag> ai </tag>
+            
+            <tag> automation </tag>
+            
+            <tag> codex </tag>
+            
+            <tag> skill </tag>
+            
+            <tag> gpt-image2 </tag>
+            
+            <tag> eastern-beauty </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>每日东方美人探索 2026-06-09（补发）</title>
       <link href="/2026/06/09/daily-eastern-beauty-2026-06-09-bonus/"/>
       <url>/2026/06/09/daily-eastern-beauty-2026-06-09-bonus/</url>
@@ -22,13 +59,13 @@
             
             <tag> AI </tag>
             
-            <tag> GPT Image </tag>
-            
-            <tag> 东方美人 </tag>
-            
             <tag> AI绘画 </tag>
             
             <tag> Prompt </tag>
+            
+            <tag> GPT Image </tag>
+            
+            <tag> 东方美人 </tag>
             
         </tags>
       
@@ -55,13 +92,13 @@
             
             <tag> AI </tag>
             
-            <tag> GPT Image </tag>
-            
-            <tag> 东方美人 </tag>
-            
             <tag> AI绘画 </tag>
             
             <tag> Prompt </tag>
+            
+            <tag> GPT Image </tag>
+            
+            <tag> 东方美人 </tag>
             
         </tags>
       
@@ -86,17 +123,17 @@
       
         <tags>
             
-            <tag> GPT Image </tag>
+            <tag> Codex </tag>
             
-            <tag> 东方美人 </tag>
+            <tag> Skill </tag>
             
             <tag> AI绘画 </tag>
             
             <tag> Prompt </tag>
             
-            <tag> Codex </tag>
+            <tag> GPT Image </tag>
             
-            <tag> Skill </tag>
+            <tag> 东方美人 </tag>
             
         </tags>
       
@@ -123,13 +160,13 @@
             
             <tag> AI </tag>
             
-            <tag> GPT Image </tag>
-            
-            <tag> 东方美人 </tag>
-            
             <tag> AI绘画 </tag>
             
             <tag> Prompt </tag>
+            
+            <tag> GPT Image </tag>
+            
+            <tag> 东方美人 </tag>
             
         </tags>
       
@@ -156,13 +193,13 @@
             
             <tag> AI </tag>
             
-            <tag> GPT Image </tag>
-            
-            <tag> 东方美人 </tag>
-            
             <tag> AI绘画 </tag>
             
             <tag> Prompt </tag>
+            
+            <tag> GPT Image </tag>
+            
+            <tag> 东方美人 </tag>
             
         </tags>
       
@@ -189,6 +226,8 @@
             
             <tag> hexo </tag>
             
+            <tag> automation </tag>
+            
             <tag> codex </tag>
             
             <tag> skill </tag>
@@ -196,8 +235,6 @@
             <tag> ai-writing </tag>
             
             <tag> blog-publishing </tag>
-            
-            <tag> automation </tag>
             
         </tags>
       
@@ -224,11 +261,11 @@
             
             <tag> hexo </tag>
             
-            <tag> automation </tag>
-            
             <tag> workbuddy </tag>
             
             <tag> ai </tag>
+            
+            <tag> automation </tag>
             
             <tag> blog </tag>
             
@@ -1496,31 +1533,6 @@
     
     
     <entry>
-      <title>使用油猴脚本批量下载canvas图片</title>
-      <link href="/2020/03/15/canvas-dl/"/>
-      <url>/2020/03/15/canvas-dl/</url>
-      
-        <content type="html"><![CDATA[<p>女友最近在网上下载一些北大网盘的pdf<a href="https://disk.pku.edu.cn/#/link/3A7748E0466521E3E68A0CBA4C24DE20?gns=AE26ACF837E24D51B1EC40E0A80A5D23%2F7F0E54D7D92343B1B62031B1C41F2280">文档</a>，结果发现没有下载接口，另存为也只能存储单张图片。找我帮忙，这时候发现程序员男票的好处了哈。</p><h2 id="分析页面"><a href="#分析页面" class="headerlink" title="分析页面"></a>分析页面</h2><p>一开始想着使用Chrome调试工具看下pdf链接，发现这个网盘居然不是直接获取的pdf文件，而是使用js脚本动态渲染生成的，涨知识了。</p><p><img src="/assets/canvas/pdf-js.png" alt="pdf-combine js"></p><p>那看看是否可以以图片形式批量下载呢，结果查看pdf单页的html结构发现，这居然是个canvas!!!还不是普通图片，而是画布。</p><p><img src="/assets/canvas/canvas.png" alt="cancvs"></p><h2 id="下载插件"><a href="#下载插件" class="headerlink" title="下载插件"></a>下载插件</h2><p>没关系，canvas什么的也不是难事，万能的油猴插件总会有解决方案的，果不其然让我找到个专门用于下载svg, canvas的油猴插件↓</p><ul><li><a href="https://greasyfork.org/zh-CN/scripts/383101-%E7%BD%91%E7%AB%99%E5%9B%BE%E7%89%87-%E8%83%8C%E6%99%AF%E5%9B%BE-svg-canvas-%E6%8A%93%E5%8F%96%E9%A2%84%E8%A7%88%E4%B8%8B%E8%BD%BD">网站图片（背景图，svg，canvas）抓取预览下载</a></li></ul><h2 id="下载图片"><a href="#下载图片" class="headerlink" title="下载图片"></a>下载图片</h2><p>这正是我想要的，安装好后，使用起来非常简单，刷新要下载canvas图片的页面，在右下角有一个按钮<strong>自动获取图片</strong>。</p><p><img src="/assets/canvas/check-tampermonkey.png" alt="js extension"></p><p>点击之后开始扫描，注意下图中的数字并不代表实际的图片数量，不用理会。</p><p><img src="/assets/canvas/scanning.png" alt="scanning"></p><p>扫描完成后，可以限定图片大小，以滤除不符合要求的小图片，然后通过<strong>批量下载</strong>完成下载，对于数量较多的页面可能需要稍微等一小会，绝大部分情况是很快的。</p><p><img src="/assets/canvas/download.png" alt="download"></p><p>这样就下载完成啦。</p><p><img src="/assets/canvas/downloaded.png" alt="downloaded"></p><p>至于如何将批量转换为pdf，那方法就多啦，福昕pdf编辑器、ABBYY等等，这个留待下回再讲，哈哈。</p><h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>经评论区大佬@Axun提醒，本文所爬网站的PDF文件是可以直接提取的，刷新页面过滤<code>Access</code>即可得到下面的链接，右键在新页面打开即可保存，然后添加扩展名即可。</p><p><img src="/assets/canvas/pdf-source-file.png" alt="PDF source file"></p><p>当然啦，本文提及的canvas图片下载方法也适用于其它网站，欢迎食用。</p>]]></content>
-      
-      
-      <categories>
-          
-          <category> Tools </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> tampermonkey </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>NBNS客户端的C语言实现</title>
       <link href="/2020/03/15/nbns_code/"/>
       <url>/2020/03/15/nbns_code/</url>
@@ -1538,6 +1550,31 @@
         <tags>
             
             <tag> C/C++ </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>使用油猴脚本批量下载canvas图片</title>
+      <link href="/2020/03/15/canvas-dl/"/>
+      <url>/2020/03/15/canvas-dl/</url>
+      
+        <content type="html"><![CDATA[<p>女友最近在网上下载一些北大网盘的pdf<a href="https://disk.pku.edu.cn/#/link/3A7748E0466521E3E68A0CBA4C24DE20?gns=AE26ACF837E24D51B1EC40E0A80A5D23%2F7F0E54D7D92343B1B62031B1C41F2280">文档</a>，结果发现没有下载接口，另存为也只能存储单张图片。找我帮忙，这时候发现程序员男票的好处了哈。</p><h2 id="分析页面"><a href="#分析页面" class="headerlink" title="分析页面"></a>分析页面</h2><p>一开始想着使用Chrome调试工具看下pdf链接，发现这个网盘居然不是直接获取的pdf文件，而是使用js脚本动态渲染生成的，涨知识了。</p><p><img src="/assets/canvas/pdf-js.png" alt="pdf-combine js"></p><p>那看看是否可以以图片形式批量下载呢，结果查看pdf单页的html结构发现，这居然是个canvas!!!还不是普通图片，而是画布。</p><p><img src="/assets/canvas/canvas.png" alt="cancvs"></p><h2 id="下载插件"><a href="#下载插件" class="headerlink" title="下载插件"></a>下载插件</h2><p>没关系，canvas什么的也不是难事，万能的油猴插件总会有解决方案的，果不其然让我找到个专门用于下载svg, canvas的油猴插件↓</p><ul><li><a href="https://greasyfork.org/zh-CN/scripts/383101-%E7%BD%91%E7%AB%99%E5%9B%BE%E7%89%87-%E8%83%8C%E6%99%AF%E5%9B%BE-svg-canvas-%E6%8A%93%E5%8F%96%E9%A2%84%E8%A7%88%E4%B8%8B%E8%BD%BD">网站图片（背景图，svg，canvas）抓取预览下载</a></li></ul><h2 id="下载图片"><a href="#下载图片" class="headerlink" title="下载图片"></a>下载图片</h2><p>这正是我想要的，安装好后，使用起来非常简单，刷新要下载canvas图片的页面，在右下角有一个按钮<strong>自动获取图片</strong>。</p><p><img src="/assets/canvas/check-tampermonkey.png" alt="js extension"></p><p>点击之后开始扫描，注意下图中的数字并不代表实际的图片数量，不用理会。</p><p><img src="/assets/canvas/scanning.png" alt="scanning"></p><p>扫描完成后，可以限定图片大小，以滤除不符合要求的小图片，然后通过<strong>批量下载</strong>完成下载，对于数量较多的页面可能需要稍微等一小会，绝大部分情况是很快的。</p><p><img src="/assets/canvas/download.png" alt="download"></p><p>这样就下载完成啦。</p><p><img src="/assets/canvas/downloaded.png" alt="downloaded"></p><p>至于如何将批量转换为pdf，那方法就多啦，福昕pdf编辑器、ABBYY等等，这个留待下回再讲，哈哈。</p><h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>经评论区大佬@Axun提醒，本文所爬网站的PDF文件是可以直接提取的，刷新页面过滤<code>Access</code>即可得到下面的链接，右键在新页面打开即可保存，然后添加扩展名即可。</p><p><img src="/assets/canvas/pdf-source-file.png" alt="PDF source file"></p><p>当然啦，本文提及的canvas图片下载方法也适用于其它网站，欢迎食用。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Tools </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> tampermonkey </tag>
             
         </tags>
       
@@ -2981,9 +3018,9 @@
       
         <tags>
             
-            <tag> labview </tag>
-            
             <tag> matlab </tag>
+            
+            <tag> labview </tag>
             
             <tag> VS </tag>
             
