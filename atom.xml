@@ -6,7 +6,7 @@
   <link href="https://www.litreily.top/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2026-06-09T00:45:21.264Z</updated>
+  <updated>2026-06-09T04:55:41.338Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>每日东方美人探索 2026-06-09（补发）</title>
+    <link href="https://www.litreily.top/2026/06/09/daily-eastern-beauty-2026-06-09-bonus/"/>
+    <id>https://www.litreily.top/2026/06/09/daily-eastern-beauty-2026-06-09-bonus/</id>
+    <published>2026-06-09T01:30:00.000Z</published>
+    <updated>2026-06-09T04:55:41.338Z</updated>
+    
+    
+    <summary type="html">补发 2026-06-09 的另一组东方美人 AI 生图探索：红金凤凰秘仪、雨窗新中式、唐宫花泉月影和城市天桥晚风。</summary>
+    
+    
+    
+    <category term="gpt-image2" scheme="https://www.litreily.top/categories/gpt-image2/"/>
+    
+    
+    <category term="AI" scheme="https://www.litreily.top/tags/AI/"/>
+    
+    <category term="GPT Image" scheme="https://www.litreily.top/tags/GPT-Image/"/>
+    
+    <category term="东方美人" scheme="https://www.litreily.top/tags/%E4%B8%9C%E6%96%B9%E7%BE%8E%E4%BA%BA/"/>
+    
+    <category term="AI绘画" scheme="https://www.litreily.top/tags/AI%E7%BB%98%E7%94%BB/"/>
+    
+    <category term="Prompt" scheme="https://www.litreily.top/tags/Prompt/"/>
+    
+  </entry>
   
   <entry>
     <title>每日东方美人探索 2026-06-09</title>
@@ -838,38 +865,6 @@ kernel/arch/arm/boot/dts/rk3288-tb_8846.dts
 ├── gt9xx_update.c
 ├── Kconfig
 └── Makefile&lt;span aria-hidden=&quot;true&quot; class=&quot;line-numbers-rows&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/s</summary>
-      
-    
-    
-    
-    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
-    
-    
-    <category term="android" scheme="https://www.litreily.top/tags/android/"/>
-    
-    <category term="rk3288" scheme="https://www.litreily.top/tags/rk3288/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>RK3288 android 6.0 同时打开两个摄像头</title>
-    <link href="https://www.litreily.top/2021/07/12/dual-camera/"/>
-    <id>https://www.litreily.top/2021/07/12/dual-camera/</id>
-    <published>2021-07-12T10:02:15.000Z</published>
-    <updated>2026-05-14T01:37:35.665Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;问题描述&quot;&gt;&lt;a href=&quot;#问题描述&quot; class=&quot;headerlink&quot; title=&quot;问题描述&quot;&gt;&lt;/a&gt;问题描述&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;平台: RK3288&lt;/li&gt;
-&lt;li&gt;系统: Android 6.0&lt;/li&gt;
-&lt;li&gt;需求: 同时打开两个摄像头&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;业务需求，要支持同时打开多个摄像头，期间遇到一些问题，在这里记录下。&lt;/p&gt;
-&lt;h2 id=&quot;问题分析&quot;&gt;&lt;a href=&quot;#问题分析&quot; class=&quot;headerlink&quot; title=&quot;问题分析&quot;&gt;&lt;/a&gt;问题分析&lt;/h2&gt;&lt;h3 id=&quot;支持多摄像头&quot;&gt;&lt;a href=&quot;#支持多摄像头&quot; class=&quot;headerlink&quot; title=&quot;支持多摄像头&quot;&gt;&lt;/a&gt;支持多摄像头&lt;/h3&gt;&lt;p&gt;首先，Android系统默认只支持同时打开一个摄像头，并且最大只识别两个摄像头。所以，为了支持多摄像头，需要修改摄像头相关的 &lt;code&gt;HAL&lt;/code&gt; 层。&lt;/p&gt;
-&lt;p&gt;这个我参考 &lt;a href=&quot;https://www.programmersought.com/article/12481783276/&quot;&gt;[AndroidO] [RK3399] Support 4 way camera preview&lt;/a&gt; 解决了。patch 如下：&lt;/p&gt;
-&lt;pre class=&quot;</summary>
       
     
     
