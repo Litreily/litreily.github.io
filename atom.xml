@@ -6,7 +6,7 @@
   <link href="https://www.litreily.top/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2026-06-11T03:35:31.697Z</updated>
+  <updated>2026-06-11T17:09:52.332Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -17,11 +17,38 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>每日东方美人探索 2026-06-12</title>
+    <link href="https://www.litreily.top/2026/06/12/daily-eastern-beauty-2026-06-12/"/>
+    <id>https://www.litreily.top/2026/06/12/daily-eastern-beauty-2026-06-12/</id>
+    <published>2026-06-11T17:05:07.000Z</published>
+    <updated>2026-06-11T17:09:52.332Z</updated>
+    
+    
+    <summary type="html">记录 2026-06-12 的五张东方美人 AI 生图探索：玉雾茶光、潮灯崖谕、雪阁停笔、镜楼风裁与晨焙回眸。</summary>
+    
+    
+    
+    <category term="gpt-image2" scheme="https://www.litreily.top/categories/gpt-image2/"/>
+    
+    
+    <category term="AI" scheme="https://www.litreily.top/tags/AI/"/>
+    
+    <category term="GPT Image" scheme="https://www.litreily.top/tags/GPT-Image/"/>
+    
+    <category term="东方美人" scheme="https://www.litreily.top/tags/%E4%B8%9C%E6%96%B9%E7%BE%8E%E4%BA%BA/"/>
+    
+    <category term="AI绘画" scheme="https://www.litreily.top/tags/AI%E7%BB%98%E7%94%BB/"/>
+    
+    <category term="Prompt" scheme="https://www.litreily.top/tags/Prompt/"/>
+    
+  </entry>
+  
+  <entry>
     <title>每日东方美人探索 2026-06-11</title>
     <link href="https://www.litreily.top/2026/06/11/daily-eastern-beauty-2026-06-11/"/>
     <id>https://www.litreily.top/2026/06/11/daily-eastern-beauty-2026-06-11/</id>
     <published>2026-06-11T02:55:00.000Z</published>
-    <updated>2026-06-11T03:35:31.697Z</updated>
+    <updated>2026-06-11T15:20:01.424Z</updated>
     
     
     <summary type="html">记录 2026-06-11 的东方美人 AI 生图探索：漆屏晨镜、新潮龙灯神谕、荷汀晓舟、雨后花店与一张加映电车大片。</summary>
@@ -789,34 +816,6 @@ kernel/arch/arm/boot/dts/rk3288-tb_8846.dts
     <summary type="html">&lt;p&gt;之前一直用的 &lt;code&gt;userdebug&lt;/code&gt; 版本，默认 &lt;code&gt;adb root&lt;/code&gt; 或者使用 &lt;code&gt;su&lt;/code&gt; 即可获取 root 权限。目前基于安全考虑，固件发布需要使用 &lt;code&gt;user&lt;/code&gt; 版本配置，很多功能都需要重新测试，下面对 &lt;code&gt;RK3288&lt;/code&gt; &lt;code&gt;user&lt;/code&gt; 发布版本遇到的问题进行总结。&lt;/p&gt;
 &lt;h2 id=&quot;编译固件&quot;&gt;&lt;a href=&quot;#编译固件&quot; class=&quot;headerlink&quot; title=&quot;编译固件&quot;&gt;&lt;/a&gt;编译固件&lt;/h2&gt;&lt;p&gt;首先是编译固件，将原先的 &lt;code&gt;rk3288-userdebug&lt;/code&gt; 改为 &lt;code&gt;rk3288-user&lt;/code&gt;.&lt;/p&gt;
 &lt;pre class=&quot;line-numbers language-bash&quot; data-language=&quot;bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;./FFTools/make.sh &lt;span class=&quot;token parameter variable&quot;&gt;-d&lt;/span&gt; rk3288-tb_8846 &lt;span class=&quot;token parameter variable&quot;&gt;-j16&lt;/span&gt; &lt;span class=&quot;to</summary>
-      
-    
-    
-    
-    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
-    
-    
-    <category term="android" scheme="https://www.litreily.top/tags/android/"/>
-    
-    <category term="rk3288" scheme="https://www.litreily.top/tags/rk3288/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>RK3288 android 6.0 user release 获取 root 权限</title>
-    <link href="https://www.litreily.top/2021/12/30/rk3288-su/"/>
-    <id>https://www.litreily.top/2021/12/30/rk3288-su/</id>
-    <published>2021-12-30T02:22:18.000Z</published>
-    <updated>2026-05-14T01:37:35.701Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;编译 RK3288 &lt;code&gt;user&lt;/code&gt; 版本后，固件不会安装su，也就无法使用root权限，导致很多功能无法调试，非常不便。&lt;/p&gt;
-&lt;p&gt;为此，我想办法把 su 重新加到系统里了。&lt;/p&gt;
-&lt;h2 id=&quot;准备su&quot;&gt;&lt;a href=&quot;#准备su&quot; class=&quot;headerlink&quot; title=&quot;准备su&quot;&gt;&lt;/a&gt;准备su&lt;/h2&gt;&lt;p&gt;先使用 &lt;code&gt;userdebug&lt;/code&gt; 模式编译系统，将 &lt;code&gt;out/target/product/rk3288/system/xbin/su&lt;/code&gt; 保存到别的地方，因为改用 &lt;code&gt;user&lt;/code&gt; 模式编译后会覆盖掉。&lt;/p&gt;
-&lt;pre class=&quot;line-numbers language-bash&quot; data-language=&quot;bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token function&quot;&gt;mkdir&lt;/span&gt; ~/backup
-&lt;span class=&quot;token function&quot;&gt;cp&lt;/span&gt; out/target/product/rk3288/system/xbin/su ~/backup/&lt;span aria-hidden=&quot;true&quot; class=&quot;line-numbers-rows&quot;</summary>
       
     
     
