@@ -6,7 +6,7 @@
   <link href="https://www.litreily.top/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2026-06-10T01:26:33.889Z</updated>
+  <updated>2026-06-11T03:35:31.697Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>每日东方美人探索 2026-06-11</title>
+    <link href="https://www.litreily.top/2026/06/11/daily-eastern-beauty-2026-06-11/"/>
+    <id>https://www.litreily.top/2026/06/11/daily-eastern-beauty-2026-06-11/</id>
+    <published>2026-06-11T02:55:00.000Z</published>
+    <updated>2026-06-11T03:35:31.697Z</updated>
+    
+    
+    <summary type="html">记录 2026-06-11 的东方美人 AI 生图探索：漆屏晨镜、新潮龙灯神谕、荷汀晓舟、雨后花店与一张加映电车大片。</summary>
+    
+    
+    
+    <category term="gpt-image2" scheme="https://www.litreily.top/categories/gpt-image2/"/>
+    
+    
+    <category term="AI" scheme="https://www.litreily.top/tags/AI/"/>
+    
+    <category term="GPT Image" scheme="https://www.litreily.top/tags/GPT-Image/"/>
+    
+    <category term="东方美人" scheme="https://www.litreily.top/tags/%E4%B8%9C%E6%96%B9%E7%BE%8E%E4%BA%BA/"/>
+    
+    <category term="AI绘画" scheme="https://www.litreily.top/tags/AI%E7%BB%98%E7%94%BB/"/>
+    
+    <category term="Prompt" scheme="https://www.litreily.top/tags/Prompt/"/>
+    
+  </entry>
   
   <entry>
     <title>每日东方美人探索 2026-06-10 (bonus)</title>
@@ -87,13 +114,13 @@
     
     <category term="hexo" scheme="https://www.litreily.top/tags/hexo/"/>
     
-    <category term="ai" scheme="https://www.litreily.top/tags/ai/"/>
-    
-    <category term="automation" scheme="https://www.litreily.top/tags/automation/"/>
-    
     <category term="codex" scheme="https://www.litreily.top/tags/codex/"/>
     
     <category term="skill" scheme="https://www.litreily.top/tags/skill/"/>
+    
+    <category term="automation" scheme="https://www.litreily.top/tags/automation/"/>
+    
+    <category term="ai" scheme="https://www.litreily.top/tags/ai/"/>
     
     <category term="gpt-image2" scheme="https://www.litreily.top/tags/gpt-image2/"/>
     
@@ -255,8 +282,6 @@
     
     <category term="hexo" scheme="https://www.litreily.top/tags/hexo/"/>
     
-    <category term="automation" scheme="https://www.litreily.top/tags/automation/"/>
-    
     <category term="codex" scheme="https://www.litreily.top/tags/codex/"/>
     
     <category term="skill" scheme="https://www.litreily.top/tags/skill/"/>
@@ -264,6 +289,8 @@
     <category term="ai-writing" scheme="https://www.litreily.top/tags/ai-writing/"/>
     
     <category term="blog-publishing" scheme="https://www.litreily.top/tags/blog-publishing/"/>
+    
+    <category term="automation" scheme="https://www.litreily.top/tags/automation/"/>
     
   </entry>
   
@@ -284,11 +311,11 @@
     
     <category term="hexo" scheme="https://www.litreily.top/tags/hexo/"/>
     
+    <category term="automation" scheme="https://www.litreily.top/tags/automation/"/>
+    
     <category term="workbuddy" scheme="https://www.litreily.top/tags/workbuddy/"/>
     
     <category term="ai" scheme="https://www.litreily.top/tags/ai/"/>
-    
-    <category term="automation" scheme="https://www.litreily.top/tags/automation/"/>
     
     <category term="blog" scheme="https://www.litreily.top/tags/blog/"/>
     
@@ -800,71 +827,6 @@ kernel/arch/arm/boot/dts/rk3288-tb_8846.dts
     <category term="android" scheme="https://www.litreily.top/tags/android/"/>
     
     <category term="rk3288" scheme="https://www.litreily.top/tags/rk3288/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>RK3399 新设计工控机配置指南</title>
-    <link href="https://www.litreily.top/2021/12/20/rk3399-dts/"/>
-    <id>https://www.litreily.top/2021/12/20/rk3399-dts/</id>
-    <published>2021-12-20T06:20:20.000Z</published>
-    <updated>2026-05-14T01:37:35.698Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;用时两周，总算将新的 RK3399 工控机配置好了，期间遇到各种坑，在此记录一二。&lt;/p&gt;
-&lt;h2 id=&quot;RK3399-工控机硬件配置&quot;&gt;&lt;a href=&quot;#RK3399-工控机硬件配置&quot; class=&quot;headerlink&quot; title=&quot;RK3399 工控机硬件配置&quot;&gt;&lt;/a&gt;RK3399 工控机硬件配置&lt;/h2&gt;&lt;p&gt;首先看下硬件配置。&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;接口&lt;/th&gt;
-&lt;th&gt;数量&lt;/th&gt;
-&lt;th&gt;说明&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;&lt;tr&gt;
-&lt;td&gt;TypeC&lt;/td&gt;
-&lt;td&gt;1个&lt;/td&gt;
-&lt;td&gt;OTG 口，可用于烧录固件&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;USB3.0&lt;/td&gt;
-&lt;td&gt;4个&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;USB2.0&lt;/td&gt;
-&lt;td&gt;2个&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;RTC芯片 hym8563&lt;/td&gt;
-&lt;td&gt;1个&lt;/td&gt;
-&lt;td&gt;用于RTC时钟存储&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;SD&lt;/td&gt;
-&lt;td&gt;1个&lt;/td&gt;
-&lt;td&gt;可插入SD/TF 卡&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;HDMI&lt;/td&gt;
-&lt;td&gt;1个&lt;/td&gt;
-&lt;td&gt;可接显示器&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;</summary>
-      
-    
-    
-    
-    <category term="Embedded" scheme="https://www.litreily.top/categories/Embedded/"/>
-    
-    
-    <category term="linux" scheme="https://www.litreily.top/tags/linux/"/>
-    
-    <category term="rk3399" scheme="https://www.litreily.top/tags/rk3399/"/>
     
   </entry>
   
