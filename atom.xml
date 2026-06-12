@@ -6,7 +6,7 @@
   <link href="https://www.litreily.top/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2026-06-11T23:15:29.459Z</updated>
+  <updated>2026-06-12T22:10:13.338Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>每日东方美人探索 2026-06-13</title>
+    <link href="https://www.litreily.top/2026/06/13/daily-eastern-beauty-2026-06-13/"/>
+    <id>https://www.litreily.top/2026/06/13/daily-eastern-beauty-2026-06-13/</id>
+    <published>2026-06-12T16:10:00.000Z</published>
+    <updated>2026-06-12T22:10:13.338Z</updated>
+    
+    
+    <summary type="html">记录每日东方美人自动探索：覆盖不同风格、穿搭、人物、场景和角度，并加入年龄与质量锁定。</summary>
+    
+    
+    
+    <category term="gpt-image2" scheme="https://www.litreily.top/categories/gpt-image2/"/>
+    
+    
+    <category term="AI" scheme="https://www.litreily.top/tags/AI/"/>
+    
+    <category term="GPT Image" scheme="https://www.litreily.top/tags/GPT-Image/"/>
+    
+    <category term="东方美人" scheme="https://www.litreily.top/tags/%E4%B8%9C%E6%96%B9%E7%BE%8E%E4%BA%BA/"/>
+    
+    <category term="AI绘画" scheme="https://www.litreily.top/tags/AI%E7%BB%98%E7%94%BB/"/>
+    
+    <category term="Prompt" scheme="https://www.litreily.top/tags/Prompt/"/>
+    
+  </entry>
   
   <entry>
     <title>每日东方美人探索 2026-06-12</title>
@@ -340,9 +367,9 @@
     
     <category term="automation" scheme="https://www.litreily.top/tags/automation/"/>
     
-    <category term="workbuddy" scheme="https://www.litreily.top/tags/workbuddy/"/>
-    
     <category term="ai" scheme="https://www.litreily.top/tags/ai/"/>
+    
+    <category term="workbuddy" scheme="https://www.litreily.top/tags/workbuddy/"/>
     
     <category term="blog" scheme="https://www.litreily.top/tags/blog/"/>
     
@@ -790,32 +817,6 @@ kernel/arch/arm/boot/dts/rk3288-tb_8846.dts
 &lt;h2 id=&quot;Root-cause&quot;&gt;&lt;a href=&quot;#Root-cause&quot; class=&quot;headerlink&quot; title=&quot;Root cause&quot;&gt;&lt;/a&gt;Root cause&lt;/h2&gt;&lt;p&gt;经过大量测试和排查，发现卡死问题源自一个文件,  &lt;code&gt;/data/camera/media_profiles.xml&lt;/code&gt; , 这是一个空文件，删除后系统就正常启动了。&lt;/p&gt;
 &lt;p&gt;通过使用 &lt;code&gt;logcat&lt;/code&gt; 结合系统源码发现，该文件是摄像头配置文件，如果为空会导致系统循环检测该文件，并尝试从中获取摄像头配置，但是由于文件为空，导致一直获取失败，最后陷入死循环。&lt;/p&gt;
 &lt;pre class=&quot;line-numbers language-bash&quot; data-language=&quot;bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;$ &lt;spa</summary>
-      
-    
-    
-    
-    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
-    
-    
-    <category term="android" scheme="https://www.litreily.top/tags/android/"/>
-    
-    <category term="rk3288" scheme="https://www.litreily.top/tags/rk3288/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>RK3288 android 6.0 user release 相关问题处理</title>
-    <link href="https://www.litreily.top/2021/12/31/rk3288-security/"/>
-    <id>https://www.litreily.top/2021/12/31/rk3288-security/</id>
-    <published>2021-12-31T02:58:22.000Z</published>
-    <updated>2026-05-14T01:37:35.705Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;之前一直用的 &lt;code&gt;userdebug&lt;/code&gt; 版本，默认 &lt;code&gt;adb root&lt;/code&gt; 或者使用 &lt;code&gt;su&lt;/code&gt; 即可获取 root 权限。目前基于安全考虑，固件发布需要使用 &lt;code&gt;user&lt;/code&gt; 版本配置，很多功能都需要重新测试，下面对 &lt;code&gt;RK3288&lt;/code&gt; &lt;code&gt;user&lt;/code&gt; 发布版本遇到的问题进行总结。&lt;/p&gt;
-&lt;h2 id=&quot;编译固件&quot;&gt;&lt;a href=&quot;#编译固件&quot; class=&quot;headerlink&quot; title=&quot;编译固件&quot;&gt;&lt;/a&gt;编译固件&lt;/h2&gt;&lt;p&gt;首先是编译固件，将原先的 &lt;code&gt;rk3288-userdebug&lt;/code&gt; 改为 &lt;code&gt;rk3288-user&lt;/code&gt;.&lt;/p&gt;
-&lt;pre class=&quot;line-numbers language-bash&quot; data-language=&quot;bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;./FFTools/make.sh &lt;span class=&quot;token parameter variable&quot;&gt;-d&lt;/span&gt; rk3288-tb_8846 &lt;span class=&quot;token parameter variable&quot;&gt;-j16&lt;/span&gt; &lt;span class=&quot;to</summary>
       
     
     
