@@ -6,7 +6,7 @@
   <link href="https://www.litreily.top/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2026-06-14T13:56:28.496Z</updated>
+  <updated>2026-06-15T09:07:58.092Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>每日东方美人探索 2026-06-15</title>
+    <link href="https://www.litreily.top/2026/06/15/daily-eastern-beauty-2026-06-15/"/>
+    <id>https://www.litreily.top/2026/06/15/daily-eastern-beauty-2026-06-15/</id>
+    <published>2026-06-15T09:20:00.000Z</published>
+    <updated>2026-06-15T09:07:58.092Z</updated>
+    
+    
+    <summary type="html">记录 2026-06-15 的五张东方美人 AI 生图探索：未来器物、敦煌壁画神女、唐宫花泉仪式、东方珠宝大片和夏夜纳凉。</summary>
+    
+    
+    
+    <category term="gpt-image2" scheme="https://www.litreily.top/categories/gpt-image2/"/>
+    
+    
+    <category term="AI" scheme="https://www.litreily.top/tags/AI/"/>
+    
+    <category term="GPT Image" scheme="https://www.litreily.top/tags/GPT-Image/"/>
+    
+    <category term="东方美人" scheme="https://www.litreily.top/tags/%E4%B8%9C%E6%96%B9%E7%BE%8E%E4%BA%BA/"/>
+    
+    <category term="AI绘画" scheme="https://www.litreily.top/tags/AI%E7%BB%98%E7%94%BB/"/>
+    
+    <category term="Prompt" scheme="https://www.litreily.top/tags/Prompt/"/>
+    
+  </entry>
   
   <entry>
     <title>每日东方美人探索 2026-06-14</title>
@@ -195,13 +222,13 @@
     
     <category term="hexo" scheme="https://www.litreily.top/tags/hexo/"/>
     
-    <category term="codex" scheme="https://www.litreily.top/tags/codex/"/>
-    
-    <category term="skill" scheme="https://www.litreily.top/tags/skill/"/>
+    <category term="ai" scheme="https://www.litreily.top/tags/ai/"/>
     
     <category term="automation" scheme="https://www.litreily.top/tags/automation/"/>
     
-    <category term="ai" scheme="https://www.litreily.top/tags/ai/"/>
+    <category term="codex" scheme="https://www.litreily.top/tags/codex/"/>
+    
+    <category term="skill" scheme="https://www.litreily.top/tags/skill/"/>
     
     <category term="gpt-image2" scheme="https://www.litreily.top/tags/gpt-image2/"/>
     
@@ -363,6 +390,8 @@
     
     <category term="hexo" scheme="https://www.litreily.top/tags/hexo/"/>
     
+    <category term="automation" scheme="https://www.litreily.top/tags/automation/"/>
+    
     <category term="codex" scheme="https://www.litreily.top/tags/codex/"/>
     
     <category term="skill" scheme="https://www.litreily.top/tags/skill/"/>
@@ -370,8 +399,6 @@
     <category term="ai-writing" scheme="https://www.litreily.top/tags/ai-writing/"/>
     
     <category term="blog-publishing" scheme="https://www.litreily.top/tags/blog-publishing/"/>
-    
-    <category term="automation" scheme="https://www.litreily.top/tags/automation/"/>
     
   </entry>
   
@@ -392,11 +419,11 @@
     
     <category term="hexo" scheme="https://www.litreily.top/tags/hexo/"/>
     
-    <category term="automation" scheme="https://www.litreily.top/tags/automation/"/>
-    
     <category term="workbuddy" scheme="https://www.litreily.top/tags/workbuddy/"/>
     
     <category term="ai" scheme="https://www.litreily.top/tags/ai/"/>
+    
+    <category term="automation" scheme="https://www.litreily.top/tags/automation/"/>
     
     <category term="blog" scheme="https://www.litreily.top/tags/blog/"/>
     
@@ -786,37 +813,6 @@ kernel/arch/arm/boot/dts/rk3288-tb_8846.dts
 &lt;li&gt;logo_kernel.bmp: kernel 阶段显示&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&quot;替换-Android-开机动画&quot;&gt;&lt;a href=&quot;#替换-Android-开机动画&quot; class=&quot;headerlink&quot; title=&quot;替换 Android 开机动画&quot;&gt;&lt;/a&gt;替换 Android 开机动画&lt;/h2&gt;&lt;h3 id=&quot;替换-bootanimation-zip&quot;&gt;&lt;a href=&quot;#替换-bootanimation-zip&quot; class=&quot;headerlink&quot; title=&quot;替换 bootanimation.zip&quot;&gt;&lt;/a&gt;替换 bootanimation.zip&lt;/h3&gt;&lt;p&gt;&lt;code&gt;rk3288&lt;/code&gt; android10 的动画文件位于 &lt;code&gt;device/rockchip/common&lt;</summary>
-      
-    
-    
-    
-    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
-    
-    
-    <category term="android" scheme="https://www.litreily.top/tags/android/"/>
-    
-    <category term="rk3288" scheme="https://www.litreily.top/tags/rk3288/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>RK3288 Android 10 系统开发[1] - 支持 EC20 4G 模块</title>
-    <link href="https://www.litreily.top/2022/02/21/android-4g/"/>
-    <id>https://www.litreily.top/2022/02/21/android-4g/</id>
-    <published>2022-02-21T08:50:51.000Z</published>
-    <updated>2026-05-14T01:37:35.730Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;根据业务需求，需要升级安卓系统，从 &lt;code&gt;Android6.0&lt;/code&gt; 升级到 &lt;code&gt;Android10.0&lt;/code&gt;, 本节介绍如何移植 &lt;code&gt;EC20 4G&lt;/code&gt; 模块。&lt;/p&gt;
-&lt;p&gt;主要参考 &lt;code&gt;Quetecl&lt;/code&gt; 提供的以下文档。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;Quectel_WCDMA&amp;amp;LTE_Linux_USB_Driver_User_Guide_V1.8.pdf&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;Quectel_Android_RIL_Driver_User_Guide_V1.9.pdf&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;kernel&quot;&gt;&lt;a href=&quot;#kernel&quot; class=&quot;headerlink&quot; title=&quot;kernel&quot;&gt;&lt;/a&gt;kernel&lt;/h2&gt;&lt;p&gt;内核部分，需要修改两部分，&lt;code&gt;EC20&lt;/code&gt;模块的使能和供电, 以及 &lt;code&gt;EC20&lt;/code&gt; 联网所需的驱动移植。&lt;/p&gt;
-&lt;h3 id=&quot;EC20-供电使能&quot;&gt;&lt;a href=&quot;#EC20-供电使能&quot; class=&quot;headerlink&quot; title=&quot;EC20 供电使能&quot;&gt;&lt;/a&gt;EC20 供电使能&lt;/h3&gt;&lt;p&gt;针对供电使能问题，&lt;code&gt;dts&lt;/code</summary>
       
     
     

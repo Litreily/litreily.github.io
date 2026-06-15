@@ -4,6 +4,39 @@
   
     
     <entry>
+      <title>每日东方美人探索 2026-06-15</title>
+      <link href="/2026/06/15/daily-eastern-beauty-2026-06-15/"/>
+      <url>/2026/06/15/daily-eastern-beauty-2026-06-15/</url>
+      
+        <content type="html"><![CDATA[<p>今天这组「每日东方美人探索」继续严格按当日计划执行：1 张原创探索路线，4 张来自脚本轮转出的固定风格家族。<br>五张图全部锁定 9:16 竖版，人物年龄统一为 20-26 岁年轻成年东亚女性；同时继续把脸和眼睛放在第一优先级，并强化道具语义锁定，避免杯子、耳坠、团扇、灯笼、丝带和水面倒影发生漂移。</p><span id="more"></span><h2 id="1-原创探索路线：未来器物"><a href="#1-原创探索路线：未来器物" class="headerlink" title="1. 原创探索路线：未来器物"></a>1. 原创探索路线：未来器物</h2><p><img src="/assets/ai/eastern-beauty/2026-06-15/open-future-object.png" alt="原创探索路线：未来器物"></p><p>今天的原创探索不走固定古风模板，而是从“带有东方审美的未来器物”反推整张画面。主钩子是一只悬浮的青铜玉质礼器，器口、器腹和底座都保持清晰语义，同时把人物表情和手部动作放在视觉中心。</p><p>结构化参数：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">技能: 东方美人风格: 原创探索路线：未来器物气质: 年轻，冷静，知性，克制场景: 安静的未来东方展陈空间，极简背景，柔和环形光晕服装: 象牙白内层 + 墨青外袍，现代东方高定质感动作: 一手稳定悬浮礼器，一手触碰器口发光符印构图: 9比16，大腿以上，人物主体占画面60%以上<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>Prompt 摘要：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">9:16 vertical cinematic portrait. Original Eastern beauty exploration route built around a luminous jade-bronze ritual vessel. Young adult East Asian woman, age 22, face and eyes first priority, premium teal, ivory and antique bronze palette. She steadies the hovering vessel with one hand and reaches toward a glowing seal on the rim with the other. The vessel remains unmistakably a vessel, the circular halo stays behind her, and the background remains minimal so the face, hands and object hierarchy stay clean.<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>负面提示：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">low quality, low resolution, blurry, jpeg artifacts, watermark, text, logo, bad anatomy, bad hands, extra fingers, missing fingers, fused fingers, distorted face, asymmetrical eyes, plastic skin, over-smoothed skin, old-looking face, matronly styling, age drift, underage, childish, scenery inside face, landscape on face, object fused with face, cup turning into chain, prop morphing, object mutation, jewelry replacing prop, random chain objects, deformed prop, melted object, broken cup, lantern becoming jewelry, flowers fused into skin, fabric fused into hands, duplicate person, background stealing focus<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="2-敦煌壁画神女"><a href="#2-敦煌壁画神女" class="headerlink" title="2. 敦煌壁画神女"></a>2. 敦煌壁画神女</h2><p><img src="/assets/ai/eastern-beauty/2026-06-15/dunhuang-mural-oracle.png" alt="敦煌壁画神女"></p><p>东方幻想古风今天抽到的是敦煌壁画神女。重点不是堆满飞天元素，而是让“壁画苏醒”的瞬间成立：背后的圆形壁画光晕作为唯一强视觉形状，丝带保持为真实丝带，不穿脸、不变链条。</p><p>结构化参数：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">技能: 东方幻想古风风格: 敦煌壁画神女气质: 年轻，神秘，柔美，庄重场景: 敦煌石窟壁画前，矿物色壁面，柔和尘光服装: 石青、赭金、淡青层叠飞天服饰，内层完整覆盖动作: 她展开壁画丝带回望，像壁中人物刚刚苏醒构图: 9比16，大腿以上，圆形壁画光晕位于身后<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>Prompt 摘要：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">9:16 vertical Eastern fantasy portrait. Dunhuang mural oracle route, a 23-year-old East Asian woman in muted mineral-pigment flying-apsara robes. She unfolds one long painted silk ribbon and turns back toward the viewer while a single mural halo glows softly behind her head and shoulders. The ribbon remains separate from the face and body, the mural remains a mural wall, and the image keeps realistic skin, crisp eyes and controlled ornament density.<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>负面提示：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">low quality, low resolution, blurry, jpeg artifacts, watermark, text, logo, bad anatomy, bad hands, extra fingers, missing fingers, fused fingers, distorted face, asymmetrical eyes, plastic skin, over-smoothed skin, old-looking face, matronly styling, age drift, underage, childish, scenery inside face, landscape on face, object fused with face, cup turning into chain, prop morphing, object mutation, jewelry replacing prop, random chain objects, deformed prop, melted object, broken cup, lantern becoming jewelry, flowers fused into skin, fabric fused into hands, duplicate person, background stealing focus<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="3-唐宫花泉仪式"><a href="#3-唐宫花泉仪式" class="headerlink" title="3. 唐宫花泉仪式"></a>3. 唐宫花泉仪式</h2><p><img src="/assets/ai/eastern-beauty/2026-06-15/tang-flower-spring-ritual.png" alt="唐宫花泉仪式"></p><p>古典东方美人路线今天继续回到唐宫花泉仪式，但这次把“只有一人、只有两只可见手”的约束直接写死，重点聚焦在扶纱、持金碗、落花入水这条动作链上，避免手部崩坏抢戏。</p><p>结构化参数：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">技能: 古典东方美人风格: 唐宫花泉仪式气质: 年轻，高贵大气，柔美场景: 唐风宫苑花泉池畔，红纱幔，烛台，香雾，花瓣倒影服装: 浅金与暖玉白层叠礼服，不透明丝绸完整覆盖动作: 左手扶纱，右手持金碗，将牡丹花瓣轻轻洒向水面构图: 9比16，全身，花瓣落入水面形成金色涟漪<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>Prompt 摘要：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">9:16 vertical full-body classical Eastern beauty portrait. A 24-year-old East Asian woman stands at the edge of a Tang-inspired flower pond, holding back one red silk curtain with her left hand and tilting a small golden bowl with her right. Peony petals touch the water and form a single golden circular ripple. The bowl remains a bowl, petals remain petals, the curtain remains a curtain, and the image keeps exactly one woman and exactly two visible hands.<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>负面提示：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">low quality, low resolution, blurry, jpeg artifacts, watermark, text, logo, bad anatomy, bad hands, extra fingers, missing fingers, fused fingers, distorted face, asymmetrical eyes, plastic skin, over-smoothed skin, old-looking face, matronly styling, age drift, underage, childish, scenery inside face, landscape on face, object fused with face, cup turning into chain, prop morphing, object mutation, jewelry replacing prop, random chain objects, deformed prop, melted object, broken cup, lantern becoming jewelry, flowers fused into skin, fabric fused into hands, duplicate person, background stealing focus<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="4-东方珠宝大片"><a href="#4-东方珠宝大片" class="headerlink" title="4. 东方珠宝大片"></a>4. 东方珠宝大片</h2><p><img src="/assets/ai/eastern-beauty/2026-06-15/jade-editorial.png" alt="东方珠宝大片"></p><p>现代东方美人今天走的是黑底珠宝大片。画面故意压低背景信息量，只保留一枚玉色耳坠作为唯一高光点，让注意力回到眼神、面部骨相和手指与耳坠接触的瞬间。</p><p>结构化参数：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">技能: 现代东方美人风格: 东方珠宝大片气质: 年轻，高级，克制，冷静场景: 黑色丝绒摄影棚，单束柔光，极简背景服装: 黑色新中式高领丝质上衣，盘扣细节克制动作: 她用指尖轻触玉色耳坠，目光平静看向镜头附近构图: 9比16，上半身特写，耳坠是唯一高光焦点<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>Prompt 摘要：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">9:16 vertical modern Eastern beauty editorial. A 22-year-old East Asian woman in a black new-Chinese silk top gently touches one jade earring with her fingertips. The dark studio and soft key light keep the background nearly invisible so the face, eyes and earring remain the whole story. The jade earring stays a single earring rather than mutating into a cup, chain or random reflective object.<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>负面提示：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">low quality, low resolution, blurry, jpeg artifacts, watermark, text, logo, bad anatomy, bad hands, extra fingers, missing fingers, fused fingers, distorted face, asymmetrical eyes, plastic skin, over-smoothed skin, old-looking face, matronly styling, age drift, underage, childish, scenery inside face, landscape on face, object fused with face, cup turning into chain, prop morphing, object mutation, jewelry replacing prop, random chain objects, deformed prop, melted object, broken cup, lantern becoming jewelry, flowers fused into skin, fabric fused into hands, duplicate person, background stealing focus<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="5-夏夜纳凉"><a href="#5-夏夜纳凉" class="headerlink" title="5. 夏夜纳凉"></a>5. 夏夜纳凉</h2><p><img src="/assets/ai/eastern-beauty/2026-06-15/gufeng-summer-pavilion.png" alt="夏夜纳凉"></p><p>最后一张是古风闺蜜路线。这里把“两个成年东亚女性、骨相不同、递茶、团扇、灯笼、荷叶、衣料边界清楚”全部作为硬约束，确保它是古风真人生活摄影里的陪伴感，而不是仙侠海报或复制粘贴脸。</p><p>结构化参数：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">技能: 古风闺蜜风格: 夏夜纳凉关系: 姐妹 / 闺蜜陪伴气质: 放松，陪伴，清凉，生活化场景: 湖亭夏夜，荷叶，灯笼，木栏杆，远处月光服装: 月白轻纱外衣 + 浅青丝棉夏装，层次分离清楚动作: 一人递茶，一人持团扇回头，像刚听见湖面风声构图: 9比16，双人中景，50mm，两位人物占画面75%-85%<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>Prompt 摘要：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">9:16 vertical live-action ancient companionship photography. Exactly two young adult East Asian women with clearly different facial structures sit in a summer pavilion by lotus leaves and a small lantern. One gently offers a tea cup while the other turns back holding a round fan. The lantern reflection creates the only warm focal glow, and the tea cup, fan, lantern and fabrics all keep their original object meaning without fusion, extra limbs or duplicated faces.<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>负面提示：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">low quality, low resolution, blurry, jpeg artifacts, watermark, text, logo, bad anatomy, bad hands, extra fingers, missing fingers, fused fingers, distorted face, asymmetrical eyes, plastic skin, over-smoothed skin, old-looking face, matronly styling, age drift, underage, childish, scenery inside face, landscape on face, object fused with face, cup turning into chain, prop morphing, object mutation, jewelry replacing prop, random chain objects, deformed prop, melted object, broken cup, lantern becoming jewelry, flowers fused into skin, fabric fused into hands, duplicate person, background stealing focus<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="今日复盘"><a href="#今日复盘" class="headerlink" title="今日复盘"></a>今日复盘</h2><p>今天的五张图把原创探索、敦煌幻想、唐宫古典、现代珠宝和古风闺蜜五条路线拉得比较开，差异已经不只是换色和换衣服，而是连道具逻辑、镜头语言和情绪结构都分开了。</p><p>从完成度看，未来器物、唐宫花泉仪式和东方珠宝大片最稳，适合继续扩展成系列；敦煌壁画神女证明矿物色幻想路线只要控住装饰密度，就能保住脸和眼睛优先；夏夜纳凉则说明双人古风生活摄影在明确关系、动作和道具语义之后，可以兼顾陪伴感和真实感。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> gpt-image2 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> AI </tag>
+            
+            <tag> GPT Image </tag>
+            
+            <tag> 东方美人 </tag>
+            
+            <tag> AI绘画 </tag>
+            
+            <tag> Prompt </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>每日东方美人探索 2026-06-14</title>
       <link href="/2026/06/14/daily-eastern-beauty-2026-06-14/"/>
       <url>/2026/06/14/daily-eastern-beauty-2026-06-14/</url>
@@ -220,13 +253,13 @@
             
             <tag> hexo </tag>
             
-            <tag> codex </tag>
-            
-            <tag> skill </tag>
+            <tag> ai </tag>
             
             <tag> automation </tag>
             
-            <tag> ai </tag>
+            <tag> codex </tag>
+            
+            <tag> skill </tag>
             
             <tag> gpt-image2 </tag>
             
@@ -424,6 +457,8 @@
             
             <tag> hexo </tag>
             
+            <tag> automation </tag>
+            
             <tag> codex </tag>
             
             <tag> skill </tag>
@@ -431,8 +466,6 @@
             <tag> ai-writing </tag>
             
             <tag> blog-publishing </tag>
-            
-            <tag> automation </tag>
             
         </tags>
       
@@ -459,11 +492,11 @@
             
             <tag> hexo </tag>
             
-            <tag> automation </tag>
-            
             <tag> workbuddy </tag>
             
             <tag> ai </tag>
+            
+            <tag> automation </tag>
             
             <tag> blog </tag>
             
@@ -2882,9 +2915,9 @@
             
             <tag> ubuntu </tag>
             
-            <tag> shell </tag>
-            
             <tag> makefile </tag>
+            
+            <tag> shell </tag>
             
         </tags>
       
@@ -3216,9 +3249,9 @@
       
         <tags>
             
-            <tag> labview </tag>
-            
             <tag> matlab </tag>
+            
+            <tag> labview </tag>
             
             <tag> VS </tag>
             
