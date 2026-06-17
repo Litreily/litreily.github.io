@@ -6,7 +6,7 @@
   <link href="https://www.litreily.top/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2026-06-16T09:06:10.258Z</updated>
+  <updated>2026-06-17T08:58:03.562Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>每日东方美人探索 2026-06-17</title>
+    <link href="https://www.litreily.top/2026/06/17/daily-eastern-beauty-2026-06-17/"/>
+    <id>https://www.litreily.top/2026/06/17/daily-eastern-beauty-2026-06-17/</id>
+    <published>2026-06-17T00:30:00.000Z</published>
+    <updated>2026-06-17T08:58:03.562Z</updated>
+    
+    
+    <summary type="html">记录 2026-06-17 的五张东方美人 AI 生图探索：原创铜镜冷光、莲梦镇邪、十二花神总览、竹林清谈和美术馆开幕夜。</summary>
+    
+    
+    
+    <category term="gpt-image2" scheme="https://www.litreily.top/categories/gpt-image2/"/>
+    
+    
+    <category term="AI" scheme="https://www.litreily.top/tags/AI/"/>
+    
+    <category term="GPT Image" scheme="https://www.litreily.top/tags/GPT-Image/"/>
+    
+    <category term="东方美人" scheme="https://www.litreily.top/tags/%E4%B8%9C%E6%96%B9%E7%BE%8E%E4%BA%BA/"/>
+    
+    <category term="AI绘画" scheme="https://www.litreily.top/tags/AI%E7%BB%98%E7%94%BB/"/>
+    
+    <category term="Prompt" scheme="https://www.litreily.top/tags/Prompt/"/>
+    
+  </entry>
   
   <entry>
     <title>每日东方美人探索 2026-06-16</title>
@@ -795,32 +822,6 @@ kernel/arch/arm/boot/dts/rk3288-tb_8846.dts
     
     
     <category term="android" scheme="https://www.litreily.top/tags/android/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>RK3288 Android 10 系统开发[3] - 结合 gitlab 搭建 repo 代码仓库管理平台</title>
-    <link href="https://www.litreily.top/2022/02/24/gitlab-repo/"/>
-    <id>https://www.litreily.top/2022/02/24/gitlab-repo/</id>
-    <published>2022-02-24T08:26:13.000Z</published>
-    <updated>2026-05-14T01:37:35.737Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;目前为了本地服务器搭建 &lt;code&gt;gitlab&lt;/code&gt; 管理平台，并配合 &lt;code&gt;gerrit&lt;/code&gt; 进行代码审查，需要对代码管理重新部署。&lt;/p&gt;
-&lt;p&gt;Android 系统使用 &lt;code&gt;repo&lt;/code&gt; 管理源码，但是 &lt;code&gt;Android 10&lt;/code&gt; 源码包含 &lt;code&gt;732&lt;/code&gt; 个仓库，如果在本地 gitlab 服务器和 &lt;code&gt;gerrit&lt;/code&gt; 服务器上将所有的仓库都创建一遍的话，仓库太多了， 不便于管理和审查，所以需要重新设计代码结构，并使用 &lt;code&gt;repo&lt;/code&gt; 和 &lt;code&gt;manifest&lt;/code&gt; 进行管理，为此，我先使用官方 &lt;code&gt;gitlab&lt;/code&gt; 搭建了一些测试仓库。用于学习和研究 &lt;code&gt;repo&lt;/code&gt; 的代码管理方式。&lt;/p&gt;
-&lt;h2 id=&quot;gitlab-操作&quot;&gt;&lt;a href=&quot;#gitlab-操作&quot; class=&quot;headerlink&quot; title=&quot;gitlab 操作&quot;&gt;&lt;/a&gt;gitlab 操作&lt;/h2&gt;&lt;h3 id=&quot;新建-group&quot;&gt;&lt;a href=&quot;#新建-group&quot; class=&quot;headerlink&quot; title=&quot;新建 group&quot;&gt;&lt;/a&gt;新建 group&lt;/h3&gt;&lt;p&gt;首先在 &lt;code&gt;gitlab</summary>
-      
-    
-    
-    
-    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
-    
-    
-    <category term="repo" scheme="https://www.litreily.top/tags/repo/"/>
-    
-    <category term="gitlab" scheme="https://www.litreily.top/tags/gitlab/"/>
     
   </entry>
   
