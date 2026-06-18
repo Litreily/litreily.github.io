@@ -4,6 +4,39 @@
   
     
     <entry>
+      <title>每日东方美人探索 2026-06-18</title>
+      <link href="/2026/06/18/daily-eastern-beauty-2026-06-18/"/>
+      <url>/2026/06/18/daily-eastern-beauty-2026-06-18/</url>
+      
+        <content type="html"><![CDATA[<p>今天这组「每日东方美人探索」严格以当日计划为唯一风格来源，先在 <code>eastern-beauty-director</code> skill 仓库生成原创探索 + 固定风格家族轮转计划，再逐张落成真实图片。</p><p>这一批五张图分别覆盖了原创探索、东方幻想古风、古典东方美人、现代东方美人和古风闺蜜五条路线。所有图片统一锁定 <code>9:16</code> 竖版、<code>20-26</code> 岁年轻成年东亚女性、脸和眼睛优先、人物主体占画面 60% 以上，并对主道具语义做了硬约束。</p><span id="more"></span><h2 id="今日质量锁定"><a href="#今日质量锁定" class="headerlink" title="今日质量锁定"></a>今日质量锁定</h2><ul><li>年龄统一：默认主体均为 20-26 岁年轻成年东亚女性。</li><li>比例统一：五张图全部为 <code>9:16</code> 竖版。</li><li>风格分散：原创探索、东方幻想、古典、现代、古风闺蜜五条路线同日分开，不重复同一家族。</li><li>视觉优先级：脸和眼睛第一优先，叙事动作第二优先，服装和环境第三优先。</li><li>道具语义：玉盒、宫灯、红灯笼、车窗雨痕、茶杯、团扇都必须保持原物体语义。</li><li>双人约束：古风闺蜜路线固定两位成年东亚女性，骨相不同，边界清晰，布料与道具彼此独立。</li></ul><h2 id="全局负面提示"><a href="#全局负面提示" class="headerlink" title="全局负面提示"></a>全局负面提示</h2><pre class="line-numbers language-text" data-language="text"><code class="language-text">low quality, low resolution, blurry, jpeg artifacts, watermark, text, logo, bad anatomy, malformed anatomy, wrong limb count, extra limbs, extra arms, missing arms, extra legs, missing legs, broken limbs, twisted joints, dislocated shoulders, broken wrists, deformed elbows, deformed knees, unnatural torso twist, broken neck, neck too long, bad hands, deformed hands, extra hands, missing hands, floating hands, extra fingers, missing fingers, wrong finger count, fused fingers, melted fingers, fingers fused with objects, hand fused with fabric, bad feet, deformed feet, missing feet, extra feet, mutated toes, distorted face, broken face, asymmetrical eyes, misaligned eyes, duplicated face parts, melted facial features, plastic skin, over-smoothed skin, old-looking face, matronly styling, age drift, underage, childish, scenery inside face, landscape on face, object fused with face, cup turning into chain, prop morphing, object mutation, jewelry replacing prop, random chain objects, deformed prop, melted object, broken cup, lantern becoming jewelry, flowers fused into skin, fabric fused into hands, duplicate person, unwanted third person, merged bodies, fused torsos, unclear body boundary, background stealing focus<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="1-原创探索：宣纸风场（探索种子：东方材料实验）"><a href="#1-原创探索：宣纸风场（探索种子：东方材料实验）" class="headerlink" title="1. 原创探索：宣纸风场（探索种子：东方材料实验）"></a>1. 原创探索：宣纸风场（探索种子：东方材料实验）</h2><p><img src="/assets/ai/eastern-beauty/2026-06-18/open-material-study.png" alt="原创探索：宣纸风场（探索种子：东方材料实验）"></p><p>这条原创探索没有复用固定古风模板，而是把宣纸、玉、玻璃反射和海边候车亭压进同一个克制的现代异常瞬间里。主钩子不是满屏奇观，而是玉质小盒的低亮度冷光和玻璃上映出的不存在月门。</p><p>结构化参数：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">技能: 东方美人风格: 原创探索：宣纸风场（探索种子：东方材料实验）审美方向: 20-26岁年轻成年东亚女性，现代生活空间里出现极克制的东方诗性异常，真实摄影优先，人物真实、脸和眼睛优先场景: 海边公交站，候车亭玻璃上映出不存在的月门和莲灯服装: 淡杏色轻外套，白色内搭，浅色长裙，帆布鞋故事瞬间: 她正伸手触碰一件异常发光的东方器物，听见你叫她后回头主道具: 玉质小盒构图: 9比16，人物主体占画面60%以上主视觉钩子: 玉质器物发出低亮度冷光，成为唯一奇观点<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>导演摘要：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">这条路线把东方材料实验放进了生活可信的海边站台角落里。人物先于奇观成立，玻璃上的月门和莲灯只做低干扰异常，真正牵住视线的是她回头时的脸、手部动作和那只保持原物体语义的玉质小盒。<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="2-凤阙宫火"><a href="#2-凤阙宫火" class="headerlink" title="2. 凤阙宫火"></a>2. 凤阙宫火</h2><p><img src="/assets/ai/eastern-beauty/2026-06-18/phoenix-palace-fire.png" alt="凤阙宫火"></p><p>这张是今天固定保留的东方幻想古风路线。它不能只是普通宫灯和古装回眸，所以把超现实证据明确压成单侧展开的凤凰火翼，让幻想机制直接服务她停步回望的瞬间。</p><p>结构化参数：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">技能: 东方幻想古风风格: 凤阙宫火气质: 年轻，高贵，强势，华丽克制场景: 黑红宫廷火庭，漆屏，铜灯，凤凰纹影服装: 朱砂红礼袍，黑漆腰封，金线凤凰刺绣故事瞬间: 她提起凤凰宫灯，火光在身后形成单翼轮廓构图: 9比16，全身，低机位幻想证据: 一只巨大的凤凰火翼只在画面一侧展开物体语义锁定: 凤凰宫灯必须保持为灯笼，不变成首饰、火球或头冠<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>导演摘要：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">技能: 东方幻想古风。幻想证据被锁成单侧可见的凤凰火翼，约束它既不是普通灯光，也不是无意义背景特效。画面重点仍然是人物脸部、提灯动作和“她为什么在门边停下”的故事触发点。<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="3-胭脂雪"><a href="#3-胭脂雪" class="headerlink" title="3. 胭脂雪"></a>3. 胭脂雪</h2><p><img src="/assets/ai/eastern-beauty/2026-06-18/rouge-snow-lantern.png" alt="胭脂雪"></p><p>古典路线这次用雪夜宫墙和红灯笼完成高反差叙事。它不靠复杂装饰取胜，而是把暖色光斑、冷石阶和回头的一瞬间压成足够干净的视觉层次。</p><p>结构化参数：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">技能: 古典东方美人风格: 胭脂雪气质: 年轻，冷艳，危险，克制场景: 雪夜宫墙，红灯笼，黑瓦，冷石阶服装: 深胭脂红斗篷，月白内裙，黑发素簪动作: 她提灯穿过雪阶，回头时灯光照亮侧脸构图: 9比16，全身，高反差夜景年龄: 20-26主视觉钩子: 红灯笼在雪地上投出唯一暖色光斑<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>导演摘要：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">这张古典东方美人路线把“唯一暖色”压在灯笼和雪地反光上，避免画面沦为普通古装写真。斗篷的大面积胭脂红负责气压，人物侧脸和回头动作负责情绪落点。<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="4-雨夜出租车窗"><a href="#4-雨夜出租车窗" class="headerlink" title="4. 雨夜出租车窗"></a>4. 雨夜出租车窗</h2><p><img src="/assets/ai/eastern-beauty/2026-06-18/taxi-window-rain-night.png" alt="雨夜出租车窗"></p><p>现代路线继续走电影感，但没有把情绪堆在满屏霓虹里，而是把城市光压成一条纵向水墨线。真正有效的是她擦开雾气、认出路边某个人以后轻轻抬眼的那个动作。</p><p>结构化参数：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">技能: 现代东方美人风格: 雨夜出租车窗气质: 年轻，电影感，温柔，都市孤独场景: 雨夜出租车后座，车窗雨痕，城市霓虹被压成柔和色块服装: 深墨绿色针织上衣，米白长裙，珍珠耳钉动作: 她用指尖擦开车窗雾气，看见你站在路边后轻轻抬眼构图: 9比16，上半身近景，85mm年龄: 20-26主视觉钩子: 车窗雨痕把城市灯光拉成一条纵向水墨线<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>导演摘要：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">这条现代东方美人路线重点不是“都市夜景很美”，而是让玻璃、水滴、指尖和眼神组成一个亲密但克制的叙事三角。车窗和雨痕保持真实物体语义，不进入脸部，也不抢走人物主权。<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="5-夏夜纳凉"><a href="#5-夏夜纳凉" class="headerlink" title="5. 夏夜纳凉"></a>5. 夏夜纳凉</h2><p><img src="/assets/ai/eastern-beauty/2026-06-18/gufeng-summer-pavilion.png" alt="夏夜纳凉"></p><p>最后一条是古风闺蜜路线，核心不是仙侠海报感，而是两位成年女性在湖亭夜风里共享一个未完成瞬间。姐姐递茶、妹妹扶扇、一起听见风声，这种陪伴关系比大场景更重要。</p><p>结构化参数：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">技能: 古风闺蜜场景: 夏夜纳凉关系: 姐姐 + 妹妹气质: 松弛，陪伴，清凉，古代生活感服装: 姐姐月白薄纱外衫，妹妹浅青丝棉夏季轻衫，披帛与衣袖独立飘落动作: 姐姐递茶给妹妹，妹妹扶着团扇回头，两人像刚听见湖面风声构图: 9比16，双人中景，50mm，人物占75%-85%比例: 9比16主视觉钩子: 荷叶间的灯笼倒影成为唯一暖色视觉钩子<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>导演摘要：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">这条古风闺蜜路线把重点锁在双人边界、不同骨相和真实陪伴动作上。茶杯、团扇、灯笼都保持原物体语义，衣袖与披帛彼此独立，画面因此更像被截下的一段古代生活，而不是拼贴式古风宣传图。<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="今日复盘"><a href="#今日复盘" class="headerlink" title="今日复盘"></a>今日复盘</h2><p>今天最值得保留的，是五条路线之间的差异不靠换衣服硬撑，而是靠空间逻辑和叙事触发点拉开。原创探索把东方材料感塞进现代海边站台，幻想路线用凤凰火翼完成硬性超现实证据，古典路线用雪夜暖斑立住气质，现代路线把雨痕压成纵向水墨线，古风闺蜜路线则把关系感放在所有装饰之前。</p><p>如果继续扩展这一批方向，最适合深挖的两条线是「现代空间里的东方异常」和「强证据幻想古风」。前者适合继续做克制的原创探索，后者则适合继续测试“幻想证据必须一眼可见且服务人物”的导演约束。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> gpt-image2 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> AI </tag>
+            
+            <tag> GPT Image </tag>
+            
+            <tag> 东方美人 </tag>
+            
+            <tag> AI绘画 </tag>
+            
+            <tag> Prompt </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>每日东方美人探索 2026-06-17</title>
       <link href="/2026/06/17/daily-eastern-beauty-2026-06-17/"/>
       <url>/2026/06/17/daily-eastern-beauty-2026-06-17/</url>
@@ -319,13 +352,13 @@
             
             <tag> hexo </tag>
             
-            <tag> codex </tag>
-            
-            <tag> skill </tag>
+            <tag> ai </tag>
             
             <tag> automation </tag>
             
-            <tag> ai </tag>
+            <tag> codex </tag>
+            
+            <tag> skill </tag>
             
             <tag> gpt-image2 </tag>
             
@@ -523,6 +556,8 @@
             
             <tag> hexo </tag>
             
+            <tag> automation </tag>
+            
             <tag> codex </tag>
             
             <tag> skill </tag>
@@ -530,8 +565,6 @@
             <tag> ai-writing </tag>
             
             <tag> blog-publishing </tag>
-            
-            <tag> automation </tag>
             
         </tags>
       
@@ -558,11 +591,11 @@
             
             <tag> hexo </tag>
             
-            <tag> automation </tag>
-            
             <tag> workbuddy </tag>
             
             <tag> ai </tag>
+            
+            <tag> automation </tag>
             
             <tag> blog </tag>
             
@@ -1830,31 +1863,6 @@
     
     
     <entry>
-      <title>使用油猴脚本批量下载canvas图片</title>
-      <link href="/2020/03/15/canvas-dl/"/>
-      <url>/2020/03/15/canvas-dl/</url>
-      
-        <content type="html"><![CDATA[<p>女友最近在网上下载一些北大网盘的pdf<a href="https://disk.pku.edu.cn/#/link/3A7748E0466521E3E68A0CBA4C24DE20?gns=AE26ACF837E24D51B1EC40E0A80A5D23%2F7F0E54D7D92343B1B62031B1C41F2280">文档</a>，结果发现没有下载接口，另存为也只能存储单张图片。找我帮忙，这时候发现程序员男票的好处了哈。</p><h2 id="分析页面"><a href="#分析页面" class="headerlink" title="分析页面"></a>分析页面</h2><p>一开始想着使用Chrome调试工具看下pdf链接，发现这个网盘居然不是直接获取的pdf文件，而是使用js脚本动态渲染生成的，涨知识了。</p><p><img src="/assets/canvas/pdf-js.png" alt="pdf-combine js"></p><p>那看看是否可以以图片形式批量下载呢，结果查看pdf单页的html结构发现，这居然是个canvas!!!还不是普通图片，而是画布。</p><p><img src="/assets/canvas/canvas.png" alt="cancvs"></p><h2 id="下载插件"><a href="#下载插件" class="headerlink" title="下载插件"></a>下载插件</h2><p>没关系，canvas什么的也不是难事，万能的油猴插件总会有解决方案的，果不其然让我找到个专门用于下载svg, canvas的油猴插件↓</p><ul><li><a href="https://greasyfork.org/zh-CN/scripts/383101-%E7%BD%91%E7%AB%99%E5%9B%BE%E7%89%87-%E8%83%8C%E6%99%AF%E5%9B%BE-svg-canvas-%E6%8A%93%E5%8F%96%E9%A2%84%E8%A7%88%E4%B8%8B%E8%BD%BD">网站图片（背景图，svg，canvas）抓取预览下载</a></li></ul><h2 id="下载图片"><a href="#下载图片" class="headerlink" title="下载图片"></a>下载图片</h2><p>这正是我想要的，安装好后，使用起来非常简单，刷新要下载canvas图片的页面，在右下角有一个按钮<strong>自动获取图片</strong>。</p><p><img src="/assets/canvas/check-tampermonkey.png" alt="js extension"></p><p>点击之后开始扫描，注意下图中的数字并不代表实际的图片数量，不用理会。</p><p><img src="/assets/canvas/scanning.png" alt="scanning"></p><p>扫描完成后，可以限定图片大小，以滤除不符合要求的小图片，然后通过<strong>批量下载</strong>完成下载，对于数量较多的页面可能需要稍微等一小会，绝大部分情况是很快的。</p><p><img src="/assets/canvas/download.png" alt="download"></p><p>这样就下载完成啦。</p><p><img src="/assets/canvas/downloaded.png" alt="downloaded"></p><p>至于如何将批量转换为pdf，那方法就多啦，福昕pdf编辑器、ABBYY等等，这个留待下回再讲，哈哈。</p><h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>经评论区大佬@Axun提醒，本文所爬网站的PDF文件是可以直接提取的，刷新页面过滤<code>Access</code>即可得到下面的链接，右键在新页面打开即可保存，然后添加扩展名即可。</p><p><img src="/assets/canvas/pdf-source-file.png" alt="PDF source file"></p><p>当然啦，本文提及的canvas图片下载方法也适用于其它网站，欢迎食用。</p>]]></content>
-      
-      
-      <categories>
-          
-          <category> Tools </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> tampermonkey </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>NBNS客户端的C语言实现</title>
       <link href="/2020/03/15/nbns_code/"/>
       <url>/2020/03/15/nbns_code/</url>
@@ -1872,6 +1880,31 @@
         <tags>
             
             <tag> C/C++ </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>使用油猴脚本批量下载canvas图片</title>
+      <link href="/2020/03/15/canvas-dl/"/>
+      <url>/2020/03/15/canvas-dl/</url>
+      
+        <content type="html"><![CDATA[<p>女友最近在网上下载一些北大网盘的pdf<a href="https://disk.pku.edu.cn/#/link/3A7748E0466521E3E68A0CBA4C24DE20?gns=AE26ACF837E24D51B1EC40E0A80A5D23%2F7F0E54D7D92343B1B62031B1C41F2280">文档</a>，结果发现没有下载接口，另存为也只能存储单张图片。找我帮忙，这时候发现程序员男票的好处了哈。</p><h2 id="分析页面"><a href="#分析页面" class="headerlink" title="分析页面"></a>分析页面</h2><p>一开始想着使用Chrome调试工具看下pdf链接，发现这个网盘居然不是直接获取的pdf文件，而是使用js脚本动态渲染生成的，涨知识了。</p><p><img src="/assets/canvas/pdf-js.png" alt="pdf-combine js"></p><p>那看看是否可以以图片形式批量下载呢，结果查看pdf单页的html结构发现，这居然是个canvas!!!还不是普通图片，而是画布。</p><p><img src="/assets/canvas/canvas.png" alt="cancvs"></p><h2 id="下载插件"><a href="#下载插件" class="headerlink" title="下载插件"></a>下载插件</h2><p>没关系，canvas什么的也不是难事，万能的油猴插件总会有解决方案的，果不其然让我找到个专门用于下载svg, canvas的油猴插件↓</p><ul><li><a href="https://greasyfork.org/zh-CN/scripts/383101-%E7%BD%91%E7%AB%99%E5%9B%BE%E7%89%87-%E8%83%8C%E6%99%AF%E5%9B%BE-svg-canvas-%E6%8A%93%E5%8F%96%E9%A2%84%E8%A7%88%E4%B8%8B%E8%BD%BD">网站图片（背景图，svg，canvas）抓取预览下载</a></li></ul><h2 id="下载图片"><a href="#下载图片" class="headerlink" title="下载图片"></a>下载图片</h2><p>这正是我想要的，安装好后，使用起来非常简单，刷新要下载canvas图片的页面，在右下角有一个按钮<strong>自动获取图片</strong>。</p><p><img src="/assets/canvas/check-tampermonkey.png" alt="js extension"></p><p>点击之后开始扫描，注意下图中的数字并不代表实际的图片数量，不用理会。</p><p><img src="/assets/canvas/scanning.png" alt="scanning"></p><p>扫描完成后，可以限定图片大小，以滤除不符合要求的小图片，然后通过<strong>批量下载</strong>完成下载，对于数量较多的页面可能需要稍微等一小会，绝大部分情况是很快的。</p><p><img src="/assets/canvas/download.png" alt="download"></p><p>这样就下载完成啦。</p><p><img src="/assets/canvas/downloaded.png" alt="downloaded"></p><p>至于如何将批量转换为pdf，那方法就多啦，福昕pdf编辑器、ABBYY等等，这个留待下回再讲，哈哈。</p><h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>经评论区大佬@Axun提醒，本文所爬网站的PDF文件是可以直接提取的，刷新页面过滤<code>Access</code>即可得到下面的链接，右键在新页面打开即可保存，然后添加扩展名即可。</p><p><img src="/assets/canvas/pdf-source-file.png" alt="PDF source file"></p><p>当然啦，本文提及的canvas图片下载方法也适用于其它网站，欢迎食用。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Tools </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> tampermonkey </tag>
             
         </tags>
       
@@ -2981,9 +3014,9 @@
             
             <tag> ubuntu </tag>
             
-            <tag> shell </tag>
-            
             <tag> makefile </tag>
+            
+            <tag> shell </tag>
             
         </tags>
       
@@ -3315,9 +3348,9 @@
       
         <tags>
             
-            <tag> labview </tag>
-            
             <tag> matlab </tag>
+            
+            <tag> labview </tag>
             
             <tag> VS </tag>
             
