@@ -4,6 +4,39 @@
   
     
     <entry>
+      <title>每日东方美人探索 2026-07-02</title>
+      <link href="/2026/07/02/daily-eastern-beauty-2026-07-02/"/>
+      <url>/2026/07/02/daily-eastern-beauty-2026-07-02/</url>
+      
+        <content type="html"><![CDATA[<p>今天这组「每日东方美人探索」固定使用 5 张真实图片，继续把东方美人放进不同的叙事、镜头和风格家族里测试稳定性。</p><p>今天的五条路线分别是：原创探索、东方幻想古风、东方美学图鉴、古典东方美人、现代东方美人。第 2 张继续锁定为必须存在的东方幻想古风路线，并单独检查幻想证据是否足够成立。</p><span id="more"></span><h2 id="今日质量锁定"><a href="#今日质量锁定" class="headerlink" title="今日质量锁定"></a>今日质量锁定</h2><ul><li>年龄统一为 20-26 岁年轻成年东亚女性。</li><li>全部图片固定 9:16，人物主体占画面 60% 以上。</li><li>今日视角分配依次为：正面互动、三分之四侧身、低头做事、过肩回眸、环境互动。</li><li>今日仅允许 1 张接近正面互动，其他路线全部回避“默认看镜头收尾”。</li><li>第 2 张东方幻想古风强制保留一眼可见的幻想证据，且不能退化成普通古风写真。</li><li>图鉴路线只保留干净文字区，准确中文标题仍建议后期叠字，不把模型乱码当成最终设计。</li></ul><h2 id="全局负面提示"><a href="#全局负面提示" class="headerlink" title="全局负面提示"></a>全局负面提示</h2><pre class="line-numbers language-text" data-language="text"><code class="language-text">low quality, low resolution, blurry, jpeg artifacts, watermark, text, logo, bad anatomy, malformed anatomy, wrong limb count, extra limbs, extra arms, missing arms, extra legs, missing legs, broken limbs, twisted joints, dislocated shoulders, broken wrists, deformed elbows, deformed knees, unnatural torso twist, broken neck, neck too long, bad hands, deformed hands, extra hands, missing hands, floating hands, extra fingers, missing fingers, wrong finger count, fused fingers, melted fingers, fingers fused with objects, hand fused with fabric, bad feet, deformed feet, missing feet, extra feet, mutated toes, distorted face, broken face, asymmetrical eyes, misaligned eyes, duplicated face parts, melted facial features, plastic skin, over-smoothed skin, old-looking face, matronly styling, age drift, underage, childish, scenery inside face, landscape on face, object fused with face, cup turning into chain, prop morphing, object mutation, jewelry replacing prop, random chain objects, deformed prop, melted object, broken cup, lantern becoming jewelry, flowers fused into skin, fabric fused into hands, duplicate person, unwanted third person, merged bodies, fused torsos, unclear body boundary, background stealing focus<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="1-原创探索：纸月车站"><a href="#1-原创探索：纸月车站" class="headerlink" title="1. 原创探索：纸月车站"></a>1. 原创探索：纸月车站</h2><p><img src="/assets/ai/eastern-beauty/2026-07-02/open-daily-magic.png" alt="原创探索：纸月车站"></p><p>这张图把“日常魔幻”压到很轻，只允许一个核心异常存在。画面重点不是堆奇观，而是在普通城市天桥里留下一道像月门一样的半环柔光。</p><p>结构化参数：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">技能: 东方美人风格: 原创探索：纸月车站（探索种子：日常魔幻）审美方向: 轻微未来感与东方器物共存，但不走赛博朋克和游戏海报场景: 清晨天桥，浅雾和城市高楼之间出现一条水墨般的风带服装: 米白棉麻短衫，浅青长裙，低马尾，少量玉色配饰动作: 她刚推开门，风把发丝和衣角轻轻带起，手中拿着竹柄团扇构图: 9比16，人物主体占画面60%以上视角分配: 正面互动；正面或轻微三分之四视角；动作来自故事，不是站桩展示主视觉钩子: 一圈像月门一样的柔光，只在人物身后半边出现物体语义锁定: 竹柄团扇必须保持为清晰可识别的原物体<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>导演摘要：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">我把原创探索压在“普通生活场景刚刚发生轻微不可能瞬间”这一层，不让它滑向夸张玄幻。第一眼仍然先看脸和眼睛，第二眼才看到半环柔光与风带，让异常成为故事触发点而不是背景特效。<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="2-青铜神谕城"><a href="#2-青铜神谕城" class="headerlink" title="2. 青铜神谕城"></a>2. 青铜神谕城</h2><p><img src="/assets/ai/eastern-beauty/2026-07-02/oracle-bronze-city.png" alt="青铜神谕城"></p><p>今天的东方幻想古风路线必须过强幻想证据验收，所以直接选择了“青铜神谕城”。这条路线成立的关键不是古城、礼袍或火光，而是空中的甲骨神谕眼。</p><p>结构化参数：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">技能: 东方幻想古风风格: 青铜神谕城气质: 年轻，英气，神秘，锋利场景: 青铜古城祭坛，甲骨纹光影，远处城墙剪影服装: 黑金短披甲外搭深茶色长裙，玉扣束腰动作: 她抬手触碰悬浮甲骨片，另一手握住短杖构图: 9比16，中近全身，轻微仰拍视角分配: 三分之四侧身；侧前方三分之四视角；眼神看向甲骨异象幻想证据: 甲骨片在空中组成一只巨大的神谕眼，约占画面15%-25%主视觉钩子: 悬浮甲骨异象与人物触碰动作形成同一叙事中心物体语义锁定: 甲骨片必须保持为骨片符号，不变成飞虫、碎脸或随机饰品<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>导演摘要：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">这一张的验收重点就是“去掉异象后画面是否还成立”。如果没有空中神谕眼，这只会变成普通古城古装图；有了它，人物动作、视线和世界观才真正锁在同一个神谕时刻里。<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="3-四大美人封面"><a href="#3-四大美人封面" class="headerlink" title="3. 四大美人封面"></a>3. 四大美人封面</h2><p><img src="/assets/ai/eastern-beauty/2026-07-02/atlas-four-beauties-cover.png" alt="四大美人封面"></p><p>图鉴路线不去赌模型生成准确中文，而是保留干净标题区，把“可后期替换文字”当成设计的一部分。今天这张更像一张竖版收藏型封面海报。</p><p>结构化参数：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">技能: 东方美学图鉴页面类型: 日更竖版图鉴海报风格: 四大美人封面气质: 年轻，典雅，收藏感场景: 浅色宣纸封面，竖排标题区，香槟金圆弧，淡胭脂粉服装: 浅粉古典长裙，花枝发簪，覆身丝绸动作: 代表人物位于右侧主视觉区，侧身回眸并带轻微低头动作构图: 9比16，竖版图鉴封面变体视角分配: 低头做事；半侧面近景；眼神落在动作与留白区之间主视觉钩子: 干净竖排标题区与右侧人物形成第一视觉文字区说明: 画面只保留干净文字区；准确中文标题建议后期叠字替换物体语义锁定: 花枝必须保持为单一装饰，不变成脸部纹样、链条或多余人物<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>导演摘要：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">图鉴封面最怕变成“普通古风人像加伪文字”。这张图把留白、纸感、圆弧框和右侧人物的比例先锁住，让它先像封面，再像人物照。<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="4-唐宫夜宴"><a href="#4-唐宫夜宴" class="headerlink" title="4. 唐宫夜宴"></a>4. 唐宫夜宴</h2><p><img src="/assets/ai/eastern-beauty/2026-07-02/tang-palace-night-banquet.png" alt="唐宫夜宴"></p><p>古典东方美人路线今天不追求舞台式盛装，而是把镜头往“拨弦动作刚被打断”的那一瞬间收紧，让夜宴更像真实发生的宫廷室内片段。</p><p>结构化参数：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">技能: 古典东方美人风格: 唐宫夜宴气质: 年轻，华贵，妩媚，盛唐气场景: 唐代宫廷夜宴，雕花屏风，烛台，琵琶，漆盘服装: 浅绛红唐风襦裙，金线披帛，花冠发饰动作: 她停下拨弦动作，隔着烛光回眸构图: 9比16，三分之四全身视角分配: 过肩回眸；至少保留半张清晰脸；眼神从侧向环境返回主视觉钩子: 琵琶弦在烛光中形成一道金色斜线物体语义锁定: 琵琶必须保持为乐器，不变成盾牌、身体纹样或背景装饰<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>导演摘要：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">这张图的重点不是“她有多华丽”，而是“她为什么停下”。我让琵琶弦、烛光和回眸共同解释这个瞬间，避免落回纯服装展示。<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="5-新中式杂志"><a href="#5-新中式杂志" class="headerlink" title="5. 新中式杂志"></a>5. 新中式杂志</h2><p><img src="/assets/ai/eastern-beauty/2026-07-02/lacquer-gallery.png" alt="新中式杂志"></p><p>最后一张回到现代东方美人，但不走棚拍广告质感，而是把人物放进一个可以发生动作的展厅里，让白手套和玉器关系成立。</p><p>结构化参数：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">技能: 现代东方美人风格: 新中式杂志气质: 年轻知性，冷静，高级场景: 漆红展厅，折屏，玻璃展柜，暖色环境光服装: 象牙白真丝衬衫，墨绿色新中式马甲，高腰长裙动作: 她戴上白色手套，侧身整理展柜中的玉器构图: 9比16，四分之三全身，低机位视角分配: 环境互动；侧面或带前景层次的故事视角；眼神看向玉器与光线主视觉钩子: 漆红折屏反射成一道弧形晨光物体语义锁定: 白色手套和玉器必须保持清晰，不变成链条、花瓣或皮肤纹理<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>导演摘要：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">现代东方路线最容易滑成“高级感空镜里站着一个人”。这张图必须让她真的在做事，白手套、玉器和展柜构成同一个事件，杂志感来自秩序和光线，不来自摆拍。<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="今日复盘"><a href="#今日复盘" class="headerlink" title="今日复盘"></a>今日复盘</h2><p>今天五张图的差异拉得比较开：原创探索负责把东方美人带进日常魔幻，东方幻想古风负责交付强幻想证据，图鉴路线负责版式留白，古典路线负责室内叙事瞬间，现代路线负责现实空间里的动作成立。</p><p>从结果看，第 2 张“青铜神谕城”把幻想证据真正立住了，第 3 张“图鉴封面”也成功保留了干净文字区。后续可以继续优化的方向是：让原创探索路线在保持克制的同时再多一点不可替代的空间识别度，让现代路线进一步压掉广告摆拍感。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> gpt-image2 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> AI </tag>
+            
+            <tag> GPT Image </tag>
+            
+            <tag> 东方美人 </tag>
+            
+            <tag> AI绘画 </tag>
+            
+            <tag> Prompt </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>每日东方美人探索 2026-07-01</title>
       <link href="/2026/07/01/daily-eastern-beauty-2026-07-01/"/>
       <url>/2026/07/01/daily-eastern-beauty-2026-07-01/</url>
@@ -3113,9 +3146,9 @@
             
             <tag> ubuntu </tag>
             
-            <tag> makefile </tag>
-            
             <tag> shell </tag>
+            
+            <tag> makefile </tag>
             
         </tags>
       
@@ -3447,9 +3480,9 @@
       
         <tags>
             
-            <tag> matlab </tag>
-            
             <tag> labview </tag>
+            
+            <tag> matlab </tag>
             
             <tag> VS </tag>
             
@@ -3622,11 +3655,11 @@
     
     
     <entry>
-      <title>模拟试题2 - 二货小易的网格盒子</title>
-      <link href="/2016/09/12/WYMN2/"/>
-      <url>/2016/09/12/WYMN2/</url>
+      <title>模拟试题1 - 计算PA+PB</title>
+      <link href="/2016/09/12/WYMN1/"/>
+      <url>/2016/09/12/WYMN1/</url>
       
-        <content type="html"><![CDATA[<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>二货小易有一个W*H的网格盒子，网格的行编号为0<del>H-1，网格的列编号为0</del>W-1。每个格子至多可以放一块蛋糕，任意两块蛋糕的欧几里得距离不能等于2。</p><p>对于两个格子坐标(x1,y1), (x2,y2)的欧几里得距离为：((x1-x2)<em>(x1-x2)+(y1-y2)</em>(y1-y2))的算术平方根。</p><p>小易想知道最多可以放多少块蛋糕在网格盒子里。</p><h3 id="输入描述"><a href="#输入描述" class="headerlink" title="输入描述"></a>输入描述</h3><blockquote><p>每组数组包含网格长宽W,H，用空格分隔。(1&lt;=W、H&lt;=1000)</p></blockquote><h3 id="输出描述"><a href="#输出描述" class="headerlink" title="输出描述"></a>输出描述</h3><blockquote><p>输出一个最多可以放的蛋糕数</p></blockquote><h3 id="输入例子"><a href="#输入例子" class="headerlink" title="输入例子"></a>输入例子</h3><blockquote><p>3 2</p></blockquote><h3 id="输出例子"><a href="#输出例子" class="headerlink" title="输出例子"></a>输出例子</h3><blockquote><p>4</p></blockquote><h2 id="题目解析"><a href="#题目解析" class="headerlink" title="题目解析"></a>题目解析</h2><p>根据题意，可以推测出蛋糕数最多的放置方案：将网格进行分区，每四个构成一个正方形的网格作为一个分区，类似于坐标变换。假设原坐标为(x,y),那么变换后的分区坐标为(x/2,y/2)。当变换后的分区坐标满足横纵坐标之和为偶数时，该分区内的4个网格均可放置蛋糕。</p><p><img src="/assets/algorithm/putCake.png" alt="putCake"></p><h2 id="解题程序"><a href="#解题程序" class="headerlink" title="解题程序"></a>解题程序</h2><pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">#include &lt;iostream&gt;using namespace std;int main()&#123;  int W,H;  int cnt&#x3D;0; &#x2F;&#x2F; 定义可放的蛋糕数  cin&gt;&gt;W&gt;&gt;H; &#x2F;&#x2F; 输入盒子网格的行列数  for(int i &#x3D; 0; i&lt;H; i++)      for(int j &#x3D; 0; j &lt; W; j++)        if((i&#x2F;2 + j&#x2F;2) % 2 &#x3D;&#x3D; 0)          cnt++;  cout&lt;&lt;cnt&lt;&lt;endl;  return 0;&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
+        <content type="html"><![CDATA[<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>正整数A的<strong>DA(1位整数)部分</strong>定义为由A中所有组成的新整数PA。例如：给定A=3862767，DA=6，则A的<strong>6部分</strong>PA是66，因为A中有2个6。</p><p>现给定A, DA, B, DB, 请编写程序计算PA+PB。</p><h3 id="输入描述"><a href="#输入描述" class="headerlink" title="输入描述"></a>输入描述</h3><blockquote><p>输入在一行中依次给出A，DA，B,DB，中间以空格分隔，其中 0 &lt; A, B &lt; 1e10</p></blockquote><h3 id="输出描述"><a href="#输出描述" class="headerlink" title="输出描述"></a>输出描述</h3><blockquote><p>在一行中输出PA+PB的值</p></blockquote><h3 id="输入例子"><a href="#输入例子" class="headerlink" title="输入例子"></a>输入例子</h3><blockquote><p>3862767 6 13530293 3</p></blockquote><h3 id="输出例子"><a href="#输出例子" class="headerlink" title="输出例子"></a>输出例子</h3><blockquote><p>399</p></blockquote><h2 id="解题程序"><a href="#解题程序" class="headerlink" title="解题程序"></a>解题程序</h2><pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">#include &lt;iostream&gt;using namespace std;void getPA(unsigned long num, int DA, unsigned long &amp; PA)&#123;    PA &#x3D; 0;    while(num)           &#x2F;&#x2F; 循环查找num中DA的个数    &#123;      if(num%10&#x3D;&#x3D;DA)        PA &#x3D; PA*10+DA;      num&#x2F;&#x3D;10;    &#125;&#125;int main()&#123;    unsigned long A,B;    unsigned long PA&#x3D;0,PB&#x3D;0;    int DA,DB;    cin&gt;&gt;A&gt;&gt;DA&gt;&gt;B&gt;&gt;DB;    getPA(A,DA,PA);      &#x2F;&#x2F; 计算PA    getPA(B,DB,PB);      &#x2F;&#x2F; 计算PB    cout&lt;&lt;PA+PB&lt;&lt;endl;    return 0;&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
       
       
       <categories>
@@ -3647,11 +3680,11 @@
     
     
     <entry>
-      <title>模拟试题1 - 计算PA+PB</title>
-      <link href="/2016/09/12/WYMN1/"/>
-      <url>/2016/09/12/WYMN1/</url>
+      <title>模拟试题2 - 二货小易的网格盒子</title>
+      <link href="/2016/09/12/WYMN2/"/>
+      <url>/2016/09/12/WYMN2/</url>
       
-        <content type="html"><![CDATA[<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>正整数A的<strong>DA(1位整数)部分</strong>定义为由A中所有组成的新整数PA。例如：给定A=3862767，DA=6，则A的<strong>6部分</strong>PA是66，因为A中有2个6。</p><p>现给定A, DA, B, DB, 请编写程序计算PA+PB。</p><h3 id="输入描述"><a href="#输入描述" class="headerlink" title="输入描述"></a>输入描述</h3><blockquote><p>输入在一行中依次给出A，DA，B,DB，中间以空格分隔，其中 0 &lt; A, B &lt; 1e10</p></blockquote><h3 id="输出描述"><a href="#输出描述" class="headerlink" title="输出描述"></a>输出描述</h3><blockquote><p>在一行中输出PA+PB的值</p></blockquote><h3 id="输入例子"><a href="#输入例子" class="headerlink" title="输入例子"></a>输入例子</h3><blockquote><p>3862767 6 13530293 3</p></blockquote><h3 id="输出例子"><a href="#输出例子" class="headerlink" title="输出例子"></a>输出例子</h3><blockquote><p>399</p></blockquote><h2 id="解题程序"><a href="#解题程序" class="headerlink" title="解题程序"></a>解题程序</h2><pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">#include &lt;iostream&gt;using namespace std;void getPA(unsigned long num, int DA, unsigned long &amp; PA)&#123;    PA &#x3D; 0;    while(num)           &#x2F;&#x2F; 循环查找num中DA的个数    &#123;      if(num%10&#x3D;&#x3D;DA)        PA &#x3D; PA*10+DA;      num&#x2F;&#x3D;10;    &#125;&#125;int main()&#123;    unsigned long A,B;    unsigned long PA&#x3D;0,PB&#x3D;0;    int DA,DB;    cin&gt;&gt;A&gt;&gt;DA&gt;&gt;B&gt;&gt;DB;    getPA(A,DA,PA);      &#x2F;&#x2F; 计算PA    getPA(B,DB,PB);      &#x2F;&#x2F; 计算PB    cout&lt;&lt;PA+PB&lt;&lt;endl;    return 0;&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
+        <content type="html"><![CDATA[<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>二货小易有一个W*H的网格盒子，网格的行编号为0<del>H-1，网格的列编号为0</del>W-1。每个格子至多可以放一块蛋糕，任意两块蛋糕的欧几里得距离不能等于2。</p><p>对于两个格子坐标(x1,y1), (x2,y2)的欧几里得距离为：((x1-x2)<em>(x1-x2)+(y1-y2)</em>(y1-y2))的算术平方根。</p><p>小易想知道最多可以放多少块蛋糕在网格盒子里。</p><h3 id="输入描述"><a href="#输入描述" class="headerlink" title="输入描述"></a>输入描述</h3><blockquote><p>每组数组包含网格长宽W,H，用空格分隔。(1&lt;=W、H&lt;=1000)</p></blockquote><h3 id="输出描述"><a href="#输出描述" class="headerlink" title="输出描述"></a>输出描述</h3><blockquote><p>输出一个最多可以放的蛋糕数</p></blockquote><h3 id="输入例子"><a href="#输入例子" class="headerlink" title="输入例子"></a>输入例子</h3><blockquote><p>3 2</p></blockquote><h3 id="输出例子"><a href="#输出例子" class="headerlink" title="输出例子"></a>输出例子</h3><blockquote><p>4</p></blockquote><h2 id="题目解析"><a href="#题目解析" class="headerlink" title="题目解析"></a>题目解析</h2><p>根据题意，可以推测出蛋糕数最多的放置方案：将网格进行分区，每四个构成一个正方形的网格作为一个分区，类似于坐标变换。假设原坐标为(x,y),那么变换后的分区坐标为(x/2,y/2)。当变换后的分区坐标满足横纵坐标之和为偶数时，该分区内的4个网格均可放置蛋糕。</p><p><img src="/assets/algorithm/putCake.png" alt="putCake"></p><h2 id="解题程序"><a href="#解题程序" class="headerlink" title="解题程序"></a>解题程序</h2><pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">#include &lt;iostream&gt;using namespace std;int main()&#123;  int W,H;  int cnt&#x3D;0; &#x2F;&#x2F; 定义可放的蛋糕数  cin&gt;&gt;W&gt;&gt;H; &#x2F;&#x2F; 输入盒子网格的行列数  for(int i &#x3D; 0; i&lt;H; i++)      for(int j &#x3D; 0; j &lt; W; j++)        if((i&#x2F;2 + j&#x2F;2) % 2 &#x3D;&#x3D; 0)          cnt++;  cout&lt;&lt;cnt&lt;&lt;endl;  return 0;&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
       
       
       <categories>

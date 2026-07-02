@@ -6,7 +6,7 @@
   <link href="https://www.litreily.top/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2026-07-01T08:47:26.372Z</updated>
+  <updated>2026-07-02T08:50:06.019Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>每日东方美人探索 2026-07-02</title>
+    <link href="https://www.litreily.top/2026/07/02/daily-eastern-beauty-2026-07-02/"/>
+    <id>https://www.litreily.top/2026/07/02/daily-eastern-beauty-2026-07-02/</id>
+    <published>2026-07-02T08:55:00.000Z</published>
+    <updated>2026-07-02T08:50:06.019Z</updated>
+    
+    
+    <summary type="html">记录 2026-07-02 的五张东方美人探索：原创日常魔幻、青铜神谕城、四大美人封面、唐宫夜宴与新中式杂志。</summary>
+    
+    
+    
+    <category term="gpt-image2" scheme="https://www.litreily.top/categories/gpt-image2/"/>
+    
+    
+    <category term="AI" scheme="https://www.litreily.top/tags/AI/"/>
+    
+    <category term="GPT Image" scheme="https://www.litreily.top/tags/GPT-Image/"/>
+    
+    <category term="东方美人" scheme="https://www.litreily.top/tags/%E4%B8%9C%E6%96%B9%E7%BE%8E%E4%BA%BA/"/>
+    
+    <category term="AI绘画" scheme="https://www.litreily.top/tags/AI%E7%BB%98%E7%94%BB/"/>
+    
+    <category term="Prompt" scheme="https://www.litreily.top/tags/Prompt/"/>
+    
+  </entry>
   
   <entry>
     <title>每日东方美人探索 2026-07-01</title>
@@ -797,27 +824,6 @@ device/rockchip/rk3288/
 &lt;pre class=&quot;line-numbers language-bash&quot; data-language=&quot;bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;cd&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;SDK&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt;/device/rockchip/rk3288
 &lt;span class=&quot;token function&quot;&gt;cp&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;-rf&lt;/span&gt; rk3288_Android10 rk3288_tablet&lt;span aria-hidden=&quot;true&quot; class=&quot;line-numbers-rows&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;spa</summary>
       
-    
-    
-    
-    <category term="Android" scheme="https://www.litreily.top/categories/Android/"/>
-    
-    
-    <category term="android" scheme="https://www.litreily.top/tags/android/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>RK3288 Android 系统 boot.img 镜像解压方法</title>
-    <link href="https://www.litreily.top/2023/01/19/binwalk/"/>
-    <id>https://www.litreily.top/2023/01/19/binwalk/</id>
-    <published>2023-01-19T02:38:26.000Z</published>
-    <updated>2026-05-14T01:37:35.789Z</updated>
-    
-    
-    <summary type="html">&lt;h2 id=&quot;android-6-0-boot-img-解包&quot;&gt;&lt;a href=&quot;#android-6-0-boot-img-解包&quot; class=&quot;headerlink&quot; title=&quot;android 6.0 boot.img 解包&quot;&gt;&lt;/a&gt;android 6.0 boot.img 解包&lt;/h2&gt;&lt;h3 id=&quot;file&quot;&gt;&lt;a href=&quot;#file&quot; class=&quot;headerlink&quot; title=&quot;file&quot;&gt;&lt;/a&gt;file&lt;/h3&gt;&lt;p&gt;file指令可以显示文件类型，但是对于特定封装的文件无能为力，比如Android系统编译出的&lt;code&gt;boot.img&lt;/code&gt;&lt;/p&gt;
-&lt;pre class=&quot;line-numbers language-bash&quot; data-language=&quot;bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;$ &lt;span class=&quot;token function&quot;&gt;file&lt;/span&gt; boot.img
-boot.img: data&lt;span aria-hidden=&quot;true&quot; class=&quot;line-numbers-rows&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;</summary>
     
     
     
