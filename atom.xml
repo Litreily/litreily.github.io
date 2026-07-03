@@ -6,7 +6,7 @@
   <link href="https://www.litreily.top/atom.xml" rel="self"/>
   
   <link href="https://www.litreily.top/"/>
-  <updated>2026-07-03T08:41:28.376Z</updated>
+  <updated>2026-07-03T12:46:07.084Z</updated>
   <id>https://www.litreily.top/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://www.litreily.top/2026/07/03/daily-eastern-beauty-2026-07-03/"/>
     <id>https://www.litreily.top/2026/07/03/daily-eastern-beauty-2026-07-03/</id>
     <published>2026-07-02T16:10:00.000Z</published>
-    <updated>2026-07-03T08:41:28.376Z</updated>
+    <updated>2026-07-03T12:46:07.084Z</updated>
     
     
     <summary type="html">记录每日东方美人自动探索：覆盖不同风格、穿搭、人物、场景和角度，并加入年龄与质量锁定。</summary>
@@ -438,13 +438,13 @@
     
     <category term="hexo" scheme="https://www.litreily.top/tags/hexo/"/>
     
-    <category term="ai" scheme="https://www.litreily.top/tags/ai/"/>
-    
-    <category term="automation" scheme="https://www.litreily.top/tags/automation/"/>
-    
     <category term="codex" scheme="https://www.litreily.top/tags/codex/"/>
     
     <category term="skill" scheme="https://www.litreily.top/tags/skill/"/>
+    
+    <category term="automation" scheme="https://www.litreily.top/tags/automation/"/>
+    
+    <category term="ai" scheme="https://www.litreily.top/tags/ai/"/>
     
     <category term="gpt-image2" scheme="https://www.litreily.top/tags/gpt-image2/"/>
     
@@ -606,8 +606,6 @@
     
     <category term="hexo" scheme="https://www.litreily.top/tags/hexo/"/>
     
-    <category term="automation" scheme="https://www.litreily.top/tags/automation/"/>
-    
     <category term="codex" scheme="https://www.litreily.top/tags/codex/"/>
     
     <category term="skill" scheme="https://www.litreily.top/tags/skill/"/>
@@ -615,6 +613,8 @@
     <category term="ai-writing" scheme="https://www.litreily.top/tags/ai-writing/"/>
     
     <category term="blog-publishing" scheme="https://www.litreily.top/tags/blog-publishing/"/>
+    
+    <category term="automation" scheme="https://www.litreily.top/tags/automation/"/>
     
   </entry>
   
@@ -635,11 +635,11 @@
     
     <category term="hexo" scheme="https://www.litreily.top/tags/hexo/"/>
     
+    <category term="automation" scheme="https://www.litreily.top/tags/automation/"/>
+    
     <category term="workbuddy" scheme="https://www.litreily.top/tags/workbuddy/"/>
     
     <category term="ai" scheme="https://www.litreily.top/tags/ai/"/>
-    
-    <category term="automation" scheme="https://www.litreily.top/tags/automation/"/>
     
     <category term="blog" scheme="https://www.litreily.top/tags/blog/"/>
     
