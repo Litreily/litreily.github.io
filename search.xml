@@ -4,6 +4,39 @@
   
     
     <entry>
+      <title>每日东方美人探索 2026-07-03</title>
+      <link href="/2026/07/03/daily-eastern-beauty-2026-07-03/"/>
+      <url>/2026/07/03/daily-eastern-beauty-2026-07-03/</url>
+      
+        <content type="html"><![CDATA[<p>这是一组由「东方美人导演」自动生成的每日探索参数。每天固定五张，但风格、穿搭、人物、场景、角度都会轮转；默认锁定年轻成年女性 20-26 岁，并且五张中固定包含一张脱离既有模板的原创探索思路种子。</p><span id="more"></span><h2 id="今日质量锁定"><a href="#今日质量锁定" class="headerlink" title="今日质量锁定"></a>今日质量锁定</h2><ul><li>年龄统一：20-26岁年轻成年东亚女性。</li><li>风格分散：同一天不重复同一风格家族，且五张中固定包含一张原创探索思路种子。</li><li>变体分散：即使抽到同一路线，也必须改变人物脸型、眼神表情、发型、妆容、人物气质、场景子空间、穿搭轮廓、叙事触发点、镜头、光线、天气、动作微差、色彩、主视觉钩子和副道具。</li><li>比例统一：五张图全部使用9:16；图鉴路线也转换为9:16竖版海报变体。</li><li>主体优先：脸和眼睛第一优先级，人物占画面60%以上；脸部清晰不等于必须正面直视镜头。</li><li>视角分散：五张图默认轮换正面互动、三分之四侧身、低头做事、过肩回眸、环境互动，避免全员面向镜头。</li><li>道具锁定：杯子、花束、灯笼、团扇、书籍等必须保持原物体语义。</li><li>双人检查：古风闺蜜路线必须两张脸不同骨相、人物边界清晰、布料枕头床品互相独立。</li><li>崩坏规避：禁止景物长进脸里、道具变链条、饰品替代杯子、人物和背景融合。</li></ul><h2 id="全局负面提示"><a href="#全局负面提示" class="headerlink" title="全局负面提示"></a>全局负面提示</h2><pre class="line-numbers language-text" data-language="text"><code class="language-text">low quality, low resolution, blurry, jpeg artifacts, watermark, text, logo, bad anatomy, malformed anatomy, wrong limb count, extra limbs, extra arms, missing arms, extra legs, missing legs, broken limbs, twisted joints, dislocated shoulders, broken wrists, deformed elbows, deformed knees, unnatural torso twist, broken neck, neck too long, bad hands, deformed hands, extra hands, missing hands, floating hands, extra fingers, missing fingers, wrong finger count, fused fingers, melted fingers, fingers fused with objects, hand fused with fabric, bad feet, deformed feet, missing feet, extra feet, mutated toes, distorted face, broken face, asymmetrical eyes, misaligned eyes, duplicated face parts, melted facial features, plastic skin, over-smoothed skin, old-looking face, matronly styling, age drift, underage, childish, scenery inside face, landscape on face, object fused with face, cup turning into chain, prop morphing, object mutation, jewelry replacing prop, random chain objects, deformed prop, melted object, broken cup, lantern becoming jewelry, flowers fused into skin, fabric fused into hands, duplicate person, unwanted third person, merged bodies, fused torsos, unclear body boundary, background stealing focus<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="1-原创探索：纸月车站（探索种子：跨时代相遇）"><a href="#1-原创探索：纸月车站（探索种子：跨时代相遇）" class="headerlink" title="1. 原创探索：纸月车站（探索种子：跨时代相遇）"></a>1. 原创探索：纸月车站（探索种子：跨时代相遇）</h2><p><img src="/assets/ai/eastern-beauty/2026-07-03/open-time-crossing.png" alt="原创探索：纸月车站（探索种子：跨时代相遇）"></p><p>路线：探索路线。一盏莲灯出现在现代空间的远处尽头</p><p>结构化参数：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">技能: 东方美人风格: 原创探索：纸月车站（探索种子：跨时代相遇）审美方向: 20-26岁年轻成年东亚女性，轻微未来感与东方器物共存，但不走赛博朋克和游戏海报，人物真实、脸和眼睛优先人群: 20-26岁年轻成年东亚女性场景: 旧书店后门小巷，宣纸一样的白色雾气从门缝里飘出。探索来源：让古典东方审美与一个完全不同的时代或媒介相遇，但不直接指定朝代、城市或职业。穿搭: 浅灰针织短上衣，青瓷色伞裙，薄纱披肩但不透明。穿搭要求东方审美、生活可信、不过度暴露、不套用固定古风模板故事瞬间: 她从人群旁经过，忽然被一束不合常理但很安静的东方光线吸引。手中道具：青瓷色雨伞构图: 9比16，人物主体占画面60%以上；按故事在全身、大腿以上、上半身或特写中选择最合适景别主视觉钩子: 一盏莲灯出现在现代空间的远处尽头道具语义锁定: 开放探索约束：保持东方美人主体和20-26岁年轻感，由GPT自行决定时代碰撞方式。 青瓷色雨伞必须保持为清晰可识别的原物体，不得变成链条、首饰、脸部纹理、背景噪声或随机装饰。当日变体: ??=饱满鹅蛋脸，眼神明亮，少女感但成年???=低马尾或松散发髻，生活化???=若有所思，眼神安静但不空洞???=新中式红唇妆，底妆真实???=清冷书卷气，动作克制，距离感更强???=月光与低灯混合???=正面互动；正面或轻微三分之四视角，允许短暂眼神交流；可以看向镜头，但动作必须来自故事，不是站桩展示???=让人物处在移动路径上，如经过门槛、桥边、窗前或桌边???=避免沿用上一张的固定白裙、红金礼服或黑金晚装套路???=画面必须能用一句话说清正在发生什么???=双人关系图时两人形成斜线，不要并排证件照???=主视觉钩子必须和人物动作发生关系，不做纯背景装饰生成: 是<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>导演摘要：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">东方美人 / 原创探索：纸月车站（探索种子：跨时代相遇）。20-26岁年轻成年东亚女性，轻微未来感与东方器物共存，但不走赛博朋克和游戏海报，人物真实、脸和眼睛优先。场景：旧书店后门小巷，宣纸一样的白色雾气从门缝里飘出。探索来源：让古典东方审美与一个完全不同的时代或媒介相遇，但不直接指定朝代、城市或职业。。穿搭：浅灰针织短上衣，青瓷色伞裙，薄纱披肩但不透明。穿搭要求东方审美、生活可信、不过度暴露、不套用固定古风模板。瞬间：她从人群旁经过，忽然被一束不合常理但很安静的东方光线吸引。手中道具：青瓷色雨伞。构图：9比16，人物主体占画面60%以上；按故事在全身、大腿以上、上半身或特写中选择最合适景别。主视觉：一盏莲灯出现在现代空间的远处尽头。道具锁定：开放探索约束：保持东方美人主体和20-26岁年轻感，由GPT自行决定时代碰撞方式。 青瓷色雨伞必须保持为清晰可识别的原物体，不得变成链条、首饰、脸部纹理、背景噪声或随机装饰。。当日变体：??=饱满鹅蛋脸，眼神明亮，少女感但成年???=低马尾或松散发髻，生活化???=若有所思，眼神安静但不空洞???=新中式红唇妆，底妆真实???=清冷书卷气，动作克制，距离感更强???=月光与低灯混合???=正面互动；正面或轻微三分之四视角，允许短暂眼神交流；可以看向镜头，但动作必须来自故事，不是站桩展示???=让人物处在移动路径上，如经过门槛、桥边、窗前或桌边???=避免沿用上一张的固定白裙、红金礼服或黑金晚装套路???=画面必须能用一句话说清正在发生什么???=双人关系图时两人形成斜线，不要并排证件照???=主视觉钩子必须和人物动作发生关系，不做纯背景装饰。<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="2-天象神朝"><a href="#2-天象神朝" class="headerlink" title="2. 天象神朝"></a>2. 天象神朝</h2><p><img src="/assets/ai/eastern-beauty/2026-07-03/celestial-observatory.png" alt="天象神朝"></p><p>路线：东方幻想古风。巨大的青铜星环在身后形成唯一主视觉</p><p>结构化参数：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">技能: 东方幻想古风风格: 天象神朝气质: 年轻，神性，高贵，清冷场景: 云海观星台，青铜浑仪，夜空星轨服装: 月白与深青层叠礼袍，青铜星纹腰饰故事瞬间: 一手扶青铜浑仪，一手指向星图，回头看向镜头构图: 9比16，低机位，三分之四全身幻想证据: 巨大的青铜星环在身后形成唯一主视觉物体语义锁定: 青铜浑仪必须保持为完整天文仪器，不变成首饰、链条或背景纹样当日变体: ??=圆中带长的脸型，眉眼柔软，安静亲近???=侧分长发，耳侧一缕碎发???=坚定平静，适合英气或神性路线???=生活写真咖啡色自然妆???=高贵宫廷感，颈肩挺拔，神态端正???=黄昏暖光???=三分之四侧身；侧前方三分之四视角或侧脸中近景，脸部清晰但不要求直视镜头；眼神看向道具、窗外、水面、灯火或同伴???=加入一个可感知的远处次空间，如院门、街口、屏风后或水面尽头???=用一处小面积主题色改变气质，主体服装仍保持克制???=故事触发点来自环境变化：灯火亮起、云影移动、雨停、月光落下???=半身近景，眼神和手部动作优先???=不要让钩子变成满屏粒子、满屏纹样或随机发光物生成: 是<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>导演摘要：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">东方幻想古风 / 天象神朝。20-26岁年轻成年东亚女性，年轻，神性，高贵，清冷。场景：云海观星台，青铜浑仪，夜空星轨。穿搭：月白与深青层叠礼袍，青铜星纹腰饰。瞬间：一手扶青铜浑仪，一手指向星图，回头看向镜头。构图：9比16，低机位，三分之四全身。主视觉：巨大的青铜星环在身后形成唯一主视觉。道具锁定：青铜浑仪必须保持为完整天文仪器，不变成首饰、链条或背景纹样。当日变体：??=圆中带长的脸型，眉眼柔软，安静亲近???=侧分长发，耳侧一缕碎发???=坚定平静，适合英气或神性路线???=生活写真咖啡色自然妆???=高贵宫廷感，颈肩挺拔，神态端正???=黄昏暖光???=三分之四侧身；侧前方三分之四视角或侧脸中近景，脸部清晰但不要求直视镜头；眼神看向道具、窗外、水面、灯火或同伴???=加入一个可感知的远处次空间，如院门、街口、屏风后或水面尽头???=用一处小面积主题色改变气质，主体服装仍保持克制???=故事触发点来自环境变化：灯火亮起、云影移动、雨停、月光落下???=半身近景，眼神和手部动作优先???=不要让钩子变成满屏粒子、满屏纹样或随机发光物。<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="3-唐宫花泉仪式"><a href="#3-唐宫花泉仪式" class="headerlink" title="3. 唐宫花泉仪式"></a>3. 唐宫花泉仪式</h2><p><img src="/assets/ai/eastern-beauty/2026-07-03/tang-flower-spring-ritual.png" alt="唐宫花泉仪式"></p><p>路线：古典东方美人。花瓣落入水面形成一圈金色涟漪</p><p>结构化参数：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">技能: 古典东方美人风格: 唐宫花泉仪式气质: 年轻，高贵大气，柔美场景: 唐代宫廷花泉池畔，花瓣倒影池，纱幔，烛台，香雾服装: 浅金与暖玉白层叠唐风礼服，覆身不透明丝绸动作: 一手扶纱幔，一手持金碗，将牡丹花瓣轻轻洒向水面构图: 9比16，全身年龄: 20-26当日变体: ??=方圆脸，端正骨相，温柔但有主见???=长发半披，发尾压在肩前???=听见你叫她后轻微惊讶，眼神刚刚抬起???=宋韵淡妆，唇色克制???=甜系恋爱感，眼神交流更柔和???=月光与低灯混合???=低头做事；半侧面近景，人物正在低头完成一个动作，保留可读的脸部轮廓和眼睫；眼神落在书页、茶杯、花束、器物、衣摆或手部动作上???=加入一个可感知的远处次空间，如院门、街口、屏风后或水面尽头???=用一处小面积主题色改变气质，主体服装仍保持克制???=故事触发点来自环境变化：灯火亮起、云影移动、雨停、月光落下???=半身近景，眼神和手部动作优先???=主视觉钩子必须和人物动作发生关系，不做纯背景装饰生成: 是<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>导演摘要：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">古典东方美人 / 唐宫花泉仪式。20-26岁年轻成年东亚女性，年轻，高贵大气，柔美。场景：唐代宫廷花泉池畔，花瓣倒影池，纱幔，烛台，香雾。穿搭：浅金与暖玉白层叠唐风礼服，覆身不透明丝绸。瞬间：一手扶纱幔，一手持金碗，将牡丹花瓣轻轻洒向水面。构图：9比16，全身。主视觉：花瓣落入水面形成一圈金色涟漪。道具锁定：金碗必须保持为碗，花瓣必须保持为花瓣，不变成链条、火焰或皮肤纹样。当日变体：??=方圆脸，端正骨相，温柔但有主见???=长发半披，发尾压在肩前???=听见你叫她后轻微惊讶，眼神刚刚抬起???=宋韵淡妆，唇色克制???=甜系恋爱感，眼神交流更柔和???=月光与低灯混合???=低头做事；半侧面近景，人物正在低头完成一个动作，保留可读的脸部轮廓和眼睫；眼神落在书页、茶杯、花束、器物、衣摆或手部动作上???=加入一个可感知的远处次空间，如院门、街口、屏风后或水面尽头???=用一处小面积主题色改变气质，主体服装仍保持克制???=故事触发点来自环境变化：灯火亮起、云影移动、雨停、月光落下???=半身近景，眼神和手部动作优先???=主视觉钩子必须和人物动作发生关系，不做纯背景装饰。<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="4-东方静奢"><a href="#4-东方静奢" class="headerlink" title="4. 东方静奢"></a>4. 东方静奢</h2><p><img src="/assets/ai/eastern-beauty/2026-07-03/oriental-quiet-luxury.png" alt="东方静奢"></p><p>路线：现代东方美人。玉杯的小小绿色高光成为画面唯一亮点</p><p>结构化参数：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">技能: 现代东方美人风格: 东方静奢气质: 年轻，优雅，松弛，高级场景: 暖木酒店廊厅，黑石墙，一只陶瓷花器服装: 黑色真丝上衣，米白阔腿裤，玉扣耳饰动作: 她一手扶住玉杯，侧身从暖木阴影里看向镜头构图: 9比16，大腿以上，中景年龄: 20-26当日变体: ??=小圆脸，明亮眼睛，干净亲和???=低盘发，少量碎发贴近脸侧???=欲言又止，像下一秒要开口???=唐风暖胭脂，但不厚重舞台化???=知性都市感，姿态清爽利落???=清晨薄光???=过肩回眸；过肩视角、背影回头、镜中视角或窗面倒影，至少保留半张清晰脸或镜中脸；眼神从肩后、镜中、窗面倒影或侧向环境返回，不必直视镜头???=把主场景切到入口、窗边、廊下或转角，不总在正中央???=让衣料有真实重量和垂坠，不能像塑料片或游戏皮肤???=故事触发点来自关系互动：等待、照顾、回应、重逢或同行???=大腿以上，脸、手、主道具同时清楚???=如果有金色、珠宝或灯火，只保留一处高光生成: 是<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>导演摘要：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">现代东方美人 / 东方静奢。20-26岁年轻成年东亚女性，年轻，优雅，松弛，高级。场景：暖木酒店廊厅，黑石墙，一只陶瓷花器。穿搭：黑色真丝上衣，米白阔腿裤，玉扣耳饰。瞬间：她一手扶住玉杯，侧身从暖木阴影里看向镜头。构图：9比16，大腿以上，中景。主视觉：玉杯的小小绿色高光成为画面唯一亮点。道具锁定：玉杯必须保持为杯子，不变成链条、花、戒指或背景光斑。当日变体：??=小圆脸，明亮眼睛，干净亲和???=低盘发，少量碎发贴近脸侧???=欲言又止，像下一秒要开口???=唐风暖胭脂，但不厚重舞台化???=知性都市感，姿态清爽利落???=清晨薄光???=过肩回眸；过肩视角、背影回头、镜中视角或窗面倒影，至少保留半张清晰脸或镜中脸；眼神从肩后、镜中、窗面倒影或侧向环境返回，不必直视镜头???=把主场景切到入口、窗边、廊下或转角，不总在正中央???=让衣料有真实重量和垂坠，不能像塑料片或游戏皮肤???=故事触发点来自关系互动：等待、照顾、回应、重逢或同行???=大腿以上，脸、手、主道具同时清楚???=如果有金色、珠宝或灯火，只保留一处高光。<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="5-精灵弓手森林展台"><a href="#5-精灵弓手森林展台" class="headerlink" title="5. 精灵弓手森林展台"></a>5. 精灵弓手森林展台</h2><p><img src="/assets/ai/eastern-beauty/2026-07-03/cosplay-elf-archer-forest.png" alt="精灵弓手森林展台"></p><p>路线：Cosplay展会摄影。弓弦道具与青绿边缘光形成东方幻想钩子</p><p>结构化参数：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">技能: Cosplay展会摄影角色方向: 精灵弓手森林展台气质: 年轻，清透，东方幻想，优雅场景: 幻想游戏森林主题展台，仿真树影，青绿金灯光，弓形展示架，观众软焦服装: 青绿金轻甲式角色服，丝缎披肩，窄腰封，短靴，覆身不透明材质动作: 她从弓形展示架旁转身，手指轻触弓弦道具，眼神看向侧前方摄影师人数: 单人构图: 9比16，大腿以上，85mm，浅景深主视觉钩子: 弓弦道具与青绿边缘光形成东方幻想钩子物体语义锁定: 弓必须保持为弓形道具，不变成手臂、链条、头发或背景树枝；树影不能长进脸里当日变体: face=clean adult East Asian face; hair=half-up hair; light=soft LED plus skin-tone fill; view=展台互动；带前景层次的展台故事视角，人物与官方布景、道具或LED光发生互动；眼神看向展台灯光、主屏、工作人员、同伴或行动方向; zone=expo aisle turn; story=checking a role prop mid-action; composition=85mm side interaction portrait; hook=one primary prop hook only生成: 是<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>导演摘要：</p><pre class="line-numbers language-text" data-language="text"><code class="language-text">Cosplay展会摄影 / 精灵弓手森林展台。20-26岁年轻成年东亚女性，年轻，清透，东方幻想，优雅。场景：幻想游戏森林主题展台，仿真树影，青绿金灯光，弓形展示架，观众软焦。穿搭：青绿金轻甲式角色服，丝缎披肩，窄腰封，短靴，覆身不透明材质。瞬间：她从弓形展示架旁转身，手指轻触弓弦道具，眼神看向侧前方摄影师。构图：9比16，大腿以上，85mm，浅景深。主视觉：弓弦道具与青绿边缘光形成东方幻想钩子。道具锁定：弓必须保持为弓形道具，不变成手臂、链条、头发或背景树枝；树影不能长进脸里。当日变体：face=clean adult East Asian face; hair=half-up hair; light=soft LED plus skin-tone fill; view=展台互动；带前景层次的展台故事视角，人物与官方布景、道具或LED光发生互动；眼神看向展台灯光、主屏、工作人员、同伴或行动方向; zone=expo aisle turn; story=checking a role prop mid-action; composition=85mm side interaction portrait; hook=one primary prop hook only。<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="今日复盘模板"><a href="#今日复盘模板" class="headerlink" title="今日复盘模板"></a>今日复盘模板</h2><p>发布前检查五张图是否真正拉开：古典 / 幻想 / 现代 / 生活 / 图鉴 / 探索路线至少覆盖四类；如果出现脸部崩坏、物体变形或年龄老成，直接丢弃并用同一结构化参数重跑。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> gpt-image2 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> AI </tag>
+            
+            <tag> GPT Image </tag>
+            
+            <tag> 东方美人 </tag>
+            
+            <tag> AI绘画 </tag>
+            
+            <tag> Prompt </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>每日东方美人探索 2026-07-02</title>
       <link href="/2026/07/02/daily-eastern-beauty-2026-07-02/"/>
       <url>/2026/07/02/daily-eastern-beauty-2026-07-02/</url>
@@ -1995,31 +2028,6 @@
     
     
     <entry>
-      <title>使用油猴脚本批量下载canvas图片</title>
-      <link href="/2020/03/15/canvas-dl/"/>
-      <url>/2020/03/15/canvas-dl/</url>
-      
-        <content type="html"><![CDATA[<p>女友最近在网上下载一些北大网盘的pdf<a href="https://disk.pku.edu.cn/#/link/3A7748E0466521E3E68A0CBA4C24DE20?gns=AE26ACF837E24D51B1EC40E0A80A5D23%2F7F0E54D7D92343B1B62031B1C41F2280">文档</a>，结果发现没有下载接口，另存为也只能存储单张图片。找我帮忙，这时候发现程序员男票的好处了哈。</p><h2 id="分析页面"><a href="#分析页面" class="headerlink" title="分析页面"></a>分析页面</h2><p>一开始想着使用Chrome调试工具看下pdf链接，发现这个网盘居然不是直接获取的pdf文件，而是使用js脚本动态渲染生成的，涨知识了。</p><p><img src="/assets/canvas/pdf-js.png" alt="pdf-combine js"></p><p>那看看是否可以以图片形式批量下载呢，结果查看pdf单页的html结构发现，这居然是个canvas!!!还不是普通图片，而是画布。</p><p><img src="/assets/canvas/canvas.png" alt="cancvs"></p><h2 id="下载插件"><a href="#下载插件" class="headerlink" title="下载插件"></a>下载插件</h2><p>没关系，canvas什么的也不是难事，万能的油猴插件总会有解决方案的，果不其然让我找到个专门用于下载svg, canvas的油猴插件↓</p><ul><li><a href="https://greasyfork.org/zh-CN/scripts/383101-%E7%BD%91%E7%AB%99%E5%9B%BE%E7%89%87-%E8%83%8C%E6%99%AF%E5%9B%BE-svg-canvas-%E6%8A%93%E5%8F%96%E9%A2%84%E8%A7%88%E4%B8%8B%E8%BD%BD">网站图片（背景图，svg，canvas）抓取预览下载</a></li></ul><h2 id="下载图片"><a href="#下载图片" class="headerlink" title="下载图片"></a>下载图片</h2><p>这正是我想要的，安装好后，使用起来非常简单，刷新要下载canvas图片的页面，在右下角有一个按钮<strong>自动获取图片</strong>。</p><p><img src="/assets/canvas/check-tampermonkey.png" alt="js extension"></p><p>点击之后开始扫描，注意下图中的数字并不代表实际的图片数量，不用理会。</p><p><img src="/assets/canvas/scanning.png" alt="scanning"></p><p>扫描完成后，可以限定图片大小，以滤除不符合要求的小图片，然后通过<strong>批量下载</strong>完成下载，对于数量较多的页面可能需要稍微等一小会，绝大部分情况是很快的。</p><p><img src="/assets/canvas/download.png" alt="download"></p><p>这样就下载完成啦。</p><p><img src="/assets/canvas/downloaded.png" alt="downloaded"></p><p>至于如何将批量转换为pdf，那方法就多啦，福昕pdf编辑器、ABBYY等等，这个留待下回再讲，哈哈。</p><h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>经评论区大佬@Axun提醒，本文所爬网站的PDF文件是可以直接提取的，刷新页面过滤<code>Access</code>即可得到下面的链接，右键在新页面打开即可保存，然后添加扩展名即可。</p><p><img src="/assets/canvas/pdf-source-file.png" alt="PDF source file"></p><p>当然啦，本文提及的canvas图片下载方法也适用于其它网站，欢迎食用。</p>]]></content>
-      
-      
-      <categories>
-          
-          <category> Tools </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> tampermonkey </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>NBNS客户端的C语言实现</title>
       <link href="/2020/03/15/nbns_code/"/>
       <url>/2020/03/15/nbns_code/</url>
@@ -2037,6 +2045,31 @@
         <tags>
             
             <tag> C/C++ </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>使用油猴脚本批量下载canvas图片</title>
+      <link href="/2020/03/15/canvas-dl/"/>
+      <url>/2020/03/15/canvas-dl/</url>
+      
+        <content type="html"><![CDATA[<p>女友最近在网上下载一些北大网盘的pdf<a href="https://disk.pku.edu.cn/#/link/3A7748E0466521E3E68A0CBA4C24DE20?gns=AE26ACF837E24D51B1EC40E0A80A5D23%2F7F0E54D7D92343B1B62031B1C41F2280">文档</a>，结果发现没有下载接口，另存为也只能存储单张图片。找我帮忙，这时候发现程序员男票的好处了哈。</p><h2 id="分析页面"><a href="#分析页面" class="headerlink" title="分析页面"></a>分析页面</h2><p>一开始想着使用Chrome调试工具看下pdf链接，发现这个网盘居然不是直接获取的pdf文件，而是使用js脚本动态渲染生成的，涨知识了。</p><p><img src="/assets/canvas/pdf-js.png" alt="pdf-combine js"></p><p>那看看是否可以以图片形式批量下载呢，结果查看pdf单页的html结构发现，这居然是个canvas!!!还不是普通图片，而是画布。</p><p><img src="/assets/canvas/canvas.png" alt="cancvs"></p><h2 id="下载插件"><a href="#下载插件" class="headerlink" title="下载插件"></a>下载插件</h2><p>没关系，canvas什么的也不是难事，万能的油猴插件总会有解决方案的，果不其然让我找到个专门用于下载svg, canvas的油猴插件↓</p><ul><li><a href="https://greasyfork.org/zh-CN/scripts/383101-%E7%BD%91%E7%AB%99%E5%9B%BE%E7%89%87-%E8%83%8C%E6%99%AF%E5%9B%BE-svg-canvas-%E6%8A%93%E5%8F%96%E9%A2%84%E8%A7%88%E4%B8%8B%E8%BD%BD">网站图片（背景图，svg，canvas）抓取预览下载</a></li></ul><h2 id="下载图片"><a href="#下载图片" class="headerlink" title="下载图片"></a>下载图片</h2><p>这正是我想要的，安装好后，使用起来非常简单，刷新要下载canvas图片的页面，在右下角有一个按钮<strong>自动获取图片</strong>。</p><p><img src="/assets/canvas/check-tampermonkey.png" alt="js extension"></p><p>点击之后开始扫描，注意下图中的数字并不代表实际的图片数量，不用理会。</p><p><img src="/assets/canvas/scanning.png" alt="scanning"></p><p>扫描完成后，可以限定图片大小，以滤除不符合要求的小图片，然后通过<strong>批量下载</strong>完成下载，对于数量较多的页面可能需要稍微等一小会，绝大部分情况是很快的。</p><p><img src="/assets/canvas/download.png" alt="download"></p><p>这样就下载完成啦。</p><p><img src="/assets/canvas/downloaded.png" alt="downloaded"></p><p>至于如何将批量转换为pdf，那方法就多啦，福昕pdf编辑器、ABBYY等等，这个留待下回再讲，哈哈。</p><h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>经评论区大佬@Axun提醒，本文所爬网站的PDF文件是可以直接提取的，刷新页面过滤<code>Access</code>即可得到下面的链接，右键在新页面打开即可保存，然后添加扩展名即可。</p><p><img src="/assets/canvas/pdf-source-file.png" alt="PDF source file"></p><p>当然啦，本文提及的canvas图片下载方法也适用于其它网站，欢迎食用。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Tools </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> tampermonkey </tag>
             
         </tags>
       
@@ -3146,9 +3179,9 @@
             
             <tag> ubuntu </tag>
             
-            <tag> shell </tag>
-            
             <tag> makefile </tag>
+            
+            <tag> shell </tag>
             
         </tags>
       
@@ -3480,9 +3513,9 @@
       
         <tags>
             
-            <tag> labview </tag>
-            
             <tag> matlab </tag>
+            
+            <tag> labview </tag>
             
             <tag> VS </tag>
             
