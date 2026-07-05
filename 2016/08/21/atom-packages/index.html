@@ -1,247 +1,77 @@
-<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>解决atom无法安装插件的问题 | LITREILY</title><meta name="author" content="litreily,707922098@qq.com"><meta name="copyright" content="litreily"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#49B1F5"><meta name="description" content="atom的插件库日趋丰富，但在中国却不方便安装，仅以此文简述一个可行的安装方法。">
-<meta property="og:type" content="article">
-<meta property="og:title" content="解决atom无法安装插件的问题">
-<meta property="og:url" content="https://www.litreily.top/2016/08/21/atom-packages/index.html">
-<meta property="og:site_name" content="LITREILY">
-<meta property="og:description" content="atom的插件库日趋丰富，但在中国却不方便安装，仅以此文简述一个可行的安装方法。">
-<meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://www.litreily.top/img/header.png">
-<meta property="article:published_time" content="2016-08-20T16:00:00.000Z">
-<meta property="article:modified_time" content="2026-05-14T01:37:34.730Z">
-<meta property="article:author" content="litreily">
-<meta property="article:tag" content="git">
-<meta property="article:tag" content="atom">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://www.litreily.top/img/header.png"><script type="application/ld+json">{
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "解决atom无法安装插件的问题",
-  "url": "https://www.litreily.top/2016/08/21/atom-packages/",
-  "image": "https://www.litreily.top/img/header.png",
-  "datePublished": "2016-08-20T16:00:00.000Z",
-  "dateModified": "2026-05-14T01:37:34.730Z",
-  "author": [
-    {
-      "@type": "Person",
-      "name": "litreily",
-      "url": "https://www.litreily.top"
-    }
-  ]
-}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://www.litreily.top/2016/08/21/atom-packages/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.4"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
-    (() => {
-      
-    const saveToLocal = {
-      set: (key, value, ttl) => {
-        if (!ttl) return
-        const expiry = Date.now() + ttl * 86400000
-        localStorage.setItem(key, JSON.stringify({ value, expiry }))
-      },
-      get: key => {
-        const itemStr = localStorage.getItem(key)
-        if (!itemStr) return undefined
-        const { value, expiry } = JSON.parse(itemStr)
-        if (Date.now() > expiry) {
-          localStorage.removeItem(key)
-          return undefined
-        }
-        return value
-      }
-    }
+<!DOCTYPE html><html lang="en"><head><meta name="generator" content="Hexo 3.9.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>解决atom无法安装插件的问题 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">解决atom无法安装插件的问题</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2016/08/21/atom-packages/">2016-08-21</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Web/">Web</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><h2 id="出错信息"><a href="#出错信息" class="headerlink" title="出错信息"></a>出错信息</h2><p>倘若使用<a href="https://atom.io/" target="_blank" rel="noopener">atom</a>自带的插件安装工具&quot;File-&gt;Settings-&gt;Install&quot;安装插件，通常会报错，以&quot;pp-markdown&quot;为例，其错误信息如下：</p>
+<pre><code class="bash">  gyp info it worked if it ends with ok
+  gyp info using node-gyp@2.0.2
+  gyp info using node@0.10.40 | win32 | ia32
+  gyp http GET http://gh-contractor-zcbenz.s3.amazonaws.com/atom-shell/dist/v0.37.8/node-v0.37.8.tar.gz
+  gyp WARN install got an error, rolling back install
+  gyp
 
-    window.btf = {
-      saveToLocal,
-      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
-        const script = document.createElement('script')
-        script.src = url
-        script.async = true
-        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
-        script.onload = script.onreadystatechange = () => {
-          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
-        }
-        script.onerror = reject
-        document.head.appendChild(script)
-      }),
-      getCSS: (url, id) => new Promise((resolve, reject) => {
-        const link = document.createElement('link')
-        link.rel = 'stylesheet'
-        link.href = url
-        if (id) link.id = id
-        link.onload = link.onreadystatechange = () => {
-          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
-        }
-        link.onerror = reject
-        document.head.appendChild(link)
-      }),
-      addGlobalFn: (key, fn, name = false, parent = window) => {
-        if (!false && key.startsWith('pjax')) return
-        const globalFn = parent.globalFn || {}
-        globalFn[key] = globalFn[key] || {}
-        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
-        parent.globalFn = globalFn
-      }
-    }
-  
-      
-      const activateDarkMode = () => {
-        document.documentElement.setAttribute('data-theme', 'dark')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0B1121')
-        }
-      }
-      const activateLightMode = () => {
-        document.documentElement.setAttribute('data-theme', 'light')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#49B1F5')
-        }
-      }
-
-      btf.activateDarkMode = activateDarkMode
-      btf.activateLightMode = activateLightMode
-
-      const theme = saveToLocal.get('theme')
-    
-          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
-        
-      
-      const asideStatus = saveToLocal.get('aside-status')
-      if (asideStatus !== undefined) {
-        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
-      }
-    
-      
-    const detectApple = () => {
-      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
-        document.documentElement.classList.add('apple')
-      }
-    }
-    detectApple()
-  
-    })()
-  </script><script>const GLOBAL_CONFIG = {
-  root: '/',
-  algolia: undefined,
-  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
-  translate: undefined,
-  highlight: {"plugin":"prismjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
-  copy: {
-    success: 'Copy Successful',
-    error: 'Copy Failed',
-    noSupport: 'Browser Not Supported'
-  },
-  relativeDate: {
-    homepage: false,
-    post: false
-  },
-  runtime: '',
-  dateSuffix: {
-    just: 'Just now',
-    min: 'minutes ago',
-    hour: 'hours ago',
-    day: 'days ago',
-    month: 'months ago'
-  },
-  copyright: undefined,
-  lightbox: 'fancybox',
-  Snackbar: undefined,
-  infinitegrid: {
-    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
-    buttonText: 'Load More'
-  },
-  isPhotoFigcaption: false,
-  islazyloadPlugin: true,
-  isAnchor: false,
-  percent: {
-    toc: true,
-    rightside: true,
-  },
-  autoDarkmode: false
-}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
-  title: '解决atom无法安装插件的问题',
-  isHighlightShrink: false,
-  isToc: true,
-  pageType: 'post'
-}</script><link rel="stylesheet" href="/css/custom.css"><style>figure.highlight pre,figure.highlight code{white-space:pre-wrap!important;word-wrap:break-word!important}</style><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
-</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/header.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">144</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">120</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">17</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(/img/title_1.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">LITREILY</span></a><a class="nav-page-title" href="/"><span class="site-name">解决atom无法安装插件的问题</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">解决atom无法安装插件的问题</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2016-08-20T16:00:00.000Z" title="Created 2016-08-21 00:00:00">2016-08-21</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-05-14T01:37:34.730Z" title="Updated 2026-05-14 09:37:34">2026-05-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Web/">Web</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;It has been&quot;,&quot;messageNext&quot;:&quot;days since the last update, the content of the article may be outdated.&quot;,&quot;postUpdate&quot;:&quot;2026-05-14 09:37:34&quot;}" hidden></div><h2 id="出错信息"><a href="#出错信息" class="headerlink" title="出错信息"></a>出错信息</h2><p>倘若使用<a target="_blank" rel="noopener" href="https://atom.io/">atom</a>自带的插件安装工具&quot;File-&gt;Settings-&gt;Install&quot;安装插件，通常会报错，以&quot;pp-markdown&quot;为例，其错误信息如下：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">gyp info it worked <span class="token keyword">if</span> it ends with ok
-gyp info using node-gyp@2.0.2
-gyp info using node@0.10.40 <span class="token operator">|</span> win32 <span class="token operator">|</span> ia32
-gyp http GET http://gh-contractor-zcbenz.s3.amazonaws.com/atom-shell/dist/v0.37.8/node-v0.37.8.tar.gz
-gyp WARN <span class="token function">install</span> got an error, rolling back <span class="token function">install</span>
-gyp
-
-<span class="token operator">!</span> Compiler tools not found
-Packages that depend on modules that contain C/C++ code will fail to install.
-Read <span class="token operator">&lt;</span>a <span class="token assign-left variable">href</span><span class="token operator">=</span><span class="token string">"http://flight-manual.atom.io/"</span><span class="token operator">></span>here<span class="token operator">&lt;</span>/a<span class="token operator">></span> <span class="token keyword">for</span> instructions on installing Python and Visual Studio.
-Run apm <span class="token function">install</span> <span class="token parameter variable">--check</span> after installing to <span class="token builtin class-name">test</span> compiling a native module.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><h3 id="安装node-js"><a href="#安装node-js" class="headerlink" title="安装node.js"></a>安装node.js</h3><p>安装<a target="_blank" rel="noopener" href="https://nodejs.org/en/">node.js</a>的目的在于使用npm工具，放弃apm工具。如果已经安装好，那么这一步自然可以略过。</p>
+  ! Compiler tools not found
+  Packages that depend on modules that contain C/C++ code will fail to install.
+  Read &lt;a href=&quot;http://flight-manual.atom.io/&quot;&gt;here&lt;/a&gt; for instructions on installing Python and Visual Studio.
+  Run apm install --check after installing to test compiling a native module.
+</code></pre>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><h3 id="安装node-js"><a href="#安装node-js" class="headerlink" title="安装node.js"></a>安装node.js</h3><p>安装<a href="https://nodejs.org/en/" target="_blank" rel="noopener">node.js</a>的目的在于使用npm工具，放弃apm工具。如果已经安装好，那么这一步自然可以略过。</p>
 <h3 id="下载插件"><a href="#下载插件" class="headerlink" title="下载插件"></a>下载插件</h3><p>在atom的插件安装界面搜索所需的插件，点击插件名称将会从网页打开atom的插件库。</p>
-<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/atom/package.png" alt="atompackage"></p>
+<p><img src="/assets/atom/package.png" alt="atompackage"></p>
 <p>此时我们点击<code>Repo</code>可以转至其github页面，复制插件的远程仓库目录。</p>
-<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/atom/package_git.png" alt="gitpackage"></p>
+<p><img src="/assets/atom/package_git.png" alt="gitpackage"></p>
 <p>在本地打开文件夹&quot;C:\Users\USER_NAME\.atom\packages&quot;，使用git指令将插件<code>clone</code>到该目录。</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> clone 插件的远程仓库目录<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
+<pre><code class="bash">git clone 插件的远程仓库目录
+</code></pre>
 <h3 id="安装插件"><a href="#安装插件" class="headerlink" title="安装插件"></a>安装插件</h3><p>转至插件目录，使用<code>npm install</code>完成插件安装，重启atom即可。</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ <span class="token builtin class-name">cd</span> pp-markdown
-$ <span class="token function">npm</span> <span class="token function">install</span>
-marked@0.3.6 node_modules<span class="token punctuation">\</span>marked
+<pre><code class="bash">$ cd pp-markdown
+$ npm install
+marked@0.3.6 node_modules\marked
 
-atom-space-pen-views@2.2.0 node_modules<span class="token punctuation">\</span>atom-space-pen-views
+atom-space-pen-views@2.2.0 node_modules\atom-space-pen-views
 ├── fuzzaldrin@2.1.0
-└── space-pen@5.1.2 <span class="token punctuation">(</span>underscore-plus@1.6.6, jquery@2.1.4, grim@1.5.0<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="效果预览"><a href="#效果预览" class="headerlink" title="效果预览"></a>效果预览</h3><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/atom/pp-markdown.png" alt="pp-markdown"></p>
+└── space-pen@5.1.2 (underscore-plus@1.6.6, jquery@2.1.4, grim@1.5.0)
+</code></pre>
+<h3 id="效果预览"><a href="#效果预览" class="headerlink" title="效果预览"></a>效果预览</h3><p><img src="/assets/atom/pp-markdown.png" alt="pp-markdown"></p>
 <p>该方案看似有点繁琐，却也能够达到目的，毕竟我们需要安装的插件并不会太多，它日有更好的方法再用不迟。</p>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://www.litreily.top">litreily</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://www.litreily.top/2016/08/21/atom-packages/">https://www.litreily.top/2016/08/21/atom-packages/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/git/">git</a><a class="post-meta__tags" href="/tags/atom/">atom</a></div><div class="post-share"><div class="social-share" data-image="/img/header.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2016/09/12/WYMN1/" title="模拟试题1 - 计算PA+PB"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">模拟试题1 - 计算PA+PB</div></div><div class="info-2"><div class="info-item-1">题目描述正整数A的DA(1位整数)部分定义为由A中所有组成的新整数PA。例如：给定A=3862767，DA=6，则A的6部分PA是66，因为A中有2个6。 现给定A, DA, B, DB, 请编写程序计算PA+PB。 输入描述 输入在一行中依次给出A，DA，B,DB，中间以空格分隔，其中 0 &lt; A, B &lt; 1e10  输出描述 在一行中输出PA+PB的值  输入例子 3862767 6 13530293 3  输出例子 399  解题程序#include &lt;iostream&gt; using namespace std;  void getPA(unsigned long num, int DA, unsigned long &amp; PA) &#123;     PA &#x3D; 0;     while(num)           &#x2F;&#x2F; 循环查找num中DA的个数     &#123;       if(num%10&#x3D;&#x3D;DA)         PA &#x3D; PA*10+DA;       num&#x...</div></div></div></a><a class="pagination-related" href="/2016/08/17/clearAD/" title="消除utorrent中的广告"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">消除utorrent中的广告</div></div><div class="info-2"><div class="info-item-1">其实，网上已有大把的教程教我如何去广告，但每次都要谷歌百度却也烦不胜烦，这也就只好搬运到这咯，一劳永逸。 去广告前 去广告 在utorrent的菜单栏中选择&quot;选项&quot;，打开“设置”界面，或者按快捷键ctrl+p; 在设置界面中选择最后一项&quot;高级&quot;; 在过滤中输入&quot;offers.&quot;，将以下两项设为false： &quot;offers.sponsored_torrent_offer_enabled&quot; , &quot;offers.left_rail_offer_enabled&quot;   在过滤中输入&quot;gui.&quot;,将&quot;gui.show_notorrents_node&quot;设为false.   去广告后 好了，至此广告一扫全无，enjoy it！ </div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2019/03/12/commitizen/" title="git commit 工具 - commitizen"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2019-03-12</div><div class="info-item-2">git commit 工具 - commitizen</div></div><div class="info-2"><div class="info-item-1">为了规范代码提交，最近学习了一下如何使用commitizen进行commit提交，其实也很简单，这里简单做个介绍。 commitizen 安装npm install -g commitizen    使用对于并非使用nodejs的项目，要先通过 npm init --yes  完成初始化，然后通过 commitizen init cz-conventional-changelog --save --save-exact  启用commitizen功能，此后使用git cz替换git commit即可。当然为了方便可以在.bashrc或.zshrc中添加一个别名。 alias cz="commitizen init cz-conventional-changelog --save --save-exact"  然后source ~/.bashrc or source ~/.zshrc 即可。好了，下面是我的笔记库的应用实例。 ➜  Notes git:(master) ✗ npm init --yes ➜  Notes git:(master) ✗ commitizen init ...</div></div></div></a><a class="pagination-related" href="/2016/10/12/installSW/" title="Ubuntu下安装常用软件"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2016-10-12</div><div class="info-item-2">Ubuntu下安装常用软件</div></div><div class="info-2"><div class="info-item-1">apt-get installAtom sudo add-apt-repository ppa:webupd8team/atom sudo apt-get update   sudo apt-get install atom  add-apt-repository用于添加软件源，apt-get update用于更新软件源，更新后即可使用apt-get install安装所需的软件。 Sublime Text 3 sudo add-apt-repository ppa:webupd8team/sublime-text-3   sudo apt-get update   sudo apt-get install sublime-text-install  添加快捷方式在Ubuntu下，有些deb安装包，安装完成后只能通过终端启动，而且不能关闭终端，为此，我们可以给应用程序添加快捷方式。  sudo vim /usr/share/applications/appName.desktop  以eclipse为例在新添加的文件eclipse.desktop中添加以下内容： [Desktop...</div></div></div></a><a class="pagination-related" href="/2016/05/15/brackets-git/" title="Brackets - Git插件的使用方法"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2016-05-15</div><div class="info-item-2">Brackets - Git插件的使用方法</div></div><div class="info-2"><div class="info-item-1">Brackets，一款专职做网页设计的开发工具，其插件也是极为丰富，Git自然是少不了的，那么如何安装和使用它呢，我以Windows 10环境为例进行说明。 安装插件打开插件管理器在Brackets中，基本上所有的插件都可以从插件管理器(Extension Manager)中安装，该管理器可以从Brackets软件菜单栏File中找到。 ![Extension Manager](/assets/brackets/git/extension manager.png) 搜素并安装git插件 打开插件管理器后，选择“Available”选项卡，在搜索框中输入“git”。  ![input git](/assets/brackets/git/input git.png)  在弹出的列表中找到“Brackets Git”，点击“install”开始安装。  ![install git](/assets/brackets/git/install git.png)  安装完成后，将提示“Installation successful!”。  ![install success](/assets...</div></div></div></a><a class="pagination-related" href="/2017/03/23/code-Platform/" title="常用的代码托管平台"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2017-03-23</div><div class="info-item-2">常用的代码托管平台</div></div><div class="info-2"><div class="info-item-1">作为一名程序员，最不缺的就是代码，那自然得选择个好用的代码托管平台，本文将对常用的几个平台进行简要描述。 Github 毋庸置疑，Github 是全球应用最广的代码托管平台，兼社交平台，本博客便承载于 Github 的 pages 服务。但是使用 Github 保存私有项目是要收费的，所以我主要用其管理可公布于众的开源项目。 GitLab gitLab 相比于 Github 具有更多的特性，官方点明的特性有：  Unlimited repositories Unlimited private collaborators 10GB disk space per project (including Git LFS) Unlimited total disk space Completely free, no credit card required Unlimited CI Runners to do parallel testing Alternate SSH port for git+ssh (443)  Visual Studio Team Services(VSTS) 微软...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comments</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/header.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">litreily</div><div class="author-info-description">simple life</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">144</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">120</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">17</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Litreily"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://xhslink.com/m/893FaC3aK88" target="_blank" title="小红书"><i class="fas fa-seedling" style="color: #ff2442;"></i></a><a class="social-icon" href="mailto:litreily@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="https://www.litreily.top/notes/" target="_blank" title="Notes"><i class="fas fa-sticky-note" style="color: #e8a618;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%BA%E9%94%99%E4%BF%A1%E6%81%AF"><span class="toc-text">出错信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-text">解决方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85node-js"><span class="toc-text">安装node.js</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E6%8F%92%E4%BB%B6"><span class="toc-text">下载插件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E6%8F%92%E4%BB%B6"><span class="toc-text">安装插件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%E9%A2%84%E8%A7%88"><span class="toc-text">效果预览</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/07/05/daily-eastern-beauty-2026-07-05/" title="每日东方美人探索 2026-07-05"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-07-05/open-daily-magic.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="每日东方美人探索 2026-07-05"/></a><div class="content"><a class="title" href="/2026/07/05/daily-eastern-beauty-2026-07-05/" title="每日东方美人探索 2026-07-05">每日东方美人探索 2026-07-05</a><time datetime="2026-07-04T16:10:00.000Z" title="Created 2026-07-05 00:10:00">2026-07-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/07/04/daily-eastern-beauty-2026-07-04/" title="每日东方美人探索 2026-07-04"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-07-04/open-time-crossing.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="每日东方美人探索 2026-07-04"/></a><div class="content"><a class="title" href="/2026/07/04/daily-eastern-beauty-2026-07-04/" title="每日东方美人探索 2026-07-04">每日东方美人探索 2026-07-04</a><time datetime="2026-07-04T09:18:00.000Z" title="Created 2026-07-04 17:18:00">2026-07-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/07/03/daily-eastern-beauty-2026-07-03/" title="每日东方美人探索 2026-07-03"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-07-03/open-time-crossing.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="每日东方美人探索 2026-07-03"/></a><div class="content"><a class="title" href="/2026/07/03/daily-eastern-beauty-2026-07-03/" title="每日东方美人探索 2026-07-03">每日东方美人探索 2026-07-03</a><time datetime="2026-07-02T16:10:00.000Z" title="Created 2026-07-03 00:10:00">2026-07-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/07/02/daily-eastern-beauty-2026-07-02/" title="每日东方美人探索 2026-07-02"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-07-02/open-daily-magic.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="每日东方美人探索 2026-07-02"/></a><div class="content"><a class="title" href="/2026/07/02/daily-eastern-beauty-2026-07-02/" title="每日东方美人探索 2026-07-02">每日东方美人探索 2026-07-02</a><time datetime="2026-07-02T08:55:00.000Z" title="Created 2026-07-02 16:55:00">2026-07-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/07/01/daily-eastern-beauty-2026-07-01/" title="每日东方美人探索 2026-07-01"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-07-01/open-time-crossing.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="每日东方美人探索 2026-07-01"/></a><div class="content"><a class="title" href="/2026/07/01/daily-eastern-beauty-2026-07-01/" title="每日东方美人探索 2026-07-01">每日东方美人探索 2026-07-01</a><time datetime="2026-07-01T01:10:00.000Z" title="Created 2026-07-01 09:10:00">2026-07-01</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By litreily</span><span class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 5.4.2</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll to Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4"></script><script src="/js/main.js?v=5.5.4"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@19.1.3/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
-  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
-  const option = null
-
-  const initValine = (el, path) => {
-    if (isShuoshuo) {
-      window.shuoshuoComment.destroyValine = () => {
-        if (el.children.length) {
-          el.innerHTML = ''
-          el.classList.add('no-comment')
-        }
-      }
-    }
-
-    const valineConfig = {
-      el: '#vcomment',
-      appId: '1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
-      appKey: 'uvA3xgqNW3q8TGR483lxXcpB',
-      avatar: 'monsterid',
-      serverURLs: '',
-      emojiMaps: "",
-      visitor: false,
-      ...option,
-      path: isShuoshuo ? path : (option && option.path) || window.location.pathname
-    }
-
-    new Valine(valineConfig)
-  }
-
-  const loadValine = async (el, path) => {
-    if (typeof Valine === 'function') {
-      initValine(el, path)
-    } else {
-      await btf.getScript('https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js')
-      initValine(el, path)
-    }
-  }
-
-  if (isShuoshuo) {
-    'Valine' === 'Valine'
-      ? window.shuoshuoComment = { loadComment: loadValine }
-      : window.loadOtherComment = loadValine
-    return
-  }
-
-  if ('Valine' === 'Valine' || !false) {
-    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
-    else setTimeout(loadValine, 0)
-  } else {
-    window.loadOtherComment = loadValine
-  }
-})()</script></div><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="local-search-input"><input placeholder="Search..." type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.4"></script></div></div></body></html>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2016/08/21/atom-packages/">https://www.litreily.top/2016/08/21/atom-packages/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tags"></i><a href="/tags/git/">git</a><a href="/tags/atom/">atom</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#出错信息"><span class="toc-number">1.</span> <span class="toc-text">出错信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解决方案"><span class="toc-number">2.</span> <span class="toc-text">解决方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#安装node-js"><span class="toc-number">2.1.</span> <span class="toc-text">安装node.js</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#下载插件"><span class="toc-number">2.2.</span> <span class="toc-text">下载插件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装插件"><span class="toc-number">2.3.</span> <span class="toc-text">安装插件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#效果预览"><span class="toc-number">2.4.</span> <span class="toc-text">效果预览</span></a></li></ol></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2016/09/12/WYMN1/">&lt; 模拟试题1 - 计算PA+PB</a><a class="next" href="/2016/08/17/clearAD/">消除utorrent中的广告 &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+.night .v[data-class=v] a:hover { color: #216C73 !important; }
+.night .v[data-class=v] li { list-style: inherit; }
+.night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
+.night .v[data-class=v] .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.night .v[data-class=v] .vbtn { border-radius: 0; background: none; }
+.night .v[data-class=v] .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.night .v[data-class=v] .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.night .v[data-class=v] .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre,.night .v[data-class=v] .vlist .vcard .vhead .vsys { background: #203240 !important; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre { color: #F0F0F0; font-size: 95%; }
+.v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
+</style><div id="vcomment"></div><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
+  lang: 'zh-cn',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></section><footer><p>Copyright © 2016 - 2020 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/plugins/prettify/prettify.js"></script><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script></body></html>

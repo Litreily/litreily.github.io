@@ -1,170 +1,12 @@
-<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Python网络爬虫2 - 爬取新浪微博用户图片 | LITREILY</title><meta name="author" content="litreily,707922098@qq.com"><meta name="copyright" content="litreily"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#49B1F5"><meta name="description" content="其实，新浪微博用户图片爬虫是我学习python以来写的第一个爬虫，只不过当时懒，后来爬完Lofter后觉得有必要总结一下，所以就有了第一篇爬虫博客。现在暂时闲下来了，准备把新浪的这个也补上。 言归正传，既然选择爬新浪微博，那当然是有需求的，这也是学习的主要动力之一，没错，就是美图。sina用户多数微博都是包含图片的，而且是组图居多，单个图片的较少。 为了避免侵权，本文以本人微博litreily为例">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Python网络爬虫2 - 爬取新浪微博用户图片">
-<meta property="og:url" content="https://www.litreily.top/2018/04/10/sina/index.html">
-<meta property="og:site_name" content="LITREILY">
-<meta property="og:description" content="其实，新浪微博用户图片爬虫是我学习python以来写的第一个爬虫，只不过当时懒，后来爬完Lofter后觉得有必要总结一下，所以就有了第一篇爬虫博客。现在暂时闲下来了，准备把新浪的这个也补上。 言归正传，既然选择爬新浪微博，那当然是有需求的，这也是学习的主要动力之一，没错，就是美图。sina用户多数微博都是包含图片的，而且是组图居多，单个图片的较少。 为了避免侵权，本文以本人微博litreily为例">
-<meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://www.litreily.top/img/header.png">
-<meta property="article:published_time" content="2018-04-10T11:54:08.000Z">
-<meta property="article:modified_time" content="2026-05-14T01:37:35.078Z">
-<meta property="article:author" content="litreily">
-<meta property="article:tag" content="tools">
-<meta property="article:tag" content="spider">
-<meta property="article:tag" content="sina">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://www.litreily.top/img/header.png"><script type="application/ld+json">{
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "Python网络爬虫2 - 爬取新浪微博用户图片",
-  "url": "https://www.litreily.top/2018/04/10/sina/",
-  "image": "https://www.litreily.top/img/header.png",
-  "datePublished": "2018-04-10T11:54:08.000Z",
-  "dateModified": "2026-05-14T01:37:35.078Z",
-  "author": [
-    {
-      "@type": "Person",
-      "name": "litreily",
-      "url": "https://www.litreily.top"
-    }
-  ]
-}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://www.litreily.top/2018/04/10/sina/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.4"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
-    (() => {
-      
-    const saveToLocal = {
-      set: (key, value, ttl) => {
-        if (!ttl) return
-        const expiry = Date.now() + ttl * 86400000
-        localStorage.setItem(key, JSON.stringify({ value, expiry }))
-      },
-      get: key => {
-        const itemStr = localStorage.getItem(key)
-        if (!itemStr) return undefined
-        const { value, expiry } = JSON.parse(itemStr)
-        if (Date.now() > expiry) {
-          localStorage.removeItem(key)
-          return undefined
-        }
-        return value
-      }
-    }
-
-    window.btf = {
-      saveToLocal,
-      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
-        const script = document.createElement('script')
-        script.src = url
-        script.async = true
-        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
-        script.onload = script.onreadystatechange = () => {
-          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
-        }
-        script.onerror = reject
-        document.head.appendChild(script)
-      }),
-      getCSS: (url, id) => new Promise((resolve, reject) => {
-        const link = document.createElement('link')
-        link.rel = 'stylesheet'
-        link.href = url
-        if (id) link.id = id
-        link.onload = link.onreadystatechange = () => {
-          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
-        }
-        link.onerror = reject
-        document.head.appendChild(link)
-      }),
-      addGlobalFn: (key, fn, name = false, parent = window) => {
-        if (!false && key.startsWith('pjax')) return
-        const globalFn = parent.globalFn || {}
-        globalFn[key] = globalFn[key] || {}
-        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
-        parent.globalFn = globalFn
-      }
-    }
-  
-      
-      const activateDarkMode = () => {
-        document.documentElement.setAttribute('data-theme', 'dark')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0B1121')
-        }
-      }
-      const activateLightMode = () => {
-        document.documentElement.setAttribute('data-theme', 'light')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#49B1F5')
-        }
-      }
-
-      btf.activateDarkMode = activateDarkMode
-      btf.activateLightMode = activateLightMode
-
-      const theme = saveToLocal.get('theme')
-    
-          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
-        
-      
-      const asideStatus = saveToLocal.get('aside-status')
-      if (asideStatus !== undefined) {
-        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
-      }
-    
-      
-    const detectApple = () => {
-      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
-        document.documentElement.classList.add('apple')
-      }
-    }
-    detectApple()
-  
-    })()
-  </script><script>const GLOBAL_CONFIG = {
-  root: '/',
-  algolia: undefined,
-  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
-  translate: undefined,
-  highlight: {"plugin":"prismjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
-  copy: {
-    success: 'Copy Successful',
-    error: 'Copy Failed',
-    noSupport: 'Browser Not Supported'
-  },
-  relativeDate: {
-    homepage: false,
-    post: false
-  },
-  runtime: '',
-  dateSuffix: {
-    just: 'Just now',
-    min: 'minutes ago',
-    hour: 'hours ago',
-    day: 'days ago',
-    month: 'months ago'
-  },
-  copyright: undefined,
-  lightbox: 'fancybox',
-  Snackbar: undefined,
-  infinitegrid: {
-    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
-    buttonText: 'Load More'
-  },
-  isPhotoFigcaption: false,
-  islazyloadPlugin: true,
-  isAnchor: false,
-  percent: {
-    toc: true,
-    rightside: true,
-  },
-  autoDarkmode: false
-}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
-  title: 'Python网络爬虫2 - 爬取新浪微博用户图片',
-  isHighlightShrink: false,
-  isToc: true,
-  pageType: 'post'
-}</script><link rel="stylesheet" href="/css/custom.css"><style>figure.highlight pre,figure.highlight code{white-space:pre-wrap!important;word-wrap:break-word!important}</style><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
-</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/header.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">144</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">120</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">17</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(/img/title_1.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">LITREILY</span></a><a class="nav-page-title" href="/"><span class="site-name">Python网络爬虫2 - 爬取新浪微博用户图片</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Python网络爬虫2 - 爬取新浪微博用户图片</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2018-04-10T11:54:08.000Z" title="Created 2018-04-10 19:54:08">2018-04-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-05-14T01:37:35.078Z" title="Updated 2026-05-14 09:37:35">2026-05-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Language/">Language</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Language/Python/">Python</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;It has been&quot;,&quot;messageNext&quot;:&quot;days since the last update, the content of the article may be outdated.&quot;,&quot;postUpdate&quot;:&quot;2026-05-14 09:37:35&quot;}" hidden></div><p>其实，新浪微博用户图片爬虫是我学习<code>python</code>以来写的第一个爬虫，只不过当时懒，后来爬完<code>Lofter</code>后觉得有必要总结一下，所以就有了第一篇爬虫博客。现在暂时闲下来了，准备把新浪的这个也补上。</p>
+<!DOCTYPE html><html lang="en"><head><meta name="generator" content="Hexo 3.9.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>Python网络爬虫2 - 爬取新浪微博用户图片 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">Python网络爬虫2 - 爬取新浪微博用户图片</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2018/04/10/sina/">2018-04-10</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Python/">Python</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>其实，新浪微博用户图片爬虫是我学习<code>python</code>以来写的第一个爬虫，只不过当时懒，后来爬完<code>Lofter</code>后觉得有必要总结一下，所以就有了第一篇爬虫博客。现在暂时闲下来了，准备把新浪的这个也补上。</p>
 <p>言归正传，既然选择爬新浪微博，那当然是有需求的，这也是学习的主要动力之一，没错，就是美图。<code>sina</code>用户多数微博都是包含图片的，而且是组图居多，单个图片的较少。</p>
-<p>为了避免侵权，本文以本人微博<a target="_blank" rel="noopener" href="https://weibo.com/litreily">litreily</a>为例说明整个爬取过程，虽然图片较少，质量较低，但爬取方案是绝对ok的，使用时只要换个用户ID就可以了。</p>
+<p>为了避免侵权，本文以本人微博<a href="https://weibo.com/litreily" target="_blank" rel="noopener">litreily</a>为例说明整个爬取过程，虽然图片较少，质量较低，但爬取方案是绝对ok的，使用时只要换个用户ID就可以了。</p>
 <h2 id="分析sina站点"><a href="#分析sina站点" class="headerlink" title="分析sina站点"></a>分析sina站点</h2><h3 id="获取用户ID"><a href="#获取用户ID" class="headerlink" title="获取用户ID"></a>获取用户ID</h3><p>在爬取前，我们需要知道的是每个用户都有一个用户名，而一个用户名又对应一个唯一的整型数字ID，类似于学生的学号，本人的是<code>2657006573</code>。至于怎么根据用户名去获取ID，有以下两种方法：</p>
 <ol>
 <li>进入待爬取用户主页，在浏览器网址栏中即可看到一串数据，那就是用户ID</li>
@@ -172,18 +14,18 @@
 </ol>
 <p>其实是可以在已知用户名的情况下通过爬虫自动获取到<code>uid</code>的，但是我当时初学<code>python</code>，并没有考虑充分，所以后面的源码是以用户ID作为输入参数的。</p>
 <h3 id="图片存储参数解析"><a href="#图片存储参数解析" class="headerlink" title="图片存储参数解析"></a>图片存储参数解析</h3><p>用户所有的图片都被存放至这样的路径下，真的是<strong>所有图片</strong>哦！！！</p>
-<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml">https<span class="token punctuation">:</span>//weibo.cn/<span class="token punctuation">&#123;</span>uid<span class="token punctuation">&#125;</span>/profile<span class="token punctuation">?</span>filter=<span class="token punctuation">&#123;</span>filter_type<span class="token punctuation">&#125;</span><span class="token important">&amp;page=</span><span class="token punctuation">&#123;</span>page_num<span class="token punctuation">&#125;</span>
+<pre><code class="yml">https://weibo.cn/{uid}/profile?filter={filter_type}&amp;page={page_num}
 
-<span class="token comment"># example</span>
-https<span class="token punctuation">:</span>//weibo.cn/2657006573/profile<span class="token punctuation">?</span>filter=0<span class="token important">&amp;page=1</span>
-<span class="token key atrule">uid</span><span class="token punctuation">:</span> <span class="token number">2657006573</span>
-<span class="token key atrule">filter_type</span><span class="token punctuation">:</span> <span class="token number">0</span>
-<span class="token key atrule">page_num</span><span class="token punctuation">:</span> <span class="token number">1</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+# example
+https://weibo.cn/2657006573/profile?filter=0&amp;page=1
+uid: 2657006573
+filter_type: 0
+page_num: 1
+</code></pre>
 <p>注意，是<code>weibo.cn</code>而不是<code>weibo.com</code>，至于我是怎么找到这个页面的，说实话，我也忘了。。。</p>
 <p>链接中包含3个参数，<code>uid</code>, <code>filter_mode</code> 以及 <code>page_num</code>。其中，<code>uid</code>就是前面提及的用户ID，<code>page_num</code>也很好理解，就是分页的当前页数，从1开始增加，那么，这个<code>filter_mode</code>是什么呢？</p>
 <p>不着急，我们先来看看页面↓</p>
-<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/spider/sina/filter_mode.png" alt="filter mode of pictures"></p>
+<p><img src="/assets/spider/sina/filter_mode.png" alt="filter mode of pictures"></p>
 <p>可以看到，滤波类型<code>filter_mode</code>指的就是筛选条件，一共三个：</p>
 <ol>
 <li>filter=0 全部微博（包含纯文本微博，转载微博）</li>
@@ -200,34 +42,34 @@ https<span class="token punctuation">:</span>//weibo.cn/2657006573/profile<span 
 </ol>
 <p>这样的网页用来练手再合适不过。但要注意的是上面第4点，什么是<strong>首图</strong>和<strong>组图链接</strong>呢，很好理解。每篇博客可能包含多张图片，那就是<strong>组图</strong>，但该页面只显示博客的第一张图片，即所谓的<strong>首图</strong>，<strong>组图链接</strong>指向的是存储着该组图所有图片的网址。</p>
 <p>由于本人微博没组图，所以此处以刘亦菲微博为例，说明单图及组图的图链格式</p>
-<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/spider/sina/pictures.png" alt="pictures"></p>
+<p><img src="/assets/spider/sina/pictures.png" alt="pictures"></p>
 <p>图中的上面一篇微博只有一张图片，可以轻易获取到原图链接，注意是<strong>原图</strong>，因为我们在页面能看到的是缩略图，但要爬取的当然是<strong>原图</strong>啦。</p>
 <p>图中下面的微博包含组图，在图片右侧的<code>Chrome</code>开发工具可以看到组图链接。</p>
-<p><a target="_blank" rel="noopener" href="https://weibo.cn/mblog/picAll/FCQefgeAr?rl=2">https://weibo.cn/mblog/picAll/FCQefgeAr?rl=2</a></p>
+<p><a href="https://weibo.cn/mblog/picAll/FCQefgeAr?rl=2" target="_blank" rel="noopener">https://weibo.cn/mblog/picAll/FCQefgeAr?rl=2</a></p>
 <p>打开组图链接，可以看到图片如下图所示：</p>
-<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/spider/sina/picture_url.png" alt="picture&#39;s url"></p>
+<p><img src="/assets/spider/sina/picture_url.png" alt="picture&#39;s url"></p>
 <p>可以看到缩略图链接以及原图链接，然后我们点击<strong>原图</strong>看一下。</p>
-<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/spider/sina/picture_source.png" alt="picture&#39;s origin url"></p>
+<p><img src="/assets/spider/sina/picture_source.png" alt="picture&#39;s origin url"></p>
 <p>可以发现，弹出页面的链接与上图显示的不同，但与上图中的缩略图链接极为相似。它们分别是：</p>
 <ol>
-<li>缩略图：<a target="_blank" rel="noopener" href="http://ww1.sinaimg.cn/thumb180/c260f7ably1fn4vd7ix0qj20rs1aj1kx.jpg">http://ww1.sinaimg.cn/thumb180/c260f7ably1fn4vd7ix0qj20rs1aj1kx.jpg</a></li>
-<li>原图：<a target="_blank" rel="noopener" href="http://wx1.sinaimg.cn/large/c260f7ably1fn4vd7ix0qj20rs1aj1kx.jpg">http://wx1.sinaimg.cn/large/c260f7ably1fn4vd7ix0qj20rs1aj1kx.jpg</a></li>
+<li>缩略图：<a href="http://ww1.sinaimg.cn/thumb180/c260f7ably1fn4vd7ix0qj20rs1aj1kx.jpg" target="_blank" rel="noopener">http://ww1.sinaimg.cn/thumb180/c260f7ably1fn4vd7ix0qj20rs1aj1kx.jpg</a></li>
+<li>原图：<a href="http://wx1.sinaimg.cn/large/c260f7ably1fn4vd7ix0qj20rs1aj1kx.jpg" target="_blank" rel="noopener">http://wx1.sinaimg.cn/large/c260f7ably1fn4vd7ix0qj20rs1aj1kx.jpg</a></li>
 </ol>
 <p>可以看出，只是一个<code>thumb180</code>和<code>large</code>的区别。既然发现了规律，那就好办多了，我们只要知道缩略图的网址，就可以将域名后的第一级子域名替换成<code>large</code>就可以了，而不用获取<strong>原图</strong>链接再跳转一次。</p>
 <p>而且，多次尝试可以发现组图链接及缩略图链接满足正则表达式：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># 1. 组图链接：</span>
-imglist_reg <span class="token operator">=</span> <span class="token string">r'href="(https://weibo.cn/mblog/picAll/.&#123;9&#125;\?rl=2)"'</span>
+<pre><code class="python"># 1. 组图链接：
+imglist_reg = r&#39;href=&quot;(https://weibo.cn/mblog/picAll/.{9}\?rl=2)&quot;&#39;
 
-<span class="token comment"># 2. 缩略图</span>
-img_reg <span class="token operator">=</span> <span class="token string">r'src="(http://w.&#123;2&#125;\.sinaimg.cn/(.&#123;6,8&#125;)/.&#123;32,33&#125;.(jpg|gif))"'</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+# 2. 缩略图
+img_reg = r&#39;src=&quot;(http://w.{2}\.sinaimg.cn/(.{6,8})/.{32,33}.(jpg|gif))&quot;&#39;
+</code></pre>
 <p>到此，新浪微博的解析过程就结束了，图链的格式以及获取方式也都清楚了。下面就可以设计方案进行爬取了。</p>
 <h2 id="确定爬取方案"><a href="#确定爬取方案" class="headerlink" title="确定爬取方案"></a>确定爬取方案</h2><p>根据解析结果，很容易制定出以下爬取方案：</p>
 <ol>
 <li>给定微博用户名<code>litreily</code></li>
 <li>进入待爬取用户主页，即可从网址中获取<code>uid: 2657006573</code></li>
 <li>获取本人登录微博后的<code>cookies</code>（请求报文需要用到<code>cookies</code>）</li>
-<li>逐一爬取<a target="_blank" rel="noopener" href="https://weibo.cn/2657006573/profile?filter=0&amp;page=%7B1,2,3,...%7D">https://weibo.cn/2657006573/profile?filter=0&amp;page={1,2,3,...}</a></li>
+<li>逐一爬取<a href="https://weibo.cn/2657006573/profile?filter=0&amp;page={1,2,3,...}" target="_blank" rel="noopener">https://weibo.cn/2657006573/profile?filter=0&amp;page={1,2,3,...}</a></li>
 <li>解析每一页的源码，获取单图链接及组图链接，<ul>
 <li>单图：直接获取该图缩略图链接；</li>
 <li>组图：爬取组图链接，循环获取组图页面所有图片的缩略图链接</li>
@@ -237,217 +79,204 @@ img_reg <span class="token operator">=</span> <span class="token string">r'src="
 <li>重复第4-6步，直至没有图片</li>
 </ol>
 <h3 id="获取cookies"><a href="#获取cookies" class="headerlink" title="获取cookies"></a>获取cookies</h3><p>针对以上方案，其中有几个重点内容，其一就是<code>cookies</code>的获取，我暂时还没学怎么自动获取<code>cookies</code>，所以目前是登录微博后手动获取的。</p>
-<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/spider/sina/cookies.png" alt="get cookies"></p>
+<p><img src="/assets/spider/sina/cookies.png" alt="get cookies"></p>
 <h3 id="下载网页"><a href="#下载网页" class="headerlink" title="下载网页"></a>下载网页</h3><p>下载网页用的是<code>python3</code>自带的<code>urllib</code>库，当时没学<code>requests</code>，以后可能也很少用<code>urllib</code>了。</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">_get_html</span><span class="token punctuation">(</span>url<span class="token punctuation">,</span> headers<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token keyword">try</span><span class="token punctuation">:</span>
-        req <span class="token operator">=</span> urllib<span class="token punctuation">.</span>request<span class="token punctuation">.</span>Request<span class="token punctuation">(</span>url<span class="token punctuation">,</span> headers <span class="token operator">=</span> headers<span class="token punctuation">)</span>
-        page <span class="token operator">=</span> urllib<span class="token punctuation">.</span>request<span class="token punctuation">.</span>urlopen<span class="token punctuation">(</span>req<span class="token punctuation">)</span>
-        html <span class="token operator">=</span> page<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>decode<span class="token punctuation">(</span><span class="token string">'UTF-8'</span><span class="token punctuation">)</span>
-    <span class="token keyword">except</span> Exception <span class="token keyword">as</span> e<span class="token punctuation">:</span>
-        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"get %s failed"</span> <span class="token operator">%</span> url<span class="token punctuation">)</span>
-        <span class="token keyword">return</span> <span class="token boolean">None</span>
-    <span class="token keyword">return</span> html<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+<pre><code class="python">def _get_html(url, headers):
+    try:
+        req = urllib.request.Request(url, headers = headers)
+        page = urllib.request.urlopen(req)
+        html = page.read().decode(&#39;UTF-8&#39;)
+    except Exception as e:
+        print(&quot;get %s failed&quot; % url)
+        return None
+    return html
+</code></pre>
 <h3 id="获取存储路径"><a href="#获取存储路径" class="headerlink" title="获取存储路径"></a>获取存储路径</h3><p>由于我是在<code>win10</code>下编写的代码，但是个人比较喜欢用<code>bash</code>，所以图片的存储路径有以下两种格式，<code>_get_path</code>函数会自动判断当前操作系统的类型，然后选择相应的路径。</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">_get_path</span><span class="token punctuation">(</span>uid<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    path <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-        <span class="token string">'Windows'</span><span class="token punctuation">:</span> <span class="token string">'D:/litreily/Pictures/python/sina/'</span> <span class="token operator">+</span> uid<span class="token punctuation">,</span>
-        <span class="token string">'Linux'</span><span class="token punctuation">:</span> <span class="token string">'/mnt/d/litreily/Pictures/python/sina/'</span> <span class="token operator">+</span> uid
-    <span class="token punctuation">&#125;</span><span class="token punctuation">.</span>get<span class="token punctuation">(</span>platform<span class="token punctuation">.</span>system<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<pre><code class="python">def _get_path(uid):
+    path = {
+        &#39;Windows&#39;: &#39;D:/litreily/Pictures/python/sina/&#39; + uid,
+        &#39;Linux&#39;: &#39;/mnt/d/litreily/Pictures/python/sina/&#39; + uid
+    }.get(platform.system())
 
-    <span class="token keyword">if</span> <span class="token keyword">not</span> os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>isdir<span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">:</span>
-        os<span class="token punctuation">.</span>makedirs<span class="token punctuation">(</span>path<span class="token punctuation">)</span>
-    <span class="token keyword">return</span> path<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+    if not os.path.isdir(path):
+        os.makedirs(path)
+    return path
+</code></pre>
 <p>幸好<code>windows</code>是兼容<code>linux</code>系统的斜杠符号的，不然程序中的相对路径替换还挺麻烦。</p>
 <h3 id="下载图片"><a href="#下载图片" class="headerlink" title="下载图片"></a>下载图片</h3><p>由于选用的<code>urllib</code>库，所以下载图片就使用<code>urllib.request.urlretrieve</code>了</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># image url of one page is saved in imgurls</span>
-<span class="token keyword">for</span> img <span class="token keyword">in</span> imgurls<span class="token punctuation">:</span>
-    imgurl <span class="token operator">=</span> img<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>replace<span class="token punctuation">(</span>img<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token string">'large'</span><span class="token punctuation">)</span>
-    num_imgs <span class="token operator">+=</span> <span class="token number">1</span>
-    <span class="token keyword">try</span><span class="token punctuation">:</span>
-        urllib<span class="token punctuation">.</span>request<span class="token punctuation">.</span>urlretrieve<span class="token punctuation">(</span>imgurl<span class="token punctuation">,</span> <span class="token string">'&#123;&#125;/&#123;&#125;.&#123;&#125;'</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>path<span class="token punctuation">,</span> num_imgs<span class="token punctuation">,</span> img<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-        <span class="token comment"># display the raw url of images</span>
-        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'\t%d\t%s'</span> <span class="token operator">%</span> <span class="token punctuation">(</span>num_imgs<span class="token punctuation">,</span> imgurl<span class="token punctuation">)</span><span class="token punctuation">)</span>
-    <span class="token keyword">except</span> Exception <span class="token keyword">as</span> e<span class="token punctuation">:</span>
-        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">str</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">)</span>
-        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'\t%d\t%s failed'</span> <span class="token operator">%</span> <span class="token punctuation">(</span>num_imgs<span class="token punctuation">,</span> imgurl<span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+<pre><code class="python"># image url of one page is saved in imgurls
+for img in imgurls:
+    imgurl = img[0].replace(img[1], &#39;large&#39;)
+    num_imgs += 1
+    try:
+        urllib.request.urlretrieve(imgurl, &#39;{}/{}.{}&#39;.format(path, num_imgs, img[2]))
+        # display the raw url of images
+        print(&#39;\t%d\t%s&#39; % (num_imgs, imgurl))
+    except Exception as e:
+        print(str(e))
+        print(&#39;\t%d\t%s failed&#39; % (num_imgs, imgurl))
+</code></pre>
 <h2 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h2><p>其它细节详见源码</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment">#!/usr/bin/python3</span>
-<span class="token comment"># -*- coding:utf-8 -*-</span>
-<span class="token comment"># author: litreily</span>
-<span class="token comment"># date: 2018.02.05</span>
-<span class="token triple-quoted-string string">"""Capture pictures from sina-weibo with user_id."""</span>
+<pre><code class="python">#!/usr/bin/python3
+# -*- coding:utf-8 -*-
+# author: litreily
+# date: 2018.02.05
+&quot;&quot;&quot;Capture pictures from sina-weibo with user_id.&quot;&quot;&quot;
 
-<span class="token keyword">import</span> re
-<span class="token keyword">import</span> os
-<span class="token keyword">import</span> platform
+import re
+import os
+import platform
 
-<span class="token keyword">import</span> urllib
-<span class="token keyword">import</span> urllib<span class="token punctuation">.</span>request
+import urllib
+import urllib.request
 
-<span class="token keyword">from</span> bs4 <span class="token keyword">import</span> BeautifulSoup
-
-
-<span class="token keyword">def</span> <span class="token function">_get_path</span><span class="token punctuation">(</span>uid<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    path <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-        <span class="token string">'Windows'</span><span class="token punctuation">:</span> <span class="token string">'D:/litreily/Pictures/python/sina/'</span> <span class="token operator">+</span> uid<span class="token punctuation">,</span>
-        <span class="token string">'Linux'</span><span class="token punctuation">:</span> <span class="token string">'/mnt/d/litreily/Pictures/python/sina/'</span> <span class="token operator">+</span> uid
-    <span class="token punctuation">&#125;</span><span class="token punctuation">.</span>get<span class="token punctuation">(</span>platform<span class="token punctuation">.</span>system<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-
-    <span class="token keyword">if</span> <span class="token keyword">not</span> os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>isdir<span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">:</span>
-        os<span class="token punctuation">.</span>makedirs<span class="token punctuation">(</span>path<span class="token punctuation">)</span>
-    <span class="token keyword">return</span> path
+from bs4 import BeautifulSoup
 
 
-<span class="token keyword">def</span> <span class="token function">_get_html</span><span class="token punctuation">(</span>url<span class="token punctuation">,</span> headers<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token keyword">try</span><span class="token punctuation">:</span>
-        req <span class="token operator">=</span> urllib<span class="token punctuation">.</span>request<span class="token punctuation">.</span>Request<span class="token punctuation">(</span>url<span class="token punctuation">,</span> headers <span class="token operator">=</span> headers<span class="token punctuation">)</span>
-        page <span class="token operator">=</span> urllib<span class="token punctuation">.</span>request<span class="token punctuation">.</span>urlopen<span class="token punctuation">(</span>req<span class="token punctuation">)</span>
-        html <span class="token operator">=</span> page<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>decode<span class="token punctuation">(</span><span class="token string">'UTF-8'</span><span class="token punctuation">)</span>
-    <span class="token keyword">except</span> Exception <span class="token keyword">as</span> e<span class="token punctuation">:</span>
-        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"get %s failed"</span> <span class="token operator">%</span> url<span class="token punctuation">)</span>
-        <span class="token keyword">return</span> <span class="token boolean">None</span>
-    <span class="token keyword">return</span> html
+def _get_path(uid):
+    path = {
+        &#39;Windows&#39;: &#39;D:/litreily/Pictures/python/sina/&#39; + uid,
+        &#39;Linux&#39;: &#39;/mnt/d/litreily/Pictures/python/sina/&#39; + uid
+    }.get(platform.system())
+
+    if not os.path.isdir(path):
+        os.makedirs(path)
+    return path
 
 
-<span class="token keyword">def</span> <span class="token function">_capture_images</span><span class="token punctuation">(</span>uid<span class="token punctuation">,</span> headers<span class="token punctuation">,</span> path<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    filter_mode <span class="token operator">=</span> <span class="token number">1</span>      <span class="token comment"># 0-all 1-original 2-pictures</span>
-    num_pages <span class="token operator">=</span> <span class="token number">1</span>
-    num_blogs <span class="token operator">=</span> <span class="token number">0</span>
-    num_imgs <span class="token operator">=</span> <span class="token number">0</span>
-
-    <span class="token comment"># regular expression of imgList and img</span>
-    imglist_reg <span class="token operator">=</span> <span class="token string">r'href="(https://weibo.cn/mblog/picAll/.&#123;9&#125;\?rl=2)"'</span>
-    imglist_pattern <span class="token operator">=</span> re<span class="token punctuation">.</span><span class="token builtin">compile</span><span class="token punctuation">(</span>imglist_reg<span class="token punctuation">)</span>
-    img_reg <span class="token operator">=</span> <span class="token string">r'src="(http://w.&#123;2&#125;\.sinaimg.cn/(.&#123;6,8&#125;)/.&#123;32,33&#125;.(jpg|gif))"'</span>
-    img_pattern <span class="token operator">=</span> re<span class="token punctuation">.</span><span class="token builtin">compile</span><span class="token punctuation">(</span>img_reg<span class="token punctuation">)</span>
-
-    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'start capture picture of uid:'</span> <span class="token operator">+</span> uid<span class="token punctuation">)</span>
-    <span class="token keyword">while</span> <span class="token boolean">True</span><span class="token punctuation">:</span>
-        url <span class="token operator">=</span> <span class="token string">'https://weibo.cn/%s/profile?filter=%s&amp;page=%d'</span> <span class="token operator">%</span> <span class="token punctuation">(</span>uid<span class="token punctuation">,</span> filter_mode<span class="token punctuation">,</span> num_pages<span class="token punctuation">)</span>
-
-        <span class="token comment"># 1. get html of each page url</span>
-        html <span class="token operator">=</span> _get_html<span class="token punctuation">(</span>url<span class="token punctuation">,</span> headers<span class="token punctuation">)</span>
-
-        <span class="token comment"># 2. parse the html and find all the imgList Url of each page</span>
-        soup <span class="token operator">=</span> BeautifulSoup<span class="token punctuation">(</span>html<span class="token punctuation">,</span> <span class="token string">"lxml"</span><span class="token punctuation">)</span>
-        <span class="token comment"># &lt;div class="c" id="M_G4gb5pY8t">&lt;div></span>
-        blogs <span class="token operator">=</span> soup<span class="token punctuation">.</span>body<span class="token punctuation">.</span>find_all<span class="token punctuation">(</span>attrs<span class="token operator">=</span><span class="token punctuation">&#123;</span><span class="token string">'id'</span><span class="token punctuation">:</span>re<span class="token punctuation">.</span><span class="token builtin">compile</span><span class="token punctuation">(</span><span class="token string">r'^M_'</span><span class="token punctuation">)</span><span class="token punctuation">&#125;</span><span class="token punctuation">,</span> recursive<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span>
-        num_blogs <span class="token operator">+=</span> <span class="token builtin">len</span><span class="token punctuation">(</span>blogs<span class="token punctuation">)</span>
-
-        imgurls <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
-        <span class="token keyword">for</span> blog <span class="token keyword">in</span> blogs<span class="token punctuation">:</span>
-            blog <span class="token operator">=</span> <span class="token builtin">str</span><span class="token punctuation">(</span>blog<span class="token punctuation">)</span>
-            imglist_url <span class="token operator">=</span> imglist_pattern<span class="token punctuation">.</span>findall<span class="token punctuation">(</span>blog<span class="token punctuation">)</span>
-            <span class="token keyword">if</span> <span class="token keyword">not</span> imglist_url<span class="token punctuation">:</span>
-                <span class="token comment"># 2.1 get img-url from blog that have only one pic</span>
-                imgurls <span class="token operator">+=</span> img_pattern<span class="token punctuation">.</span>findall<span class="token punctuation">(</span>blog<span class="token punctuation">)</span>
-            <span class="token keyword">else</span><span class="token punctuation">:</span>
-                <span class="token comment"># 2.2 get img-urls from blog that have group pics</span>
-                html <span class="token operator">=</span> _get_html<span class="token punctuation">(</span>imglist_url<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> headers<span class="token punctuation">)</span>
-                imgurls <span class="token operator">+=</span> img_pattern<span class="token punctuation">.</span>findall<span class="token punctuation">(</span>html<span class="token punctuation">)</span>
-
-        <span class="token keyword">if</span> <span class="token keyword">not</span> imgurls<span class="token punctuation">:</span>
-            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'capture complete!'</span><span class="token punctuation">)</span>
-            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'captured pages:%d, blogs:%d, imgs:%d'</span> <span class="token operator">%</span> <span class="token punctuation">(</span>num_pages<span class="token punctuation">,</span> num_blogs<span class="token punctuation">,</span> num_imgs<span class="token punctuation">)</span><span class="token punctuation">)</span>
-            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'directory:'</span> <span class="token operator">+</span> path<span class="token punctuation">)</span>
-            <span class="token keyword">break</span>
-
-        <span class="token comment"># 3. download all the imgs from each imgList</span>
-        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'PAGE %d with %d images'</span> <span class="token operator">%</span> <span class="token punctuation">(</span>num_pages<span class="token punctuation">,</span> <span class="token builtin">len</span><span class="token punctuation">(</span>imgurls<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-        <span class="token keyword">for</span> img <span class="token keyword">in</span> imgurls<span class="token punctuation">:</span>
-            imgurl <span class="token operator">=</span> img<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>replace<span class="token punctuation">(</span>img<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token string">'large'</span><span class="token punctuation">)</span>
-            num_imgs <span class="token operator">+=</span> <span class="token number">1</span>
-            <span class="token keyword">try</span><span class="token punctuation">:</span>
-                urllib<span class="token punctuation">.</span>request<span class="token punctuation">.</span>urlretrieve<span class="token punctuation">(</span>imgurl<span class="token punctuation">,</span> <span class="token string">'&#123;&#125;/&#123;&#125;.&#123;&#125;'</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>path<span class="token punctuation">,</span> num_imgs<span class="token punctuation">,</span> img<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-                <span class="token comment"># display the raw url of images</span>
-                <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'\t%d\t%s'</span> <span class="token operator">%</span> <span class="token punctuation">(</span>num_imgs<span class="token punctuation">,</span> imgurl<span class="token punctuation">)</span><span class="token punctuation">)</span>
-            <span class="token keyword">except</span> Exception <span class="token keyword">as</span> e<span class="token punctuation">:</span>
-                <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">str</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">)</span>
-                <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'\t%d\t%s failed'</span> <span class="token operator">%</span> <span class="token punctuation">(</span>num_imgs<span class="token punctuation">,</span> imgurl<span class="token punctuation">)</span><span class="token punctuation">)</span>
-        num_pages <span class="token operator">+=</span> <span class="token number">1</span>
-        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">''</span><span class="token punctuation">)</span>
+def _get_html(url, headers):
+    try:
+        req = urllib.request.Request(url, headers = headers)
+        page = urllib.request.urlopen(req)
+        html = page.read().decode(&#39;UTF-8&#39;)
+    except Exception as e:
+        print(&quot;get %s failed&quot; % url)
+        return None
+    return html
 
 
-<span class="token keyword">def</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token comment"># uids = ['2657006573','2173752092','3261134763','2174219060']</span>
-    uid <span class="token operator">=</span> <span class="token string">'2657006573'</span>
-    path <span class="token operator">=</span> _get_path<span class="token punctuation">(</span>uid<span class="token punctuation">)</span>
+def _capture_images(uid, headers, path):
+    filter_mode = 1      # 0-all 1-original 2-pictures
+    num_pages = 1
+    num_blogs = 0
+    num_imgs = 0
 
-    <span class="token comment"># cookie is form the above url->network->request headers</span>
-    cookies <span class="token operator">=</span> <span class="token string">''</span>
-    headers <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token string">'User-Agent'</span><span class="token punctuation">:</span> <span class="token string">'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36'</span><span class="token punctuation">,</span>
-            <span class="token string">'Cookie'</span><span class="token punctuation">:</span> cookies<span class="token punctuation">&#125;</span>
+    # regular expression of imgList and img
+    imglist_reg = r&#39;href=&quot;(https://weibo.cn/mblog/picAll/.{9}\?rl=2)&quot;&#39;
+    imglist_pattern = re.compile(imglist_reg)
+    img_reg = r&#39;src=&quot;(http://w.{2}\.sinaimg.cn/(.{6,8})/.{32,33}.(jpg|gif))&quot;&#39;
+    img_pattern = re.compile(img_reg)
 
-    <span class="token comment"># capture imgs from sina</span>
-    _capture_images<span class="token punctuation">(</span>uid<span class="token punctuation">,</span> headers<span class="token punctuation">,</span> path<span class="token punctuation">)</span>
+    print(&#39;start capture picture of uid:&#39; + uid)
+    while True:
+        url = &#39;https://weibo.cn/%s/profile?filter=%s&amp;page=%d&#39; % (uid, filter_mode, num_pages)
+
+        # 1. get html of each page url
+        html = _get_html(url, headers)
+
+        # 2. parse the html and find all the imgList Url of each page
+        soup = BeautifulSoup(html, &quot;lxml&quot;)
+        # &lt;div class=&quot;c&quot; id=&quot;M_G4gb5pY8t&quot;&gt;&lt;div&gt;
+        blogs = soup.body.find_all(attrs={&#39;id&#39;:re.compile(r&#39;^M_&#39;)}, recursive=False)
+        num_blogs += len(blogs)
+
+        imgurls = []
+        for blog in blogs:
+            blog = str(blog)
+            imglist_url = imglist_pattern.findall(blog)
+            if not imglist_url:
+                # 2.1 get img-url from blog that have only one pic
+                imgurls += img_pattern.findall(blog)
+            else:
+                # 2.2 get img-urls from blog that have group pics
+                html = _get_html(imglist_url[0], headers)
+                imgurls += img_pattern.findall(html)
+
+        if not imgurls:
+            print(&#39;capture complete!&#39;)
+            print(&#39;captured pages:%d, blogs:%d, imgs:%d&#39; % (num_pages, num_blogs, num_imgs))
+            print(&#39;directory:&#39; + path)
+            break
+
+        # 3. download all the imgs from each imgList
+        print(&#39;PAGE %d with %d images&#39; % (num_pages, len(imgurls)))
+        for img in imgurls:
+            imgurl = img[0].replace(img[1], &#39;large&#39;)
+            num_imgs += 1
+            try:
+                urllib.request.urlretrieve(imgurl, &#39;{}/{}.{}&#39;.format(path, num_imgs, img[2]))
+                # display the raw url of images
+                print(&#39;\t%d\t%s&#39; % (num_imgs, imgurl))
+            except Exception as e:
+                print(str(e))
+                print(&#39;\t%d\t%s failed&#39; % (num_imgs, imgurl))
+        num_pages += 1
+        print(&#39;&#39;)
 
 
-<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
-    main<span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+def main():
+    # uids = [&#39;2657006573&#39;,&#39;2173752092&#39;,&#39;3261134763&#39;,&#39;2174219060&#39;]
+    uid = &#39;2657006573&#39;
+    path = _get_path(uid)
 
+    # cookie is form the above url-&gt;network-&gt;request headers
+    cookies = &#39;&#39;
+    headers = {&#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36&#39;,
+            &#39;Cookie&#39;: cookies}
+
+    # capture imgs from sina
+    _capture_images(uid, headers, path)
+
+
+if __name__ == &#39;__main__&#39;:
+    main()
+
+</code></pre>
 <p>使用时记得修改<code>main</code>函数中的<code>cookies</code>和<code>uid</code>！</p>
-<h2 id="爬取测试"><a href="#爬取测试" class="headerlink" title="爬取测试"></a>爬取测试</h2><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/spider/sina/capturer_litreily.png" alt="capture litreily"></p>
-<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/spider/sina/capturer_litreily_end.png" alt="capture litreily end"></p>
-<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/spider/sina/captured_pictures.png" alt="captured pictures"></p>
+<h2 id="爬取测试"><a href="#爬取测试" class="headerlink" title="爬取测试"></a>爬取测试</h2><p><img src="/assets/spider/sina/capturer_litreily.png" alt="capture litreily"></p>
+<p><img src="/assets/spider/sina/capturer_litreily_end.png" alt="capture litreily end"></p>
+<p><img src="/assets/spider/sina/captured_pictures.png" alt="captured pictures"></p>
 <h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><ul>
-<li>该爬虫已存放至开源项目<a target="_blank" rel="noopener" href="https://github.com/Litreily/capturer">capturer</a>，欢迎交流</li>
+<li>该爬虫已存放至开源项目<a href="https://github.com/Litreily/capturer" target="_blank" rel="noopener">capturer</a>，欢迎交流</li>
 <li>由于是首个爬虫，所以许多地方有待改进，相对的<a href="http://www.litreily.top/2018/03/17/lofter/">LOFTER爬虫</a>就更娴熟写了</li>
 <li>目前没有发现新浪微博有明显的反爬措施，但还是按需索取为好</li>
 </ul>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://www.litreily.top">litreily</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://www.litreily.top/2018/04/10/sina/">https://www.litreily.top/2018/04/10/sina/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/tools/">tools</a><a class="post-meta__tags" href="/tags/spider/">spider</a><a class="post-meta__tags" href="/tags/sina/">sina</a></div><div class="post-share"><div class="social-share" data-image="/img/header.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2018/04/30/cfachina/" title="Python网络爬虫3 - 生产者消费者模型爬取某金融网站数据"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">Python网络爬虫3 - 生产者消费者模型爬取某金融网站数据</div></div><div class="info-2"><div class="info-item-1">应一位金融圈的朋友所托，帮忙写个爬虫，帮他爬取中国期货行业协议网站中所有金融机构的从业人员信息。网站数据的获取本身比较简单，但是为了学习一些新的爬虫方法和技巧，即本文要讲述的生产者消费者模型，我又学习了一下Python中队列库queue及线程库Thread的使用方法。 生产者消费者模型生产者消费者模型非常简单，相信大部分程序员都知道，就是一方作为生产者不断提供资源，另一方作为消费者不断消费资源。简单点说，就好比餐馆的厨师和顾客，厨师作为生产者不断制作美味的食物，而顾客作为消费者不断食用厨师提供的食物。此外，生产者与消费者之间可以是一对一、一对多、多对一和多对多的关系。 那么这个模型和爬虫有什么关系呢？其实，爬虫可以认为是一个生产者，它不断从网站爬取数据，爬取到的数据就是食物；而所得数据需要消费者进行数据清洗，把有用的数据吸收掉，把无用的数据丢弃。 在实践过程中，爬虫爬取和数据清洗分别对应一个Thread，两个线程之间通过顺序队列queue传递数据，数据传递过程就好比餐馆服务员从厨房把食物送到顾客餐桌上的过程。爬取线程负责爬取网站数据，并将原始数据存入队列，清洗线程从队列中按入队顺...</div></div></div></a><a class="pagination-related" href="/2018/03/17/lofter/" title="Python网络爬虫1 - 爬取网易LOFTER图片"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">Python网络爬虫1 - 爬取网易LOFTER图片</div></div><div class="info-2"><div class="info-item-1">LOFTER是网易出品的优质轻博客，灵感源于国外的tumblr，但比之更加文艺，更加本地化。本人非常喜欢LOFTER的UI设计，以及其中的优质用户和内容，似乎网易并不擅长推广，所以受众并不广泛。这都是题外话，本文主要记录作者近期学习python3并用之爬取LOFTER用户图片的过程和成果，与大家交流分享。  本文将以本人litreily博客为例说明整个爬取过程  分析LOFTER站点在爬取站点之前，首先需要分析站点的关键信息有哪些，如果给自己提问，可能会有以下问题：  用户的主页网址格式是？ 用户博客链接的格式是？ 每篇博客内的图片链接的格式是？ 不同用户的主页模板不同，是否可以按同样方法抓取博客信息？ 用户的博客数量巨大，主页以什么方式分页？ 有没有归档页面方便爬取（大多数网站都有归档页面）？  当然，这些问题不是一下子就能想出来，可以在探索网页内容的过程逐步展开，并思考下一步该考虑的问题，下面针对各个问题对主页进行探索分析。 主页信息 主页: http://[username].lofter.com   从主页可以看到归档的链接，暂时不管。不同的用户，其主页所用模板不尽一致，...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2018/03/17/lofter/" title="Python网络爬虫1 - 爬取网易LOFTER图片"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2018-03-17</div><div class="info-item-2">Python网络爬虫1 - 爬取网易LOFTER图片</div></div><div class="info-2"><div class="info-item-1">LOFTER是网易出品的优质轻博客，灵感源于国外的tumblr，但比之更加文艺，更加本地化。本人非常喜欢LOFTER的UI设计，以及其中的优质用户和内容，似乎网易并不擅长推广，所以受众并不广泛。这都是题外话，本文主要记录作者近期学习python3并用之爬取LOFTER用户图片的过程和成果，与大家交流分享。  本文将以本人litreily博客为例说明整个爬取过程  分析LOFTER站点在爬取站点之前，首先需要分析站点的关键信息有哪些，如果给自己提问，可能会有以下问题：  用户的主页网址格式是？ 用户博客链接的格式是？ 每篇博客内的图片链接的格式是？ 不同用户的主页模板不同，是否可以按同样方法抓取博客信息？ 用户的博客数量巨大，主页以什么方式分页？ 有没有归档页面方便爬取（大多数网站都有归档页面）？  当然，这些问题不是一下子就能想出来，可以在探索网页内容的过程逐步展开，并思考下一步该考虑的问题，下面针对各个问题对主页进行探索分析。 主页信息 主页: http://[username].lofter.com   从主页可以看到归档的链接，暂时不管。不同的用户，其主页所用模板不尽一致，...</div></div></div></a><a class="pagination-related" href="/2020/08/09/netbian/" title="Python网络爬虫8 - 爬取彼岸图网美图"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-08-09</div><div class="info-item-2">Python网络爬虫8 - 爬取彼岸图网美图</div></div><div class="info-2"><div class="info-item-1">彼岸图网收集了大量美图，是个不错的爬取对象。话不多说，直接上图。  分析站点分类列表爬取之前，自然要分析一波，这个站点的框架比较简单，从分类着手，共包含12个分类项。  4K人物 4K动漫 4K动物 4K宗教 4K影视 4K明星 4K汽车 4K游戏 4K美女 4K美食 4K背景 4K风景  名称都含有4K，但是获取原图是需要会员的，所以我这里获取的不是原图，而是详细页展示的大图。首先要获取的当然是分类页面的网址，看下面的DOM.  通过xpath //div[contains(@class, &quot;classify&quot;)]/a 可以得到分类链接信息，从而可以得到分类名称和网址。 缩略图列表接下来以4k影视为例，解析每个分类页面，从分类页面可以看到图片的缩略图列表，点击缩略图就能进入详细页面看到大图。  缩略图列表中的图片链接可以通过xpath //div[@class=&quot;slist&quot;]//a/@href 获得。 此外，分类页面包含大量图片，是通过分页展示的，分页的页数可以从页面尾部看到。  页面数量可以通过xpath //span[@class=...</div></div></div></a><a class="pagination-related" href="/2019/08/09/vmgirls/" title="Python网络爬虫6 - Scrapy爬取vmgirls"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2019-08-09</div><div class="info-item-2">Python网络爬虫6 - Scrapy爬取vmgirls</div></div><div class="info-2"><div class="info-item-1">今天介绍一个妹子站点图片的爬取过程，站点唯美女生。站点结构非常简单，单独用requests库或者scrapy框架都可以。本文介绍的是使用scrapy框架爬取。    分析vmgirls站点站点做的非常清新唯美，结构简洁明了，主页的主体部分以卡片形式展示各个主题的缩略图和简要介绍，但主页并不适合直接爬取。  不过幸好该站点已经提供了站点地图，对于这种相对简单的网站，使用现成的网站地图简直事半功倍。  那么思路就很清楚了，首先通过站点地图获取所有主题页面的网址和标题，然后逐个爬取妹子页面，提取所有的图片url，然后下载到本地，每个主题页面的图片单独存放到一个文件夹中。 站点地图本站点提供了两个站点地图：  https://www.vmgirls.com/sitemap.shtml https://www.vmgirls.com/sitemap.xml  第1个是面向用户的站点地图，从主页的导航栏就能找到；第2个（如下图）则是常规网站留给搜索引擎的站点地图，文件格式也是常规的xml  我使用wget指令获取两个文件，并进行了对比，发现sitemap.xml仅仅包含1000个网址，但是可...</div></div></div></a><a class="pagination-related" href="/2016/08/17/clearAD/" title="消除utorrent中的广告"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2016-08-17</div><div class="info-item-2">消除utorrent中的广告</div></div><div class="info-2"><div class="info-item-1">其实，网上已有大把的教程教我如何去广告，但每次都要谷歌百度却也烦不胜烦，这也就只好搬运到这咯，一劳永逸。 去广告前 去广告 在utorrent的菜单栏中选择&quot;选项&quot;，打开“设置”界面，或者按快捷键ctrl+p; 在设置界面中选择最后一项&quot;高级&quot;; 在过滤中输入&quot;offers.&quot;，将以下两项设为false： &quot;offers.sponsored_torrent_offer_enabled&quot; , &quot;offers.left_rail_offer_enabled&quot;   在过滤中输入&quot;gui.&quot;,将&quot;gui.show_notorrents_node&quot;设为false.   去广告后 好了，至此广告一扫全无，enjoy it！ </div></div></div></a><a class="pagination-related" href="/2018/05/27/scrapy-start/" title="Python网络爬虫4 - scrapy入门"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2018-05-27</div><div class="info-item-2">Python网络爬虫4 - scrapy入门</div></div><div class="info-2"><div class="info-item-1">scrapy作为一款强大的爬虫框架，当然要好好学习一番，本文便是本人学习和使用scrapy过后的一个总结，内容比较基础，算是入门笔记吧，主要讲述scrapy的基本概念和使用方法。 scrapy framework首先附上scrapy经典图如下：  scrapy框架包含以下几个部分  Scrapy Engine 引擎 Spiders 爬虫 Scheduler 调度器 Downloader 下载器 Item Pipeline 项目管道 Downloader Middlewares 下载器中间件 Spider Middlewares 爬虫中间件  spider process其爬取过程简述如下：  引擎从爬虫获取首个待爬取的链接url，并传递给调度器 调度器将链接存入队列 引擎向调度器请求要爬取的链接，并将请求得到的链接经下载器中间件传递给下载器 下载器从网上下载网页，下载后的网页经下载器中间件传递给引擎 引擎将网页经爬虫中间件传递给爬虫 爬虫对网页进行解析，将得到的Items和新的链接经爬虫中间件交给引擎 引擎将从爬虫得到的Items交给项目管道，将新的链接请求requests交给调...</div></div></div></a><a class="pagination-related" href="/2019/10/09/fabiaoqing/" title="Python网络爬虫7 - 爬取表情包"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2019-10-09</div><div class="info-item-2">Python网络爬虫7 - 爬取表情包</div></div><div class="info-2"><div class="info-item-1">为了逗女朋友开心，想找一堆表情包，那么作为一名程序员，自然是会想到用程序来完成这个事情，而Python爬虫就是一个非常好的方法。 我先找到了一个专门发布表情包的网站，就叫做发表情网，可以通过搜索关键词得到大量相关的表情包，下面对这个网站的爬取进行详细介绍。  分析站点为了不引起不适，我选择搜索“你好”，出来的结果是这样的  可以看到共有688个相关的表情，右侧的表情包是分组形式的，不是我的爬取对象。我们只关注表情，在网页底部可以看到分页信息：  切换分页到第４页后，可以看到网址的编号情况如下：  网址是https://www.fabiaoqing.com/search/search/keyword/你好/type/bq/page/4.html，据此就可以分析出表情的分页格式  keyword 后接关键词，此处为“你好” type 后接类型，此处为&quot;bq&quot;,对应表情 page 后接页码，此处为&quot;4.html&quot;，对应第４页  到此就确定了关键词和分页信息的整合方式，根据这个可以按顺序获取指定关键词的所有分页。那么接下来的问题是如何解析每个分页中...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comments</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/header.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">litreily</div><div class="author-info-description">simple life</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">144</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">120</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">17</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Litreily"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://xhslink.com/m/893FaC3aK88" target="_blank" title="小红书"><i class="fas fa-seedling" style="color: #ff2442;"></i></a><a class="social-icon" href="mailto:litreily@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="https://www.litreily.top/notes/" target="_blank" title="Notes"><i class="fas fa-sticky-note" style="color: #e8a618;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E6%9E%90sina%E7%AB%99%E7%82%B9"><span class="toc-text">分析sina站点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7ID"><span class="toc-text">获取用户ID</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%BE%E7%89%87%E5%AD%98%E5%82%A8%E5%8F%82%E6%95%B0%E8%A7%A3%E6%9E%90"><span class="toc-text">图片存储参数解析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%BE%E9%93%BE%E8%A7%A3%E6%9E%90"><span class="toc-text">图链解析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A1%AE%E5%AE%9A%E7%88%AC%E5%8F%96%E6%96%B9%E6%A1%88"><span class="toc-text">确定爬取方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96cookies"><span class="toc-text">获取cookies</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E7%BD%91%E9%A1%B5"><span class="toc-text">下载网页</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E5%AD%98%E5%82%A8%E8%B7%AF%E5%BE%84"><span class="toc-text">获取存储路径</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E5%9B%BE%E7%89%87"><span class="toc-text">下载图片</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BA%90%E7%A0%81"><span class="toc-text">源码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%88%AC%E5%8F%96%E6%B5%8B%E8%AF%95"><span class="toc-text">爬取测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%99%E5%9C%A8%E6%9C%80%E5%90%8E"><span class="toc-text">写在最后</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/07/05/daily-eastern-beauty-2026-07-05/" title="每日东方美人探索 2026-07-05"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-07-05/open-daily-magic.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="每日东方美人探索 2026-07-05"/></a><div class="content"><a class="title" href="/2026/07/05/daily-eastern-beauty-2026-07-05/" title="每日东方美人探索 2026-07-05">每日东方美人探索 2026-07-05</a><time datetime="2026-07-04T16:10:00.000Z" title="Created 2026-07-05 00:10:00">2026-07-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/07/04/daily-eastern-beauty-2026-07-04/" title="每日东方美人探索 2026-07-04"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-07-04/open-time-crossing.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="每日东方美人探索 2026-07-04"/></a><div class="content"><a class="title" href="/2026/07/04/daily-eastern-beauty-2026-07-04/" title="每日东方美人探索 2026-07-04">每日东方美人探索 2026-07-04</a><time datetime="2026-07-04T09:18:00.000Z" title="Created 2026-07-04 17:18:00">2026-07-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/07/03/daily-eastern-beauty-2026-07-03/" title="每日东方美人探索 2026-07-03"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-07-03/open-time-crossing.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="每日东方美人探索 2026-07-03"/></a><div class="content"><a class="title" href="/2026/07/03/daily-eastern-beauty-2026-07-03/" title="每日东方美人探索 2026-07-03">每日东方美人探索 2026-07-03</a><time datetime="2026-07-02T16:10:00.000Z" title="Created 2026-07-03 00:10:00">2026-07-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/07/02/daily-eastern-beauty-2026-07-02/" title="每日东方美人探索 2026-07-02"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-07-02/open-daily-magic.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="每日东方美人探索 2026-07-02"/></a><div class="content"><a class="title" href="/2026/07/02/daily-eastern-beauty-2026-07-02/" title="每日东方美人探索 2026-07-02">每日东方美人探索 2026-07-02</a><time datetime="2026-07-02T08:55:00.000Z" title="Created 2026-07-02 16:55:00">2026-07-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/07/01/daily-eastern-beauty-2026-07-01/" title="每日东方美人探索 2026-07-01"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-07-01/open-time-crossing.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="每日东方美人探索 2026-07-01"/></a><div class="content"><a class="title" href="/2026/07/01/daily-eastern-beauty-2026-07-01/" title="每日东方美人探索 2026-07-01">每日东方美人探索 2026-07-01</a><time datetime="2026-07-01T01:10:00.000Z" title="Created 2026-07-01 09:10:00">2026-07-01</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By litreily</span><span class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 5.4.2</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll to Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4"></script><script src="/js/main.js?v=5.5.4"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@19.1.3/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
-  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
-  const option = null
-
-  const initValine = (el, path) => {
-    if (isShuoshuo) {
-      window.shuoshuoComment.destroyValine = () => {
-        if (el.children.length) {
-          el.innerHTML = ''
-          el.classList.add('no-comment')
-        }
-      }
-    }
-
-    const valineConfig = {
-      el: '#vcomment',
-      appId: '1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
-      appKey: 'uvA3xgqNW3q8TGR483lxXcpB',
-      avatar: 'monsterid',
-      serverURLs: '',
-      emojiMaps: "",
-      visitor: false,
-      ...option,
-      path: isShuoshuo ? path : (option && option.path) || window.location.pathname
-    }
-
-    new Valine(valineConfig)
-  }
-
-  const loadValine = async (el, path) => {
-    if (typeof Valine === 'function') {
-      initValine(el, path)
-    } else {
-      await btf.getScript('https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js')
-      initValine(el, path)
-    }
-  }
-
-  if (isShuoshuo) {
-    'Valine' === 'Valine'
-      ? window.shuoshuoComment = { loadComment: loadValine }
-      : window.loadOtherComment = loadValine
-    return
-  }
-
-  if ('Valine' === 'Valine' || !false) {
-    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
-    else setTimeout(loadValine, 0)
-  } else {
-    window.loadOtherComment = loadValine
-  }
-})()</script></div><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="local-search-input"><input placeholder="Search..." type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.4"></script></div></div></body></html>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2018/04/10/sina/">https://www.litreily.top/2018/04/10/sina/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tags"></i><a href="/tags/tools/">tools</a><a href="/tags/spider/">spider</a><a href="/tags/sina/">sina</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#分析sina站点"><span class="toc-number">1.</span> <span class="toc-text">分析sina站点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#获取用户ID"><span class="toc-number">1.1.</span> <span class="toc-text">获取用户ID</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#图片存储参数解析"><span class="toc-number">1.2.</span> <span class="toc-text">图片存储参数解析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#图链解析"><span class="toc-number">1.3.</span> <span class="toc-text">图链解析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#确定爬取方案"><span class="toc-number">2.</span> <span class="toc-text">确定爬取方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#获取cookies"><span class="toc-number">2.1.</span> <span class="toc-text">获取cookies</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#下载网页"><span class="toc-number">2.2.</span> <span class="toc-text">下载网页</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#获取存储路径"><span class="toc-number">2.3.</span> <span class="toc-text">获取存储路径</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#下载图片"><span class="toc-number">2.4.</span> <span class="toc-text">下载图片</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#源码"><span class="toc-number">3.</span> <span class="toc-text">源码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#爬取测试"><span class="toc-number">4.</span> <span class="toc-text">爬取测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#写在最后"><span class="toc-number">5.</span> <span class="toc-text">写在最后</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2018/04/30/cfachina/">&lt; Python网络爬虫3 - 生产者消费者模型爬取某金融网站数据</a><a class="next" href="/2018/03/17/lofter/">Python网络爬虫1 - 爬取网易LOFTER图片 &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+.night .v[data-class=v] a:hover { color: #216C73 !important; }
+.night .v[data-class=v] li { list-style: inherit; }
+.night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
+.night .v[data-class=v] .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.night .v[data-class=v] .vbtn { border-radius: 0; background: none; }
+.night .v[data-class=v] .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.night .v[data-class=v] .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.night .v[data-class=v] .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre,.night .v[data-class=v] .vlist .vcard .vhead .vsys { background: #203240 !important; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre { color: #F0F0F0; font-size: 95%; }
+.v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
+</style><div id="vcomment"></div><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
+  lang: 'zh-cn',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></section><footer><p>Copyright © 2016 - 2020 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/plugins/prettify/prettify.js"></script><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script></body></html>

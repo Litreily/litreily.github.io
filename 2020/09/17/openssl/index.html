@@ -1,190 +1,33 @@
-<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>openssl 验证证书有效性 | LITREILY</title><meta name="author" content="litreily,707922098@qq.com"><meta name="copyright" content="litreily"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#49B1F5"><meta name="description" content="OpenSSL is a robust, commercial-grade, and full-featured toolkit for the Transport Layer Security (TLS) and Secure Sockets Layer (SSL) protocols. It is also a general-purpose cryptography library.  o">
-<meta property="og:type" content="article">
-<meta property="og:title" content="openssl 验证证书有效性">
-<meta property="og:url" content="https://www.litreily.top/2020/09/17/openssl/index.html">
-<meta property="og:site_name" content="LITREILY">
-<meta property="og:description" content="OpenSSL is a robust, commercial-grade, and full-featured toolkit for the Transport Layer Security (TLS) and Secure Sockets Layer (SSL) protocols. It is also a general-purpose cryptography library.  o">
-<meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://www.litreily.top/img/header.png">
-<meta property="article:published_time" content="2020-09-17T06:17:27.000Z">
-<meta property="article:modified_time" content="2026-05-14T01:37:35.526Z">
-<meta property="article:author" content="litreily">
-<meta property="article:tag" content="openssl">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://www.litreily.top/img/header.png"><script type="application/ld+json">{
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "openssl 验证证书有效性",
-  "url": "https://www.litreily.top/2020/09/17/openssl/",
-  "image": "https://www.litreily.top/img/header.png",
-  "datePublished": "2020-09-17T06:17:27.000Z",
-  "dateModified": "2026-05-14T01:37:35.526Z",
-  "author": [
-    {
-      "@type": "Person",
-      "name": "litreily",
-      "url": "https://www.litreily.top"
-    }
-  ]
-}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://www.litreily.top/2020/09/17/openssl/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.4"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
-    (() => {
-      
-    const saveToLocal = {
-      set: (key, value, ttl) => {
-        if (!ttl) return
-        const expiry = Date.now() + ttl * 86400000
-        localStorage.setItem(key, JSON.stringify({ value, expiry }))
-      },
-      get: key => {
-        const itemStr = localStorage.getItem(key)
-        if (!itemStr) return undefined
-        const { value, expiry } = JSON.parse(itemStr)
-        if (Date.now() > expiry) {
-          localStorage.removeItem(key)
-          return undefined
-        }
-        return value
-      }
-    }
-
-    window.btf = {
-      saveToLocal,
-      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
-        const script = document.createElement('script')
-        script.src = url
-        script.async = true
-        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
-        script.onload = script.onreadystatechange = () => {
-          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
-        }
-        script.onerror = reject
-        document.head.appendChild(script)
-      }),
-      getCSS: (url, id) => new Promise((resolve, reject) => {
-        const link = document.createElement('link')
-        link.rel = 'stylesheet'
-        link.href = url
-        if (id) link.id = id
-        link.onload = link.onreadystatechange = () => {
-          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
-        }
-        link.onerror = reject
-        document.head.appendChild(link)
-      }),
-      addGlobalFn: (key, fn, name = false, parent = window) => {
-        if (!false && key.startsWith('pjax')) return
-        const globalFn = parent.globalFn || {}
-        globalFn[key] = globalFn[key] || {}
-        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
-        parent.globalFn = globalFn
-      }
-    }
-  
-      
-      const activateDarkMode = () => {
-        document.documentElement.setAttribute('data-theme', 'dark')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0B1121')
-        }
-      }
-      const activateLightMode = () => {
-        document.documentElement.setAttribute('data-theme', 'light')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#49B1F5')
-        }
-      }
-
-      btf.activateDarkMode = activateDarkMode
-      btf.activateLightMode = activateLightMode
-
-      const theme = saveToLocal.get('theme')
-    
-          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
-        
-      
-      const asideStatus = saveToLocal.get('aside-status')
-      if (asideStatus !== undefined) {
-        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
-      }
-    
-      
-    const detectApple = () => {
-      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
-        document.documentElement.classList.add('apple')
-      }
-    }
-    detectApple()
-  
-    })()
-  </script><script>const GLOBAL_CONFIG = {
-  root: '/',
-  algolia: undefined,
-  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
-  translate: undefined,
-  highlight: {"plugin":"prismjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
-  copy: {
-    success: 'Copy Successful',
-    error: 'Copy Failed',
-    noSupport: 'Browser Not Supported'
-  },
-  relativeDate: {
-    homepage: false,
-    post: false
-  },
-  runtime: '',
-  dateSuffix: {
-    just: 'Just now',
-    min: 'minutes ago',
-    hour: 'hours ago',
-    day: 'days ago',
-    month: 'months ago'
-  },
-  copyright: undefined,
-  lightbox: 'fancybox',
-  Snackbar: undefined,
-  infinitegrid: {
-    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
-    buttonText: 'Load More'
-  },
-  isPhotoFigcaption: false,
-  islazyloadPlugin: true,
-  isAnchor: false,
-  percent: {
-    toc: true,
-    rightside: true,
-  },
-  autoDarkmode: false
-}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
-  title: 'openssl 验证证书有效性',
-  isHighlightShrink: false,
-  isToc: true,
-  pageType: 'post'
-}</script><link rel="stylesheet" href="/css/custom.css"><style>figure.highlight pre,figure.highlight code{white-space:pre-wrap!important;word-wrap:break-word!important}</style><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
-</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/header.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">144</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">120</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">17</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(/img/title_1.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">LITREILY</span></a><a class="nav-page-title" href="/"><span class="site-name">openssl 验证证书有效性</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">openssl 验证证书有效性</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2020-09-17T06:17:27.000Z" title="Created 2020-09-17 14:17:27">2020-09-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-05-14T01:37:35.526Z" title="Updated 2026-05-14 09:37:35">2026-05-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Network/">Network</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Network/Security/">Security</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;It has been&quot;,&quot;messageNext&quot;:&quot;days since the last update, the content of the article may be outdated.&quot;,&quot;postUpdate&quot;:&quot;2026-05-14 09:37:35&quot;}" hidden></div><blockquote>
+<!DOCTYPE html><html lang="en"><head><meta name="generator" content="Hexo 3.9.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>openssl 验证证书有效性 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">openssl 验证证书有效性</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2020/09/17/openssl/">2020-09-17</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Network/">Network</a>&nbsp;&bull;&nbsp;<a href="/categories/Network/Security/">Security</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><blockquote>
 <p>OpenSSL is a robust, commercial-grade, and full-featured toolkit for the Transport Layer Security (TLS) and Secure Sockets Layer (SSL) protocols. It is also a general-purpose cryptography library.</p>
 </blockquote>
 <p>openssl是非常强大的TLS/SSL协议相关的工具集，包含丰富的测试工具。 这篇文章来讲讲如何使用openssl工具集中的<code>s_client</code>测试证书认证。</p>
-<span id="more"></span>
-
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ openssl <span class="token parameter variable">-h</span>
-openssl:Error: <span class="token string">'-h'</span> is an invalid command.
+<a id="more"></a>
+<pre><code class="bash">$ openssl -h
+openssl:Error: &#39;-h&#39; is an invalid command.
 
 Standard commands
 asn1parse      ca             ciphers        cms            crl
 crl2pkcs7      dgst           dh             dhparam        dsa
 dsaparam       ec             ecparam        enc            engine
 errstr         gendh          gendsa         genpkey        genrsa
-nseq           ocsp           <span class="token function">passwd</span>         pkcs12         pkcs7
+nseq           ocsp           passwd         pkcs12         pkcs7
 pkcs8          pkey           pkeyparam      pkeyutl        prime
 rand           req            rsa            rsautl         s_client
 s_server       s_time         sess_id        smime          speed
 spkac          srp            ts             verify         version
 x509
 
-Message Digest commands <span class="token punctuation">(</span>see the <span class="token variable"><span class="token variable">`</span>dgst<span class="token variable">`</span></span> <span class="token builtin class-name">command</span> <span class="token keyword">for</span> <span class="token function">more</span> details<span class="token punctuation">)</span>
+Message Digest commands (see the `dgst` command for more details)
 md4            md5            rmd160         sha            sha1
 
-Cipher commands <span class="token punctuation">(</span>see the <span class="token variable"><span class="token variable">`</span>enc<span class="token variable">`</span></span> <span class="token builtin class-name">command</span> <span class="token keyword">for</span> <span class="token function">more</span> details<span class="token punctuation">)</span>
+Cipher commands (see the `enc` command for more details)
 aes-128-cbc    aes-128-ecb    aes-192-cbc    aes-192-ecb    aes-256-cbc
 aes-256-ecb    base64         bf             bf-cbc         bf-cfb
 bf-ecb         bf-ofb         cast           cast-cbc       cast5-cbc
@@ -194,155 +37,45 @@ des-ede-ofb    des-ede3       des-ede3-cbc   des-ede3-cfb   des-ede3-ofb
 des-ofb        des3           desx           rc2            rc2-40-cbc
 rc2-64-cbc     rc2-cbc        rc2-cfb        rc2-ecb        rc2-ofb
 rc4            rc4-40         seed           seed-cbc       seed-cfb
-seed-ecb       seed-ofb       zlib<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+seed-ecb       seed-ofb       zlib
+</code></pre>
 <p>以站点<code>devicelocation.ngxcld.com</code>为例，修改当前系统时间，测试不同时间下的认证情况。</p>
 <h2 id="DNS解析"><a href="#DNS解析" class="headerlink" title="DNS解析"></a>DNS解析</h2><p>首先使用<code>nslookup</code>获取server ip.</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ <span class="token function">nslookup</span> devicelocation.ngxcld.com
-Server:    <span class="token number">112.65</span>.184.255
-Address <span class="token number">1</span>: <span class="token number">112.65</span>.184.255
+<pre><code class="bash">$ nslookup devicelocation.ngxcld.com
+Server:    112.65.184.255
+Address 1: 112.65.184.255
 
 Name:      devicelocation.ngxcld.com
-Address <span class="token number">1</span>: <span class="token number">54.72</span>.14.214 ec2-54-72-14-214.eu-west-1.compute.amazonaws.com
-Address <span class="token number">2</span>: <span class="token number">52.48</span>.74.182 ec2-52-48-74-182.eu-west-1.compute.amazonaws.com<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+Address 1: 54.72.14.214 ec2-54-72-14-214.eu-west-1.compute.amazonaws.com
+Address 2: 52.48.74.182 ec2-52-48-74-182.eu-west-1.compute.amazonaws.com
+</code></pre>
 <p>选择两个地址之一，此处选择<code>52.48.74.182</code>.</p>
 <h2 id="openssl-s-client"><a href="#openssl-s-client" class="headerlink" title="openssl s_client"></a>openssl s_client</h2><p><code>s_client</code>使用方法如下，详细参数说明可以通过<code>openssl s_client -h</code> 获得</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">openssl s_client <span class="token parameter variable">-connect</span> serverip:port<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
+<pre><code class="bash">openssl s_client -connect serverip:port
+</code></pre>
 <p>正常情况下，当前系统时间为正确的格林尼治时间，使用<code>openssl s_client</code>进行测试，测试结果如下↓</p>
-<pre class="line-numbers language-none"><code class="language-none">$ openssl s_client -connect 52.48.74.182:443
+<pre><code>$ openssl s_client -connect 52.48.74.182:443
 CONNECTED(00000003)
-depth&#x3D;4 C &#x3D; US, O &#x3D; &quot;Starfield Technologies, Inc.&quot;, OU &#x3D; Starfield Class 2 Certification Authority
+depth=4 C = US, O = &quot;Starfield Technologies, Inc.&quot;, OU = Starfield Class 2 Certification Authority
 verify return:1
-depth&#x3D;3 C &#x3D; US, ST &#x3D; Arizona, L &#x3D; Scottsdale, O &#x3D; &quot;Starfield Technologies, Inc.&quot;, CN &#x3D; Starfield Services Root Certificate Authority - G2
+depth=3 C = US, ST = Arizona, L = Scottsdale, O = &quot;Starfield Technologies, Inc.&quot;, CN = Starfield Services Root Certificate Authority - G2
 verify return:1
-depth&#x3D;2 C &#x3D; US, O &#x3D; Amazon, CN &#x3D; Amazon Root CA 1
+depth=2 C = US, O = Amazon, CN = Amazon Root CA 1
 verify return:1
-depth&#x3D;1 C &#x3D; US, O &#x3D; Amazon, OU &#x3D; Server CA 1B, CN &#x3D; Amazon
+depth=1 C = US, O = Amazon, OU = Server CA 1B, CN = Amazon
 verify return:1
-depth&#x3D;0 CN &#x3D; devicelocation.ngxcld.com
-verify return:1
----
-Certificate chain
- 0 s:&#x2F;CN&#x3D;devicelocation.ngxcld.com
-   i:&#x2F;C&#x3D;US&#x2F;O&#x3D;Amazon&#x2F;OU&#x3D;Server CA 1B&#x2F;CN&#x3D;Amazon
- 1 s:&#x2F;C&#x3D;US&#x2F;O&#x3D;Amazon&#x2F;OU&#x3D;Server CA 1B&#x2F;CN&#x3D;Amazon
-   i:&#x2F;C&#x3D;US&#x2F;O&#x3D;Amazon&#x2F;CN&#x3D;Amazon Root CA 1
- 2 s:&#x2F;C&#x3D;US&#x2F;O&#x3D;Amazon&#x2F;CN&#x3D;Amazon Root CA 1
-   i:&#x2F;C&#x3D;US&#x2F;ST&#x3D;Arizona&#x2F;L&#x3D;Scottsdale&#x2F;O&#x3D;Starfield Technologies, Inc.&#x2F;CN&#x3D;Starfield Services Root Certificate Authority - G2
- 3 s:&#x2F;C&#x3D;US&#x2F;ST&#x3D;Arizona&#x2F;L&#x3D;Scottsdale&#x2F;O&#x3D;Starfield Technologies, Inc.&#x2F;CN&#x3D;Starfield Services Root Certificate Authority - G2
-   i:&#x2F;C&#x3D;US&#x2F;O&#x3D;Starfield Technologies, Inc.&#x2F;OU&#x3D;Starfield Class 2 Certification Authority
----
-Server certificate
------BEGIN CERTIFICATE-----
-MIIFezCCBGOgAwIBAgIQD2G5WRjlpBXraGmoG0C50TANBgkqhkiG9w0BAQsFADBG
-MQswCQYDVQQGEwJVUzEPMA0GA1UEChMGQW1hem9uMRUwEwYDVQQLEwxTZXJ2ZXIg
-Q0EgMUIxDzANBgNVBAMTBkFtYXpvbjAeFw0yMDA4MjgwMDAwMDBaFw0yMTA5Mjcx
-MjAwMDBaMCQxIjAgBgNVBAMTGWRldmljZWxvY2F0aW9uLm5neGNsZC5jb20wggEi
-MA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCZw+BtpGv+SopXdXVjxvRJb1It
-3MqlCXyFp+lRxuM9ySLT0IFCMqhBadzJCIB32VZP4ixQ0WjqGDjwcXVau2ka0SDN
-e+xjhYzc6FKzgRmIy016sBQiadasadAZbbcJeRTNrhjD0PqjCE7DbKmQWx8SEoY0
-Nm1fnq&#x2F;TPwBIKqo1vdS2e6CiXcfH5LTBLLE4Ryw9aloWDQ2nud&#x2F;x8lRMlY+0Gird
-X1abENX9++gpoS&#x2F;TUQ2uXxbFKDPb&#x2F;Moi&#x2F;3hirivQiVi1R9CjEYYcmlSr+XctUjk&#x2F;
-VgzqwgUukC15YABvfxCjZRHyNQ85SJ2vDtDhxMfQfhZHqcUozkQPqw28SUVhAgMB
-AAGjggKFMIICgTAfBgNVHSMEGDAWgBRZpGYGUqB7lZI8o5QHJ5Z0W&#x2F;k90DAdBgNV
-HQ4EFgQUtbIEC2lD6lx&#x2F;E0fmPY&#x2F;OICyl9HQwJAYDVR0RBB0wG4IZZGV2aWNlbG9j
-YXRpb24ubmd4Y2xkLmNvbTAOBgNVHQ8BAf8EBAMCBaAwHQYDVR0lBBYwFAYIKwYB
-BQUHAwEGCCsGAQUFBwMCMDsGA1UdHwQ0MDIwMKAuoCyGKmh0dHA6Ly9jcmwuc2Nh
-MWIuYW1hem9udHJ1c3QuY29tL3NjYTFiLmNybDAgBgNVHSAEGTAXMAsGCWCGSAGG
-&#x2F;WwBAjAIBgZngQwBAgEwdQYIKwYBBQUHAQEEaTBnMC0GCCsGAQUFBzABhiFodHRw
-Oi8vb2NzcC5zY2ExYi5hbWF6b250cnVzdC5jb20wNgYIKwYBBQUHMAKGKmh0dHA6
-Ly9jcnQuc2NhMWIuYW1hem9udHJ1c3QuY29tL3NjYTFiLmNydDAMBgNVHRMBAf8E
-AjAAMIIBBAYKKwYBBAHWeQIEAgSB9QSB8gDwAHYA9lyUL9F3MCIUVBgIMJRWjuNN
-Exkzv98MLyALzE7xZOMAAAF0Moj6QwAABAMARzBFAiArdrj+FzgNhO3UOShNAThI
-dUxRgP21OgRiZCsOv3UZDwIhAJFyF0BC4kYsJqJFkc+n&#x2F;ZMmmVrrAG4WPIfGqwq&#x2F;
-nqc+AHYAXNxDkv7mq0VEsV6a1FbmEDf71fpH3KFzlLJe5vbHDsoAAAF0Moj6PQAA
-BAMARzBFAiEA+twofyIX7Z2fSqY3OJsHzw2c39o3oBVkwuthnGmsIegCIHNCLMBY
-lrkWX0V9j+7Pi+NHe57Bj2+IgWqlw&#x2F;CHeM5OMA0GCSqGSIb3DQEBCwUAA4IBAQAf
-2CtL8DliTB9Inf1+ZKTg6JjCebH4iH61gSfqxJZyDgW+7umFQguL+hEpdDUd6tcq
-Uj9ibAxtcdOLSbIjJKwC1cN+gcgSHYbPBD2mQU4U7wPhfFSZRDBoFBH4n13OkgT+
-f2tO&#x2F;byQ7uchJvnezVhjYdJwZoBpPi6IXpzqE5A6IH9AJz0iQJLUyyC1b8fQNiFQ
-5j65t5FrLqf9LU82hrDrPLjEvR9v6BAumlH&#x2F;0FmaIbXPwZm6kMXmTqRoPzX0+R5W
-M8bUGEDnkWMwzj+1eW64hpu8Fwsq17SAeITVclj2ZNjz2LaNyuLbdKkMatnLq1M6
-2sq4dgrQ1Jx90PGLzAbi
------END CERTIFICATE-----
-subject&#x3D;&#x2F;CN&#x3D;devicelocation.ngxcld.com
-issuer&#x3D;&#x2F;C&#x3D;US&#x2F;O&#x3D;Amazon&#x2F;OU&#x3D;Server CA 1B&#x2F;CN&#x3D;Amazon
----
-No client certificate CA names sent
-Peer signing digest: SHA512
-Server Temp Key: ECDH, P-256, 256 bits
----
-SSL handshake has read 5506 bytes and written 400 bytes
----
-New, TLSv1&#x2F;SSLv3, Cipher is ECDHE-RSA-AES128-GCM-SHA256
-Server public key is 2048 bit
-Secure Renegotiation IS supported
-Compression: NONE
-Expansion: NONE
-No ALPN negotiated
-SSL-Session:
-    Protocol  : TLSv1.2
-    Cipher    : ECDHE-RSA-AES128-GCM-SHA256
-    Session-ID: EFA5500D91F4403CA0D2003B98F790B238F68D34E4A9D1F7CB6E382B1C762588
-    Session-ID-ctx:
-    Master-Key: 8CEE4FCFC53AA6CB66F915D5C0911D28F59D30477EEDDA1E2A5E6C0DEE3FE24F8CC7918EF85717D34BC675F83F1BB892
-    Key-Arg   : None
-    PSK identity: None
-    PSK identity hint: None
-    SRP username: None
-    TLS session ticket lifetime hint: 43200 (seconds)
-    TLS session ticket:
-    0000 - c3 33 dc 6e 4b 4c 35 4f-3a 84 49 5d 7f 4a 12 30   .3.nKL5O:.I].J.0
-    0010 - cb be 29 f6 6c 04 78 61-19 48 9a ba e8 b8 21 31   ..).l.xa.H....!1
-    0020 - 56 52 ab d0 16 eb 56 6f-b6 8c 00 42 f6 14 cd 49   VR....Vo...B...I
-    0030 - b4 a1 09 5b 0e ea 11 1c-0c 85 61 4d 9b b3 75 49   ...[......aM..uI
-    0040 - 80 d5 ab da c8 2d 07 4c-c0 dc 9a dc 9c 4d 66 87   .....-.L.....Mf.
-    0050 - b3 8c 72 f4 c3 75 9a cf-76 46 75 35 81 54 48 ad   ..r..u..vFu5.TH.
-    0060 - 71 16 db 55 12 61 fe da-87 1a bc eb 43 83 2d 75   q..U.a......C.-u
-    0070 - 6a 6d 97 4a de 09 e1 b2-5c 18 2e af ac a0 a1 7a   jm.J....\......z
-    0080 - b8 e9 3f 83 65 5e 3e da-db 4f 1d fd 94 b6 66 e1   ..?.e^&gt;..O....f.
-    0090 - 74 73 3b 09 93 83 2f 23-7f 13 98 8c 63 3b 13 6b   ts;...&#x2F;#....c;.k
-    00a0 - 03 07 0f d2 b2 66 37 df-92 e7 c9 c1 7b da 26 67   .....f7.....&#123;.&amp;g
-
-    Start Time: 1600248002
-    Timeout   : 300 (sec)
-    Verify return code: 0 (ok)
----<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>输出结果中包含server端的证书以及认证结果，Verify return code 为0(ok)，说明一切正常。</p>
-<p>现在我故意将系统时间调整为去年的时间</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">date</span> <span class="token parameter variable">-s</span> <span class="token number">2019</span>-09-14<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>重新执行一遍指令，结果如下↓</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ openssl s_client <span class="token parameter variable">-connect</span> <span class="token number">52.48</span>.74.182:443
-CONNECTED<span class="token punctuation">(</span>00000003<span class="token punctuation">)</span>
-<span class="token assign-left variable">depth</span><span class="token operator">=</span><span class="token number">4</span> C <span class="token operator">=</span> US, O <span class="token operator">=</span> <span class="token string">"Starfield Technologies, Inc."</span>, OU <span class="token operator">=</span> Starfield Class <span class="token number">2</span> Certification Authority
-verify return:1
-<span class="token assign-left variable">depth</span><span class="token operator">=</span><span class="token number">3</span> C <span class="token operator">=</span> US, ST <span class="token operator">=</span> Arizona, L <span class="token operator">=</span> Scottsdale, O <span class="token operator">=</span> <span class="token string">"Starfield Technologies, Inc."</span>, CN <span class="token operator">=</span> Starfield Services Root Certificate Authority - G2
-verify return:1
-<span class="token assign-left variable">depth</span><span class="token operator">=</span><span class="token number">2</span> C <span class="token operator">=</span> US, O <span class="token operator">=</span> Amazon, CN <span class="token operator">=</span> Amazon Root CA <span class="token number">1</span>
-verify return:1
-<span class="token assign-left variable">depth</span><span class="token operator">=</span><span class="token number">1</span> C <span class="token operator">=</span> US, O <span class="token operator">=</span> Amazon, OU <span class="token operator">=</span> Server CA 1B, CN <span class="token operator">=</span> Amazon
-verify return:1
-<span class="token assign-left variable">depth</span><span class="token operator">=</span><span class="token number">0</span> CN <span class="token operator">=</span> devicelocation.ngxcld.com
-verify error:num<span class="token operator">=</span><span class="token number">9</span>:certificate is not yet valid
-<span class="token assign-left variable">notBefore</span><span class="token operator">=</span>Aug <span class="token number">28</span> 00:00:00 <span class="token number">2020</span> GMT
-verify return:1
-<span class="token assign-left variable">depth</span><span class="token operator">=</span><span class="token number">0</span> CN <span class="token operator">=</span> devicelocation.ngxcld.com
-<span class="token assign-left variable">notBefore</span><span class="token operator">=</span>Aug <span class="token number">28</span> 00:00:00 <span class="token number">2020</span> GMT
+depth=0 CN = devicelocation.ngxcld.com
 verify return:1
 ---
 Certificate chain
- <span class="token number">0</span> s:/CN<span class="token operator">=</span>devicelocation.ngxcld.com
-   i:/C<span class="token operator">=</span>US/O<span class="token operator">=</span>Amazon/OU<span class="token operator">=</span>Server CA 1B/CN<span class="token operator">=</span>Amazon
- <span class="token number">1</span> s:/C<span class="token operator">=</span>US/O<span class="token operator">=</span>Amazon/OU<span class="token operator">=</span>Server CA 1B/CN<span class="token operator">=</span>Amazon
-   i:/C<span class="token operator">=</span>US/O<span class="token operator">=</span>Amazon/CN<span class="token operator">=</span>Amazon Root CA <span class="token number">1</span>
- <span class="token number">2</span> s:/C<span class="token operator">=</span>US/O<span class="token operator">=</span>Amazon/CN<span class="token operator">=</span>Amazon Root CA <span class="token number">1</span>
-   i:/C<span class="token operator">=</span>US/ST<span class="token operator">=</span>Arizona/L<span class="token operator">=</span>Scottsdale/O<span class="token operator">=</span>Starfield Technologies, Inc./CN<span class="token operator">=</span>Starfield Services Root Certificate Authority - G2
- <span class="token number">3</span> s:/C<span class="token operator">=</span>US/ST<span class="token operator">=</span>Arizona/L<span class="token operator">=</span>Scottsdale/O<span class="token operator">=</span>Starfield Technologies, Inc./CN<span class="token operator">=</span>Starfield Services Root Certificate Authority - G2
-   i:/C<span class="token operator">=</span>US/O<span class="token operator">=</span>Starfield Technologies, Inc./OU<span class="token operator">=</span>Starfield Class <span class="token number">2</span> Certification Authority
+ 0 s:/CN=devicelocation.ngxcld.com
+   i:/C=US/O=Amazon/OU=Server CA 1B/CN=Amazon
+ 1 s:/C=US/O=Amazon/OU=Server CA 1B/CN=Amazon
+   i:/C=US/O=Amazon/CN=Amazon Root CA 1
+ 2 s:/C=US/O=Amazon/CN=Amazon Root CA 1
+   i:/C=US/ST=Arizona/L=Scottsdale/O=Starfield Technologies, Inc./CN=Starfield Services Root Certificate Authority - G2
+ 3 s:/C=US/ST=Arizona/L=Scottsdale/O=Starfield Technologies, Inc./CN=Starfield Services Root Certificate Authority - G2
+   i:/C=US/O=Starfield Technologies, Inc./OU=Starfield Class 2 Certification Authority
 ---
 Server certificate
 -----BEGIN CERTIFICATE-----
@@ -377,107 +110,203 @@ f2tO/byQ7uchJvnezVhjYdJwZoBpPi6IXpzqE5A6IH9AJz0iQJLUyyC1b8fQNiFQ
 M8bUGEDnkWMwzj+1eW64hpu8Fwsq17SAeITVclj2ZNjz2LaNyuLbdKkMatnLq1M6
 2sq4dgrQ1Jx90PGLzAbi
 -----END CERTIFICATE-----
-<span class="token assign-left variable">subject</span><span class="token operator">=</span>/CN<span class="token operator">=</span>devicelocation.ngxcld.com
-<span class="token assign-left variable">issuer</span><span class="token operator">=</span>/C<span class="token operator">=</span>US/O<span class="token operator">=</span>Amazon/OU<span class="token operator">=</span>Server CA 1B/CN<span class="token operator">=</span>Amazon
+subject=/CN=devicelocation.ngxcld.com
+issuer=/C=US/O=Amazon/OU=Server CA 1B/CN=Amazon
 ---
 No client certificate CA names sent
 Peer signing digest: SHA512
-Server Temp Key: ECDH, P-256, <span class="token number">256</span> bits
+Server Temp Key: ECDH, P-256, 256 bits
 ---
-SSL handshake has <span class="token builtin class-name">read</span> <span class="token number">5506</span> bytes and written <span class="token number">400</span> bytes
+SSL handshake has read 5506 bytes and written 400 bytes
 ---
 New, TLSv1/SSLv3, Cipher is ECDHE-RSA-AES128-GCM-SHA256
-Server public key is <span class="token number">2048</span> bit
+Server public key is 2048 bit
 Secure Renegotiation IS supported
 Compression: NONE
 Expansion: NONE
 No ALPN negotiated
 SSL-Session:
-    Protocol  <span class="token builtin class-name">:</span> TLSv1.2
-    Cipher    <span class="token builtin class-name">:</span> ECDHE-RSA-AES128-GCM-SHA256
-    Session-ID: 979E3C71B293EDF1923989B706B0B315A638046A30DA9E6B77C8889DF94BC613
+    Protocol  : TLSv1.2
+    Cipher    : ECDHE-RSA-AES128-GCM-SHA256
+    Session-ID: EFA5500D91F4403CA0D2003B98F790B238F68D34E4A9D1F7CB6E382B1C762588
     Session-ID-ctx:
-    Master-Key: 24F7FD66C5A195765C62FE5B8D5304F94F3006A1A2993B7C3FB5B1D9162A9E5BFD6CADC984458153E32F012AD30A3F7A
-    Key-Arg   <span class="token builtin class-name">:</span> None
+    Master-Key: 8CEE4FCFC53AA6CB66F915D5C0911D28F59D30477EEDDA1E2A5E6C0DEE3FE24F8CC7918EF85717D34BC675F83F1BB892
+    Key-Arg   : None
     PSK identity: None
     PSK identity hint: None
     SRP username: None
-    TLS session ticket lifetime hint: <span class="token number">43200</span> <span class="token punctuation">(</span>seconds<span class="token punctuation">)</span>
+    TLS session ticket lifetime hint: 43200 (seconds)
     TLS session ticket:
-    0000 - c3 <span class="token number">33</span> <span class="token function">dc</span> 6e 4b 4c <span class="token number">35</span> 4f-3a <span class="token number">84</span> <span class="token number">49</span> 5d 7f 4a <span class="token number">12</span> <span class="token number">30</span>   .3.nKL5O:.I<span class="token punctuation">]</span>.J.0
-    0010 - be c3 <span class="token number">28</span> c9 3a fd <span class="token number">73</span> 6a-c7 <span class="token number">65</span> <span class="token number">65</span> b0 a7 <span class="token number">69</span> a1 ca   <span class="token punctuation">..</span><span class="token punctuation">(</span>.:.sj.ee<span class="token punctuation">..</span>i<span class="token punctuation">..</span>
-    0020 - f8 <span class="token number">89</span> 1d <span class="token number">62</span> <span class="token number">75</span> 3d <span class="token number">46</span> 7d-92 <span class="token number">62</span> 01 f6 8b fa <span class="token number">40</span> c7   <span class="token punctuation">..</span>.bu<span class="token operator">=</span>F<span class="token punctuation">&#125;</span>.b<span class="token punctuation">..</span><span class="token punctuation">..</span>@.
-    0030 - ef de 3b <span class="token number">35</span> <span class="token number">50</span> ab 0c <span class="token number">45</span>-79 ce <span class="token number">97</span> 2f <span class="token number">13</span> 9e 0c <span class="token number">10</span>   <span class="token punctuation">..</span><span class="token punctuation">;</span>5P<span class="token punctuation">..</span>Ey<span class="token punctuation">..</span>/<span class="token punctuation">..</span><span class="token punctuation">..</span>
-    0040 - 4c d2 2a 4e <span class="token number">85</span> fc 8f b1-4c c9 <span class="token number">98</span> 1a 0d <span class="token number">39</span> a9 <span class="token number">26</span>   L.*N<span class="token punctuation">..</span><span class="token punctuation">..</span>L<span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token number">9</span>.<span class="token operator">&amp;</span>
-    0050 - e3 c3 <span class="token number">18</span> <span class="token number">16</span> fc ad b9 9a-ba 5d f7 b1 db <span class="token number">70</span> ab <span class="token number">30</span>   <span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span>.<span class="token punctuation">]</span><span class="token punctuation">..</span>.p.0
-    0060 - 04 b3 9a 2f <span class="token number">66</span> <span class="token number">97</span> <span class="token number">74</span> e6-74 c9 04 <span class="token number">59</span> 3b <span class="token number">18</span> <span class="token function">df</span> <span class="token number">67</span>   <span class="token punctuation">..</span>./f.t.t<span class="token punctuation">..</span>Y<span class="token punctuation">;</span><span class="token punctuation">..</span>g
-    0070 - a3 <span class="token number">17</span> 03 <span class="token number">52</span> c8 c9 b9 8c-1f <span class="token number">11</span> 01 8e cf <span class="token function">bc</span> <span class="token number">17</span> <span class="token number">22</span>   <span class="token punctuation">..</span>.R<span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span>."
-    0080 - e7 7d <span class="token number">40</span> ad <span class="token number">53</span> c6 04 <span class="token number">83</span>-d2 <span class="token number">80</span> <span class="token number">24</span> <span class="token number">28</span> 3f cb f8 c6   .<span class="token punctuation">&#125;</span>@.S<span class="token punctuation">..</span><span class="token punctuation">..</span>.<span class="token punctuation">$(</span>?<span class="token punctuation">..</span>.
-    0090 - c4 1c 2f <span class="token number">42</span> <span class="token number">15</span> 7b a3 <span class="token number">13</span>-c7 4f 8f <span class="token number">62</span> <span class="token number">18</span> <span class="token number">71</span> 0f 2a   <span class="token punctuation">..</span>/B.<span class="token punctuation">&#123;</span><span class="token punctuation">..</span>.O.b.q.*
-    00a0 - <span class="token number">90</span> 8b 8b d9 <span class="token number">64</span> b8 1e 0d-cf <span class="token function">df</span> <span class="token number">62</span> cc fc <span class="token number">95</span> d0 ce   <span class="token punctuation">..</span><span class="token punctuation">..</span>d<span class="token punctuation">..</span><span class="token punctuation">..</span>.b<span class="token punctuation">..</span><span class="token punctuation">..</span>.
+    0000 - c3 33 dc 6e 4b 4c 35 4f-3a 84 49 5d 7f 4a 12 30   .3.nKL5O:.I].J.0
+    0010 - cb be 29 f6 6c 04 78 61-19 48 9a ba e8 b8 21 31   ..).l.xa.H....!1
+    0020 - 56 52 ab d0 16 eb 56 6f-b6 8c 00 42 f6 14 cd 49   VR....Vo...B...I
+    0030 - b4 a1 09 5b 0e ea 11 1c-0c 85 61 4d 9b b3 75 49   ...[......aM..uI
+    0040 - 80 d5 ab da c8 2d 07 4c-c0 dc 9a dc 9c 4d 66 87   .....-.L.....Mf.
+    0050 - b3 8c 72 f4 c3 75 9a cf-76 46 75 35 81 54 48 ad   ..r..u..vFu5.TH.
+    0060 - 71 16 db 55 12 61 fe da-87 1a bc eb 43 83 2d 75   q..U.a......C.-u
+    0070 - 6a 6d 97 4a de 09 e1 b2-5c 18 2e af ac a0 a1 7a   jm.J....\......z
+    0080 - b8 e9 3f 83 65 5e 3e da-db 4f 1d fd 94 b6 66 e1   ..?.e^&gt;..O....f.
+    0090 - 74 73 3b 09 93 83 2f 23-7f 13 98 8c 63 3b 13 6b   ts;.../#....c;.k
+    00a0 - 03 07 0f d2 b2 66 37 df-92 e7 c9 c1 7b da 26 67   .....f7.....{.&amp;g
 
-    Start Time: <span class="token number">1598327363</span>
-    Timeout   <span class="token builtin class-name">:</span> <span class="token number">300</span> <span class="token punctuation">(</span>sec<span class="token punctuation">)</span>
-    Verify <span class="token builtin class-name">return</span> code: <span class="token number">9</span> <span class="token punctuation">(</span>certificate is not yet valid<span class="token punctuation">)</span>
----<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    Start Time: 1600248002
+    Timeout   : 300 (sec)
+    Verify return code: 0 (ok)
+---
+</code></pre><p>输出结果中包含server端的证书以及认证结果，Verify return code 为0(ok)，说明一切正常。</p>
+<p>现在我故意将系统时间调整为去年的时间</p>
+<pre><code class="bash">date -s 2019-09-14
+</code></pre>
+<p>重新执行一遍指令，结果如下↓</p>
+<pre><code class="bash">$ openssl s_client -connect 52.48.74.182:443
+CONNECTED(00000003)
+depth=4 C = US, O = &quot;Starfield Technologies, Inc.&quot;, OU = Starfield Class 2 Certification Authority
+verify return:1
+depth=3 C = US, ST = Arizona, L = Scottsdale, O = &quot;Starfield Technologies, Inc.&quot;, CN = Starfield Services Root Certificate Authority - G2
+verify return:1
+depth=2 C = US, O = Amazon, CN = Amazon Root CA 1
+verify return:1
+depth=1 C = US, O = Amazon, OU = Server CA 1B, CN = Amazon
+verify return:1
+depth=0 CN = devicelocation.ngxcld.com
+verify error:num=9:certificate is not yet valid
+notBefore=Aug 28 00:00:00 2020 GMT
+verify return:1
+depth=0 CN = devicelocation.ngxcld.com
+notBefore=Aug 28 00:00:00 2020 GMT
+verify return:1
+---
+Certificate chain
+ 0 s:/CN=devicelocation.ngxcld.com
+   i:/C=US/O=Amazon/OU=Server CA 1B/CN=Amazon
+ 1 s:/C=US/O=Amazon/OU=Server CA 1B/CN=Amazon
+   i:/C=US/O=Amazon/CN=Amazon Root CA 1
+ 2 s:/C=US/O=Amazon/CN=Amazon Root CA 1
+   i:/C=US/ST=Arizona/L=Scottsdale/O=Starfield Technologies, Inc./CN=Starfield Services Root Certificate Authority - G2
+ 3 s:/C=US/ST=Arizona/L=Scottsdale/O=Starfield Technologies, Inc./CN=Starfield Services Root Certificate Authority - G2
+   i:/C=US/O=Starfield Technologies, Inc./OU=Starfield Class 2 Certification Authority
+---
+Server certificate
+-----BEGIN CERTIFICATE-----
+MIIFezCCBGOgAwIBAgIQD2G5WRjlpBXraGmoG0C50TANBgkqhkiG9w0BAQsFADBG
+MQswCQYDVQQGEwJVUzEPMA0GA1UEChMGQW1hem9uMRUwEwYDVQQLEwxTZXJ2ZXIg
+Q0EgMUIxDzANBgNVBAMTBkFtYXpvbjAeFw0yMDA4MjgwMDAwMDBaFw0yMTA5Mjcx
+MjAwMDBaMCQxIjAgBgNVBAMTGWRldmljZWxvY2F0aW9uLm5neGNsZC5jb20wggEi
+MA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCZw+BtpGv+SopXdXVjxvRJb1It
+3MqlCXyFp+lRxuM9ySLT0IFCMqhBadzJCIB32VZP4ixQ0WjqGDjwcXVau2ka0SDN
+e+xjhYzc6FKzgRmIy016sBQiadasadAZbbcJeRTNrhjD0PqjCE7DbKmQWx8SEoY0
+Nm1fnq/TPwBIKqo1vdS2e6CiXcfH5LTBLLE4Ryw9aloWDQ2nud/x8lRMlY+0Gird
+X1abENX9++gpoS/TUQ2uXxbFKDPb/Moi/3hirivQiVi1R9CjEYYcmlSr+XctUjk/
+VgzqwgUukC15YABvfxCjZRHyNQ85SJ2vDtDhxMfQfhZHqcUozkQPqw28SUVhAgMB
+AAGjggKFMIICgTAfBgNVHSMEGDAWgBRZpGYGUqB7lZI8o5QHJ5Z0W/k90DAdBgNV
+HQ4EFgQUtbIEC2lD6lx/E0fmPY/OICyl9HQwJAYDVR0RBB0wG4IZZGV2aWNlbG9j
+YXRpb24ubmd4Y2xkLmNvbTAOBgNVHQ8BAf8EBAMCBaAwHQYDVR0lBBYwFAYIKwYB
+BQUHAwEGCCsGAQUFBwMCMDsGA1UdHwQ0MDIwMKAuoCyGKmh0dHA6Ly9jcmwuc2Nh
+MWIuYW1hem9udHJ1c3QuY29tL3NjYTFiLmNybDAgBgNVHSAEGTAXMAsGCWCGSAGG
+/WwBAjAIBgZngQwBAgEwdQYIKwYBBQUHAQEEaTBnMC0GCCsGAQUFBzABhiFodHRw
+Oi8vb2NzcC5zY2ExYi5hbWF6b250cnVzdC5jb20wNgYIKwYBBQUHMAKGKmh0dHA6
+Ly9jcnQuc2NhMWIuYW1hem9udHJ1c3QuY29tL3NjYTFiLmNydDAMBgNVHRMBAf8E
+AjAAMIIBBAYKKwYBBAHWeQIEAgSB9QSB8gDwAHYA9lyUL9F3MCIUVBgIMJRWjuNN
+Exkzv98MLyALzE7xZOMAAAF0Moj6QwAABAMARzBFAiArdrj+FzgNhO3UOShNAThI
+dUxRgP21OgRiZCsOv3UZDwIhAJFyF0BC4kYsJqJFkc+n/ZMmmVrrAG4WPIfGqwq/
+nqc+AHYAXNxDkv7mq0VEsV6a1FbmEDf71fpH3KFzlLJe5vbHDsoAAAF0Moj6PQAA
+BAMARzBFAiEA+twofyIX7Z2fSqY3OJsHzw2c39o3oBVkwuthnGmsIegCIHNCLMBY
+lrkWX0V9j+7Pi+NHe57Bj2+IgWqlw/CHeM5OMA0GCSqGSIb3DQEBCwUAA4IBAQAf
+2CtL8DliTB9Inf1+ZKTg6JjCebH4iH61gSfqxJZyDgW+7umFQguL+hEpdDUd6tcq
+Uj9ibAxtcdOLSbIjJKwC1cN+gcgSHYbPBD2mQU4U7wPhfFSZRDBoFBH4n13OkgT+
+f2tO/byQ7uchJvnezVhjYdJwZoBpPi6IXpzqE5A6IH9AJz0iQJLUyyC1b8fQNiFQ
+5j65t5FrLqf9LU82hrDrPLjEvR9v6BAumlH/0FmaIbXPwZm6kMXmTqRoPzX0+R5W
+M8bUGEDnkWMwzj+1eW64hpu8Fwsq17SAeITVclj2ZNjz2LaNyuLbdKkMatnLq1M6
+2sq4dgrQ1Jx90PGLzAbi
+-----END CERTIFICATE-----
+subject=/CN=devicelocation.ngxcld.com
+issuer=/C=US/O=Amazon/OU=Server CA 1B/CN=Amazon
+---
+No client certificate CA names sent
+Peer signing digest: SHA512
+Server Temp Key: ECDH, P-256, 256 bits
+---
+SSL handshake has read 5506 bytes and written 400 bytes
+---
+New, TLSv1/SSLv3, Cipher is ECDHE-RSA-AES128-GCM-SHA256
+Server public key is 2048 bit
+Secure Renegotiation IS supported
+Compression: NONE
+Expansion: NONE
+No ALPN negotiated
+SSL-Session:
+    Protocol  : TLSv1.2
+    Cipher    : ECDHE-RSA-AES128-GCM-SHA256
+    Session-ID: 979E3C71B293EDF1923989B706B0B315A638046A30DA9E6B77C8889DF94BC613
+    Session-ID-ctx:
+    Master-Key: 24F7FD66C5A195765C62FE5B8D5304F94F3006A1A2993B7C3FB5B1D9162A9E5BFD6CADC984458153E32F012AD30A3F7A
+    Key-Arg   : None
+    PSK identity: None
+    PSK identity hint: None
+    SRP username: None
+    TLS session ticket lifetime hint: 43200 (seconds)
+    TLS session ticket:
+    0000 - c3 33 dc 6e 4b 4c 35 4f-3a 84 49 5d 7f 4a 12 30   .3.nKL5O:.I].J.0
+    0010 - be c3 28 c9 3a fd 73 6a-c7 65 65 b0 a7 69 a1 ca   ..(.:.sj.ee..i..
+    0020 - f8 89 1d 62 75 3d 46 7d-92 62 01 f6 8b fa 40 c7   ...bu=F}.b....@.
+    0030 - ef de 3b 35 50 ab 0c 45-79 ce 97 2f 13 9e 0c 10   ..;5P..Ey../....
+    0040 - 4c d2 2a 4e 85 fc 8f b1-4c c9 98 1a 0d 39 a9 26   L.*N....L....9.&amp;
+    0050 - e3 c3 18 16 fc ad b9 9a-ba 5d f7 b1 db 70 ab 30   .........]...p.0
+    0060 - 04 b3 9a 2f 66 97 74 e6-74 c9 04 59 3b 18 df 67   .../f.t.t..Y;..g
+    0070 - a3 17 03 52 c8 c9 b9 8c-1f 11 01 8e cf bc 17 22   ...R...........&quot;
+    0080 - e7 7d 40 ad 53 c6 04 83-d2 80 24 28 3f cb f8 c6   .}@.S.....$(?...
+    0090 - c4 1c 2f 42 15 7b a3 13-c7 4f 8f 62 18 71 0f 2a   ../B.{...O.b.q.*
+    00a0 - 90 8b 8b d9 64 b8 1e 0d-cf df 62 cc fc 95 d0 ce   ....d.....b.....
 
+    Start Time: 1598327363
+    Timeout   : 300 (sec)
+    Verify return code: 9 (certificate is not yet valid)
+---
+</code></pre>
 <p>可以看到最后的<code>Verify return code</code>变为9了，而且提示<code>certificate is not yet vaild</code>, 说明证书无效，实际上不是证书无效，而是本地系统时间没有同步，然后认为server端的证书有效期太超前，错认为是证书无效。在前半部分的错误信息中</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">verify error:num<span class="token operator">=</span><span class="token number">9</span>:certificate is not yet valid
-<span class="token assign-left variable">notBefore</span><span class="token operator">=</span>Aug <span class="token number">28</span> 00:00:00 <span class="token number">2020</span> GMT<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
+<pre><code class="bash">verify error:num=9:certificate is not yet valid
+notBefore=Aug 28 00:00:00 2020 GMT
+</code></pre>
 <p>可以看出server端证书的起始时间是<code>Aug 28 00:00:00 2020 GMT</code>，所以只要当前系统时间在这个时间之后就是正常的。</p>
 <p>在出错的情况下使用<code>wireshark</code>抓包就可以发现，client端认为证书无效，会alert一个<code>Bad Certificate</code>的错误信息，然后关闭当前连接。</p>
-<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/network/ssl/bad-certificate.png" alt="wireshark Bad Certificate"></p>
+<p><img src="/assets/network/ssl/bad-certificate.png" alt="wireshark Bad Certificate"></p>
 <p>在嵌入式设备中，如果NTP没有同步，当前系统时间就有可能是错误的，此时使用<code>https</code>与远程服务器通信就可能出错。</p>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://www.litreily.top">litreily</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://www.litreily.top/2020/09/17/openssl/">https://www.litreily.top/2020/09/17/openssl/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/openssl/">openssl</a></div><div class="post-share"><div class="social-share" data-image="/img/header.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2020/12/02/setup-pptp/" title="Setup PPTP and DNS server"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">Setup PPTP and DNS server</div></div><div class="info-2"><div class="info-item-1">PPTP (Point to Point Tunneling Protocol) 点对点隧道协议，与PPPoE, L2TP 均属于 PPP(Point to Point Protocol) 点对点协议。这篇来记录下PPTP server的安装和配置过程。 install DHCP server除了PPPoE外，PPTP 与 L2TP 都无法直接给client分配IP，需要使用dhcp server分配。所以在安装PPTP的同时，也要保证DHCP server也已安装。具体方法参考 Setup dhcpd/dhcpdv6 server. 需要注意的是，在Ubuntu 20.10 版本中，网卡的静态IP管理模式与以往有所不同。在以往版本中，是修改 /etc/network/interfaces 文件，但是在最新Ubuntu确不一样，最新版提出了一个叫 netplan 的概念，修改的文件是：  /etc/netplan/01-network-manager-all.yaml  以 yaml 文件存储配置信息，我们将配置dhcp 对应接口的静态IP为 10.0.0.138/24, 对应配...</div></div></div></a><a class="pagination-related" href="/2020/08/13/python-pdf/" title="python之给pdf添加页码"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">python之给pdf添加页码</div></div><div class="info-2"><div class="info-item-1">最近写release note, 总感觉用tex不太方便，特别是装texlive占用大量空间，还有各种依赖问题，想着能不能用markdown写更方便。实践证明，typora导出pdf的功能真的很棒，唯独一个不足之处就是生成的PDF不带页码。 这个虽然可以使用在线工具实现，或者使用Adobe、福昕的 pdf 编辑功能，但是很多情况，尤其是工作平台是不方便使用的。为此我想到了Python，通过脚本把页码加上。 安装Python库首先需要安装两个依赖库，PyPDF2以及reportLab, PyPDF2可以对PDF进行拆分、合并、删除、加密等操作；reportlab则更是强大，看看下面的官方介绍。  We build solutions to generate rich, attractive and fully bespoke PDFs at incredible speeds.Over 5 million documents are generated each month using Reportlab&#39;s software--- https://www.reportla...</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comments</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/header.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">litreily</div><div class="author-info-description">simple life</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">144</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">120</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">17</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Litreily"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://xhslink.com/m/893FaC3aK88" target="_blank" title="小红书"><i class="fas fa-seedling" style="color: #ff2442;"></i></a><a class="social-icon" href="mailto:litreily@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="https://www.litreily.top/notes/" target="_blank" title="Notes"><i class="fas fa-sticky-note" style="color: #e8a618;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS%E8%A7%A3%E6%9E%90"><span class="toc-text">DNS解析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#openssl-s-client"><span class="toc-text">openssl s_client</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/07/05/daily-eastern-beauty-2026-07-05/" title="每日东方美人探索 2026-07-05"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-07-05/open-daily-magic.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="每日东方美人探索 2026-07-05"/></a><div class="content"><a class="title" href="/2026/07/05/daily-eastern-beauty-2026-07-05/" title="每日东方美人探索 2026-07-05">每日东方美人探索 2026-07-05</a><time datetime="2026-07-04T16:10:00.000Z" title="Created 2026-07-05 00:10:00">2026-07-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/07/04/daily-eastern-beauty-2026-07-04/" title="每日东方美人探索 2026-07-04"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-07-04/open-time-crossing.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="每日东方美人探索 2026-07-04"/></a><div class="content"><a class="title" href="/2026/07/04/daily-eastern-beauty-2026-07-04/" title="每日东方美人探索 2026-07-04">每日东方美人探索 2026-07-04</a><time datetime="2026-07-04T09:18:00.000Z" title="Created 2026-07-04 17:18:00">2026-07-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/07/03/daily-eastern-beauty-2026-07-03/" title="每日东方美人探索 2026-07-03"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-07-03/open-time-crossing.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="每日东方美人探索 2026-07-03"/></a><div class="content"><a class="title" href="/2026/07/03/daily-eastern-beauty-2026-07-03/" title="每日东方美人探索 2026-07-03">每日东方美人探索 2026-07-03</a><time datetime="2026-07-02T16:10:00.000Z" title="Created 2026-07-03 00:10:00">2026-07-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/07/02/daily-eastern-beauty-2026-07-02/" title="每日东方美人探索 2026-07-02"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-07-02/open-daily-magic.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="每日东方美人探索 2026-07-02"/></a><div class="content"><a class="title" href="/2026/07/02/daily-eastern-beauty-2026-07-02/" title="每日东方美人探索 2026-07-02">每日东方美人探索 2026-07-02</a><time datetime="2026-07-02T08:55:00.000Z" title="Created 2026-07-02 16:55:00">2026-07-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/07/01/daily-eastern-beauty-2026-07-01/" title="每日东方美人探索 2026-07-01"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-07-01/open-time-crossing.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="每日东方美人探索 2026-07-01"/></a><div class="content"><a class="title" href="/2026/07/01/daily-eastern-beauty-2026-07-01/" title="每日东方美人探索 2026-07-01">每日东方美人探索 2026-07-01</a><time datetime="2026-07-01T01:10:00.000Z" title="Created 2026-07-01 09:10:00">2026-07-01</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By litreily</span><span class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 5.4.2</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll to Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4"></script><script src="/js/main.js?v=5.5.4"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@19.1.3/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
-  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
-  const option = null
-
-  const initValine = (el, path) => {
-    if (isShuoshuo) {
-      window.shuoshuoComment.destroyValine = () => {
-        if (el.children.length) {
-          el.innerHTML = ''
-          el.classList.add('no-comment')
-        }
-      }
-    }
-
-    const valineConfig = {
-      el: '#vcomment',
-      appId: '1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
-      appKey: 'uvA3xgqNW3q8TGR483lxXcpB',
-      avatar: 'monsterid',
-      serverURLs: '',
-      emojiMaps: "",
-      visitor: false,
-      ...option,
-      path: isShuoshuo ? path : (option && option.path) || window.location.pathname
-    }
-
-    new Valine(valineConfig)
-  }
-
-  const loadValine = async (el, path) => {
-    if (typeof Valine === 'function') {
-      initValine(el, path)
-    } else {
-      await btf.getScript('https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js')
-      initValine(el, path)
-    }
-  }
-
-  if (isShuoshuo) {
-    'Valine' === 'Valine'
-      ? window.shuoshuoComment = { loadComment: loadValine }
-      : window.loadOtherComment = loadValine
-    return
-  }
-
-  if ('Valine' === 'Valine' || !false) {
-    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
-    else setTimeout(loadValine, 0)
-  } else {
-    window.loadOtherComment = loadValine
-  }
-})()</script></div><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="local-search-input"><input placeholder="Search..." type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.4"></script></div></div></body></html>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2020/09/17/openssl/">https://www.litreily.top/2020/09/17/openssl/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tag"></i><a href="/tags/openssl/">openssl</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS解析"><span class="toc-number">1.</span> <span class="toc-text">DNS解析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#openssl-s-client"><span class="toc-number">2.</span> <span class="toc-text">openssl s_client</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2020/12/02/setup-pptp/">&lt; Setup PPTP and DNS server</a><a class="next" href="/2020/08/13/python-pdf/">python之给pdf添加页码 &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+.night .v[data-class=v] a:hover { color: #216C73 !important; }
+.night .v[data-class=v] li { list-style: inherit; }
+.night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
+.night .v[data-class=v] .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.night .v[data-class=v] .vbtn { border-radius: 0; background: none; }
+.night .v[data-class=v] .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.night .v[data-class=v] .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.night .v[data-class=v] .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre,.night .v[data-class=v] .vlist .vcard .vhead .vsys { background: #203240 !important; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre { color: #F0F0F0; font-size: 95%; }
+.v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
+</style><div id="vcomment"></div><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
+  lang: 'zh-cn',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></section><footer><p>Copyright © 2016 - 2020 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/plugins/prettify/prettify.js"></script><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script></body></html>

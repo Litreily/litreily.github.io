@@ -1,170 +1,13 @@
-<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Telnet中使用smtp发送邮件 | LITREILY</title><meta name="author" content="litreily,707922098@qq.com"><meta name="copyright" content="litreily"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#49B1F5"><meta name="description" content="Telnet是远程登录服务的标准协议和主要方式，工作于TCP&#x2F;IP协议族的应用层，常用于远程登录web服务器，其中便包括SMTP，POP3等邮件服务器。">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Telnet中使用smtp发送邮件">
-<meta property="og:url" content="https://www.litreily.top/2017/08/17/telnet-smtp/index.html">
-<meta property="og:site_name" content="LITREILY">
-<meta property="og:description" content="Telnet是远程登录服务的标准协议和主要方式，工作于TCP&#x2F;IP协议族的应用层，常用于远程登录web服务器，其中便包括SMTP，POP3等邮件服务器。">
-<meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://www.litreily.top/img/header.png">
-<meta property="article:published_time" content="2017-08-17T13:18:44.000Z">
-<meta property="article:modified_time" content="2026-05-14T01:37:35.036Z">
-<meta property="article:author" content="litreily">
-<meta property="article:tag" content="telnet">
-<meta property="article:tag" content="smtp">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://www.litreily.top/img/header.png"><script type="application/ld+json">{
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "Telnet中使用smtp发送邮件",
-  "url": "https://www.litreily.top/2017/08/17/telnet-smtp/",
-  "image": "https://www.litreily.top/img/header.png",
-  "datePublished": "2017-08-17T13:18:44.000Z",
-  "dateModified": "2026-05-14T01:37:35.036Z",
-  "author": [
-    {
-      "@type": "Person",
-      "name": "litreily",
-      "url": "https://www.litreily.top"
-    }
-  ]
-}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://www.litreily.top/2017/08/17/telnet-smtp/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.4"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
-    (() => {
-      
-    const saveToLocal = {
-      set: (key, value, ttl) => {
-        if (!ttl) return
-        const expiry = Date.now() + ttl * 86400000
-        localStorage.setItem(key, JSON.stringify({ value, expiry }))
-      },
-      get: key => {
-        const itemStr = localStorage.getItem(key)
-        if (!itemStr) return undefined
-        const { value, expiry } = JSON.parse(itemStr)
-        if (Date.now() > expiry) {
-          localStorage.removeItem(key)
-          return undefined
-        }
-        return value
-      }
-    }
-
-    window.btf = {
-      saveToLocal,
-      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
-        const script = document.createElement('script')
-        script.src = url
-        script.async = true
-        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
-        script.onload = script.onreadystatechange = () => {
-          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
-        }
-        script.onerror = reject
-        document.head.appendChild(script)
-      }),
-      getCSS: (url, id) => new Promise((resolve, reject) => {
-        const link = document.createElement('link')
-        link.rel = 'stylesheet'
-        link.href = url
-        if (id) link.id = id
-        link.onload = link.onreadystatechange = () => {
-          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
-        }
-        link.onerror = reject
-        document.head.appendChild(link)
-      }),
-      addGlobalFn: (key, fn, name = false, parent = window) => {
-        if (!false && key.startsWith('pjax')) return
-        const globalFn = parent.globalFn || {}
-        globalFn[key] = globalFn[key] || {}
-        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
-        parent.globalFn = globalFn
-      }
-    }
-  
-      
-      const activateDarkMode = () => {
-        document.documentElement.setAttribute('data-theme', 'dark')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0B1121')
-        }
-      }
-      const activateLightMode = () => {
-        document.documentElement.setAttribute('data-theme', 'light')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#49B1F5')
-        }
-      }
-
-      btf.activateDarkMode = activateDarkMode
-      btf.activateLightMode = activateLightMode
-
-      const theme = saveToLocal.get('theme')
-    
-          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
-        
-      
-      const asideStatus = saveToLocal.get('aside-status')
-      if (asideStatus !== undefined) {
-        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
-      }
-    
-      
-    const detectApple = () => {
-      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
-        document.documentElement.classList.add('apple')
-      }
-    }
-    detectApple()
-  
-    })()
-  </script><script>const GLOBAL_CONFIG = {
-  root: '/',
-  algolia: undefined,
-  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
-  translate: undefined,
-  highlight: {"plugin":"prismjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
-  copy: {
-    success: 'Copy Successful',
-    error: 'Copy Failed',
-    noSupport: 'Browser Not Supported'
-  },
-  relativeDate: {
-    homepage: false,
-    post: false
-  },
-  runtime: '',
-  dateSuffix: {
-    just: 'Just now',
-    min: 'minutes ago',
-    hour: 'hours ago',
-    day: 'days ago',
-    month: 'months ago'
-  },
-  copyright: undefined,
-  lightbox: 'fancybox',
-  Snackbar: undefined,
-  infinitegrid: {
-    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
-    buttonText: 'Load More'
-  },
-  isPhotoFigcaption: false,
-  islazyloadPlugin: true,
-  isAnchor: false,
-  percent: {
-    toc: true,
-    rightside: true,
-  },
-  autoDarkmode: false
-}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
-  title: 'Telnet中使用smtp发送邮件',
-  isHighlightShrink: false,
-  isToc: true,
-  pageType: 'post'
-}</script><link rel="stylesheet" href="/css/custom.css"><style>figure.highlight pre,figure.highlight code{white-space:pre-wrap!important;word-wrap:break-word!important}</style><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
-</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/header.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">144</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">120</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">17</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(/img/title_1.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">LITREILY</span></a><a class="nav-page-title" href="/"><span class="site-name">Telnet中使用smtp发送邮件</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Telnet中使用smtp发送邮件</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2017-08-17T13:18:44.000Z" title="Created 2017-08-17 21:18:44">2017-08-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-05-14T01:37:35.036Z" title="Updated 2026-05-14 09:37:35">2026-05-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Linux/">Linux</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;It has been&quot;,&quot;messageNext&quot;:&quot;days since the last update, the content of the article may be outdated.&quot;,&quot;postUpdate&quot;:&quot;2026-05-14 09:37:35&quot;}" hidden></div><p><code>Telnet</code>是远程登录服务的标准协议和主要方式，工作于<code>TCP/IP</code>协议族的应用层，常用于远程登录<code>web</code>服务器，其中便包括<code>SMTP</code>，<code>POP3</code>等邮件服务器。</p>
+<!DOCTYPE html><html lang="en"><head><meta name="generator" content="Hexo 3.9.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>Telnet中使用smtp发送邮件 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">Telnet中使用smtp发送邮件</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2017/08/17/telnet-smtp/">2017-08-17</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Linux/">Linux</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p><code>Telnet</code>是远程登录服务的标准协议和主要方式，工作于<code>TCP/IP</code>协议族的应用层，常用于远程登录<code>web</code>服务器，其中便包括<code>SMTP</code>，<code>POP3</code>等邮件服务器。</p>
 <p>这几天参考书籍《计算机网络-自顶向下方法》学习计算机网络知识，顺便尝试了如何使用<code>Telnet</code>登录<code>smtp</code>发送邮件，下面通过一个简单示例介绍具体的发送过程。</p>
 <h2 id="Telnet-smtp-163-com-25"><a href="#Telnet-smtp-163-com-25" class="headerlink" title="Telnet smtp.163.com 25"></a>Telnet smtp.163.com 25</h2><p><code>smtp</code>对应的端口号为<code>25</code>，以163邮箱为例，下面是邮件发送过程。</p>
-<pre class="line-numbers language-zsh" data-language="zsh"><code class="language-zsh">→ ~ telnet smtp.163.com 25
+<pre><code class="zsh">→ ~ telnet smtp.163.com 25
 Trying 220.181.12.15...
 Connected to smtp.163.com.
 Escape character is ^].
@@ -173,7 +16,7 @@ helo 163.com
 250 OK
 auth login
 334 dXNlcm5hbWU6
-MTgyNjY2MzI4NzJAMTYzLmNvbQ&#x3D;&#x3D;
+MTgyNjY2MzI4NzJAMTYzLmNvbQ==
 334 UGFzc3dvcmQ6
 ****************
 235 Authentication successful
@@ -196,8 +39,8 @@ Litreily
 250 Mail OK queued as smtp11,D8CowAAnjlqKlZVZXa4QAQ--.18342S2 1502975693
 quit
 Connection closed by foreign host.
-→ ~<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+→ ~
+</code></pre>
 <p>下面分开对每个过程进行解析，<code>C</code>代表客户端，即本机，<code>S</code>代表远程服务器端。整个过程分为以下几步：</p>
 <ul>
 <li>打招呼</li>
@@ -206,29 +49,29 @@ Connection closed by foreign host.
 <li>书写邮件内容</li>
 <li>退出<code>Telnet</code></li>
 </ul>
-<h3 id="招呼语"><a href="#招呼语" class="headerlink" title="招呼语"></a>招呼语</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">S <span class="token number">220</span> <span class="token number">163</span>.com Anti-spam GT <span class="token keyword">for</span> Coremail System <span class="token punctuation">(</span>163com<span class="token punctuation">[</span><span class="token number">20141201</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
-C helo <span class="token number">163</span>.com
-S <span class="token number">250</span> OK<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
+<h3 id="招呼语"><a href="#招呼语" class="headerlink" title="招呼语"></a>招呼语</h3><pre><code class="bash">S 220 163.com Anti-spam GT for Coremail System (163com[20141201])
+C helo 163.com
+S 250 OK
+</code></pre>
 <p><code>220</code>代表服务器已准备好，客户端首先向服务器打一声招呼<code>helo</code>，服务器接收到后返回一个<code>250</code>应答信号，代表打招呼成功，下面可以进行账户的密码认证。</p>
-<h3 id="账户认证"><a href="#账户认证" class="headerlink" title="账户认证"></a>账户认证</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">C auth login
-S <span class="token number">334</span> dXNlcm5hbWU6
-C <span class="token assign-left variable">MTgyNjY2MzI4NzJAMTYzLmNvbQ</span><span class="token operator">==</span>
-S <span class="token number">334</span> UGFzc3dvcmQ6
+<h3 id="账户认证"><a href="#账户认证" class="headerlink" title="账户认证"></a>账户认证</h3><pre><code class="bash">C auth login
+S 334 dXNlcm5hbWU6
+C MTgyNjY2MzI4NzJAMTYzLmNvbQ==
+S 334 UGFzc3dvcmQ6
 C ****************
-S <span class="token number">235</span> Authentication successful<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+S 235 Authentication successful
+</code></pre>
 <p>客户端发送<code>auth login</code>声明自己将进行邮箱账户的用户名认证和密码认证。服务器端返回一个以<code>334</code>代码开头的提示信息，不必追究其语义，而后用户依次输入通过<code>Base64</code>加密的邮箱名和密码，加密网址见后续参考资料。当输入的账号密码无误时，服务端将返回认证成功的提示语。</p>
-<h3 id="声明邮箱地址"><a href="#声明邮箱地址" class="headerlink" title="声明邮箱地址"></a>声明邮箱地址</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">C mail from:<span class="token operator">&lt;</span><span class="token number">182</span>****2872@163.com<span class="token operator">></span>
-S <span class="token number">250</span> Mail OK
-C rcpt to:<span class="token operator">&lt;</span><span class="token number">707</span>***098@qq.com<span class="token operator">></span>
-S <span class="token number">250</span> Mail OK<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
+<h3 id="声明邮箱地址"><a href="#声明邮箱地址" class="headerlink" title="声明邮箱地址"></a>声明邮箱地址</h3><pre><code class="bash">C mail from:&lt;182****2872@163.com&gt;
+S 250 Mail OK
+C rcpt to:&lt;707***098@qq.com&gt;
+S 250 Mail OK
+</code></pre>
 <p>账户密码认证结束后，客户端通过<code>mail from:&lt;emailName&gt;</code>以及<code>rcpt to:&lt;nameEmail&gt;</code>声明邮箱的源地址和目的地址。</p>
-<h3 id="书写邮件内容"><a href="#书写邮件内容" class="headerlink" title="书写邮件内容"></a>书写邮件内容</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">C data
-S <span class="token number">354</span> End data with <span class="token operator">&lt;</span>CR<span class="token operator">></span><span class="token operator">&lt;</span>LF<span class="token operator">></span>.<span class="token operator">&lt;</span>CR<span class="token operator">></span><span class="token operator">&lt;</span>LF<span class="token operator">></span>
-C From: <span class="token number">182</span>****2872@163.com
-C To: <span class="token number">707</span>***098@qq.com
+<h3 id="书写邮件内容"><a href="#书写邮件内容" class="headerlink" title="书写邮件内容"></a>书写邮件内容</h3><pre><code class="bash">C data
+S 354 End data with &lt;CR&gt;&lt;LF&gt;.&lt;CR&gt;&lt;LF&gt;
+C From: 182****2872@163.com
+C To: 707***098@qq.com
 C Subject: Test the use of smtp
 C
 C   Hello, litreily.
@@ -236,14 +79,14 @@ C   This is a message edit with telnet.
 C
 C Best wish to you.
 C Litreily
-C <span class="token builtin class-name">.</span>
-S <span class="token number">250</span> Mail OK queued as smtp11,D8CowAAnjlqKlZVZXa4QAQ--.18342S2 <span class="token number">1502975693</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+C .
+S 250 Mail OK queued as smtp11,D8CowAAnjlqKlZVZXa4QAQ--.18342S2 1502975693
+</code></pre>
 <p>写明邮件地址后，使用指令<code>data</code>进入邮件编辑状态，服务器端会提示当输入<code>&lt;CR&gt;&lt;LF&gt;.&lt;CR&gt;&lt;LF&gt;</code>时退出编辑状态。</p>
 <p>邮件内容有一定的格式要求，不按要求随意书写有可能被当成垃圾邮件或不合法邮件而退信。通常需要指定邮件主题<code>Subject</code>，其它相关信息包括时间<code>Date</code>，邮件地址<code>From</code>，<code>To</code>等，然后再书写邮件主体内容，更详细的格式可以参考文档<strong>【RFC 821】</strong>。编辑结束后，以单行的点号<code>.</code>结束。如果一切正常，服务器端将返回以<code>250</code>开头的应答信息，并提示邮件以进入<code>smtp</code>的发送队列。此时便可以查收邮件予以验证了。</p>
-<h3 id="退出Telnet"><a href="#退出Telnet" class="headerlink" title="退出Telnet"></a>退出Telnet</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">C quit
-S Connection closed by foreign host.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
+<h3 id="退出Telnet"><a href="#退出Telnet" class="headerlink" title="退出Telnet"></a>退出Telnet</h3><pre><code class="bash">C quit
+S Connection closed by foreign host.
+</code></pre>
 <p>当邮件发送结束后，客户端通过<code>quit</code>退出<code>Telnet</code>。</p>
 <h2 id="SMTP-Code"><a href="#SMTP-Code" class="headerlink" title="SMTP Code"></a>SMTP Code</h2><ul>
 <li><code>211</code> 系统状态或系统帮助响应</li>
@@ -254,7 +97,7 @@ S Connection closed by foreign host.<span aria-hidden="true" class="line-numbers
 <li><code>250</code> 要求的邮件操作完成</li>
 <li><code>251</code> 用户非本地，将转发向</li>
 <li><code>334</code> 等待用户输入验证信息</li>
-<li><code>354</code> 开始邮件输入，以单行**.**结束</li>
+<li><code>354</code> 开始邮件输入，以单行<strong>.</strong>结束</li>
 <li><code>421</code> 服务未就绪，关闭传输信道（当必须关闭时，此应答可以作为对任何命令的响应）</li>
 <li><code>450</code> 要求的邮件操作未完成，邮箱不可用（例如，邮箱忙）</li>
 <li><code>451</code> 放弃要求的操作；处理过程中出错</li>
@@ -272,59 +115,46 @@ S Connection closed by foreign host.<span aria-hidden="true" class="line-numbers
 <li><code>554</code> 操作失败</li>
 </ul>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
-<li><code>SMTP</code>文档(<code>RFC 821</code>) : <a target="_blank" rel="noopener" href="https://tools.ietf.org/pdf/rfc821.pdf">https://tools.ietf.org/pdf/rfc821.pdf</a></li>
-<li><code>SMTP Code</code> : <a target="_blank" rel="noopener" href="http://bbs.csdn.net/topics/80275246">http://bbs.csdn.net/topics/80275246</a></li>
-<li><code>163.com</code> 邮件退信代码 : <a target="_blank" rel="noopener" href="http://help.163.com/09/1224/17/5RAJ4LMH00753VB8.html">http://help.163.com/09/1224/17/5RAJ4LMH00753VB8.html</a></li>
+<li><code>SMTP</code>文档(<code>RFC 821</code>) : <a href="https://tools.ietf.org/pdf/rfc821.pdf" target="_blank" rel="noopener">https://tools.ietf.org/pdf/rfc821.pdf</a></li>
+<li><code>SMTP Code</code> : <a href="http://bbs.csdn.net/topics/80275246" target="_blank" rel="noopener">http://bbs.csdn.net/topics/80275246</a></li>
+<li><code>163.com</code> 邮件退信代码 : <a href="http://help.163.com/09/1224/17/5RAJ4LMH00753VB8.html" target="_blank" rel="noopener">http://help.163.com/09/1224/17/5RAJ4LMH00753VB8.html</a></li>
 </ul>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://www.litreily.top">litreily</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://www.litreily.top/2017/08/17/telnet-smtp/">https://www.litreily.top/2017/08/17/telnet-smtp/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/telnet/">telnet</a><a class="post-meta__tags" href="/tags/smtp/">smtp</a></div><div class="post-share"><div class="social-share" data-image="/img/header.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2017/08/23/tmux-install/" title="远程服务器中编译安装tmux"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">远程服务器中编译安装tmux</div></div><div class="info-2"><div class="info-item-1">在工作当中，公司出于安全考虑，部署的远程Linux服务器总有一些限制（没网，Shell指令有限），而且员工作为普通用户，无法安装软件到除用户目录以外的目录。当我们需要下载安装一些常用工具时，因为没网，所以无法使用apt-get等下载指令，只能先在本地PC下载软件源码，然后传入服务器进行编译安装。本文以tmux为例说明服务器中编译安装软件的流程。 安装路径：~/lib/software/tmux Downloadtmux的下载地址 : https://github.com/tmux/tmux/releases/download/2.5/tmux-2.5.tar.gz 依赖库libevent：https://github.com/libevent/libevent/releases/download/release-2.1.8-stable/libevent-2.1.8-stable.tar.gz 下载后的文件通过一定方式(scp，共享服务，...)可以传入服务器中。 Move files (optional)在服务器中执行以下指令，将文件放入~/lib文件夹。 cd mkdir l...</div></div></div></a><a class="pagination-related" href="/2017/07/28/chmod-wireshark/" title="ubuntu下解决wireshark没有权限的问题"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">ubuntu下解决wireshark没有权限的问题</div></div><div class="info-2"><div class="info-item-1">wireshark是常用的网络抓包工具，在ubuntu中安装方法如下： sudo aptitude install wireshark  安装以后，打开软件后，在选择网络接口进行抓包时会提示没有权限，为此，可以通过以下方法解决。 # 添加用户组，命名为wireshark sudo groupadd wireshark    # 将dumpcap更改为刚添加的用户组 sudo chgrp wireshark /usr/bin/dumpcap    # 为wireshark用户组添加使用dumpcap的root权限 sudo chmod 4755 /usr/bin/dumpcap  # 将自己的用户(本人litreily)添加到wireshark用户组 sudo gpasswd -a litreily wireshark    执行完成以后便可以使用wireshark正常抓包了。 </div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comments</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/header.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">litreily</div><div class="author-info-description">simple life</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">144</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">120</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">17</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Litreily"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://xhslink.com/m/893FaC3aK88" target="_blank" title="小红书"><i class="fas fa-seedling" style="color: #ff2442;"></i></a><a class="social-icon" href="mailto:litreily@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="https://www.litreily.top/notes/" target="_blank" title="Notes"><i class="fas fa-sticky-note" style="color: #e8a618;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Telnet-smtp-163-com-25"><span class="toc-text">Telnet smtp.163.com 25</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8B%9B%E5%91%BC%E8%AF%AD"><span class="toc-text">招呼语</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B4%A6%E6%88%B7%E8%AE%A4%E8%AF%81"><span class="toc-text">账户认证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A3%B0%E6%98%8E%E9%82%AE%E7%AE%B1%E5%9C%B0%E5%9D%80"><span class="toc-text">声明邮箱地址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B9%A6%E5%86%99%E9%82%AE%E4%BB%B6%E5%86%85%E5%AE%B9"><span class="toc-text">书写邮件内容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%80%E5%87%BATelnet"><span class="toc-text">退出Telnet</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SMTP-Code"><span class="toc-text">SMTP Code</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-text">参考资料</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/07/05/daily-eastern-beauty-2026-07-05/" title="每日东方美人探索 2026-07-05"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-07-05/open-daily-magic.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="每日东方美人探索 2026-07-05"/></a><div class="content"><a class="title" href="/2026/07/05/daily-eastern-beauty-2026-07-05/" title="每日东方美人探索 2026-07-05">每日东方美人探索 2026-07-05</a><time datetime="2026-07-04T16:10:00.000Z" title="Created 2026-07-05 00:10:00">2026-07-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/07/04/daily-eastern-beauty-2026-07-04/" title="每日东方美人探索 2026-07-04"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-07-04/open-time-crossing.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="每日东方美人探索 2026-07-04"/></a><div class="content"><a class="title" href="/2026/07/04/daily-eastern-beauty-2026-07-04/" title="每日东方美人探索 2026-07-04">每日东方美人探索 2026-07-04</a><time datetime="2026-07-04T09:18:00.000Z" title="Created 2026-07-04 17:18:00">2026-07-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/07/03/daily-eastern-beauty-2026-07-03/" title="每日东方美人探索 2026-07-03"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-07-03/open-time-crossing.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="每日东方美人探索 2026-07-03"/></a><div class="content"><a class="title" href="/2026/07/03/daily-eastern-beauty-2026-07-03/" title="每日东方美人探索 2026-07-03">每日东方美人探索 2026-07-03</a><time datetime="2026-07-02T16:10:00.000Z" title="Created 2026-07-03 00:10:00">2026-07-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/07/02/daily-eastern-beauty-2026-07-02/" title="每日东方美人探索 2026-07-02"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-07-02/open-daily-magic.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="每日东方美人探索 2026-07-02"/></a><div class="content"><a class="title" href="/2026/07/02/daily-eastern-beauty-2026-07-02/" title="每日东方美人探索 2026-07-02">每日东方美人探索 2026-07-02</a><time datetime="2026-07-02T08:55:00.000Z" title="Created 2026-07-02 16:55:00">2026-07-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/07/01/daily-eastern-beauty-2026-07-01/" title="每日东方美人探索 2026-07-01"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-07-01/open-time-crossing.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="每日东方美人探索 2026-07-01"/></a><div class="content"><a class="title" href="/2026/07/01/daily-eastern-beauty-2026-07-01/" title="每日东方美人探索 2026-07-01">每日东方美人探索 2026-07-01</a><time datetime="2026-07-01T01:10:00.000Z" title="Created 2026-07-01 09:10:00">2026-07-01</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By litreily</span><span class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 5.4.2</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll to Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4"></script><script src="/js/main.js?v=5.5.4"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@19.1.3/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
-  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
-  const option = null
-
-  const initValine = (el, path) => {
-    if (isShuoshuo) {
-      window.shuoshuoComment.destroyValine = () => {
-        if (el.children.length) {
-          el.innerHTML = ''
-          el.classList.add('no-comment')
-        }
-      }
-    }
-
-    const valineConfig = {
-      el: '#vcomment',
-      appId: '1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
-      appKey: 'uvA3xgqNW3q8TGR483lxXcpB',
-      avatar: 'monsterid',
-      serverURLs: '',
-      emojiMaps: "",
-      visitor: false,
-      ...option,
-      path: isShuoshuo ? path : (option && option.path) || window.location.pathname
-    }
-
-    new Valine(valineConfig)
-  }
-
-  const loadValine = async (el, path) => {
-    if (typeof Valine === 'function') {
-      initValine(el, path)
-    } else {
-      await btf.getScript('https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js')
-      initValine(el, path)
-    }
-  }
-
-  if (isShuoshuo) {
-    'Valine' === 'Valine'
-      ? window.shuoshuoComment = { loadComment: loadValine }
-      : window.loadOtherComment = loadValine
-    return
-  }
-
-  if ('Valine' === 'Valine' || !false) {
-    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
-    else setTimeout(loadValine, 0)
-  } else {
-    window.loadOtherComment = loadValine
-  }
-})()</script></div><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="local-search-input"><input placeholder="Search..." type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.4"></script></div></div></body></html>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2017/08/17/telnet-smtp/">https://www.litreily.top/2017/08/17/telnet-smtp/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tags"></i><a href="/tags/telnet/">telnet</a><a href="/tags/smtp/">smtp</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Telnet-smtp-163-com-25"><span class="toc-number">1.</span> <span class="toc-text">Telnet smtp.163.com 25</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#招呼语"><span class="toc-number">1.1.</span> <span class="toc-text">招呼语</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#账户认证"><span class="toc-number">1.2.</span> <span class="toc-text">账户认证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#声明邮箱地址"><span class="toc-number">1.3.</span> <span class="toc-text">声明邮箱地址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#书写邮件内容"><span class="toc-number">1.4.</span> <span class="toc-text">书写邮件内容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#退出Telnet"><span class="toc-number">1.5.</span> <span class="toc-text">退出Telnet</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SMTP-Code"><span class="toc-number">2.</span> <span class="toc-text">SMTP Code</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">3.</span> <span class="toc-text">参考资料</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2017/08/23/tmux-install/">&lt; 远程服务器中编译安装tmux</a><a class="next" href="/2017/07/28/chmod-wireshark/">ubuntu下解决wireshark没有权限的问题 &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+.night .v[data-class=v] a:hover { color: #216C73 !important; }
+.night .v[data-class=v] li { list-style: inherit; }
+.night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
+.night .v[data-class=v] .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.night .v[data-class=v] .vbtn { border-radius: 0; background: none; }
+.night .v[data-class=v] .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.night .v[data-class=v] .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.night .v[data-class=v] .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre,.night .v[data-class=v] .vlist .vcard .vhead .vsys { background: #203240 !important; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre { color: #F0F0F0; font-size: 95%; }
+.v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
+</style><div id="vcomment"></div><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
+  lang: 'zh-cn',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></section><footer><p>Copyright © 2016 - 2020 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/plugins/prettify/prettify.js"></script><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script></body></html>

@@ -1,287 +1,130 @@
-<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Python网络爬虫5 - 爬取QQ空间相册 | LITREILY</title><meta name="author" content="litreily,707922098@qq.com"><meta name="copyright" content="litreily"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#49B1F5"><meta name="description" content="自毕业后，就再也没有用过QQ，QQ空间里记录的是些并不精彩的青葱岁月，但好歹也是份回忆，近日想着学以致用，用Python把QQ空间相册的所有照片爬取下来，以作备份。 分析QQ空间登录QQ空间爬取第一步，分析站点，首先需要知道如何登录QQ空间。最初想法是用requests库配置登录请求，模拟登录，但是不久便放弃了这一思路，请看下图↓  根据登录按钮绑定的监听事件可以追踪到该按钮的点击事件如下：  账">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Python网络爬虫5 - 爬取QQ空间相册">
-<meta property="og:url" content="https://www.litreily.top/2019/03/03/qqzone/index.html">
-<meta property="og:site_name" content="LITREILY">
-<meta property="og:description" content="自毕业后，就再也没有用过QQ，QQ空间里记录的是些并不精彩的青葱岁月，但好歹也是份回忆，近日想着学以致用，用Python把QQ空间相册的所有照片爬取下来，以作备份。 分析QQ空间登录QQ空间爬取第一步，分析站点，首先需要知道如何登录QQ空间。最初想法是用requests库配置登录请求，模拟登录，但是不久便放弃了这一思路，请看下图↓  根据登录按钮绑定的监听事件可以追踪到该按钮的点击事件如下：  账">
-<meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://www.litreily.top/img/header.png">
-<meta property="article:published_time" content="2019-03-03T10:34:20.000Z">
-<meta property="article:modified_time" content="2026-05-14T01:37:35.245Z">
-<meta property="article:author" content="litreily">
-<meta property="article:tag" content="spider">
-<meta property="article:tag" content="qqzone">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://www.litreily.top/img/header.png"><script type="application/ld+json">{
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "Python网络爬虫5 - 爬取QQ空间相册",
-  "url": "https://www.litreily.top/2019/03/03/qqzone/",
-  "image": "https://www.litreily.top/img/header.png",
-  "datePublished": "2019-03-03T10:34:20.000Z",
-  "dateModified": "2026-05-14T01:37:35.245Z",
-  "author": [
-    {
-      "@type": "Person",
-      "name": "litreily",
-      "url": "https://www.litreily.top"
-    }
-  ]
-}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://www.litreily.top/2019/03/03/qqzone/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.4"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
-    (() => {
-      
-    const saveToLocal = {
-      set: (key, value, ttl) => {
-        if (!ttl) return
-        const expiry = Date.now() + ttl * 86400000
-        localStorage.setItem(key, JSON.stringify({ value, expiry }))
-      },
-      get: key => {
-        const itemStr = localStorage.getItem(key)
-        if (!itemStr) return undefined
-        const { value, expiry } = JSON.parse(itemStr)
-        if (Date.now() > expiry) {
-          localStorage.removeItem(key)
-          return undefined
-        }
-        return value
-      }
-    }
-
-    window.btf = {
-      saveToLocal,
-      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
-        const script = document.createElement('script')
-        script.src = url
-        script.async = true
-        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
-        script.onload = script.onreadystatechange = () => {
-          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
-        }
-        script.onerror = reject
-        document.head.appendChild(script)
-      }),
-      getCSS: (url, id) => new Promise((resolve, reject) => {
-        const link = document.createElement('link')
-        link.rel = 'stylesheet'
-        link.href = url
-        if (id) link.id = id
-        link.onload = link.onreadystatechange = () => {
-          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
-        }
-        link.onerror = reject
-        document.head.appendChild(link)
-      }),
-      addGlobalFn: (key, fn, name = false, parent = window) => {
-        if (!false && key.startsWith('pjax')) return
-        const globalFn = parent.globalFn || {}
-        globalFn[key] = globalFn[key] || {}
-        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
-        parent.globalFn = globalFn
-      }
-    }
-  
-      
-      const activateDarkMode = () => {
-        document.documentElement.setAttribute('data-theme', 'dark')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0B1121')
-        }
-      }
-      const activateLightMode = () => {
-        document.documentElement.setAttribute('data-theme', 'light')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#49B1F5')
-        }
-      }
-
-      btf.activateDarkMode = activateDarkMode
-      btf.activateLightMode = activateLightMode
-
-      const theme = saveToLocal.get('theme')
-    
-          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
-        
-      
-      const asideStatus = saveToLocal.get('aside-status')
-      if (asideStatus !== undefined) {
-        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
-      }
-    
-      
-    const detectApple = () => {
-      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
-        document.documentElement.classList.add('apple')
-      }
-    }
-    detectApple()
-  
-    })()
-  </script><script>const GLOBAL_CONFIG = {
-  root: '/',
-  algolia: undefined,
-  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
-  translate: undefined,
-  highlight: {"plugin":"prismjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
-  copy: {
-    success: 'Copy Successful',
-    error: 'Copy Failed',
-    noSupport: 'Browser Not Supported'
-  },
-  relativeDate: {
-    homepage: false,
-    post: false
-  },
-  runtime: '',
-  dateSuffix: {
-    just: 'Just now',
-    min: 'minutes ago',
-    hour: 'hours ago',
-    day: 'days ago',
-    month: 'months ago'
-  },
-  copyright: undefined,
-  lightbox: 'fancybox',
-  Snackbar: undefined,
-  infinitegrid: {
-    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
-    buttonText: 'Load More'
-  },
-  isPhotoFigcaption: false,
-  islazyloadPlugin: true,
-  isAnchor: false,
-  percent: {
-    toc: true,
-    rightside: true,
-  },
-  autoDarkmode: false
-}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
-  title: 'Python网络爬虫5 - 爬取QQ空间相册',
-  isHighlightShrink: false,
-  isToc: true,
-  pageType: 'post'
-}</script><link rel="stylesheet" href="/css/custom.css"><style>figure.highlight pre,figure.highlight code{white-space:pre-wrap!important;word-wrap:break-word!important}</style><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
-</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/header.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">144</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">120</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">17</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(/img/title_1.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">LITREILY</span></a><a class="nav-page-title" href="/"><span class="site-name">Python网络爬虫5 - 爬取QQ空间相册</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Python网络爬虫5 - 爬取QQ空间相册</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2019-03-03T10:34:20.000Z" title="Created 2019-03-03 18:34:20">2019-03-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-05-14T01:37:35.245Z" title="Updated 2026-05-14 09:37:35">2026-05-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Language/">Language</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Language/Python/">Python</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;It has been&quot;,&quot;messageNext&quot;:&quot;days since the last update, the content of the article may be outdated.&quot;,&quot;postUpdate&quot;:&quot;2026-05-14 09:37:35&quot;}" hidden></div><p>自毕业后，就再也没有用过QQ，QQ空间里记录的是些并不精彩的青葱岁月，但好歹也是份回忆，近日想着学以致用，用<code>Python</code>把QQ空间相册的所有照片爬取下来，以作备份。</p>
+<!DOCTYPE html><html lang="en"><head><meta name="generator" content="Hexo 3.9.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>Python网络爬虫5 - 爬取QQ空间相册 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">Python网络爬虫5 - 爬取QQ空间相册</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2019/03/03/qqzone/">2019-03-03</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Python/">Python</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>自毕业后，就再也没有用过QQ，QQ空间里记录的是些并不精彩的青葱岁月，但好歹也是份回忆，近日想着学以致用，用<code>Python</code>把QQ空间相册的所有照片爬取下来，以作备份。</p>
 <h2 id="分析QQ空间"><a href="#分析QQ空间" class="headerlink" title="分析QQ空间"></a>分析QQ空间</h2><h3 id="登录QQ空间"><a href="#登录QQ空间" class="headerlink" title="登录QQ空间"></a>登录QQ空间</h3><p>爬取第一步，分析站点，首先需要知道如何登录QQ空间。最初想法是用<code>requests</code>库配置登录请求，模拟登录，但是不久便放弃了这一思路，请看下图↓</p>
-<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/qqzone/login.png" alt="login"></p>
+<p><img src="/assets/qqzone/login.png" alt="login"></p>
 <p>根据登录按钮绑定的监听事件可以追踪到该按钮的点击事件如下：</p>
-<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/qqzone/login_func.png" alt="login function"></p>
+<p><img src="/assets/qqzone/login_func.png" alt="login function"></p>
 <p>账号加密是必然的，但这一堆堆的代码真心不好解析，有耐心的勇士尽情一试！</p>
 <p>在排除这种登录方法后，选择<code>selenium</code>模拟用户登录不失为省时省力的方法，而且我们只是需要通过<code>selenium</code>完成登录，获取到<code>Cookies</code>和后面讲述的<code>g_tk</code>参数后，就可以停用了，所以效率并不太低。</p>
-<h3 id="分析空间相册"><a href="#分析空间相册" class="headerlink" title="分析空间相册"></a>分析空间相册</h3><p>登录以后，页面会跳转至 <a href="javascript:;">https://user.qzone.qq.com/{QQ_NUMBER}</a>, 这时把鼠标移到导航栏你会发现，所有的导航栏链接都是<code>javascript:;</code> 😳。没错就是这么坑，一切都是暗箱操作。</p>
+<h3 id="分析空间相册"><a href="#分析空间相册" class="headerlink" title="分析空间相册"></a>分析空间相册</h3><p>登录以后，页面会跳转至 <a href="javascript:;" target="_blank" rel="noopener">https://user.qzone.qq.com/{QQ_NUMBER}</a>, 这时把鼠标移到导航栏你会发现，所有的导航栏链接都是<code>javascript:;</code> 😳。没错就是这么坑，一切都是暗箱操作。</p>
 <p>当然这并不难处理，使用调试工具捕获点击后产生的请求，然后过滤出正确的请求包即可。因为网络包非常多，那么怎么过滤呢，猜想相册数据的API必然会返回个列表<code>list</code>，尝试过滤<code>list</code>然后逐个排除，最后定位到请求包。下面是通过<code>fcg_list</code>过滤后的数据包，列表信息以<code>jsonp</code>格式返回，稍作处理即可当做<code>json</code>格式来读取（后面有讲）。</p>
-<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/qqzone/album_list.png" alt="album list"></p>
+<p><img src="/assets/qqzone/album_list.png" alt="album list"></p>
 <p>从<code>Headers</code>和<code>Response</code>可以分别获取到两组<strong>重要</strong>信息：</p>
 <ol>
 <li><code>request</code> 获取相册列表所需的请求信息，包括请求链接和参数</li>
 <li><code>response</code> 数据包包含的所有相册的信息，是每个相册所含照片对应的请求包参数的数据来源</li>
 </ol>
 <p>先看请求包：</p>
-<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token comment"># url</span>
-https<span class="token punctuation">:</span>//h5.qzone.qq.com/proxy/domain/photo.qzone.qq.com/fcgi<span class="token punctuation">-</span>bin/fcg_list_album_v3
+<pre><code class="yml"># url
+https://h5.qzone.qq.com/proxy/domain/photo.qzone.qq.com/fcgi-bin/fcg_list_album_v3
 
-<span class="token comment"># args</span>
-<span class="token key atrule">g_tk</span><span class="token punctuation">:</span> <span class="token number">477819917</span>
-<span class="token key atrule">callback</span><span class="token punctuation">:</span> shine0_Callback
-<span class="token key atrule">t</span><span class="token punctuation">:</span> <span class="token number">691481346</span>
-<span class="token key atrule">hostUin</span><span class="token punctuation">:</span> <span class="token number">123456789</span>
-<span class="token key atrule">uin</span><span class="token punctuation">:</span> <span class="token number">123456789</span>
-<span class="token key atrule">appid</span><span class="token punctuation">:</span> <span class="token number">4</span>
-<span class="token key atrule">inCharset</span><span class="token punctuation">:</span> utf<span class="token punctuation">-</span><span class="token number">8</span>
-<span class="token key atrule">outCharset</span><span class="token punctuation">:</span> utf<span class="token punctuation">-</span><span class="token number">8</span>
-<span class="token key atrule">source</span><span class="token punctuation">:</span> qzone
-<span class="token key atrule">plat</span><span class="token punctuation">:</span> qzone
-<span class="token key atrule">format</span><span class="token punctuation">:</span> jsonp
-<span class="token key atrule">notice</span><span class="token punctuation">:</span> <span class="token number">0</span>
-<span class="token key atrule">filter</span><span class="token punctuation">:</span> <span class="token number">1</span>
-<span class="token key atrule">handset</span><span class="token punctuation">:</span> <span class="token number">4</span>
-<span class="token key atrule">pageNumModeSort</span><span class="token punctuation">:</span> <span class="token number">40</span>
-<span class="token key atrule">pageNumModeClass</span><span class="token punctuation">:</span> <span class="token number">15</span>
-<span class="token key atrule">needUserInfo</span><span class="token punctuation">:</span> <span class="token number">1</span>
-<span class="token key atrule">idcNum</span><span class="token punctuation">:</span> <span class="token number">4</span>
-<span class="token key atrule">callbackFun</span><span class="token punctuation">:</span> shine0
-<span class="token key atrule">_</span><span class="token punctuation">:</span> <span class="token number">1551788226819</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+# args
+g_tk: 477819917
+callback: shine0_Callback
+t: 691481346
+hostUin: 123456789
+uin: 123456789
+appid: 4
+inCharset: utf-8
+outCharset: utf-8
+source: qzone
+plat: qzone
+format: jsonp
+notice: 0
+filter: 1
+handset: 4
+pageNumModeSort: 40
+pageNumModeClass: 15
+needUserInfo: 1
+idcNum: 4
+callbackFun: shine0
+_: 1551788226819
+</code></pre>
 <p>其中<code>hostUin</code>, <code>uin</code>都是QQ号，<code>g_tk</code>是必须的且每次重新登录都会更新（后面有讲如何获取），其它有些参数不是必须的，我尝试后整理出如下请求参数：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">query <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-    <span class="token string">'g_tk'</span><span class="token punctuation">:</span> self<span class="token punctuation">.</span>g_tk<span class="token punctuation">,</span>
-    <span class="token string">'hostUin'</span><span class="token punctuation">:</span> self<span class="token punctuation">.</span>username<span class="token punctuation">,</span>
-    <span class="token string">'uin'</span><span class="token punctuation">:</span> self<span class="token punctuation">.</span>username<span class="token punctuation">,</span>
-    <span class="token string">'appid'</span><span class="token punctuation">:</span> <span class="token number">4</span><span class="token punctuation">,</span>
-    <span class="token string">'inCharset'</span><span class="token punctuation">:</span> <span class="token string">'utf-8'</span><span class="token punctuation">,</span>
-    <span class="token string">'outCharset'</span><span class="token punctuation">:</span> <span class="token string">'utf-8'</span><span class="token punctuation">,</span>
-    <span class="token string">'source'</span><span class="token punctuation">:</span> <span class="token string">'qzone'</span><span class="token punctuation">,</span>
-    <span class="token string">'plat'</span><span class="token punctuation">:</span> <span class="token string">'qzone'</span><span class="token punctuation">,</span>
-    <span class="token string">'format'</span><span class="token punctuation">:</span> <span class="token string">'jsonp'</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+<pre><code class="python">query = {
+    &#39;g_tk&#39;: self.g_tk,
+    &#39;hostUin&#39;: self.username,
+    &#39;uin&#39;: self.username,
+    &#39;appid&#39;: 4,
+    &#39;inCharset&#39;: &#39;utf-8&#39;,
+    &#39;outCharset&#39;: &#39;utf-8&#39;,
+    &#39;source&#39;: &#39;qzone&#39;,
+    &#39;plat&#39;: &#39;qzone&#39;,
+    &#39;format&#39;: &#39;jsonp&#39;
+}
+</code></pre>
 <p>接下来看<code>jsonp</code>格式的跨域响应包：</p>
-<pre class="line-numbers language-json" data-language="json"><code class="language-json">shine0_Callback(<span class="token punctuation">&#123;</span>
-    <span class="token property">"code"</span><span class="token operator">:</span><span class="token number">0</span><span class="token punctuation">,</span>
-    <span class="token property">"subcode"</span><span class="token operator">:</span><span class="token number">0</span><span class="token punctuation">,</span>
-    <span class="token property">"message"</span><span class="token operator">:</span><span class="token string">""</span><span class="token punctuation">,</span>
-    <span class="token property">"default"</span><span class="token operator">:</span><span class="token number">0</span><span class="token punctuation">,</span>
-    <span class="token property">"data"</span><span class="token operator">:</span>
-<span class="token punctuation">&#123;</span>
-   <span class="token property">"albumListModeSort"</span> <span class="token operator">:</span> <span class="token punctuation">[</span>
-      <span class="token punctuation">&#123;</span>
-         <span class="token property">"allowAccess"</span> <span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
-         <span class="token property">"anonymity"</span> <span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
-         <span class="token property">"bitmap"</span> <span class="token operator">:</span> <span class="token string">"10000000"</span><span class="token punctuation">,</span>
-         <span class="token property">"classid"</span> <span class="token operator">:</span> <span class="token number">106</span><span class="token punctuation">,</span>
-         <span class="token property">"comment"</span> <span class="token operator">:</span> <span class="token number">11</span><span class="token punctuation">,</span>
-         <span class="token property">"createtime"</span> <span class="token operator">:</span> <span class="token number">1402661881</span><span class="token punctuation">,</span>
-         <span class="token property">"desc"</span> <span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
-         <span class="token property">"handset"</span> <span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
-         <span class="token property">"id"</span> <span class="token operator">:</span> <span class="token string">"V13LmPKk0JLNRY"</span><span class="token punctuation">,</span>
-         <span class="token property">"lastuploadtime"</span> <span class="token operator">:</span> <span class="token number">1402662103</span><span class="token punctuation">,</span>
-         <span class="token property">"modifytime"</span> <span class="token operator">:</span> <span class="token number">1408271987</span><span class="token punctuation">,</span>
-         <span class="token property">"name"</span> <span class="token operator">:</span> <span class="token string">"毕业季"</span><span class="token punctuation">,</span>
-         <span class="token property">"order"</span> <span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
-         <span class="token property">"pre"</span> <span class="token operator">:</span> <span class="token string">"http:\/\/b171.photo.store.qq.com\/psb?\/V13LmPKk0JLNRY\/eSAslg*mYWaytEtLysg*Q*5Km91gIWfGuwSk58K2rQY!\/a\/dIY29GUbJgAA"</span><span class="token punctuation">,</span>
-         <span class="token property">"priv"</span> <span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
-         <span class="token property">"pypriv"</span> <span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
-         <span class="token property">"total"</span> <span class="token operator">:</span> <span class="token number">4</span><span class="token punctuation">,</span>
-         <span class="token property">"viewtype"</span> <span class="token operator">:</span> <span class="token number">0</span>
-      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+<pre><code class="json">shine0_Callback({
+    &quot;code&quot;:0,
+    &quot;subcode&quot;:0,
+    &quot;message&quot;:&quot;&quot;,
+    &quot;default&quot;:0,
+    &quot;data&quot;:
+{
+   &quot;albumListModeSort&quot; : [
+      {
+         &quot;allowAccess&quot; : 1,
+         &quot;anonymity&quot; : 0,
+         &quot;bitmap&quot; : &quot;10000000&quot;,
+         &quot;classid&quot; : 106,
+         &quot;comment&quot; : 11,
+         &quot;createtime&quot; : 1402661881,
+         &quot;desc&quot; : &quot;&quot;,
+         &quot;handset&quot; : 0,
+         &quot;id&quot; : &quot;V13LmPKk0JLNRY&quot;,
+         &quot;lastuploadtime&quot; : 1402662103,
+         &quot;modifytime&quot; : 1408271987,
+         &quot;name&quot; : &quot;毕业季&quot;,
+         &quot;order&quot; : 0,
+         &quot;pre&quot; : &quot;http:\/\/b171.photo.store.qq.com\/psb?\/V13LmPKk0JLNRY\/eSAslg*mYWaytEtLysg*Q*5Km91gIWfGuwSk58K2rQY!\/a\/dIY29GUbJgAA&quot;,
+         &quot;priv&quot; : 1,
+         &quot;pypriv&quot; : 1,
+         &quot;total&quot; : 4,
+         &quot;viewtype&quot; : 0
+      },
+</code></pre>
 <p>shine0_Callback是请求包的<code>callbackFun</code>参数决定的，如果没这个参数，响应包会以<code>_Callback</code>作为默认名，当然这都不重要。所有相册信息以<code>json</code>格式存入<code>albumListModeSort</code>中，上面仅截取了一个相册的信息。</p>
 <p>相册信息中，<code>name</code>代表相册名称，<code>id</code>作为唯一标识可用于请求该相册内的照片信息，而<code>pre</code>仅仅是一个预览缩略图的链接，无关紧要。</p>
 <h3 id="分析单个相册"><a href="#分析单个相册" class="headerlink" title="分析单个相册"></a>分析单个相册</h3><p>与获取相册信息类似，进入某一相册，使用<code>cgi_list</code>过滤数据包，找到该相册的照片信息</p>
-<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/qqzone/photo_list.png" alt="photo list"></p>
+<p><img src="/assets/qqzone/photo_list.png" alt="photo list"></p>
 <p>同样的道理，根据数据包可以获取照片列表信息的请求包和响应信息，先看请求：</p>
-<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token comment"># url</span>
-https<span class="token punctuation">:</span>//h5.qzone.qq.com/proxy/domain/photo.qzone.qq.com/fcgi<span class="token punctuation">-</span>bin/cgi_list_photo
+<pre><code class="yml"># url
+https://h5.qzone.qq.com/proxy/domain/photo.qzone.qq.com/fcgi-bin/cgi_list_photo
 
-<span class="token comment"># args</span>
-<span class="token key atrule">g_tk</span><span class="token punctuation">:</span> <span class="token number">477819917</span>
-<span class="token key atrule">callback</span><span class="token punctuation">:</span> shine0_Callback
-<span class="token key atrule">t</span><span class="token punctuation">:</span> <span class="token number">952444063</span>
-<span class="token key atrule">mode</span><span class="token punctuation">:</span> <span class="token number">0</span>
-<span class="token key atrule">idcNum</span><span class="token punctuation">:</span> <span class="token number">4</span>
-<span class="token key atrule">hostUin</span><span class="token punctuation">:</span> <span class="token number">123456789</span>
-<span class="token key atrule">topicId</span><span class="token punctuation">:</span> V13LmPKk0JLNRY
-<span class="token key atrule">noTopic</span><span class="token punctuation">:</span> <span class="token number">0</span>
-<span class="token key atrule">uin</span><span class="token punctuation">:</span> <span class="token number">123456789</span>
-<span class="token key atrule">pageStart</span><span class="token punctuation">:</span> <span class="token number">0</span>
-<span class="token key atrule">pageNum</span><span class="token punctuation">:</span> <span class="token number">30</span>
-<span class="token key atrule">skipCmtCount</span><span class="token punctuation">:</span> <span class="token number">0</span>
-<span class="token key atrule">singleurl</span><span class="token punctuation">:</span> <span class="token number">1</span>
-<span class="token key atrule">batchId</span><span class="token punctuation">:</span>
-<span class="token key atrule">notice</span><span class="token punctuation">:</span> <span class="token number">0</span>
-<span class="token key atrule">appid</span><span class="token punctuation">:</span> <span class="token number">4</span>
-<span class="token key atrule">inCharset</span><span class="token punctuation">:</span> utf<span class="token punctuation">-</span><span class="token number">8</span>
-<span class="token key atrule">outCharset</span><span class="token punctuation">:</span> utf<span class="token punctuation">-</span><span class="token number">8</span>
-<span class="token key atrule">source</span><span class="token punctuation">:</span> qzone
-<span class="token key atrule">plat</span><span class="token punctuation">:</span> qzone
-<span class="token key atrule">outstyle</span><span class="token punctuation">:</span> json
-<span class="token key atrule">format</span><span class="token punctuation">:</span> jsonp
-<span class="token key atrule">json_esc</span><span class="token punctuation">:</span> <span class="token number">1</span>
-<span class="token key atrule">question</span><span class="token punctuation">:</span>
-<span class="token key atrule">answer</span><span class="token punctuation">:</span>
-<span class="token key atrule">callbackFun</span><span class="token punctuation">:</span> shine0
-<span class="token key atrule">_</span><span class="token punctuation">:</span> <span class="token number">1551790719497</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+# args
+g_tk: 477819917
+callback: shine0_Callback
+t: 952444063
+mode: 0
+idcNum: 4
+hostUin: 123456789
+topicId: V13LmPKk0JLNRY
+noTopic: 0
+uin: 123456789
+pageStart: 0
+pageNum: 30
+skipCmtCount: 0
+singleurl: 1
+batchId:
+notice: 0
+appid: 4
+inCharset: utf-8
+outCharset: utf-8
+source: qzone
+plat: qzone
+outstyle: json
+format: jsonp
+json_esc: 1
+question:
+answer:
+callbackFun: shine0
+_: 1551790719497
+</code></pre>
 <p>其中有几个关键参数：</p>
 <ol>
 <li><code>g_tk</code> - 与相册列表参数一致</li>
@@ -294,104 +137,104 @@ https<span class="token punctuation">:</span>//h5.qzone.qq.com/proxy/domain/phot
 </blockquote>
 <p>同样可以对上面的参数进行简化，在相册列表请求参数的基础上添加<code>topicId</code>，<code>pageStart</code>和<code>pageNum</code>三个参数即可。</p>
 <p>下面来看返回的照片列表信息：</p>
-<pre class="line-numbers language-json" data-language="json"><code class="language-json">shine0_Callback(<span class="token punctuation">&#123;</span>
-    <span class="token property">"code"</span><span class="token operator">:</span><span class="token number">0</span><span class="token punctuation">,</span>
-    <span class="token property">"subcode"</span><span class="token operator">:</span><span class="token number">0</span><span class="token punctuation">,</span>
-    <span class="token property">"message"</span><span class="token operator">:</span><span class="token string">""</span><span class="token punctuation">,</span>
-    <span class="token property">"default"</span><span class="token operator">:</span><span class="token number">0</span><span class="token punctuation">,</span>
-    <span class="token property">"data"</span><span class="token operator">:</span>
-<span class="token punctuation">&#123;</span>
-   <span class="token property">"limit"</span> <span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
-   <span class="token property">"photoList"</span> <span class="token operator">:</span> <span class="token punctuation">[</span>
-      <span class="token punctuation">&#123;</span>
-         <span class="token property">"batchId"</span> <span class="token operator">:</span> <span class="token string">"1402662093402000"</span><span class="token punctuation">,</span>
-         <span class="token property">"browser"</span> <span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
-         <span class="token property">"cameratype"</span> <span class="token operator">:</span> <span class="token string">" "</span><span class="token punctuation">,</span>
-         <span class="token property">"cp_flag"</span> <span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
-         <span class="token property">"cp_x"</span> <span class="token operator">:</span> <span class="token number">455</span><span class="token punctuation">,</span>
-         <span class="token property">"cp_y"</span> <span class="token operator">:</span> <span class="token number">388</span><span class="token punctuation">,</span>
-         <span class="token property">"desc"</span> <span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
-         <span class="token property">"exif"</span> <span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-            <span class="token property">"exposureCompensation"</span> <span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
-            <span class="token property">"exposureMode"</span> <span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
-            <span class="token property">"exposureProgram"</span> <span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
-            <span class="token property">"exposureTime"</span> <span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
-            <span class="token property">"flash"</span> <span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
-            <span class="token property">"fnumber"</span> <span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
-            <span class="token property">"focalLength"</span> <span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
-            <span class="token property">"iso"</span> <span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
-            <span class="token property">"lensModel"</span> <span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
-            <span class="token property">"make"</span> <span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
-            <span class="token property">"meteringMode"</span> <span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
-            <span class="token property">"model"</span> <span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
-            <span class="token property">"originalTime"</span> <span class="token operator">:</span> <span class="token string">""</span>
-         <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-         <span class="token property">"forum"</span> <span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
-         <span class="token property">"frameno"</span> <span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
-         <span class="token property">"height"</span> <span class="token operator">:</span> <span class="token number">621</span><span class="token punctuation">,</span>
-         <span class="token property">"id"</span> <span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
-         <span class="token property">"is_video"</span> <span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
-         <span class="token property">"is_weixin_mode"</span> <span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
-         <span class="token property">"ismultiup"</span> <span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
-         <span class="token property">"lloc"</span> <span class="token operator">:</span> <span class="token string">"NDN0sggyKs3smlOg6eYghjb0ZRsmAAA!"</span><span class="token punctuation">,</span>
-         <span class="token property">"modifytime"</span> <span class="token operator">:</span> <span class="token number">1402661792</span><span class="token punctuation">,</span>
-         <span class="token property">"name"</span> <span class="token operator">:</span> <span class="token string">"QQ图片20140612104616"</span><span class="token punctuation">,</span>
-         <span class="token property">"origin"</span> <span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
-         <span class="token property">"origin_upload"</span> <span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
-         <span class="token property">"origin_url"</span> <span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
-         <span class="token property">"owner"</span> <span class="token operator">:</span> <span class="token string">"123456789"</span><span class="token punctuation">,</span>
-         <span class="token property">"ownername"</span> <span class="token operator">:</span> <span class="token string">"123456789"</span><span class="token punctuation">,</span>
-         <span class="token property">"photocubage"</span> <span class="token operator">:</span> <span class="token number">91602</span><span class="token punctuation">,</span>
-         <span class="token property">"phototype"</span> <span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
-         <span class="token property">"picmark_flag"</span> <span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
-         <span class="token property">"picrefer"</span> <span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
-         <span class="token property">"platformId"</span> <span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
-         <span class="token property">"platformSubId"</span> <span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
-         <span class="token property">"poiName"</span> <span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
-         <span class="token property">"pre"</span> <span class="token operator">:</span> <span class="token string">"http:\/\/b171.photo.store.qq.com\/psb?\/V13LmPKk0JLNRY\/eSAslg*mYWaytEtLysg*Q*5Km91gIWfSk58K2rQY!\/a\/dIY29GUbJgAA&amp;bo=pANtAgAAAAABCeY!"</span><span class="token punctuation">,</span>
-         <span class="token property">"raw"</span> <span class="token operator">:</span> <span class="token string">"http:\/\/r.photo.store.qq.com\/psb?\/V13LmPKk0JLNRY\/eSAslg*mYWaytEtLysg*Q*5Km91gIWfSk58K2rQY!\/r\/dIY29GUbJgAA"</span><span class="token punctuation">,</span>
-         <span class="token property">"raw_upload"</span> <span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
-         <span class="token property">"rawshoottime"</span> <span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
-         <span class="token property">"shoottime"</span> <span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
-         <span class="token property">"shorturl"</span> <span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
-         <span class="token property">"sloc"</span> <span class="token operator">:</span> <span class="token string">"NDN0sggyKs3smlOg6eYghjb0ZRsmAAA!"</span><span class="token punctuation">,</span>
-         <span class="token property">"tag"</span> <span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
-         <span class="token property">"uploadtime"</span> <span class="token operator">:</span> <span class="token string">"2014-06-13 20:21:33"</span><span class="token punctuation">,</span>
-         <span class="token property">"url"</span> <span class="token operator">:</span> <span class="token string">"http:\/\/b171.photo.store.qq.com\/psb?\/V13LmPKk0JLNRY\/eSAslg*mYWaytEtLysg*Q*5Km91gIWfSk58K2rQY!\/b\/dIY29GUbJgAA&amp;bo=pANtAgAAAAABCeY!"</span><span class="token punctuation">,</span>
-         <span class="token property">"width"</span> <span class="token operator">:</span> <span class="token number">932</span><span class="token punctuation">,</span>
-         <span class="token property">"yurl"</span> <span class="token operator">:</span> <span class="token number">0</span>
-      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-      <span class="token comment">// ...</span>
-   <span class="token punctuation">]</span>
-   <span class="token property">"t"</span> <span class="token operator">:</span> <span class="token string">"952444063"</span><span class="token punctuation">,</span>
-   <span class="token property">"topic"</span> <span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-      <span class="token property">"bitmap"</span> <span class="token operator">:</span> <span class="token string">"10000000"</span><span class="token punctuation">,</span>
-      <span class="token property">"browser"</span> <span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
-      <span class="token property">"classid"</span> <span class="token operator">:</span> <span class="token number">106</span><span class="token punctuation">,</span>
-      <span class="token property">"comment"</span> <span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
-      <span class="token property">"cover_id"</span> <span class="token operator">:</span> <span class="token string">"NDN0sggyKs3smlOg6eYghjb0ZRsmAAA!"</span><span class="token punctuation">,</span>
-      <span class="token property">"createtime"</span> <span class="token operator">:</span> <span class="token number">1402661881</span><span class="token punctuation">,</span>
-      <span class="token property">"desc"</span> <span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
-      <span class="token property">"handset"</span> <span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
-      <span class="token property">"id"</span> <span class="token operator">:</span> <span class="token string">"V13LmPKk0JLNRY"</span><span class="token punctuation">,</span>
-      <span class="token property">"is_share_album"</span> <span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
-      <span class="token property">"lastuploadtime"</span> <span class="token operator">:</span> <span class="token number">1402662103</span><span class="token punctuation">,</span>
-      <span class="token property">"modifytime"</span> <span class="token operator">:</span> <span class="token number">1408271987</span><span class="token punctuation">,</span>
-      <span class="token property">"name"</span> <span class="token operator">:</span> <span class="token string">"毕业季"</span><span class="token punctuation">,</span>
-      <span class="token property">"ownerName"</span> <span class="token operator">:</span> <span class="token string">"707922098"</span><span class="token punctuation">,</span>
-      <span class="token property">"ownerUin"</span> <span class="token operator">:</span> <span class="token string">"707922098"</span><span class="token punctuation">,</span>
-      <span class="token property">"pre"</span> <span class="token operator">:</span> <span class="token string">"http:\/\/b171.photo.store.qq.com\/psb?\/V13LmPKk0JLNRY\/eSAslg*mYWaytEtLysg*Q*5Km91gIWfGuwSk58K2rQY!\/a\/dIY29GUbJgAA"</span><span class="token punctuation">,</span>
-      <span class="token property">"priv"</span> <span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
-      <span class="token property">"pypriv"</span> <span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
-      <span class="token property">"share_album_owner"</span> <span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
-      <span class="token property">"total"</span> <span class="token operator">:</span> <span class="token number">4</span><span class="token punctuation">,</span>
-      <span class="token property">"url"</span> <span class="token operator">:</span> <span class="token string">"http:\/\/b171.photo.store.qq.com\/psb?\/V13LmPKk0JLNRY\/eSAslg*mYWaytEtLysg*Q*5Km91gIWfGuwSk58K2rQY!\/b\/dIY29GUbJgAA"</span><span class="token punctuation">,</span>
-      <span class="token property">"viewtype"</span> <span class="token operator">:</span> <span class="token number">0</span>
-   <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-   <span class="token property">"totalInAlbum"</span> <span class="token operator">:</span> <span class="token number">4</span><span class="token punctuation">,</span>
-   <span class="token property">"totalInPage"</span> <span class="token operator">:</span> <span class="token number">4</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+<pre><code class="json">shine0_Callback({
+    &quot;code&quot;:0,
+    &quot;subcode&quot;:0,
+    &quot;message&quot;:&quot;&quot;,
+    &quot;default&quot;:0,
+    &quot;data&quot;:
+{
+   &quot;limit&quot; : 0,
+   &quot;photoList&quot; : [
+      {
+         &quot;batchId&quot; : &quot;1402662093402000&quot;,
+         &quot;browser&quot; : 0,
+         &quot;cameratype&quot; : &quot; &quot;,
+         &quot;cp_flag&quot; : false,
+         &quot;cp_x&quot; : 455,
+         &quot;cp_y&quot; : 388,
+         &quot;desc&quot; : &quot;&quot;,
+         &quot;exif&quot; : {
+            &quot;exposureCompensation&quot; : &quot;&quot;,
+            &quot;exposureMode&quot; : &quot;&quot;,
+            &quot;exposureProgram&quot; : &quot;&quot;,
+            &quot;exposureTime&quot; : &quot;&quot;,
+            &quot;flash&quot; : &quot;&quot;,
+            &quot;fnumber&quot; : &quot;&quot;,
+            &quot;focalLength&quot; : &quot;&quot;,
+            &quot;iso&quot; : &quot;&quot;,
+            &quot;lensModel&quot; : &quot;&quot;,
+            &quot;make&quot; : &quot;&quot;,
+            &quot;meteringMode&quot; : &quot;&quot;,
+            &quot;model&quot; : &quot;&quot;,
+            &quot;originalTime&quot; : &quot;&quot;
+         },
+         &quot;forum&quot; : 0,
+         &quot;frameno&quot; : 0,
+         &quot;height&quot; : 621,
+         &quot;id&quot; : 0,
+         &quot;is_video&quot; : false,
+         &quot;is_weixin_mode&quot; : 0,
+         &quot;ismultiup&quot; : 0,
+         &quot;lloc&quot; : &quot;NDN0sggyKs3smlOg6eYghjb0ZRsmAAA!&quot;,
+         &quot;modifytime&quot; : 1402661792,
+         &quot;name&quot; : &quot;QQ图片20140612104616&quot;,
+         &quot;origin&quot; : 0,
+         &quot;origin_upload&quot; : 0,
+         &quot;origin_url&quot; : &quot;&quot;,
+         &quot;owner&quot; : &quot;123456789&quot;,
+         &quot;ownername&quot; : &quot;123456789&quot;,
+         &quot;photocubage&quot; : 91602,
+         &quot;phototype&quot; : 1,
+         &quot;picmark_flag&quot; : 0,
+         &quot;picrefer&quot; : 1,
+         &quot;platformId&quot; : 0,
+         &quot;platformSubId&quot; : 0,
+         &quot;poiName&quot; : &quot;&quot;,
+         &quot;pre&quot; : &quot;http:\/\/b171.photo.store.qq.com\/psb?\/V13LmPKk0JLNRY\/eSAslg*mYWaytEtLysg*Q*5Km91gIWfSk58K2rQY!\/a\/dIY29GUbJgAA&amp;bo=pANtAgAAAAABCeY!&quot;,
+         &quot;raw&quot; : &quot;http:\/\/r.photo.store.qq.com\/psb?\/V13LmPKk0JLNRY\/eSAslg*mYWaytEtLysg*Q*5Km91gIWfSk58K2rQY!\/r\/dIY29GUbJgAA&quot;,
+         &quot;raw_upload&quot; : 1,
+         &quot;rawshoottime&quot; : 0,
+         &quot;shoottime&quot; : 0,
+         &quot;shorturl&quot; : &quot;&quot;,
+         &quot;sloc&quot; : &quot;NDN0sggyKs3smlOg6eYghjb0ZRsmAAA!&quot;,
+         &quot;tag&quot; : &quot;&quot;,
+         &quot;uploadtime&quot; : &quot;2014-06-13 20:21:33&quot;,
+         &quot;url&quot; : &quot;http:\/\/b171.photo.store.qq.com\/psb?\/V13LmPKk0JLNRY\/eSAslg*mYWaytEtLysg*Q*5Km91gIWfSk58K2rQY!\/b\/dIY29GUbJgAA&amp;bo=pANtAgAAAAABCeY!&quot;,
+         &quot;width&quot; : 932,
+         &quot;yurl&quot; : 0
+      },
+      // ...
+   ]
+   &quot;t&quot; : &quot;952444063&quot;,
+   &quot;topic&quot; : {
+      &quot;bitmap&quot; : &quot;10000000&quot;,
+      &quot;browser&quot; : 0,
+      &quot;classid&quot; : 106,
+      &quot;comment&quot; : 1,
+      &quot;cover_id&quot; : &quot;NDN0sggyKs3smlOg6eYghjb0ZRsmAAA!&quot;,
+      &quot;createtime&quot; : 1402661881,
+      &quot;desc&quot; : &quot;&quot;,
+      &quot;handset&quot; : 0,
+      &quot;id&quot; : &quot;V13LmPKk0JLNRY&quot;,
+      &quot;is_share_album&quot; : 0,
+      &quot;lastuploadtime&quot; : 1402662103,
+      &quot;modifytime&quot; : 1408271987,
+      &quot;name&quot; : &quot;毕业季&quot;,
+      &quot;ownerName&quot; : &quot;707922098&quot;,
+      &quot;ownerUin&quot; : &quot;707922098&quot;,
+      &quot;pre&quot; : &quot;http:\/\/b171.photo.store.qq.com\/psb?\/V13LmPKk0JLNRY\/eSAslg*mYWaytEtLysg*Q*5Km91gIWfGuwSk58K2rQY!\/a\/dIY29GUbJgAA&quot;,
+      &quot;priv&quot; : 1,
+      &quot;pypriv&quot; : 1,
+      &quot;share_album_owner&quot; : 0,
+      &quot;total&quot; : 4,
+      &quot;url&quot; : &quot;http:\/\/b171.photo.store.qq.com\/psb?\/V13LmPKk0JLNRY\/eSAslg*mYWaytEtLysg*Q*5Km91gIWfGuwSk58K2rQY!\/b\/dIY29GUbJgAA&quot;,
+      &quot;viewtype&quot; : 0
+   },
+   &quot;totalInAlbum&quot; : 4,
+   &quot;totalInPage&quot; : 4
+}
+</code></pre>
 <p>返回的照片信息都存于<code>photoList</code>, 上面同样只截取了一张照片的信息，后面一部分返回的是当前相册的一些基本信息。<code>totalInAlbum</code>， <code>totalInPage</code>存储了当前相册总共包含的照片数及本次返回的照片数。而我们需要下载的图片链接则是<code>url</code>！</p>
 <p>OK, 到此，所有请求和响应数据都分析清楚了，接下来便是<code>coding</code>的时候了。</p>
 <h2 id="确定爬取方案"><a href="#确定爬取方案" class="headerlink" title="确定爬取方案"></a>确定爬取方案</h2><ol>
@@ -401,39 +244,39 @@ https<span class="token punctuation">:</span>//h5.qzone.qq.com/proxy/domain/phot
 <li>使用<code>requests</code>获取相册列表信息</li>
 <li>遍历相册，获取照片列表信息并下载照片</li>
 </ol>
-<h3 id="创建qqzone类"><a href="#创建qqzone类" class="headerlink" title="创建qqzone类"></a>创建qqzone类</h3><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">qqzone</span><span class="token punctuation">(</span><span class="token builtin">object</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token triple-quoted-string string">"""QQ空间相册爬虫"""</span>
-    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> user<span class="token punctuation">)</span><span class="token punctuation">:</span>
-        self<span class="token punctuation">.</span>username <span class="token operator">=</span> user<span class="token punctuation">[</span><span class="token string">'username'</span><span class="token punctuation">]</span>
-        self<span class="token punctuation">.</span>password <span class="token operator">=</span> user<span class="token punctuation">[</span><span class="token string">'password'</span><span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="创建qqzone类"><a href="#创建qqzone类" class="headerlink" title="创建qqzone类"></a>创建qqzone类</h3><pre><code class="python">class qqzone(object):
+    &quot;&quot;&quot;QQ空间相册爬虫&quot;&quot;&quot;
+    def __init__(self, user):
+        self.username = user[&#39;username&#39;]
+        self.password = user[&#39;password&#39;]
+</code></pre>
+<h3 id="模拟登录"><a href="#模拟登录" class="headerlink" title="模拟登录"></a>模拟登录</h3><pre><code class="python">from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import WebDriverExceptio
 
-<h3 id="模拟登录"><a href="#模拟登录" class="headerlink" title="模拟登录"></a>模拟登录</h3><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> selenium <span class="token keyword">import</span> webdriver
-<span class="token keyword">from</span> selenium<span class="token punctuation">.</span>webdriver<span class="token punctuation">.</span>common<span class="token punctuation">.</span>keys <span class="token keyword">import</span> Keys
-<span class="token keyword">from</span> selenium<span class="token punctuation">.</span>common<span class="token punctuation">.</span>exceptions <span class="token keyword">import</span> WebDriverExceptio
+# ...
 
-<span class="token comment"># ...</span>
+def _login_and_get_args(self):
+    &quot;&quot;&quot;登录QQ，获取Cookies和g_tk&quot;&quot;&quot;
+    opt = webdriver.ChromeOptions()
+    opt.set_headless()
 
-<span class="token keyword">def</span> <span class="token function">_login_and_get_args</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token triple-quoted-string string">"""登录QQ，获取Cookies和g_tk"""</span>
-    opt <span class="token operator">=</span> webdriver<span class="token punctuation">.</span>ChromeOptions<span class="token punctuation">(</span><span class="token punctuation">)</span>
-    opt<span class="token punctuation">.</span>set_headless<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    driver = webdriver.Chrome(chrome_options=opt)
+    driver.get(&#39;https://i.qq.com/&#39;)
+    # time.sleep(2)
 
-    driver <span class="token operator">=</span> webdriver<span class="token punctuation">.</span>Chrome<span class="token punctuation">(</span>chrome_options<span class="token operator">=</span>opt<span class="token punctuation">)</span>
-    driver<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">'https://i.qq.com/'</span><span class="token punctuation">)</span>
-    <span class="token comment"># time.sleep(2)</span>
+    logging.info(&#39;User {} login...&#39;.format(self.username))
+    driver.switch_to.frame(&#39;login_frame&#39;)
+    driver.find_element_by_id(&#39;switcher_plogin&#39;).click()
+    driver.find_element_by_id(&#39;u&#39;).clear()
+    driver.find_element_by_id(&#39;u&#39;).send_keys(self.username)
+    driver.find_element_by_id(&#39;p&#39;).clear()
+    driver.find_element_by_id(&#39;p&#39;).send_keys(self.password)
+    driver.find_element_by_id(&#39;login_button&#39;).click()
 
-    logging<span class="token punctuation">.</span>info<span class="token punctuation">(</span><span class="token string">'User &#123;&#125; login...'</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>username<span class="token punctuation">)</span><span class="token punctuation">)</span>
-    driver<span class="token punctuation">.</span>switch_to<span class="token punctuation">.</span>frame<span class="token punctuation">(</span><span class="token string">'login_frame'</span><span class="token punctuation">)</span>
-    driver<span class="token punctuation">.</span>find_element_by_id<span class="token punctuation">(</span><span class="token string">'switcher_plogin'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>click<span class="token punctuation">(</span><span class="token punctuation">)</span>
-    driver<span class="token punctuation">.</span>find_element_by_id<span class="token punctuation">(</span><span class="token string">'u'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>clear<span class="token punctuation">(</span><span class="token punctuation">)</span>
-    driver<span class="token punctuation">.</span>find_element_by_id<span class="token punctuation">(</span><span class="token string">'u'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>send_keys<span class="token punctuation">(</span>self<span class="token punctuation">.</span>username<span class="token punctuation">)</span>
-    driver<span class="token punctuation">.</span>find_element_by_id<span class="token punctuation">(</span><span class="token string">'p'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>clear<span class="token punctuation">(</span><span class="token punctuation">)</span>
-    driver<span class="token punctuation">.</span>find_element_by_id<span class="token punctuation">(</span><span class="token string">'p'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>send_keys<span class="token punctuation">(</span>self<span class="token punctuation">.</span>password<span class="token punctuation">)</span>
-    driver<span class="token punctuation">.</span>find_element_by_id<span class="token punctuation">(</span><span class="token string">'login_button'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>click<span class="token punctuation">(</span><span class="token punctuation">)</span>
-
-    time<span class="token punctuation">.</span>sleep<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
-    driver<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">'https://user.qzone.qq.com/&#123;&#125;'</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>username<span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+    time.sleep(1)
+    driver.get(&#39;https://user.qzone.qq.com/{}&#39;.format(self.username))
+</code></pre>
 <p>此处需要注意的是：</p>
 <ol>
 <li>使用<code>selenium</code>需要安装对应的<code>webdriver</code></li>
@@ -441,44 +284,44 @@ https<span class="token punctuation">:</span>//h5.qzone.qq.com/proxy/domain/phot
 <li>如果电脑打开浏览器较慢，可能需要在<code>driver.get</code>后<code>sleep</code>几秒</li>
 </ol>
 <h3 id="获取-Cookies"><a href="#获取-Cookies" class="headerlink" title="获取 Cookies"></a>获取 Cookies</h3><p>使用<code>selenium</code>获取<code>Cookies</code>非常方便</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">self<span class="token punctuation">.</span>cookies <span class="token operator">=</span> driver<span class="token punctuation">.</span>get_cookies<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
+<pre><code class="python">self.cookies = driver.get_cookies()
+</code></pre>
 <h3 id="获取-g-tk"><a href="#获取-g-tk" class="headerlink" title="获取 g_tk"></a>获取 g_tk</h3><p>获取<code>g_tk</code>最开始可以说是本爬虫最大的难点，因为从网页中根本找不到直接写明的数值，只有各种函数调用。为此我全局搜索，发现好多地方都有其获取方式。</p>
-<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/qqzone/g_tk.png" alt="g_tk"></p>
+<p><img src="/assets/qqzone/g_tk.png" alt="g_tk"></p>
 <p>最后选择了其中一处，通过<code>selenium</code>执行脚本的功能成功获取到了<code>g_tk</code>！</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">self<span class="token punctuation">.</span>g_tk <span class="token operator">=</span> driver<span class="token punctuation">.</span>execute_script<span class="token punctuation">(</span><span class="token string">'return QZONE.FP.getACSRFToken()'</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
+<pre><code class="python">self.g_tk = driver.execute_script(&#39;return QZONE.FP.getACSRFToken()&#39;)
+</code></pre>
 <p>到此，<code>selenium</code>的使命就完成了，剩下的将通过<code>requests</code>来完成。</p>
 <h3 id="初始化-request-Session"><a href="#初始化-request-Session" class="headerlink" title="初始化 request.Session"></a>初始化 request.Session</h3><p>接下来需要逐步生成请求然后获取数据。但是为方便起见，这里使用会话的方式请求数据，配置好<code>cookie</code>和<code>headers</code>，省的每次请求都设置一遍。</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">_init_session</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    self<span class="token punctuation">.</span>session <span class="token operator">=</span> requests<span class="token punctuation">.</span>Session<span class="token punctuation">(</span><span class="token punctuation">)</span>
-    <span class="token keyword">for</span> cookie <span class="token keyword">in</span> self<span class="token punctuation">.</span>cookies<span class="token punctuation">:</span>
-        self<span class="token punctuation">.</span>session<span class="token punctuation">.</span>cookies<span class="token punctuation">.</span><span class="token builtin">set</span><span class="token punctuation">(</span>cookie<span class="token punctuation">[</span><span class="token string">'name'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> cookie<span class="token punctuation">[</span><span class="token string">'value'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
-    self<span class="token punctuation">.</span>session<span class="token punctuation">.</span>headers <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-        <span class="token string">'Referer'</span><span class="token punctuation">:</span> <span class="token string">'https://qzs.qq.com/qzone/photo/v7/page/photo.html?init=photo.v7/module/albumList/index&amp;navBar=1'</span><span class="token punctuation">,</span>
-        <span class="token string">'User-Agent'</span><span class="token punctuation">:</span> <span class="token string">'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.109 Safari/537.36'</span>
-    <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+<pre><code class="python">def _init_session(self):
+    self.session = requests.Session()
+    for cookie in self.cookies:
+        self.session.cookies.set(cookie[&#39;name&#39;], cookie[&#39;value&#39;])
+    self.session.headers = {
+        &#39;Referer&#39;: &#39;https://qzs.qq.com/qzone/photo/v7/page/photo.html?init=photo.v7/module/albumList/index&amp;navBar=1&#39;,
+        &#39;User-Agent&#39;: &#39;Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.109 Safari/537.36&#39;
+    }
+</code></pre>
 <h3 id="请求相册信息"><a href="#请求相册信息" class="headerlink" title="请求相册信息"></a>请求相册信息</h3><p>获取相册信息，需要先封装好请求参数，然后通过<code>session.get</code>爬取数据，再通过正则匹配以<code>json</code>格式读取<code>jsonp</code>数据，最后解析所需的<code>name</code>和<code>id</code>。</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">_get_ablum_list</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token triple-quoted-string string">"""获取相册的列表信息"""</span>
-    album_url <span class="token operator">=</span> <span class="token string">'&#123;&#125;&#123;&#125;'</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>
-        <span class="token string">'https://h5.qzone.qq.com/proxy/domain/photo.qzone.qq.com/fcgi-bin/fcg_list_album_v3?'</span><span class="token punctuation">,</span>
-        self<span class="token punctuation">.</span>_get_query_for_request<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<pre><code class="python">def _get_ablum_list(self):
+    &quot;&quot;&quot;获取相册的列表信息&quot;&quot;&quot;
+    album_url = &#39;{}{}&#39;.format(
+        &#39;https://h5.qzone.qq.com/proxy/domain/photo.qzone.qq.com/fcgi-bin/fcg_list_album_v3?&#39;,
+        self._get_query_for_request())
 
-    logging<span class="token punctuation">.</span>info<span class="token punctuation">(</span><span class="token string">'Getting ablum list id...'</span><span class="token punctuation">)</span>
-    resp <span class="token operator">=</span> self<span class="token punctuation">.</span>session<span class="token punctuation">.</span>get<span class="token punctuation">(</span>album_url<span class="token punctuation">)</span>
-    data <span class="token operator">=</span> self<span class="token punctuation">.</span>_load_callback_data<span class="token punctuation">(</span>resp<span class="token punctuation">)</span>
+    logging.info(&#39;Getting ablum list id...&#39;)
+    resp = self.session.get(album_url)
+    data = self._load_callback_data(resp)
 
-    album_list <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
-    <span class="token keyword">for</span> item <span class="token keyword">in</span> data<span class="token punctuation">[</span><span class="token string">'data'</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">'albumListModeSort'</span><span class="token punctuation">]</span><span class="token punctuation">:</span>
-        album_list<span class="token punctuation">[</span>item<span class="token punctuation">[</span><span class="token string">'name'</span><span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">=</span> item<span class="token punctuation">[</span><span class="token string">'id'</span><span class="token punctuation">]</span>
+    album_list = {}
+    for item in data[&#39;data&#39;][&#39;albumListModeSort&#39;]:
+        album_list[item[&#39;name&#39;]] = item[&#39;id&#39;]
 
-    <span class="token keyword">return</span> album_list<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+    return album_list
+</code></pre>
 <p>其中的参数组合来自下面的函数<code>_get_query_for_request</code>函数。</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">_get_query_for_request</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> topicId<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> pageStart<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">,</span> pageNum<span class="token operator">=</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token triple-quoted-string string">"""获取请求相册信息或照片信息所需的参数
+<pre><code class="python">def _get_query_for_request(self, topicId=None, pageStart=0, pageNum=100):
+    &quot;&quot;&quot;获取请求相册信息或照片信息所需的参数
 
     Args:
         topicId: 每个相册对应的唯一标识符
@@ -487,129 +330,116 @@ https<span class="token punctuation">:</span>//h5.qzone.qq.com/proxy/domain/phot
 
     Returns:
         一个组合好所有请求参数的字符串
-    """</span>
-    query <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-        <span class="token string">'g_tk'</span><span class="token punctuation">:</span> self<span class="token punctuation">.</span>g_tk<span class="token punctuation">,</span>
-        <span class="token string">'hostUin'</span><span class="token punctuation">:</span> self<span class="token punctuation">.</span>username<span class="token punctuation">,</span>
-        <span class="token string">'uin'</span><span class="token punctuation">:</span> self<span class="token punctuation">.</span>username<span class="token punctuation">,</span>
-        <span class="token string">'appid'</span><span class="token punctuation">:</span> <span class="token number">4</span><span class="token punctuation">,</span>
-        <span class="token string">'inCharset'</span><span class="token punctuation">:</span> <span class="token string">'utf-8'</span><span class="token punctuation">,</span>
-        <span class="token string">'outCharset'</span><span class="token punctuation">:</span> <span class="token string">'utf-8'</span><span class="token punctuation">,</span>
-        <span class="token string">'source'</span><span class="token punctuation">:</span> <span class="token string">'qzone'</span><span class="token punctuation">,</span>
-        <span class="token string">'plat'</span><span class="token punctuation">:</span> <span class="token string">'qzone'</span><span class="token punctuation">,</span>
-        <span class="token string">'format'</span><span class="token punctuation">:</span> <span class="token string">'jsonp'</span>
-    <span class="token punctuation">&#125;</span>
-    <span class="token keyword">if</span> topicId<span class="token punctuation">:</span>
-        query<span class="token punctuation">[</span><span class="token string">'topicId'</span><span class="token punctuation">]</span> <span class="token operator">=</span> topicId
-        query<span class="token punctuation">[</span><span class="token string">'pageStart'</span><span class="token punctuation">]</span> <span class="token operator">=</span> pageStart
-        query<span class="token punctuation">[</span><span class="token string">'pageNum'</span><span class="token punctuation">]</span> <span class="token operator">=</span> pageNum
-    <span class="token keyword">return</span> <span class="token string">'&amp;'</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span><span class="token string">'&#123;&#125;=&#123;&#125;'</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> val<span class="token punctuation">)</span> <span class="token keyword">for</span> key<span class="token punctuation">,</span> val <span class="token keyword">in</span> query<span class="token punctuation">.</span>items<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+    &quot;&quot;&quot;
+    query = {
+        &#39;g_tk&#39;: self.g_tk,
+        &#39;hostUin&#39;: self.username,
+        &#39;uin&#39;: self.username,
+        &#39;appid&#39;: 4,
+        &#39;inCharset&#39;: &#39;utf-8&#39;,
+        &#39;outCharset&#39;: &#39;utf-8&#39;,
+        &#39;source&#39;: &#39;qzone&#39;,
+        &#39;plat&#39;: &#39;qzone&#39;,
+        &#39;format&#39;: &#39;jsonp&#39;
+    }
+    if topicId:
+        query[&#39;topicId&#39;] = topicId
+        query[&#39;pageStart&#39;] = pageStart
+        query[&#39;pageNum&#39;] = pageNum
+    return &#39;&amp;&#39;.join(&#39;{}={}&#39;.format(key, val) for key, val in query.items())
+</code></pre>
 <p>其中的<code>jsonp</code>解析函数如下，主体部分就是一个正则匹配，非常简单。</p>
-<pre class="line-numbers language-Python" data-language="Python"><code class="language-Python">def _load_callback_data(self, resp):
+<pre><code class="Python">def _load_callback_data(self, resp):
     &quot;&quot;&quot;以json格式解析返回的jsonp数据&quot;&quot;&quot;
     try:
-        resp.encoding &#x3D; &#39;utf-8&#39;
-        data &#x3D; loads(re.search(r&#39;.*?\((&#123;.*&#125;).*?\).*&#39;, resp.text, re.S)[1])
+        resp.encoding = &#39;utf-8&#39;
+        data = loads(re.search(r&#39;.*?\(({.*}).*?\).*&#39;, resp.text, re.S)[1])
         return data
     except ValueError:
-        logging.error(&#39;Invalid input&#39;)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+        logging.error(&#39;Invalid input&#39;)
+</code></pre>
 <h3 id="解析并下载照片"><a href="#解析并下载照片" class="headerlink" title="解析并下载照片"></a>解析并下载照片</h3><p>获取相册列表后，逐个请求照片列表信息，进而逐一下载</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">_get_photo</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> album_name<span class="token punctuation">,</span> album_id<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token triple-quoted-string string">"""获取单个相册的照片列表信息，并下载该相册所有照片"""</span>
-    photo_list_url <span class="token operator">=</span> <span class="token string">'&#123;&#125;&#123;&#125;'</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>
-        <span class="token string">'https://h5.qzone.qq.com/proxy/domain/photo.qzone.qq.com/fcgi-bin/cgi_list_photo?'</span><span class="token punctuation">,</span>
-        self<span class="token punctuation">.</span>_get_query_for_request<span class="token punctuation">(</span>topicId<span class="token operator">=</span>album_id<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<pre><code class="python">def _get_photo(self, album_name, album_id):
+    &quot;&quot;&quot;获取单个相册的照片列表信息，并下载该相册所有照片&quot;&quot;&quot;
+    photo_list_url = &#39;{}{}&#39;.format(
+        &#39;https://h5.qzone.qq.com/proxy/domain/photo.qzone.qq.com/fcgi-bin/cgi_list_photo?&#39;,
+        self._get_query_for_request(topicId=album_id))
 
-    logging<span class="token punctuation">.</span>info<span class="token punctuation">(</span><span class="token string">'Getting photo list for album &#123;&#125;...'</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>album_name<span class="token punctuation">)</span><span class="token punctuation">)</span>
-    resp <span class="token operator">=</span> self<span class="token punctuation">.</span>session<span class="token punctuation">.</span>get<span class="token punctuation">(</span>photo_list_url<span class="token punctuation">)</span>
-    data <span class="token operator">=</span> self<span class="token punctuation">.</span>_load_callback_data<span class="token punctuation">(</span>resp<span class="token punctuation">)</span>
-    <span class="token keyword">if</span> data<span class="token punctuation">[</span><span class="token string">'data'</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">'totalInPage'</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">:</span>
-        <span class="token keyword">return</span> <span class="token boolean">None</span>
+    logging.info(&#39;Getting photo list for album {}...&#39;.format(album_name))
+    resp = self.session.get(photo_list_url)
+    data = self._load_callback_data(resp)
+    if data[&#39;data&#39;][&#39;totalInPage&#39;] == 0:
+        return None
 
-    file_dir <span class="token operator">=</span> self<span class="token punctuation">.</span>get_path<span class="token punctuation">(</span>album_name<span class="token punctuation">)</span>
-    <span class="token keyword">for</span> item <span class="token keyword">in</span> data<span class="token punctuation">[</span><span class="token string">'data'</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">'photoList'</span><span class="token punctuation">]</span><span class="token punctuation">:</span>
-        path <span class="token operator">=</span> <span class="token string">'&#123;&#125;/&#123;&#125;.jpg'</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>file_dir<span class="token punctuation">,</span> item<span class="token punctuation">[</span><span class="token string">'name'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
-        logging<span class="token punctuation">.</span>info<span class="token punctuation">(</span><span class="token string">'Downloading &#123;&#125;-&#123;&#125;'</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>album_name<span class="token punctuation">,</span> item<span class="token punctuation">[</span><span class="token string">'name'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-        self<span class="token punctuation">.</span>_download_image<span class="token punctuation">(</span>item<span class="token punctuation">[</span><span class="token string">'url'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> path<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+    file_dir = self.get_path(album_name)
+    for item in data[&#39;data&#39;][&#39;photoList&#39;]:
+        path = &#39;{}/{}.jpg&#39;.format(file_dir, item[&#39;name&#39;])
+        logging.info(&#39;Downloading {}-{}&#39;.format(album_name, item[&#39;name&#39;]))
+        self._download_image(item[&#39;url&#39;], path)
+</code></pre>
 <p>下载图片也是通过<code>request</code>,记得设置超时时间。</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">_download_image</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> url<span class="token punctuation">,</span> path<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token triple-quoted-string string">"""下载单张照片"""</span>
-    <span class="token keyword">try</span><span class="token punctuation">:</span>
-        resp <span class="token operator">=</span> self<span class="token punctuation">.</span>session<span class="token punctuation">.</span>get<span class="token punctuation">(</span>url<span class="token punctuation">,</span> timeout<span class="token operator">=</span><span class="token number">15</span><span class="token punctuation">)</span>
-        <span class="token keyword">if</span> resp<span class="token punctuation">.</span>status_code <span class="token operator">==</span> <span class="token number">200</span><span class="token punctuation">:</span>
-            <span class="token builtin">open</span><span class="token punctuation">(</span>path<span class="token punctuation">,</span> <span class="token string">'wb'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>write<span class="token punctuation">(</span>resp<span class="token punctuation">.</span>content<span class="token punctuation">)</span>
-    <span class="token keyword">except</span> requests<span class="token punctuation">.</span>exceptions<span class="token punctuation">.</span>Timeout<span class="token punctuation">:</span>
-        logging<span class="token punctuation">.</span>warning<span class="token punctuation">(</span><span class="token string">'get &#123;&#125; timeout'</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>url<span class="token punctuation">)</span><span class="token punctuation">)</span>
-    <span class="token keyword">except</span> requests<span class="token punctuation">.</span>exceptions<span class="token punctuation">.</span>ConnectionError <span class="token keyword">as</span> e<span class="token punctuation">:</span>
-        logging<span class="token punctuation">.</span>error<span class="token punctuation">(</span>e<span class="token punctuation">.</span>__str__<span class="token punctuation">)</span>
-    <span class="token keyword">finally</span><span class="token punctuation">:</span>
-        <span class="token keyword">pass</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+<pre><code class="python">def _download_image(self, url, path):
+    &quot;&quot;&quot;下载单张照片&quot;&quot;&quot;
+    try:
+        resp = self.session.get(url, timeout=15)
+        if resp.status_code == 200:
+            open(path, &#39;wb&#39;).write(resp.content)
+    except requests.exceptions.Timeout:
+        logging.warning(&#39;get {} timeout&#39;.format(url))
+    except requests.exceptions.ConnectionError as e:
+        logging.error(e.__str__)
+    finally:
+        pass
+</code></pre>
 <h2 id="爬取测试"><a href="#爬取测试" class="headerlink" title="爬取测试"></a>爬取测试</h2><ul>
 <li>爬取过程</li>
 </ul>
-<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/qqzone/downloading.png" alt="capturing"></p>
+<p><img src="/assets/qqzone/downloading.png" alt="capturing"></p>
 <ul>
 <li>爬取结果</li>
 </ul>
-<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/qqzone/downloaded_photos.png" alt="downloaded photos"></p>
+<p><img src="/assets/qqzone/downloaded_photos.png" alt="downloaded photos"></p>
 <h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><ol>
 <li>如果将请求参数中的<code>format</code>由<code>jsonp</code>改成<code>json</code>，则可以直接获取<code>json</code>数据</li>
 <li>本用例并未使用多进程或多线程，所以速率不算快，还有待优化的地方</li>
-<li>该爬虫已存放至开源项目<a target="_blank" rel="noopener" href="https://github.com/Litreily/capturer">Github capturer</a>，欢迎交流</li>
+<li>该爬虫已存放至开源项目<a href="https://github.com/Litreily/capturer" target="_blank" rel="noopener">Github capturer</a>，欢迎交流</li>
 </ol>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://www.litreily.top">litreily</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://www.litreily.top/2019/03/03/qqzone/">https://www.litreily.top/2019/03/03/qqzone/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/spider/">spider</a><a class="post-meta__tags" href="/tags/qqzone/">qqzone</a></div><div class="post-share"><div class="social-share" data-image="/img/header.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2019/03/12/commitizen/" title="git commit 工具 - commitizen"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">git commit 工具 - commitizen</div></div><div class="info-2"><div class="info-item-1">为了规范代码提交，最近学习了一下如何使用commitizen进行commit提交，其实也很简单，这里简单做个介绍。 commitizen 安装npm install -g commitizen    使用对于并非使用nodejs的项目，要先通过 npm init --yes  完成初始化，然后通过 commitizen init cz-conventional-changelog --save --save-exact  启用commitizen功能，此后使用git cz替换git commit即可。当然为了方便可以在.bashrc或.zshrc中添加一个别名。 alias cz="commitizen init cz-conventional-changelog --save --save-exact"  然后source ~/.bashrc or source ~/.zshrc 即可。好了，下面是我的笔记库的应用实例。 ➜  Notes git:(master) ✗ npm init --yes ➜  Notes git:(master) ✗ commitizen init ...</div></div></div></a><a class="pagination-related" href="/2019/02/27/ipv6/" title="记一次Client无法获取IPv6地址问题的分析过程"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">记一次Client无法获取IPv6地址问题的分析过程</div></div><div class="info-2"><div class="info-item-1">近日SQA报了一个bug，对路由器经过6天左右的压力测试后，无论是有线设备还是无线设备都拿不到IPv6地址了。经过层层分析发现可能是kernel内存泄漏。本文便记录这一问题的分析过程。   检查网络状态首先打开Router的console，使用ifconfig br0(br0是Router LAN端的桥接地址)查看当前的网络状态 $ ifconfig br0 br0       Link encap:Ethernet  HWaddr A0:63:91:A7:63:07             inet addr:192.168.27.1  Bcast:192.168.27.255  Mask:255.255.255.0           UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1           RX packets:530995052 errors:0 dropped:0 overruns:0 frame:0           TX packets:1012058984 errors:0 dropped:0 ov...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2018/04/30/cfachina/" title="Python网络爬虫3 - 生产者消费者模型爬取某金融网站数据"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2018-04-30</div><div class="info-item-2">Python网络爬虫3 - 生产者消费者模型爬取某金融网站数据</div></div><div class="info-2"><div class="info-item-1">应一位金融圈的朋友所托，帮忙写个爬虫，帮他爬取中国期货行业协议网站中所有金融机构的从业人员信息。网站数据的获取本身比较简单，但是为了学习一些新的爬虫方法和技巧，即本文要讲述的生产者消费者模型，我又学习了一下Python中队列库queue及线程库Thread的使用方法。 生产者消费者模型生产者消费者模型非常简单，相信大部分程序员都知道，就是一方作为生产者不断提供资源，另一方作为消费者不断消费资源。简单点说，就好比餐馆的厨师和顾客，厨师作为生产者不断制作美味的食物，而顾客作为消费者不断食用厨师提供的食物。此外，生产者与消费者之间可以是一对一、一对多、多对一和多对多的关系。 那么这个模型和爬虫有什么关系呢？其实，爬虫可以认为是一个生产者，它不断从网站爬取数据，爬取到的数据就是食物；而所得数据需要消费者进行数据清洗，把有用的数据吸收掉，把无用的数据丢弃。 在实践过程中，爬虫爬取和数据清洗分别对应一个Thread，两个线程之间通过顺序队列queue传递数据，数据传递过程就好比餐馆服务员从厨房把食物送到顾客餐桌上的过程。爬取线程负责爬取网站数据，并将原始数据存入队列，清洗线程从队列中按入队顺...</div></div></div></a><a class="pagination-related" href="/2019/10/09/fabiaoqing/" title="Python网络爬虫7 - 爬取表情包"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2019-10-09</div><div class="info-item-2">Python网络爬虫7 - 爬取表情包</div></div><div class="info-2"><div class="info-item-1">为了逗女朋友开心，想找一堆表情包，那么作为一名程序员，自然是会想到用程序来完成这个事情，而Python爬虫就是一个非常好的方法。 我先找到了一个专门发布表情包的网站，就叫做发表情网，可以通过搜索关键词得到大量相关的表情包，下面对这个网站的爬取进行详细介绍。  分析站点为了不引起不适，我选择搜索“你好”，出来的结果是这样的  可以看到共有688个相关的表情，右侧的表情包是分组形式的，不是我的爬取对象。我们只关注表情，在网页底部可以看到分页信息：  切换分页到第４页后，可以看到网址的编号情况如下：  网址是https://www.fabiaoqing.com/search/search/keyword/你好/type/bq/page/4.html，据此就可以分析出表情的分页格式  keyword 后接关键词，此处为“你好” type 后接类型，此处为&quot;bq&quot;,对应表情 page 后接页码，此处为&quot;4.html&quot;，对应第４页  到此就确定了关键词和分页信息的整合方式，根据这个可以按顺序获取指定关键词的所有分页。那么接下来的问题是如何解析每个分页中...</div></div></div></a><a class="pagination-related" href="/2019/08/09/vmgirls/" title="Python网络爬虫6 - Scrapy爬取vmgirls"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2019-08-09</div><div class="info-item-2">Python网络爬虫6 - Scrapy爬取vmgirls</div></div><div class="info-2"><div class="info-item-1">今天介绍一个妹子站点图片的爬取过程，站点唯美女生。站点结构非常简单，单独用requests库或者scrapy框架都可以。本文介绍的是使用scrapy框架爬取。    分析vmgirls站点站点做的非常清新唯美，结构简洁明了，主页的主体部分以卡片形式展示各个主题的缩略图和简要介绍，但主页并不适合直接爬取。  不过幸好该站点已经提供了站点地图，对于这种相对简单的网站，使用现成的网站地图简直事半功倍。  那么思路就很清楚了，首先通过站点地图获取所有主题页面的网址和标题，然后逐个爬取妹子页面，提取所有的图片url，然后下载到本地，每个主题页面的图片单独存放到一个文件夹中。 站点地图本站点提供了两个站点地图：  https://www.vmgirls.com/sitemap.shtml https://www.vmgirls.com/sitemap.xml  第1个是面向用户的站点地图，从主页的导航栏就能找到；第2个（如下图）则是常规网站留给搜索引擎的站点地图，文件格式也是常规的xml  我使用wget指令获取两个文件，并进行了对比，发现sitemap.xml仅仅包含1000个网址，但是可...</div></div></div></a><a class="pagination-related" href="/2018/05/27/scrapy-start/" title="Python网络爬虫4 - scrapy入门"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2018-05-27</div><div class="info-item-2">Python网络爬虫4 - scrapy入门</div></div><div class="info-2"><div class="info-item-1">scrapy作为一款强大的爬虫框架，当然要好好学习一番，本文便是本人学习和使用scrapy过后的一个总结，内容比较基础，算是入门笔记吧，主要讲述scrapy的基本概念和使用方法。 scrapy framework首先附上scrapy经典图如下：  scrapy框架包含以下几个部分  Scrapy Engine 引擎 Spiders 爬虫 Scheduler 调度器 Downloader 下载器 Item Pipeline 项目管道 Downloader Middlewares 下载器中间件 Spider Middlewares 爬虫中间件  spider process其爬取过程简述如下：  引擎从爬虫获取首个待爬取的链接url，并传递给调度器 调度器将链接存入队列 引擎向调度器请求要爬取的链接，并将请求得到的链接经下载器中间件传递给下载器 下载器从网上下载网页，下载后的网页经下载器中间件传递给引擎 引擎将网页经爬虫中间件传递给爬虫 爬虫对网页进行解析，将得到的Items和新的链接经爬虫中间件交给引擎 引擎将从爬虫得到的Items交给项目管道，将新的链接请求requests交给调...</div></div></div></a><a class="pagination-related" href="/2018/04/10/sina/" title="Python网络爬虫2 - 爬取新浪微博用户图片"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2018-04-10</div><div class="info-item-2">Python网络爬虫2 - 爬取新浪微博用户图片</div></div><div class="info-2"><div class="info-item-1">其实，新浪微博用户图片爬虫是我学习python以来写的第一个爬虫，只不过当时懒，后来爬完Lofter后觉得有必要总结一下，所以就有了第一篇爬虫博客。现在暂时闲下来了，准备把新浪的这个也补上。 言归正传，既然选择爬新浪微博，那当然是有需求的，这也是学习的主要动力之一，没错，就是美图。sina用户多数微博都是包含图片的，而且是组图居多，单个图片的较少。 为了避免侵权，本文以本人微博litreily为例说明整个爬取过程，虽然图片较少，质量较低，但爬取方案是绝对ok的，使用时只要换个用户ID就可以了。 分析sina站点获取用户ID在爬取前，我们需要知道的是每个用户都有一个用户名，而一个用户名又对应一个唯一的整型数字ID，类似于学生的学号，本人的是2657006573。至于怎么根据用户名去获取ID，有以下两种方法：  进入待爬取用户主页，在浏览器网址栏中即可看到一串数据，那就是用户ID Ctrl-U查看待爬取用户的源码，搜索&quot;uid，注意是双引号  其实是可以在已知用户名的情况下通过爬虫自动获取到uid的，但是我当时初学python，并没有考虑充分，所以后面的源码是以用户ID作为...</div></div></div></a><a class="pagination-related" href="/2018/03/17/lofter/" title="Python网络爬虫1 - 爬取网易LOFTER图片"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2018-03-17</div><div class="info-item-2">Python网络爬虫1 - 爬取网易LOFTER图片</div></div><div class="info-2"><div class="info-item-1">LOFTER是网易出品的优质轻博客，灵感源于国外的tumblr，但比之更加文艺，更加本地化。本人非常喜欢LOFTER的UI设计，以及其中的优质用户和内容，似乎网易并不擅长推广，所以受众并不广泛。这都是题外话，本文主要记录作者近期学习python3并用之爬取LOFTER用户图片的过程和成果，与大家交流分享。  本文将以本人litreily博客为例说明整个爬取过程  分析LOFTER站点在爬取站点之前，首先需要分析站点的关键信息有哪些，如果给自己提问，可能会有以下问题：  用户的主页网址格式是？ 用户博客链接的格式是？ 每篇博客内的图片链接的格式是？ 不同用户的主页模板不同，是否可以按同样方法抓取博客信息？ 用户的博客数量巨大，主页以什么方式分页？ 有没有归档页面方便爬取（大多数网站都有归档页面）？  当然，这些问题不是一下子就能想出来，可以在探索网页内容的过程逐步展开，并思考下一步该考虑的问题，下面针对各个问题对主页进行探索分析。 主页信息 主页: http://[username].lofter.com   从主页可以看到归档的链接，暂时不管。不同的用户，其主页所用模板不尽一致，...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comments</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/header.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">litreily</div><div class="author-info-description">simple life</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">144</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">120</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">17</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Litreily"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://xhslink.com/m/893FaC3aK88" target="_blank" title="小红书"><i class="fas fa-seedling" style="color: #ff2442;"></i></a><a class="social-icon" href="mailto:litreily@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="https://www.litreily.top/notes/" target="_blank" title="Notes"><i class="fas fa-sticky-note" style="color: #e8a618;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E6%9E%90QQ%E7%A9%BA%E9%97%B4"><span class="toc-text">分析QQ空间</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%99%BB%E5%BD%95QQ%E7%A9%BA%E9%97%B4"><span class="toc-text">登录QQ空间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%9E%90%E7%A9%BA%E9%97%B4%E7%9B%B8%E5%86%8C"><span class="toc-text">分析空间相册</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%9E%90%E5%8D%95%E4%B8%AA%E7%9B%B8%E5%86%8C"><span class="toc-text">分析单个相册</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A1%AE%E5%AE%9A%E7%88%AC%E5%8F%96%E6%96%B9%E6%A1%88"><span class="toc-text">确定爬取方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BAqqzone%E7%B1%BB"><span class="toc-text">创建qqzone类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E6%8B%9F%E7%99%BB%E5%BD%95"><span class="toc-text">模拟登录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96-Cookies"><span class="toc-text">获取 Cookies</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96-g-tk"><span class="toc-text">获取 g_tk</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96-request-Session"><span class="toc-text">初始化 request.Session</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%B7%E6%B1%82%E7%9B%B8%E5%86%8C%E4%BF%A1%E6%81%AF"><span class="toc-text">请求相册信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E6%9E%90%E5%B9%B6%E4%B8%8B%E8%BD%BD%E7%85%A7%E7%89%87"><span class="toc-text">解析并下载照片</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%88%AC%E5%8F%96%E6%B5%8B%E8%AF%95"><span class="toc-text">爬取测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%99%E5%9C%A8%E6%9C%80%E5%90%8E"><span class="toc-text">写在最后</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/07/05/daily-eastern-beauty-2026-07-05/" title="每日东方美人探索 2026-07-05"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-07-05/open-daily-magic.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="每日东方美人探索 2026-07-05"/></a><div class="content"><a class="title" href="/2026/07/05/daily-eastern-beauty-2026-07-05/" title="每日东方美人探索 2026-07-05">每日东方美人探索 2026-07-05</a><time datetime="2026-07-04T16:10:00.000Z" title="Created 2026-07-05 00:10:00">2026-07-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/07/04/daily-eastern-beauty-2026-07-04/" title="每日东方美人探索 2026-07-04"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-07-04/open-time-crossing.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="每日东方美人探索 2026-07-04"/></a><div class="content"><a class="title" href="/2026/07/04/daily-eastern-beauty-2026-07-04/" title="每日东方美人探索 2026-07-04">每日东方美人探索 2026-07-04</a><time datetime="2026-07-04T09:18:00.000Z" title="Created 2026-07-04 17:18:00">2026-07-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/07/03/daily-eastern-beauty-2026-07-03/" title="每日东方美人探索 2026-07-03"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-07-03/open-time-crossing.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="每日东方美人探索 2026-07-03"/></a><div class="content"><a class="title" href="/2026/07/03/daily-eastern-beauty-2026-07-03/" title="每日东方美人探索 2026-07-03">每日东方美人探索 2026-07-03</a><time datetime="2026-07-02T16:10:00.000Z" title="Created 2026-07-03 00:10:00">2026-07-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/07/02/daily-eastern-beauty-2026-07-02/" title="每日东方美人探索 2026-07-02"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-07-02/open-daily-magic.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="每日东方美人探索 2026-07-02"/></a><div class="content"><a class="title" href="/2026/07/02/daily-eastern-beauty-2026-07-02/" title="每日东方美人探索 2026-07-02">每日东方美人探索 2026-07-02</a><time datetime="2026-07-02T08:55:00.000Z" title="Created 2026-07-02 16:55:00">2026-07-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/07/01/daily-eastern-beauty-2026-07-01/" title="每日东方美人探索 2026-07-01"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-07-01/open-time-crossing.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="每日东方美人探索 2026-07-01"/></a><div class="content"><a class="title" href="/2026/07/01/daily-eastern-beauty-2026-07-01/" title="每日东方美人探索 2026-07-01">每日东方美人探索 2026-07-01</a><time datetime="2026-07-01T01:10:00.000Z" title="Created 2026-07-01 09:10:00">2026-07-01</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By litreily</span><span class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 5.4.2</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll to Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4"></script><script src="/js/main.js?v=5.5.4"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@19.1.3/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
-  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
-  const option = null
-
-  const initValine = (el, path) => {
-    if (isShuoshuo) {
-      window.shuoshuoComment.destroyValine = () => {
-        if (el.children.length) {
-          el.innerHTML = ''
-          el.classList.add('no-comment')
-        }
-      }
-    }
-
-    const valineConfig = {
-      el: '#vcomment',
-      appId: '1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
-      appKey: 'uvA3xgqNW3q8TGR483lxXcpB',
-      avatar: 'monsterid',
-      serverURLs: '',
-      emojiMaps: "",
-      visitor: false,
-      ...option,
-      path: isShuoshuo ? path : (option && option.path) || window.location.pathname
-    }
-
-    new Valine(valineConfig)
-  }
-
-  const loadValine = async (el, path) => {
-    if (typeof Valine === 'function') {
-      initValine(el, path)
-    } else {
-      await btf.getScript('https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js')
-      initValine(el, path)
-    }
-  }
-
-  if (isShuoshuo) {
-    'Valine' === 'Valine'
-      ? window.shuoshuoComment = { loadComment: loadValine }
-      : window.loadOtherComment = loadValine
-    return
-  }
-
-  if ('Valine' === 'Valine' || !false) {
-    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
-    else setTimeout(loadValine, 0)
-  } else {
-    window.loadOtherComment = loadValine
-  }
-})()</script></div><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="local-search-input"><input placeholder="Search..." type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.4"></script></div></div></body></html>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2019/03/03/qqzone/">https://www.litreily.top/2019/03/03/qqzone/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tags"></i><a href="/tags/spider/">spider</a><a href="/tags/qqzone/">qqzone</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#分析QQ空间"><span class="toc-number">1.</span> <span class="toc-text">分析QQ空间</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#登录QQ空间"><span class="toc-number">1.1.</span> <span class="toc-text">登录QQ空间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分析空间相册"><span class="toc-number">1.2.</span> <span class="toc-text">分析空间相册</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分析单个相册"><span class="toc-number">1.3.</span> <span class="toc-text">分析单个相册</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#确定爬取方案"><span class="toc-number">2.</span> <span class="toc-text">确定爬取方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建qqzone类"><span class="toc-number">2.1.</span> <span class="toc-text">创建qqzone类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#模拟登录"><span class="toc-number">2.2.</span> <span class="toc-text">模拟登录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#获取-Cookies"><span class="toc-number">2.3.</span> <span class="toc-text">获取 Cookies</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#获取-g-tk"><span class="toc-number">2.4.</span> <span class="toc-text">获取 g_tk</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#初始化-request-Session"><span class="toc-number">2.5.</span> <span class="toc-text">初始化 request.Session</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#请求相册信息"><span class="toc-number">2.6.</span> <span class="toc-text">请求相册信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解析并下载照片"><span class="toc-number">2.7.</span> <span class="toc-text">解析并下载照片</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#爬取测试"><span class="toc-number">3.</span> <span class="toc-text">爬取测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#写在最后"><span class="toc-number">4.</span> <span class="toc-text">写在最后</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2019/03/12/commitizen/">&lt; git commit 工具 - commitizen</a><a class="next" href="/2019/02/27/ipv6/">记一次Client无法获取IPv6地址问题的分析过程 &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+.night .v[data-class=v] a:hover { color: #216C73 !important; }
+.night .v[data-class=v] li { list-style: inherit; }
+.night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
+.night .v[data-class=v] .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.night .v[data-class=v] .vbtn { border-radius: 0; background: none; }
+.night .v[data-class=v] .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.night .v[data-class=v] .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.night .v[data-class=v] .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre,.night .v[data-class=v] .vlist .vcard .vhead .vsys { background: #203240 !important; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre { color: #F0F0F0; font-size: 95%; }
+.v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
+</style><div id="vcomment"></div><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
+  lang: 'zh-cn',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></section><footer><p>Copyright © 2016 - 2020 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/plugins/prettify/prettify.js"></script><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script></body></html>

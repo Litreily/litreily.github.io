@@ -1,205 +1,48 @@
-<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Openwrt中添加内核模块 | LITREILY</title><meta name="author" content="litreily,707922098@qq.com"><meta name="copyright" content="litreily"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#49B1F5"><meta name="description" content="如果想要在Openwrt系统中添加一个内核模块，其实并不难，对着某个已有的内核模块，依葫芦画瓢嘛，不难。本文将介绍一个最最简单的 sourcecodepath: git_repo&#x2F;package&#x2F;kmod-demo&#x2F; 下面是源码包含的所有文件，根级Makefile提供给内核编译器使用，src级Makefile用于编译.ko文件。 $ tree . ├── Makefile └── src">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Openwrt中添加内核模块">
-<meta property="og:url" content="https://www.litreily.top/2018/05/30/openwrt-ko/index.html">
-<meta property="og:site_name" content="LITREILY">
-<meta property="og:description" content="如果想要在Openwrt系统中添加一个内核模块，其实并不难，对着某个已有的内核模块，依葫芦画瓢嘛，不难。本文将介绍一个最最简单的 sourcecodepath: git_repo&#x2F;package&#x2F;kmod-demo&#x2F; 下面是源码包含的所有文件，根级Makefile提供给内核编译器使用，src级Makefile用于编译.ko文件。 $ tree . ├── Makefile └── src">
-<meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://www.litreily.top/img/header.png">
-<meta property="article:published_time" content="2018-05-30T15:23:56.000Z">
-<meta property="article:modified_time" content="2026-05-14T01:37:35.089Z">
-<meta property="article:author" content="litreily">
-<meta property="article:tag" content="C&#x2F;C++">
-<meta property="article:tag" content="linux">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://www.litreily.top/img/header.png"><script type="application/ld+json">{
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "Openwrt中添加内核模块",
-  "url": "https://www.litreily.top/2018/05/30/openwrt-ko/",
-  "image": "https://www.litreily.top/img/header.png",
-  "datePublished": "2018-05-30T15:23:56.000Z",
-  "dateModified": "2026-05-14T01:37:35.089Z",
-  "author": [
-    {
-      "@type": "Person",
-      "name": "litreily",
-      "url": "https://www.litreily.top"
-    }
-  ]
-}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://www.litreily.top/2018/05/30/openwrt-ko/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.4"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
-    (() => {
-      
-    const saveToLocal = {
-      set: (key, value, ttl) => {
-        if (!ttl) return
-        const expiry = Date.now() + ttl * 86400000
-        localStorage.setItem(key, JSON.stringify({ value, expiry }))
-      },
-      get: key => {
-        const itemStr = localStorage.getItem(key)
-        if (!itemStr) return undefined
-        const { value, expiry } = JSON.parse(itemStr)
-        if (Date.now() > expiry) {
-          localStorage.removeItem(key)
-          return undefined
-        }
-        return value
-      }
-    }
-
-    window.btf = {
-      saveToLocal,
-      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
-        const script = document.createElement('script')
-        script.src = url
-        script.async = true
-        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
-        script.onload = script.onreadystatechange = () => {
-          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
-        }
-        script.onerror = reject
-        document.head.appendChild(script)
-      }),
-      getCSS: (url, id) => new Promise((resolve, reject) => {
-        const link = document.createElement('link')
-        link.rel = 'stylesheet'
-        link.href = url
-        if (id) link.id = id
-        link.onload = link.onreadystatechange = () => {
-          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
-        }
-        link.onerror = reject
-        document.head.appendChild(link)
-      }),
-      addGlobalFn: (key, fn, name = false, parent = window) => {
-        if (!false && key.startsWith('pjax')) return
-        const globalFn = parent.globalFn || {}
-        globalFn[key] = globalFn[key] || {}
-        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
-        parent.globalFn = globalFn
-      }
-    }
-  
-      
-      const activateDarkMode = () => {
-        document.documentElement.setAttribute('data-theme', 'dark')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0B1121')
-        }
-      }
-      const activateLightMode = () => {
-        document.documentElement.setAttribute('data-theme', 'light')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#49B1F5')
-        }
-      }
-
-      btf.activateDarkMode = activateDarkMode
-      btf.activateLightMode = activateLightMode
-
-      const theme = saveToLocal.get('theme')
-    
-          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
-        
-      
-      const asideStatus = saveToLocal.get('aside-status')
-      if (asideStatus !== undefined) {
-        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
-      }
-    
-      
-    const detectApple = () => {
-      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
-        document.documentElement.classList.add('apple')
-      }
-    }
-    detectApple()
-  
-    })()
-  </script><script>const GLOBAL_CONFIG = {
-  root: '/',
-  algolia: undefined,
-  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
-  translate: undefined,
-  highlight: {"plugin":"prismjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
-  copy: {
-    success: 'Copy Successful',
-    error: 'Copy Failed',
-    noSupport: 'Browser Not Supported'
-  },
-  relativeDate: {
-    homepage: false,
-    post: false
-  },
-  runtime: '',
-  dateSuffix: {
-    just: 'Just now',
-    min: 'minutes ago',
-    hour: 'hours ago',
-    day: 'days ago',
-    month: 'months ago'
-  },
-  copyright: undefined,
-  lightbox: 'fancybox',
-  Snackbar: undefined,
-  infinitegrid: {
-    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
-    buttonText: 'Load More'
-  },
-  isPhotoFigcaption: false,
-  islazyloadPlugin: true,
-  isAnchor: false,
-  percent: {
-    toc: true,
-    rightside: true,
-  },
-  autoDarkmode: false
-}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
-  title: 'Openwrt中添加内核模块',
-  isHighlightShrink: false,
-  isToc: true,
-  pageType: 'post'
-}</script><link rel="stylesheet" href="/css/custom.css"><style>figure.highlight pre,figure.highlight code{white-space:pre-wrap!important;word-wrap:break-word!important}</style><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
-</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/header.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">144</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">120</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">17</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(/img/title_1.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">LITREILY</span></a><a class="nav-page-title" href="/"><span class="site-name">Openwrt中添加内核模块</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Openwrt中添加内核模块</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2018-05-30T15:23:56.000Z" title="Created 2018-05-30 23:23:56">2018-05-30</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-05-14T01:37:35.089Z" title="Updated 2026-05-14 09:37:35">2026-05-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Embedded/">Embedded</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;It has been&quot;,&quot;messageNext&quot;:&quot;days since the last update, the content of the article may be outdated.&quot;,&quot;postUpdate&quot;:&quot;2026-05-14 09:37:35&quot;}" hidden></div><p>如果想要在<code>Openwrt</code>系统中添加一个内核模块，其实并不难，对着某个已有的内核模块，依葫芦画瓢嘛，不难。本文将介绍一个最最简单的</p>
+<!DOCTYPE html><html lang="en"><head><meta name="generator" content="Hexo 3.9.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>Openwrt中添加内核模块 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">Openwrt中添加内核模块</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2018/05/30/openwrt-ko/">2018-05-30</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Embedded/">Embedded</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>如果想要在<code>Openwrt</code>系统中添加一个内核模块，其实并不难，对着某个已有的内核模块，依葫芦画瓢嘛，不难。本文将介绍一个最最简单的</p>
 <h2 id="sourcecode"><a href="#sourcecode" class="headerlink" title="sourcecode"></a>sourcecode</h2><p>path: <code>git_repo/package/kmod-demo/</code></p>
 <p>下面是源码包含的所有文件，根级<code>Makefile</code>提供给内核编译器使用，<code>src</code>级<code>Makefile</code>用于编译<code>.ko</code>文件。</p>
-<pre class="line-numbers language-txt" data-language="txt"><code class="language-txt">$ tree
+<pre><code class="txt">$ tree
 .
 ├── Makefile
 └── src
     ├── demo.c
     ├── Kconfig
-    └── Makefile<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+    └── Makefile
+</code></pre>
 <h3 id="demo-c"><a href="#demo-c" class="headerlink" title="demo.c"></a>demo.c</h3><p>源码非常简单，在装载时打印<code>Hello World</code>，卸载时打印<code>Exit</code>。</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/module.h></span></span>
-<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/kernel.h></span></span>
+<pre><code class="c">#include &lt;linux/module.h&gt;
+#include &lt;linux/kernel.h&gt;
 
-<span class="token keyword">static</span> <span class="token keyword">int</span> __init <span class="token function">hello_init</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-    <span class="token function">printk</span><span class="token punctuation">(</span><span class="token string">"Hello World\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
+static int __init hello_init(void)
+{
+    printk(&quot;Hello World\n&quot;);
+    return 0;
+}
 
-<span class="token keyword">static</span> <span class="token keyword">void</span> __exit <span class="token function">hello_exit</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-    <span class="token function">printk</span><span class="token punctuation">(</span><span class="token string">"Exit\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
+static void __exit hello_exit(void)
+{
+    printk(&quot;Exit\n&quot;);
+}
 
-<span class="token function">module_init</span><span class="token punctuation">(</span>hello_init<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token function">module_exit</span><span class="token punctuation">(</span>hello_exit<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token function">MODULE_LICENSE</span><span class="token punctuation">(</span><span class="token string">"GPL"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token function">MODULE_AUTHOR</span><span class="token punctuation">(</span><span class="token string">"Guangtao.wu"</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+module_init(hello_init);
+module_exit(hello_exit);
+MODULE_LICENSE(&quot;GPL&quot;);
+MODULE_AUTHOR(&quot;Guangtao.wu&quot;);
+</code></pre>
 <h3 id="Kconfig"><a href="#Kconfig" class="headerlink" title="Kconfig"></a>Kconfig</h3><p>在<code>Kconfig</code>文件中添加一些编译相关的选项</p>
-<pre class="line-numbers language-json" data-language="json"><code class="language-json">config DEMO
-    tristate <span class="token string">"This is a Module_DEMO"</span>
+<pre><code class="json">config DEMO
+    tristate &quot;This is a Module_DEMO&quot;
     default n
     help
-      This is a DEMO<span class="token punctuation">,</span> for debugging kernel model.
-      If unsure<span class="token punctuation">,</span> say N.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+      This is a DEMO, for debugging kernel model.
+      If unsure, say N.
+</code></pre>
 <ul>
 <li><code>default</code> : 该选项的默认值<ul>
 <li><code>n</code> 不编译</li>
@@ -209,126 +52,113 @@
 </li>
 </ul>
 <h3 id="Root-Makefile"><a href="#Root-Makefile" class="headerlink" title="Root - Makefile"></a>Root - Makefile</h3><p>根级<code>Makefile</code>仿其它内核模块编写，注意替换名称<code>demo</code>，<code>SUBMENU</code>以及<code>TITLE</code>将显示在<code>make menuconfig</code>的交互界面中。</p>
-<pre class="line-numbers language-makefile" data-language="makefile"><code class="language-makefile"><span class="token comment">#</span>
-<span class="token comment"># Copyright (C) 2006 OpenWrt.org</span>
-<span class="token comment">#</span>
-<span class="token comment"># This is free software, licensed under the GNU General Public License v2.</span>
-<span class="token comment"># See /LICENSE for more information.</span>
-<span class="token comment">#</span>
-<span class="token comment"># $Id: Makefile 6565 2007-03-14 13:42:21Z nbd $</span>
+<pre><code class="makefile">#
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+# $Id: Makefile 6565 2007-03-14 13:42:21Z nbd $
 
-<span class="token keyword">include</span> <span class="token variable">$</span><span class="token punctuation">(</span>TOPDIR<span class="token punctuation">)</span>/rules.mk
-<span class="token keyword">include</span> <span class="token variable">$</span><span class="token punctuation">(</span>INCLUDE_DIR<span class="token punctuation">)</span>/kernel.mk
+include $(TOPDIR)/rules.mk
+include $(INCLUDE_DIR)/kernel.mk
 
-PKG_NAME<span class="token operator">:=</span>demo
-PKG_RELEASE<span class="token operator">:=</span>1
+PKG_NAME:=demo
+PKG_RELEASE:=1
 
-PKG_BUILD_DIR<span class="token operator">:=</span><span class="token variable">$</span><span class="token punctuation">(</span>KERNEL_BUILD_DIR<span class="token punctuation">)</span>/<span class="token variable">$</span><span class="token punctuation">(</span>PKG_NAME<span class="token punctuation">)</span>
+PKG_BUILD_DIR:=$(KERNEL_BUILD_DIR)/$(PKG_NAME)
 
-<span class="token keyword">include</span> <span class="token variable">$</span><span class="token punctuation">(</span>INCLUDE_DIR<span class="token punctuation">)</span>/package.mk
+include $(INCLUDE_DIR)/package.mk
 
-<span class="token keyword">define</span> KernelPackage/demo
-  SUBMENU<span class="token operator">:=</span>Other modules
-  TITLE<span class="token operator">:=</span>kernel demo
-  VERSION<span class="token operator">:=</span><span class="token variable">$</span><span class="token punctuation">(</span>LINUX_VERSION<span class="token punctuation">)</span>-<span class="token variable">$</span><span class="token punctuation">(</span>BOARD<span class="token punctuation">)</span>-<span class="token variable">$</span><span class="token punctuation">(</span>PKG_RELEASE<span class="token punctuation">)</span>
-  FILES<span class="token operator">:=</span> <span class="token variable">$</span><span class="token punctuation">(</span>PKG_BUILD_DIR<span class="token punctuation">)</span>/demo.<span class="token variable">$</span><span class="token punctuation">(</span>LINUX_KMOD_SUFFIX<span class="token punctuation">)</span>
-  AUTOLOAD<span class="token operator">:=</span><span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">call</span> AutoLoad,46,demo<span class="token punctuation">)</span>
-<span class="token keyword">endef</span>
+define KernelPackage/demo
+  SUBMENU:=Other modules
+  TITLE:=kernel demo
+  VERSION:=$(LINUX_VERSION)-$(BOARD)-$(PKG_RELEASE)
+  FILES:= $(PKG_BUILD_DIR)/demo.$(LINUX_KMOD_SUFFIX)
+  AUTOLOAD:=$(call AutoLoad,46,demo)
+endef
 
-<span class="token keyword">define</span> Build/Prepare
-  mkdir -p <span class="token variable">$</span><span class="token punctuation">(</span>PKG_BUILD_DIR<span class="token punctuation">)</span>
-  <span class="token variable">$</span><span class="token punctuation">(</span>CP<span class="token punctuation">)</span> ./src/* <span class="token variable">$</span><span class="token punctuation">(</span>PKG_BUILD_DIR<span class="token punctuation">)</span>
-<span class="token keyword">endef</span>
+define Build/Prepare
+  mkdir -p $(PKG_BUILD_DIR)
+  $(CP) ./src/* $(PKG_BUILD_DIR)
+endef
 
-<span class="token keyword">define</span> Build/Compile
-  <span class="token variable">$</span><span class="token punctuation">(</span>MAKE<span class="token punctuation">)</span> -C <span class="token string">"$(LINUX_DIR)"</span> \
-    CROSS_COMPILE<span class="token operator">=</span><span class="token string">"$(TARGET_CROSS)"</span> \
-    ARCH<span class="token operator">=</span><span class="token string">"$(LINUX_KARCH)"</span> \
-    SUBDIRS<span class="token operator">=</span><span class="token string">"$(PKG_BUILD_DIR)"</span> \
-    EXTRA_CFLAGS<span class="token operator">=</span><span class="token string">"$(BUILDFLAGS)"</span> \
+define Build/Compile
+  $(MAKE) -C &quot;$(LINUX_DIR)&quot; \
+    CROSS_COMPILE=&quot;$(TARGET_CROSS)&quot; \
+    ARCH=&quot;$(LINUX_KARCH)&quot; \
+    SUBDIRS=&quot;$(PKG_BUILD_DIR)&quot; \
+    EXTRA_CFLAGS=&quot;$(BUILDFLAGS)&quot; \
     modules
-<span class="token keyword">endef</span>
+endef
 
-<span class="token keyword">define</span> KernelPackage/demo/install
-  <span class="token variable">$</span><span class="token punctuation">(</span>INSTALL_DIR<span class="token punctuation">)</span> <span class="token variable">$</span><span class="token punctuation">(</span>1<span class="token punctuation">)</span>/lib/network/
-<span class="token keyword">endef</span>
+define KernelPackage/demo/install
+  $(INSTALL_DIR) $(1)/lib/network/
+endef
 
-<span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">eval</span> <span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">call</span> KernelPackage,demo<span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+$(eval $(call KernelPackage,demo))
+</code></pre>
 <h3 id="src-Makefile"><a href="#src-Makefile" class="headerlink" title="src - Makefile"></a>src - Makefile</h3><p>源码的<code>Makefile</code>很简单，其实只要一行就够了，其中<code>CONFIG_&lt;module_name&gt;</code>需要在后续<code>.config</code>文件中配置，或者直接将<code>$(CONFIG_DEMO)</code>改为<code>y</code>或<code>m</code>即可。</p>
-<pre class="line-numbers language-Makefile" data-language="Makefile"><code class="language-Makefile">obj ?&#x3D; .
+<pre><code class="Makefile">obj ?= .
 
-obj-$(CONFIG_DEMO) +&#x3D; demo.o<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
+obj-$(CONFIG_DEMO) += demo.o
+</code></pre>
 <h2 id="更新-config"><a href="#更新-config" class="headerlink" title="更新 .config"></a>更新 .config</h2><p>使用<code>make menuconfig</code>或者直接修改配置文件<code>.config</code>可以启用新添加的内核模块。</p>
 <ol>
 <li><code>make menuconfig</code>: 搜索<code>demo</code>将其选中然后保存退出</li>
 <li>手动启用，修改<code>.config</code>，在<code>Others module</code>配置参数附近添加如下内容</li>
 </ol>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">CONFIG_KERNEL_kmod_demo<span class="token operator">=</span>y<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
+<pre><code class="c">CONFIG_KERNEL_kmod_demo=y
+</code></pre>
 <h2 id="make"><a href="#make" class="headerlink" title="make"></a>make</h2><p>当源码和配置选项都准备好后，便可以编译安装了，单独安装需要整个<code>kernel</code>已经编译过一次，以保证交叉编译工具链能够正常使用。</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">make</span> package/kmod-demo/compile <span class="token assign-left variable">V</span><span class="token operator">=</span>s
-<span class="token function">make</span> package/kmod-demo/install <span class="token assign-left variable">V</span><span class="token operator">=</span>s<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<h2 id="insmod-rmmod"><a href="#insmod-rmmod" class="headerlink" title="insmod/rmmod"></a>insmod/rmmod</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># insmod</span>
+<pre><code class="sh">make package/kmod-demo/compile V=s
+make package/kmod-demo/install V=s
+</code></pre>
+<h2 id="insmod-rmmod"><a href="#insmod-rmmod" class="headerlink" title="insmod/rmmod"></a>insmod/rmmod</h2><pre><code class="sh"># insmod
 $ insmod demo.ko
 Hello World
 
-<span class="token comment"># rmmod</span>
+# rmmod
 $ rmmod demo.ko
-Exit<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+Exit
+</code></pre>
 <p>look, <code>printk</code>的信息已经成功打印出来了！</p>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://www.litreily.top">litreily</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://www.litreily.top/2018/05/30/openwrt-ko/">https://www.litreily.top/2018/05/30/openwrt-ko/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/C-C/">C/C++</a><a class="post-meta__tags" href="/tags/linux/">linux</a></div><div class="post-share"><div class="social-share" data-image="/img/header.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2018/06/19/tmux-config/" title="tmux常用配置说明"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">tmux常用配置说明</div></div><div class="info-2"><div class="info-item-1">tmux作为Linux三大神器之一，结合zsh和vim堪称无敌，tmux作为分屏利器自有其强大之处，本文就其常用配置予以说明。 安装tmux# install in ubuntu $ sudo apt-get install tmux   Ctrl+B: default keys of tmux prefix .tmux.conf: config file of tmux tmux source-file .tmux.conf: command to reload .tmux.conf    禁止自动更新窗口名称默认情况下，tmux会根据当前目录及相关操作自动更改窗口名称，但通常情况下，我们是不需要其修改的，为此可以在配置文件中添加： setw -g allow_rename 'off'  设置zsh作为默认shell如果先安装的tmux, 后安装和配置zsh，那tmux有可能默认打开使用的是bash，此时可以使用以下配置指令予以更改： set-option -g default-shell /bin/zsh  设置vim作为默认编辑器在tmux的搜索模式prefix+[下，默认...</div></div></div></a><a class="pagination-related" href="/2018/05/27/scrapy-start/" title="Python网络爬虫4 - scrapy入门"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">Python网络爬虫4 - scrapy入门</div></div><div class="info-2"><div class="info-item-1">scrapy作为一款强大的爬虫框架，当然要好好学习一番，本文便是本人学习和使用scrapy过后的一个总结，内容比较基础，算是入门笔记吧，主要讲述scrapy的基本概念和使用方法。 scrapy framework首先附上scrapy经典图如下：  scrapy框架包含以下几个部分  Scrapy Engine 引擎 Spiders 爬虫 Scheduler 调度器 Downloader 下载器 Item Pipeline 项目管道 Downloader Middlewares 下载器中间件 Spider Middlewares 爬虫中间件  spider process其爬取过程简述如下：  引擎从爬虫获取首个待爬取的链接url，并传递给调度器 调度器将链接存入队列 引擎向调度器请求要爬取的链接，并将请求得到的链接经下载器中间件传递给下载器 下载器从网上下载网页，下载后的网页经下载器中间件传递给引擎 引擎将网页经爬虫中间件传递给爬虫 爬虫对网页进行解析，将得到的Items和新的链接经爬虫中间件交给引擎 引擎将从爬虫得到的Items交给项目管道，将新的链接请求requests交给调...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2018/09/27/tee/" title="Linux指令 - tee的实现"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2018-09-27</div><div class="info-item-2">Linux指令 - tee的实现</div></div><div class="info-2"><div class="info-item-1">近日学习《Linux/UNIX 系统编程手册》一书，巩固了C语言中一些常用库函数的使用，主要涉及基本IO操作相关的库函数。为了加深理解，手动实现了Linux系统中的tee指令的功能。借此文记述实现过程。 tee功能简述tee类似于一个单输入双输出的三通管道，将标准输入的数据输出到指定文件和标准输出中。为实现这个指令，主要考虑以下几点：  解析tee包含的命令行参数 读取标准输入数据，并将数据写入标准输出和指定文件 若未指定文件，则仅将数据输出到标准输出  下面逐步分析每个要点的实现方法。 参数解析tee包含以下可选项，本文实现仅考虑-a,--version,--help Usage: tee [OPTION]... [FILE]... Copy standard input to each FILE, and also to standard output.    -a, --append              append to the given FILEs, do not overwrite   -i, --ignore-interrupts   ignore inte...</div></div></div></a><a class="pagination-related" href="/2019/05/24/hash-table/" title="哈希表的实现与常见操作"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2019-05-24</div><div class="info-item-2">哈希表的实现与常见操作</div></div><div class="info-2"><div class="info-item-1">前段时间基于数组和单链表以拉链法写了个哈希表，实现了基本的增删改查（CRUD），以键值对的形式存储一些配置参数，便以此文记录一下。 数据结构#define TABLE_SIZE 101 #define KEY_SIZE 32 #define VALUE_SIZE 128 #define BUF_SIZE 256  #define DATA_PATH "data.txt"  struct linklist &#123;     char key[KEY_SIZE];     char val[VALUE_SIZE];     struct linklist *next; &#125;; struct linklist *hashtbl[TABLE_SIZE];   简单起见，使用两个字符数组分别用于存储键key和值value,每个键值对都以单链表linklist的一个节点形式存储。哈希表hashtbl数组存储每个单链表的头部指针head。  哈希函数对于字符串的哈希函数，我选择了《算法》第4版提供的一种叫 Horner 的经典算法，用 N 次乘法、加法和取余来计算一个字符串的散列值...</div></div></div></a><a class="pagination-related" href="/2016/09/12/WYMN1/" title="模拟试题1 - 计算PA+PB"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2016-09-12</div><div class="info-item-2">模拟试题1 - 计算PA+PB</div></div><div class="info-2"><div class="info-item-1">题目描述正整数A的DA(1位整数)部分定义为由A中所有组成的新整数PA。例如：给定A=3862767，DA=6，则A的6部分PA是66，因为A中有2个6。 现给定A, DA, B, DB, 请编写程序计算PA+PB。 输入描述 输入在一行中依次给出A，DA，B,DB，中间以空格分隔，其中 0 &lt; A, B &lt; 1e10  输出描述 在一行中输出PA+PB的值  输入例子 3862767 6 13530293 3  输出例子 399  解题程序#include &lt;iostream&gt; using namespace std;  void getPA(unsigned long num, int DA, unsigned long &amp; PA) &#123;     PA &#x3D; 0;     while(num)           &#x2F;&#x2F; 循环查找num中DA的个数     &#123;       if(num%10&#x3D;&#x3D;DA)         PA &#x3D; PA*10+DA;       num&#x...</div></div></div></a><a class="pagination-related" href="/2021/10/27/system-app/" title="RK3288 android 6.0 内置系统应用"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-27</div><div class="info-item-2">RK3288 android 6.0 内置系统应用</div></div><div class="info-2"><div class="info-item-1">安卓系统的内置应用可分为以下两大类：  可卸载的普通应用 不可卸载的系统应用，可以在首次烧录后自启动  可卸载应用对于可卸载应用，其内置很简单，只需要将apk文件放置在指定目录即可。 cp My_application.apk device/rockchip/rk3288/preinstall_del/  不可卸载应用针对不可卸载的系统应用，复杂一些，需要放置在 packages/apps 目录，具体操作如下： apk_file=My_application.apk install_dir=packages/apps/$&#123;apk_file&#125; mkdir $&#123;install_dir&#125; cp $&#123;apk_file&#125; $&#123;install_dir&#125;  # 解压出lib文件 cd $&#123;install_dir&#125; unzip $&#123;apk_file&#125; -d tmp mv tmp/lib . rm -rf tmp cd -  # vi Android.mk  新建 Android...</div></div></div></a><a class="pagination-related" href="/2020/03/15/nbns_code/" title="NBNS客户端的C语言实现"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-03-15</div><div class="info-item-2">NBNS客户端的C语言实现</div></div><div class="info-2"><div class="info-item-1">接上一篇【网络协议详解1 - NBNS】对NBNS的介绍，这一篇将要讲述使用C语言如何实现一个NBNS客户端，用于向局域网内其它设备发送NBNS NODE STATUS QUERY，并将接收到的RESPONSE信息打印出来。其实也就是一个UDP socket的实例。  编写一个客户端，首先要清楚它要完成什么任务，进而确定完成任务的方法和步骤。其任务很简单，就是NBNS数据包的发送和接收，也就是一个简单的socket收发进程。实现主要分以下几步：  组包得到NBNS NODE STATUS QUERY 发送NBNS NODE STATUS QUERY 接收RESPONSE并解析  include &amp; define首先来看看编写该客户端会用到的头文件及相关宏定义 #include &lt;stdio.h> #include &lt;stdlib.h> /* for exit */ #include &lt;string.h> /* for memset */ #include &lt;unistd.h> /* for close */ #include &lt;sys/soc...</div></div></div></a><a class="pagination-related" href="/2016/11/02/FreeRTOS/" title="stm32 - FreeRTOS系统移植"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2016-11-02</div><div class="info-item-2">stm32 - FreeRTOS系统移植</div></div><div class="info-2"><div class="info-item-1">前段时间研究了一下 FreeRTOS 在 stm32 的系统移植，觉得有必要做个总结，记录这研发路上的点点滴滴。 FreeRTOS从 FreeRTOS官网 下载最新源码，我下载的是 FreeRTOSv9.0.0 ，其文件结构如下，根目录主要包含 FreeRTOS 和 FreeRTOS-Plus 两个文件夹， Plus 版系统添加了 TCP/UDP 等网络通信功能。 D:\FREERTOSV9.0.0 │  New - Direct to Task Notifications.html │  New - FreeRTOS+TCP.html │  Quick_Start_Guide.html │  Upgrading-to-FreeRTOS-9.html │  readme.txt │ ├─FreeRTOS │   │  links_to_doc_pages_for_the_demo_projects.html │   │  readme.txt │   │ │   ├─Demo │   ├─License │   └─Source │ └─FreeRTOS-Plus     │  ...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comments</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/header.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">litreily</div><div class="author-info-description">simple life</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">144</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">120</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">17</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Litreily"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://xhslink.com/m/893FaC3aK88" target="_blank" title="小红书"><i class="fas fa-seedling" style="color: #ff2442;"></i></a><a class="social-icon" href="mailto:litreily@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="https://www.litreily.top/notes/" target="_blank" title="Notes"><i class="fas fa-sticky-note" style="color: #e8a618;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#sourcecode"><span class="toc-text">sourcecode</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#demo-c"><span class="toc-text">demo.c</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Kconfig"><span class="toc-text">Kconfig</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Root-Makefile"><span class="toc-text">Root - Makefile</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#src-Makefile"><span class="toc-text">src - Makefile</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0-config"><span class="toc-text">更新 .config</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#make"><span class="toc-text">make</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#insmod-rmmod"><span class="toc-text">insmod&#x2F;rmmod</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/07/05/daily-eastern-beauty-2026-07-05/" title="每日东方美人探索 2026-07-05"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-07-05/open-daily-magic.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="每日东方美人探索 2026-07-05"/></a><div class="content"><a class="title" href="/2026/07/05/daily-eastern-beauty-2026-07-05/" title="每日东方美人探索 2026-07-05">每日东方美人探索 2026-07-05</a><time datetime="2026-07-04T16:10:00.000Z" title="Created 2026-07-05 00:10:00">2026-07-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/07/04/daily-eastern-beauty-2026-07-04/" title="每日东方美人探索 2026-07-04"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-07-04/open-time-crossing.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="每日东方美人探索 2026-07-04"/></a><div class="content"><a class="title" href="/2026/07/04/daily-eastern-beauty-2026-07-04/" title="每日东方美人探索 2026-07-04">每日东方美人探索 2026-07-04</a><time datetime="2026-07-04T09:18:00.000Z" title="Created 2026-07-04 17:18:00">2026-07-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/07/03/daily-eastern-beauty-2026-07-03/" title="每日东方美人探索 2026-07-03"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-07-03/open-time-crossing.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="每日东方美人探索 2026-07-03"/></a><div class="content"><a class="title" href="/2026/07/03/daily-eastern-beauty-2026-07-03/" title="每日东方美人探索 2026-07-03">每日东方美人探索 2026-07-03</a><time datetime="2026-07-02T16:10:00.000Z" title="Created 2026-07-03 00:10:00">2026-07-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/07/02/daily-eastern-beauty-2026-07-02/" title="每日东方美人探索 2026-07-02"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-07-02/open-daily-magic.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="每日东方美人探索 2026-07-02"/></a><div class="content"><a class="title" href="/2026/07/02/daily-eastern-beauty-2026-07-02/" title="每日东方美人探索 2026-07-02">每日东方美人探索 2026-07-02</a><time datetime="2026-07-02T08:55:00.000Z" title="Created 2026-07-02 16:55:00">2026-07-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/07/01/daily-eastern-beauty-2026-07-01/" title="每日东方美人探索 2026-07-01"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-07-01/open-time-crossing.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="每日东方美人探索 2026-07-01"/></a><div class="content"><a class="title" href="/2026/07/01/daily-eastern-beauty-2026-07-01/" title="每日东方美人探索 2026-07-01">每日东方美人探索 2026-07-01</a><time datetime="2026-07-01T01:10:00.000Z" title="Created 2026-07-01 09:10:00">2026-07-01</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By litreily</span><span class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 5.4.2</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll to Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4"></script><script src="/js/main.js?v=5.5.4"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@19.1.3/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
-  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
-  const option = null
-
-  const initValine = (el, path) => {
-    if (isShuoshuo) {
-      window.shuoshuoComment.destroyValine = () => {
-        if (el.children.length) {
-          el.innerHTML = ''
-          el.classList.add('no-comment')
-        }
-      }
-    }
-
-    const valineConfig = {
-      el: '#vcomment',
-      appId: '1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
-      appKey: 'uvA3xgqNW3q8TGR483lxXcpB',
-      avatar: 'monsterid',
-      serverURLs: '',
-      emojiMaps: "",
-      visitor: false,
-      ...option,
-      path: isShuoshuo ? path : (option && option.path) || window.location.pathname
-    }
-
-    new Valine(valineConfig)
-  }
-
-  const loadValine = async (el, path) => {
-    if (typeof Valine === 'function') {
-      initValine(el, path)
-    } else {
-      await btf.getScript('https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js')
-      initValine(el, path)
-    }
-  }
-
-  if (isShuoshuo) {
-    'Valine' === 'Valine'
-      ? window.shuoshuoComment = { loadComment: loadValine }
-      : window.loadOtherComment = loadValine
-    return
-  }
-
-  if ('Valine' === 'Valine' || !false) {
-    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
-    else setTimeout(loadValine, 0)
-  } else {
-    window.loadOtherComment = loadValine
-  }
-})()</script></div><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="local-search-input"><input placeholder="Search..." type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.4"></script></div></div></body></html>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2018/05/30/openwrt-ko/">https://www.litreily.top/2018/05/30/openwrt-ko/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tags"></i><a href="/tags/C-C/">C/C++</a><a href="/tags/linux/">linux</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#sourcecode"><span class="toc-number">1.</span> <span class="toc-text">sourcecode</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#demo-c"><span class="toc-number">1.1.</span> <span class="toc-text">demo.c</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Kconfig"><span class="toc-number">1.2.</span> <span class="toc-text">Kconfig</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Root-Makefile"><span class="toc-number">1.3.</span> <span class="toc-text">Root - Makefile</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#src-Makefile"><span class="toc-number">1.4.</span> <span class="toc-text">src - Makefile</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#更新-config"><span class="toc-number">2.</span> <span class="toc-text">更新 .config</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#make"><span class="toc-number">3.</span> <span class="toc-text">make</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#insmod-rmmod"><span class="toc-number">4.</span> <span class="toc-text">insmod/rmmod</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2018/06/19/tmux-config/">&lt; tmux常用配置说明</a><a class="next" href="/2018/05/27/scrapy-start/">Python网络爬虫4 - scrapy入门 &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+.night .v[data-class=v] a:hover { color: #216C73 !important; }
+.night .v[data-class=v] li { list-style: inherit; }
+.night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
+.night .v[data-class=v] .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.night .v[data-class=v] .vbtn { border-radius: 0; background: none; }
+.night .v[data-class=v] .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.night .v[data-class=v] .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.night .v[data-class=v] .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre,.night .v[data-class=v] .vlist .vcard .vhead .vsys { background: #203240 !important; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre { color: #F0F0F0; font-size: 95%; }
+.v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
+</style><div id="vcomment"></div><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
+  lang: 'zh-cn',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></section><footer><p>Copyright © 2016 - 2020 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/plugins/prettify/prettify.js"></script><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script></body></html>

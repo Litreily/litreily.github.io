@@ -1,167 +1,10 @@
-<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Python之markdown转Chrome收藏夹 | LITREILY</title><meta name="author" content="litreily,707922098@qq.com"><meta name="copyright" content="litreily"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#49B1F5"><meta name="description" content="网上可以搜到很多chrome收藏夹转markdown文档的方法，却鲜有markdown文档转为Chrome收藏夹的方法，不过这种需求也确实不多。我之所以用到，是因为平常会用markdown文档收集一些网站，现在想要转换为Chrome收藏夹，方便访问。 思路要实现这个功能倒也不难，因为Chrome的收藏夹本质上也是一个html文件，只不过有其固定的DOM结构而已，所以我们的实现思路很简单。  导出C">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Python之markdown转Chrome收藏夹">
-<meta property="og:url" content="https://www.litreily.top/2020/05/03/md2bm/index.html">
-<meta property="og:site_name" content="LITREILY">
-<meta property="og:description" content="网上可以搜到很多chrome收藏夹转markdown文档的方法，却鲜有markdown文档转为Chrome收藏夹的方法，不过这种需求也确实不多。我之所以用到，是因为平常会用markdown文档收集一些网站，现在想要转换为Chrome收藏夹，方便访问。 思路要实现这个功能倒也不难，因为Chrome的收藏夹本质上也是一个html文件，只不过有其固定的DOM结构而已，所以我们的实现思路很简单。  导出C">
-<meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://www.litreily.top/img/header.png">
-<meta property="article:published_time" content="2020-05-03T08:49:25.000Z">
-<meta property="article:modified_time" content="2026-05-14T01:37:35.477Z">
-<meta property="article:author" content="litreily">
-<meta property="article:tag" content="markdown">
-<meta property="article:tag" content="chrome">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://www.litreily.top/img/header.png"><script type="application/ld+json">{
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "Python之markdown转Chrome收藏夹",
-  "url": "https://www.litreily.top/2020/05/03/md2bm/",
-  "image": "https://www.litreily.top/img/header.png",
-  "datePublished": "2020-05-03T08:49:25.000Z",
-  "dateModified": "2026-05-14T01:37:35.477Z",
-  "author": [
-    {
-      "@type": "Person",
-      "name": "litreily",
-      "url": "https://www.litreily.top"
-    }
-  ]
-}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://www.litreily.top/2020/05/03/md2bm/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.4"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
-    (() => {
-      
-    const saveToLocal = {
-      set: (key, value, ttl) => {
-        if (!ttl) return
-        const expiry = Date.now() + ttl * 86400000
-        localStorage.setItem(key, JSON.stringify({ value, expiry }))
-      },
-      get: key => {
-        const itemStr = localStorage.getItem(key)
-        if (!itemStr) return undefined
-        const { value, expiry } = JSON.parse(itemStr)
-        if (Date.now() > expiry) {
-          localStorage.removeItem(key)
-          return undefined
-        }
-        return value
-      }
-    }
-
-    window.btf = {
-      saveToLocal,
-      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
-        const script = document.createElement('script')
-        script.src = url
-        script.async = true
-        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
-        script.onload = script.onreadystatechange = () => {
-          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
-        }
-        script.onerror = reject
-        document.head.appendChild(script)
-      }),
-      getCSS: (url, id) => new Promise((resolve, reject) => {
-        const link = document.createElement('link')
-        link.rel = 'stylesheet'
-        link.href = url
-        if (id) link.id = id
-        link.onload = link.onreadystatechange = () => {
-          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
-        }
-        link.onerror = reject
-        document.head.appendChild(link)
-      }),
-      addGlobalFn: (key, fn, name = false, parent = window) => {
-        if (!false && key.startsWith('pjax')) return
-        const globalFn = parent.globalFn || {}
-        globalFn[key] = globalFn[key] || {}
-        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
-        parent.globalFn = globalFn
-      }
-    }
-  
-      
-      const activateDarkMode = () => {
-        document.documentElement.setAttribute('data-theme', 'dark')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0B1121')
-        }
-      }
-      const activateLightMode = () => {
-        document.documentElement.setAttribute('data-theme', 'light')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#49B1F5')
-        }
-      }
-
-      btf.activateDarkMode = activateDarkMode
-      btf.activateLightMode = activateLightMode
-
-      const theme = saveToLocal.get('theme')
-    
-          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
-        
-      
-      const asideStatus = saveToLocal.get('aside-status')
-      if (asideStatus !== undefined) {
-        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
-      }
-    
-      
-    const detectApple = () => {
-      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
-        document.documentElement.classList.add('apple')
-      }
-    }
-    detectApple()
-  
-    })()
-  </script><script>const GLOBAL_CONFIG = {
-  root: '/',
-  algolia: undefined,
-  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
-  translate: undefined,
-  highlight: {"plugin":"prismjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
-  copy: {
-    success: 'Copy Successful',
-    error: 'Copy Failed',
-    noSupport: 'Browser Not Supported'
-  },
-  relativeDate: {
-    homepage: false,
-    post: false
-  },
-  runtime: '',
-  dateSuffix: {
-    just: 'Just now',
-    min: 'minutes ago',
-    hour: 'hours ago',
-    day: 'days ago',
-    month: 'months ago'
-  },
-  copyright: undefined,
-  lightbox: 'fancybox',
-  Snackbar: undefined,
-  infinitegrid: {
-    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
-    buttonText: 'Load More'
-  },
-  isPhotoFigcaption: false,
-  islazyloadPlugin: true,
-  isAnchor: false,
-  percent: {
-    toc: true,
-    rightside: true,
-  },
-  autoDarkmode: false
-}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
-  title: 'Python之markdown转Chrome收藏夹',
-  isHighlightShrink: false,
-  isToc: true,
-  pageType: 'post'
-}</script><link rel="stylesheet" href="/css/custom.css"><style>figure.highlight pre,figure.highlight code{white-space:pre-wrap!important;word-wrap:break-word!important}</style><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="LITREILY" type="application/atom+xml">
-</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/header.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">144</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">120</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">17</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(/img/title_1.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">LITREILY</span></a><a class="nav-page-title" href="/"><span class="site-name">Python之markdown转Chrome收藏夹</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Python之markdown转Chrome收藏夹</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2020-05-03T08:49:25.000Z" title="Created 2020-05-03 16:49:25">2020-05-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-05-14T01:37:35.477Z" title="Updated 2026-05-14 09:37:35">2026-05-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Language/">Language</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Language/Python/">Python</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;It has been&quot;,&quot;messageNext&quot;:&quot;days since the last update, the content of the article may be outdated.&quot;,&quot;postUpdate&quot;:&quot;2026-05-14 09:37:35&quot;}" hidden></div><p>网上可以搜到很多chrome收藏夹转markdown文档的方法，却鲜有markdown文档转为Chrome收藏夹的方法，不过这种需求也确实不多。我之所以用到，是因为平常会用markdown文档收集一些网站，现在想要转换为Chrome收藏夹，方便访问。</p>
+<!DOCTYPE html><html lang="en"><head><meta name="generator" content="Hexo 3.9.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="simple life"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification" content="pte8o83UGG"><title>Python之markdown转Chrome收藏夹 | LITREILY</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><script>var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?d55250b3059d32736607d30baa6e0ca2";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script></head><link rel="stylesheet" type="text/css" href="/plugins/prettify/doxy.css"><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">LITREILY</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/notes/">笔记</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">Python之markdown转Chrome收藏夹</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2020/05/03/md2bm/">2020-05-03</a></span><span class="p-category"><i class="fa fa-folder"></i><a href="/categories/Python/">Python</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><p>网上可以搜到很多chrome收藏夹转markdown文档的方法，却鲜有markdown文档转为Chrome收藏夹的方法，不过这种需求也确实不多。我之所以用到，是因为平常会用markdown文档收集一些网站，现在想要转换为Chrome收藏夹，方便访问。</p>
 <h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>要实现这个功能倒也不难，因为Chrome的收藏夹本质上也是一个html文件，只不过有其固定的DOM结构而已，所以我们的实现思路很简单。</p>
 <ol>
 <li>导出Chrome已有的收藏夹</li>
@@ -170,53 +13,53 @@
 <li>在chrome中导入生成后的收藏夹</li>
 </ol>
 <h2 id="收藏夹的DOM结构"><a href="#收藏夹的DOM结构" class="headerlink" title="收藏夹的DOM结构"></a>收藏夹的DOM结构</h2><p>我导出了自己的收藏夹，取出其中一小部分为例进行分析，比较局部是可以反映整体的。</p>
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token doctype"><span class="token punctuation">&lt;!</span><span class="token doctype-tag">DOCTYPE</span> <span class="token name">NETSCAPE-Bookmark-file-1</span><span class="token punctuation">></span></span>
-<span class="token comment">&lt;!-- This is an automatically generated file.
+<pre><code class="html">&lt;!DOCTYPE NETSCAPE-Bookmark-file-1&gt;
+&lt;!-- This is an automatically generated file.
      It will be read and overwritten.
-     DO NOT EDIT! --></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>META</span> <span class="token attr-name">HTTP-EQUIV</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Content-Type<span class="token punctuation">"</span></span> <span class="token attr-name">CONTENT</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text/html; charset=UTF-8<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>TITLE</span><span class="token punctuation">></span></span>Bookmarks<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>TITLE</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>H1</span><span class="token punctuation">></span></span>Bookmarks<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>H1</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DL</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DT</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>H3</span> <span class="token attr-name">ADD_DATE</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1499940499<span class="token punctuation">"</span></span> <span class="token attr-name">LAST_MODIFIED</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1573567059<span class="token punctuation">"</span></span> <span class="token attr-name">PERSONAL_TOOLBAR_FOLDER</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Bookmarks bar<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>H3</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DL</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DT</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>H3</span> <span class="token attr-name">ADD_DATE</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1481956366<span class="token punctuation">"</span></span> <span class="token attr-name">LAST_MODIFIED</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1565750292<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>不常用<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>H3</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DL</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DT</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>H3</span> <span class="token attr-name">ADD_DATE</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1460906121<span class="token punctuation">"</span></span> <span class="token attr-name">LAST_MODIFIED</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1582357904<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>设计<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>H3</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DL</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>
-                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DT</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>A</span> <span class="token attr-name">HREF</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>https://w3layouts.com/<span class="token punctuation">"</span></span> <span class="token attr-name">ADD_DATE</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1460906098<span class="token punctuation">"</span></span> <span class="token attr-name">ICON</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>data:image/png;base64,<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Free Responsive Mobile Website Templates Designs - w3layouts.com<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>A</span><span class="token punctuation">></span></span>
-                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DT</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>A</span> <span class="token attr-name">HREF</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>http://www.hightopo.com/demos/index.html<span class="token punctuation">"</span></span> <span class="token attr-name">ADD_DATE</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1472525305<span class="token punctuation">"</span></span> <span class="token attr-name">ICON</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>data:image/png;base64,<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Hightopo - Everything you need to create cutting-edge 2D and 3D visualization<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>A</span><span class="token punctuation">></span></span>
-                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DT</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>A</span> <span class="token attr-name">HREF</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>http://jekyllthemes.org/<span class="token punctuation">"</span></span> <span class="token attr-name">ADD_DATE</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1459860502<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Jekyll Themes<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>A</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>DL</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DT</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>H3</span> <span class="token attr-name">ADD_DATE</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1468076322<span class="token punctuation">"</span></span> <span class="token attr-name">LAST_MODIFIED</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1538094516<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>算法<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>H3</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DL</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>
-                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DT</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>A</span> <span class="token attr-name">HREF</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>http://www.pythontip.com/acm/problemCategory<span class="token punctuation">"</span></span> <span class="token attr-name">ADD_DATE</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1468076332<span class="token punctuation">"</span></span> <span class="token attr-name">ICON</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>data:image/png;base64,<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>各大OJ题目分类<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>A</span><span class="token punctuation">></span></span>
-                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DT</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>A</span> <span class="token attr-name">HREF</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>http://www.acmerblog.com/<span class="token punctuation">"</span></span> <span class="token attr-name">ADD_DATE</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1468075312<span class="token punctuation">"</span></span> <span class="token attr-name">ICON</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>data:image/png;base64,<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Acm之家<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>A</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>DL</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DT</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>H3</span> <span class="token attr-name">ADD_DATE</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1550926992<span class="token punctuation">"</span></span> <span class="token attr-name">LAST_MODIFIED</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1582961771<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>图标<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>H3</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DL</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>
-                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DT</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>A</span> <span class="token attr-name">HREF</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>https://www.emojicopy.com/<span class="token punctuation">"</span></span> <span class="token attr-name">ADD_DATE</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1550926923<span class="token punctuation">"</span></span> <span class="token attr-name">ICON</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>data:image/png;base64,<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>EmojiCopy | Simple emoji copy and paste by EmojiOne™<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>A</span><span class="token punctuation">></span></span>
-                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DT</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>A</span> <span class="token attr-name">HREF</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>https://www.webfx.com/tools/emoji-cheat-sheet/<span class="token punctuation">"</span></span> <span class="token attr-name">ADD_DATE</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1582961771<span class="token punctuation">"</span></span> <span class="token attr-name">ICON</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>data:image/png;base64,<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>🎁 Emoji cheat sheet for GitHub, Basecamp, Slack <span class="token entity named-entity" title="&amp;">&amp;amp;</span> more<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>A</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>DL</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DT</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>H3</span> <span class="token attr-name">ADD_DATE</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1412991964<span class="token punctuation">"</span></span> <span class="token attr-name">LAST_MODIFIED</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1586250269<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>论坛<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>H3</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DL</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>
-                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DT</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>A</span> <span class="token attr-name">HREF</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>https://www.qt.io/<span class="token punctuation">"</span></span> <span class="token attr-name">ADD_DATE</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1472370392<span class="token punctuation">"</span></span> <span class="token attr-name">ICON</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>data:image/png;base64,<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Qt<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>A</span><span class="token punctuation">></span></span>
-                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DT</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>A</span> <span class="token attr-name">HREF</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>https://freessl.cn/<span class="token punctuation">"</span></span> <span class="token attr-name">ADD_DATE</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1566824588<span class="token punctuation">"</span></span> <span class="token attr-name">ICON</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>data:image/png;base64,<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>FreeSSL首页 - FreeSSL.cn 一个申请免费HTTPS证书的网站<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>A</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>DL</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>DL</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DT</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>H3</span> <span class="token attr-name">ADD_DATE</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1538059196<span class="token punctuation">"</span></span> <span class="token attr-name">LAST_MODIFIED</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1569229251<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>wiki<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>H3</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DL</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DT</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>A</span> <span class="token attr-name">HREF</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>https://code.woboq.org/linux/linux/<span class="token punctuation">"</span></span> <span class="token attr-name">ADD_DATE</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1528874869<span class="token punctuation">"</span></span> <span class="token attr-name">ICON</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>data:image/png;base64,<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>linux/linux/ Source Tree - Woboq Code Browser<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>A</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DT</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>A</span> <span class="token attr-name">HREF</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>https://www.geeksforgeeks.org/c-programming-language/<span class="token punctuation">"</span></span> <span class="token attr-name">ADD_DATE</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1569229251<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>C Programming Language - GeeksforGeeks<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>A</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>DL</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DT</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>A</span> <span class="token attr-name">HREF</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>http://translate.google.cn/<span class="token punctuation">"</span></span> <span class="token attr-name">ADD_DATE</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1446427265<span class="token punctuation">"</span></span> <span class="token attr-name">ICON</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>data:image/png;base64,<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>A</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DT</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>A</span> <span class="token attr-name">HREF</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>http://www.litreily.top/<span class="token punctuation">"</span></span> <span class="token attr-name">ADD_DATE</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1481438786<span class="token punctuation">"</span></span> <span class="token attr-name">ICON</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>data:image/png;base64,<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>A</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>DL</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>DL</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+     DO NOT EDIT! --&gt;
+&lt;META HTTP-EQUIV=&quot;Content-Type&quot; CONTENT=&quot;text/html; charset=UTF-8&quot;&gt;
+&lt;TITLE&gt;Bookmarks&lt;/TITLE&gt;
+&lt;H1&gt;Bookmarks&lt;/H1&gt;
+&lt;DL&gt;&lt;p&gt;
+    &lt;DT&gt;&lt;H3 ADD_DATE=&quot;1499940499&quot; LAST_MODIFIED=&quot;1573567059&quot; PERSONAL_TOOLBAR_FOLDER=&quot;true&quot;&gt;Bookmarks bar&lt;/H3&gt;
+    &lt;DL&gt;&lt;p&gt;
+        &lt;DT&gt;&lt;H3 ADD_DATE=&quot;1481956366&quot; LAST_MODIFIED=&quot;1565750292&quot;&gt;不常用&lt;/H3&gt;
+        &lt;DL&gt;&lt;p&gt;
+            &lt;DT&gt;&lt;H3 ADD_DATE=&quot;1460906121&quot; LAST_MODIFIED=&quot;1582357904&quot;&gt;设计&lt;/H3&gt;
+            &lt;DL&gt;&lt;p&gt;
+                &lt;DT&gt;&lt;A HREF=&quot;https://w3layouts.com/&quot; ADD_DATE=&quot;1460906098&quot; ICON=&quot;data:image/png;base64,&quot;&gt;Free Responsive Mobile Website Templates Designs - w3layouts.com&lt;/A&gt;
+                &lt;DT&gt;&lt;A HREF=&quot;http://www.hightopo.com/demos/index.html&quot; ADD_DATE=&quot;1472525305&quot; ICON=&quot;data:image/png;base64,&quot;&gt;Hightopo - Everything you need to create cutting-edge 2D and 3D visualization&lt;/A&gt;
+                &lt;DT&gt;&lt;A HREF=&quot;http://jekyllthemes.org/&quot; ADD_DATE=&quot;1459860502&quot;&gt;Jekyll Themes&lt;/A&gt;
+            &lt;/DL&gt;&lt;p&gt;
+            &lt;DT&gt;&lt;H3 ADD_DATE=&quot;1468076322&quot; LAST_MODIFIED=&quot;1538094516&quot;&gt;算法&lt;/H3&gt;
+            &lt;DL&gt;&lt;p&gt;
+                &lt;DT&gt;&lt;A HREF=&quot;http://www.pythontip.com/acm/problemCategory&quot; ADD_DATE=&quot;1468076332&quot; ICON=&quot;data:image/png;base64,&quot;&gt;各大OJ题目分类&lt;/A&gt;
+                &lt;DT&gt;&lt;A HREF=&quot;http://www.acmerblog.com/&quot; ADD_DATE=&quot;1468075312&quot; ICON=&quot;data:image/png;base64,&quot;&gt;Acm之家&lt;/A&gt;
+            &lt;/DL&gt;&lt;p&gt;
+            &lt;DT&gt;&lt;H3 ADD_DATE=&quot;1550926992&quot; LAST_MODIFIED=&quot;1582961771&quot;&gt;图标&lt;/H3&gt;
+            &lt;DL&gt;&lt;p&gt;
+                &lt;DT&gt;&lt;A HREF=&quot;https://www.emojicopy.com/&quot; ADD_DATE=&quot;1550926923&quot; ICON=&quot;data:image/png;base64,&quot;&gt;EmojiCopy | Simple emoji copy and paste by EmojiOne™&lt;/A&gt;
+                &lt;DT&gt;&lt;A HREF=&quot;https://www.webfx.com/tools/emoji-cheat-sheet/&quot; ADD_DATE=&quot;1582961771&quot; ICON=&quot;data:image/png;base64,&quot;&gt;🎁 Emoji cheat sheet for GitHub, Basecamp, Slack &amp;amp; more&lt;/A&gt;
+            &lt;/DL&gt;&lt;p&gt;
+            &lt;DT&gt;&lt;H3 ADD_DATE=&quot;1412991964&quot; LAST_MODIFIED=&quot;1586250269&quot;&gt;论坛&lt;/H3&gt;
+            &lt;DL&gt;&lt;p&gt;
+                &lt;DT&gt;&lt;A HREF=&quot;https://www.qt.io/&quot; ADD_DATE=&quot;1472370392&quot; ICON=&quot;data:image/png;base64,&quot;&gt;Qt&lt;/A&gt;
+                &lt;DT&gt;&lt;A HREF=&quot;https://freessl.cn/&quot; ADD_DATE=&quot;1566824588&quot; ICON=&quot;data:image/png;base64,&quot;&gt;FreeSSL首页 - FreeSSL.cn 一个申请免费HTTPS证书的网站&lt;/A&gt;
+            &lt;/DL&gt;&lt;p&gt;
+        &lt;/DL&gt;&lt;p&gt;
+        &lt;DT&gt;&lt;H3 ADD_DATE=&quot;1538059196&quot; LAST_MODIFIED=&quot;1569229251&quot;&gt;wiki&lt;/H3&gt;
+        &lt;DL&gt;&lt;p&gt;
+            &lt;DT&gt;&lt;A HREF=&quot;https://code.woboq.org/linux/linux/&quot; ADD_DATE=&quot;1528874869&quot; ICON=&quot;data:image/png;base64,&quot;&gt;linux/linux/ Source Tree - Woboq Code Browser&lt;/A&gt;
+            &lt;DT&gt;&lt;A HREF=&quot;https://www.geeksforgeeks.org/c-programming-language/&quot; ADD_DATE=&quot;1569229251&quot;&gt;C Programming Language - GeeksforGeeks&lt;/A&gt;
+        &lt;/DL&gt;&lt;p&gt;
+        &lt;DT&gt;&lt;A HREF=&quot;http://translate.google.cn/&quot; ADD_DATE=&quot;1446427265&quot; ICON=&quot;data:image/png;base64,&quot;&gt;&lt;/A&gt;
+        &lt;DT&gt;&lt;A HREF=&quot;http://www.litreily.top/&quot; ADD_DATE=&quot;1481438786&quot; ICON=&quot;data:image/png;base64,&quot;&gt;&lt;/A&gt;
+    &lt;/DL&gt;&lt;p&gt;
+&lt;/DL&gt;&lt;p&gt;
+</code></pre>
 <p>以上DOM结构中，每条收藏都有一个<code>&lt;A&gt;</code>标签，该标签有一个base64值对应的是base64编码后的图标，也就是每个收藏的图标，这个不是必须的，为了方便阅读，我将其删除了，并不影响。</p>
 <p>如果使用上面的html文件导入chrome的话，是下面这样的。</p>
-<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/chrome/example.png" alt="chrome bookmark"></p>
+<p><img src="/assets/chrome/example.png" alt="chrome bookmark"></p>
 <p>注意其中两个收藏（谷歌翻译和我的博客主页）没有显示描述信息，这个在chrome中是允许的，因为根据图标就能知道这是什么站点。</p>
 <p>好啦，对比DOM结构和在收藏夹的展示，不难发现规律：</p>
 <ol>
@@ -230,34 +73,34 @@
 </ol>
 <p>到此就完成了对收藏夹的分析，下面就可以按照这个格式将markdown转换成相应的html</p>
 <h2 id="markdown转html"><a href="#markdown转html" class="headerlink" title="markdown转html"></a>markdown转html</h2><p>markdown文档格式很简单，同样举例说明，下面是用markdown格式编写的收藏夹。</p>
-<pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown"><span class="token title important"><span class="token punctuation">#</span> 收藏夹(Favorites)</span>
+<pre><code class="md"># 收藏夹(Favorites)
 
-<span class="token title important"><span class="token punctuation">##</span> 常用</span>
+## 常用
 
-<span class="token list punctuation">-</span> <span class="token url">[<span class="token content">谷歌翻译</span>](<span class="token url">http://translate.google.cn/</span>)</span>
-<span class="token list punctuation">-</span> <span class="token url">[<span class="token content">litreily</span>](<span class="token url">http://www.litreily.top/</span>)</span>
-<span class="token list punctuation">-</span> <span class="token url">[<span class="token content">Notes</span>](<span class="token url">https://litreily.gitbook.io/notes/content/</span>)</span>
-<span class="token list punctuation">-</span> <span class="token url">[<span class="token content">smslit</span>](<span class="token url">http://www.smslit.top/</span>)</span>
-<span class="token list punctuation">-</span> <span class="token url">[<span class="token content">github</span>](<span class="token url">https://github.com/</span>)</span>
-<span class="token list punctuation">-</span> <span class="token url">[<span class="token content">coding</span>](<span class="token url">https://coding.net/user</span>)</span>
+- [谷歌翻译](http://translate.google.cn/)
+- [litreily](http://www.litreily.top/)
+- [Notes](https://litreily.gitbook.io/notes/content/)
+- [smslit](http://www.smslit.top/)
+- [github](https://github.com/)
+- [coding](https://coding.net/user)
 
-<span class="token title important"><span class="token punctuation">##</span> 论坛(forum)</span>
+## 论坛(forum)
 
-<span class="token list punctuation">-</span> <span class="token url">[<span class="token content">Coding 博客</span>](<span class="token url">https://blog.coding.net/</span>)</span>
-<span class="token list punctuation">-</span> <span class="token url">[<span class="token content">图灵社区</span>](<span class="token url">http://www.ituring.com.cn/</span>)</span>
-<span class="token list punctuation">-</span> <span class="token url">[<span class="token content">电子发烧友</span>](<span class="token url">http://www.elecfans.com/</span>)</span>
+- [Coding 博客](https://blog.coding.net/)
+- [图灵社区](http://www.ituring.com.cn/)
+- [电子发烧友](http://www.elecfans.com/)
 
-<span class="token title important"><span class="token punctuation">##</span> 编程(Programming)</span>
+## 编程(Programming)
 
-<span class="token title important"><span class="token punctuation">###</span> 算法(Algorithm)</span>
+### 算法(Algorithm)
 
-<span class="token list punctuation">-</span> <span class="token url">[<span class="token content">Acm之家</span>](<span class="token url">http://www.acmerblog.com/</span>)</span>
-<span class="token list punctuation">-</span> <span class="token url">[<span class="token content">各大OJ题目分类</span>](<span class="token url">http://www.pythontip.com/acm/problemCategory</span>)</span>
+- [Acm之家](http://www.acmerblog.com/)
+- [各大OJ题目分类](http://www.pythontip.com/acm/problemCategory)
 
-<span class="token title important"><span class="token punctuation">###</span> linux</span>
+### linux
 
-<span class="token list punctuation">-</span> <span class="token url">[<span class="token content">linux - Elixir - Free Electrons</span>](<span class="token url">http://elixir.free-electrons.com/linux/latest/source</span>)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+- [linux - Elixir - Free Electrons](http://elixir.free-electrons.com/linux/latest/source)
+</code></pre>
 <p>我们使用Python对其逐行读取处理，处理策略如下：</p>
 <ol>
 <li>新建html文件favorites.html，添加HTML头部信息</li>
@@ -268,182 +111,169 @@
 <li>在合适的位置添加<code>&lt;/DL&gt;&lt;p&gt;</code>标签，用以封装<code>&lt;DL&gt;&lt;p&gt;</code></li>
 </ol>
 <p>使用该策略编写的Python脚本如下：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment">#!/usr/bin/env python3</span>
-<span class="token comment"># -*- coding:utf-8 -*-</span>
-<span class="token comment"># convert markdown to chrome bookmarks</span>
-<span class="token comment"># @author: litreily</span>
-<span class="token comment"># @date: 2020-04-25</span>
+<pre><code class="python">#!/usr/bin/env python3
+# -*- coding:utf-8 -*-
+# convert markdown to chrome bookmarks
+# @author: litreily
+# @date: 2020-04-25
 
-<span class="token keyword">import</span> sys
-<span class="token keyword">import</span> time
-<span class="token keyword">import</span> re
+import sys
+import time
+import re
 
 
-TIMESTAMP <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>time<span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+TIMESTAMP = int(time.time())
 
-HTML_HEAD <span class="token operator">=</span> <span class="token triple-quoted-string string">"""\
-&lt;!DOCTYPE NETSCAPE-Bookmark>
+HTML_HEAD = &quot;&quot;&quot;\
+&lt;!DOCTYPE NETSCAPE-Bookmark&gt;
 &lt;!-- This is an automatically generated file.
      It will be read and overwritten.
-     DO NOT EDIT! -->
-&lt;META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-&lt;TITLE>Bookmarks&lt;/TITLE>
-&lt;H1>Bookmarks&lt;/H1>
-&lt;DL>&lt;p>
-"""</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>TIMESTAMP<span class="token punctuation">)</span>
-HTML_END <span class="token operator">=</span> <span class="token triple-quoted-string string">"""&lt;/DL>&lt;p>\n"""</span>
+     DO NOT EDIT! --&gt;
+&lt;META HTTP-EQUIV=&quot;Content-Type&quot; CONTENT=&quot;text/html; charset=UTF-8&quot;&gt;
+&lt;TITLE&gt;Bookmarks&lt;/TITLE&gt;
+&lt;H1&gt;Bookmarks&lt;/H1&gt;
+&lt;DL&gt;&lt;p&gt;
+&quot;&quot;&quot;.format(TIMESTAMP)
+HTML_END = &quot;&quot;&quot;&lt;/DL&gt;&lt;p&gt;\n&quot;&quot;&quot;
 
-GROUP_HEAD <span class="token operator">=</span> <span class="token triple-quoted-string string">"""\t&lt;DT>&lt;H3 ADD_DATE="&#123;ts&#125;" LAST_MODIFIED="&#123;ts&#125;">&#123;title&#125;&lt;/H3>
-\t&lt;DL>&lt;p>
-"""</span>
-GROUP_END <span class="token operator">=</span> <span class="token string">"\t&lt;/DL>&lt;p>\n"</span>
+GROUP_HEAD = &quot;&quot;&quot;\t&lt;DT&gt;&lt;H3 ADD_DATE=&quot;{ts}&quot; LAST_MODIFIED=&quot;{ts}&quot;&gt;{title}&lt;/H3&gt;
+\t&lt;DL&gt;&lt;p&gt;
+&quot;&quot;&quot;
+GROUP_END = &quot;\t&lt;/DL&gt;&lt;p&gt;\n&quot;
 
-MASK <span class="token operator">=</span> <span class="token triple-quoted-string string">"""\t&lt;DT>\
-&lt;A HREF="&#123;link&#125;" ADD_DATE="&#123;ts&#125;" ICON="data:image/png;base64,&#123;icon&#125;">&#123;title&#125;&lt;/A>
-"""</span>
+MASK = &quot;&quot;&quot;\t&lt;DT&gt;\
+&lt;A HREF=&quot;{link}&quot; ADD_DATE=&quot;{ts}&quot; ICON=&quot;data:image/png;base64,{icon}&quot;&gt;{title}&lt;/A&gt;
+&quot;&quot;&quot;
 
 
-<span class="token keyword">def</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">,</span> <span class="token string">'r'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
-        lists <span class="token operator">=</span> f<span class="token punctuation">.</span>readlines<span class="token punctuation">(</span><span class="token punctuation">)</span>
+def main(input):
+    with open(input, &#39;r&#39;) as f:
+        lists = f.readlines()
 
-    <span class="token comment"># open html file to write into</span>
-    output <span class="token operator">=</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'favorites.html'</span><span class="token punctuation">,</span> <span class="token string">'w'</span><span class="token punctuation">)</span>
-    output<span class="token punctuation">.</span>write<span class="token punctuation">(</span>HTML_HEAD<span class="token punctuation">)</span>
+    # open html file to write into
+    output = open(&#39;favorites.html&#39;, &#39;w&#39;)
+    output.write(HTML_HEAD)
 
-    group_re <span class="token operator">=</span> re<span class="token punctuation">.</span><span class="token builtin">compile</span><span class="token punctuation">(</span><span class="token string">r'^(#+) +(.*)$'</span><span class="token punctuation">)</span> <span class="token comment"># eg. ## network</span>
-    mask_re <span class="token operator">=</span> re<span class="token punctuation">.</span><span class="token builtin">compile</span><span class="token punctuation">(</span><span class="token string">r'\[(.*)\]\((.*)\)'</span><span class="token punctuation">)</span> <span class="token comment"># eg. [baidu](https://www.baidu.com)</span>
+    group_re = re.compile(r&#39;^(#+) +(.*)$&#39;) # eg. ## network
+    mask_re = re.compile(r&#39;\[(.*)\]\((.*)\)&#39;) # eg. [baidu](https://www.baidu.com)
 
-    pre_H_level <span class="token operator">=</span> <span class="token number">0</span> <span class="token comment"># previous Header level, H2 or H3 or ...</span>
-    <span class="token keyword">for</span> line <span class="token keyword">in</span> lists<span class="token punctuation">:</span>
-        line <span class="token operator">=</span> line<span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    pre_H_level = 0 # previous Header level, H2 or H3 or ...
+    for line in lists:
+        line = line.strip()
 
-        m <span class="token operator">=</span> mask_re<span class="token punctuation">.</span>search<span class="token punctuation">(</span>line<span class="token punctuation">)</span>
-        <span class="token keyword">if</span> m<span class="token punctuation">:</span>
-            <span class="token comment"># find link</span>
-            output<span class="token punctuation">.</span>write<span class="token punctuation">(</span>MASK<span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>link<span class="token operator">=</span>m<span class="token punctuation">.</span>group<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">,</span> ts<span class="token operator">=</span>TIMESTAMP<span class="token punctuation">,</span> icon<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> title<span class="token operator">=</span>m<span class="token punctuation">.</span>group<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-        <span class="token keyword">else</span><span class="token punctuation">:</span>
-            m <span class="token operator">=</span> group_re<span class="token punctuation">.</span>search<span class="token punctuation">(</span>line<span class="token punctuation">)</span>
-            <span class="token keyword">if</span> m<span class="token punctuation">:</span>
-                <span class="token comment"># find header</span>
-                cur_H_level <span class="token operator">=</span> <span class="token builtin">len</span><span class="token punctuation">(</span>m<span class="token punctuation">.</span>group<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment"># current Header level</span>
-                <span class="token keyword">if</span> cur_H_level <span class="token operator">&lt;=</span> pre_H_level<span class="token punctuation">:</span>
-                    <span class="token keyword">for</span> _ <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>pre_H_level <span class="token operator">-</span> cur_H_level <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-                        output<span class="token punctuation">.</span>write<span class="token punctuation">(</span>GROUP_END<span class="token punctuation">)</span>
-                pre_H_level <span class="token operator">=</span> cur_H_level
-                output<span class="token punctuation">.</span>write<span class="token punctuation">(</span>GROUP_HEAD<span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>ts<span class="token operator">=</span>TIMESTAMP<span class="token punctuation">,</span> title<span class="token operator">=</span>m<span class="token punctuation">.</span>group<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-    output<span class="token punctuation">.</span>write<span class="token punctuation">(</span>HTML_END<span class="token punctuation">)</span>
+        m = mask_re.search(line)
+        if m:
+            # find link
+            output.write(MASK.format(link=m.group(2), ts=TIMESTAMP, icon=None, title=m.group(1)))
+        else:
+            m = group_re.search(line)
+            if m:
+                # find header
+                cur_H_level = len(m.group(1)) # current Header level
+                if cur_H_level &lt;= pre_H_level:
+                    for _ in range(pre_H_level - cur_H_level + 1):
+                        output.write(GROUP_END)
+                pre_H_level = cur_H_level
+                output.write(GROUP_HEAD.format(ts=TIMESTAMP, title=m.group(2)))
+    output.write(HTML_END)
 
-<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">"__main__"</span><span class="token punctuation">:</span>
-    <span class="token keyword">if</span> <span class="token builtin">len</span><span class="token punctuation">(</span>sys<span class="token punctuation">.</span>argv<span class="token punctuation">)</span> <span class="token operator">&lt;</span> <span class="token number">2</span><span class="token punctuation">:</span>
-        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'No input files.'</span><span class="token punctuation">)</span>
-        sys<span class="token punctuation">.</span>exit<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
-    main<span class="token punctuation">(</span>sys<span class="token punctuation">.</span>argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+if __name__ == &quot;__main__&quot;:
+    if len(sys.argv) &lt; 2:
+        print(&#39;No input files.&#39;)
+        sys.exit(1)
+    main(sys.argv[1])
+</code></pre>
 <p>这个脚本唯一需要注意的一点是：什么时候添加<code>&lt;DL&gt;&lt;p&gt;</code>对应的<code>&lt;/DL&gt;&lt;p&gt;</code>闭合标签？如果在错误位置添加了或者是没添加，都会导致收藏夹嵌套顺序错乱。</p>
 <p>对此我的思路是：对比前后两次markdown中读取到的HEADER层级，比如H2对应2，H3对应3. 前一次<code>pre_H_level</code>，当前<code>cur_H_level</code>，如果<code>cur_H_level</code> &lt;= <code>pre_H_level</code>就需要添加，而且添加个数等于前后两数之差加1.</p>
 <p>举例说明：</p>
-<pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown"><span class="token title important"><span class="token punctuation">##</span> H2_1</span>
+<pre><code class="md">## H2_1
 ...
-<span class="token title important"><span class="token punctuation">###</span> H3        # pre: H2, cur: H3. cur > pre, 不加</span>
+### H3        # pre: H2, cur: H3. cur &gt; pre, 不加
 ...
-<span class="token title important"><span class="token punctuation">##</span> H2_2       # pre: H3, cur: H2, cur &lt; pre, 加(3-2+1)=2次</span>
+## H2_2       # pre: H3, cur: H2, cur &lt; pre, 加(3-2+1)=2次
 ...
-<span class="token title important"><span class="token punctuation">##</span> H2_3       # pre: H2, cur: H2, cur = pre, 加(2-2+1)=1次</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+## H2_3       # pre: H2, cur: H2, cur = pre, 加(2-2+1)=1次
+</code></pre>
 <p>当然，这种做法的前提是markdown符合语法要求。</p>
 <h2 id="导入chrome"><a href="#导入chrome" class="headerlink" title="导入chrome"></a>导入chrome</h2><p>使用以上脚本将markdown转换为html</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">./md2bm test.md<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token doctype"><span class="token punctuation">&lt;!</span><span class="token doctype-tag">DOCTYPE</span> <span class="token name">NETSCAPE-Bookmark</span><span class="token punctuation">></span></span>
-<span class="token comment">&lt;!-- This is an automatically generated file.
+<pre><code class="sh">./md2bm test.md
+</code></pre>
+<pre><code class="html">&lt;!DOCTYPE NETSCAPE-Bookmark&gt;
+&lt;!-- This is an automatically generated file.
      It will be read and overwritten.
-     DO NOT EDIT! --></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>META</span> <span class="token attr-name">HTTP-EQUIV</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Content-Type<span class="token punctuation">"</span></span> <span class="token attr-name">CONTENT</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text/html; charset=UTF-8<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>TITLE</span><span class="token punctuation">></span></span>Bookmarks<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>TITLE</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>H1</span><span class="token punctuation">></span></span>Bookmarks<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>H1</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DL</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DT</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>H3</span> <span class="token attr-name">ADD_DATE</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1588501602<span class="token punctuation">"</span></span> <span class="token attr-name">LAST_MODIFIED</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1588501602<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>收藏夹(Favorites)<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>H3</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DL</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DT</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>H3</span> <span class="token attr-name">ADD_DATE</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1588501602<span class="token punctuation">"</span></span> <span class="token attr-name">LAST_MODIFIED</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1588501602<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>常用<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>H3</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DL</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DT</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>A</span> <span class="token attr-name">HREF</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>http://translate.google.cn/<span class="token punctuation">"</span></span> <span class="token attr-name">ADD_DATE</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1588501602<span class="token punctuation">"</span></span> <span class="token attr-name">ICON</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>data:image/png;base64,None<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>谷歌翻译<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>A</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DT</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>A</span> <span class="token attr-name">HREF</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>http://www.litreily.top/<span class="token punctuation">"</span></span> <span class="token attr-name">ADD_DATE</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1588501602<span class="token punctuation">"</span></span> <span class="token attr-name">ICON</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>data:image/png;base64,None<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>litreily<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>A</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DT</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>A</span> <span class="token attr-name">HREF</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>https://litreily.gitbook.io/notes/content/<span class="token punctuation">"</span></span> <span class="token attr-name">ADD_DATE</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1588501602<span class="token punctuation">"</span></span> <span class="token attr-name">ICON</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>data:image/png;base64,None<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Notes<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>A</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DT</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>A</span> <span class="token attr-name">HREF</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>http://www.smslit.top/<span class="token punctuation">"</span></span> <span class="token attr-name">ADD_DATE</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1588501602<span class="token punctuation">"</span></span> <span class="token attr-name">ICON</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>data:image/png;base64,None<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>smslit<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>A</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DT</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>A</span> <span class="token attr-name">HREF</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>https://github.com/<span class="token punctuation">"</span></span> <span class="token attr-name">ADD_DATE</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1588501602<span class="token punctuation">"</span></span> <span class="token attr-name">ICON</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>data:image/png;base64,None<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>github<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>A</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DT</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>A</span> <span class="token attr-name">HREF</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>https://coding.net/user<span class="token punctuation">"</span></span> <span class="token attr-name">ADD_DATE</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1588501602<span class="token punctuation">"</span></span> <span class="token attr-name">ICON</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>data:image/png;base64,None<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>coding<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>A</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>DL</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DT</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>H3</span> <span class="token attr-name">ADD_DATE</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1588501602<span class="token punctuation">"</span></span> <span class="token attr-name">LAST_MODIFIED</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1588501602<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>论坛(forum)<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>H3</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DL</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DT</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>A</span> <span class="token attr-name">HREF</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>https://blog.coding.net/<span class="token punctuation">"</span></span> <span class="token attr-name">ADD_DATE</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1588501602<span class="token punctuation">"</span></span> <span class="token attr-name">ICON</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>data:image/png;base64,None<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Coding 博客<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>A</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DT</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>A</span> <span class="token attr-name">HREF</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>http://www.ituring.com.cn/<span class="token punctuation">"</span></span> <span class="token attr-name">ADD_DATE</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1588501602<span class="token punctuation">"</span></span> <span class="token attr-name">ICON</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>data:image/png;base64,None<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>图灵社区<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>A</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DT</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>A</span> <span class="token attr-name">HREF</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>http://www.elecfans.com/<span class="token punctuation">"</span></span> <span class="token attr-name">ADD_DATE</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1588501602<span class="token punctuation">"</span></span> <span class="token attr-name">ICON</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>data:image/png;base64,None<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>电子发烧友<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>A</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>DL</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DT</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>H3</span> <span class="token attr-name">ADD_DATE</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1588501602<span class="token punctuation">"</span></span> <span class="token attr-name">LAST_MODIFIED</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1588501602<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>编程(Programming)<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>H3</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DL</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DT</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>H3</span> <span class="token attr-name">ADD_DATE</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1588501602<span class="token punctuation">"</span></span> <span class="token attr-name">LAST_MODIFIED</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1588501602<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>算法(Algorithm)<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>H3</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DL</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DT</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>A</span> <span class="token attr-name">HREF</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>http://www.acmerblog.com/<span class="token punctuation">"</span></span> <span class="token attr-name">ADD_DATE</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1588501602<span class="token punctuation">"</span></span> <span class="token attr-name">ICON</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>data:image/png;base64,None<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Acm之家<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>A</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DT</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>A</span> <span class="token attr-name">HREF</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>http://www.pythontip.com/acm/problemCategory<span class="token punctuation">"</span></span> <span class="token attr-name">ADD_DATE</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1588501602<span class="token punctuation">"</span></span> <span class="token attr-name">ICON</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>data:image/png;base64,None<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>各大OJ题目分类<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>A</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>DL</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DT</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>H3</span> <span class="token attr-name">ADD_DATE</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1588501602<span class="token punctuation">"</span></span> <span class="token attr-name">LAST_MODIFIED</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1588501602<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>linux<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>H3</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DL</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DT</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>A</span> <span class="token attr-name">HREF</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>http://elixir.free-electrons.com/linux/latest/source<span class="token punctuation">"</span></span> <span class="token attr-name">ADD_DATE</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1588501602<span class="token punctuation">"</span></span> <span class="token attr-name">ICON</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>data:image/png;base64,None<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>linux - Elixir - Free Electrons<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>A</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>DL</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+     DO NOT EDIT! --&gt;
+&lt;META HTTP-EQUIV=&quot;Content-Type&quot; CONTENT=&quot;text/html; charset=UTF-8&quot;&gt;
+&lt;TITLE&gt;Bookmarks&lt;/TITLE&gt;
+&lt;H1&gt;Bookmarks&lt;/H1&gt;
+&lt;DL&gt;&lt;p&gt;
+    &lt;DT&gt;&lt;H3 ADD_DATE=&quot;1588501602&quot; LAST_MODIFIED=&quot;1588501602&quot;&gt;收藏夹(Favorites)&lt;/H3&gt;
+    &lt;DL&gt;&lt;p&gt;
+    &lt;DT&gt;&lt;H3 ADD_DATE=&quot;1588501602&quot; LAST_MODIFIED=&quot;1588501602&quot;&gt;常用&lt;/H3&gt;
+    &lt;DL&gt;&lt;p&gt;
+    &lt;DT&gt;&lt;A HREF=&quot;http://translate.google.cn/&quot; ADD_DATE=&quot;1588501602&quot; ICON=&quot;data:image/png;base64,None&quot;&gt;谷歌翻译&lt;/A&gt;
+    &lt;DT&gt;&lt;A HREF=&quot;http://www.litreily.top/&quot; ADD_DATE=&quot;1588501602&quot; ICON=&quot;data:image/png;base64,None&quot;&gt;litreily&lt;/A&gt;
+    &lt;DT&gt;&lt;A HREF=&quot;https://litreily.gitbook.io/notes/content/&quot; ADD_DATE=&quot;1588501602&quot; ICON=&quot;data:image/png;base64,None&quot;&gt;Notes&lt;/A&gt;
+    &lt;DT&gt;&lt;A HREF=&quot;http://www.smslit.top/&quot; ADD_DATE=&quot;1588501602&quot; ICON=&quot;data:image/png;base64,None&quot;&gt;smslit&lt;/A&gt;
+    &lt;DT&gt;&lt;A HREF=&quot;https://github.com/&quot; ADD_DATE=&quot;1588501602&quot; ICON=&quot;data:image/png;base64,None&quot;&gt;github&lt;/A&gt;
+    &lt;DT&gt;&lt;A HREF=&quot;https://coding.net/user&quot; ADD_DATE=&quot;1588501602&quot; ICON=&quot;data:image/png;base64,None&quot;&gt;coding&lt;/A&gt;
+    &lt;/DL&gt;&lt;p&gt;
+    &lt;DT&gt;&lt;H3 ADD_DATE=&quot;1588501602&quot; LAST_MODIFIED=&quot;1588501602&quot;&gt;论坛(forum)&lt;/H3&gt;
+    &lt;DL&gt;&lt;p&gt;
+    &lt;DT&gt;&lt;A HREF=&quot;https://blog.coding.net/&quot; ADD_DATE=&quot;1588501602&quot; ICON=&quot;data:image/png;base64,None&quot;&gt;Coding 博客&lt;/A&gt;
+    &lt;DT&gt;&lt;A HREF=&quot;http://www.ituring.com.cn/&quot; ADD_DATE=&quot;1588501602&quot; ICON=&quot;data:image/png;base64,None&quot;&gt;图灵社区&lt;/A&gt;
+    &lt;DT&gt;&lt;A HREF=&quot;http://www.elecfans.com/&quot; ADD_DATE=&quot;1588501602&quot; ICON=&quot;data:image/png;base64,None&quot;&gt;电子发烧友&lt;/A&gt;
+    &lt;/DL&gt;&lt;p&gt;
+    &lt;DT&gt;&lt;H3 ADD_DATE=&quot;1588501602&quot; LAST_MODIFIED=&quot;1588501602&quot;&gt;编程(Programming)&lt;/H3&gt;
+    &lt;DL&gt;&lt;p&gt;
+    &lt;DT&gt;&lt;H3 ADD_DATE=&quot;1588501602&quot; LAST_MODIFIED=&quot;1588501602&quot;&gt;算法(Algorithm)&lt;/H3&gt;
+    &lt;DL&gt;&lt;p&gt;
+    &lt;DT&gt;&lt;A HREF=&quot;http://www.acmerblog.com/&quot; ADD_DATE=&quot;1588501602&quot; ICON=&quot;data:image/png;base64,None&quot;&gt;Acm之家&lt;/A&gt;
+    &lt;DT&gt;&lt;A HREF=&quot;http://www.pythontip.com/acm/problemCategory&quot; ADD_DATE=&quot;1588501602&quot; ICON=&quot;data:image/png;base64,None&quot;&gt;各大OJ题目分类&lt;/A&gt;
+    &lt;/DL&gt;&lt;p&gt;
+    &lt;DT&gt;&lt;H3 ADD_DATE=&quot;1588501602&quot; LAST_MODIFIED=&quot;1588501602&quot;&gt;linux&lt;/H3&gt;
+    &lt;DL&gt;&lt;p&gt;
+    &lt;DT&gt;&lt;A HREF=&quot;http://elixir.free-electrons.com/linux/latest/source&quot; ADD_DATE=&quot;1588501602&quot; ICON=&quot;data:image/png;base64,None&quot;&gt;linux - Elixir - Free Electrons&lt;/A&gt;
+&lt;/DL&gt;&lt;p&gt;
+</code></pre>
 <p>最后导入Chrome看下，Chrome会添加一个新的文件夹<strong>已导入</strong>，我们可以把子文件夹拖出来就ok了，再看看图标，如果最近有访问过，其实不加icon的base64信息也是可以显示出来的，就算现在没有，以后只要访问过一次就会自动更新，这点倒是有点像交换机的学习机制。</p>
-<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/chrome/favorite.png" alt="favorites"></p>
-<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>这个脚本也已经更新到了<a target="_blank" rel="noopener" href="https://github.com/Litreily/Python-scripts/blob/master/md2bm/mb2bm.py">GitHub Litreily/Python-scripts</a>，欢迎有需要的小伙伴们使用。</p>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://www.litreily.top">litreily</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://www.litreily.top/2020/05/03/md2bm/">https://www.litreily.top/2020/05/03/md2bm/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/markdown/">markdown</a><a class="post-meta__tags" href="/tags/chrome/">chrome</a></div><div class="post-share"><div class="social-share" data-image="/img/header.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2020/05/07/ubi-driver/" title="Linux 内核驱动解析 - UBI坏块预留大小"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">Linux 内核驱动解析 - UBI坏块预留大小</div></div><div class="info-2"><div class="info-item-1">在处理ubifs相关bug的过程中，学习了ubi驱动对坏块保留分区的处理方式，在此记录一下。  相关概念mtdmtd 全称 memory technology device 内存技术设备，是用于访问内存设备(RAM, Flash)的Linux 子系统，在硬件层和用户空间之间提供抽象接口。 在嵌入式linux设备中的/dev/目录下有很多/dev/mtdxx文件，这些文件对应的就是内存设备。比如，嵌入式设备的Nand Flash被划分为多个分区，每个分区对应一个/dev/mtdxx文件。 如下所示，/dev/mtd0至/dev/mtd10对应uboot分区，mtd21对应固件分区，mtd20就是本文将要用到的数据分区。 root:/dev# ls mtd* |grep -v block mtd0        mtd16ro     mtd23ro     mtd30ro mtd0ro      mtd17       mtd24       mtd31 mtd1        mtd17ro     mtd24ro     mtd31ro mtd10       mtd18   ...</div></div></div></a><a class="pagination-related" href="/2020/05/03/netease/" title="解锁网易云音乐灰色无版权歌曲"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">解锁网易云音乐灰色无版权歌曲</div></div><div class="info-2"><div class="info-item-1">由于版权之争，网易云的很多歌曲都灰掉并且无法播放了，想要使其可以播放还是有办法的，万能的Google和Github让我找到了答案，直接上享用方法吧。 前提条件 一个可以远程访问的服务器，比如vps，阿里云、腾讯云、... 如果没有服务器，只能寻找别人搭建好的服务  搭建服务在服务器端，首先安装依赖的工具npx，如果有则忽略 sudo apt install npm sudo npm i -g npx  然后clone项目UnblockNeteaseMusic.git到本地 git clone git@github.com:nondanee&#x2F;UnblockNeteaseMusic.git cd UnblockNeteaseMusic  接下来是运行服务，有好几种方式，下面介绍3种 npx启动第一种，最简单的是直接用npx启动，默认以8080端口打开 npx @npndanee&#x2F;unblockneteasemusic  node启动第二种方式，使用node, -p参数指定端口 npde app.js -p 4321  搭建系统服务第三种，使用服务方式，方便管理和查...</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comments</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/header.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">litreily</div><div class="author-info-description">simple life</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">144</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">120</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">17</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Litreily"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://xhslink.com/m/893FaC3aK88" target="_blank" title="小红书"><i class="fas fa-seedling" style="color: #ff2442;"></i></a><a class="social-icon" href="mailto:litreily@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="https://www.litreily.top/notes/" target="_blank" title="Notes"><i class="fas fa-sticky-note" style="color: #e8a618;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF"><span class="toc-text">思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%94%B6%E8%97%8F%E5%A4%B9%E7%9A%84DOM%E7%BB%93%E6%9E%84"><span class="toc-text">收藏夹的DOM结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#markdown%E8%BD%AChtml"><span class="toc-text">markdown转html</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%BC%E5%85%A5chrome"><span class="toc-text">导入chrome</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E5%90%8E"><span class="toc-text">最后</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/07/05/daily-eastern-beauty-2026-07-05/" title="每日东方美人探索 2026-07-05"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-07-05/open-daily-magic.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="每日东方美人探索 2026-07-05"/></a><div class="content"><a class="title" href="/2026/07/05/daily-eastern-beauty-2026-07-05/" title="每日东方美人探索 2026-07-05">每日东方美人探索 2026-07-05</a><time datetime="2026-07-04T16:10:00.000Z" title="Created 2026-07-05 00:10:00">2026-07-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/07/04/daily-eastern-beauty-2026-07-04/" title="每日东方美人探索 2026-07-04"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-07-04/open-time-crossing.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="每日东方美人探索 2026-07-04"/></a><div class="content"><a class="title" href="/2026/07/04/daily-eastern-beauty-2026-07-04/" title="每日东方美人探索 2026-07-04">每日东方美人探索 2026-07-04</a><time datetime="2026-07-04T09:18:00.000Z" title="Created 2026-07-04 17:18:00">2026-07-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/07/03/daily-eastern-beauty-2026-07-03/" title="每日东方美人探索 2026-07-03"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-07-03/open-time-crossing.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="每日东方美人探索 2026-07-03"/></a><div class="content"><a class="title" href="/2026/07/03/daily-eastern-beauty-2026-07-03/" title="每日东方美人探索 2026-07-03">每日东方美人探索 2026-07-03</a><time datetime="2026-07-02T16:10:00.000Z" title="Created 2026-07-03 00:10:00">2026-07-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/07/02/daily-eastern-beauty-2026-07-02/" title="每日东方美人探索 2026-07-02"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-07-02/open-daily-magic.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="每日东方美人探索 2026-07-02"/></a><div class="content"><a class="title" href="/2026/07/02/daily-eastern-beauty-2026-07-02/" title="每日东方美人探索 2026-07-02">每日东方美人探索 2026-07-02</a><time datetime="2026-07-02T08:55:00.000Z" title="Created 2026-07-02 16:55:00">2026-07-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/07/01/daily-eastern-beauty-2026-07-01/" title="每日东方美人探索 2026-07-01"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/assets/ai/eastern-beauty/2026-07-01/open-time-crossing.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="每日东方美人探索 2026-07-01"/></a><div class="content"><a class="title" href="/2026/07/01/daily-eastern-beauty-2026-07-01/" title="每日东方美人探索 2026-07-01">每日东方美人探索 2026-07-01</a><time datetime="2026-07-01T01:10:00.000Z" title="Created 2026-07-01 09:10:00">2026-07-01</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By litreily</span><span class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 5.4.2</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll to Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4"></script><script src="/js/main.js?v=5.5.4"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@19.1.3/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
-  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
-  const option = null
-
-  const initValine = (el, path) => {
-    if (isShuoshuo) {
-      window.shuoshuoComment.destroyValine = () => {
-        if (el.children.length) {
-          el.innerHTML = ''
-          el.classList.add('no-comment')
-        }
-      }
-    }
-
-    const valineConfig = {
-      el: '#vcomment',
-      appId: '1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
-      appKey: 'uvA3xgqNW3q8TGR483lxXcpB',
-      avatar: 'monsterid',
-      serverURLs: '',
-      emojiMaps: "",
-      visitor: false,
-      ...option,
-      path: isShuoshuo ? path : (option && option.path) || window.location.pathname
-    }
-
-    new Valine(valineConfig)
-  }
-
-  const loadValine = async (el, path) => {
-    if (typeof Valine === 'function') {
-      initValine(el, path)
-    } else {
-      await btf.getScript('https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js')
-      initValine(el, path)
-    }
-  }
-
-  if (isShuoshuo) {
-    'Valine' === 'Valine'
-      ? window.shuoshuoComment = { loadComment: loadValine }
-      : window.loadOtherComment = loadValine
-    return
-  }
-
-  if ('Valine' === 'Valine' || !false) {
-    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
-    else setTimeout(loadValine, 0)
-  } else {
-    window.loadOtherComment = loadValine
-  }
-})()</script></div><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="local-search-input"><input placeholder="Search..." type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.4"></script></div></div></body></html>
+<p><img src="/assets/chrome/favorite.png" alt="favorites"></p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>这个脚本也已经更新到了<a href="https://github.com/Litreily/Python-scripts/blob/master/md2bm/mb2bm.py" target="_blank" rel="noopener">GitHub Litreily/Python-scripts</a>，欢迎有需要的小伙伴们使用。</p>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">litreily</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2020/05/03/md2bm/">https://www.litreily.top/2020/05/03/md2bm/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://www.litreily.top">litreily的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tags"></i><a href="/tags/markdown/">markdown</a><a href="/tags/chrome/">chrome</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#思路"><span class="toc-number">1.</span> <span class="toc-text">思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#收藏夹的DOM结构"><span class="toc-number">2.</span> <span class="toc-text">收藏夹的DOM结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#markdown转html"><span class="toc-number">3.</span> <span class="toc-text">markdown转html</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#导入chrome"><span class="toc-number">4.</span> <span class="toc-text">导入chrome</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最后"><span class="toc-number">5.</span> <span class="toc-text">最后</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2020/05/07/ubi-driver/">&lt; Linux 内核驱动解析 - UBI坏块预留大小</a><a class="next" href="/2020/05/03/netease/">解锁网易云音乐灰色无版权歌曲 &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+.night .v[data-class=v] a:hover { color: #216C73 !important; }
+.night .v[data-class=v] li { list-style: inherit; }
+.night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
+.night .v[data-class=v] .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.night .v[data-class=v] .vbtn { border-radius: 0; background: none; }
+.night .v[data-class=v] .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.night .v[data-class=v] .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.night .v[data-class=v] .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre,.night .v[data-class=v] .vlist .vcard .vhead .vsys { background: #203240 !important; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre { color: #F0F0F0; font-size: 95%; }
+.v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
+</style><div id="vcomment"></div><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'1ecKy4yk4u1R7C4tScKbnyq9-gzGzoHsz',
+  appKey:'uvA3xgqNW3q8TGR483lxXcpB',
+  lang: 'zh-cn',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></section><footer><p>Copyright © 2016 - 2020 <a href="/." rel="nofollow">LITREILY</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/plugins/prettify/prettify.js"></script><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script></body></html>
